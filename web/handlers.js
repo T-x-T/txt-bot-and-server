@@ -33,7 +33,13 @@ handlers.html = function (data, callback) {
                 if (!err && fileData.length > 0) {
                     callback(200, fileData, 'html');
                 } else {
-                    callback(404, 'html handler couldnt find the file', 'html');
+                    fs.readFile(path.join(__dirname, './html/' + data.path), 'utf8', function (err, fileData) {
+                        if (!err && fileData) {
+                            callback(200, fileData, 'html');
+                        } else {
+                            callback(404, 'html handler couldnt find the file', 'html');
+                        }
+                    });
                 }
             });
         }
@@ -47,6 +53,7 @@ handlers.assets = function (data, callback) {
     if (assetName.length > 0) {
         //Read in the asset
         fs.readFile(path.join(__dirname, './html/assets/' + assetName), function (err, fileData) {
+            console.log();
             if (!err && fileData) {
                 //Choose the contentType and default to plain
                 var contentType = 'plain';
