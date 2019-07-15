@@ -1,0 +1,63 @@
+@media screen and (min-width:800px) {
+    
+    .wrapper {
+        width: 800px;
+    }
+    
+    
+/* ------------- SECTION LEARN MORE ------------- */
+.video-container {
+    width: calc(50% - 20px);
+    position: relative;
+}
+    
+.video-container iframe {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    display: block;
+}
+    
+#placeholder-dynmap {
+    width: calc(50% - 20px);
+    height: 214px;
+    background:#333;
+    color:#1a1a1a;
+    font-family: 'Rajdhani-SemiBold', sans-serif;
+    font-size:30pt;
+    text-align: center;
+}
+ 
+section.more .more-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 30px 0 70px 0;
+}
+    
+#tooltip-mc {
+    top: 105px;
+    left: 120%;
+}
+
+#tooltip-discord {
+    top: 4px;
+    left: 110%;
+}
+
+#tooltip-yt {
+    top: 7px;
+    left: 115%;
+}
+
+#tooltip-twitter {
+    top: 105px;
+    left: 115%;
+}
+    
+.icons-container .icon-margin {
+    margin-top: 100px;
+}
+    
+}

@@ -37,6 +37,7 @@ handlers.html = function (data, callback) {
                         if (!err && fileData) {
                             callback(200, fileData, 'html');
                         } else {
+                            console.log(data.path);
                             callback(404, 'html handler couldnt find the file', 'html');
                         }
                     });
@@ -53,7 +54,6 @@ handlers.assets = function (data, callback) {
     if (assetName.length > 0) {
         //Read in the asset
         fs.readFile(path.join(__dirname, './html/assets/' + assetName), function (err, fileData) {
-            console.log();
             if (!err && fileData) {
                 //Choose the contentType and default to plain
                 var contentType = 'plain';
