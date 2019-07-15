@@ -38,10 +38,10 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
 server.uniServer = function (req, res) {
 	//Form the data object
     var data = this.getDataObject(req);
-
+    console.log(data.path);
     //Check the path and choose a handler
     var chosenHandler = typeof (server.router[data.path]) !== 'undefined' ? server.router[data.path] : handlers.html;
-    chosenHandler = data.path.indexOf('assets/') > -1 ? handlers.public : chosenHandler;
+    chosenHandler = data.path.indexOf('assets/') > -1 ? handlers.assets : chosenHandler;
 
     //Send the request to the chosenHandler
     try {
