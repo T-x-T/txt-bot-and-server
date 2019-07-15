@@ -41,11 +41,6 @@
     src: url("../fonts/Rajdhani-Regular.ttf");
 }
 
-@font-face {
-    font-family: "fontello";
-    src: url("../fonts/fontello/font/icons.ttf");
-}
-
 body {
     background: #1b1b1b;
 }

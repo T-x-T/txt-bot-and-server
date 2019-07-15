@@ -37,7 +37,7 @@ handlers.html = function (data, callback) {
                         if (!err && fileData) {
                             callback(200, fileData, 'html');
                         } else {
-                            console.log(data.path);
+                            console.log(path.join(__dirname, './html/' + data.path));
                             callback(404, 'html handler couldnt find the file', 'html');
                         }
                     });
@@ -49,18 +49,18 @@ handlers.html = function (data, callback) {
 
 //Handlers for assets
 handlers.assets = function (data, callback) {
-    //Get requested Filename
-    var assetName = data.path.replace('assets/', '').trim();
-    if (assetName.length > 0) {
+    if (data.path.length > 0) {
         //Read in the asset
-        fs.readFile(path.join(__dirname, './html/assets/' + assetName), function (err, fileData) {
+        fs.readFile(path.join(__dirname, './html/' + data.path), function (err, fileData) {
+            console.log(data.path);
             if (!err && fileData) {
                 //Choose the contentType and default to plain
                 var contentType = 'plain';
-                if (assetName.indexOf('.css') > -1) contentType = 'css';
-                if (assetName.indexOf('.png') > -1) contentType = 'png';
-                if (assetName.indexOf('.jpg') > -1) contentType = 'jpg';
-                if (assetName.indexOf('.ico') > -1) contentType = 'favicon';
+                if (data.path.indexOf('.css') > -1) contentType = 'css';
+                if (data.path.indexOf('.png') > -1) contentType = 'png';
+                if (data.path.indexOf('.jpg') > -1) contentType = 'jpg';
+                if (data.path.indexOf('.ico') > -1) contentType = 'favicon';
+                if (data.path.indexOf('.ttf') > -1) contentType = 'font';
                 callback(200, fileData, contentType);
             } else {
                 callback(404);

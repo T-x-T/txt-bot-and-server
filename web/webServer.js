@@ -41,7 +41,7 @@ server.uniServer = function (req, res) {
     //console.log(data.path);
     //Check the path and choose a handler
     var chosenHandler = typeof (server.router[data.path]) !== 'undefined' ? server.router[data.path] : handlers.html;
-    chosenHandler = data.path.indexOf('assets/') > -1 ? handlers.assets : chosenHandler;
+    chosenHandler = data.path.indexOf('assets') > -1 ? handlers.assets : chosenHandler;
 
     //Send the request to the chosenHandler
     try {
@@ -114,6 +114,10 @@ server.processHandlerResponse = function (res, method, path, statusCode, payload
         res.setHeader('Content-Type', 'image/jpeg');
         payloadStr = typeof (payload) !== 'undefined' ? payload : '';
     }
+    if (contentType == 'font') {
+        res.setHeader('Content-Type', 'application/octet-stream');
+        payloadStr = typeof (payload) !== 'undefined' ? payload : '';
+    }
     if (contentType == 'plain') {
         res.setHeader('Content-Type', 'text/plain');
         payloadStr = typeof (payload) !== 'undefined' ? payload : '';
@@ -126,9 +130,7 @@ server.processHandlerResponse = function (res, method, path, statusCode, payload
 
 //Define all possible routes
 server.router = {
-    '': handlers.index,
-    'assets': handlers.assets,
-    'favicon.ico': handlers.assets
+    '': handlers.index
 };
 
 //Init
