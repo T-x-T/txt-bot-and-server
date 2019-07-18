@@ -1,1 +1,1 @@
-nohup nodejs ./index.js &
+nohup nodejs /srv/node/txt-bot-and-server/index.js &
