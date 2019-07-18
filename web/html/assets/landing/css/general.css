@@ -1,0 +1,293 @@
+.preload * {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -ms-transition: none !important;
+  -o-transition: none !important;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    transition-duration: .3s;
+}
+
+::selection {
+    background: #bebebe;
+    color: #fff;
+}
+
+::-moz-selection {
+    background: #4061ae;
+    color: #fff;
+}
+
+::-webkit-scrollbar { width: 10px; background-color: #e9e9e9; }
+::-webkit-scrollbar-thumb { background: #333;  }
+::-webkit-scrollbar-thumb:hover { background: #030303; }
+
+@font-face {
+    font-family: "Rajdhani-SemiBold";
+    src: url("../fonts/Rajdhani-SemiBold.ttf");
+}
+
+@font-face {
+    font-family: "Rajdhani-Bold";
+    src: url("../fonts/Rajdhani-Bold.ttf");
+}
+
+@font-face {
+    font-family: "Rajdhani-Regular";
+    src: url("../fonts/Rajdhani-Regular.ttf");
+}
+
+body {
+    background: #1b1b1b;
+}
+
+.wrapper {
+    margin: 0 auto;
+}
+
+header {
+    width: 100%;
+    height: 160px;
+    text-align: center;
+    background: #030303;
+    padding: 30px 0 20px 0;
+    position: fixed;
+    top: 0;
+    z-index: 1;
+}
+
+header.shrink { 
+    height: 70px;
+    padding: 10px 0 10px 0;
+}
+
+header.shrink img {
+    width: 75px;
+    height: auto;
+}
+
+header.shrink h1 {
+    display: none;
+}
+
+
+
+
+h1 {
+    font-family: "Rajdhani-SemiBold", sans-serif;
+    color: white;
+    padding-top: 20px;
+    font-size: 24pt;
+}
+
+h2 {
+    font-family: "Rajdhani-SemiBold", sans-serif;
+    color: white;
+    padding: 5px 0;
+    font-size: 20pt;
+    background: #030303;
+    width: 100%;
+    text-align: center;
+}
+
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+
+/* ------------- SECTION INTRO ------------- */
+section.intro {
+    padding: 275px 0 0 0;
+}
+
+section.intro p {
+    font-family: "Rajdhani-Regular", sans-serif;
+    color: white;
+    text-align: center;
+    margin: 0 auto;
+    width: 50%;
+    font-size: 13pt;
+}
+
+
+/* ------------- SECTION JOIN ------------- */
+section.join {
+    background: #121212;
+    margin: 70px 0;
+    transform: skewY(-2deg);
+}
+
+section.join .wrapper {
+    transform: skewY(2deg);
+    padding: 50px 0;
+}
+
+.icons-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+
+
+
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip img {
+    opacity: .5;
+}
+
+.tooltip img:hover {
+    opacity: 1;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+    opacity: 0;
+  width: 150px;
+  color: #fff;
+  position: absolute;
+  z-index: 1;
+  margin-left: -5px;
+  transition: ease-in-out 0.3s;
+    font-family: "Rajdhani-SemiBold", sans-serif;
+    transform: scale(.1);
+    margin-left: -100px;
+}
+
+.tooltiptext .social-desc {
+    color: white;
+    background: black;
+    width: 100%;
+    padding: 3px 10px;
+    font-size: 12pt;
+}
+
+.tooltiptext a {
+    color: #fff;
+    padding: 7px 10px;
+    background: #555;
+    display: block;
+    width: 100%;
+    font-size: 14pt;
+}
+
+.tooltiptext a:hover {
+    background: #333;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent #555 transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+    transform: scale(1);
+    margin-left: 0;
+}
+
+
+
+
+
+/* ------------- SECTION LEGAL INFO ------------- */
+section.legal-info {
+    padding: 275px 0 100px 0;
+}
+
+section.legal-info h2 {
+    margin: 20px 0;
+}
+
+section.legal-info h3 {
+    font-family: "Rajdhani-Regular", sans-serif;
+    color: white;
+    font-size: 16pt;
+    border-bottom: 1px solid #bebebe;
+    padding-bottom: 3px;
+    margin: 30px 0 10px 0;
+}
+
+section.legal-info p {
+    font-family: "Rajdhani-Regular", sans-serif;
+    color: white;
+    width: 90%;
+    font-size: 13pt;
+    margin: 0 auto;
+}
+
+section.legal-info a {
+    color: white;
+    text-decoration: underline;
+}
+
+section.legal-info a#props {
+    font-family: "Rajdhani-Regular", sans-serif;
+    color: white;
+    width: 100%;
+    display: block;
+    text-decoration: none;
+    font-size: 13pt;
+    background: #030303;
+    text-align: center;
+    padding: 5px;
+    margin-top: 20px;
+}
+
+section.legal-info a#props:hover {
+    background: #0e0e0e;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* ------------- FOOTER ------------- */
+
+footer {
+    padding: 10px 0;
+    background: #030303;
+}
+
+footer a {
+    font-family: "Rajdhani-Regular", sans-serif;
+    color: white;
+    font-size: 11pt;
+}
+
+footer p {
+    font-family: "Rajdhani-SemiBold", sans-serif;
+    color: #555;
+    font-size: 11pt;
+}
+
+footer a:hover {
+    color: #bebebe;
+}

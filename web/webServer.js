@@ -38,10 +38,10 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
 server.uniServer = function (req, res) {
 	//Form the data object
     var data = this.getDataObject(req);
-    console.log(data.path);
+    //console.log(data.path);
     //Check the path and choose a handler
     var chosenHandler = typeof (server.router[data.path]) !== 'undefined' ? server.router[data.path] : handlers.html;
-    chosenHandler = data.path.indexOf('assets/') > -1 ? handlers.assets : chosenHandler;
+    chosenHandler = data.path.indexOf('assets') > -1 ? handlers.assets : chosenHandler;
 
     //Send the request to the chosenHandler
     try {
@@ -100,23 +100,27 @@ server.processHandlerResponse = function (res, method, path, statusCode, payload
     }
     if (contentType == 'favicon') {
         res.setHeader('Content-Type', 'image/x-icon');
-        payloadString = typeof (payload) !== 'undefined' ? payload : '';
+        payloadStr = typeof (payload) !== 'undefined' ? payload : '';
     }
     if (contentType == 'css') {
         res.setHeader('Content-Type', 'text/css');
-        payloadString = typeof (payload) !== 'undefined' ? payload : '';
+        payloadStr = typeof (payload) !== 'undefined' ? payload : '';
     }
     if (contentType == 'png') {
         res.setHeader('Content-Type', 'image/png');
-        payloadString = typeof (payload) !== 'undefined' ? payload : '';
+        payloadStr = typeof (payload) !== 'undefined' ? payload : '';
     }
     if (contentType == 'jpg') {
         res.setHeader('Content-Type', 'image/jpeg');
-        payloadString = typeof (payload) !== 'undefined' ? payload : '';
+        payloadStr = typeof (payload) !== 'undefined' ? payload : '';
+    }
+    if (contentType == 'font') {
+        res.setHeader('Content-Type', 'application/octet-stream');
+        payloadStr = typeof (payload) !== 'undefined' ? payload : '';
     }
     if (contentType == 'plain') {
         res.setHeader('Content-Type', 'text/plain');
-        payloadString = typeof (payload) !== 'undefined' ? payload : '';
+        payloadStr = typeof (payload) !== 'undefined' ? payload : '';
     }
 
     //Finish the response with the rest which is common
@@ -126,9 +130,7 @@ server.processHandlerResponse = function (res, method, path, statusCode, payload
 
 //Define all possible routes
 server.router = {
-    '': handlers.index,
-    'assets': handlers.assets,
-    'favicon.ico': handlers.assets
+    '': handlers.index
 };
 
 //Init
