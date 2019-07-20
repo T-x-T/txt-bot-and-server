@@ -7,7 +7,11 @@
 //Create the container
 var conf = {
     'http-port': 3000,
-    'https-port': 3001
+    'https-port': 3001,
+    'bot-prefix': '+',
+    'bot-token': 'ENTER YOUR TOKEN HERE',
+    'mongodb-url': 'mongodb://HOSTNAME/DATABASE',
+    'guild': 'guild id goes here as a number'
 };
 
 //Export the container
