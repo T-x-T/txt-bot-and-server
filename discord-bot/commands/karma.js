@@ -5,7 +5,7 @@
 const data = require('./../../lib/data.js');
 module.exports = {
     name: 'karma',
-    description: 'Returns the current karma of score of a user',
+    description: 'Returns the current karma of score of a user\nYour amount of karma changes when someone reacts to one of your messages with the upvote or downvote emoji',
     aliases: ['level', 'xp'],
     usage: '[command name]',
 
