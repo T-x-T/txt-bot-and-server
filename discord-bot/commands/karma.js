@@ -33,7 +33,7 @@ module.exports = {
             if (typeof (karma) == 'number') {
                 message.channel.send('<@' + userID + '> has ' + karma + ' karma');
             } else {
-                message.channel.send('There was an oopsie (Im sorry)');
+                message.channel.send('There was an oopsie (Im sorry)');                    //@TODO this will get called once when  the user doesnt exist yet, then the karma gets returned
             }
         });
     }

@@ -8,6 +8,7 @@ const config = require('./../config.js');
 const fs = require('fs');
 const Discord = require('discord.js');
 const client = new Discord.Client();
+const _data = require('./../lib/data.js');
 
 //Create the container
 var discordBot = { };
@@ -53,6 +54,80 @@ client.on('message', message => {
     } catch (e) {
         console.log('Some Discord command just broke: ' + e);
         message.reply('There was an oopsie when I tried to do that');
+    }
+});
+
+//Gets called when something happens - this is necessary, so we can listen for reactions on non cached (old) messages
+const events = {
+    MESSAGE_REACTION_ADD: 'messageReactionAdd',
+    MESSAGE_REACTION_REMOVE: 'messageReactionRemove'
+};
+client.on('raw', async event => {
+    if (!events.hasOwnProperty(event.t)) return;
+
+    const { d: data } = event;
+    const user = client.users.get(data.user_id);
+    const channel = client.channels.get(data.channel_id) || await user.createDM();
+
+    if (channel.messages.has(data.message_id)) return;
+
+    const message = await channel.fetchMessage(data.message_id);
+    const emojiKey = (data.emoji.id) ? `${data.emoji.name}:${data.emoji.id}` : data.emoji.name;
+    const reaction = message.reactions.get(emojiKey);
+    client.emit(events[event.t], reaction, user);
+    //if (message.reactions.size === 1) message.reactions.delete(emojiKey);
+});
+
+//Gets called when a reaction gets added to some message
+client.on('messageReactionAdd', (reaction, user) => {
+    //The check if the emoji is the emoji from our server will throw an exception if its from another server
+    try {
+        if (reaction.emoji.guild.id == config["guild"]) {
+            //Cancel the operation if someones reacts to themself
+            if (user.id === reaction.message.author.id) return;
+            if (reaction.emoji.name == 'upvote'){
+                _data.updateKarma(reaction.message.author.id, 1, function (err) {
+                    if (err) {
+                        console.log(err);
+                    }
+                });
+            }
+            if (reaction.emoji.name == 'downvote'){
+                _data.updateKarma(reaction.message.author.id, -1, function (err) {
+                    
+                });
+            }
+        }
+    } catch (e) {
+        //No need to do anything
+    }
+    
+});
+
+//Gets called when a reaction gets removed from some message
+client.on('messageReactionRemove', (reaction, user) => {
+    //The check if the emoji is the emoji from our server will throw an exception if its from another server
+    try {
+        if (reaction.emoji.guild.id == config["guild"]) {
+            //Cancel the operation if someones reacts to themself
+            if (user.id === reaction.message.author.id) return;
+            if (reaction.emoji.name == 'upvote'){
+                _data.updateKarma(reaction.message.author.id, -1, function (err) {
+                    if (err) {
+                        console.log(err);
+                    }
+                });
+            }
+            if (reaction.emoji.name == 'downvote'){
+                _data.updateKarma(reaction.message.author.id, 1, function (err) {
+                    if (err) {
+                        console.log(err);
+                    }
+                });
+            }
+        }
+    } catch (e) {
+        //No need to do anything
     }
 });
 
