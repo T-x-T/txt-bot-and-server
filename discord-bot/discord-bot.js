@@ -9,6 +9,7 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const _data = require('./../lib/data.js');
+const discordHelpers = require('./discord-helpers.js');
 
 //Create the container
 var discordBot = { };
@@ -16,6 +17,9 @@ var discordBot = { };
 //Gets called when everything is ok and the bot is logged in
 client.once('ready', () => {
     console.log('The Discord bot is ready!');
+    client.user.setActivity('you', 'watching');
+    //Hand the client object over to discord-helpers.js
+    discordHelpers.init(client);
 });
 
 //Gets called when the bot receives a new message

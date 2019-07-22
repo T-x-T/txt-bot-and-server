@@ -32,28 +32,62 @@ module.exports = {
                     data.listAllMembers(function (userObjects) {
                         var entries = [];
                         userObjects.forEach((document) => {
+                            var name = 'Wumpus';
+                            discordHelpers.getNicknameByID(document.discord, function (data) {
+                                if (data) {
+                                    name = data;
+                                } else {
+                                    name = 'Ghost person';
+                                }
+                            });
                             var finishedObject = {
-                                name: document.discord,
+                                name: name,
                                 karma: document.karma
                             };
                             entries.push(finishedObject);
-                            console.log(finishedObject.name)
-                            console.log(discordHelpers.getNicknameByID(finishedObject.name))
                         });
+
+                        //Sort the array
+                        entries = entries.sort(function (obj1, obj2) {
+                            return obj2.karma - obj1.karma;
+                        });
+
+                        //Only use the top 10 users
+                        entries = entries.slice(0, 9);
+
+                        //Form the output string
+                        var count = 0;
+                        var output = '```Top Members:\n\n';
+                        output += 'Rank  Karma\tName\n';
+                        entries.forEach((curEntry) => {
+                            count++;
+                            output += `   ${count}. ${curEntry.karma}`;
+                            //Insert the right amount of spaces
+                            var spaces = 9 - curEntry.karma.toString().length;
+                            for (var i = 0; i < spaces; i++) {
+                                output += ' ';
+                            }
+                            output += `${curEntry.name}\n`;
+                        });
+                        output += '```';
+
+                        //Send the output string
+                        message.channel.send(output);
                     });
                     //Now we can stop
                     return;
                 }
             }
         }
+        //User wants to get karma of one user
 
         //Check if the userID is weird and stop everything if it is
         if (!userID) {
             message.channel.send('The specified user is not really a user');
             return;
         }
-
         data.getKarma(userID, function (err, karma) {
+            console.log('the error retrieved is: ' + err)
             if (typeof (karma) == 'number') {
                 message.channel.send('<@' + userID + '> has ' + karma + ' karma');
             } else {

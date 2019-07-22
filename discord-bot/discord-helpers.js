@@ -5,15 +5,26 @@
 
 //Dependencies
 const config = require('./../config.js');
-const Discord = require('discord.js');
-const client = new Discord.Client();
+
+//Global var
+var client;
 
 //Create the container
 var helpers = {};
 
 //Get the nickname of user by their id
 helpers.getNicknameByID = function (userID, callback) {
-    //console.log(client.users.first().username)             FIX
+    try {
+        callback(client.users.get(userID).username);
+    } catch (e) {
+        callback(false);
+    }
+    
+};
+
+//Init script
+helpers.init = function (origClient) {
+    client = origClient;
 };
 
 //Export the container
