@@ -136,11 +136,11 @@ server.router = {
 //Init
 server.init = function () {
 	//Start http server
-    server.httpServer.listen(3000, function () {
-        console.log('HTTP server online on port ' + 3000);
+    server.httpServer.listen(config["http-port"], function () {
+        console.log('HTTP server online on port ' + config["http-port"]);
     });
-    server.httpsServer.listen(3001, function () {
-        console.log('HTTPS server online on port ' + 3001);
+    server.httpsServer.listen(config["https-port"], function () {
+        console.log('HTTPS server online on port ' + config["https-port"]);
     });
 };
 
