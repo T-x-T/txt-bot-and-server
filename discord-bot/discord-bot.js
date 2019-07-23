@@ -10,6 +10,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const _data = require('./../lib/data.js');
 const discordHelpers = require('./discord-helpers.js');
+const log = require('./../lib/log.js');
 
 //Create the container
 var discordBot = { };
