@@ -1,1 +1,0 @@
-nohup nodejs /srv/node/txt-bot-and-server/index.js &
