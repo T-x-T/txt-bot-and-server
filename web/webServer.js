@@ -14,6 +14,7 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const handlers = require('./handlers');
+const log = require('./../lib/log.js');
 
 //Create the container
 var server = {};
@@ -38,7 +39,10 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
 server.uniServer = function (req, res) {
 	//Form the data object
     var data = this.getDataObject(req);
-    //console.log(data.path);
+
+    //Log the request
+    log.write(0, 'Web Request received', data, function (err) {});
+
     //Check the path and choose a handler
     var chosenHandler = typeof (server.router[data.path]) !== 'undefined' ? server.router[data.path] : handlers.html;
     chosenHandler = data.path.indexOf('assets') > -1 ? handlers.assets : chosenHandler;
@@ -92,6 +96,10 @@ server.processHandlerResponse = function (res, method, path, statusCode, payload
     statusCode = typeof (statusCode) == 'number' ? statusCode : 200;
     contentType = typeof (contentType) == 'string' ? contentType : 'html';
 
+    //Log 404 and 500 errors
+    if (statusCode == 404) log.write(0, 'Answered web request with 404', { path: path }, function (err) { });
+    if (statusCode == 500) log.write(2, 'Answered web request with 500', { path: path, payload: payload }, function (err) { });
+
     //Build the response parts that are content specific
     var payloadStr = '';
     if (contentType == 'html') {
@@ -138,9 +146,15 @@ server.init = function () {
 	//Start http server
     server.httpServer.listen(config["http-port"], function () {
         console.log('HTTP server online on port ' + config["http-port"]);
+        log.write(1, 'HTTP server is online', { 'port': config["http-port"] }, function (err) {
+            if (err) console.log('Error logging event: HTTP server is online');
+        });
     });
     server.httpsServer.listen(config["https-port"], function () {
         console.log('HTTPS server online on port ' + config["https-port"]);
+        log.write(1, 'HTTPS server is online', { 'port': config["https-port"] }, function (err) {
+            if (err) console.log('Error logging event: HTTPS server is online');
+        });
     });
 };
 
