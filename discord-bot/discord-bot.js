@@ -21,6 +21,10 @@ client.once('ready', () => {
     client.user.setActivity('you', 'watching');
     //Hand the client object over to discord-helpers.js
     discordHelpers.init(client);
+    //Finally log that we sucessfully started
+    log.write(1, 'Discord Bot connected sucessfully', null, function (err) {
+        if (err) console.log('Error logging event: Discord Bot connected sucessfully');
+    });
 });
 
 //Gets called when the bot receives a new message

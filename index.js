@@ -11,7 +11,7 @@ const data = require('./lib/data.js');
 const log = require('./lib/log.js');
 
 //Log that the app got started
-log.write(0, 'Application started', null, function (err) {
+log.write(1, 'Application started', null, function (err) {
     if (err) {
         console.log('Error writing log: ' + err);
     }

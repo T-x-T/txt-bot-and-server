@@ -11,7 +11,8 @@ var conf = {
     'bot-prefix': '+',
     'bot-token': 'ENTER YOUR TOKEN HERE',
     'mongodb-url': 'mongodb://HOSTNAME/DATABASE',
-    'guild': 'guild id goes here as a number'
+    'guild': 'guild id goes here as a number',
+    'log-level': 1
 };
 
 //Export the container
