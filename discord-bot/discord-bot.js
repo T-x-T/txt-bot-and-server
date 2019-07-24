@@ -10,6 +10,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const _data = require('./../lib/data.js');
 const discordHelpers = require('./discord-helpers.js');
+const log = require('./../lib/log.js');
 
 //Create the container
 var discordBot = { };
@@ -20,6 +21,10 @@ client.once('ready', () => {
     client.user.setActivity('you', 'watching');
     //Hand the client object over to discord-helpers.js
     discordHelpers.init(client);
+    //Finally log that we sucessfully started
+    log.write(1, 'Discord Bot connected sucessfully', null, function (err) {
+        if (err) console.log('Error logging event: Discord Bot connected sucessfully');
+    });
 });
 
 //Gets called when the bot receives a new message
