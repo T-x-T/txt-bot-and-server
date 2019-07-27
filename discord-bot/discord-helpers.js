@@ -19,7 +19,6 @@ helpers.getNicknameByID = function (userID, callback) {
     } catch (e) {
         callback(false);
     }
-    
 };
 
 //Init script
