@@ -9,6 +9,7 @@ const graph = require('./../../lib/graph.js');
 const fs = require('fs');
 const log = require('./../../lib/log.js');
 const path = require('path');
+const perfLog = require('./../../lib/perfLog.js');
 
 module.exports = {
     name: 'admin',
@@ -17,21 +18,44 @@ module.exports = {
 
     execute(message, args) {
         //Performance graphs?
-        if (args[0] == 'performance') {
-            //Hand all the data to the graph file
-            graph.create(1920, 1080, 'Test-Title', 'TIME', 'FREE MEMORY', 1000, 500, 150, 100, '-4d', '0%', 'Now', '100%', [100, 200, 300, 400, 500, 600, 500, 400, 300, 200, 100, 0, 50, 1000, 1100], function (fileName) {
-                var filePath = 'temp/' + fileName;
-                //Send the image
-                message.channel.send({
-                    files: [{
-                        attachment: filePath,
-                        name: fileName
-                    }]
-                })
-                    .catch(log.write(3, 'Cant send performance graph image', { filename: fileName }, function (err) { }));
-            });
-            return;
-        }
+        //get all data
+        perfLog.getPerfLogs(false, function (data) {
+            if (args[0] == 'performance') {
+                //Get required data
+                let tempData = [];
+                data.forEach((entry) => {
+                    tempData.push(entry.memUsageAvg);
+                });
+                //Hand all the data to the graph file
+                graph.create({
+                    res_x: 1920,
+                    res_y: 1080,
+                    title: 'Test-Title',
+                    legend_x: 'TIME',
+                    legend_y: 'FREE MEMORY',
+                    scale: 100,
+                    scale_res_x: 15,
+                    scale_res_y: 10,
+                    min_value_x: '-4d',
+                    min_value_y: 0,
+                    max_value_x: 'Now',
+                    max_value_y: 100,
+                    unit_y: '%',
+                    data: tempData
+                }, function (fileName) {
+                    var filePath = 'temp/' + fileName;
+                    //Send the image
+                    message.channel.send({
+                        files: [{
+                            attachment: filePath,
+                            name: fileName
+                        }]
+                    })
+                        .catch(log.write(3, 'Cant send performance graph image', { filename: fileName }, function (err) { }));
+                });
+                return;
+            }
+        });
 
         //Paramater not found
         message.channel.send('Sorry, I cant find that paramater');
