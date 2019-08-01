@@ -9,6 +9,7 @@ const webServer = require('./web/webServer.js');
 const discordBot = require('./discord-bot/discord-bot.js');
 const data = require('./lib/data.js');
 const log = require('./lib/log.js');
+const perfLog = require('./lib/perfLog.js');
 
 //Log that the app got started
 log.write(1, 'Application started', null, function (err) {

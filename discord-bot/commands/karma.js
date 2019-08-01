@@ -87,7 +87,6 @@ module.exports = {
             return;
         }
         data.getKarma(userID, function (err, karma) {
-            console.log('the error retrieved is: ' + err)
             if (typeof (karma) == 'number') {
                 message.channel.send('<@' + userID + '> has ' + karma + ' karma');
             } else {
