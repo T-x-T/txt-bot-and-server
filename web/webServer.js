@@ -97,7 +97,7 @@ server.processHandlerResponse = function (res, method, path, statusCode, payload
     contentType = typeof (contentType) == 'string' ? contentType : 'html';
 
     //Log 404 and 500 errors
-    if (statusCode == 404) log.write(0, 'Answered web request with 404', { path: path }, function (err) { });
+    if (statusCode == 404) log.write(0, 'Answered web request with 404', { path: path, payload: payload }, function (err) { });
     if (statusCode == 500) log.write(2, 'Answered web request with 500', { path: path, payload: payload }, function (err) { });
 
     //Build the response parts that are content specific
