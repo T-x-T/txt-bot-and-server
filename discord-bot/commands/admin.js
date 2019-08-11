@@ -187,7 +187,7 @@ module.exports = {
                             message.channel.bulkDelete(amount, true)
                                 .catch(err => {
                                     log.write(2, 'Admin Command: Bulk delete failed', { message: message, error: err }, function (err) { });
-                                    message.channel.send('Welp, that didnt work :(');
+                                    message.channel.send('Welp, that didnt work :(' + err);
                                 });
                         } else {
                             for (var i = 0; i < amount; i += 50) {
@@ -195,13 +195,13 @@ module.exports = {
                                     message.channel.bulkDelete(50, true)
                                         .catch(err => {
                                             log.write(2, 'Admin Command: Mass bulk delete failed', { message: message, error: err }, function (err) { });
-                                            message.channel.send('Welp, that didnt work :(');
+                                            message.channel.send('Welp, that didnt work :(' + err);
                                         });
                                 } else {
                                     message.channel.bulkDelete(amount, true)
                                         .catch(err => {
                                             log.write(2, 'Admin Command: Mass bulk delete failed', { message: message, error: err }, function (err) { });
-                                            message.channel.send('Welp, that didnt work :(');
+                                            message.channel.send('Welp, that didnt work :(' + err);
                                         });
                                 }
                             }
