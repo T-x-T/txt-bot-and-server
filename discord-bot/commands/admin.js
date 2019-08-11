@@ -184,7 +184,7 @@ module.exports = {
                         //Bulk delete can only delete 100 messages at once, check if we are below that
                         if (amount <= 100) {
                             //Just delete the amount
-                            message.channel.bulkDelete(amount, true)
+                            message.channel.bulkDelete(amount, false)
                                 .catch(err => {
                                     log.write(2, 'Admin Command: Bulk delete failed', { message: message, error: err }, function (err) { });
                                     message.channel.send('Welp, that didnt work :(' + err);
@@ -192,13 +192,13 @@ module.exports = {
                         } else {
                             for (var i = 0; i < amount; i += 50) {
                                 if (amount >= 50) {
-                                    message.channel.bulkDelete(50, true)
+                                    message.channel.bulkDelete(50, false)
                                         .catch(err => {
                                             log.write(2, 'Admin Command: Mass bulk delete failed', { message: message, error: err }, function (err) { });
                                             message.channel.send('Welp, that didnt work :(' + err);
                                         });
                                 } else {
-                                    message.channel.bulkDelete(amount, true)
+                                    message.channel.bulkDelete(amount, false)
                                         .catch(err => {
                                             log.write(2, 'Admin Command: Mass bulk delete failed', { message: message, error: err }, function (err) { });
                                             message.channel.send('Welp, that didnt work :(' + err);
