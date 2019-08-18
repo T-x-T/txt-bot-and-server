@@ -92,10 +92,10 @@ module.exports = {
                                     //Form the output
                                     let output = '```';
                                     output += `I counted a total of ${data.length} log entries! In detail these are\n`;
-                                    if(countDebug != 0) output += `${countDebug} debug messages,\n`;
-                                    if (countInfo != 0)output += `${countInfo} informational messages,\n`;
-                                    if (countWarn != 0)output += `${countWarn} warnings,\n`;
-                                    if (countError != 0)output += `${countError} errors\n`;
+                                    if (countDebug != 0) output += `${countDebug} debug messages,\n`;
+                                    if (countInfo != 0) output += `${countInfo} informational messages,\n`;
+                                    if (countWarn != 0) output += `${countWarn} warnings,\n`;
+                                    if (countError != 0) output += `${countError} errors\n`;
                                     output += '```';
 
                                     //Send the message
@@ -186,7 +186,7 @@ module.exports = {
                             //Just delete the amount
                             message.channel.bulkDelete(amount, false)
                                 .catch(err => {
-                                    log.write(2, 'Admin Command: Bulk delete failed', { message: message, error: err }, function (err) { });
+                                    log.write(2, 'Admin Command: Bulk delete failed', { message: message, error: err }, function (error) { });
                                     message.channel.send('Welp, that didnt work :(');
                                 });
                         } else {
@@ -194,13 +194,13 @@ module.exports = {
                                 if (amount >= 50) {
                                     message.channel.bulkDelete(50, false)
                                         .catch(err => {
-                                            log.write(2, 'Admin Command: Mass bulk delete failed', { message: message, error: err }, function (err) { });
+                                            log.write(2, 'Admin Command: Mass bulk delete failed', { message: message, error: err }, function (error) { });
                                             message.channel.send('Welp, that didnt work :(');
                                         });
                                 } else {
                                     message.channel.bulkDelete(amount, false)
                                         .catch(err => {
-                                            log.write(2, 'Admin Command: Mass bulk delete failed', { message: message, error: err }, function (err) { });
+                                            log.write(2, 'Admin Command: Mass bulk delete failed', { message: message, error: err }, function (error) { });
                                             message.channel.send('Welp, that didnt work :(');
                                         });
                                 }

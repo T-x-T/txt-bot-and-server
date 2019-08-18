@@ -7,6 +7,7 @@
 const config = require('./../config.js');
 const perfLog = require('./../lib/perfLog.js');
 const youtube = require('./../lib/youtube.js');
+const log = require('./../lib/log.js');
 
 //Every second
 setInterval(function () {
@@ -15,5 +16,9 @@ setInterval(function () {
 
 //Every minute
 setInterval(function () {
-    youtube.getNewestVideo();
-}, 1000 * 60);
+    try {
+        youtube.getNewestVideo();
+    } catch (e) {
+        log.write(3, 'Workers: Cant execute getNewestVideo', { Error: e }, function (err) { });
+    }
+}, 1000 * 60 * 60);
