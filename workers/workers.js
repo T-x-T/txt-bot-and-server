@@ -17,8 +17,9 @@ setInterval(function () {
 //Every minute
 setInterval(function () {
     try {
-        youtube.getNewestVideo();
+        youtube.getNewestVideo()
     } catch (e) {
         log.write(3, 'Workers: Cant execute getNewestVideo', { Error: e }, function (err) { });
+        console.log('error')
     }
-}, 1000 * 60 * 60);
+}, 1000 * 60);
