@@ -55,6 +55,25 @@ helpers.sendMessage = function (message, channelID, callback) {
     }
 };
 
+//Returns all roles from the guild defined in config.js
+//Returns only roles that members are allowed to join/leave themselves!
+helpers.getRoles = function(){
+  let roles = [];
+  client.guilds.get(config.guild).roles.map(function(item){
+    if(item.name.indexOf('#') > -1) roles.push({id: item.id, name: item.name});
+  });
+  return roles;
+};
+
+//Returns the role ID of a role by name
+helpers.getRoleId = function(roleName){
+  let id = -1;
+  client.guilds.get(config.guild).roles.map(function(item){
+    if(item.name == roleName) id = item.id;
+  });
+  return id;
+};
+
 //Init script
 helpers.init = function (origClient) {
     client = origClient;
