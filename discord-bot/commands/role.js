@@ -18,19 +18,36 @@ module.exports = {
         switch(args[0]){
           case 'add':
             //Check if the supplied role exists
-            if(discordHelpers.getRoles().indexOf(args[1] > -1)){
+            let valid = false;
+            discordHelpers.getRoles().forEach((item) => {
+              if(item.name == '#' + args[1]) valid = true;
+            });
+            if(valid){
               //Role exists, add it
               message.member.addRole(discordHelpers.getRoleId('#' + args[1]))
               .then(message.reply(`Welcome in the ${args[1]} role!`))
               .catch(log.write(2, 'Role Command: Couldnt add user into role', {Message: message.text}, function(e){}));
             }else{
               //Role doesnt exist
-              message.reply('That role doesnt exist :()')
+              message.reply('That role doesnt exist :(')
             }
             break;
+
+
           case 'remove':
-            message.channel.send('remove');
+            let roleId = discordHelpers.getRoleId('#' + args[1]);
+            let count = 0;
+            message.member.roles.map(function(item){
+              if(item.id.indexOf(roleId) > -1){
+                message.member.removeRole(roleId);
+                message.channel.send('Success!');
+                count++;
+              }
+            });
+            if(count == 0) message.channel.send('That didnt work');
             break;
+
+
           case 'list':
             let output = '```\n';
 
