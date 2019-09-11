@@ -12,7 +12,7 @@ var conf = {
     'bot-token': 'ENTER YOUR TOKEN HERE',
     'mongodb-url': 'mongodb://HOSTNAME/DATABASE',
     'guild': 'guild id goes here as a number',
-    'admin-role': '592305368831492106',
+    'admin-role': 'The role ID of the admin role goes here',
     'log-level': 1,
     'channelID': 'youtube channel ID here',
     'google-api-key': 'google api key here',

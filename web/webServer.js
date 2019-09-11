@@ -41,7 +41,7 @@ server.uniServer = function (req, res) {
     var data = this.getDataObject(req);
 
     //Log the request
-    log.write(0, 'Web Request received', data, function (err) {});
+    log.write(0, 'Web Request received', {data: data, sourceIP: req.connection.remoteAddress}, function (err) {});
 
     //Check the path and choose a handler
     var chosenHandler = typeof (server.router[data.path]) !== 'undefined' ? server.router[data.path] : handlers.html;
@@ -58,7 +58,7 @@ server.uniServer = function (req, res) {
         server.processHandlerResponse(res, data.method, data.path, 500, 'Internal server error :(\n(Please notify TxT#0001 on Discord if you see this!)', 'html');
     }
 
-    
+
 };
 
 //Take a request and return a nice data object w/o payload
