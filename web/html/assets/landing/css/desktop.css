@@ -52,7 +52,12 @@ section.more .more-container {
 }
 
 #tooltip-twitter {
-    top: 105px;
+    top: 2px;
+    left: 115%;
+}
+    
+#tooltip-instagram {
+    top: 103px;
     left: 115%;
 }
     
