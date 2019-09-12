@@ -60,7 +60,7 @@ header {
     z-index: 1;
 }
 
-header.shrink { 
+header.shrink {
     height: 70px;
     padding: 10px 0 10px 0;
 }
@@ -114,7 +114,6 @@ section.intro p {
     color: white;
     text-align: center;
     margin: 0 auto;
-    width: 50%;
     font-size: 13pt;
 }
 
