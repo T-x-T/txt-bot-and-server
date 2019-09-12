@@ -33,8 +33,15 @@ client.on('message', message => {
     if (!message.content.startsWith(config["bot-prefix"]) || message.author.bot) return;
 
     //Split the message into the command name and its arguments
-    const args = message.content.slice(config["bot-prefix"].length).split(/ +/);
-    const commandName = args.shift().toLowerCase();
+    var args = message.content.slice(config["bot-prefix"].length).split(/ +/);
+    var commandName = args.shift().toLowerCase();
+
+    //Convert all arguments to lowerCase
+    var tempArgs = [];
+    args.forEach((cur) => {
+      tempArgs.push(cur.toLowerCase());
+    })
+    args = tempArgs;
 
     //Stop processing the message if the command specified cant be found
     const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
@@ -103,14 +110,14 @@ client.on('messageReactionAdd', (reaction, user) => {
             }
             if (reaction.emoji.name == 'downvote'){
                 _data.updateKarma(reaction.message.author.id, -1, function (err) {
-                    
+
                 });
             }
         }
     } catch (e) {
         //No need to do anything
     }
-    
+
 });
 
 //Gets called when a reaction gets removed from some message
