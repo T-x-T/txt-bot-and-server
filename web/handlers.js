@@ -90,8 +90,8 @@ handlers.assets = function (data, callback) {
 //Finish HTML files by replacing variables
 handlers.insertVariables = function(file, callback){
   //Load variables
-  let variables = require('./variables.js');
-  console.log(variables)
+  let variables = require('./variables.js')();
+  console.log(variables) //For debugging only
   //Loop through all possible variables and replace
   for(let key in variables){
     if(variables.hasOwnProperty(key)){
