@@ -27,15 +27,33 @@ handlers.notFound = function (data, callback) {
 handlers.html = function (data, callback) {
     fs.readFile(path.join(__dirname, './html/' + data.path + '.html'), 'utf8', function (err, fileData) {
         if (!err && fileData.length > 0) {
-            callback(200, fileData, 'html');
+            handlers.insertVariables(fileData, function(err, newFileData){
+              if(!err && fileData.length > 0){
+                callback(200, newFileData, 'html');
+              }else{
+                callback(500, 'Something bad happend. Not like a nuclear war, but still bad. Please contact TxT#0001 on Discord if you see this', 'html');
+              }
+            })
         } else {
             fs.readFile(path.join(__dirname, './html/' + data.path + '/index.html'), 'utf8', function (err, fileData) {
                 if (!err && fileData.length > 0) {
-                    callback(200, fileData, 'html');
+                  handlers.insertVariables(fileData, function(err, newFileData){
+                    if(!err && fileData.length > 0){
+                      callback(200, newFileData, 'html');
+                    }else{
+                      callback(500, 'Something bad happend. Not like a nuclear war, but still bad. Please contact TxT#0001 on Discord if you see this', 'html');
+                    }
+                  })
                 } else {
                     fs.readFile(path.join(__dirname, './html/' + data.path), 'utf8', function (err, fileData) {
                         if (!err && fileData) {
-                            callback(200, fileData, 'html');
+                          handlers.insertVariables(fileData, function(err, newFileData){
+                            if(!err && fileData.length > 0){
+                              callback(200, newFileData, 'html');
+                            }else{
+                              callback(500, 'Something bad happend. Not like a nuclear war, but still bad. Please contact TxT#0001 on Discord if you see this', 'html');
+                            }
+                          })
                         } else {
                             console.log(path.join(__dirname, './html/' + data.path));
                             callback(404, 'html handler couldnt find the file', 'html');
@@ -67,6 +85,27 @@ handlers.assets = function (data, callback) {
             }
         });
     }
+};
+
+//Finish HTML files by replacing variables
+handlers.insertVariables = function(file, callback){
+  //Load variables
+  let variables = require('./variables.js')();
+  console.log(variables) //For debugging only
+  //Loop through all possible variables and replace
+  for(let key in variables){
+    if(variables.hasOwnProperty(key)){
+      let find = '{' + key + '}';
+      let replace = variables[key];
+
+      file = file.split(find).join(replace)
+      //file = file.replace('{' + key + '}', variables[key])
+    }
+  }
+
+  //Callback the new file
+  callback(false, file);
+
 };
 
 //Export the container

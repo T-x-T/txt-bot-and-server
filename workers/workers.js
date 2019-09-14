@@ -9,6 +9,14 @@ const perfLog = require('./../lib/perfLog.js');
 const youtube = require('./../lib/youtube.js');
 const log = require('./../lib/log.js');
 
+//Stuff that should run on startup
+try {
+    youtube.getNewestVideo()
+} catch (e) {
+    log.write(3, 'Workers: Cant execute getNewestVideo', { Error: e }, function (err) { });
+    console.log('error')
+}
+
 //Every second
 setInterval(function () {
     perfLog.execute();
