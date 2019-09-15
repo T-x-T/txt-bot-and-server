@@ -25,10 +25,17 @@ server.httpServer = http.createServer(function (req, res) {
 });
 
 //https stuff
-server.httpsConfig = {
+if(config['use-external-certs']){
+  server.httpsConfig = {
+    'key': fs.readFileSync(path.join(config['cert-path'], 'privkey.pem')),
+  	'cert': fs.readFileSync(path.join(config['cert-path'], 'fullchain.pem'))
+  };
+}else{
+  server.httpsConfig = {
     'key': fs.readFileSync(path.join(__dirname, './certs/key.pem')),
-	'cert': fs.readFileSync(path.join(__dirname, './certs/cert.pem'))
-};
+  	'cert': fs.readFileSync(path.join(__dirname, './certs/cert.pem'))
+  };
+}
 
 //Instanciate the https server
 server.httpsServer = https.createServer(server.httpsConfig, function (req, res) {
@@ -44,7 +51,7 @@ server.uniServer = function (req, res) {
     log.write(0, 'Web Request received', {data: data, sourceIP: req.connection.remoteAddress}, function (err) {});
 
     //Check the path and choose a handler
-    var chosenHandler = typeof (server.router[data.path]) !== 'undefined' ? server.router[data.path] : handlers.html;
+    var chosenHandler = handlers.html;
     chosenHandler = data.path.indexOf('assets') > -1 ? handlers.assets : chosenHandler;
 
     //Send the request to the chosenHandler
