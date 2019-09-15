@@ -25,10 +25,17 @@ server.httpServer = http.createServer(function (req, res) {
 });
 
 //https stuff
-server.httpsConfig = {
+if(config['use-external-certs']){
+  server.httpsConfig = {
+    'key': fs.readFileSync(path.join(config['cert-path'], 'privkey.pem')),
+  	'cert': fs.readFileSync(path.join(config['cert-path'], 'fullchain.pem'))
+  };
+}else{
+  server.httpsConfig = {
     'key': fs.readFileSync(path.join(__dirname, './certs/key.pem')),
-	'cert': fs.readFileSync(path.join(__dirname, './certs/cert.pem'))
-};
+  	'cert': fs.readFileSync(path.join(__dirname, './certs/cert.pem'))
+  };
+}
 
 //Instanciate the https server
 server.httpsServer = https.createServer(server.httpsConfig, function (req, res) {
