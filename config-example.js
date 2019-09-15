@@ -8,7 +8,7 @@
 var conf = {
     'http-port': 3000,
     'https-port': 3001,
-    'use-external-certs': true //false for testing
+    'use-external-certs': true, //false for testing
     'cert-path': '/etc/letsencrypt/live/{Domain}/',
     'bot-prefix': '+',
     'bot-token': 'ENTER YOUR TOKEN HERE',
