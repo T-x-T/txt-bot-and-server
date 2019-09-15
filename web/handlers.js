@@ -22,7 +22,7 @@ handlers.notFound = function (data, callback) {
 handlers.html = function (data, callback) {
   //Add path for different hosts
   if(data.headers.host.indexOf('thetxt.club') > -1) data.path = '/landing/' + data.path;
-  //if(data.headers.host.indexOf('localhost') > -1) data.path = '/landing/' + data.path;
+  if(data.headers.host.indexOf('localhost') > -1) data.path = '/landing/' + data.path;
     fs.readFile(path.join(__dirname, './html/' + data.path + '.html'), 'utf8', function (err, fileData) {
         if (!err && fileData.length > 0) {
             handlers.insertVariables(fileData, function(err, newFileData){
@@ -89,7 +89,6 @@ handlers.assets = function (data, callback) {
 handlers.insertVariables = function(file, callback){
   //Load variables
   let variables = require('./variables.js')();
-  console.log(variables) //For debugging only
   //Loop through all possible variables and replace
   for(let key in variables){
     if(variables.hasOwnProperty(key)){
