@@ -311,7 +311,7 @@ module.exports = {
                                 case 'load':
                                     graphData.title = 'System load';
                                     graphData.legend_y = 'LOAD';
-                                    graphData.max_value_y = 10;
+                                    graphData.max_value_y = 2;
                                     graphData.unit_y = '';
                                     break;
                                 default:
