@@ -210,7 +210,7 @@ module.exports = {
                     break;
                 case 'performance':
                     //get all data
-                    perfLog.getPerfLogs(false, function (data) {
+                    perfLog.getPerfLogs(new Date(Date.now() - 1000 * 60 * 60 * 24 * 7), function (data) {
                         //Set all graphs we want to gather
                         var graphTypes = [
                             'memNodeAvg',
