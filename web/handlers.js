@@ -53,7 +53,7 @@ handlers.html = function (data, callback) {
                             }
                           })
                         } else {
-                            console.log(path.join(__dirname, './html/' + data.path));
+                            //console.log(path.join(__dirname, './html/' + data.path));
                             callback(404, 'html handler couldnt find the file', 'html');
                         }
                     });
@@ -68,7 +68,7 @@ handlers.assets = function (data, callback) {
     if (data.path.length > 0) {
         //Read in the asset
         fs.readFile(path.join(__dirname, './html/' + data.path), function (err, fileData) {
-            console.log(data.path);
+            //console.log(data.path);
             if (!err && fileData) {
                 //Choose the contentType and default to plain
                 var contentType = 'plain';
