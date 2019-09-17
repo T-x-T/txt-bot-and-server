@@ -11,7 +11,7 @@ module.exports = {
     name: 'role',
     description: 'Used to change roles',
     aliases: ['roles'],
-    usage: '[mention user OR top]',
+    usage: 'add ROLE_NAME OR remove ROLE_NAME OR list',
     execute(message, args) {
 
         //Check if the user want to add, remove or list roles
