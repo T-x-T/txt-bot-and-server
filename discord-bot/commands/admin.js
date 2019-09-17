@@ -186,7 +186,7 @@ module.exports = {
                             //Just delete the amount
                             message.channel.bulkDelete(amount, false)
                                 .catch(err => {
-                                    log.write(2, 'Admin Command: Bulk delete failed', { message: message, error: err }, function (error) { });
+                                    log.write(2, 'Admin Command: Bulk delete failed', { message: message.content, error: err }, function (error) { console.log(error) });
                                     message.channel.send('Welp, that didnt work :(');
                                 });
                         } else {
@@ -194,13 +194,13 @@ module.exports = {
                                 if (amount >= 50) {
                                     message.channel.bulkDelete(50, false)
                                         .catch(err => {
-                                            log.write(2, 'Admin Command: Mass bulk delete failed', { message: message, error: err }, function (error) { });
+                                            log.write(2, 'Admin Command: Mass bulk delete failed', { message: message.content, error: err }, function (error) { console.log(error)});
                                             message.channel.send('Welp, that didnt work :(');
                                         });
                                 } else {
                                     message.channel.bulkDelete(amount, false)
                                         .catch(err => {
-                                            log.write(2, 'Admin Command: Mass bulk delete failed', { message: message, error: err }, function (error) { });
+                                            log.write(2, 'Admin Command: Mass bulk delete failed', { message: message.content, error: err }, function (error) { console.log(error)});
                                             message.channel.send('Welp, that didnt work :(');
                                         });
                                 }
