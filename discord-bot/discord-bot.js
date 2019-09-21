@@ -18,7 +18,7 @@ var discordBot = { };
 //Gets called when everything is ok and the bot is logged in
 client.once('ready', () => {
     console.log('The Discord bot is ready!');
-    client.user.setActivity('you', 'watching');
+    client.user.setActivity('your messages',{type: 'LISTENING'});
     //Hand the client object over to discord-helpers.js
     discordHelpers.init(client);
     //Finally log that we sucessfully started
@@ -30,7 +30,7 @@ client.once('ready', () => {
 //Gets called when the bot receives a new message
 client.on('message', message => {
     //Stop processing the message when it doesnt start with our prefix or if its from another bot
-    if (!message.content.startsWith(config["bot-prefix"]) || message.author.bot) return;
+    if (!message.content.startsWith(config["bot-prefix"]) || message.author.bot || message.channel.type === 'dm') return;
 
     //Split the message into the command name and its arguments
     var args = message.content.slice(config["bot-prefix"].length).split(/ +/);
