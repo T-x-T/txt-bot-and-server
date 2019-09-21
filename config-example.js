@@ -15,6 +15,7 @@ var conf = {
     'mongodb-url': 'mongodb://HOSTNAME/DATABASE',
     'guild': 'guild id goes here as a number',
     'admin-role': 'The role ID of the admin role goes here',
+    'upload-role': 'The role ID of the upload role goes here',
     'log-level': 1,
     'channelID': 'youtube channel ID here',
     'google-api-key': 'google api key here',
