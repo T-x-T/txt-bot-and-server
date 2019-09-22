@@ -1,0 +1,72 @@
+
+<h1>
+    <div class="wrapper">
+        {pax_title}
+    </div>
+</h1>
+
+<div class="wrapper content">
+
+    <div class="counter">
+        <p>
+        {total_members}
+        </p>
+        <h2>Total members</h2>
+    </div>
+
+    <div class="counter">
+        <p>
+        {average_age}
+        </p>
+        <h2>Average age</h2>
+    </div>
+
+    <div class="counter">
+        <p>
+        {total_playtime}
+        </p>
+        <h2>Total playtime</h2>
+    </div>
+
+    <div class="clear"></div>
+
+    <article class="lesspadding">
+        <h2>Countries with the most members</h2>
+        <span class="subtitle"></span>
+
+        <section>
+            <link href="js/map/jqvmap.css" media="screen" rel="stylesheet" type="text/css" />
+            <script src="js/map/jquery.vmap.js"></script>
+            <script src="js/map/jquery.vmap.world.js"></script>
+
+
+            <script>
+                jQuery(document).ready(function() {
+                    jQuery('#vmap').vectorMap({
+                        map: 'world_en',
+                        backgroundColor: '#fff',
+                        color: '#e9e9e9',
+                        hoverColor: '#007787',
+                        selectedColor: '#007787',
+                        enableZoom: true,
+                        showTooltip: true,
+                        scaleColors: ['#C8EEFF', '#00515C'],
+                        values: paxterya_countries,
+                        normalizeFunction: 'polynomial'
+                    });
+                });
+
+            </script>
+
+            <div id="vmap"></div>
+
+
+            <div class="country-ranking">
+              <p>Placeholder</p>
+
+            </div>
+
+        </section>
+    </article>
+
+</div>
