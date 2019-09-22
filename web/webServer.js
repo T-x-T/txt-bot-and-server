@@ -50,9 +50,15 @@ server.uniServer = function (req, res) {
     //Log the request
     log.write(0, 'Web Request received', {data: data, sourceIP: req.connection.remoteAddress}, function (err) {});
 
+    //Insert the correct path for different hosts
+    if (data.headers.host.indexOf('thetxt.club') > -1) data.path = '/landing/' + data.path;
+    if (data.headers.host.indexOf('paxterya.com') > -1) data.path = '/paxterya/' + data.path;
+
     //Check the path and choose a handler
     var chosenHandler = handlers.html;
-    chosenHandler = data.path.indexOf('assets') > -1 ? handlers.assets : chosenHandler;
+    chosenHandler = data.path.startsWith('assets') ? handlers.assets : chosenHandler;
+    chosenHandler = data.path.startsWith('landing') ? handlers.landing : chosenHandler;
+    chosenHandler = data.path.startsWith('paxterya') ? handlers.paxterya : chosenHandler;
 
     //Send the request to the chosenHandler
     try {
@@ -145,7 +151,7 @@ server.processHandlerResponse = function (res, method, path, statusCode, payload
 
 //Define all possible routes
 server.router = {
-    '': handlers.index
+    '': handlers.index,
 };
 
 //Init
