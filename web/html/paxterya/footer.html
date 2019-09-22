@@ -420,7 +420,19 @@ $("#app-form").on("submit", function(){
 </script>
 
 
-
+<!-- copy ip to clipboard -->
+<script>
+  function copyToClip(str) {
+    function listener(e) {
+      e.clipboardData.setData("text/plain", str);
+      e.preventDefault();
+    }
+    document.addEventListener("copy", listener);
+    document.execCommand("copy");
+    document.removeEventListener("copy", listener);
+    $('#copiedip').text('Copied!');
+  };
+</script>
 
 
 </html>

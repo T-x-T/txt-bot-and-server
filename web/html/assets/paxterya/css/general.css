@@ -121,7 +121,10 @@ header .banner {
     padding: 5px 15px;
     font-size: 24pt;
     text-shadow: 1px 3px 0px #00515c;
+    cursor: pointer;
 }
+
+
 
 .banner .players {
     background: #00515c;
@@ -853,6 +856,20 @@ textarea {
     font-weight: normal;
 }
 
+.tooltip2#copyip .tooltiptext {
+    top: 5%;
+    left: 20%;
+    text-align: center;
+    width: 150px;
+    padding: 5px;
+}
+
+.tooltip2#copyip .tooltiptext::after {
+    border-color: #222424 transparent transparent transparent;
+    top: 130%;
+    left: 50%;
+}
+
 .tooltip2 .tooltiptext::after {
     border-color: transparent transparent #222424 transparent;
     top: 0%;
@@ -1376,7 +1393,7 @@ button[type="submit"]:hover {
     font-family: "semibold", sans-serif;
     font-size: 12pt;
     float: left;
-    
+
 }
 
 .country .member-amount {
