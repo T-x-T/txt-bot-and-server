@@ -160,6 +160,8 @@ handlers.assets = function (data, callback) {
                 if (data.path.indexOf('.jpg') > -1) contentType = 'jpg';
                 if (data.path.indexOf('.ico') > -1) contentType = 'favicon';
                 if (data.path.indexOf('.ttf') > -1) contentType = 'font';
+                if (data.path.indexOf('.svg') > -1) contentType = 'svg';
+
                 callback(200, fileData, contentType);
             } else {
                 callback(404);

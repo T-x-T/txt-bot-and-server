@@ -51,14 +51,28 @@ server.uniServer = function (req, res) {
     log.write(0, 'Web Request received', {data: data, sourceIP: req.connection.remoteAddress}, function (err) {});
 
     //Insert the correct path for different hosts
-    if (data.headers.host.indexOf('thetxt.club') > -1) data.path = '/landing/' + data.path;
-    if (data.headers.host.indexOf('paxterya.com') > -1) data.path = '/paxterya/' + data.path;
+
+    //FOR TESTING ONLY
+    data.headers.host = 'paxterya.com'
+
+
+
+
+
+
+
+    if(!data.path.startsWith('assets')){
+      if (data.headers.host.indexOf('thetxt.club') > -1) data.path = '/landing/' + data.path;
+      if (data.headers.host.indexOf('paxterya.com') > -1) data.path = '/paxterya/' + data.path;
+    }
+
+    console.log(data.path)
 
     //Check the path and choose a handler
     var chosenHandler = handlers.html;
-    chosenHandler = data.path.startsWith('assets') ? handlers.assets : chosenHandler;
-    chosenHandler = data.path.startsWith('landing') ? handlers.landing : chosenHandler;
-    chosenHandler = data.path.startsWith('paxterya') ? handlers.paxterya : chosenHandler;
+    chosenHandler = data.path.indexOf('assets') > -1 ? handlers.assets : chosenHandler;
+    chosenHandler = data.path.startsWith('/landing') ? handlers.landing : chosenHandler;
+    chosenHandler = data.path.startsWith('/paxterya') ? handlers.paxterya : chosenHandler;
 
     //Send the request to the chosenHandler
     try {
@@ -137,6 +151,10 @@ server.processHandlerResponse = function (res, method, path, statusCode, payload
     }
     if (contentType == 'font') {
         res.setHeader('Content-Type', 'application/octet-stream');
+        payloadStr = typeof (payload) !== 'undefined' ? payload : '';
+    }
+    if (contentType == 'svg') {
+        res.setHeader('Content-Type', 'image/svg+xml');
         payloadStr = typeof (payload) !== 'undefined' ? payload : '';
     }
     if (contentType == 'plain') {
