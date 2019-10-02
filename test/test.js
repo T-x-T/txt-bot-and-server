@@ -10,6 +10,7 @@ const lib_data = require('./../lib/data.js');
 const lib_perflog = require('./../lib/perfLog.js');
 const webserver = require('./../web/webServer.js');
 const youtube = require('./../lib/youtube.js');
+const mc_helpers = require('./../lib/mc_helpers.js');
 
 const assert = require('assert');
 const http = require('http');
@@ -163,7 +164,21 @@ describe('Array', function() {
     });
 
 
-
+    //Tests for /lib/mc_helpers.js
+    it('mc_helpers.getUUID should return valid UUID', function(done){
+      mc_helpers.getUUID('the__txt', function(uuid){
+        assert.ok(uuid);
+        assert.ok(uuid == 'dac25e44d1024f3b819978ed62d209a1');
+        done();
+      });
+    });
+    it('mc_helpers.getIGN should return valid IGN', function(done){
+      mc_helpers.getIGN('dac25e44d1024f3b819978ed62d209a1', function(ign){
+        assert.ok(ign);
+        assert.ok(ign == 'The__TxT');
+        done();
+      });
+    });
 
 
     /*
