@@ -12,6 +12,7 @@ const path = require('path');
 const perfLog = require('./../../lib/perfLog.js');
 const discord = require('discord.js');
 const config = require('./../../config.js');
+const mc_helpers = require('./../../lib/mc_helpers.js');
 
 module.exports = {
     name: 'admin',
@@ -331,6 +332,24 @@ module.exports = {
                             });
                         }
                     });
+                    break;
+
+                case 'exec':
+                    //Command to execute manual tasks
+                    switch(args[1]){
+                      case 'updateuuids':
+                        //Updates all minecraft UUIDs, but only if its not already known
+                        mc_helpers.updateAllUUIDs(false);
+                        break;
+                      case 'forceupdateuuids':
+                        //Will update ALL minecraft UUIDs, even if they are already recorded!
+                        mc_helpers.updateAllUUIDs(true);
+                        break;
+                      default:
+                        message.reply('I didnt quite understand you moron');
+                        break;
+                    }
+
                     break;
 
                 default:

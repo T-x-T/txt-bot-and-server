@@ -4,6 +4,7 @@
  */
 
 const data = require('./../../lib/data.js');
+const mc_helpers = require('./../../lib/mc_helpers.js');
 
 module.exports = {
     name: 'minecraft',
@@ -25,14 +26,22 @@ module.exports = {
                   data.getUserData(message.author.id, function(err, userData){
                     if(!err && data){
                       userData.mcName = args[2];
-                      data.updateUserData(message.author.id, userData, function(err){
-                        if(!err){
-                          message.reply('success! Your official Minecraft IGN is now _drumroll_ ' + args[2]);
+                      //Also get the uuid for the user
+                      mc_helpers.getUUID(userData.mcName, function(uuid){
+                        if(uuid){
+                          data.updateUserData(message.author.id, userData, function(err){
+                            if(!err){
+                              message.reply('success! Your official Minecraft IGN is now _drumroll_ ' + args[2]);
+                            }else{
+                              console.log(err)
+                              message.reply('I could not update your user object for some weird reason.')
+                            }
+                          });
                         }else{
-                          console.log(err)
-                          message.reply('I could not update your user object for some weird reason.')
+                          message.reply('I couldnt get your uuid from mojang, this will be added later! Some functionality might not be available in the meantime');
                         }
-                      })
+                      });
+
                     }else{
                       message.reply('I could not get your data to update it :()');
                     }
