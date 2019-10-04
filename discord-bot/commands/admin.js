@@ -345,6 +345,9 @@ module.exports = {
                         //Will update ALL minecraft UUIDs, even if they are already recorded!
                         mc_helpers.updateAllUUIDs(true);
                         break;
+                      case 'updatestats':
+                        mc_helpers.updateStats();
+                        break;
                       default:
                         message.reply('I didnt quite understand you moron');
                         break;

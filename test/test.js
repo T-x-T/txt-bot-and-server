@@ -179,8 +179,25 @@ describe('Array', function() {
         done();
       });
     });
-
-
+    it('mc_helpers.convertUUIDtoWeirdFormat should properly convert a uuid', function(done){
+      assert.ok(mc_helpers.convertUUIDtoWeirdFormat('dac25e44d1024f3b819978ed62d209a1') == 'dac25e44-d102-4f3b-8199-78ed62d209a1');
+      done();
+    });
+    it('mc_helpers.prettiyDistance should properly prettify dfferent distances', function(done){
+      assert.equal(mc_helpers.prettiyDistance(0), '0cm');
+      assert.equal(mc_helpers.prettiyDistance(99), '99cm');
+      assert.equal(mc_helpers.prettiyDistance(100), '1m');
+      assert.equal(mc_helpers.prettiyDistance(99949), '999m');
+      assert.equal(mc_helpers.prettiyDistance(99950), '1km');
+      assert.equal(mc_helpers.prettiyDistance(100000), '1km');
+      done();
+    });
+    it('mc_helpers.prettifyDuration should properly prettidy different durations', function(done){
+      assert.equal(mc_helpers.prettifyDuration(20 * 60 * 60), '1h');
+      assert.equal(mc_helpers.prettifyDuration(20 * 60 * 30), '1h');
+      assert.equal(mc_helpers.prettifyDuration(20 * 60 * 60 * 24), '24h');
+      done();
+    });
     /*
     *
     * TESTS FOR /DISCORD-BOT/
