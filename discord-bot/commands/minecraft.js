@@ -38,7 +38,7 @@ module.exports = {
                             }
                           });
                         }else{
-                          message.reply('I couldnt get your uuid from mojang, this will be added later! Some functionality might not be available in the meantime');
+                          message.reply('I couldnt validate your name. Maybe you misspelled it, or mojangs api is down');
                         }
                       });
 
@@ -121,6 +121,8 @@ module.exports = {
                       output += `Deaths: ${stats.deaths}\n`;
                       output += `Players killed: ${stats.playerKills}\n`;
                       output += `Mobs killed: ${stats.mobKills}\n`;
+                      output += `Damage dealt: ${stats.damageDealt}\n`;
+                      output += `Damage taken: ${stats.damageTaken}\n`;
                       output += `Playtime: ${stats.playtime}\n`;
                       output += `Distance by foot: ${stats.distanceByFoot}\n`;
 
