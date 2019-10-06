@@ -38,7 +38,7 @@ module.exports = {
                             }
                           });
                         }else{
-                          message.reply('I couldnt get your uuid from mojang, this will be added later! Some functionality might not be available in the meantime');
+                          message.reply('I couldnt validate your name. Maybe you misspelled it, or mojangs api is down');
                         }
                       });
 
