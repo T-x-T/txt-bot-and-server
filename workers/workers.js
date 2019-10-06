@@ -42,4 +42,5 @@ setInterval(function(){
 setInterval(function(){
   mc_helpers.updateAllUUIDs(false);
   mc_helpers.updateStats();
+  mc_helpers.updateAllIGNs();
 }, 1000 * 60 * 60);
