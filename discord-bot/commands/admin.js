@@ -345,6 +345,10 @@ module.exports = {
                         //Will update ALL minecraft UUIDs, even if they are already recorded!
                         mc_helpers.updateAllUUIDs(true);
                         break;
+                      case 'updateigns':
+                        //Updates all minecraft IGNs
+                        mc_helpers.updateAllIGNs();
+                        break;
                       case 'updatestats':
                         mc_helpers.updateStats();
                         break;
