@@ -121,6 +121,8 @@ module.exports = {
                       output += `Deaths: ${stats.deaths}\n`;
                       output += `Players killed: ${stats.playerKills}\n`;
                       output += `Mobs killed: ${stats.mobKills}\n`;
+                      output += `Damage dealt: ${stats.damageDealt}\n`;
+                      output += `Damage taken: ${stats.damageTaken}\n`;
                       output += `Playtime: ${stats.playtime}\n`;
                       output += `Distance by foot: ${stats.distanceByFoot}\n`;
 
