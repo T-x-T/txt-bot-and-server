@@ -71,24 +71,53 @@ module.exports = {
                 break;
               case 'show':
                 //User wants to see an IGN
-                let userID;
-                //Use the userID of the first mentioned user, or the userID of the author
-                try {
-                  userID = message.mentions.users.first().id;
-                } catch (e) {
-                  userID = message.author.id;
-                }
-                //Get the user object
-                data.getUserData(userID, function(err, userData){
-                  if(!err && userData){
-                    //Check if the user has a IGN
-                    if(userData.mcName != null){
-                      message.reply('The IGN of the specified user is ' + userData.mcName);
-                    }else{
-                      message.reply('The specified user has no IGN')
+                data.listAllMembers(function(users){
+                  let userID;
+                  let showIGN = args[2] != undefined ? true: false;
+                  let validIGN = false;
+                  let ign = '';
+                  //Use the userID of the first mentioned user, or the userID of the author
+                  try {
+                    userID = message.mentions.users.first().id;
+                    showIGN = false;
+                  } catch (e) {
+                    userID = message.author.id;
+                    //User didnt mention anyone, find out if they want to see the discord user for an ign
+                    if(args[2] != undefined){
+                      users.forEach((user) => {
+                        if(user.mcName != null){
+                          if(args[2] == user.mcName.toLowerCase()){
+                            validIGN = true;
+                            ign = user.mcName;
+                            userID = user.discord;
+                          }
+                        }
+                      });
                     }
+                  }
+                  if(showIGN){
+                    //Mention the discord user that belongs to the given id
+                    if(validIGN){
+                      message.reply(`The user ${ign} belongs to <@${userID}>`);
+                    }else{
+                      message.reply('I cant find that user');
+                    }
+
                   }else{
-                    message.reply('I could not retrieve the IGN of the specified user');
+                    //Show the ign of the mentioned discord user
+                    //Get the user object
+                    data.getUserData(userID, function(err, userData){
+                      if(!err && userData){
+                        //Check if the user has a IGN
+                        if(userData.mcName != null){
+                          message.reply('The IGN of the specified user is ' + userData.mcName);
+                        }else{
+                          message.reply('The specified user has no IGN')
+                        }
+                      }else{
+                        message.reply('I could not retrieve the IGN of the specified user');
+                      }
+                    });
                   }
                 });
                 break;
