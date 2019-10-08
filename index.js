@@ -23,7 +23,7 @@ var app = {};
 //Init
 app.init = function () {
     //Mount the stats from the minecraft sftp server to ./mc_stats
-    exec(`rclone mount ${config['mc-stats-remote']}:./world/stats ./mc_stats`, (err, stdout, stderr) => {
+    exec(`rclone mount ${config['mc-stats-remote']}:./ ./mc_stats`, (err, stdout, stderr) => {
       if (err) {
         log.write(3, 'Couldnt start the process to mount the sftp server', {error: err}, function(err){});
         console.log('Couldnt start the process to mount the sftp server');
