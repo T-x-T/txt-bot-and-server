@@ -20,7 +20,7 @@ try {
 
 //Every second
 setInterval(function () {
-    perfLog.execute();
+    //perfLog.execute();
 }, 1000);
 
 //Every minute
