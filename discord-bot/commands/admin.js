@@ -390,7 +390,6 @@ module.exports = {
                             cmd += arg;
                             cmd += ' ';
                           });
-                          console.log(cmd.trim());
                           mc_helpers.rcon(cmd.trim());
                         break;
                     }
