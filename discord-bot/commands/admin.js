@@ -13,6 +13,7 @@ const perfLog = require('./../../lib/perfLog.js');
 const discord = require('discord.js');
 const config = require('./../../config.js');
 const mc_helpers = require('./../../lib/mc_helpers.js');
+const data = require('./../../lib/data.js');
 
 module.exports = {
     name: 'admin',
@@ -359,6 +360,41 @@ module.exports = {
 
                     break;
 
+                case 'mc':
+                    switch(args[1]){
+                      case 'wladd':
+                        //Add mentioned user to whitelist
+                        data.getUserData(message.mentions.users.first().id, function(err, user){
+                          if(!err){
+                            mc_helpers.rcon('whitelist add ' + user.mcName);
+                          }else{
+                            message.reply('Couldnt find the user');
+                          }
+                        });
+                        break;
+                      case 'wlrm':
+                      //Remove mentioned user from whitelist
+                      data.getUserData(message.mentions.users.first().id, function(err, user){
+                        if(!err){
+                          mc_helpers.rcon('whitelist remove ' + user.mcName);
+                        }else{
+                          message.reply('Couldnt find the user');
+                        }
+                      });
+                        break;
+                      case 'cmd':
+                          let cmd = '';
+                          args[0] = '';
+                          args[1] = '';
+                          args.forEach((arg) => {
+                            cmd += arg;
+                            cmd += ' ';
+                          });
+                          console.log(cmd.trim());
+                          mc_helpers.rcon(cmd.trim());
+                        break;
+                    }
+                    break;
                 default:
                     //Paramater not found
                     message.channel.send('Sorry, I cant find that paramater');
