@@ -147,6 +147,11 @@ client.on('messageReactionRemove', (reaction, user) => {
     }
 });
 
+//Gets called whenever a member leaves the guild
+client.on('guildMemberRemove', (user) => {
+  _data.removeMember(user.id, function(err){});
+});
+
 //Init script
 discordBot.init = function () {
     //Read in and require all command files dynamically

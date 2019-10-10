@@ -4,6 +4,7 @@
  */
 
 //Dependencies
+const data = require('./lib/data.js');
 const config = require('./config.js');
 const webServer = require('./web/webServer.js');
 const discordBot = require('./discord-bot/discord-bot.js');
