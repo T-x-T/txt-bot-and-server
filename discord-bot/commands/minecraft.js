@@ -128,218 +128,426 @@ module.exports = {
           case 'stats':
           //User wants to see some stats
           let userID;
-          //Use the userID of the first mentioned user, or the userID of the author
-          try {
-            userID = message.mentions.users.first().id;
-          } catch (e) {
-            userID = message.author.id;
+
+          //If the user is all then get stats for all users combined
+          if(args[2] == 'all'){
+            userID = false;
+          }else{
+            //Use the userID of the first mentioned user, or the userID of the author
+            try {
+              userID = message.mentions.users.first().id;
+            } catch (e) {
+              userID = message.author.id;
+            }
           }
 
-          //Find the IGN out as well
-          data.getUserData(userID, function(err, data){
-            if(!err && data.mcName != null){
-              let ign = data.mcName;
-              switch(args[1]){
-                case 'general':
-                  mc_helpers.getStatTemplate.general(userID, function(err, stats){
-                    if(!err){
-                      //Build the message to send back
-                      let output = '```';
+          if(userID){
+            //Find the IGN out as well
+            data.getUserData(userID, function(err, data){
+              if(!err && data.mcName != null){
+                let ign = data.mcName;
+                switch(args[1]){
+                  case 'general':
+                    mc_helpers.getStatTemplate.general(userID, function(err, stats){
+                      if(!err){
+                        //Build the message to send back
+                        let output = '```';
 
-                      output += `General statistics for ${ign}:\n`;
-                      output += `Deaths: ${stats.deaths}\n`;
-                      output += `Players killed: ${stats.playerKills}\n`;
-                      output += `Mobs killed: ${stats.mobKills}\n`;
-                      output += `Damage dealt: ${stats.damageDealt}\n`;
-                      output += `Damage taken: ${stats.damageTaken}\n`;
-                      output += `Playtime: ${stats.playtime}\n`;
-                      output += `Distance by foot: ${stats.distanceByFoot}\n`;
+                        output += `General statistics for ${ign}:\n`;
+                        output += `Deaths: ${stats.deaths}\n`;
+                        output += `Players killed: ${stats.playerKills}\n`;
+                        output += `Mobs killed: ${stats.mobKills}\n`;
+                        output += `Damage dealt: ${stats.damageDealt}\n`;
+                        output += `Damage taken: ${stats.damageTaken}\n`;
+                        output += `Playtime: ${stats.playtime}\n`;
+                        output += `Distance by foot: ${stats.distanceByFoot}\n`;
 
-                      output += '```';
-                      message.channel.send(output);
-                    }else{
-                      message.reply(err);
+                        output += '```';
+                        message.channel.send(output);
+                      }else{
+                        message.reply(err);
+                      }
+                    });
+                    break;
+                  case 'distance':
+                    mc_helpers.getStatTemplate.distances(userID, function(err, stats){
+                      if(!err){
+                        //Build the message to send back
+                        let output = '```';
+
+                        output += `Distance statistics for ${ign}:\n`;
+                        output += `Walk: ${stats.walk}\n`;
+                        output += `Sprint: ${stats.sprint}\n`;
+                        output += `Crouch: ${stats.crouch}\n`;
+                        output += `Climb: ${stats.climb}\n`;
+                        output += `Fall: ${stats.fall}\n`;
+                        output += `Walk on Water: ${stats.walkOnWater}\n`;
+                        output += `Walk under Water: ${stats.walkUnderWater}\n`;
+                        output += `Swim: ${stats.swim}\n`;
+                        output += `Boat: ${stats.boat}\n`;
+                        output += `Elytra: ${stats.aviate}\n`;
+                        output += `Fly: ${stats.fly}\n`;
+
+                        output += '```';
+                        message.channel.send(output);
+                      }else{
+                        message.reply(err);
+                      }
+                    });
+                    break;
+                  case 'ores':
+                    mc_helpers.getStatTemplate.minedOres(userID, function(err, stats){
+                      if(!err){
+                        //Build the message to send back
+                        let output = '```';
+
+                        output += `Mined ores from ${ign}:\n`;
+                        output += `Diamond: ${stats.diamond}\n`;
+                        output += `Iron: ${stats.iron}\n`;
+                        output += `Gold: ${stats.gold}\n`;
+                        output += `Emerald: ${stats.emerald}\n`;
+                        output += `Coal: ${stats.coal}\n`;
+                        output += `Lapis Lazuli: ${stats.lapis}\n`;
+                        output += `Redstone: ${stats.redstone}\n`;
+
+                        output += '```';
+                        message.channel.send(output);
+                      }else{
+                        message.reply(err);
+                      }
+                    });
+                    break;
+                  case 'total':
+                      mc_helpers.getStatTemplate.totals(userID, function(err, stats){
+                        if(!err){
+                          //Build the message to send back
+                          let output = '```';
+
+                          output += `Totals for ${ign}:\n`;
+                          output += `Blocks mined: ${stats.mined}\n`;
+                          output += `Blocks built / Items used: ${stats.used}\n`;
+                          output += `Items crafted: ${stats.crafted}\n`;
+                          output += `Items broken: ${stats.broken}\n`;
+                          output += `Items dropped: ${stats.dropped}\n`;
+                          output += `Distance traveled: ${stats.traveled}\n`;
+
+                          output += '```';
+                          message.channel.send(output);
+                        }else{
+                          message.reply(err);
+                        }
+                      });
+                      break;
+                    case 'top_usage':
+                      mc_helpers.getStatTemplate.topUsageItems(userID, function(err, stats){
+                        if(!err){
+                          //Build the message to send back
+                          let output = '```';
+
+                          output += `Top used items from ${ign}:\n`;
+                          let i = 0;
+                          stats.forEach((entry) => {
+                            output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
+                            i++;
+                          });
+
+                          output += '```';
+                          message.channel.send(output);
+                        }else{
+                          message.reply(err);
+                        }
+                      });
+                      break;
+                    case 'top_mined':
+                      mc_helpers.getStatTemplate.topMinedBlocks(userID, function(err, stats){
+                        if(!err){
+                          //Build the message to send back
+                          let output = '```';
+
+                          output += `Top mined items from ${ign}:\n`;
+                          let i = 0;
+                          stats.forEach((entry) => {
+                            output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
+                            i++;
+                          });
+
+                          output += '```';
+                          message.channel.send(output);
+                        }else{
+                          message.reply(err);
+                        }
+                      });
+                      break;
+                    case 'top_killed':
+                      mc_helpers.getStatTemplate.topKilledMobs(userID, function(err, stats){
+                        if(!err){
+                          //Build the message to send back
+                          let output = '```';
+
+                          output += `Top killed mobs from ${ign}:\n`;
+                          let i = 0;
+                          stats.forEach((entry) => {
+                            output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
+                            i++;
+                          });
+
+                          output += '```';
+                          message.channel.send(output);
+                        }else{
+                          message.reply(err);
+                        }
+                      });
+                      break;
+                    case 'top_killed_by':
+                      mc_helpers.getStatTemplate.topKilledByMobs(userID, function(err, stats){
+                        if(!err){
+                          //Build the message to send back
+                          let output = '```';
+
+                          output += `Top top mobs killed by for ${ign}:\n`;
+                          let i = 0;
+                          stats.forEach((entry) => {
+                            output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
+                            i++;
+                          });
+
+                          output += '```';
+                          message.channel.send(output);
+                        }else{
+                          message.reply(err);
+                        }
+                      });
+                      break;
+                    case 'total_per_death':
+                      mc_helpers.getStatTemplate.totalPerDeath(userID, function(err, stats){
+                        if(!err){
+                          //Build the message to send back
+                          let output = '```';
+
+                          output += `Totals per death from ${ign}:\n`;
+                          output += `Blocks mined: ${stats.mined}\n`;
+                          output += `Blocks built / Items used: ${stats.used}\n`;
+                          output += `Items crafted: ${stats.crafted}\n`;
+                          output += `Items broken: ${stats.broken}\n`;
+                          output += `Items dropped: ${stats.dropped}\n`;
+                          output += `Distance traveled: ${stats.traveled}\n`;
+
+                          output += '```';
+                          message.channel.send(output);
+                        }else{
+                          message.reply(err);
+                        }
+                      });
+                      break;
+                    default:
+                      message.reply('I couldnt find that collection. Please use one of the following collecitons: general, distance, ores, total, top_usage, top_mined, top_killed, top_killed_by, total_per_death');
+                      break;
                     }
-                  });
-                  break;
-                case 'distance':
-                  mc_helpers.getStatTemplate.distances(userID, function(err, stats){
-                    if(!err){
-                      //Build the message to send back
-                      let output = '```';
+              }else{
+                message.reply('Couldnt get the IGN for that user');
+              }
+            });
+          }else{
+            let ign = 'all players';
+            switch(args[1]){
+              case 'general':
+                mc_helpers.getStatTemplate.general(userID, function(err, stats){
+                  if(!err){
+                    //Build the message to send back
+                    let output = '```';
 
-                      output += `Distance statistics for ${ign}:\n`;
-                      output += `Walk: ${stats.walk}\n`;
-                      output += `Sprint: ${stats.sprint}\n`;
-                      output += `Crouch: ${stats.crouch}\n`;
-                      output += `Climb: ${stats.climb}\n`;
-                      output += `Fall: ${stats.fall}\n`;
-                      output += `Walk on Water: ${stats.walkOnWater}\n`;
-                      output += `Walk under Water: ${stats.walkUnderWater}\n`;
-                      output += `Swim: ${stats.swim}\n`;
-                      output += `Boat: ${stats.boat}\n`;
-                      output += `Elytra: ${stats.aviate}\n`;
-                      output += `Fly: ${stats.fly}\n`;
+                    output += `General statistics for ${ign}:\n`;
+                    output += `Deaths: ${stats.deaths}\n`;
+                    output += `Players killed: ${stats.playerKills}\n`;
+                    output += `Mobs killed: ${stats.mobKills}\n`;
+                    output += `Damage dealt: ${stats.damageDealt}\n`;
+                    output += `Damage taken: ${stats.damageTaken}\n`;
+                    output += `Playtime: ${stats.playtime}\n`;
+                    output += `Distance by foot: ${stats.distanceByFoot}\n`;
 
-                      output += '```';
-                      message.channel.send(output);
-                    }else{
-                      message.reply(err);
-                    }
-                  });
-                  break;
-                case 'ores':
-                  mc_helpers.getStatTemplate.minedOres(userID, function(err, stats){
-                    if(!err){
-                      //Build the message to send back
-                      let output = '```';
-
-                      output += `Mined ores from ${ign}:\n`;
-                      output += `Diamond: ${stats.diamond}\n`;
-                      output += `Iron: ${stats.iron}\n`;
-                      output += `Gold: ${stats.gold}\n`;
-                      output += `Emerald: ${stats.emerald}\n`;
-                      output += `Coal: ${stats.coal}\n`;
-                      output += `Lapis Lazuli: ${stats.lapis}\n`;
-                      output += `Redstone: ${stats.redstone}\n`;
-
-                      output += '```';
-                      message.channel.send(output);
-                    }else{
-                      message.reply(err);
-                    }
-                  });
-                  break;
-                case 'total':
-                    mc_helpers.getStatTemplate.totals(userID, function(err, stats){
-                      if(!err){
-                        //Build the message to send back
-                        let output = '```';
-
-                        output += `Totals for ${ign}:\n`;
-                        output += `Blocks mined: ${stats.mined}\n`;
-                        output += `Blocks built / Items used: ${stats.used}\n`;
-                        output += `Items crafted: ${stats.crafted}\n`;
-                        output += `Items broken: ${stats.broken}\n`;
-                        output += `Items dropped: ${stats.dropped}\n`;
-                        output += `Distance traveled: ${stats.traveled}\n`;
-
-                        output += '```';
-                        message.channel.send(output);
-                      }else{
-                        message.reply(err);
-                      }
-                    });
-                    break;
-                  case 'top_usage':
-                    mc_helpers.getStatTemplate.topUsageItems(userID, function(err, stats){
-                      if(!err){
-                        //Build the message to send back
-                        let output = '```';
-
-                        output += `Top used items from ${ign}:\n`;
-                        let i = 0;
-                        stats.forEach((entry) => {
-                          output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
-                          i++;
-                        });
-
-                        output += '```';
-                        message.channel.send(output);
-                      }else{
-                        message.reply(err);
-                      }
-                    });
-                    break;
-                  case 'top_mined':
-                    mc_helpers.getStatTemplate.topMinedBlocks(userID, function(err, stats){
-                      if(!err){
-                        //Build the message to send back
-                        let output = '```';
-
-                        output += `Top mined items from ${ign}:\n`;
-                        let i = 0;
-                        stats.forEach((entry) => {
-                          output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
-                          i++;
-                        });
-
-                        output += '```';
-                        message.channel.send(output);
-                      }else{
-                        message.reply(err);
-                      }
-                    });
-                    break;
-                  case 'top_killed':
-                    mc_helpers.getStatTemplate.topKilledMobs(userID, function(err, stats){
-                      if(!err){
-                        //Build the message to send back
-                        let output = '```';
-
-                        output += `Top killed mobs from ${ign}:\n`;
-                        let i = 0;
-                        stats.forEach((entry) => {
-                          output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
-                          i++;
-                        });
-
-                        output += '```';
-                        message.channel.send(output);
-                      }else{
-                        message.reply(err);
-                      }
-                    });
-                    break;
-                  case 'top_killed_by':
-                    mc_helpers.getStatTemplate.topKilledByMobs(userID, function(err, stats){
-                      if(!err){
-                        //Build the message to send back
-                        let output = '```';
-
-                        output += `Top top mobs killed by for ${ign}:\n`;
-                        let i = 0;
-                        stats.forEach((entry) => {
-                          output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
-                          i++;
-                        });
-
-                        output += '```';
-                        message.channel.send(output);
-                      }else{
-                        message.reply(err);
-                      }
-                    });
-                    break;
-                  case 'total_per_death':
-                    mc_helpers.getStatTemplate.totalPerDeath(userID, function(err, stats){
-                      if(!err){
-                        //Build the message to send back
-                        let output = '```';
-
-                        output += `Totals per death from ${ign}:\n`;
-                        output += `Blocks mined: ${stats.mined}\n`;
-                        output += `Blocks built / Items used: ${stats.used}\n`;
-                        output += `Items crafted: ${stats.crafted}\n`;
-                        output += `Items broken: ${stats.broken}\n`;
-                        output += `Items dropped: ${stats.dropped}\n`;
-                        output += `Distance traveled: ${stats.traveled}\n`;
-
-                        output += '```';
-                        message.channel.send(output);
-                      }else{
-                        message.reply(err);
-                      }
-                    });
-                    break;
-                  default:
-                    message.reply('I couldnt find that collection. Please use one of the following collecitons: general, distance, ores, total, top_usage, top_mined, top_killed, top_killed_by, total_per_death');
-                    break;
+                    output += '```';
+                    message.channel.send(output);
+                  }else{
+                    message.reply(err);
                   }
-            }else{
-              message.reply('Couldnt get the IGN for that user');
-            }
-          });
+                });
+                break;
+              case 'distance':
+                mc_helpers.getStatTemplate.distances(userID, function(err, stats){
+                  if(!err){
+                    //Build the message to send back
+                    let output = '```';
+
+                    output += `Distance statistics for ${ign}:\n`;
+                    output += `Walk: ${stats.walk}\n`;
+                    output += `Sprint: ${stats.sprint}\n`;
+                    output += `Crouch: ${stats.crouch}\n`;
+                    output += `Climb: ${stats.climb}\n`;
+                    output += `Fall: ${stats.fall}\n`;
+                    output += `Walk on Water: ${stats.walkOnWater}\n`;
+                    output += `Walk under Water: ${stats.walkUnderWater}\n`;
+                    output += `Swim: ${stats.swim}\n`;
+                    output += `Boat: ${stats.boat}\n`;
+                    output += `Elytra: ${stats.aviate}\n`;
+                    output += `Fly: ${stats.fly}\n`;
+
+                    output += '```';
+                    message.channel.send(output);
+                  }else{
+                    message.reply(err);
+                  }
+                });
+                break;
+              case 'ores':
+                mc_helpers.getStatTemplate.minedOres(userID, function(err, stats){
+                  if(!err){
+                    //Build the message to send back
+                    let output = '```';
+
+                    output += `Mined ores from ${ign}:\n`;
+                    output += `Diamond: ${stats.diamond}\n`;
+                    output += `Iron: ${stats.iron}\n`;
+                    output += `Gold: ${stats.gold}\n`;
+                    output += `Emerald: ${stats.emerald}\n`;
+                    output += `Coal: ${stats.coal}\n`;
+                    output += `Lapis Lazuli: ${stats.lapis}\n`;
+                    output += `Redstone: ${stats.redstone}\n`;
+
+                    output += '```';
+                    message.channel.send(output);
+                  }else{
+                    message.reply(err);
+                  }
+                });
+                break;
+              case 'total':
+                  mc_helpers.getStatTemplate.totals(userID, function(err, stats){
+                    if(!err){
+                      //Build the message to send back
+                      let output = '```';
+
+                      output += `Totals for ${ign}:\n`;
+                      output += `Blocks mined: ${stats.mined}\n`;
+                      output += `Blocks built / Items used: ${stats.used}\n`;
+                      output += `Items crafted: ${stats.crafted}\n`;
+                      output += `Items broken: ${stats.broken}\n`;
+                      output += `Items dropped: ${stats.dropped}\n`;
+                      output += `Distance traveled: ${stats.traveled}\n`;
+
+                      output += '```';
+                      message.channel.send(output);
+                    }else{
+                      message.reply(err);
+                    }
+                  });
+                  break;
+                case 'top_usage':
+                  mc_helpers.getStatTemplate.topUsageItems(userID, function(err, stats){
+                    if(!err){
+                      //Build the message to send back
+                      let output = '```';
+
+                      output += `Top used items from ${ign}:\n`;
+                      let i = 0;
+                      stats.forEach((entry) => {
+                        output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
+                        i++;
+                      });
+
+                      output += '```';
+                      message.channel.send(output);
+                    }else{
+                      message.reply(err);
+                    }
+                  });
+                  break;
+                case 'top_mined':
+                  mc_helpers.getStatTemplate.topMinedBlocks(userID, function(err, stats){
+                    if(!err){
+                      //Build the message to send back
+                      let output = '```';
+
+                      output += `Top mined items from ${ign}:\n`;
+                      let i = 0;
+                      stats.forEach((entry) => {
+                        output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
+                        i++;
+                      });
+
+                      output += '```';
+                      message.channel.send(output);
+                    }else{
+                      message.reply(err);
+                    }
+                  });
+                  break;
+                case 'top_killed':
+                  mc_helpers.getStatTemplate.topKilledMobs(userID, function(err, stats){
+                    if(!err){
+                      //Build the message to send back
+                      let output = '```';
+
+                      output += `Top killed mobs from ${ign}:\n`;
+                      let i = 0;
+                      stats.forEach((entry) => {
+                        output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
+                        i++;
+                      });
+
+                      output += '```';
+                      message.channel.send(output);
+                    }else{
+                      message.reply(err);
+                    }
+                  });
+                  break;
+                case 'top_killed_by':
+                  mc_helpers.getStatTemplate.topKilledByMobs(userID, function(err, stats){
+                    if(!err){
+                      //Build the message to send back
+                      let output = '```';
+
+                      output += `Top top mobs killed by for ${ign}:\n`;
+                      let i = 0;
+                      stats.forEach((entry) => {
+                        output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
+                        i++;
+                      });
+
+                      output += '```';
+                      message.channel.send(output);
+                    }else{
+                      message.reply(err);
+                    }
+                  });
+                  break;
+                case 'total_per_death':
+                  mc_helpers.getStatTemplate.totalPerDeath(userID, function(err, stats){
+                    if(!err){
+                      //Build the message to send back
+                      let output = '```';
+
+                      output += `Totals per death from ${ign}:\n`;
+                      output += `Blocks mined: ${stats.mined}\n`;
+                      output += `Blocks built / Items used: ${stats.used}\n`;
+                      output += `Items crafted: ${stats.crafted}\n`;
+                      output += `Items broken: ${stats.broken}\n`;
+                      output += `Items dropped: ${stats.dropped}\n`;
+                      output += `Distance traveled: ${stats.traveled}\n`;
+
+                      output += '```';
+                      message.channel.send(output);
+                    }else{
+                      message.reply(err);
+                    }
+                  });
+                  break;
+                default:
+                  message.reply('I couldnt find that collection. Please use one of the following collecitons: general, distance, ores, total, top_usage, top_mined, top_killed, top_killed_by, total_per_death');
+                  break;
+                }
+          }
+
             break;
           default:
             message.reply('you tried to do something that I dont understand');
