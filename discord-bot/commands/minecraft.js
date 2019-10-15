@@ -247,6 +247,7 @@ _internals.statsSwitch = function(collection, userID, ign, callback){
     case 'total':
         mc_helpers.getStatTemplate(userID, 'totals', function(err, stats){
           if(!err){
+            output += `Totals from ${ign}:\n`;
             output += `Blocks mined: ${stats.mined}\n`;
             output += `Blocks built / Items used: ${stats.used}\n`;
             output += `Items crafted: ${stats.crafted}\n`;
@@ -292,6 +293,7 @@ _internals.statsSwitch = function(collection, userID, ign, callback){
       case 'top_killed':
         mc_helpers.getStatTemplate(userID, 'topKilledMobs', function(err, stats){
           if(!err){
+            output += `Top killed mobs from ${ign}:\n`;
             let i = 0;
             stats.forEach((entry) => {
               output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
@@ -306,6 +308,7 @@ _internals.statsSwitch = function(collection, userID, ign, callback){
       case 'top_killed_by':
         mc_helpers.getStatTemplate(userID, 'topKilledByMobs', function(err, stats){
           if(!err){
+            output += `Top mobs killed by from ${ign}:\n`;
             let i = 0;
             stats.forEach((entry) => {
               output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
@@ -320,6 +323,7 @@ _internals.statsSwitch = function(collection, userID, ign, callback){
       case 'total_per_death':
         mc_helpers.getStatTemplate(userID, 'totalPerDeath', function(err, stats){
           if(!err){
+            output += `Totals per death from ${ign}:\n`;
             output += `Blocks mined: ${stats.mined}\n`;
             output += `Blocks built / Items used: ${stats.used}\n`;
             output += `Items crafted: ${stats.crafted}\n`;
