@@ -28,7 +28,7 @@ module.exports = {
                 if (args[0] == 'top' || args[0] == 'list') {
                     //User wants to get the top list
 
-                    //Get all user objects
+                    //Get all user objects and put them into array entries
                     data.listAllMembers(function (userObjects) {
                         var entries = [];
                         userObjects.forEach((document) => {
@@ -53,7 +53,7 @@ module.exports = {
                         });
 
                         //Only use the top 10 users
-                        entries = entries.slice(0, 9);
+                        entries = entries.slice(0, 10);
 
                         //Form the output string
                         var count = 0;
