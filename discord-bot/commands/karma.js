@@ -61,7 +61,7 @@ module.exports = {
                         output += 'Rank  Karma\tName\n';
                         entries.forEach((curEntry) => {
                             count++;
-                            output += `   ${count}. ${curEntry.karma}`;
+                            output += count < 10 ? `   ${count}. ${curEntry.karma}` : `  ${count}. ${curEntry.karma}`;
                             //Insert the right amount of spaces
                             var spaces = 9 - curEntry.karma.toString().length;
                             for (var i = 0; i < spaces; i++) {
