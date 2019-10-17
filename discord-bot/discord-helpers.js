@@ -92,7 +92,7 @@ helpers.addIgnToNick = function(member){
       let ign = typeof document.mcName == 'string' ? document.mcName : '';
       try{
         //Now we have the discord nick and the mc ign, so lets compare them to find out if they are different
-        if(!(nick.indexOf(ign) > -1 || ign.indexOf(nick) > -1)){
+        if(!(nick.toLowerCase().indexOf(ign.toLowerCase()) > -1 || ign.toLowerCase().indexOf(nick.toLowerCase()) > -1)){
           //Now its time to change the users nick
           member.setNickname(`${nick} (${ign})`)
           .catch(console.log);
