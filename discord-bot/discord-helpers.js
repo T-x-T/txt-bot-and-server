@@ -90,13 +90,17 @@ helpers.addIgnToNick = function(member){
   data.getUserData(member.id, function(err, document){
     if(!err){
       let ign = typeof document.mcName == 'string' ? document.mcName : '';
-
+      try{
         //Now we have the discord nick and the mc ign, so lets compare them to find out if they are different
         if(!(nick.indexOf(ign) > -1 || ign.indexOf(nick) > -1)){
           //Now its time to change the users nick
           member.setNickname(`${nick} (${ign})`)
           .catch(console.log);
         }
+      }catch(e){
+        console.log(member.id);
+      }
+
 
     }else{
       log.write(2, 'discord_helpers.addIgnToNick couldnt get the member document', {user: user.id, err: err}, function(e){});
