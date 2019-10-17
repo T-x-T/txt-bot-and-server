@@ -3,8 +3,6 @@
  *	Command for all the admin thingys
  */
 
-//FIX: you need to send the command twice to get the up to date image
-
 const graph = require('./../../lib/graph.js');
 const fs = require('fs');
 const log = require('./../../lib/log.js');
@@ -13,12 +11,13 @@ const perfLog = require('./../../lib/perfLog.js');
 const discord = require('discord.js');
 const config = require('./../../config.js');
 const mc_helpers = require('./../../lib/mc_helpers.js');
+const discord_helpers = require('./../discord-helpers.js');
 const data = require('./../../lib/data.js');
 
 module.exports = {
     name: 'admin',
     description: 'Commands only for admins',
-    aliases: [''],
+    aliases: ['a'],
 
     execute(message, args) {
         //Check if the author is admin
@@ -353,6 +352,12 @@ module.exports = {
                       case 'updatestats':
                         mc_helpers.updateStats();
                         break;
+                      case 'updatenick':
+                        _internal.addIgnToNick(message, false);
+                        break;
+                      case 'updateallnicks':
+                        _internal.addIgnToNick(message, true);
+                        break;
                       default:
                         message.reply('I didnt quite understand you moron');
                         break;
@@ -403,4 +408,31 @@ module.exports = {
             message.channel.send('Sorry, you are not authorized to do that');
         }
     }
+};
+
+var _internal = {};
+
+//if all is true, it will update the nick for all users with an ign
+_internal.addIgnToNick = function(msg, all){
+  if(all){
+    data.listAllMembers(function(docs){
+      //add ign to nick for each member with a nick
+      docs.forEach((user) => {
+        if(typeof user.mcName == 'string'){
+          let dummyMsg = {member: user.discord};
+          _internal.addIgnToNick(dummyMsg, false);
+        }
+      });
+    });
+  }else{
+    let user;
+    try{
+      user = msg.mentions.members.first();
+      discord_helpers.addIgnToNick(user);
+    }catch(e){
+      user = discord_helpers.getMemberObjectByID(msg.member, function(member){
+        discord_helpers.addIgnToNick(member);
+      });
+    }
+  }
 };

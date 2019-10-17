@@ -5,6 +5,8 @@
 
 //Dependencies
 const config = require('./../config.js');
+const data = require('./../lib/data.js');
+const log = require('./../lib/log.js');
 
 //Global var
 var client;
@@ -19,6 +21,14 @@ helpers.getNicknameByID = function (userID, callback) {
     } catch (e) {
         callback(false);
     }
+};
+
+helpers.getMemberObjectByID = function(userID, callback){
+  try {
+      callback(client.guilds.get(config['guild']).members.get(userID));
+  } catch (e) {
+      callback(false);
+  }
 };
 
 //Get the last message from a channel
@@ -72,6 +82,26 @@ helpers.getRoleId = function(roleName){
     if(item.name == roleName) id = item.id;
   });
   return id;
+};
+
+//Add the ign to the users nick if necessary. the user variable requires a discord guildmember object
+helpers.addIgnToNick = function(member){
+  let nick = member.displayName;
+  data.getUserData(member.id, function(err, document){
+    if(!err){
+      let ign = typeof document.mcName == 'string' ? document.mcName : '';
+
+        //Now we have the discord nick and the mc ign, so lets compare them to find out if they are different
+        if(!(nick.indexOf(ign) > -1 || ign.indexOf(nick) > -1)){
+          //Now its time to change the users nick
+          member.setNickname(`${nick} (${ign})`)
+          .catch(console.log);
+        }
+
+    }else{
+      log.write(2, 'discord_helpers.addIgnToNick couldnt get the member document', {user: user.id, err: err}, function(e){});
+    }
+  });
 };
 
 //Init script
