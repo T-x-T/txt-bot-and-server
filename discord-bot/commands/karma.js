@@ -44,7 +44,6 @@ module.exports = {
               let rank = entries.indexOf(karma);
               //Get the total amount of users
               let totalUsers = entries.length;
-              message.reply(entries);
               message.channel.send(`<@${userID}> has ${karma} karma and thus has the rank ${rank + 1} of ${totalUsers} total Users!`);
             }else{
               message.channel.send('There was an oopsie (Im kinda sorry)');
