@@ -275,6 +275,21 @@ _internals.statsSwitch = function(collection, userID, ign, callback){
       callback(output);
     });
     break;
+    case 'top_picked_up':
+    mc_helpers.getStatTemplate(userID, 'topPickedUpItems', function(err, stats){
+      if(!err){
+        output += `Top picked up items from ${ign}:\n`;
+        let i = 0;
+        stats.forEach((entry) => {
+          output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
+          i++;
+        });
+      }else{
+        output += 'Something went wrong and I couldnt get the stats';
+      }
+      callback(output);
+    });
+    break;
     case 'top_mined':
     mc_helpers.getStatTemplate(userID, 'topMinedBlocks', function(err, stats){
       if(!err){
