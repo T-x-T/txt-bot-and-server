@@ -32,7 +32,7 @@ module.exports = {
                     data.updateUserData(message.author.id, userData, function(err){
                       if(!err){
                         //Last, but not least trigger the nickname update and tell the user everything worked
-                        mc_helpers.addIgnToNick(message.author);
+                        discord_helpers.addIgnToNick(message.member);
                         message.reply('success! Your official Minecraft IGN is now _drumroll_ ' + args[2]);
                       }else{
                         console.log(err)
