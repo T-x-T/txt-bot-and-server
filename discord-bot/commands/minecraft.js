@@ -305,6 +305,51 @@ _internals.statsSwitch = function(collection, userID, ign, callback){
       callback(output);
     });
     break;
+    case 'top_dropped':
+    mc_helpers.getStatTemplate(userID, 'topDroppedItems', function(err, stats){
+      if(!err){
+        output += `Top dropped items from ${ign}:\n`;
+        let i = 0;
+        stats.forEach((entry) => {
+          output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
+          i++;
+        });
+      }else{
+        output += 'Something went wrong and I couldnt get the stats';
+      }
+      callback(output);
+    });
+    break;
+    case 'top_crafted':
+    mc_helpers.getStatTemplate(userID, 'topCraftedItems', function(err, stats){
+      if(!err){
+        output += `Top crafted items from ${ign}:\n`;
+        let i = 0;
+        stats.forEach((entry) => {
+          output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
+          i++;
+        });
+      }else{
+        output += 'Something went wrong and I couldnt get the stats';
+      }
+      callback(output);
+    });
+    break;
+    case 'top_broken':
+    mc_helpers.getStatTemplate(userID, 'topBrokenItems', function(err, stats){
+      if(!err){
+        output += `Top broken items from ${ign}:\n`;
+        let i = 0;
+        stats.forEach((entry) => {
+          output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
+          i++;
+        });
+      }else{
+        output += 'Something went wrong and I couldnt get the stats';
+      }
+      callback(output);
+    });
+    break;
     case 'top_killed':
     mc_helpers.getStatTemplate(userID, 'topKilledMobs', function(err, stats){
       if(!err){
@@ -352,7 +397,7 @@ _internals.statsSwitch = function(collection, userID, ign, callback){
     });
     break;
     default:
-    output += 'I couldnt find that collection. Please use one of the following collecitons: general, distance, ores, total, top_usage, top_picked_up, top_mined, top_killed, top_killed_by, total_per_death';
+    output += 'I couldnt find that collection. Please use one of the following collecitons: general, distance, ores, total, top_usage, top_picked_up, top_dropped, top_crafted, top_broken, top_mined, top_killed, top_killed_by, total_per_death';
     callback(output);
     break;
   }
