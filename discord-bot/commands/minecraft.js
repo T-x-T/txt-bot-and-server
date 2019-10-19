@@ -148,12 +148,23 @@ module.exports = {
             if(!err && data.mcName != null){
               let ign = data.mcName;
 
-              let output = '```';
-              _internals.statsSwitch(args[1], userID, ign, function(statsOutput){
-                output += statsOutput;
-                output += '```';
-                message.channel.send(output);
-              });
+              if(args[1] == 'rank'){
+                //Get the rank flavored stats
+                let output = '```';
+                _internals.statsSwitch(args[2], userID, ign, true, function(statsOutput){
+                  output += statsOutput;
+                  output += '```';
+                  message.channel.send(output);
+                });
+              }else{
+                //Normal stats
+                let output = '```';
+                _internals.statsSwitch(args[1], userID, ign, false, function(statsOutput){
+                  output += statsOutput;
+                  output += '```';
+                  message.channel.send(output);
+                });
+              }
             }else{
               message.reply('Couldnt get the IGN for that user');
             }
@@ -186,20 +197,31 @@ module.exports = {
 
 var _internals = {};
 
-_internals.statsSwitch = function(collection, userID, ign, callback){
+_internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
   let output = '';
   switch(collection){
     case 'general':
-    mc_helpers.getStatTemplate(userID, 'general', function(err, stats){
+    mc_helpers.getStatTemplate(userID, 'general', rankInfo, function(err, stats){
       if(!err){
-        output += `General statistics for ${ign}:\n`;
-        output += `Deaths: ${stats.deaths}\n`;
-        output += `Players killed: ${stats.playerKills}\n`;
-        output += `Mobs killed: ${stats.mobKills}\n`;
-        output += `Damage dealt: ${stats.damageDealt}\n`;
-        output += `Damage taken: ${stats.damageTaken}\n`;
-        output += `Playtime: ${stats.playtime}\n`;
-        output += `Distance by foot: ${stats.distanceByFoot}\n`;
+        if(rankInfo){
+          output += `General statistics for ${ign}:\n`;
+          output += `Deaths: ${stats.deaths.rank} of ${stats._totalPlayers} (${stats.deaths.stat})\n`;
+          output += `Players killed: ${stats.playerKills.rank} of ${stats._totalPlayers} (${stats.playerKills.stat})\n`;
+          output += `Mobs killed: ${stats.mobKills.rank} of ${stats._totalPlayers} (${stats.mobKills.stat})\n`;
+          output += `Damage dealt: ${stats.damageDealt.rank} of ${stats._totalPlayers} (${stats.damageDealt.stat})\n`;
+          output += `Damage taken: ${stats.damageTaken.rank} of ${stats._totalPlayers} (${stats.damageTaken.stat})\n`;
+          output += `Playtime: ${stats.playtime.rank} of ${stats._totalPlayers} (${stats.playtime.stat})\n`;
+          output += `Distance by foot: ${stats.distanceByFoot.rank} of ${stats._totalPlayers} (${stats.distanceByFoot.stat})\n`;
+        }else{
+          output += `General statistics for ${ign}:\n`;
+          output += `Deaths: ${stats.deaths}\n`;
+          output += `Players killed: ${stats.playerKills}\n`;
+          output += `Mobs killed: ${stats.mobKills}\n`;
+          output += `Damage dealt: ${stats.damageDealt}\n`;
+          output += `Damage taken: ${stats.damageTaken}\n`;
+          output += `Playtime: ${stats.playtime}\n`;
+          output += `Distance by foot: ${stats.distanceByFoot}\n`;
+        }
       }else{
         output += 'Something went wrong and I couldnt get the stats';
       }
@@ -207,20 +229,35 @@ _internals.statsSwitch = function(collection, userID, ign, callback){
     });
     break;
     case 'distance':
-    mc_helpers.getStatTemplate(userID, 'distances', function(err, stats){
+    mc_helpers.getStatTemplate(userID, 'distances', rankInfo, function(err, stats){
       if(!err){
-        output += `Distance statistics for ${ign}:\n`;
-        output += `Walk: ${stats.walk}\n`;
-        output += `Sprint: ${stats.sprint}\n`;
-        output += `Crouch: ${stats.crouch}\n`;
-        output += `Climb: ${stats.climb}\n`;
-        output += `Fall: ${stats.fall}\n`;
-        output += `Walk on Water: ${stats.walkOnWater}\n`;
-        output += `Walk under Water: ${stats.walkUnderWater}\n`;
-        output += `Swim: ${stats.swim}\n`;
-        output += `Boat: ${stats.boat}\n`;
-        output += `Elytra: ${stats.aviate}\n`;
-        output += `Fly: ${stats.fly}\n`;
+        if(rankInfo){
+          output += `Distance statistics for ${ign}:\n`;
+          output += `Walk: ${stats.walk.rank} of ${stats._totalPlayers} (${stats.walk.stat})\n`;
+          output += `Sprint: ${stats.sprint.rank} of ${stats._totalPlayers} (${stats.sprint.stat})\n`;
+          output += `Crouch: ${stats.crouch.rank} of ${stats._totalPlayers} (${stats.crouch.stat})\n`;
+          output += `Climb: ${stats.climb.rank} of ${stats._totalPlayers} (${stats.climb.stat})\n`;
+          output += `Fall: ${stats.fall.rank} of ${stats._totalPlayers} (${stats.fall.stat})\n`;
+          output += `Walk on Water: ${stats.walkOnWater.rank} of ${stats._totalPlayers} (${stats.walkOnWater.stat})\n`;
+          output += `Walk under Water: ${stats.walkUnderWater.rank} of ${stats._totalPlayers} (${stats.walkUnderWater.stat})\n`;
+          output += `Swim: ${stats.swim.rank} of ${stats._totalPlayers} (${stats.swim.stat})\n`;
+          output += `Boat: ${stats.boat.rank} of ${stats._totalPlayers} (${stats.boat.stat})\n`;
+          output += `Elytra: ${stats.aviate.rank} of ${stats._totalPlayers} (${stats.aviate.stat})\n`;
+          output += `Fly: ${stats.fly.rank} of ${stats._totalPlayers} (${stats.fly.stat})\n`;
+        }else{
+          output += `Distance statistics for ${ign}:\n`;
+          output += `Walk: ${stats.walk}\n`;
+          output += `Sprint: ${stats.sprint}\n`;
+          output += `Crouch: ${stats.crouch}\n`;
+          output += `Climb: ${stats.climb}\n`;
+          output += `Fall: ${stats.fall}\n`;
+          output += `Walk on Water: ${stats.walkOnWater}\n`;
+          output += `Walk under Water: ${stats.walkUnderWater}\n`;
+          output += `Swim: ${stats.swim}\n`;
+          output += `Boat: ${stats.boat}\n`;
+          output += `Elytra: ${stats.aviate}\n`;
+          output += `Fly: ${stats.fly}\n`;
+        }
       }else{
         output += 'Something went wrong and I couldnt get the stats';
       }
@@ -228,16 +265,27 @@ _internals.statsSwitch = function(collection, userID, ign, callback){
     });
     break;
     case 'ores':
-    mc_helpers.getStatTemplate(userID, 'minedOres', function(err, stats){
+    mc_helpers.getStatTemplate(userID, 'minedOres', rankInfo, function(err, stats){
       if(!err){
-        output += `Mined ores from ${ign}:\n`;
-        output += `Diamond: ${stats.diamond}\n`;
-        output += `Iron: ${stats.iron}\n`;
-        output += `Gold: ${stats.gold}\n`;
-        output += `Emerald: ${stats.emerald}\n`;
-        output += `Coal: ${stats.coal}\n`;
-        output += `Lapis Lazuli: ${stats.lapis}\n`;
-        output += `Redstone: ${stats.redstone}\n`;
+        if(rankInfo){
+          output += `Mined ores from ${ign}:\n`;
+          output += `Diamond: ${stats.diamond.rank} of ${stats._totalPlayers} (${stats.diamond.stat})\n`;
+          output += `Iron: ${stats.iron.rank} of ${stats._totalPlayers} (${stats.iron.stat})\n`;
+          output += `Gold: ${stats.gold.rank} of ${stats._totalPlayers} (${stats.gold.stat})\n`;
+          output += `Emerald: ${stats.emerald.rank} of ${stats._totalPlayers} (${stats.emerald.stat})\n`;
+          output += `Coal: ${stats.coal.rank} of ${stats._totalPlayers} (${stats.coal.stat})\n`;
+          output += `Lapis Lazuli: ${stats.lapis.rank} of ${stats._totalPlayers} (${stats.lapis.stat})\n`;
+          output += `Redstone: ${stats.redstone.rank} of ${stats._totalPlayers} (${stats.redstone.stat})\n`;
+        }else{
+          output += `Mined ores from ${ign}:\n`;
+          output += `Diamond: ${stats.diamond}\n`;
+          output += `Iron: ${stats.iron}\n`;
+          output += `Gold: ${stats.gold}\n`;
+          output += `Emerald: ${stats.emerald}\n`;
+          output += `Coal: ${stats.coal}\n`;
+          output += `Lapis Lazuli: ${stats.lapis}\n`;
+          output += `Redstone: ${stats.redstone}\n`;
+        }
       }else{
         output += 'Something went wrong and I couldnt get the stats';
       }
@@ -245,15 +293,25 @@ _internals.statsSwitch = function(collection, userID, ign, callback){
     });
     break;
     case 'total':
-    mc_helpers.getStatTemplate(userID, 'totals', function(err, stats){
+    mc_helpers.getStatTemplate(userID, 'totals', rankInfo, function(err, stats){
       if(!err){
-        output += `Totals from ${ign}:\n`;
-        output += `Blocks mined: ${stats.mined}\n`;
-        output += `Blocks built / Items used: ${stats.used}\n`;
-        output += `Items crafted: ${stats.crafted}\n`;
-        output += `Items broken: ${stats.broken}\n`;
-        output += `Items dropped: ${stats.dropped}\n`;
-        output += `Distance traveled: ${stats.traveled}\n`;
+        if(rankInfo){
+          output += `Totals from ${ign}:\n`;
+          output += `Blocks mined: ${stats.mined.rank} of ${stats._totalPlayers} (${stats.mined.stat})\n`;
+          output += `Blocks built & Items used: ${stats.used.rank} of ${stats._totalPlayers} (${stats.used.stat})\n`;
+          output += `Items crafted: ${stats.crafted.rank} of ${stats._totalPlayers} (${stats.crafted.stat})\n`;
+          output += `Items broken: ${stats.broken.rank} of ${stats._totalPlayers} (${stats.broken.stat})\n`;
+          output += `Items dropped: ${stats.dropped.rank} of ${stats._totalPlayers} (${stats.dropped.stat})\n`;
+          output += `Distance traveled: ${stats.traveled.rank} of ${stats._totalPlayers} (${stats.traveled.stat})\n`;
+        }else{
+          output += `Totals from ${ign}:\n`;
+          output += `Blocks mined: ${stats.mined}\n`;
+          output += `Blocks built & Items used: ${stats.used}\n`;
+          output += `Items crafted: ${stats.crafted}\n`;
+          output += `Items broken: ${stats.broken}\n`;
+          output += `Items dropped: ${stats.dropped}\n`;
+          output += `Distance traveled: ${stats.traveled}\n`;
+        }
       }else{
         output += 'Something went wrong and I couldnt get the stats';
       }
@@ -261,135 +319,177 @@ _internals.statsSwitch = function(collection, userID, ign, callback){
     });
     break;
     case 'top_usage':
-    mc_helpers.getStatTemplate(userID, 'topUsageItems', function(err, stats){
-      if(!err){
-        output += `Top used items from ${ign}:\n`;
-        let i = 0;
-        stats.forEach((entry) => {
-          output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
-          i++;
-        });
-      }else{
-        output += 'Something went wrong and I couldnt get the stats';
-      }
-      callback(output);
-    });
+    if(!rankInfo){
+      mc_helpers.getStatTemplate(userID, 'topUsageItems', false, function(err, stats){
+        if(!err){
+          output += `Top used items from ${ign}:\n`;
+          let i = 0;
+          stats.forEach((entry) => {
+            output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
+            i++;
+          });
+        }else{
+          output += 'Something went wrong and I couldnt get the stats';
+        }
+        callback(output);
+      });
+    }else{
+      callback('This stats collection doesnt work with ranks :(');
+    }
     break;
     case 'top_picked_up':
-    mc_helpers.getStatTemplate(userID, 'topPickedUpItems', function(err, stats){
-      if(!err){
-        output += `Top picked up items from ${ign}:\n`;
-        let i = 0;
-        stats.forEach((entry) => {
-          output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
-          i++;
-        });
-      }else{
-        output += 'Something went wrong and I couldnt get the stats';
-      }
-      callback(output);
-    });
+    if(!rankInfo){
+      mc_helpers.getStatTemplate(userID, 'topPickedUpItems', false, function(err, stats){
+        if(!err){
+          output += `Top picked up items from ${ign}:\n`;
+          let i = 0;
+          stats.forEach((entry) => {
+            output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
+            i++;
+          });
+        }else{
+          output += 'Something went wrong and I couldnt get the stats';
+        }
+        callback(output);
+      });
+    }else{
+      callback('This stats collection doesnt work with ranks :(');
+    }
     break;
     case 'top_mined':
-    mc_helpers.getStatTemplate(userID, 'topMinedBlocks', function(err, stats){
-      if(!err){
-        output += `Top mined items from ${ign}:\n`;
-        let i = 0;
-        stats.forEach((entry) => {
-          output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
-          i++;
-        });
-      }else{
-        output += 'Something went wrong and I couldnt get the stats';
-      }
-      callback(output);
-    });
+    if(!rankInfo){
+      mc_helpers.getStatTemplate(userID, 'topMinedBlocks', false, function(err, stats){
+        if(!err){
+          output += `Top mined items from ${ign}:\n`;
+          let i = 0;
+          stats.forEach((entry) => {
+            output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
+            i++;
+          });
+        }else{
+          output += 'Something went wrong and I couldnt get the stats';
+        }
+        callback(output);
+      });
+    }else{
+      callback('This stats collection doesnt work with ranks :(');
+    }
     break;
     case 'top_dropped':
-    mc_helpers.getStatTemplate(userID, 'topDroppedItems', function(err, stats){
-      if(!err){
-        output += `Top dropped items from ${ign}:\n`;
-        let i = 0;
-        stats.forEach((entry) => {
-          output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
-          i++;
-        });
-      }else{
-        output += 'Something went wrong and I couldnt get the stats';
-      }
-      callback(output);
-    });
+    if(!rankInfo){
+      mc_helpers.getStatTemplate(userID, 'topDroppedItems', false, function(err, stats){
+        if(!err){
+          output += `Top dropped items from ${ign}:\n`;
+          let i = 0;
+          stats.forEach((entry) => {
+            output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
+            i++;
+          });
+        }else{
+          output += 'Something went wrong and I couldnt get the stats';
+        }
+        callback(output);
+      });
+    }else{
+      callback('This stats collection doesnt work with ranks :(');
+    }
     break;
     case 'top_crafted':
-    mc_helpers.getStatTemplate(userID, 'topCraftedItems', function(err, stats){
-      if(!err){
-        output += `Top crafted items from ${ign}:\n`;
-        let i = 0;
-        stats.forEach((entry) => {
-          output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
-          i++;
-        });
-      }else{
-        output += 'Something went wrong and I couldnt get the stats';
-      }
-      callback(output);
-    });
+    if(!rankInfo){
+      mc_helpers.getStatTemplate(userID, 'topCraftedItems', false, function(err, stats){
+        if(!err){
+          output += `Top crafted items from ${ign}:\n`;
+          let i = 0;
+          stats.forEach((entry) => {
+            output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
+            i++;
+          });
+        }else{
+          output += 'Something went wrong and I couldnt get the stats';
+        }
+        callback(output);
+      });
+    }else{
+      callback('This stats collection doesnt work with ranks :(');
+    }
     break;
     case 'top_broken':
-    mc_helpers.getStatTemplate(userID, 'topBrokenItems', function(err, stats){
-      if(!err){
-        output += `Top broken items from ${ign}:\n`;
-        let i = 0;
-        stats.forEach((entry) => {
-          output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
-          i++;
-        });
-      }else{
-        output += 'Something went wrong and I couldnt get the stats';
-      }
-      callback(output);
-    });
+    if(!rankInfo){
+      mc_helpers.getStatTemplate(userID, 'topBrokenItems', false, function(err, stats){
+        if(!err){
+          output += `Top broken items from ${ign}:\n`;
+          let i = 0;
+          stats.forEach((entry) => {
+            output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
+            i++;
+          });
+        }else{
+          output += 'Something went wrong and I couldnt get the stats';
+        }
+        callback(output);
+      });
+    }else{
+      callback('This stats collection doesnt work with ranks :(');
+    }
     break;
     case 'top_killed':
-    mc_helpers.getStatTemplate(userID, 'topKilledMobs', function(err, stats){
-      if(!err){
-        output += `Top killed mobs from ${ign}:\n`;
-        let i = 0;
-        stats.forEach((entry) => {
-          output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
-          i++;
-        });
-      }else{
-        output += 'Something went wrong and I couldnt get the stats';
-      }
-      callback(output);
-    });
+    if(!rankInfo){
+      mc_helpers.getStatTemplate(userID, 'topKilledMobs', false, function(err, stats){
+        if(!err){
+          output += `Top killed mobs from ${ign}:\n`;
+          let i = 0;
+          stats.forEach((entry) => {
+            output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
+            i++;
+          });
+        }else{
+          output += 'Something went wrong and I couldnt get the stats';
+        }
+        callback(output);
+      });
+    }else{
+      callback('This stats collection doesnt work with ranks :(');
+    }
     break;
     case 'top_killed_by':
-    mc_helpers.getStatTemplate(userID, 'topKilledByMobs', function(err, stats){
-      if(!err){
-        output += `Top mobs killed by from ${ign}:\n`;
-        let i = 0;
-        stats.forEach((entry) => {
-          output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
-          i++;
-        });
-      }else{
-        output += 'Something went wrong and I couldnt get the stats';
-      }
-      callback(output);
-    });
+    if(!rankInfo){
+      mc_helpers.getStatTemplate(userID, 'topKilledByMobs', false, function(err, stats){
+        if(!err){
+          output += `Top mobs killed by from ${ign}:\n`;
+          let i = 0;
+          stats.forEach((entry) => {
+            output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
+            i++;
+          });
+        }else{
+          output += 'Something went wrong and I couldnt get the stats';
+        }
+        callback(output);
+      });
+    }else{
+      callback('This stats collection doesnt work with ranks :(');
+    }
     break;
     case 'total_per_death':
-    mc_helpers.getStatTemplate(userID, 'totalPerDeath', function(err, stats){
+    mc_helpers.getStatTemplate(userID, 'totalPerDeath', rankInfo, function(err, stats){
       if(!err){
-        output += `Totals per death from ${ign}:\n`;
-        output += `Blocks mined: ${stats.mined}\n`;
-        output += `Blocks built / Items used: ${stats.used}\n`;
-        output += `Items crafted: ${stats.crafted}\n`;
-        output += `Items broken: ${stats.broken}\n`;
-        output += `Items dropped: ${stats.dropped}\n`;
-        output += `Distance traveled: ${stats.traveled}\n`;
+        if(rankInfo){
+          output += `Totals per death from ${ign}:\n`;
+          output += `Blocks mined: ${stats.mined.rank} of ${stats._totalPlayers} (${stats.mined.stat})\n`;
+          output += `Blocks built / Items used: ${stats.used.rank} of ${stats._totalPlayers} (${stats.used.stat})\n`;
+          output += `Items crafted: ${stats.crafted.rank} of ${stats._totalPlayers} (${stats.crafted.stat})\n`;
+          output += `Items broken: ${stats.broken.rank} of ${stats._totalPlayers} (${stats.broken.stat})\n`;
+          output += `Items dropped: ${stats.dropped.rank} of ${stats._totalPlayers} (${stats.dropped.stat})\n`;
+          output += `Distance traveled: ${stats.traveled.rank} of ${stats._totalPlayers} (${stats.traveled.stat})\n`;
+        }else{
+          output += `Totals per death from ${ign}:\n`;
+          output += `Blocks mined: ${stats.mined}\n`;
+          output += `Blocks built / Items used: ${stats.used}\n`;
+          output += `Items crafted: ${stats.crafted}\n`;
+          output += `Items broken: ${stats.broken}\n`;
+          output += `Items dropped: ${stats.dropped}\n`;
+          output += `Distance traveled: ${stats.traveled}\n`;
+        }
       }else{
         output += 'Something went wrong and I couldnt get the stats';
       }
