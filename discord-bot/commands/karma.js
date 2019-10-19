@@ -44,6 +44,7 @@ module.exports = {
               let rank = entries.indexOf(karma);
               //Get the total amount of users
               let totalUsers = entries.length;
+              message.reply(entries);
               message.channel.send(`<@${userID}> has ${karma} karma and thus has the rank ${rank + 1} of ${totalUsers} total Users!`);
             }else{
               message.channel.send('There was an oopsie (Im kinda sorry)');
@@ -125,11 +126,17 @@ _internals.getSortedKarmaArray = function(includeNames, callback){
 
         entries.push(finishedObject);
     });
-
     //Sort the array
-    entries = entries.sort(function (obj1, obj2) {
-      return obj2.karma - obj1.karma;
-    });
+    if(includeNames){
+      entries = entries.sort(function (obj1, obj2) {
+        return obj2.karma - obj1.karma;
+      });
+    }else{
+      entries = entries.sort(function (obj1, obj2) {
+        return obj2 - obj1;
+      });
+    }
+
     callback(entries);
   });
 
