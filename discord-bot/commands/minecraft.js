@@ -352,7 +352,7 @@ _internals.statsSwitch = function(collection, userID, ign, callback){
     });
     break;
     default:
-    output += 'I couldnt find that collection. Please use one of the following collecitons: general, distance, ores, total, top_usage, top_mined, top_killed, top_killed_by, total_per_death';
+    output += 'I couldnt find that collection. Please use one of the following collecitons: general, distance, ores, total, top_usage, top_picked_up, top_mined, top_killed, top_killed_by, total_per_death';
     callback(output);
     break;
   }
