@@ -28,6 +28,10 @@ setInterval(function () {
 //Every hour
 setInterval(function(){
   mc_helpers.updateAllUUIDs(false);
-  mc_helpers.updateStats();
   mc_helpers.updateAllIGNs();
+}, 1000 * 60 * 60);
+
+//Every six hours
+setInterval(function(){
+  mc_helpers.updateStats();
 }, 1000 * 60 * 60);
