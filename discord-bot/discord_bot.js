@@ -62,7 +62,7 @@ client.on('message', message => {
   try {
     command.execute(message, args);
   } catch (e) {
-    lo.write(3, 'Some Discord command just broke', {error: e, msg: message.content});
+    log.write(3, 'Some Discord command just broke', {error: e, msg: message.content});
     message.reply('There was an oopsie when I tried to do that');
   }
 });
