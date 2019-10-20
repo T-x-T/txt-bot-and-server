@@ -7,7 +7,6 @@
 const config = require('./../config.js');
 const lib_log = require('./../lib/log.js');
 const lib_data = require('./../lib/data.js');
-const lib_perflog = require('./../lib/perfLog.js');
 const webserver = require('./../web/webServer.js');
 const youtube = require('./../lib/youtube.js');
 const mc_helpers = require('./../lib/mc_helpers.js');
@@ -86,27 +85,7 @@ describe('Array', function() {
     });
 
 
-
-
-
-    //Tests for /lib/graph.js
-    //Nothing lol
-
-
-
     //Tests for /lib/log.js
-    it('lib_log.write should log an event', function(done){
-      lib_log.write(0, 'Test log', {}, function(err){
-        assert.equal(err, false);
-        lib_log.write(-1, 'Invalid test log', {}, function(err){
-          assert.ok(err);
-          lib_log.write(4, 'Invalid test log', {}, function(err){
-            assert.ok(err);
-            done();
-          });
-        });
-      });
-    });
     it('lib_log.read should return a log objects', function(done){
       lib_log.read(1, 0, function(data){
         assert.ok(data);
@@ -124,24 +103,6 @@ describe('Array', function() {
         });
       });
     });
-
-
-
-    //Tests for /lib/perfLog.js
-    it('lib_perflog should log performance data to db and read it back', function(done){
-      for(let i = 0; i < 100; i++){
-        lib_perflog.execute();
-      }
-      setTimeout(function(){
-        lib_perflog.getPerfLogs(new Date(Date.now() - 1000), function(data){
-          assert.ok(typeof(data[0]) != 'undefined');
-          assert.ok(data[0].memFreeMin > -1);
-          assert.ok(data[0].memUsageAvg < 101);
-          done();
-        });
-      }, 500);
-    });
-
 
 
     //Tests for /lib/youtube.js
