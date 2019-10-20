@@ -5,7 +5,6 @@
 
 //Dependencies
 const config = require('./../config.js');
-const perfLog = require('./../lib/perfLog.js');
 const youtube = require('./../lib/youtube.js');
 const log = require('./../lib/log.js');
 const mc_helpers = require('./../lib/mc_helpers.js');
