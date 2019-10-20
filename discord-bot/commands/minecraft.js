@@ -123,6 +123,9 @@ module.exports = {
             }
           });
           break;
+        default:
+          message.reply('You need to specifiy another sub-command like **add**, **show** or **remove**')
+          break;
         }
         break;
       case 'stats':

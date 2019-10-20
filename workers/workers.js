@@ -1,7 +1,7 @@
 /*
- *  WORKERS HOST
- *  This file contains all setInterval functions
- */
+*  WORKERS HOST
+*  This file contains all setInterval functions
+*/
 
 //Dependencies
 const config = require('./../config.js');
@@ -12,31 +12,19 @@ const mc_helpers = require('./../lib/mc_helpers.js');
 
 //Stuff that should run on startup
 try {
-    youtube.getNewestVideo()
+  youtube.getNewestVideo()
 } catch (e) {
-    log.write(3, 'Workers: Cant execute getNewestVideo', { Error: e }, function (err) { });
-    console.log('error')
+  log.write(3, 'Workers: Cant execute getNewestVideo', { Error: e });
 }
-
-//Every second
-setInterval(function () {
-    //perfLog.execute();
-}, 1000);
 
 //Every minute
 setInterval(function () {
-    try {
-        youtube.getNewestVideo()
-    } catch (e) {
-        log.write(3, 'Workers: Cant execute getNewestVideo', { Error: e }, function (err) { });
-        console.log('error')
-    }
+  try {
+    youtube.getNewestVideo();
+  } catch (e) {
+    log.write(3, 'Workers: Cant execute getNewestVideo', { Error: e });
+  }
 }, 1000 * 60);
-
-//Every 5 minutes
-setInterval(function(){
-
-}, 1000 * 60 * 5);
 
 //Every hour
 setInterval(function(){
