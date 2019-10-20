@@ -12,7 +12,7 @@ const log = require('./lib/log.js');
 const workers = require('./workers/workers.js');
 const { exec } = require('child_process');
 //Log that the app got started
-log.write(1, 'Application started', null, function (err));
+log.write(1, 'Application started', null);
 
 //Create the container
 var app = {};
