@@ -131,7 +131,6 @@ module.exports = {
       case 'stats':
         //User wants to see some stats
         let userID;
-
         //If the user is all then get stats for all users combined
         if(args[2] == 'all'){
           userID = false;
@@ -150,11 +149,12 @@ module.exports = {
           data.getUserData(userID, function(err, data){
             if(!err && data.mcName != null){
               let ign = data.mcName;
+              let uuid = data.mcUUID;
 
               if(args[1] == 'rank'){
                 //Get the rank flavored stats
                 let output = '```';
-                _internals.statsSwitch(args[2], userID, ign, true, function(statsOutput){
+                _internals.statsSwitch(args[2], uuid, ign, true, function(statsOutput){
                   output += statsOutput;
                   output += '```';
                   message.channel.send(output);
@@ -162,7 +162,7 @@ module.exports = {
               }else{
                 //Normal stats
                 let output = '```';
-                _internals.statsSwitch(args[1], userID, ign, false, function(statsOutput){
+                _internals.statsSwitch(args[1], uuid, ign, false, function(statsOutput){
                   output += statsOutput;
                   output += '```';
                   message.channel.send(output);
@@ -177,7 +177,8 @@ module.exports = {
           let ign = 'all players';
 
           let output = '```';
-          _internals.statsSwitch(args[1], userID, ign, function(statsOutput){
+          console.log();
+          _internals.statsSwitch(args[1], userID, ign, false, function(statsOutput){
             output += statsOutput;
             output += '```';
             message.channel.send(output);
@@ -205,6 +206,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
   switch(collection){
     case 'general':
     mc_helpers.getStatTemplate(userID, 'general', rankInfo, function(err, stats){
+      console.log(err);
       if(!err){
         if(rankInfo){
           output += `General statistics for ${ign}:\n`;
