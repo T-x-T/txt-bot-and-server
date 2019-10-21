@@ -206,7 +206,6 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
   switch(collection){
     case 'general':
     mc_helpers.getStatTemplate(userID, 'general', rankInfo, function(err, stats){
-      console.log(err);
       if(!err){
         if(rankInfo){
           output += `General statistics for ${ign}:\n`;
