@@ -5,6 +5,7 @@
 
 const data = require('./../../lib/data.js');
 const mc_helpers = require('./../../lib/mc_helpers.js');
+const discord_helpers = require('./../discord_helpers.js');
 
 module.exports = {
   name: 'minecraft',
@@ -25,25 +26,33 @@ module.exports = {
             //Everything ok, update User
             data.getUserData(message.author.id, function(err, userData){
               if(!err && data){
-                userData.mcName = args[2];
                 //Also get the uuid for the user
-                mc_helpers.getUUID(userData.mcName, function(uuid){
+                mc_helpers.getUUID(args[2], function(uuid){
                   if(uuid){
-                    data.updateUserData(message.author.id, userData, function(err){
-                      if(!err){
-                        //Last, but not least trigger the nickname update and tell the user everything worked
-                        discord_helpers.addIgnToNick(message.member);
-                        message.reply('success! Your official Minecraft IGN is now _drumroll_ ' + args[2]);
+                    //Now lets get the correct ign from mojang
+                    mc_helpers.getIGN(uuid, function(ign){
+                      if(ign){
+                        //Now we can update the user
+                        userData.mcName = ign;
+                        userData.mcUUID = uuid;
+                        data.updateUserData(message.author.id, userData, function(err){
+                          if(!err){
+                            //Last, but not least trigger the nickname update and tell the user everything worked
+                            discord_helpers.addIgnToNick(message.member);
+                            message.reply('success! Your official Minecraft IGN is now _drumroll_ ' + ign);
+                          }else{
+                            console.log(err)
+                            message.reply('I could not update your user object for some weird reason.')
+                          }
+                        });
                       }else{
-                        console.log(err)
-                        message.reply('I could not update your user object for some weird reason.')
+                        message.reply('I couldnt get your correct capitalized name from mojang');
                       }
                     });
                   }else{
                     message.reply('I couldnt validate your name. Maybe you misspelled it, or mojangs api is down');
                   }
                 });
-
               }else{
                 message.reply('I could not get your data to update it :()');
               }
