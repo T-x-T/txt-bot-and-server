@@ -95,13 +95,13 @@ helpers.addIgnToNick = function(member){
         if(!(nick.toLowerCase().indexOf(ign.toLowerCase()) > -1 || ign.toLowerCase().indexOf(nick.toLowerCase()) > -1)){
           //Now its time to change the users nick
           member.setNickname(`${nick} (${ign})`)
-          .catch(console.log);
+          .catch((e) => {log.write(2, 'discord_helpers.addIgnToNick failed to set the members nickname', {user: member.id, nick: nick, ign: ign, err: e});});
         }
       }catch(e){
-        console.log(member.id);
+        log.write(2, 'discord_helpers.addIgnToNick failed to compare or change the nickname', {user: member.id, err: e});
       }
     }else{
-      log.write(2, 'discord_helpers.addIgnToNick couldnt get the member document', {user: user.id, err: err});
+      log.write(2, 'discord_helpers.addIgnToNick couldnt get the member document', {user: member.id, err: err});
     }
   });
 };
