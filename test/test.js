@@ -24,21 +24,29 @@ describe('Array', function() {
     */
 
     //Tests for /lib/data.js
-    it('lib_data.getUserData should return valid data for the bot user', function(done) {
-      lib_data.getUserData('624980994889613312', function(err, userData){
+    it('lib_data.createMember should be able to create a member', function(done){
+      lib_data.createMember('000000000889613312', 'random_name', 1234, 0, false, function(err){
+        assert.ok(!err);
+        done();
+      });
+    });
+    it('lib_data.getUserData should return valid data for the test user', function(done) {
+      lib_data.getUserData('000000000889613312', function(err, userData){
         assert.equal(err, false);
-        assert.ok(typeof(userData) == 'object');
-        assert.ok(userData.discord == '624980994889613312');
-        assert.ok(JSON.stringify(userData).length > 10);
+        assert.equal(userData.discord, '000000000889613312');
+        assert.equal(userData.mcName, 'random_name');
+        assert.equal(userData.birthyear, 1234);
+        assert.equal(userData.nationality, 0);
+        assert.equal(userData.public, false);
         done();
       });
     });
     it('lib_data.updateUserData should be able to update users data', function(done){
-      lib_data.getUserData('624980994889613312', function(err, userData){
-        userData.discord = '624980994889613312';
+      lib_data.getUserData('000000000889613312', function(err, userData){
+        userData.mcName = 'another_name';
         lib_data.updateUserData(userData.discord, userData, function(err){
           assert.equal(err, false);
-          assert.ok(userData.discord == '624980994889613312');
+          assert.ok(userData.mcName == 'another_name');
           done();
         });
       });
@@ -51,27 +59,38 @@ describe('Array', function() {
       })
     });
     it('lib_data.getKarma should get karma', function(done){
-      lib_data.getKarma('624980994889613312', function(err, karma){
+      lib_data.getKarma('000000000889613312', function(err, karma){
         assert.equal(err, false);
         assert.ok(typeof(karma) == 'number');
-        assert.ok(karma > -1);
-        assert.ok(karma < 1000);
+        assert.equal(karma, 0);
         done();
       });
     });
     it('lib_data.updateKarma should update karma', function(done){
-      lib_data.getKarma('624980994889613312', function(err, karma){
-        lib_data.updateKarma('624980994889613312', karma, function(err){
-          assert.equal(err, false);
-          done();
+      lib_data.getKarma('000000000889613312', function(err, karma){
+        lib_data.updateKarma('000000000889613312', karma + 1, function(err){
+          lib_data.getKarma('000000000889613312', function(err, karma){
+            assert.equal(err, false);
+            assert.equal(karma, 1);
+            done();
+          });
         });
       });
     });
     it('lib_data.checkMemberExist should correctly tell if a member exists or not', function(done){
-      lib_data.checkMemberExist('624980994889613312', false, function(exists){
+      lib_data.checkMemberExist('000000000889613312', false, function(exists){
         assert.equal(exists, true);
-        lib_data.checkMemberExist('2398', false, function(exists){
+        lib_data.checkMemberExist('100000000889613312', false, function(exists){
           assert.equal(exists, false);
+          done();
+        });
+      });
+    });
+    it('lib_data.removeMember should remove the test user', function(done){
+      lib_data.removeMember('000000000889613312', function(err){
+        assert.ok(!err);
+        lib_data.checkMemberExist('000000000889613312', false, function(exists){
+          assert.ok(!exists);
           done();
         });
       });
@@ -158,6 +177,160 @@ describe('Array', function() {
       assert.equal(mc_helpers.prettifyDuration(20 * 60 * 30), '1h');
       assert.equal(mc_helpers.prettifyDuration(20 * 60 * 60 * 24), '24h');
       done();
+    });
+    it('mc_helpers.sumStats should properly sum two objects', function(done){
+      let obj1 = {}, obj2 = {};
+      obj1.x = {
+        a: 1,
+        b: 3
+      };
+      obj2.x = {
+        b: 1,
+        c: 5
+      };
+      let obj3 = mc_helpers.sumStats([obj1, obj2]);
+      assert.equal(obj3.x.a, 1);
+      assert.equal(obj3.x.b, 4);
+      assert.equal(obj3.x.c, 5);
+      done();
+    });
+    it('mc_helpers.sumOfObject should properly sum an object', function(done){
+      assert.equal(mc_helpers.sumOfObject({a: 1, b: 2, c: 3}), 6);
+      done();
+    });
+    it('mc_helpers.getStatTemplate should return a proper general stats object for the__txt', function(done){
+      mc_helpers.getStatTemplate('dac25e44d1024f3b819978ed62d209a1', 'general', false, function(err, stats){
+        assert.ok(!err);
+        assert.equal(typeof stats, 'object');
+        assert.equal(typeof stats.damageDealt, 'number');
+        assert.equal(typeof stats.deaths, 'number');
+        assert.equal(typeof stats.playtime, 'string');
+        done();
+      });
+    });
+    it('mc_helpers.getStatTemplate should return a proper totals stats object for the__txt', function(done){
+      mc_helpers.getStatTemplate('dac25e44d1024f3b819978ed62d209a1', 'totals', false, function(err, stats){
+        assert.ok(!err);
+        assert.equal(typeof stats, 'object');
+        assert.equal(typeof stats.mined, 'number');
+        assert.equal(typeof stats.dropped, 'number');
+        assert.equal(typeof stats.traveled, 'string');
+        done();
+      });
+    });
+    it('mc_helpers.getStatTemplate should return a proper topUsageItems stats object for the__txt', function(done){
+      mc_helpers.getStatTemplate('dac25e44d1024f3b819978ed62d209a1', 'topDroppedItems', false, function(err, stats){
+        assert.ok(!err);
+        assert.equal(typeof stats, 'object');
+        assert.equal(typeof stats.stats[0].value, 'number');
+        assert.equal(typeof stats.stats[0].key, 'string');
+        assert.equal(typeof stats.stats[5].value, 'number');
+        assert.equal(typeof stats.stats[5].key, 'string');
+        assert.equal(typeof stats.stats[9].value, 'number');
+        assert.equal(typeof stats.stats[9].key, 'string');
+        done();
+      });
+    });
+    it('mc_helpers.getStatTemplate should return a proper totals per death stats object for the__txt', function(done){
+      mc_helpers.getStatTemplate('dac25e44d1024f3b819978ed62d209a1', 'totalPerDeath', false, function(err, stats){
+        assert.ok(!err);
+        assert.equal(typeof stats, 'object');
+        assert.equal(typeof stats.mined, 'number');
+        assert.equal(typeof stats.dropped, 'number');
+        assert.equal(typeof stats.traveled, 'string');
+        done();
+      });
+    });
+    it('mc_helpers.getStatTemplate should return a proper general stats object for all players', function(done){
+      mc_helpers.getStatTemplate(false, 'general', false, function(err, stats){
+        assert.ok(!err);
+        assert.equal(typeof stats, 'object');
+        assert.equal(typeof stats.damageDealt, 'number');
+        assert.equal(typeof stats.deaths, 'number');
+        assert.equal(typeof stats.playtime, 'string');
+        done();
+      });
+    });
+    it('mc_helpers.getStatTemplate should return a proper totals stats object for all players', function(done){
+      mc_helpers.getStatTemplate(false, 'totals', false, function(err, stats){
+        assert.ok(!err);
+        assert.equal(typeof stats, 'object');
+        assert.equal(typeof stats.mined, 'number');
+        assert.equal(typeof stats.dropped, 'number');
+        assert.equal(typeof stats.traveled, 'string');
+        done();
+      });
+    });
+    it('mc_helpers.getStatTemplate should return a proper topUsageItems stats object for all players', function(done){
+      mc_helpers.getStatTemplate(false, 'topDroppedItems', false, function(err, stats){
+        assert.ok(!err);
+        assert.equal(typeof stats, 'object');
+        assert.equal(typeof stats.stats[0].value, 'number');
+        assert.equal(typeof stats.stats[0].key, 'string');
+        assert.equal(typeof stats.stats[5].value, 'number');
+        assert.equal(typeof stats.stats[5].key, 'string');
+        assert.equal(typeof stats.stats[9].value, 'number');
+        assert.equal(typeof stats.stats[9].key, 'string');
+        done();
+      });
+    });
+    it('mc_helpers.getStatTemplate should return a proper totals per death stats object for all players', function(done){
+      mc_helpers.getStatTemplate(false, 'totalPerDeath', false, function(err, stats){
+        assert.ok(!err);
+        assert.equal(typeof stats, 'object');
+        assert.equal(typeof stats.mined, 'number');
+        assert.equal(typeof stats.dropped, 'number');
+        assert.equal(typeof stats.traveled, 'string');
+        done();
+      });
+    });
+    it('mc_helpers.getStatTemplate should return a proper general stats object for the__txt including ranks', function(done){
+      mc_helpers.getStatTemplate('dac25e44d1024f3b819978ed62d209a1', 'general', true, function(err, stats){
+        assert.ok(!err);
+        assert.equal(typeof stats, 'object');
+        assert.equal(typeof stats.damageDealt.stat, 'number');
+        assert.equal(typeof stats.damageDealt.rank, 'number');
+        assert.ok(typeof stats.damageDealt.rank != 0);
+        assert.equal(typeof stats.deaths.stat, 'number');
+        assert.equal(typeof stats.deaths.rank, 'number');
+        assert.ok(typeof stats.deaths.rank != 0);
+        assert.equal(typeof stats.playtime.stat, 'string');
+        assert.equal(typeof stats.playtime.rank, 'number');
+        assert.ok(typeof stats.playtime.rank != 0);
+        done();
+      });
+    });
+    it('mc_helpers.getStatTemplate should return a proper totals stats object for the__txt including ranks', function(done){
+      mc_helpers.getStatTemplate('dac25e44d1024f3b819978ed62d209a1', 'totals', true, function(err, stats){
+        assert.ok(!err);
+        assert.equal(typeof stats, 'object');
+        assert.equal(typeof stats.mined.stat, 'number');
+        assert.equal(typeof stats.mined.rank, 'number');
+        assert.ok(typeof stats.mined.rank != 0);
+        assert.equal(typeof stats.dropped.stat, 'number');
+        assert.equal(typeof stats.dropped.rank, 'number');
+        assert.ok(typeof stats.dropped.rank != 0);
+        assert.equal(typeof stats.traveled.stat, 'string');
+        assert.equal(typeof stats.traveled.rank, 'number');
+        assert.ok(typeof stats.traveled.rank != 0);
+        done();
+      });
+    });
+    it('mc_helpers.getStatTemplate should return a proper totals per death stats object for the__txt including ranks', function(done){
+      mc_helpers.getStatTemplate('dac25e44d1024f3b819978ed62d209a1', 'totalPerDeath', true, function(err, stats){
+        assert.ok(!err);
+        assert.equal(typeof stats, 'object');
+        assert.equal(typeof stats.mined.stat, 'number');
+        assert.equal(typeof stats.mined.rank, 'number');
+        assert.ok(typeof stats.mined.rank != 0);
+        assert.equal(typeof stats.dropped.stat, 'number');
+        assert.equal(typeof stats.dropped.rank, 'number');
+        assert.ok(typeof stats.dropped.rank != 0);
+        assert.equal(typeof stats.traveled.stat, 'string');
+        assert.equal(typeof stats.traveled.rank, 'number');
+        assert.ok(typeof stats.traveled.rank != 0);
+        done();
+      });
     });
     /*
     *

@@ -41,7 +41,6 @@ module.exports = {
                             discord_helpers.addIgnToNick(message.member);
                             message.reply('success! Your official Minecraft IGN is now _drumroll_ ' + ign);
                           }else{
-                            console.log(err)
                             message.reply('I could not update your user object for some weird reason.')
                           }
                         });
@@ -71,7 +70,6 @@ module.exports = {
                 if(!err){
                   message.reply('success! You no longer have a registered IGN! use +mc add to set it again');
                 }else{
-                  console.log(err)
                   message.reply('I could not update your user object for some weird reason.')
                 }
               });
@@ -186,7 +184,6 @@ module.exports = {
           let ign = 'all players';
 
           let output = '```';
-          console.log();
           _internals.statsSwitch(args[1], userID, ign, false, function(statsOutput){
             output += statsOutput;
             output += '```';
