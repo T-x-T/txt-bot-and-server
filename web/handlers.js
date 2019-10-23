@@ -124,14 +124,7 @@ handlers.paxterya = function (data, callback) {
                   handlers.insertVariables(fileData, function(err, newFileData){
                     if(!err && fileData.length > 0){
                       callback(200, newFileData, 'html');
-                    }else{*.userosscache
-*.sln.docstates
-config.js
-
-mc_stats
-# User-specific files (MonoDevelop/Xamarin Studio)
-*.userprefs
-
+                    }else{
                       callback(500, 'Something bad happend. Not like a nuclear war, but still bad. Please contact TxT#0001 on Discord if you see this', 'html');
                     }
                   })
