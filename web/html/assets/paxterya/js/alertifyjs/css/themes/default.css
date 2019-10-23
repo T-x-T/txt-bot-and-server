@@ -1,0 +1,68 @@
+/**
+ * alertifyjs 1.11.2 http://alertifyjs.com
+ * AlertifyJS is a javascript framework for developing pretty browser dialogs and notifications.
+ * Copyright 2018 Mohammad Younes <Mohammad@alertifyjs.com> (http://alertifyjs.com) 
+ * Licensed under GPL 3 <https://opensource.org/licenses/gpl-3.0>*/
+.alertify .ajs-dialog {
+  background-color: #f0f0f0;
+  -webkit-box-shadow: 0px 15px 20px 0px rgba(0, 0, 0, 0.25);
+          box-shadow: 0px 15px 20px 0px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+    font-family: "regular", sans-serif;
+}
+.alertify .ajs-header {
+  color: #222424;
+  font-weight: bold;
+  background: #f0f0f0;
+  border-bottom: #bebebe 1px solid;
+  border-radius: 10px 10px 0 0;
+}
+.alertify .ajs-body {
+  color: #222424;
+}
+.alertify .ajs-body .ajs-content .ajs-input {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  margin: 4px;
+  border-radius: 2px;
+  border: 1px solid #CCC;
+}
+.alertify .ajs-body .ajs-content p {
+  margin: 0;
+}
+.alertify .ajs-footer {
+}
+.alertify .ajs-footer .ajs-buttons .ajs-button {
+  background-color: transparent;
+  color: #1a1a1a;
+  border: 0;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.alertify .ajs-footer .ajs-buttons .ajs-button.ajs-ok {
+  color: #007787;
+}
+.alertify-notifier .ajs-message {
+  background: rgba(255, 255, 255, 0.95);
+  color: #000;
+  text-align: center;
+  border: solid 1px #ddd;
+    font-weight: bold;
+  border-radius: 2px;
+}
+.alertify-notifier .ajs-message.ajs-success {
+  color: #fff;
+  background: #08a346;
+  text-shadow: 0 0 2px black;
+}
+.alertify-notifier .ajs-message.ajs-error {
+  color: #fff;
+  background: rgba(217, 92, 92, 0.95);
+  text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.5);
+}
+.alertify-notifier .ajs-message.ajs-warning {
+  background: rgba(252, 248, 215, 0.95);
+  border-color: #999;
+}
