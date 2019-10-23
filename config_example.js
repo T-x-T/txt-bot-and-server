@@ -19,7 +19,11 @@ var conf = {
     'log-level': 1,
     'channelID': 'youtube channel ID here',
     'google-api-key': 'google api key here',
-    'youtube-video-announcement-channel': 'channel id'
+    'youtube-video-announcement-channel': 'channel id',
+    'mc-stats-remote': 'rclone remote name',
+    'rcon-server': '',
+    'rcon-port': 25575,
+    'rcon-password':
 };
 
 //Export the container

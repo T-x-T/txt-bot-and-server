@@ -1,7 +1,7 @@
 /*
- *  HANDLERS
- *  Contains all functions which handle web requests
- */
+*  HANDLERS
+*  Contains all functions which handle web requests
+*/
 
 //@TODO configure config path
 
@@ -16,49 +16,52 @@ var handlers = {};
 
 //Not found handler
 handlers.notFound = function (data, callback) {
-    callback(404, 'The page you requested is not available', 'html');
+  callback(404, 'The page you requested is not available', 'html');
 };
 
 //Handler for all basic html sites
 handlers.html = function (data, callback) {
-    fs.readFile(path.join(__dirname, './html/' + data.path + '.html'), 'utf8', function (err, fileData) {
-        if (!err && fileData.length > 0) {
-            handlers.insertVariables(fileData, function(err, newFileData){
-              if(!err && fileData.length > 0){
-                callback(200, newFileData, 'html');
-              }else{
-                callback(500, 'Something bad happend. Not like a nuclear war, but still bad. Please contact TxT#0001 on Discord if you see this', 'html');
-              }
-            })
-        } else {
-            fs.readFile(path.join(__dirname, './html/' + data.path + '/index.html'), 'utf8', function (err, fileData) {
-                if (!err && fileData.length > 0) {
-                  handlers.insertVariables(fileData, function(err, newFileData){
-                    if(!err && fileData.length > 0){
-                      callback(200, newFileData, 'html');
-                    }else{
-                      callback(500, 'Something bad happend. Not like a nuclear war, but still bad. Please contact TxT#0001 on Discord if you see this', 'html');
-                    }
-                  })
-                } else {
-                    fs.readFile(path.join(__dirname, './html/' + data.path), 'utf8', function (err, fileData) {
-                        if (!err && fileData) {
-                          handlers.insertVariables(fileData, function(err, newFileData){
-                            if(!err && fileData.length > 0){
-                              callback(200, newFileData, 'html');
-                            }else{
-                              callback(500, 'Something bad happend. Not like a nuclear war, but still bad. Please contact TxT#0001 on Discord if you see this', 'html');
-                            }
-                          })
-                        } else {
-                            //console.log(path.join(__dirname, './html/' + data.path));
-                            callback(404, 'html handler couldnt find the file', 'html');
-                        }
-                    });
-                }
-            });
+  //Add path for different hosts
+  if(data.headers.host.indexOf('thetxt.club') > -1) data.path = '/landing/' + data.path;
+  //if(data.headers.host.indexOf('localhost') > -1) data.path = '/landing/' + data.path;
+  fs.readFile(path.join(__dirname, './html/' + data.path + '.html'), 'utf8', function (err, fileData) {
+    if (!err && fileData.length > 0) {
+      handlers.insertVariables(fileData, function(err, newFileData){
+        if(!err && fileData.length > 0){
+          callback(200, newFileData, 'html');
+        }else{
+          callback(500, 'Something bad happend. Not like a nuclear war, but still bad. Please contact TxT#0001 on Discord if you see this', 'html');
         }
-    });
+      })
+    } else {
+      fs.readFile(path.join(__dirname, './html/' + data.path + '/index.html'), 'utf8', function (err, fileData) {
+        if (!err && fileData.length > 0) {
+          handlers.insertVariables(fileData, function(err, newFileData){
+            if(!err && fileData.length > 0){
+              callback(200, newFileData, 'html');
+            }else{
+              callback(500, 'Something bad happend. Not like a nuclear war, but still bad. Please contact TxT#0001 on Discord if you see this', 'html');
+            }
+          })
+        } else {
+          fs.readFile(path.join(__dirname, './html/' + data.path), 'utf8', function (err, fileData) {
+            if (!err && fileData) {
+              handlers.insertVariables(fileData, function(err, newFileData){
+                if(!err && fileData.length > 0){
+                  callback(200, newFileData, 'html');
+                }else{
+                  callback(500, 'Something bad happend. Not like a nuclear war, but still bad. Please contact TxT#0001 on Discord if you see this', 'html');
+                }
+              })
+            } else {
+              //console.log(path.join(__dirname, './html/' + data.path));
+              callback(404, 'html handler couldnt find the file', 'html');
+            }
+          });
+        }
+      });
+    }
+  });
 };
 
 //Handler for landing html sites
@@ -121,7 +124,14 @@ handlers.paxterya = function (data, callback) {
                   handlers.insertVariables(fileData, function(err, newFileData){
                     if(!err && fileData.length > 0){
                       callback(200, newFileData, 'html');
-                    }else{
+                    }else{*.userosscache
+*.sln.docstates
+config.js
+
+mc_stats
+# User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
+
                       callback(500, 'Something bad happend. Not like a nuclear war, but still bad. Please contact TxT#0001 on Discord if you see this', 'html');
                     }
                   })
