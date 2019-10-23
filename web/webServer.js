@@ -3,8 +3,6 @@
 *  contains all setup and routing for web requests
 */
 
-//@TODO: Obtain better https certs
-
 //Dependencies
 const config = require('./../config.js');
 const http = require('http');
@@ -46,9 +44,43 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
 server.uniServer = function (req, res) {
   //Form the data object
   var data = this.getDataObject(req);
+    //Log the request
+    log.write(0, 'Web Request received', {data: data, sourceIP: req.connection.remoteAddress}, function (err) {});
 
-  //Log the request
-  log.write(0, 'Web Request received', {data: data, sourceIP: req.connection.remoteAddress});
+    //Insert the correct path for different hosts
+
+    //FOR TESTING ONLY
+    data.headers.host = 'paxterya.com'
+
+
+
+
+
+
+
+    if(!data.path.startsWith('assets')){
+      if (data.headers.host.indexOf('thetxt.club') > -1) data.path = '/landing/' + data.path;
+      if (data.headers.host.indexOf('paxterya.com') > -1) data.path = '/paxterya/' + data.path;
+    }
+
+    console.log(data.path)
+
+    //Check the path and choose a handler
+    var chosenHandler = handlers.html;
+    chosenHandler = data.path.indexOf('assets') > -1 ? handlers.assets : chosenHandler;
+    chosenHandler = data.path.startsWith('/landing') ? handlers.landing : chosenHandler;
+    chosenHandler = data.path.startsWith('/paxterya') ? handlers.paxterya : chosenHandler;
+
+    //Send the request to the chosenHandler
+    try {
+        chosenHandler(data, function (statusCode, payload, contentType) {
+            server.processHandlerResponse(res, data.method, data.path, statusCode, payload, contentType);
+        });
+    } catch (e) {
+        //                                                                                                          @TODO: Log the error
+        console.log(e);
+        server.processHandlerResponse(res, data.method, data.path, 500, 'Internal server error :(\n(Please notify TxT#0001 on Discord if you see this!)', 'html');
+    }
 
   //Check the path and choose a handler
   var chosenHandler = handlers.html;
@@ -95,53 +127,57 @@ server.getDataObject = function (req) {
 
 //Take the response from the handler and process it
 server.processHandlerResponse = function (res, method, path, statusCode, payload, contentType) {
-  //Check responses from handler or use defaults
-  statusCode = typeof (statusCode) == 'number' ? statusCode : 200;
-  contentType = typeof (contentType) == 'string' ? contentType : 'html';
+    //Check responses from handler or use defaults
+    statusCode = typeof (statusCode) == 'number' ? statusCode : 200;
+    contentType = typeof (contentType) == 'string' ? contentType : 'html';
 
-  //Log 404 and 500 errors
-  if (statusCode == 404) log.write(0, 'Answered web request with 404', { path: path, payload: payload }, function (err) { });
-  if (statusCode == 500) log.write(2, 'Answered web request with 500', { path: path, payload: payload }, function (err) { });
+    //Log 404 and 500 errors
+    if (statusCode == 404) log.write(0, 'Answered web request with 404', { path: path, payload: payload }, function (err) { });
+    if (statusCode == 500) log.write(2, 'Answered web request with 500', { path: path, payload: payload }, function (err) { });
 
-  //Build the response parts that are content specific
-  var payloadStr = '';
-  if (contentType == 'html') {
-    res.setHeader('Content-Type', 'text/html');
-    payloadStr = typeof (payload) == 'string' ? payload : '';
-  }
-  if (contentType == 'favicon') {
-    res.setHeader('Content-Type', 'image/x-icon');
-    payloadStr = typeof (payload) !== 'undefined' ? payload : '';
-  }
-  if (contentType == 'css') {
-    res.setHeader('Content-Type', 'text/css');
-    payloadStr = typeof (payload) !== 'undefined' ? payload : '';
-  }
-  if (contentType == 'png') {
-    res.setHeader('Content-Type', 'image/png');
-    payloadStr = typeof (payload) !== 'undefined' ? payload : '';
-  }
-  if (contentType == 'jpg') {
-    res.setHeader('Content-Type', 'image/jpeg');
-    payloadStr = typeof (payload) !== 'undefined' ? payload : '';
-  }
-  if (contentType == 'font') {
-    res.setHeader('Content-Type', 'application/octet-stream');
-    payloadStr = typeof (payload) !== 'undefined' ? payload : '';
-  }
-  if (contentType == 'plain') {
-    res.setHeader('Content-Type', 'text/plain');
-    payloadStr = typeof (payload) !== 'undefined' ? payload : '';
-  }
+    //Build the response parts that are content specific
+    var payloadStr = '';
+    if (contentType == 'html') {
+        res.setHeader('Content-Type', 'text/html');
+        payloadStr = typeof (payload) == 'string' ? payload : '';
+    }
+    if (contentType == 'favicon') {
+        res.setHeader('Content-Type', 'image/x-icon');
+        payloadStr = typeof (payload) !== 'undefined' ? payload : '';
+    }
+    if (contentType == 'css') {
+        res.setHeader('Content-Type', 'text/css');
+        payloadStr = typeof (payload) !== 'undefined' ? payload : '';
+    }
+    if (contentType == 'png') {
+        res.setHeader('Content-Type', 'image/png');
+        payloadStr = typeof (payload) !== 'undefined' ? payload : '';
+    }
+    if (contentType == 'jpg') {
+        res.setHeader('Content-Type', 'image/jpeg');
+        payloadStr = typeof (payload) !== 'undefined' ? payload : '';
+    }
+    if (contentType == 'font') {
+        res.setHeader('Content-Type', 'application/octet-stream');
+        payloadStr = typeof (payload) !== 'undefined' ? payload : '';
+    }
+    if (contentType == 'svg') {
+        res.setHeader('Content-Type', 'image/svg+xml');
+        payloadStr = typeof (payload) !== 'undefined' ? payload : '';
+    }
+    if (contentType == 'plain') {
+        res.setHeader('Content-Type', 'text/plain');
+        payloadStr = typeof (payload) !== 'undefined' ? payload : '';
+    }
 
-  //Finish the response with the rest which is common
-  res.writeHead(statusCode);
-  res.end(payloadStr);
+    //Finish the response with the rest which is common
+    res.writeHead(statusCode);
+    res.end(payloadStr);
 };
 
 //Define all possible routes
 server.router = {
-  '': handlers.index
+    '': handlers.index
 };
 
 //Init
