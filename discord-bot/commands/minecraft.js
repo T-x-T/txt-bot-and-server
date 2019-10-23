@@ -55,6 +55,7 @@ module.exports = {
                     }
                   });
                 }else{
+                  log.write(2, '+mc add ign couldnt get valid userdata', {err: err, data: data});
                   message.reply('I could not get your data to update it :(');
                 }
               });
