@@ -39,44 +39,43 @@ if(config['use-external-certs']){
 
 //Instanciate the https server
 server.httpsServer = https.createServer(server.httpsConfig, function (req, res) {
-  //Contains all server logic for https
-  server.uniServer = function (req, res) {
-    //Form the data object
-    var data = this.getDataObject(req);
-    //Log the request
-    log.write(0, 'Web Request received', {data: data, sourceIP: req.connection.remoteAddress});
+  //Form the data object
+  var data = server.getDataObject(req);
+  //Log the request
+  log.write(0, 'Web Request received', {data: data, sourceIP: req.connection.remoteAddress});
 
-    //Insert the correct path for different hosts
+  //Insert the correct path for different hosts
 
-    //FOR TESTING ONLY
-    data.headers.host = 'thetxt.club'
-    data.headers.host = 'paxterya.com'
+  //FOR TESTING ONLY
+  data.headers.host = 'thetxt.club'
+  data.headers.host = 'paxterya.com'
 
 
 
-    if(!data.path.startsWith('assets')){
-      if (data.headers.host.indexOf('thetxt.club') > -1) data.path = '/landing/' + data.path;
-      if (data.headers.host.indexOf('paxterya.com') > -1) data.path = '/paxterya/' + data.path;
-    }
+  if(!data.path.startsWith('assets')){
+    if (data.headers.host.indexOf('thetxt.club') > -1) data.path = '/landing/' + data.path;
+    if (data.headers.host.indexOf('paxterya.com') > -1) data.path = '/paxterya/' + data.path;
+  }
 
-    console.log(data.path)
+  console.log(data.method, data.path)
+  if(data.method == 'post') console.log(data.payload);
 
-    //Check the path and choose a handler
-    var chosenHandler = handlers.html;
-    chosenHandler = data.path.indexOf('assets') > -1 ? handlers.assets : chosenHandler;
-    chosenHandler = data.path.startsWith('/landing') ? handlers.landing : chosenHandler;
-    chosenHandler = data.path.startsWith('/paxterya') ? handlers.paxterya : chosenHandler;
+  //Check the path and choose a handler
+  var chosenHandler = handlers.html;
+  chosenHandler = data.path.indexOf('assets') > -1 ? handlers.assets : chosenHandler;
+  chosenHandler = data.path.startsWith('/landing') ? handlers.landing : chosenHandler;
+  chosenHandler = data.path.startsWith('/paxterya') ? handlers.paxterya : chosenHandler;
+  chosenHandler = data.path.startsWith('/paxterya/api/application') && data.method == 'post' ? handlers.paxapi.application.post : chosenHandler;
 
-    //Send the request to the chosenHandler
-    try {
-      chosenHandler(data, function (statusCode, payload, contentType) {
-        server.processHandlerResponse(res, data.method, data.path, statusCode, payload, contentType);
-      });
-    } catch (e) {
-      console.log(e);
-      server.processHandlerResponse(res, data.method, data.path, 500, 'Internal server error :(\n(Please notify TxT#0001 on Discord if you see this!)', 'html');
-    }
-  };
+  //Send the request to the chosenHandler
+  try {
+    chosenHandler(data, function (statusCode, payload, contentType) {
+      server.processHandlerResponse(res, data.method, data.path, statusCode, payload, contentType);
+    });
+  } catch (e) {
+    console.log(e);
+    server.processHandlerResponse(res, data.method, data.path, 500, 'Internal server error :(\n(Please notify TxT#0001 on Discord if you see this!)', 'html');
+  }
 });
 
 
@@ -126,6 +125,10 @@ server.processHandlerResponse = function (res, method, path, statusCode, payload
     res.setHeader('Content-Type', 'text/html');
     payloadStr = typeof (payload) == 'string' ? payload : '';
   }
+  if (contentType == 'json') {
+    res.setHeader('Content-Type', 'application/json');
+    payloadStr = typeof (payload) == 'string' ? payload : '';
+  }
   if (contentType == 'favicon') {
     res.setHeader('Content-Type', 'image/x-icon');
     payloadStr = typeof (payload) !== 'undefined' ? payload : '';
@@ -154,17 +157,9 @@ server.processHandlerResponse = function (res, method, path, statusCode, payload
     res.setHeader('Content-Type', 'text/plain');
     payloadStr = typeof (payload) !== 'undefined' ? payload : '';
   }
-
   //Finish the response with the rest which is common
   res.writeHead(statusCode);
   res.end(payloadStr);
-};
-
-//Define all possible routes
-server.router = {
-  '': handlers.index,
-  'landing': handlers.landing,
-  'paxterya': handlers.paxterya
 };
 
 //Init

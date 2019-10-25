@@ -36,5 +36,29 @@ webHelpers.readHtmlAndEncapsulate = function(path, site, callback){
   });
 };
 
+//Finish HTML files by replacing variables
+webHelpers.insertVariables = function(path, file, callback){
+  //Load variables
+  console.log('insert for this path: ' + path);
+  let variables = require('./variables.js')()[path];
+  //Loop through all possible variables and replace
+  for(let key in variables){
+    if(variables.hasOwnProperty(key)){
+      let find = '{' + key + '}';
+      let replace = variables[key];
+      if(typeof replace == 'function'){
+        replace(function(output){
+          file = file.split(find).join(output)
+        });
+      }else {
+        file = file.split(find).join(replace);
+      }
+    }
+  }
+
+  //Callback the new file
+  callback(false, file);
+};
+
 //Export the container
 module.exports = webHelpers;
