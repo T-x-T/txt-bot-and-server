@@ -10,6 +10,7 @@ const config = require('./../config.js');
 const fs = require('fs');
 const path = require('path');
 const webHelpers = require('./web-helpers.js');
+const application = require('./../lib/application.js');
 
 //Create the container
 var handlers = {};
@@ -95,6 +96,7 @@ handlers.assets = function (data, callback) {
         if (data.path.indexOf('.ico') > -1) contentType = 'favicon';
         if (data.path.indexOf('.ttf') > -1) contentType = 'font';
         if (data.path.indexOf('.svg') > -1) contentType = 'svg';
+        if (data.path.indexOf('.js') > -1) contentType = 'js';
 
         callback(200, fileData, contentType);
       } else {
@@ -113,8 +115,15 @@ handlers.assets = function (data, callback) {
 
 handlers.paxapi.application = {};
 
+//Receives a new application
 handlers.paxapi.application.post = function(data, callback){
-  callback(200, '{}', 'json');
+  application.write(data.payload, function(status, err){
+    if(!err){
+      callback(status, {}, 'json');
+    }else{
+      callback(status, {err: err}, 'json');
+    }
+  });
 };
 
 //Export the container

@@ -17,7 +17,6 @@ _internal.generateBirthyearOptions = function(callback){
   for(let i = curYear - 8; i > curYear - 80; i--){
       output += `<option value="${i}">${i}</option>\n`;
   }
-console.log(output);
   callback(output);
 };
 

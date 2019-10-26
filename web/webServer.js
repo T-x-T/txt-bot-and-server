@@ -40,48 +40,49 @@ if(config['use-external-certs']){
 //Instanciate the https server
 server.httpsServer = https.createServer(server.httpsConfig, function (req, res) {
   //Form the data object
-  var data = server.getDataObject(req);
-  //Log the request
-  log.write(0, 'Web Request received', {data: data, sourceIP: req.connection.remoteAddress});
+  server.getDataObject(req, function(data){
+    //Log the request
+    log.write(0, 'Web Request received', {data: data, sourceIP: req.connection.remoteAddress});
 
-  //Insert the correct path for different hosts
+    //Insert the correct path for different hosts
 
-  //FOR TESTING ONLY
-  data.headers.host = 'thetxt.club'
-  data.headers.host = 'paxterya.com'
+    //FOR TESTING ONLY
+    data.headers.host = 'thetxt.club'
+    data.headers.host = 'paxterya.com'
 
 
 
-  if(!data.path.startsWith('assets')){
-    if (data.headers.host.indexOf('thetxt.club') > -1) data.path = '/landing/' + data.path;
-    if (data.headers.host.indexOf('paxterya.com') > -1) data.path = '/paxterya/' + data.path;
-  }
+    if(!data.path.startsWith('assets')){
+      if (data.headers.host.indexOf('thetxt.club') > -1) data.path = '/landing/' + data.path;
+      if (data.headers.host.indexOf('paxterya.com') > -1) data.path = '/paxterya/' + data.path;
+    }
 
-  console.log(data.method, data.path)
-  if(data.method == 'post') console.log(data.payload);
+    console.log(data.method, data.path)
+    if(data.method == 'post') console.log(data.payload);
 
-  //Check the path and choose a handler
-  var chosenHandler = handlers.html;
-  chosenHandler = data.path.indexOf('assets') > -1 ? handlers.assets : chosenHandler;
-  chosenHandler = data.path.startsWith('/landing') ? handlers.landing : chosenHandler;
-  chosenHandler = data.path.startsWith('/paxterya') ? handlers.paxterya : chosenHandler;
-  chosenHandler = data.path.startsWith('/paxterya/api/application') && data.method == 'post' ? handlers.paxapi.application.post : chosenHandler;
+    //Check the path and choose a handler
+    var chosenHandler = handlers.html;
+    chosenHandler = data.path.indexOf('assets') > -1 ? handlers.assets : chosenHandler;
+    chosenHandler = data.path.startsWith('/landing') ? handlers.landing : chosenHandler;
+    chosenHandler = data.path.startsWith('/paxterya') ? handlers.paxterya : chosenHandler;
+    chosenHandler = data.path.startsWith('/paxterya/api/application') && data.method == 'post' ? handlers.paxapi.application.post : chosenHandler;
 
-  //Send the request to the chosenHandler
-  try {
-    chosenHandler(data, function (statusCode, payload, contentType) {
-      server.processHandlerResponse(res, data.method, data.path, statusCode, payload, contentType);
-    });
-  } catch (e) {
-    console.log(e);
-    server.processHandlerResponse(res, data.method, data.path, 500, 'Internal server error :(\n(Please notify TxT#0001 on Discord if you see this!)', 'html');
-  }
+    //Send the request to the chosenHandler
+    try {
+      chosenHandler(data, function (statusCode, payload, contentType) {
+        server.processHandlerResponse(res, data.method, data.path, statusCode, payload, contentType);
+      });
+    } catch (e) {
+      console.log(e);
+      server.processHandlerResponse(res, data.method, data.path, 500, 'Internal server error :(\n(Please notify TxT#0001 on Discord if you see this!)', 'html');
+    }
+  });
 });
 
 
 
 //Take a request and return a nice data object w/o payload
-server.getDataObject = function (req) {
+server.getDataObject = function (req, callback) {
   var parsedUrl = url.parse(req.url, true);
 
   //Try to get payload, if there is some
@@ -92,21 +93,21 @@ server.getDataObject = function (req) {
   });
   req.on('end', function () {
     buffer += decoder.end();
-  });
-  try {
-    var jsonObject = JSON.parse(buffer);
-  } catch (e) {
-    var jsonObject = {};
-  }
-  var data = {
-    'path': parsedUrl.pathname.replace(/^\/+|\/+$/g, ''),
-    'queryStringObject': parsedUrl.query,
-    'method': req.method.toLowerCase(),
-    'headers': req.headers,
-    'payload': jsonObject
-  };
+    try {
+      var jsonObject = JSON.parse(buffer);
+    } catch (e) {
+      var jsonObject = {};
+    }
+    var data = {
+      'path': parsedUrl.pathname.replace(/^\/+|\/+$/g, ''),
+      'queryStringObject': parsedUrl.query,
+      'method': req.method.toLowerCase(),
+      'headers': req.headers,
+      'payload': jsonObject
+    };
 
-  return data;
+    callback(data);
+  });
 };
 
 //Take the response from the handler and process it
@@ -127,7 +128,7 @@ server.processHandlerResponse = function (res, method, path, statusCode, payload
   }
   if (contentType == 'json') {
     res.setHeader('Content-Type', 'application/json');
-    payloadStr = typeof (payload) == 'string' ? payload : '';
+    payloadStr = typeof (payload) == 'object' ? JSON.stringify(payload) : payload;
   }
   if (contentType == 'favicon') {
     res.setHeader('Content-Type', 'image/x-icon');
@@ -151,6 +152,10 @@ server.processHandlerResponse = function (res, method, path, statusCode, payload
   }
   if (contentType == 'svg') {
     res.setHeader('Content-Type', 'image/svg+xml');
+    payloadStr = typeof (payload) !== 'undefined' ? payload : '';
+  }
+  if (contentType == 'js') {
+    res.setHeader('Content-Type', 'application/javascript');
     payloadStr = typeof (payload) !== 'undefined' ? payload : '';
   }
   if (contentType == 'plain') {

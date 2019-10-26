@@ -23,7 +23,9 @@ var conf = {
     'mc-stats-remote': 'rclone remote name',
     'rcon-server': '',
     'rcon-port': 25575,
-    'rcon-password':
+    'rcon-password': '',
+    'mailUser': 'test@example.org',
+    'mailPass': 'badPW123'
 };
 
 //Export the container

@@ -18,17 +18,17 @@
 
       <section>
 
-        <form id="app-form" enctype="multipart/form-data" action="api/application" method="post">
+        <form id="app-form" method="post" action="#" onsubmit="root.sendApplication(); return false">
 
           <div class="group">
             <label for="ign">Minecraft in-game name</label>
-            <input name="ign" type="text" placeholder="Minecraft in-game name" required>
+            <input id="ign" name="ign" type="text" placeholder="Minecraft in-game name" required>
             <span class="bar"></span>
           </div>
 
           <div class="group">
             <label for="discord">Discord tag</label>
-            <input name="discord" type="text" placeholder="Discord tag" title="Discord name, hashtag, 4 digits" required>
+            <input id="discord" name="discord" type="text" placeholder="Discord tag" title="Discord name, hashtag, 4 digits" required>
             <span class="bar"></span>
 
             <div class="tooltip"><i class="fas fa-question-circle"></i>
@@ -39,7 +39,7 @@
 
           <div class="group">
             <label for="email">E-Mail</label>
-            <input name="email" type="email" placeholder="E-Mail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+            <input id="email" name="email" type="email" placeholder="E-Mail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
             <span class="bar"></span>
 
             <div class="tooltip"><i class="fas fa-question-circle"></i>
@@ -383,7 +383,8 @@
                 <span class="tooltiptext">Here you can show us some screenshots of your previous Minecraft buildings.</span>
               </span>
             </h3>
-            <textarea name="upload[]" id="fileToUpload" maxlength="1500" placeholder="Add some links from external image hosts like imgur"></textarea>
+            <textarea name="upload[]" id="build_images" maxlength="1500" placeholder="Add some links from external image hosts like imgur"></textarea>
+            <p><span id="chars3">1500</span> characters remaining</p>
           </div>
 
           <div class="group">
@@ -391,28 +392,28 @@
             <hr>
             <label class="container">
               <span class="label">Publish my "About me" text on the Paxterya Discord server (only visible to Paxterya members) (optional)</span>
-              <input type="checkbox" name="checkmark1" value="1">
+              <input id="publish_about_me" type="checkbox" name="checkmark1" value="1">
               <span class="checkmark"></span>
             </label>
             <label class="container">
               <span class="label">Show my age in the <a target="_blank" href="members.html">member list</a> (optional)</span>
-              <input type="checkbox" name="checkmark2" value="1">
+              <input id="publish_age" type="checkbox" name="checkmark2" value="1">
               <span class="checkmark"></span>
             </label>
             <label class="container">
               <span class="label">Show my home country in the <a target="_blank" href="members.html">member list</a> (optional)</span>
-              <input type="checkbox" name="checkmark3" value="1">
+              <input id="publish_country" type="checkbox" name="checkmark3" value="1">
               <span class="checkmark"></span>
             </label>
             <hr>
             <label class="container">
               <span class="label">I accept the <a target="_blank" href="privacy-policy.html">privacy policy</a> of Paxterya. None of my entered data will be published or transmitted to third parties without my consent.</span>
-              <input type="checkbox" name="checkmark4" value="1" required>
+              <input id="accept_privacy_policy" type="checkbox" name="checkmark4" value="1" required>
               <span class="checkmark"></span>
             </label>
             <label class="container">
               <span class="label">I accept the <a target="_blank" href="rules.html">rules of Paxterya</a>. I'm aware that a violation of those rules can lead to an exclusion from the Paxterya community.</span>
-              <input type="checkbox" name="checkmark5" value="1" required>
+              <input id="accept_rules" type="checkbox" name="checkmark5" value="1" required>
               <span class="checkmark"></span>
             </label>
           </div>

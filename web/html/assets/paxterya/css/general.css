@@ -1051,7 +1051,7 @@ textarea {
     background: #f0f0f0;
 }
 
-button[type="submit"] {
+button[id="submit"] {
     background: #007787;
     border: 2px solid #00515c;
     color: white;
@@ -1062,17 +1062,17 @@ button[type="submit"] {
     width: 100%;
 }
 
-button[type="submit"]:disabled, button[type="submit"]:disabled:hover {
+button[id="submit"]:disabled, button[id="submit"]:disabled:hover {
     background: #b8b8b8;
     border-color: #777;
 }
 
-button[type="submit"] i {
+button[id="submit"] i {
     font-size: 12pt;
     margin-right: 7px;
 }
 
-button[type="submit"]:hover {
+button[id="submit"]:hover {
     background: #00515c;
 }
 

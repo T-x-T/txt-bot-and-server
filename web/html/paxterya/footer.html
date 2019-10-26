@@ -276,6 +276,12 @@
       var length = maxLength-length;
       $('#chars2').text(length);
     });
+
+    $('#build_images').keyup(function() {
+      var length = $(this).val().length;
+      var length = maxLength-length;
+      $('#chars3').text(length);
+    });
 </script>
 
 <!-- country list autocomplete and alternative country spellings -->
