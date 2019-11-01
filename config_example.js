@@ -25,7 +25,11 @@ var conf = {
     'rcon-port': 25575,
     'rcon-password': '',
     'mailUser': 'test@example.org',
-    'mailPass': 'badPW123'
+    'mailPass': 'badPW123',
+    'discord_client_id': '',
+    'discord_client_secret': '',
+    'discord_redirect_uri_application': '',
+    'discord_redirect_uri_staffLogin': ''
 };
 
 //Export the container

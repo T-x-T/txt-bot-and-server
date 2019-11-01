@@ -13,8 +13,11 @@ var webHelpers = {};
 
 //Reads in an html file and encapsulates it
 webHelpers.readHtmlAndEncapsulate = function(path, site, callback){
-  var headerPath = site === 'paxterya' ? _path.join(__dirname, './html/paxterya/header.html') : 'false';
-  var footerPath = site === 'paxterya' ? _path.join(__dirname, './html/paxterya/footer.html') : 'false';
+  let headerPath, footerPath;
+  headerPath = site === 'paxterya' ? _path.join(__dirname, './html/paxterya/header.html') : 'false';
+  footerPath = site === 'paxterya' ? _path.join(__dirname, './html/paxterya/footer.html') : 'false';
+  headerPath = site === 'paxteryaStaff' ? _path.join(__dirname, './html/paxterya/staff/header.html') : headerPath;
+  footerPath = site === 'paxteryaStaff' ? _path.join(__dirname, './html/paxterya/staff/footer.html') : footerPath;
   fs.readFile(path, 'utf8', function(err, html){
     if(!err && html.length > 0){
       fs.readFile(headerPath, 'utf8', function(err, header){
@@ -23,15 +26,15 @@ webHelpers.readHtmlAndEncapsulate = function(path, site, callback){
             if(!err && footer.length > 0){
               callback(false, header + html + footer);
             }else{
-              callback(true, 'Couldnt open file');
+              callback('Couldnt open footer', false);
             }
           })
         }else{
-          callback(true, 'Couldnt open file');
+          callback('Couldnt open header', false);
         }
       })
     }else{
-      callback(true, 'Couldnt open file');
+      callback('Couldnt open file', false);
     }
   });
 };
@@ -39,7 +42,6 @@ webHelpers.readHtmlAndEncapsulate = function(path, site, callback){
 //Finish HTML files by replacing variables
 webHelpers.insertVariables = function(path, file, callback){
   //Load variables
-  console.log('insert for this path: ' + path);
   let variables = require('./variables.js')()[path];
   //Loop through all possible variables and replace
   for(let key in variables){

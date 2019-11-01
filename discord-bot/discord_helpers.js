@@ -5,8 +5,8 @@
 
 //Dependencies
 const config = require('./../config.js');
-const data = require('./../lib/data.js');
-const log = require('./../lib/log.js');
+const data   = require('./../lib/data.js');
+const log    = require('./../lib/log.js');
 
 //Global var
 var client;
@@ -82,6 +82,11 @@ helpers.getRoleId = function(roleName){
     if(item.name == roleName) id = item.id;
   });
   return id;
+};
+
+//Get the roles of a member
+helpers.isAdmin = function(userID, callback){
+  callback(client.guilds.get(config['guild']).members.get(userID).roles.has(config["admin-role"]));
 };
 
 //Add the ign to the users nick if necessary. the user variable requires a discord guildmember object

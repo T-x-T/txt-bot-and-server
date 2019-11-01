@@ -49,7 +49,7 @@ function getVariables() {
     '/paxterya/how-to-join.html': {
       'pax_title': 'How to join'
     },
-    '/paxterya/interface.html': {
+    '/paxterya/staff/interface.html': {
       'pax_title': 'Sicco admin Interface'
     },
     '/paxterya/join-us.html': {
@@ -62,11 +62,11 @@ function getVariables() {
     '/paxterya/members.html': {
       'pax_title': 'All members'
     },
-    '/paxterya/message-error.html': {
-      'pax_title': 'Something went wrong'
-    },
     '/paxterya/message-sent.html': {
       'pax_title': 'Success!'
+    },
+    '/paxterya/login.html': {
+      'pax_title': 'Staff login'
     },
     '/paxterya/our-team.html': {
       'pax_title': 'Our team'

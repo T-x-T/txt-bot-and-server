@@ -44,18 +44,22 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
     //Log the request
     log.write(0, 'Web Request received', {data: data, sourceIP: req.connection.remoteAddress});
 
-    //Insert the correct path for different hosts
+
 
     //FOR TESTING ONLY
+    let origHost = data.headers.host;
     data.headers.host = 'thetxt.club'
     data.headers.host = 'paxterya.com'
 
 
-
+    //Insert the correct path for different hosts
     if(!data.path.startsWith('assets')){
       if (data.headers.host.indexOf('thetxt.club') > -1) data.path = '/landing/' + data.path;
       if (data.headers.host.indexOf('paxterya.com') > -1) data.path = '/paxterya/' + data.path;
     }
+
+    //necessary for testing purposes
+    data.headers.host = origHost;
 
     console.log(data.method, data.path)
     if(data.method == 'post') console.log(data.payload);
@@ -66,6 +70,9 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
     chosenHandler = data.path.startsWith('/landing') ? handlers.landing : chosenHandler;
     chosenHandler = data.path.startsWith('/paxterya') ? handlers.paxterya : chosenHandler;
     chosenHandler = data.path.startsWith('/paxterya/api/application') && data.method == 'post' ? handlers.paxapi.application.post : chosenHandler;
+    chosenHandler = data.path.startsWith('/paxterya/api/application') && data.method == 'get' ? handlers.paxapi.application.get : chosenHandler;
+    chosenHandler = data.path.startsWith('/paxterya/login') ? handlers.paxLogin : chosenHandler;
+    chosenHandler = data.path.startsWith('/paxterya/staff') ? handlers.paxStaff : chosenHandler;
 
     //Send the request to the chosenHandler
     try {
@@ -100,7 +107,7 @@ server.getDataObject = function (req, callback) {
     }
     var data = {
       'path': parsedUrl.pathname.replace(/^\/+|\/+$/g, ''),
-      'queryStringObject': parsedUrl.query,
+      'queryStringObject': JSON.parse(JSON.stringify(parsedUrl.query)),
       'method': req.method.toLowerCase(),
       'headers': req.headers,
       'payload': jsonObject
@@ -122,48 +129,52 @@ server.processHandlerResponse = function (res, method, path, statusCode, payload
 
   //Build the response parts that are content specific
   var payloadStr = '';
-  if (contentType == 'html') {
-    res.setHeader('Content-Type', 'text/html');
-    payloadStr = typeof (payload) == 'string' ? payload : '';
-  }
-  if (contentType == 'json') {
-    res.setHeader('Content-Type', 'application/json');
-    payloadStr = typeof (payload) == 'object' ? JSON.stringify(payload) : payload;
-  }
-  if (contentType == 'favicon') {
-    res.setHeader('Content-Type', 'image/x-icon');
-    payloadStr = typeof (payload) !== 'undefined' ? payload : '';
-  }
-  if (contentType == 'css') {
-    res.setHeader('Content-Type', 'text/css');
-    payloadStr = typeof (payload) !== 'undefined' ? payload : '';
-  }
-  if (contentType == 'png') {
-    res.setHeader('Content-Type', 'image/png');
-    payloadStr = typeof (payload) !== 'undefined' ? payload : '';
-  }
-  if (contentType == 'jpg') {
-    res.setHeader('Content-Type', 'image/jpeg');
-    payloadStr = typeof (payload) !== 'undefined' ? payload : '';
-  }
-  if (contentType == 'font') {
-    res.setHeader('Content-Type', 'application/octet-stream');
-    payloadStr = typeof (payload) !== 'undefined' ? payload : '';
-  }
-  if (contentType == 'svg') {
-    res.setHeader('Content-Type', 'image/svg+xml');
-    payloadStr = typeof (payload) !== 'undefined' ? payload : '';
-  }
-  if (contentType == 'js') {
-    res.setHeader('Content-Type', 'application/javascript');
-    payloadStr = typeof (payload) !== 'undefined' ? payload : '';
-  }
-  if (contentType == 'plain') {
-    res.setHeader('Content-Type', 'text/plain');
-    payloadStr = typeof (payload) !== 'undefined' ? payload : '';
+  if(statusCode == 301 || statusCode == 302){
+    res.writeHead(statusCode, payload);
+  }else{
+    if (contentType == 'html') {
+      res.setHeader('Content-Type', 'text/html');
+      payloadStr = typeof (payload) == 'string' ? payload : '';
+    }
+    if (contentType == 'json') {
+      res.setHeader('Content-Type', 'application/json');
+      payloadStr = typeof (payload) == 'object' ? JSON.stringify(payload) : payload;
+    }
+    if (contentType == 'favicon') {
+      res.setHeader('Content-Type', 'image/x-icon');
+      payloadStr = typeof (payload) !== 'undefined' ? payload : '';
+    }
+    if (contentType == 'css') {
+      res.setHeader('Content-Type', 'text/css');
+      payloadStr = typeof (payload) !== 'undefined' ? payload : '';
+    }
+    if (contentType == 'png') {
+      res.setHeader('Content-Type', 'image/png');
+      payloadStr = typeof (payload) !== 'undefined' ? payload : '';
+    }
+    if (contentType == 'jpg') {
+      res.setHeader('Content-Type', 'image/jpeg');
+      payloadStr = typeof (payload) !== 'undefined' ? payload : '';
+    }
+    if (contentType == 'font') {
+      res.setHeader('Content-Type', 'application/octet-stream');
+      payloadStr = typeof (payload) !== 'undefined' ? payload : '';
+    }
+    if (contentType == 'svg') {
+      res.setHeader('Content-Type', 'image/svg+xml');
+      payloadStr = typeof (payload) !== 'undefined' ? payload : '';
+    }
+    if (contentType == 'js') {
+      res.setHeader('Content-Type', 'application/javascript');
+      payloadStr = typeof (payload) !== 'undefined' ? payload : '';
+    }
+    if (contentType == 'plain') {
+      res.setHeader('Content-Type', 'text/plain');
+      payloadStr = typeof (payload) !== 'undefined' ? payload : '';
+    }
+    res.writeHead(statusCode);
   }
   //Finish the response with the rest which is common
-  res.writeHead(statusCode);
   res.end(payloadStr);
 };
 
