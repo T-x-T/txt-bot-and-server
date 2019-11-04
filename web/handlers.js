@@ -25,7 +25,7 @@ handlers.notFound = function (data, callback) {
 handlers.landing = function (data, callback){
   fs.readFile(path.join(__dirname, './html/' + data.path), 'utf8', function (err, fileData) {
     if (!err && fileData.length > 0) {
-      webHelpers.insertVariables(data.path, fileData, function(err, newFileData){
+      webHelpers.insertVariables(data, fileData, function(err, newFileData){
         if(!err && fileData.length > 0){
           callback(200, newFileData, 'html');
         }else{
@@ -35,7 +35,8 @@ handlers.landing = function (data, callback){
     } else {
       fs.readFile(path.join(__dirname, './html/' + data.path + '/index.html'), 'utf8', function (err, fileData) {
         if (!err && fileData.length > 0) {
-          webHelpers.insertVariables(data.path + 'index.html', fileData, function(err, newFileData){
+          data.path += 'index.html';
+          webHelpers.insertVariables(data, fileData, function(err, newFileData){
             if(!err && fileData.length > 0){
               callback(200, newFileData, 'html');
             }else{
@@ -62,7 +63,7 @@ handlers.paxterya = function (data, callback) {
             let id = userObject.id;
             webHelpers.readHtmlAndEncapsulate(path.join(__dirname, './html/' + data.path), 'paxterya', function (err, fileData) {
               if (!err && fileData.length > 0) {
-                webHelpers.insertVariables(data.path, fileData, function(err, newFileData){
+                webHelpers.insertVariables(data, fileData, function(err, newFileData){
                   if(!err && fileData.length > 0){
                     callback(302, {Location: `https://${data.headers.host}/${data.path.replace('/paxterya/', '')}?id=${id}`}, 'plain');
                   }else{
@@ -82,7 +83,7 @@ handlers.paxterya = function (data, callback) {
   }else{
     webHelpers.readHtmlAndEncapsulate(path.join(__dirname, './html/' + data.path), 'paxterya', function (err, fileData) {
       if (!err && fileData.length > 0) {
-        webHelpers.insertVariables(data.path, fileData, function(err, newFileData){
+        webHelpers.insertVariables(data, fileData, function(err, newFileData){
           if(!err && fileData.length > 0){
             callback(200, newFileData, 'html');
           }else{
@@ -92,7 +93,8 @@ handlers.paxterya = function (data, callback) {
       } else {
         webHelpers.readHtmlAndEncapsulate(path.join(__dirname, './html/' + data.path + '/index.html'), 'paxterya', function (err, fileData) {
           if (!err && fileData.length > 0) {
-            webHelpers.insertVariables(data.path + 'index.html', fileData, function(err, newFileData){
+            data.path += 'index.html';
+            webHelpers.insertVariables(data, fileData, function(err, newFileData){
               if(!err && fileData.length > 0){
                 callback(200, newFileData, 'html');
               }else{
@@ -143,27 +145,25 @@ handlers.paxStaff = function(data, callback){
         if(typeof userObject === 'object'){
           if(userObject.hasOwnProperty('id')){
             //Now verify that the user is in the admin group
-            discord.isAdmin(userObject.id, function(isAdmin){
-              if(isAdmin){
-                //Everything is fine, serve the website
-                webHelpers.readHtmlAndEncapsulate(path.join(__dirname, './html/' + data.path), 'paxteryaStaff', function (err, fileData) {
-                  if (!err && fileData.length > 0) {
-                    webHelpers.insertVariables(data.path, fileData, function(err, newFileData){
-                      if(!err && fileData.length > 0){
-                        callback(200, newFileData, 'html');
-                      }else{
-                        callback(500, 'Something bad happend. Not like a nuclear war, but still bad. Please contact TxT#0001 on Discord if you see this', 'html');
-                      }
-                    });
-                  }else{
-                    callback(500, 'I couldnt encapsulate the html for you, Im sorry :(', 'html');
-                  }
-                });
-              }else{
-                callback(403, 'You first have to become an admin before accessing this site!!', 'html');
-              }
+            if(discord.isAdmin(userObject.id)){
+              //Everything is fine, serve the website
+              webHelpers.readHtmlAndEncapsulate(path.join(__dirname, './html/' + data.path), 'paxteryaStaff', function (err, fileData) {
+                if(!err && fileData.length > 0) {
+                  webHelpers.insertVariables(data, fileData, function(err, newFileData){
+                    if(!err && fileData.length > 0){
+                      callback(200, newFileData, 'html');
+                    }else{
+                      callback(500, 'Something bad happend. Not like a nuclear war, but still bad. Please contact TxT#0001 on Discord if you see this', 'html');
+                    }
+                  });
+                }else{
+                  callback(500, 'I couldnt encapsulate the html for you, Im sorry :(', 'html');
+                }
               });
             }else{
+              callback(403, 'You first have to become an admin before accessing this site!!', 'html');
+            }
+          }else{
             callback(500, 'I couldnt get your userData from discord, Im sorry :(', 'html');
           }
         }else{
@@ -188,18 +188,16 @@ handlers.paxLogin = function(data, callback){
         oauth.getUserObject(access_token, function(userObject){
           if(userObject.hasOwnProperty('id')){
             //Now verify that the user is in the admin group
-            discord.isAdmin(userObject.id, function(isAdmin){
-              if(isAdmin){
-                //Now set the access_token as a cookie and redirect the user to the interface.html
-                callback(302, {Location: `https://${data.headers.host}/staff/interface.html`, 'Set-Cookie': 'access_token=' + access_token + ';path=/'}, 'plain');
+            if(discord.isAdmin(userObject.id)){
+              //Now set the access_token as a cookie and redirect the user to the interface.html
+              callback(302, {Location: `https://${data.headers.host}/staff/interface.html`, 'Set-Cookie': 'access_token=' + access_token + ';path=/'}, 'plain');
               }else{
                 callback(403, 'You first have to become an admin before accessing this site!!', 'html');
               }
-            });
-          }else{
-            callback(500, 'I couldnt get your userData from discord, Im sorry :(', 'html');
-          }
-        });
+            }else{
+              callback(500, 'I couldnt get your userData from discord, Im sorry :(', 'html');
+            }
+          });
       }else{
         callback(500, 'I couldnt get your access_token from discord, Im sorry :(', 'html');
       }
@@ -217,7 +215,7 @@ handlers.paxLogin = function(data, callback){
 
 handlers.paxapi.application = {};
 
-//Receives a new application
+//To send a new application
 handlers.paxapi.application.post = function(data, callback){
   application.write(data.payload, function(status, err){
     if(!err){
@@ -239,28 +237,69 @@ handlers.paxapi.application.get = function(data, callback){
       //There is an access_token cookie, lets check if it belongs to an admin
       let access_token = data.headers.cookie.split('=')[1];
       oauth.getUserObject(access_token, function(userObject){
-          if(userObject.hasOwnProperty('id')){
-            discord.isAdmin(userObject.id, function(isAdmin){
-              if(isAdmin){
-                //The requester is allowed to get the records
-                //Retrieve all records
-                //Clear the 0 status code, as 0 means get all data
-                if(data.queryStringObject.status == 0) data.queryStringObject = undefined;
-                application.readAll(data.queryStringObject, function(err, docs){
-                  if(!err){
-                    callback(200, docs, 'json');
-                  }else{
-                    callback(500, {err: 'Couldnt get any records from the database'}, 'json');
-                  }
-                });
+        if(userObject.hasOwnProperty('id')){
+          if(discord.isAdmin(userObject.id)){
+            //The requester is allowed to get the records
+            //Retrieve all records
+            //Clear the 0 status code, as 0 means get all data
+            if(data.queryStringObject.status == 0) data.queryStringObject = undefined;
+            application.readAll(data.queryStringObject, function(err, docs){
+              if(!err){
+                callback(200, docs, 'json');
               }else{
-                callback(403, {err: 'You are not authorized to do that!'}, 'json');
+                callback(500, {err: 'Couldnt get any records from the database'}, 'json');
               }
             });
           }else{
+            callback(403, {err: 'You are not authorized to do that!'}, 'json');
+          }
+        }else{
+          callback(500, {err: 'Couldnt get userData from discord'}, 'json');
+        }
+      });
+    }else{
+      callback(401, {err: 'You need to send your access_token'}, 'json');
+    }
+  }else{
+    callback(401, {err: 'You need to send your access_token'}, 'json');
+  }
+};
+
+//To change the status of a single application
+//REQUIRES AUTHORIZATION!
+//Required data: id, new status (2 or 3)
+handlers.paxapi.application.patch = function(data, callback){
+  //Check if there is an access_token
+  if(data.headers.hasOwnProperty('cookie')){
+    if(data.headers.cookie.indexOf('access_token' > -1)){
+      //Check if the required fields are set
+      let id     = typeof data.payload.id     == 'number' && data.payload.id     > -1 ? data.payload.id     : false;
+      let status = typeof data.payload.status == 'number' && data.payload.status >= 2 && data.payload.status <= 3 ? data.payload.status : false;
+      let reason = typeof data.payload.reason == 'string' && data.payload.reason.length > 0 ? data.payload.reason : false;
+      if(typeof id == 'number' && status){
+        //There is an access_token cookie, lets check if it belongs to an admin
+        let access_token = data.headers.cookie.split('=')[1];
+        oauth.getUserObject(access_token, function(userObject){
+          if(userObject.hasOwnProperty('id')){
+            if(discord.isAdmin(userObject.id)){
+              //Hand it over to the correct function
+              application.changeStatus(id, status, reason, function(status, err){
+                if(!err){
+                  callback(status, {}, 'json');
+                }else{
+                  callback(status, {err: err}, 'json');
+                }
+              });
+            }else{
+              callback(403, {err: 'You are not authorized to do that!'}, 'json');
+            }
+          }else{
             callback(500, {err: 'Couldnt get userData from discord'}, 'json');
           }
-      });
+        });
+      }else{
+        callback(401, {err: 'One of the inputs is not quite right'}, 'json');
+      }
     }else{
       callback(401, {err: 'You need to send your access_token'}, 'json');
     }

@@ -29,7 +29,9 @@ var conf = {
     'discord_client_id': '',
     'discord_client_secret': '',
     'discord_redirect_uri_application': '',
-    'discord_redirect_uri_staffLogin': ''
+    'discord_redirect_uri_staffLogin': '',
+    'new_member_announcement_channel': 'id of the channel new members get announced to',
+    'new_application_announcement_channel': ''
 };
 
 //Export the container

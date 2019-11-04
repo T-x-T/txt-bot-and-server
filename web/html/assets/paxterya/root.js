@@ -12,7 +12,6 @@ root.interface = {};
 
 //Loads the applications from the api and puts them into the table; bs is just some random variable because we get some shit from the onload
 root.interface.loadApplications = function(bs, filter){
-  console.log(filter);
   //We need to send the cookie, but the browser is doing that for us!
   _internal.send('application', false, 'GET', filter, false, function(status, res){
     console.log(res);
@@ -42,6 +41,7 @@ root.interface.loadApplications = function(bs, filter){
           table[i+1].cells[3].childNodes[0].textContent = res[i].mc_ign;
           table[i+1].cells[4].childNodes[0].textContent = res[i].about_me.substring(0, 50);
           table[i+1].cells[5].childNodes[0].textContent = statusString;
+          table[i+1].setAttribute("onclick", `root.interface.redirectToApplication(${res[i].id})`);
         }
       }else{
 
@@ -62,8 +62,41 @@ root.interface.changeStatus = function(){
   //Emtpy any existing data
   if(table.length > 2) for(let i = 1; i < table.length; i++) document.getElementById('applications-table').deleteRow(i);
   if(table.length > 2) for(let i = 1; i < table.length; i++) document.getElementById('applications-table').deleteRow(i);
+  if(table.length > 2) for(let i = 1; i < table.length; i++) document.getElementById('applications-table').deleteRow(i);
+  if(table.length > 2) for(let i = 1; i < table.length; i++) document.getElementById('applications-table').deleteRow(i);
 
   root.interface.loadApplications(null, {status: document.getElementById('status').value});
+};
+
+root.interface.redirectToApplication = function(id){
+  window.location.href = `https://${window.location.host}/staff/application.html?id=${id}`;
+};
+
+//Container for all functions necessary for application.html to work properly
+root.application = {};
+
+//Gets executed when an application is accepted
+root.application.accept = function(){
+  _internal.send('application', false, 'PATCH', {}, {id: parseInt(_internal.getQueryValue('id')), status: 3}, function(status, res){
+    if(status == 200){
+      window.alert('success!');
+      window.location.href = `https://${document.location.host}/staff/interface.html`;
+    }else{
+      window.alert('Something went wrong!\n' + res.err);
+    }
+  });
+};
+
+//Gets executed when an application is denied
+root.application.deny = function(){
+  _internal.send('application', false, 'PATCH', {}, {id: parseInt(_internal.getQueryValue('id')), status: 2, reason: document.getElementById('deny_reason').value}, function(status, res){
+    if(status == 200){
+      window.alert('success!');
+      window.location.href = `https://${document.location.host}/staff/interface.html`;
+    }else{
+      window.alert('Something went wrong!\n' + res.err);
+    }
+  });
 };
 
 //Container for all functions necessary for join-us.html to work properly

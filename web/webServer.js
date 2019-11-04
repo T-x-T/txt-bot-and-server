@@ -71,6 +71,7 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
     chosenHandler = data.path.startsWith('/paxterya') ? handlers.paxterya : chosenHandler;
     chosenHandler = data.path.startsWith('/paxterya/api/application') && data.method == 'post' ? handlers.paxapi.application.post : chosenHandler;
     chosenHandler = data.path.startsWith('/paxterya/api/application') && data.method == 'get' ? handlers.paxapi.application.get : chosenHandler;
+    chosenHandler = data.path.startsWith('/paxterya/api/application') && data.method == 'patch' ? handlers.paxapi.application.patch : chosenHandler;
     chosenHandler = data.path.startsWith('/paxterya/login') ? handlers.paxLogin : chosenHandler;
     chosenHandler = data.path.startsWith('/paxterya/staff') ? handlers.paxStaff : chosenHandler;
 

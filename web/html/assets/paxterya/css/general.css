@@ -1465,55 +1465,59 @@ button[id="submit"]:hover {
 
 /* ################### interface applicant profile ###################*/
 
-#applicant-profile {
-    display: block;
+#applicant-wrapper {
+    display: flex;
+    width: 100%;
 }
 
-#applicant-profile .stats {
-    padding-top: 10px;
+#applicant-details {
+  float: left;
+  width: 90%;
 }
 
-#applicant-profile .counter {
-    width: 47.5%;
+#applicant-avatar {
+  float: right;
+  width: 15%;
 }
 
-#applicant-profile .counter h2 {
-    padding: 3px 10px;
+#single-application-table {
+  font-family: "regular", sans-serif;
 }
 
-#applicant-profile .counter p {
-    padding: 3px 10px;
-    word-break: break-all;
+#application-accept {
+  background: #e9fced;
+  color: #7d7d7d;
+  float: left;
+  border-color: #b8b8b8;
+  font-size: 16pt;
+  width: 45%;
+  margin: 20px 2.5%;
 }
 
-#applicant-profile .text {
-    display: block;
-    margin: 40px 5%;
-    width: 40%;
-    float: left;
+#application-accept:hover {
+  color: #222424;
+  background: #18AE39;
+  font-size: 16pt;
+  width: 45%;
+  margin: 20px 2.5%;
 }
 
-#applicant-profile .text p, #applicant-profile .text h3 {
-    width: 95%;
-    padding: 3px 10px;
+#application-deny {
+  background: #ffcccc;
+  color: #7d7d7d;
+  float: right;
+  border-color: #b8b8b8;
+  font-size: 16pt;
+  width: 45%;
+  margin: 20px 2.5%;
 }
 
-.app-decision button {
-    font-size: 16pt;
-    width: 45%;
-    margin: 20px 2.5%;
-}
-
-.app-decision .deny {
-    background: transparent;
-    color: #7d7d7d;
-    float: right;
-    border-color: #b8b8b8;
-}
-
-.app-decision .deny:hover {
-    color: #222424;
-    background: #b8b8b8;
+#application-deny:hover {
+  color: #ffffff;
+  background: #a50101;
+  font-size: 16pt;
+  width: 45%;
+  margin: 20px 2.5%;
 }
 
 /* #########################################*/
