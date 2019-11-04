@@ -11,6 +11,23 @@ const _path = require('path');
 //Create the container
 var webHelpers = {};
 
+//Extra function to combine readHtmlAndEncapsulate and insertVariables
+webHelpers.finishHtml = function(data, site, callback){
+  webHelpers.readHtmlAndEncapsulate(data.path, site, function(err, html){
+    if(!err){
+      webHelpers.insertVariables(data, html, function(err, finishedHtml){
+        if(!err){
+          callback(false, finishedHtml);
+        }else{
+          callback(err, false);
+        }
+      });
+    }else{
+      callback(err, false);
+    }
+  });
+};
+
 //Reads in an html file and encapsulates it
 webHelpers.readHtmlAndEncapsulate = function(path, site, callback){
   let headerPath, footerPath;

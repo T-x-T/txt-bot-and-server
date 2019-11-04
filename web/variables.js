@@ -144,18 +144,25 @@ const template = {
   '/paxterya/vanilla-map.html': {
     'pax_title': 'Vanilla map'
   },
-  'landing_videoID': global.newestVideo.id
+  '/landing/index.html': {
+    'landing_videoID': global.newestVideo.id
+  }
 };
 
 //Export the variables
 module.exports = function(local_data, callback) {
+  local_data.path = local_data.path.replace(__dirname, '').replace('/html', '');
   data = local_data;
   let templateData = template[data.path];
   if(typeof templateData == 'object'){
     callback(templateData);
   }else{
-    templateData(function(variables){
-      callback(variables);
-    })
+    if(typeof templateData == 'function'){
+      templateData(function(variables){
+        callback(variables);
+      });
+    }else{
+      callback(false);
+    }
   }
 };

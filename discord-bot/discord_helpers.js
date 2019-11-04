@@ -92,7 +92,7 @@ helpers.addMemberToRole = function(discordID, roleID, callback){
 };
 
 //Returns true if  the given member is admin and false if not
-helpers.isAdmin = function(userID, callback){
+helpers.isAdmin = function(userID){
   return client.guilds.get(config['guild']).members.get(userID).roles.has(config["admin-role"]);
 };
 
