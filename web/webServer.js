@@ -19,9 +19,10 @@ var server = {};
 
 //Instanciate the http server
 server.httpServer = http.createServer(function (req, res) {
-  let data = server.getDataObject(req);
-  res.writeHead(301, {Location: `https://${data.headers.host}/${data.path}`});
-  res.end();
+  server.getDataObject(req, function(data){
+    res.writeHead(301, {Location: `https://${data.headers.host}/${data.path}`});
+      res.end();
+  });
 });
 
 //https stuff
@@ -51,7 +52,7 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
     data.headers.host = 'thetxt.club'
     data.headers.host = 'paxterya.com'
 
-
+    if(data.headers.hasOwnProperty('landingtesting')) data.headers.host = 'thetxt.club';
     //Insert the correct path for different hosts
     if(!data.path.startsWith('assets')){
       if (data.headers.host.indexOf('thetxt.club') > -1) data.path = '/landing/' + data.path;
