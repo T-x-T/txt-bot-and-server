@@ -11,6 +11,7 @@ const webHelpers  = require('./web-helpers.js');
 const application = require('./../lib/application.js');
 const oauth       = require('./../lib/oauth2.js');
 const discord     = require('./../discord-bot/discord_helpers.js');
+const email       = require('./../lib/email.js');
 
 //Create the container
 var handlers = {};
@@ -156,6 +157,27 @@ handlers.paxLogin = function(data, callback){
 * paxapi stuff
 *
 */
+
+handlers.paxapi.contact = {};
+
+//To send a contact email
+handlers.paxapi.contact.post = function(data, callback){
+  //Check the inputs
+  let name      = typeof data.payload.name == 'string' && data.payload.name.length > 0 ? data.payload.name : false;
+  let recipient = typeof data.payload.email == 'string' && data.payload.email.length > 3 ? data.payload.email : false;
+  let subject   = typeof data.payload.subject == 'string' && data.payload.subject.length > 0 ? data.payload.subject : false;
+  let text      = typeof data.payload.text == 'string' && data.payload.text.length > 10 ? data.payload.text : false;
+
+  if(name && recipient && subject && text){
+    //Add the email of the sender to the text
+    text =+ text + '\n\n' + recipient;
+    //Send the email
+    email.send('contact@paxterya.com', subject, text);
+    callback(200, {}, 'json');
+  }else{
+    callback(400, {err: 'One of your inputs is a little off'}, 'json');
+  }
+};
 
 handlers.paxapi.application = {};
 
