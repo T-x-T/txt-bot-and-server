@@ -170,7 +170,8 @@ handlers.paxapi.contact.post = function(data, callback){
 
   if(name && recipient && subject && text){
     //Add the email of the sender to the text
-    text =+ text + '\n\n' + recipient;
+    text = text + '\n\n' + recipient;
+    
     //Send the email
     email.send('contact@paxterya.com', subject, text);
     callback(200, {}, 'json');
