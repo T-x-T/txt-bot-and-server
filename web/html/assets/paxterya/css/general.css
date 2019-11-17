@@ -487,6 +487,7 @@ article .article-img {
 
 article .article-img img {
     vertical-align: bottom;
+    width: 250px;
 }
 
 /* #########################################*/
