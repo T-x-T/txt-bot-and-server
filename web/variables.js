@@ -9,6 +9,7 @@ const log             = require('./../lib/log.js');
 const application     = require('./../lib/application.js');
 const discord_helpers = require('./../discord-bot/discord_helpers.js');
 const mc_helpers      = require('./../lib/mc_helpers.js');
+const stats           = require('./../lib/stats.js');
 
 //Create internal container
 var _internal = {};
@@ -78,34 +79,32 @@ _getters.application = function(callback){
   });
 };
 
+//Calls back an object containing some basic statistics
+_getters.statistics = function(callback){
+  stats.overview(function(obj){
+    callback({
+      'pax_title': 'Statistics',
+      'total_members': obj.total_members,
+      'average_age': obj.average_age,
+      'total_playtime': obj.total_playtime
+    });
+  });
+};
+
 const template = {
   '/paxterya/staff/application.html': _getters.application,
+  '/paxterya/statistics.html': _getters.statistics,
   '/paxterya/index.html': {
     'pax_title': 'Start page'
   },
-  '/paxterya/adventure-map.html': {
-    'pax_title': 'Adventure Map'
-  },
   '/paxterya/applicant.html': {
     'pax_title': 'Applicant'
-  },
-  '/paxterya/application-error.html': {
-    'pax_title': 'Something went wrong :('
   },
   '/paxterya/application-sent.html': {
     'pax_title': 'Success!'
   },
   '/paxterya/contact-us.html': {
     'pax_title': 'Contact us!'
-  },
-  '/paxterya/farming-map.html': {
-    'pax_title': 'Farming map'
-  },
-  '/paxterya/guides.html': {
-    'pax_title': 'Guides'
-  },
-  '/paxterya/how-to-join.html': {
-    'pax_title': 'How to join'
   },
   '/paxterya/staff/interface.html': {
     'pax_title': 'Sicco admin Interface'
@@ -120,30 +119,14 @@ const template = {
   '/paxterya/members.html': {
     'pax_title': 'All members'
   },
-  '/paxterya/message-sent.html': {
-    'pax_title': 'Success!'
-  },
-  '/paxterya/login.html': {
-    'pax_title': 'Staff login'
-  },
-  '/paxterya/our-team.html': {
-    'pax_title': 'Our team'
-  },
-  '/paxterya/our-world.html': {
-    'pax_title': 'Our world'
-  },
   '/paxterya/privacy-policy.html': {
     'pax_title': 'Privacy Policy'
   },
   '/paxterya/rules.html': {
     'pax_title': 'Rules'
   },
-  '/paxterya/statistics.html': {
-    'pax_title': 'Statistics'
-  },
-  '/paxterya/vanilla-map.html': {
-    'pax_title': 'Vanilla map'
-  },
+
+
   '/landing/index.html': {
     'landing_videoID': global.newestVideo.id
   }
@@ -152,17 +135,21 @@ const template = {
 //Export the variables
 module.exports = function(local_data, callback) {
   local_data.path = local_data.path.replace(__dirname, '').replace('/html', '');
-  data = local_data;
-  let templateData = template[data.path];
-  if(typeof templateData == 'object'){
-    callback(templateData);
-  }else{
-    if(typeof templateData == 'function'){
-      templateData(function(variables){
-        callback(variables);
-      });
+  mc_helpers.getOnlinePlayers(function(online_players){
+    data = local_data;
+    let templateData = template[data.path];
+    if(typeof templateData == 'object'){
+      templateData['online_players'] = online_players;
+      callback(templateData);
     }else{
-      callback(false);
+      if(typeof templateData == 'function'){
+        templateData(function(variables){
+          variables['online_players'] = online_players;
+          callback(variables);
+        });
+      }else{
+        callback(false);
+      }
     }
-  }
+  });
 };
