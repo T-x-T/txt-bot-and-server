@@ -1,0 +1,59 @@
+<h1>
+  <div class="wrapper">
+    {pax_title}
+  </div>
+</h1>
+
+<div class="wrapper content">
+
+  <p>For inquiries of any kind, please use the contact form below or send an e-mail to <a href="mailto:contact@paxterya.com">contact@paxterya.com</a>.<br>If you want to become a member of the Paxterya community, please use the <a href="join-us.html">application form</a>.</p>
+
+  <form id="contact-form" method="post" onsubmit="root.contact_us.send(); return false">
+
+    <div class="group">
+      <label for="name">Your Name</label>
+      <input id="name" name="name" type="text" placeholder="Your Name" required>
+      <span class="bar"></span>
+    </div>
+
+    <div class="group">
+      <label for="email">Your E-Mail</label>
+      <input id="email" name="email" type="email" placeholder="Your E-Mail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+      <span class="bar"></span>
+
+      <div class="tooltip"><i class="fas fa-question-circle"></i>
+        <span class="tooltiptext">We will answer you via e-mail. Your e-mail will not be shared with third parties.</span>
+      </div>
+
+    </div>
+
+    <div class="group">
+      <label for="subject">Subject</label>
+      <input id="subject" name="subject" type="text" placeholder="Subject" required>
+      <span class="bar"></span>
+    </div>
+
+
+
+
+
+    <div class="textbox">
+      <h3>Your Message</h3>
+      <textarea id="text" name="message" maxlength="10000" placeholder="Type text…"></textarea>
+    </div>
+
+    <div class="group">
+      <label class="container">
+        <span class="label">I accept the privacy policy of Paxterya. None of my entered data will be published or transmitted to third parties without my consent.</span>
+        <input type="checkbox" id="checkmark4" required>
+        <span class="checkmark"></span>
+      </label>
+    </div>
+
+    <button type="submit" name="submit" id="submit">
+      <i class="fas fa-paper-plane"></i> Submit
+    </button>
+
+  </form>
+
+</div>
