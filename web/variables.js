@@ -20,7 +20,7 @@ var globalObject;
 _internal.generateBirthyearOptions = function(callback){
   let output = '';
   let curYear = new Date().getFullYear();
-  for(let i = curYear - 8; i > curYear - 80; i--){
+  for(let i = curYear - 12; i > curYear - 80; i--){
       output += `<option value="${i}">${i}</option>\n`;
   }
   callback(output);
