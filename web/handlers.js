@@ -127,10 +127,10 @@ handlers.paxStaff = function(data, callback){
         }
       });
     }else{
-      callback(302, {Location: 'https://discordapp.com/oauth2/authorize?client_id=624980994889613312&redirect_uri=https%3A%2F%2Flocalhost%3A3001%2Flogin.html&response_type=code&scope=identify%20guilds'}, 'plain');
+      callback(302, {Location: 'https://discordapp.com/api/oauth2/authorize?client_id=624980994889613312&redirect_uri=https%3A%2F%2Fpaxterya.com%2Flogin.html&response_type=code&scope=identify'}, 'plain');
     }
   }else{
-    callback(302, {Location: 'https://discordapp.com/oauth2/authorize?client_id=624980994889613312&redirect_uri=https%3A%2F%2Flocalhost%3A3001%2Flogin.html&response_type=code&scope=identify%20guilds'}, 'plain');
+    callback(302, {Location: 'https://discordapp.com/api/oauth2/authorize?client_id=624980994889613312&redirect_uri=https%3A%2F%2Fpaxterya.com%2Flogin.html&response_type=code&scope=identify'}, 'plain');
   }
 };
 
@@ -171,7 +171,7 @@ handlers.paxapi.contact.post = function(data, callback){
   if(name && recipient && subject && text){
     //Add the email of the sender to the text
     text = text + '\n\n' + recipient;
-    
+
     //Send the email
     email.send('contact@paxterya.com', subject, text);
     callback(200, {}, 'json');
