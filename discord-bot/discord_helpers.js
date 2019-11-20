@@ -5,8 +5,8 @@
 
 //Dependencies
 const config = require('./../config.js');
-const data   = require('./../lib/data.js');
-const log    = require('./../lib/log.js');
+const data = require('./../lib/data.js');
+const log = require('./../lib/log.js');
 
 //Global var
 var client;
@@ -84,23 +84,6 @@ helpers.getRoleId = function(roleName){
   return id;
 };
 
-//Adds the given discord member to the given role
-helpers.addMemberToRole = function(discordID, roleID, callback){
-  client.guilds.get(config['guild']).members.get(discordID).addRole(roleID)
-  .then(callback(false))
-  .catch(callback(true));
-};
-
-//Returns true if  the given member is admin and false if not
-helpers.isAdmin = function(userID){
-  return client.guilds.get(config['guild']).members.get(userID).roles.has(config["admin-role"]);
-};
-
-//Returns true if the given discord id is member of the guild and false if not
-helpers.isGuildMember = function(userID){
-  return client.guilds.get(config['guild']).members.has(userID);
-};
-
 //Add the ign to the users nick if necessary. the user variable requires a discord guildmember object
 helpers.addIgnToNick = function(member){
   let nick = member.displayName;
@@ -120,24 +103,6 @@ helpers.addIgnToNick = function(member){
     }else{
       log.write(2, 'discord_helpers.addIgnToNick couldnt get the member document', {user: member.id, err: err});
     }
-  });
-};
-
-//Add the ign to the users nick if necessary. the user variable requires a discord_id
-helpers.addIgnToNickById = function(discordID){
-  helpers.getMemberObjectByID(discordID, function(member){
-    if(member){
-      helpers.addIgnToNick(member);
-    }else{
-      log.write(2, 'discord_helpers.addIgnToNickById couldnt get the member object');
-    }
-  });
-};
-
-//Callbacks the avatar url of the given userID
-helpers.getAvatarUrl = function(discord_id, callback){
-  client.fetchUser(discord_id).then(myUser => {
-      callback(myUser.avatarURL);
   });
 };
 

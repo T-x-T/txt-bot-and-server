@@ -4,13 +4,12 @@
  */
 
 //Dependencies
-const config     = require('./../config.js');
-const lib_log    = require('./../lib/log.js');
-const lib_data   = require('./../lib/data.js');
-const webserver  = require('./../web/webServer.js');
-const youtube    = require('./../lib/youtube.js');
+const config = require('./../config.js');
+const lib_log = require('./../lib/log.js');
+const lib_data = require('./../lib/data.js');
+const webserver = require('./../web/webServer.js');
+const youtube = require('./../lib/youtube.js');
 const mc_helpers = require('./../lib/mc_helpers.js');
-const oauth      = require('./../lib/oauth2.js');
 
 const assert = require('assert');
 const http = require('http');
@@ -24,10 +23,6 @@ describe('Array', function() {
     *
     */
 
-    //Tests for /lib/application.js
-
-
-
     //Tests for /lib/data.js
     it('lib_data.createMember should be able to create a member', function(done){
       lib_data.createMember('000000000889613312', 'random_name', 1234, 0, false, function(err){
@@ -40,9 +35,9 @@ describe('Array', function() {
         assert.equal(err, false);
         assert.equal(userData.discord, '000000000889613312');
         assert.equal(userData.mcName, 'random_name');
-        assert.equal(userData.birth_year, 1234);
-        assert.equal(userData.country, 0);
-        assert.equal(userData.publish_country, false);
+        assert.equal(userData.birthyear, 1234);
+        assert.equal(userData.nationality, 0);
+        assert.equal(userData.public, false);
         done();
       });
     });
@@ -223,19 +218,19 @@ describe('Array', function() {
         done();
       });
     });
-    // it('mc_helpers.getStatTemplate should return a proper topUsageItems stats object for the__txt', function(done){
-    //   mc_helpers.getStatTemplate('dac25e44d1024f3b819978ed62d209a1', 'topDroppedItems', false, function(err, stats){
-    //     assert.ok(!err);
-    //     assert.equal(typeof stats, 'object');
-    //     assert.equal(typeof stats.stats[0].value, 'number');
-    //     assert.equal(typeof stats.stats[0].key, 'string');
-    //     assert.equal(typeof stats.stats[5].value, 'number');
-    //     assert.equal(typeof stats.stats[5].key, 'string');
-    //     assert.equal(typeof stats.stats[9].value, 'number');
-    //     assert.equal(typeof stats.stats[9].key, 'string');
-    //     done();
-    //   });
-    // });
+    it('mc_helpers.getStatTemplate should return a proper topUsageItems stats object for the__txt', function(done){
+      mc_helpers.getStatTemplate('dac25e44d1024f3b819978ed62d209a1', 'topDroppedItems', false, function(err, stats){
+        assert.ok(!err);
+        assert.equal(typeof stats, 'object');
+        assert.equal(typeof stats.stats[0].value, 'number');
+        assert.equal(typeof stats.stats[0].key, 'string');
+        assert.equal(typeof stats.stats[5].value, 'number');
+        assert.equal(typeof stats.stats[5].key, 'string');
+        assert.equal(typeof stats.stats[9].value, 'number');
+        assert.equal(typeof stats.stats[9].key, 'string');
+        done();
+      });
+    });
     it('mc_helpers.getStatTemplate should return a proper totals per death stats object for the__txt', function(done){
       mc_helpers.getStatTemplate('dac25e44d1024f3b819978ed62d209a1', 'totalPerDeath', false, function(err, stats){
         assert.ok(!err);
@@ -266,19 +261,19 @@ describe('Array', function() {
         done();
       });
     });
-    // it('mc_helpers.getStatTemplate should return a proper topUsageItems stats object for all players', function(done){
-    //   mc_helpers.getStatTemplate(false, 'topDroppedItems', false, function(err, stats){
-    //     assert.ok(!err);
-    //     assert.equal(typeof stats, 'object');
-    //     assert.equal(typeof stats.stats[0].value, 'number');
-    //     assert.equal(typeof stats.stats[0].key, 'string');
-    //     assert.equal(typeof stats.stats[5].value, 'number');
-    //     assert.equal(typeof stats.stats[5].key, 'string');
-    //     assert.equal(typeof stats.stats[9].value, 'number');
-    //     assert.equal(typeof stats.stats[9].key, 'string');
-    //     done();
-    //   });
-    // });
+    it('mc_helpers.getStatTemplate should return a proper topUsageItems stats object for all players', function(done){
+      mc_helpers.getStatTemplate(false, 'topDroppedItems', false, function(err, stats){
+        assert.ok(!err);
+        assert.equal(typeof stats, 'object');
+        assert.equal(typeof stats.stats[0].value, 'number');
+        assert.equal(typeof stats.stats[0].key, 'string');
+        assert.equal(typeof stats.stats[5].value, 'number');
+        assert.equal(typeof stats.stats[5].key, 'string');
+        assert.equal(typeof stats.stats[9].value, 'number');
+        assert.equal(typeof stats.stats[9].key, 'string');
+        done();
+      });
+    });
     it('mc_helpers.getStatTemplate should return a proper totals per death stats object for all players', function(done){
       mc_helpers.getStatTemplate(false, 'totalPerDeath', false, function(err, stats){
         assert.ok(!err);
@@ -337,17 +332,6 @@ describe('Array', function() {
         done();
       });
     });
-
-    //Tests for lib_oauth
-    it('oauth.getUserObjectById should return a user object for txt', function(done){
-      oauth.getUserObjectById('293029505457586176', function(userObject){
-        assert.ok(userObject);
-        assert.equal(userObject.id, '293029505457586176');
-        assert.equal(userObject.discriminator, '0001');
-        done();
-      });
-    });
-
     /*
     *
     * TESTS FOR /DISCORD-BOT/
@@ -369,39 +353,34 @@ describe('Array', function() {
     youtube.getNewestVideo();
     webserver.init();
 
-    //General
-    it('HTTP request to localhost/landing on port from config should retrieve a redirect', function(done){
+    it('HTTP request to localhost/landing on port from config should retrieve a html document', function(done){
       http.get({
         host: 'localhost',
         port: config['http-port'],
-        path: '/'
+        path: '/landing'
       }, function(res){
         res.setEncoding('utf8');
         let data = '';
         res.on('data', function (chunk) {
-          data += chunk;
+            data += chunk;
         }).on('end', function () {
-          assert.equal(res.statusCode, 301);
+          assert.ok(data);
+          assert.ok(data.indexOf('I make videos on the interwebs.') > -1);
           done();
         });
       });
     });
-
-    //Landing page
     process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
     it('HTTPS request to localhost/landing on port from config should retrieve a html document', function(done){
       https.get({
         host: 'localhost',
         port: config['https-port'],
-        path: '/',
-        headers: {
-          'landingtesting': true
-        }
+        path: '/landing'
       }, function(res){
         res.setEncoding('utf8');
         let data = '';
         res.on('data', function (chunk) {
-          data += chunk;
+            data += chunk;
         }).on('end', function () {
           assert.ok(data);
           assert.ok(data.indexOf('I make videos on the interwebs.') > -1);
@@ -410,63 +389,6 @@ describe('Array', function() {
       });
     });
 
-    //Paxterya page
-    it('HTTPS request to index site should retrieve a html document without bare variable names', function(done){
-      https.get({
-        host: 'localhost',
-        port: config['https-port'],
-        path: '/'
-      }, function(res){
-        res.setEncoding('utf8');
-        let data = '';
-        res.on('data', function (chunk) {
-          data += chunk;
-        }).on('end', function () {
-          assert.ok(data);
-          assert.ok(data.indexOf('Hello World! This Is Paxterya Under Construction') > -1);
-          assert.ok(data.indexOf('in" href="https://discordapp.com/api/oauth2/authorize?client_id=624980994889613312&red') > -1);
-          assert.ok(data.indexOf('<p class="ip" onclick="copyToClip(this.innerHTML)">play.paxterya.com</p>') > -1);
-          assert.ok(!data.indexOf('{pax_title}') > -1);
-          done();
-        });
-      });
-    });
-    it('HTTPS request to join-us site should retrieve a html document without bare variable names', function(done){
-      https.get({
-        host: 'localhost',
-        port: config['https-port'],
-        path: '/join-us.html'
-      }, function(res){
-        res.setEncoding('utf8');
-        let data = '';
-        res.on('data', function (chunk) {
-          data += chunk;
-        }).on('end', function () {
-          assert.ok(data);
-          assert.ok(data.indexOf('Authenticate with discord to start your application') > -1);
-          assert.ok(data.indexOf('in" href="https://discordapp.com/api/oauth2/authorize?client_id=624980994889613312&red') > -1);
-          assert.ok(data.indexOf('<p class="ip" onclick="copyToClip(this.innerHTML)">play.paxterya.com</p>') > -1);
-          assert.ok(!data.indexOf('{pax_title}') > -1);
-          done();
-        });
-      });
-    });
-    it('HTTPS request to staff site should fail', function(done){
-      https.get({
-        host: 'localhost',
-        port: config['https-port'],
-        path: '/staff/interface.html'
-      }, function(res){
-        res.setEncoding('utf8');
-        let data = '';
-        res.on('data', function (chunk) {
-          data += chunk;
-        }).on('end', function () {
-          assert.equal(res.statusCode, 302);
-          done();
-        });
-      });
-    });
     /*
     *
     * TESTS FOR /WORKERS/

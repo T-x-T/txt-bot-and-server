@@ -4,14 +4,13 @@
 */
 
 //Dependencies
-const config         = require('./../config.js');
-const fs             = require('fs');
-const Discord        = require('discord.js');
-const client         = new Discord.Client();
-const data           = require('./../lib/data.js');
+const config = require('./../config.js');
+const fs = require('fs');
+const Discord = require('discord.js');
+const client = new Discord.Client();
+const data = require('./../lib/data.js');
 const discordHelpers = require('./discord_helpers.js');
-const log            = require('./../lib/log.js');
-const application    = require('./../lib/application.js');
+const log = require('./../lib/log.js');
 
 //Create the container
 var discordBot = {};
@@ -134,16 +133,6 @@ client.on('messageReactionRemove', (reaction, user) => {
 //Gets called whenever a member leaves the guild
 client.on('guildMemberRemove', (user) => {
   data.removeMember(user.id, function(err){});
-});
-
-//Gets called whenever a new member joins the guild
-client.on('guildMemberAdd', (user) =>{
-  //Check if the new member got accepted as a member
-  application.readAll({discord_id: user.id}, function(err, docs){
-    docs.forEach((doc) =>{
-      if(doc.status == 3) application.acceptWorkflow(user.id, doc);
-    });
-  });
 });
 
 //Init script

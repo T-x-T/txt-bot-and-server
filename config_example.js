@@ -23,15 +23,7 @@ var conf = {
     'mc-stats-remote': 'rclone remote name',
     'rcon-server': '',
     'rcon-port': 25575,
-    'rcon-password': '',
-    'mailUser': 'test@example.org',
-    'mailPass': 'badPW123',
-    'discord_client_id': '',
-    'discord_client_secret': '',
-    'discord_redirect_uri_application': '',
-    'discord_redirect_uri_staffLogin': '',
-    'new_member_announcement_channel': 'id of the channel new members get announced to',
-    'new_application_announcement_channel': ''
+    'rcon-password':
 };
 
 //Export the container
