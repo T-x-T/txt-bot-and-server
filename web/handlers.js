@@ -158,7 +158,14 @@ handlers.paxLogin = function(data, callback){
 *
 */
 
-handlers.paxapi.contact = {};
+handlers.paxapi.contact = function(data, callback){
+  try {
+    handlers.paxapi.contact[data.method](data, callback);
+  }catch(e){
+    console.log(e);
+    handlers.notFound(data, callback);
+  }
+};
 
 //To send a contact email
 handlers.paxapi.contact.post = function(data, callback){
@@ -180,7 +187,34 @@ handlers.paxapi.contact.post = function(data, callback){
   }
 };
 
-handlers.paxapi.application = {};
+handlers.paxapi.application = function(data, callback){
+  try {
+    if(data.method != 'post') {
+      //All non post requests require authorization
+      //Check if there is an access_token
+      if(data.headers.hasOwnProperty('cookie')){
+        if(data.headers.cookie.indexOf('access_token' > -1)){
+          //There is an access_token cookie, lets check if it belongs to an admin
+          oauth.isTokenAdmin(data.headers.cookie.split('=')[1], function(isAdmin){
+            if(isAdmin){
+              //The requester is allowed to get the records
+              handlers.paxapi.application[data.method](data, callback);
+            }else{
+              callback(403, {err: 'You are not authorized to do that!'}, 'json');
+            }
+          });
+        }else{
+          callback(401, {err: 'Your client didnt send an access_token, please log in again'}, 'json');
+        }
+      }else{
+        callback(401, {err: 'Your client didnt send an access_token, please log in again'}, 'json');
+      }
+    }
+    handlers.paxapi.application[data.method](data, callback);
+  }catch(e){
+    handlers.notFound(data, callback);
+  }
+};
 
 //To send a new application
 handlers.paxapi.application.post = function(data, callback){
@@ -193,77 +227,45 @@ handlers.paxapi.application.post = function(data, callback){
   });
 };
 
-//To retrieve a list of applications
+//Retrieves a list of applications
 //REQUIRES AUTHORIZATION!
 //Required data: none - this will return all applications
 //Optional id, discord, discord_id, mc_ign, status - these are filters, only return records matching the filter
 handlers.paxapi.application.get = function(data, callback){
-  //Check if there is an access_token
-  if(data.headers.hasOwnProperty('cookie')){
-    if(data.headers.cookie.indexOf('access_token' > -1)){
-      //There is an access_token cookie, lets check if it belongs to an admin
-      oauth.isTokenAdmin(data.headers.cookie.split('=')[1], function(isAdmin){
-        if(isAdmin){
-          //The requester is allowed to get the records
-          //Retrieve all records
-          //Clear the 0 status code, as 0 means get all data
-          if(data.queryStringObject.status == 0) data.queryStringObject = undefined;
-          application.readAll(data.queryStringObject, function(err, docs){
-            if(!err){
-              callback(200, docs, 'json');
-            }else{
-              callback(500, {err: 'Couldnt get any records from the database'}, 'json');
-            }
-          });
-        }else{
-          callback(403, {err: 'You are not authorized to do that!'}, 'json');
-        }
-      });
+  //Retrieve all records
+  //Clear the 0 status code, as 0 means get all data
+  if(data.queryStringObject.status == 0) data.queryStringObject = undefined;
+  application.readAll(data.queryStringObject, function(err, docs){
+    if(!err){
+      callback(200, docs, 'json');
     }else{
-      callback(401, {err: 'Your client didnt send an access_token, please log in again'}, 'json');
+      callback(500, {err: 'Couldnt get any records from the database'}, 'json');
     }
-  }else{
-    callback(401, {err: 'Your client didnt send an access_token, please log in again'}, 'json');
-  }
+  });
 };
 
 //To change the status of a single application
 //REQUIRES AUTHORIZATION!
 //Required data: id, new status (2 or 3)
 handlers.paxapi.application.patch = function(data, callback){
-  //Check if there is an access_token
-  if(data.headers.hasOwnProperty('cookie')){
-    if(data.headers.cookie.indexOf('access_token' > -1)){
-      //Check if the required fields are set
-      let id     = typeof data.payload.id     == 'number' && data.payload.id     > -1 ? data.payload.id     : false;
-      let status = typeof data.payload.status == 'number' && data.payload.status >= 2 && data.payload.status <= 3 ? data.payload.status : false;
-      let reason = typeof data.payload.reason == 'string' && data.payload.reason.length > 0 ? data.payload.reason : false;
-      if(typeof id == 'number' && status){
-        //There is an access_token cookie, lets check if it belongs to an admin
-        let access_token = data.headers.cookie.split('=')[1];
-        oauth.isTokenAdmin(data.headers.cookie.split('=')[1], function(isAdmin){
-          if(isAdmin){
-            //Hand it over to the correct function
-            application.changeStatus(id, status, reason, function(status, err){
-              if(!err){
-                callback(status, {}, 'json');
-              }else{
-                callback(status, {err: err}, 'json');
-              }
-            });
-          }else{
-            callback(403, {err: 'You are not authorized to do that!'}, 'json');
-          }
-        });
+  //Check if the required fields are set
+  let id     = typeof data.payload.id     == 'number' && data.payload.id     > -1 ? data.payload.id     : false;
+  let status = typeof data.payload.status == 'number' && data.payload.status >= 2 && data.payload.status <= 3 ? data.payload.status : false;
+  let reason = typeof data.payload.reason == 'string' && data.payload.reason.length > 0 ? data.payload.reason : false;
+  if(typeof id == 'number' && status){
+
+    //Hand it over to the correct function
+    application.changeStatus(id, status, reason, function(status, err){
+      if(!err){
+        callback(status, {}, 'json');
       }else{
-        callback(401, {err: 'One of the inputs is not quite right'}, 'json');
+        callback(status, {err: err}, 'json');
       }
-    }else{
-      callback(401, {err: 'You need to send your access_token'}, 'json');
-    }
-  }else{
-    callback(401, {err: 'You need to send your access_token'}, 'json');
+    });
+
+    callback(401, {err: 'One of the inputs is not quite right'}, 'json');
   }
+
 };
 
 //Internal helper functions to make code cleaner

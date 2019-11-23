@@ -48,9 +48,9 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
 
 
     //FOR TESTING ONLY
-    //let origHost = data.headers.host;
-    //data.headers.host = 'thetxt.club'
-    //data.headers.host = 'paxterya.com'
+    let origHost = data.headers.host;
+    data.headers.host = 'thetxt.club'
+    data.headers.host = 'paxterya.com'
 
     if(data.headers.hasOwnProperty('landingtesting')) data.headers.host = 'thetxt.club';
     //Insert the correct path for different hosts
@@ -60,22 +60,17 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
     }
 
     //necessary for testing purposes
-    //data.headers.host = origHost;
+    data.headers.host = origHost;
 
-    //console.log(data.method, data.path)
-    //if(data.method == 'post') console.log(data.payload);
+    console.log(data.method, data.path)
+    if(data.method == 'post') console.log(data.payload);
 
     //Check the path and choose a handler
-    var chosenHandler = handlers.html;
-    chosenHandler = data.path.indexOf('assets') > -1 ? handlers.assets : chosenHandler;
-    chosenHandler = data.path.startsWith('/landing') ? handlers.landing : chosenHandler;
-    chosenHandler = data.path.startsWith('/paxterya') ? handlers.paxterya : chosenHandler;
-    chosenHandler = data.path.startsWith('/paxterya/api/application') && data.method == 'post' ? handlers.paxapi.application.post : chosenHandler;
-    chosenHandler = data.path.startsWith('/paxterya/api/application') && data.method == 'get' ? handlers.paxapi.application.get : chosenHandler;
-    chosenHandler = data.path.startsWith('/paxterya/api/application') && data.method == 'patch' ? handlers.paxapi.application.patch : chosenHandler;
-    chosenHandler = data.path.startsWith('/paxterya/api/contact') && data.method == 'post' ? handlers.paxapi.contact.post : chosenHandler;
-    chosenHandler = data.path.startsWith('/paxterya/login') ? handlers.paxLogin : chosenHandler;
-    chosenHandler = data.path.startsWith('/paxterya/staff') ? handlers.paxStaff : chosenHandler;
+    var chosenHandler = handlers.assets;
+
+    for(key in router){
+      chosenHandler = data.path.startsWith(key) ? router[key] : chosenHandler;
+    }
 
     //Send the request to the chosenHandler
     try {
@@ -89,7 +84,14 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
   });
 });
 
-
+const router = {
+  '/landing': handlers.landing,
+  '/paxterya': handlers.paxterya,
+  '/paxterya/api/application': handlers.paxapi.application,
+  '/paxterya/api/contact': handlers.paxapi.contact,
+  '/paxterya/login': handlers.paxLogin,
+  '/paxterya/staff': handlers.paxStaff
+};
 
 //Take a request and return a nice data object w/o payload
 server.getDataObject = function (req, callback) {
