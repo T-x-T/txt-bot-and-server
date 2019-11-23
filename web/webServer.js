@@ -48,9 +48,9 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
 
 
     //FOR TESTING ONLY
-    let origHost = data.headers.host;
-    data.headers.host = 'thetxt.club'
-    data.headers.host = 'paxterya.com'
+    //let origHost = data.headers.host;
+    //data.headers.host = 'thetxt.club'
+    //data.headers.host = 'paxterya.com'
 
     if(data.headers.hasOwnProperty('landingtesting')) data.headers.host = 'thetxt.club';
     //Insert the correct path for different hosts
@@ -60,10 +60,10 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
     }
 
     //necessary for testing purposes
-    data.headers.host = origHost;
+    //data.headers.host = origHost;
 
-    console.log(data.method, data.path)
-    if(data.method == 'post') console.log(data.payload);
+    //console.log(data.method, data.path)
+    //if(data.method == 'post') console.log(data.payload);
 
     //Check the path and choose a handler
     var chosenHandler = handlers.assets;
