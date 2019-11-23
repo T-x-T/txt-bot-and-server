@@ -15,6 +15,7 @@ try {
 } catch (e) {
   log.write(3, 'Workers: Cant execute getNewestVideo', { Error: e });
 }
+mc_helpers.updateOnlinePlayers();
 
 //Every minute
 setInterval(function () {
@@ -23,6 +24,8 @@ setInterval(function () {
   } catch (e) {
     log.write(3, 'Workers: Cant execute getNewestVideo', { Error: e });
   }
+
+  mc_helpers.updateOnlinePlayers();
 }, 1000 * 60);
 
 //Every hour

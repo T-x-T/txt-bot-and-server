@@ -135,21 +135,19 @@ const template = {
 //Export the variables
 module.exports = function(local_data, callback) {
   local_data.path = local_data.path.replace(__dirname, '').replace('/html', '');
-  mc_helpers.getOnlinePlayers(function(online_players){
-    data = local_data;
-    let templateData = template[data.path];
-    if(typeof templateData == 'object'){
-      templateData['online_players'] = online_players;
-      callback(templateData);
+  data = local_data;
+  let templateData = template[data.path];
+  if(typeof templateData == 'object'){
+    templateData['online_players'] = global.mcPlayerCount;
+    callback(templateData);
+  }else{
+    if(typeof templateData == 'function'){
+      templateData(function(variables){
+        variables['online_players'] = global.mcPlayerCount;
+        callback(variables);
+      });
     }else{
-      if(typeof templateData == 'function'){
-        templateData(function(variables){
-          variables['online_players'] = online_players;
-          callback(variables);
-        });
-      }else{
-        callback(false);
-      }
+      callback(false);
     }
-  });
+  }
 };
