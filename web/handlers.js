@@ -211,6 +211,10 @@ handlers.paxapi.application = function(data, callback){
     }else{
       handlers.paxapi.application[data.method](data, callback);
     }
+<<<<<<< HEAD
+=======
+    handlers.paxapi.application[data.method](data, callback);
+>>>>>>> eae1d61cf49deff90846e60efdd317e3f258e9e7
   }else{
     callback(404, {err: 'Verb not allowed'}, 'json');
   }
