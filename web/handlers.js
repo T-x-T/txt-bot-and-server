@@ -257,9 +257,9 @@ handlers.paxapi.application.patch = function(data, callback){
     //Hand it over to the correct function
     application.changeStatus(id, status, reason, function(status, err){
       if(!err){
-        callback(status, {}, 'json');
+        callback(200, {}, 'json');
       }else{
-        callback(status, {err: err}, 'json');
+        callback(500, {err: err}, 'json');
       }
     });
   }else{
