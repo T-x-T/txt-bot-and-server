@@ -71,8 +71,17 @@ handlers.paxterya = function (data, callback) {
           if(!err && fileData.length > 0){
             callback(200, fileData, 'html');
           }else{
-            //Nope someone wants to go somewhere, but that somewhere doesnt exist!
-            callback(404, 'You tried to go somewhere that does not exist!', 'html');
+            //maybe that is without the .html?
+            data.path = path.join(__dirname, './html/' + origPath + '.html');
+            console.log(data.path);
+            webHelpers.finishHtml(data, 'paxterya', function(err, fileData){
+              if(!err && fileData.length > 0){
+                callback(200, fileData, 'html');
+              }else{
+                //Nope someone wants to go somewhere, but that somewhere doesnt exist!
+                callback(404, 'You tried to go somewhere that does not exist!', 'html');
+              }
+            });
           }
         });
       }
