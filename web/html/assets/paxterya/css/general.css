@@ -1384,12 +1384,16 @@ button[id="submit"]:hover {
 
 #applicant-details {
   float: left;
-  width: 90%;
+  width: 80%;
 }
 
 #applicant-avatar {
   float: right;
-  width: 15%;
+  width: 20%;
+}
+
+#applicant-avatar img {
+  max-width: 100%;
 }
 
 #single-application-table {
