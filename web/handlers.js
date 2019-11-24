@@ -252,8 +252,8 @@ handlers.paxapi.application.patch = function(data, callback){
   let id     = typeof data.payload.id     == 'number' && data.payload.id     > -1 ? data.payload.id     : false;
   let status = typeof data.payload.status == 'number' && data.payload.status >= 2 && data.payload.status <= 3 ? data.payload.status : false;
   let reason = typeof data.payload.reason == 'string' && data.payload.reason.length > 0 ? data.payload.reason : false;
-  if(typeof id == 'number' && status){
 
+  if(typeof id == 'number' && status){
     //Hand it over to the correct function
     application.changeStatus(id, status, reason, function(status, err){
       if(!err){
@@ -262,10 +262,9 @@ handlers.paxapi.application.patch = function(data, callback){
         callback(status, {err: err}, 'json');
       }
     });
-
+  }else{
     callback(401, {err: 'One of the inputs is not quite right'}, 'json');
   }
-
 };
 
 //Internal helper functions to make code cleaner
