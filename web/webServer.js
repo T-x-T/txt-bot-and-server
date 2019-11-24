@@ -46,11 +46,13 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
     log.write(0, 'Web Request received', {data: data, sourceIP: req.connection.remoteAddress});
 
 
+    if(!config['use-external-certs']){
+      //FOR TESTING ONLY
+      var origHost = data.headers.host;
+      data.headers.host = 'thetxt.club'
+      data.headers.host = 'paxterya.com'
+    }
 
-    //FOR TESTING ONLY
-    //let origHost = data.headers.host;
-    //data.headers.host = 'thetxt.club'
-    //data.headers.host = 'paxterya.com'
 
     if(data.headers.hasOwnProperty('landingtesting')) data.headers.host = 'thetxt.club';
     //Insert the correct path for different hosts
@@ -59,11 +61,12 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
       if (data.headers.host.indexOf('paxterya.com') > -1) data.path = '/paxterya/' + data.path;
     }
 
-    //necessary for testing purposes
-    //data.headers.host = origHost;
-
-    //console.log(data.method, data.path)
-    //if(data.method == 'post') console.log(data.payload);
+    if(!config['use-external-certs']){
+      //necessary for testing purposes
+      data.headers.host = origHost;
+      console.log(data.method, data.path)
+      if(data.method == 'post') console.log(data.payload);
+    }
 
     //Check the path and choose a handler
     var chosenHandler = handlers.assets;

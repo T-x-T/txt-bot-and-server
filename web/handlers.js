@@ -159,11 +159,10 @@ handlers.paxLogin = function(data, callback){
 */
 
 handlers.paxapi.contact = function(data, callback){
-  try {
+  if(typeof handlers.paxapi.contact[data.method] == 'function'){
     handlers.paxapi.contact[data.method](data, callback);
-  }catch(e){
-    console.log(e);
-    handlers.notFound(data, callback);
+  }else{
+    callback(404, {err: 'Verb not allowed'}, 'json');
   }
 };
 
@@ -188,7 +187,7 @@ handlers.paxapi.contact.post = function(data, callback){
 };
 
 handlers.paxapi.application = function(data, callback){
-  try {
+  if(typeof handlers.paxapi.application[data.method] == 'function'){
     if(data.method != 'post') {
       //All non post requests require authorization
       //Check if there is an access_token
@@ -209,10 +208,11 @@ handlers.paxapi.application = function(data, callback){
       }else{
         callback(401, {err: 'Your client didnt send an access_token, please log in again'}, 'json');
       }
+    }else{
+      handlers.paxapi.application[data.method](data, callback);
     }
-    handlers.paxapi.application[data.method](data, callback);
-  }catch(e){
-    handlers.notFound(data, callback);
+  }else{
+    callback(404, {err: 'Verb not allowed'}, 'json');
   }
 };
 
