@@ -10,9 +10,8 @@ const path        = require('path');
 const webHelpers  = require('./web-helpers.js');
 const application = require('./../lib/application.js');
 const oauth       = require('./../lib/oauth2.js');
-const discord     = require('./../discord-bot/discord_helpers.js');
 const email       = require('./../lib/email.js');
-const _data        = require('./../lib/data.js');
+const stats       = require('./../lib/stats.js');
 
 //Create the container
 var handlers = {};
@@ -181,13 +180,12 @@ handlers.paxapi.member = function(data, callback){
 handlers.paxapi.member.get = function(data, callback){
   let filter = {};
   if(data.queryStringObject.hasOwnProperty('id')) filter = filter['discord'] = id;
-
   //Retrieve the data with our custom made filter
-  _data.getMembers(filter, true, true, function(docs){
-    if (docs){
+  stats.memberOverview(false, filter, function(docs){
+    if(docs){
       callback(200, docs, 'json');
     }else{
-      callback(500, { err: 'Couldnt get any data for you :/'}, 'json');
+      callback(500, {err: 'Couldnt retrieve data'}, 'json');
     }
   });
 };
