@@ -1,27 +1,56 @@
+<script type="text/javascript">
+    window.onload = root.members.init;
+</script>
 
-<p><b><u><h2>This is still work in progress and will be made available soon!</h2></u></b></p>
-        <h1>
-            <div class="wrapper">
-            !WIP! {pax_title}
-            </div>
-        </h1>
-        <div class="wrapper content lesspadding">
+<p><b><u>
+            <h2>This is still work in progress and will be made available soon!</h2>
+        </u></b></p>
+<h1>
+    <div class="wrapper">
+        !WIP! {pax_title}
+    </div>
+</h1>
+<div class="wrapper content lesspadding">
 
-            <p>Here you can see all current members of the Paxterya community.</p>
+    <p>Here you can see all current members of the Paxterya community.</p>
 
-            <a href="statistics.html"><button class="hover-right">View Statistics <i class="fas fa-chevron-right"></i></button></a>
+    <a href="statistics.html"><button class="hover-right">View Statistics <i
+                class="fas fa-chevron-right"></i></button></a>
 
-            <div class="search">
-                <div id="search" class="searchicon">
-                    <i class="fas fa-search"></i>
-                </div>
+    <div class="search">
+        <div id="search" class="searchicon">
+            <i class="fas fa-search"></i>
+        </div>
 
-                <div id="cancel" class="searchicon">
-                    <i class="fas fa-times"></i>
-                </div>
+        <div id="cancel" class="searchicon">
+            <i class="fas fa-times"></i>
+        </div>
 
-                <input type="text" id="searchInput" onkeyup="searchName()" placeholder="Search member…">
-            </div>
+        <input type="text" id="searchInput" onkeyup="searchName()" placeholder="Search member…">
+    </div>
 
+    <!-- Template that gets copie as needed using js -->
+    <div class="member-card-wrapper">
+        <div class="member-card-image">
+            <img src="https://crafatar.com/renders/body/8667ba71-b85a-4004-af54-457a9734eed7" alt="image not available">
+        </div>
+        <div class="member-card-description">
+            <h2 id="mc_ign">The__TxT</h2>
+            <h3 id="discord_name">TxT#0001</h3><br>
+
+            <p class="description">Country:</p>
+            <p class="value" id="country">Germany</p><br>
+
+            <p class="description">Age:</p>
+            <p class="value" id="age">19</p><br>
+
+            <p class="description">Playtime:</p>
+            <p class="value" id="playtime">123h</p><br>
+
+            <p class="description">Date joined:</p>
+            <p class="value" id="joined">2019-09-24</p><br>
 
         </div>
+    </div>
+
+</div>

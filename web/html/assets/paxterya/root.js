@@ -167,6 +167,26 @@ root.contact_us.send = function(){
   });
 };
 
+//members.html stuff
+root.members = {};
+
+//This gets executed onload and should trigger the update of member cards
+root.members.init = function(){
+  root.members.update();
+};
+
+//This updates the member cards
+root.members.update = function(){
+  //Get all members date from the api
+  _internal.send('member', false, 'GET', false, false, function(status, docs){
+    if(status == 200){
+      console.log(docs)
+    }else{
+      window.alert('Couldnt get data', docs.err);
+    }
+  });
+};
+
 //Internal helper functions
 var _internal = {};
 

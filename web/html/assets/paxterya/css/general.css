@@ -1166,7 +1166,16 @@ button[id="submit"]:hover {
 
 /* ################### our team, member stats ###################*/
 
-.team-profile h2, .member-profile h2 {
+.member-card-wrapper{
+    display: flex;
+    border: 5px solid #00515c;
+    width: 350px;
+    padding: 10px;
+    filter: drop-shadow(5px 2px 4px rgba(0, 0, 0, .3));
+    -webkit-filter: drop-shadow(5px 2px 4px rgba(0, 0, 0, .3));
+}
+
+.member-card-description h2 {
     background: #007787;
     color: white;
     width: 164px;
@@ -1175,34 +1184,47 @@ button[id="submit"]:hover {
     border-top: 2px solid #00515c;
     text-shadow: 1px 2px 0px #00515c;
     word-break: break-all;
+    margin: auto;
+    
 }
 
-.team-profile p,
-.team-profile h3,
-.team-profile a {
-    color: white;
-}
-
-.team-profile h3 {
+.member-card-description h3 {
     border-bottom: 1px solid #60aeb8;
     margin-bottom: 5px;
+    margin-left: 30px;
+    margin-right: 30px;
+    align-self: center;
 }
 
-.team-profile .tasks p::before,
-.team-profile .person p::before {
-    content: "▪";
-    color: #60aeb8;
-    padding-right: 5px;
+.member-card-description{
+    /* display: grid; */
+    float: right;
+    width: 230px;
 }
 
-.team-profile a:hover {
-    color: #97dde6;
+.member-card-description {
+    text-align: center;
+    padding: 5px;
 }
 
-.team-profile .avatar img, .member-profile .avatar img {
-    width: 170px;
+.description, .value{
+    display: inline;
+    font-size: 14pt;
+}
+
+.description{
+    color: #007787;
+}
+
+.value{
+    font-family: "semibold", sans-serif;
+}
+
+.member-card-image {
+    float: left;
+    width: 120px;
     height: auto;
-    vertical-align: bottom;
+    vertical-align: top;
     filter: drop-shadow(5px 2px 4px rgba(0, 0, 0, .3));
     -webkit-filter: drop-shadow(5px 2px 4px rgba(0, 0, 0, .3));
 }
