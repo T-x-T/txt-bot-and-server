@@ -27,9 +27,9 @@
 
       <section>
         <div id="oauth-login" class="oauth-login" hidden=true>
-          <button type="button" onclick="window.location.href = 'https://discordapp.com/api/oauth2/authorize?client_id=624980994889613312&redirect_uri=https%3A%2F%2Fpaxterya.com%2Fjoin-us.html&response_type=code&scope=identify';">Authenticate with discord</button>
-          <p>
-            Authenticate with discord to start your application. We will just get your visible data, like your nickname, discriminator and id. We need this data, so we can give you the apropriate roles on our server automatically.
+          <button type="button" onclick="window.location.href = 'https://discordapp.com/api/oauth2/authorize?client_id=624980994889613312&redirect_uri=https%3A%2F%2Fpaxterya.com%2Fjoin-us.html&response_type=code&scope=identify';">Authenticate with Discord</button>
+          <p id="auth-explanation">
+            Authenticate with Discord to start your application. We will just get your visible data, like your nickname, discriminator and ID. We need this data so we can give you the appropriate roles on our server automatically.
           </p>
         </div>
         <form id="app-form" method="post" action="#" onsubmit="root.join_us.sendApplication(); return false" hidden=true>

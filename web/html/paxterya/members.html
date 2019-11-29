@@ -47,7 +47,7 @@
 
     <div id="member-list" class="member-list-wrapper">
         <!-- Template that gets copie as needed using js -->
-        <div style="display: none;" id="template" class="member-card-wrapper">
+        <div style="display: none;" id="template" class="member-card-wrapper" title="View player stats" onclick="#">
             <div class="member-card-image">
                 <img id="render" src="https://crafatar.com/renders/body/8667ba71-b85a-4004-af54-457a9734eed7" alt="image not available">
             </div>
@@ -55,17 +55,19 @@
                 <h2 id="mc_ign">loading</h2>
                 <h3 id="discord_name">loading</h3>
 
-                <p class="description" id="country-desc"><br>Country:</p>
-                <p class="value" id="country">loading</p>
+                <div class="member-card-infos">
+                    <p class="description" id="country-desc"><br>Country:</p>
+                    <p class="value" id="country">loading</p>
 
-                <p class="description" id="age-desc"><br>Age:</p>
-                <p class="value" id="age">loading</p>
+                    <p class="description" id="age-desc"><br>Age:</p>
+                    <p class="value" id="age">loading</p>
 
-                <p class="description"><br>Playtime:</p>
-                <p class="value" id="playtime">loading</p>
+                    <p class="description"><br>Playtime:</p>
+                    <p class="value" id="playtime">loading</p>
 
-                <p class="description"><br>Date joined:</p>
-                <p class="value" id="joined">loading</p>
+                    <p class="description"><br>Date joined:</p>
+                    <p class="value" id="joined">loading</p>
+                </div>
 
             </div>
         </div>
