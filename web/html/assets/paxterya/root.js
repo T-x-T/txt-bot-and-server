@@ -180,14 +180,33 @@ root.members.update = function(){
   //Get all members date from the api
   _internal.send('member', false, 'GET', false, false, function(status, docs){
     if(status == 200){
+      //Get the selected sorting
+      let sorting = document.getElementById('sort').value;
 
-      //Sort after date joined
-      docs = _internal.sortArray(docs, 'joined_date', 'asc');
+      //Fix the playtime for sorting
+      for(let i = 0; i < docs.length; i++) docs[i].playtime = typeof docs[i].playtime == 'undefined'? 0 : parseInt(docs[i].playtime);
+
+      //Sort after sorting joined
+      docs = _internal.sortArray(docs, _internal.sortings[sorting][0], _internal.sortings[sorting][1]);
+
+      //Remove existing elements, that are not the template!
+      let parent = document.getElementById('member-list');
+      let elements = parent.children;
+      let newElements = [];
+
+      //Fill newElements with all elements we need to remove
+      for (let i = 0; i < elements.length; i++) {
+        if (elements[i].id != 'template') newElements.push(elements[i]);
+      }
+
+      //Remove elements
+      newElements.forEach((element) => {
+        element.parentNode.removeChild(element);
+      });
 
       //Iterate over docs: copy template, fill it out, make it visible
       let i = 0;
       docs.forEach((doc) => {
-        console.log(doc)
         //Clone template
         let template = document.getElementById('template');
         let div = template.cloneNode(true);
@@ -196,13 +215,13 @@ root.members.update = function(){
         //Fill out the static stuff
         div.querySelector('#mc_ign').innerText = doc.mc_nick;
         div.querySelector('#discord_name').innerText = doc.discord_nick;
-        div.querySelector('#playtime').innerText = doc.playtime;
+        div.querySelector('#playtime').innerText = doc.playtime + 'h';
 
         //Fill out date
         div.querySelector('#joined').innerText = new Date(doc.joined_date).toISOString().substring(0, 10);;
 
         //Add country or remove it if its false
-        if (doc.age) {
+        if (doc.country != 'false') {
           div.querySelector('#country').innerText = doc.country;
         } else {
           let toDel = div.querySelector('#country-desc');
@@ -318,5 +337,29 @@ _internal.sortArray = function(input, property, order = 'asc'){
       return 0;
     });
   }
-  return input;
+};
+
+_internal.sortings = {
+  0: ['joined_date', 'asc'],
+  1: ['joined_date', 'desc'],
+  2: ['playtime', 'asc'],
+  3: ['playtime', 'desc'],
+  4: ['age', 'asc'],
+  5: ['age', 'desc'],
+  6: ['mc_nick', 'asc'],
+  7: ['mc_nick', 'desc'],
+  8: ['discord_nick', 'asc'],
+  9: ['discord_nick', 'desc'],
+};
+
+//Removes all children of given element, only keeps children with the id == blacklist_id
+_internal.clearChildren = function(elementToClear, blacklist_id){
+  let children = elementToClear.children;
+  console.log(children)
+  
+  for (let i = 0; i < children.length; i++) {
+    if (children[i].id != blacklist_id) children[i].parentNode.removeChild(children[i]);
+    console.log(i)
+  };
+  console.log('done')
 };

@@ -30,6 +30,20 @@
 
         <input type="text" id="searchInput" onkeyup="searchName()" placeholder="Search member…">
     </div>
+    <div class="sort">
+        <select name="sort" id="sort" onchange="root.members.update()">
+            <option value="0">Date joined ASC</option>
+            <option value="1">Date joined DESC</option>
+            <option value="2">Playtime ASC</option>
+            <option value="3">Playtime DESC</option>
+            <option value="4">Age ASC</option>
+            <option value="5">Age DESC</option>
+            <option value="6">IGN ASC</option>
+            <option value="7">IGN DESC</option>
+            <option value="8">Discord ASC</option>
+            <option value="9">Discord DESC</option>
+        </select>
+    </div>
 
     <div id="member-list" class="member-list-wrapper">
         <!-- Template that gets copie as needed using js -->
