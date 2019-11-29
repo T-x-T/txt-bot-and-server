@@ -905,7 +905,9 @@ textarea {
     opacity: 1;
 }
 
-
+p#auth-explanation {
+  margin-top: 10px;
+}
 
 
 
