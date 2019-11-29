@@ -17,6 +17,10 @@ try {
 }
 mc_helpers.updateOnlinePlayers();
 
+//Contains discord user objects mapped by the discord id; gets cleared once an hour in workers
+global.cache = {}
+global.cache.discordUserObjects = {};
+
 //Every minute
 setInterval(function () {
   try {
@@ -32,6 +36,7 @@ setInterval(function () {
 setInterval(function(){
   mc_helpers.updateAllUUIDs(false);
   mc_helpers.updateAllIGNs();
+  global.cache.discordUserObjects = {};
 }, 1000 * 60 * 60);
 
 //Every six hours
