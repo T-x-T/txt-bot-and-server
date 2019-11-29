@@ -10,8 +10,8 @@ const path        = require('path');
 const webHelpers  = require('./web-helpers.js');
 const application = require('./../lib/application.js');
 const oauth       = require('./../lib/oauth2.js');
-const discord     = require('./../discord-bot/discord_helpers.js');
 const email       = require('./../lib/email.js');
+const stats       = require('./../lib/stats.js');
 
 //Create the container
 var handlers = {};
@@ -167,6 +167,30 @@ handlers.paxLogin = function(data, callback){
 *
 */
 
+//API functionallity surrounding member stuff
+handlers.paxapi.member = function(data, callback){
+  if(typeof handlers.paxapi.member[data.method] == 'function'){
+    handlers.paxapi.member[data.method](data, callback);
+  }else{
+    callback(404, { err: 'Verb not allowed' }, 'json');
+  }
+};
+
+//Retrieves member objects
+handlers.paxapi.member.get = function(data, callback){
+  let filter = {};
+  if(data.queryStringObject.hasOwnProperty('id')) filter = filter['discord'] = id;
+  //Retrieve the data with our custom made filter
+  stats.memberOverview(false, filter, function(docs){
+    if(docs){
+      callback(200, docs, 'json');
+    }else{
+      callback(500, {err: 'Couldnt retrieve data'}, 'json');
+    }
+  });
+};
+
+//API functionallity surrounding the contact form
 handlers.paxapi.contact = function(data, callback){
   if(typeof handlers.paxapi.contact[data.method] == 'function'){
     handlers.paxapi.contact[data.method](data, callback);

@@ -92,6 +92,7 @@ const router = {
   '/paxterya': handlers.paxterya,
   '/paxterya/api/application': handlers.paxapi.application,
   '/paxterya/api/contact': handlers.paxapi.contact,
+  '/paxterya/api/member': handlers.paxapi.member,
   '/paxterya/login': handlers.paxLogin,
   '/paxterya/staff': handlers.paxStaff
 };

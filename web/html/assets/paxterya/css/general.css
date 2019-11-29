@@ -905,7 +905,9 @@ textarea {
     opacity: 1;
 }
 
-
+p#auth-explanation {
+  margin-top: 10px;
+}
 
 
 
@@ -1166,45 +1168,74 @@ button[id="submit"]:hover {
 
 /* ################### our team, member stats ###################*/
 
-.team-profile h2, .member-profile h2 {
+.member-list-wrapper {
+  width: 100%;
+  display: flex;
+  flex-flow: wrap;
+}
+
+.member-card-wrapper{
+    display: flex;
+    width: 380px;
+    max-width: 100%;
+    padding: 10px 0 10px 20px;
+    background: linear-gradient(180deg, rgba(240,240,240,0) 15%, rgba(240,240,240,1) 15%, rgba(240,240,240,1) 85%, rgba(240,240,240,0) 85%);
+    margin: 0 40px 20px 0;
+    cursor: pointer;
+}
+
+.member-card-wrapper:hover {
+  transform: scale(.9);
+  opacity: .75;
+}
+
+.member-card-description {
+    width: 70%;
+    padding: 55px 0 0 30px;
+}
+
+.member-card-image {
+    float: left;
+    width: 30%;
+    height: auto;
+    vertical-align: top;
+    filter: drop-shadow(5px 2px 4px rgba(0, 0, 0, .3));
+    -webkit-filter: drop-shadow(5px 2px 4px rgba(0, 0, 0, .3));
+}
+
+.member-card-description h2 {
     background: #007787;
     color: white;
-    width: 164px;
-    text-align: center;
-    padding: 3px;
-    border-top: 2px solid #00515c;
+    padding: 3px 0px 3px 15px;
     text-shadow: 1px 2px 0px #00515c;
+    border-right: 4px solid rgba(0,0,0,0.15);
+    overflow-x: hidden;
+}
+
+.member-card-description h3 {
+    background: #00515c;
+    color: white;
+    padding: 3px 0px 3px 15px;
+    border-right: 4px solid rgba(0,0,0,0.15);
+    font-size: 12pt;
     word-break: break-all;
 }
 
-.team-profile p,
-.team-profile h3,
-.team-profile a {
-    color: white;
+.member-card-infos {
+  margin-left: 15px;
+  margin-top: -5px;
 }
 
-.team-profile h3 {
-    border-bottom: 1px solid #60aeb8;
-    margin-bottom: 5px;
+.description, .value{
+    display: inline;
 }
 
-.team-profile .tasks p::before,
-.team-profile .person p::before {
-    content: "▪";
-    color: #60aeb8;
-    padding-right: 5px;
+.description{
+    color: #007787;
 }
 
-.team-profile a:hover {
-    color: #97dde6;
-}
-
-.team-profile .avatar img, .member-profile .avatar img {
-    width: 170px;
-    height: auto;
-    vertical-align: bottom;
-    filter: drop-shadow(5px 2px 4px rgba(0, 0, 0, .3));
-    -webkit-filter: drop-shadow(5px 2px 4px rgba(0, 0, 0, .3));
+.description{
+    font-family: "semibold", sans-serif;
 }
 
 .team-profile .tasks {
