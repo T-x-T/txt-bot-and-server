@@ -1167,16 +1167,38 @@ button[id="submit"]:hover {
 /* ################### our team, member stats ###################*/
 
 .member-list-wrapper {
+  width: 100%;
   display: flex;
-  justify-content: space-around;
+  flex-flow: wrap;
 }
 
 .member-card-wrapper{
     display: flex;
-    width: 350px;
+    width: 380px;
+    max-width: 100%;
     padding: 10px 0 10px 20px;
     background: linear-gradient(180deg, rgba(240,240,240,0) 15%, rgba(240,240,240,1) 15%, rgba(240,240,240,1) 85%, rgba(240,240,240,0) 85%);
-    margin: 0 20px 20px 0;
+    margin: 0 40px 20px 0;
+    cursor: pointer;
+}
+
+.member-card-wrapper:hover {
+  transform: scale(.9);
+  opacity: .75;
+}
+
+.member-card-description {
+    width: 70%;
+    padding: 55px 0 0 30px;
+}
+
+.member-card-image {
+    float: left;
+    width: 30%;
+    height: auto;
+    vertical-align: top;
+    filter: drop-shadow(5px 2px 4px rgba(0, 0, 0, .3));
+    -webkit-filter: drop-shadow(5px 2px 4px rgba(0, 0, 0, .3));
 }
 
 .member-card-description h2 {
@@ -1185,8 +1207,7 @@ button[id="submit"]:hover {
     padding: 3px 0px 3px 15px;
     text-shadow: 1px 2px 0px #00515c;
     border-right: 4px solid rgba(0,0,0,0.15);
-    word-break: break-all;
-    margin: auto;
+    overflow-x: hidden;
 }
 
 .member-card-description h3 {
@@ -1196,14 +1217,6 @@ button[id="submit"]:hover {
     border-right: 4px solid rgba(0,0,0,0.15);
     font-size: 12pt;
     word-break: break-all;
-}
-
-.member-card-description{
-    /* display: grid; */
-    float: right;
-    width: 230px;
-    text-align: left;
-    padding: 55px 0 0 30px;
 }
 
 .member-card-infos {
@@ -1221,15 +1234,6 @@ button[id="submit"]:hover {
 
 .description{
     font-family: "semibold", sans-serif;
-}
-
-.member-card-image {
-    float: left;
-    width: 120px;
-    height: auto;
-    vertical-align: top;
-    filter: drop-shadow(5px 2px 4px rgba(0, 0, 0, .3));
-    -webkit-filter: drop-shadow(5px 2px 4px rgba(0, 0, 0, .3));
 }
 
 .team-profile .tasks {

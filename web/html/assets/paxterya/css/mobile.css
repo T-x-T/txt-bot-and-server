@@ -231,3 +231,22 @@ nav li ul li i {
 }
 
 }
+
+
+@media screen and (max-width:500px) {
+/* ################## member list #####################*/
+  .member-card-wrapper{
+      background: #f0f0f0;
+      margin: 0 0 20px 0;
+      padding: 15px 0 10px 15px;
+  }
+
+  .member-card-image {
+      display: none;
+  }
+
+  .member-card-description {
+      width: 100%;
+      padding: 0;
+  }
+}
