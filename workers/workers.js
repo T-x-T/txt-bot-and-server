@@ -45,4 +45,4 @@ setInterval(function(){
   setTimeout(function(){
     mc_helpers.updateStats();
   }, 1000)
-}, 1 * 60 * 60);
+}, 1000 * 60 * 60 * 6);
