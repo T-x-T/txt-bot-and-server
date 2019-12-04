@@ -132,7 +132,7 @@ handlers.paxStaff = function(data, callback){
             }
           });
         }else{
-          callback(403, 'You first have to become an admin before accessing this site!!', 'html');
+          callback(302, {Location: 'https://discordapp.com/api/oauth2/authorize?client_id=624980994889613312&redirect_uri=https%3A%2F%2Fpaxterya.com%2Flogin.html&response_type=code&scope=identify'}, 'plain');
         }
       });
     }else{
@@ -153,7 +153,7 @@ handlers.paxLogin = function(data, callback){
         //Now set the access_token as a cookie and redirect the user to the interface.html
         callback(302, {Location: `https://${data.headers.host}/staff/interface.html`, 'Set-Cookie': 'access_token=' + access_token + ';path=/'}, 'plain');
       }else{
-        callback(403, 'You first have to become an admin before accessing this site!!', 'html');
+        callback(302, {Location: 'https://discordapp.com/api/oauth2/authorize?client_id=624980994889613312&redirect_uri=https%3A%2F%2Fpaxterya.com%2Flogin.html&response_type=code&scope=identify'}, 'plain');
       }
     });
   }else{
