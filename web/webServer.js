@@ -68,6 +68,12 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
       if(data.method == 'post') console.log(data.payload);
     }
 
+    //Fixing links in staff pages
+    if(data.path.startsWith('/paxterya/staff')){
+      if(data.path.startsWith('/paxterya/staff/assets')) data.path = data.path.replace('/paxterya/staff', '');
+      if(!data.path.startsWith('/paxterya/staff/interface') && !data.path.startsWith('/paxterya/staff/application')) data.path = data.path.replace('/staff', '');
+    }
+    
     //Check the path and choose a handler
     var chosenHandler = handlers.assets;
 

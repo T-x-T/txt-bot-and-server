@@ -73,7 +73,6 @@ handlers.paxterya = function (data, callback) {
           }else{
             //maybe that is without the .html?
             data.path = path.join(__dirname, './html/' + origPath + '.html');
-            console.log(data.path);
             webHelpers.finishHtml(data, 'paxterya', function(err, fileData){
               if(!err && fileData.length > 0){
                 callback(200, fileData, 'html');
@@ -124,7 +123,7 @@ handlers.paxStaff = function(data, callback){
         if(isAdmin){
           //Everything is fine, serve the website
           data.path = path.join(__dirname, './html/' + data.path);
-          webHelpers.finishHtml(data, 'paxteryaStaff', function(err, fileData){
+          webHelpers.finishHtml(data, 'paxterya', function(err, fileData){
             if(!err && fileData.length > 0){
               callback(200, fileData, 'html');
             }else{
