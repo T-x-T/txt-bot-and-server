@@ -134,6 +134,7 @@ client.on('messageReactionRemove', (reaction, user) => {
 //Gets called whenever a member leaves the guild
 client.on('guildMemberRemove', (user) => {
   data.removeMember(user.id, function(err){});
+  discordHelpers.sendMessage(`${user.nickname} left the server`, config['new_application_announcement_channel'], function(e){});
 });
 
 //Gets called whenever a new member joins the guild
