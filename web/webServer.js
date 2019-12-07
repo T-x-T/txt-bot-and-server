@@ -45,7 +45,6 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
     //Log the request
     log.write(0, 'Web Request received', {data: data, sourceIP: req.connection.remoteAddress});
 
-
     if(!config['use-external-certs']){
       //FOR TESTING ONLY
       var origHost = data.headers.host;
