@@ -258,6 +258,24 @@ module.exports = {
                 }
               });
               break;
+            case 'ban':
+              //Bans mentioned user
+              data.getUserData(message.mentions.users.first().id, function(err, user) {
+                if(!err) {
+                  mc_helpers.rcon('whitelist remove ' + user.mcName);
+                  user.status = 2;
+                  data.updateUserData(user.discord, user, function(err){
+                    if(err){
+                      message.reply(err);
+                    }else{
+                      message.reply('success!');
+                    }
+                  })
+                } else {
+                  message.reply('Couldnt find the user');
+                }
+              });
+              break;
             case 'cmd':
               let cmd = '';
               args[0] = '';
