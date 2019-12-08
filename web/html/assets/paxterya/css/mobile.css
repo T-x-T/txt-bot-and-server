@@ -139,6 +139,7 @@ nav li ul li i {
     article .article-img {
         margin: 20px auto;
         width: 300px;
+        max-width: 100%;
         display: block;
         float: none;
     }

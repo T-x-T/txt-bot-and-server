@@ -490,6 +490,10 @@ article .article-img img {
     width: 250px;
 }
 
+.article-img.big img {
+    width: 500px;
+}
+
 /* #########################################*/
 
 /* ################### rules ###################*/
