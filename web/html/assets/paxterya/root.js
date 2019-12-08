@@ -173,6 +173,9 @@ root.members = {};
 //This gets executed onload and should trigger the update of member cards
 root.members.init = function(){
   root.members.update();
+  setTimeout(function(){
+    if(document.getElementById('searchInput').value.length > 0) root.members.search();
+  }, 1000);
 };
 
 //This updates the member cards
@@ -255,6 +258,29 @@ root.members.update = function(){
     }
   });
 };
+
+//Makes the search work
+root.members.search = function(){
+  //Get the search term
+  let term = document.getElementById('searchInput').value.toLowerCase();
+  if(term.length == 0) return;
+
+  //Iterate over all member cards and enable/disable them
+  let parent = document.getElementById('member-list');
+  let elements = parent.children;
+  let newElements = [];
+
+  //Fill newElements with all elements we need to evaluate
+  for(let i = 0; i < elements.length; i++) {
+    if(elements[i].id != 'template') newElements.push(elements[i]);
+  }
+  elements = newElements;
+
+  elements.forEach((element) => {
+    if(element.querySelector('#mc_ign').innerText.toLowerCase().includes(term) || element.querySelector('#discord_name').innerText.toLowerCase().includes(term)) element.style = '';
+      else element.style = 'display: none;';
+  });
+}
 
 //Internal helper functions
 var _internal = {};
