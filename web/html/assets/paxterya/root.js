@@ -185,7 +185,6 @@ root.members.update = function(){
     if(status == 200){
       //Get the selected sorting
       let sorting = document.getElementById('sort').value;
-
       //Fix the playtime for sorting
       for(let i = 0; i < docs.length; i++) docs[i].playtime = typeof docs[i].playtime == 'undefined'? 0 : parseInt(docs[i].playtime);
 

@@ -977,6 +977,11 @@ p#auth-explanation {
     margin-top: 7px;
 }
 
+.custom-select.membersorting {
+    width: 300px;
+    max-width: 100%;
+}
+
 
 .custom-select select {
     display: none;
@@ -1271,8 +1276,11 @@ button[id="submit"]:hover {
     font-size: 20pt;
 }
 
-
-
+/* world map */
+#map-container .datamap {
+    margin-top: 20px;
+    max-width: 100%;
+}
 
 
 

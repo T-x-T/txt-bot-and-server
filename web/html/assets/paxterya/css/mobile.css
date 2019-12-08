@@ -1,7 +1,7 @@
 @media screen and (max-width:999px) {
 
     .mobile-hide, header .dots, header .banner, .dots,
-    a.prev, a.next, img.author {
+    a.prev, a.next, img.author, #mapsection {
         display: none;
     }
 
