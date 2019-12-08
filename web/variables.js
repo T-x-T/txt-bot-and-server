@@ -82,11 +82,14 @@ _getters.application = function(callback){
 //Calls back an object containing some basic statistics
 _getters.statistics = function(callback){
   stats.overview(function(obj){
-    callback({
-      'pax_title': 'Statistics',
-      'total_members': obj.total_members,
-      'average_age': obj.average_age,
-      'total_playtime': obj.total_playtime
+    stats.countryList(function(map_data){
+      callback({
+        'pax_title': 'Statistics',
+        'total_members': obj.total_members,
+        'average_age': obj.average_age,
+        'total_playtime': obj.total_playtime,
+        'map_data': JSON.stringify(map_data)
+      });
     });
   });
 };
@@ -134,7 +137,7 @@ const template = {
 
 //Export the variables
 module.exports = function(local_data, callback) {
-  local_data.path = local_data.path.replace(__dirname, '').replace('/html', '');
+  local_data.path = local_data.origPath;
   data = local_data;
   let templateData = template[data.path];
   if(typeof templateData == 'object'){

@@ -17,6 +17,7 @@ try {
   log.write(3, 'Workers: Cant execute getNewestVideo', { Error: e });
 }
 mc_helpers.updateOnlinePlayers();
+log.prune(30);
 
 //Contains discord user objects mapped by the discord id; gets cleared once an hour in workers
 global.cache = {}
@@ -48,3 +49,8 @@ setInterval(function(){
     mc_helpers.updateStats();
   }, 1000)
 }, 1000 * 60 * 60 * 6);
+
+//Every day
+setInterval(function(){
+  log.prune(30);
+}, 1000 * 60 * 60 * 24);
