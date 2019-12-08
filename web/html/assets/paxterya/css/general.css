@@ -492,6 +492,7 @@ article .article-img img {
 
 .article-img.big img {
     width: 500px;
+    max-width: 100%;
 }
 
 /* #########################################*/
