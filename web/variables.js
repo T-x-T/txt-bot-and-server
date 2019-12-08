@@ -137,7 +137,7 @@ const template = {
 
 //Export the variables
 module.exports = function(local_data, callback) {
-  local_data.path = local_data.path.replace(__dirname, '').replace('/html', '');
+  local_data.path = local_data.origPath;
   data = local_data;
   let templateData = template[data.path];
   if(typeof templateData == 'object'){

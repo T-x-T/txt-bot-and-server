@@ -55,6 +55,7 @@ handlers.landing = function (data, callback){
 //Handler for all paxterya html sites
 handlers.paxterya = function (data, callback) {
   let origPath = data.path;
+  data.origPath = origPath;
   if(Object.hasOwnProperty.bind(data.queryStringObject)('code')){
     //There is a access_code in the querystring, lets convert that to a discord_id and redirect to the same site, just with the id as a parameter
     _internal.redirectToDiscordId(data, function(status, file, type){ callback(status, file, type); });
