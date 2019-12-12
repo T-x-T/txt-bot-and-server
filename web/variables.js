@@ -128,6 +128,9 @@ const template = {
   '/paxterya/rules.html': {
     'pax_title': 'Rules'
   },
+  '/paxterya/hardware.html': {
+    'pax_title': 'Server hardware'
+  },
 
 
   '/landing/index.html': {

@@ -1,0 +1,175 @@
+<script type="text/javascript" src="https://monitoring.paxterya.com/netdata/txt-game02/dashboard.js"></script>
+<style>
+    main{
+        width: 60%;
+        /* background-color: #1a1a1a; */
+    }
+    #wrapper{
+        width: calc(100% - 120px);
+    }
+
+</style>
+<h1>
+    <div class="wrapper">
+        {pax_title}
+    </div>
+</h1>
+
+<div id="wrapper" class="wrapper content">
+    <article class="lesspadding" width="100%">
+
+        <script>
+            var dash = new Dash('https://monitoring.paxterya.com/netdata/txt-game02');    
+        </script>
+
+        <h3>txt-game02</h3>
+        <br>
+        <div class="netdata-row">
+            <div data-host="https://monitoring.paxterya.com/netdata/txt-game02/" class="netdata-container-easypiechart"
+                style="margin-right: 10px; width: 9%;" data-netdata="system.swap" data-dimensions="used"
+                data-append-options="percentage" data-chart-library="easypiechart" data-title="Used Swap" data-units="%"
+                data-easypiechart-max-value="100" data-width="9%" data-before="0" data-after="-780" data-points="780"
+                data-colors="#DD4400" role="application">
+            </div>
+
+            <div data-host="https://monitoring.paxterya.com/netdata/txt-game02/" class="netdata-container-easypiechart"
+                style="margin-right: 10px; width: 11%;" data-netdata="system.io" data-dimensions="in"
+                data-chart-library="easypiechart" data-title="Disk Read" data-width="11%" data-before="0"
+                data-after="-780" data-points="780" data-common-units="system.io.mainhead" role="application">
+            </div>
+
+            <div data-host="https://monitoring.paxterya.com/netdata/txt-game02/" class="netdata-container-easypiechart"
+                style="margin-right: 10px; width: 11%;" data-netdata="system.io" data-dimensions="out"
+                data-chart-library="easypiechart" data-title="Disk Write" data-width="11%" data-before="0"
+                data-after="-780" data-points="780" data-common-units="system.io.mainhead" role="application">
+            </div>
+
+            <div data-host="https://monitoring.paxterya.com/netdata/txt-game02/" class="netdata-container-gauge"
+                style="margin-right: 10px; width: 20%;" data-netdata="system.cpu" data-chart-library="gauge"
+                data-title="CPU" data-units="%" data-gauge-max-value="100" data-width="20%" data-after="-780"
+                data-points="780" data-colors="#22AA99" role="application">
+            </div>
+
+            <div data-host="https://monitoring.paxterya.com/netdata/txt-game02/" class="netdata-container-easypiechart"
+                style="margin-right: 10px; width: 11%;" data-netdata="system.net" data-dimensions="received"
+                data-chart-library="easypiechart" data-title="Net Inbound" data-width="11%" data-before="0"
+                data-after="-780" data-points="780" data-common-units="system.net.mainhead" role="application">
+            </div>
+
+            <div data-host="https://monitoring.paxterya.com/netdata/txt-game02/" class="netdata-container-easypiechart"
+                style="margin-right: 10px; width: 11%;" data-netdata="system.net" data-dimensions="sent"
+                data-chart-library="easypiechart" data-title="Net Outbound" data-width="11%" data-before="0"
+                data-after="-780" data-points="780" data-common-units="system.net.mainhead" role="application">
+            </div>
+
+            <div data-host="https://monitoring.paxterya.com/netdata/txt-game02/" class="netdata-container-easypiechart"
+                style="margin-right: 10px; width: 9%;" data-netdata="system.ram"
+                data-dimensions="used|buffers|active|wired" data-append-options="percentage"
+                data-chart-library="easypiechart" data-title="Used RAM" data-units="%" data-easypiechart-max-value="100"
+                data-width="9%" data-after="-780" data-points="780" data-colors="#EE9911" role="application">
+            </div>
+        </div>
+        <br>
+
+        <h3>txt-web01</h3>
+        <br>
+
+        <div class="netdata-row">
+            <div data-host="https://monitoring.paxterya.com/netdata/txt-web01/" class="netdata-container-easypiechart"
+                style="margin-right: 10px; width: 11%;" data-netdata="system.io" data-dimensions="in"
+                data-chart-library="easypiechart" data-title="Disk Read" data-width="11%" data-before="0"
+                data-after="-780" data-points="780" data-common-units="system.io.mainhead" role="application">
+            </div>
+
+            <div data-host="https://monitoring.paxterya.com/netdata/txt-web01/" class="netdata-container-easypiechart"
+                style="margin-right: 10px; width: 11%;" data-netdata="system.io" data-dimensions="out"
+                data-chart-library="easypiechart" data-title="Disk Write" data-width="11%" data-before="0"
+                data-after="-780" data-points="780" data-common-units="system.io.mainhead" role="application">
+            </div>
+
+            <div data-host="https://monitoring.paxterya.com/netdata/txt-web01/" class="netdata-container-gauge"
+                style="margin-right: 10px; width: 20%;" data-netdata="system.cpu" data-chart-library="gauge"
+                data-title="CPU" data-units="%" data-gauge-max-value="100" data-width="20%" data-after="-780"
+                data-points="780" data-colors="#22AA99" role="application">
+            </div>
+
+            <div data-host="https://monitoring.paxterya.com/netdata/txt-web01/" class="netdata-container-easypiechart"
+                style="margin-right: 10px; width: 11%;" data-netdata="system.net" data-dimensions="received"
+                data-chart-library="easypiechart" data-title="Net Inbound" data-width="11%" data-before="0"
+                data-after="-780" data-points="780" data-common-units="system.net.mainhead" role="application">
+            </div>
+
+            <div data-host="https://monitoring.paxterya.com/netdata/txt-web01/" class="netdata-container-easypiechart"
+                style="margin-right: 10px; width: 11%;" data-netdata="system.net" data-dimensions="sent"
+                data-chart-library="easypiechart" data-title="Net Outbound" data-width="11%" data-before="0"
+                data-after="-780" data-points="780" data-common-units="system.net.mainhead" role="application">
+            </div>
+
+            <div data-host="https://monitoring.paxterya.com/netdata/txt-web01/" class="netdata-container-easypiechart"
+                style="margin-right: 10px; width: 9%;" data-netdata="system.ram"
+                data-dimensions="used|buffers|active|wired" data-append-options="percentage"
+                data-chart-library="easypiechart" data-title="Used RAM" data-units="%" data-easypiechart-max-value="100"
+                data-width="9%" data-after="-780" data-points="780" data-colors="#EE9911" role="application">
+            </div>
+        </div>
+        <br>
+
+        <h3>txt-mon01</h3>
+        <br>
+        <div class="netdata-row">
+            <div data-host="https://monitoring.paxterya.com/netdata/txt-mon01/" class="netdata-container-easypiechart"
+                style="margin-right: 10px; width: 11%;" data-netdata="system.io" data-dimensions="in"
+                data-chart-library="easypiechart" data-title="Disk Read" data-width="11%" data-before="0"
+                data-after="-780" data-points="780" data-common-units="system.io.mainhead" role="application">
+            </div>
+
+            <div data-host="https://monitoring.paxterya.com/netdata/txt-mon01/" class="netdata-container-easypiechart"
+                style="margin-right: 10px; width: 11%;" data-netdata="system.io" data-dimensions="out"
+                data-chart-library="easypiechart" data-title="Disk Write" data-width="11%" data-before="0"
+                data-after="-780" data-points="780" data-common-units="system.io.mainhead" role="application">
+            </div>
+
+            <div data-host="https://monitoring.paxterya.com/netdata/txt-mon01/" class="netdata-container-gauge"
+                style="margin-right: 10px; width: 20%;" data-netdata="system.cpu" data-chart-library="gauge"
+                data-title="CPU" data-units="%" data-gauge-max-value="100" data-width="20%" data-after="-780"
+                data-points="780" data-colors="#22AA99" role="application">
+            </div>
+
+            <div data-host="https://monitoring.paxterya.com/netdata/txt-mon01/" class="netdata-container-easypiechart"
+                style="margin-right: 10px; width: 11%;" data-netdata="system.net" data-dimensions="received"
+                data-chart-library="easypiechart" data-title="Net Inbound" data-width="11%" data-before="0"
+                data-after="-780" data-points="780" data-common-units="system.net.mainhead" role="application">
+            </div>
+
+            <div data-host="https://monitoring.paxterya.com/netdata/txt-mon01/" class="netdata-container-easypiechart"
+                style="margin-right: 10px; width: 11%;" data-netdata="system.net" data-dimensions="sent"
+                data-chart-library="easypiechart" data-title="Net Outbound" data-width="11%" data-before="0"
+                data-after="-780" data-points="780" data-common-units="system.net.mainhead" role="application">
+            </div>
+
+            <div data-host="https://monitoring.paxterya.com/netdata/txt-mon01/" class="netdata-container-easypiechart"
+                style="margin-right: 10px; width: 9%;" data-netdata="system.ram"
+                data-dimensions="used|buffers|active|wired" data-append-options="percentage"
+                data-chart-library="easypiechart" data-title="Used RAM" data-units="%" data-easypiechart-max-value="100"
+                data-width="9%" data-after="-780" data-points="780" data-colors="#EE9911" role="application">
+            </div>
+        </div>
+        <br>
+
+        <iframe src="https://monitoring.paxterya.com/d-solo/0RlHKXaZk/website?orgId=1&panelId=2&refresh=30s"
+            width="100%" height="500" frameborder="0">
+        </iframe>
+
+        <iframe src="https://monitoring.paxterya.com/d-solo/0RlHKXaZk/website?orgId=1&panelId=4&refresh=30s"
+            width="100%" height="500" frameborder="0">
+        </iframe>
+
+        <iframe src="https://monitoring.paxterya.com/d-solo/0RlHKXaZk/website?orgId=1&panelId=6&refresh=30s"
+            width="100%" height="600" frameborder="0">
+        </iframe>
+
+        <iframe src="https://monitoring.paxterya.com/d-solo/0RlHKXaZk/website?orgId=1&refresh=30s&panelId=8"
+            width="100%" height="500" frameborder="0">
+        </iframe>
+    </article>
+</div>

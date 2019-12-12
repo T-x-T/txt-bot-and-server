@@ -1479,3 +1479,13 @@ button[id="submit"]:hover {
   width: 45%;
   margin: 20px 2.5%;
 }
+
+
+/* ################### hardware ###################*/
+.netdata-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: right;
+    width: 100%;
+}
