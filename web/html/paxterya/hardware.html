@@ -1,13 +1,20 @@
+<script>
+    //var dash = new Dash('https://monitoring.paxterya.com/netdata/txt-game02');    
+    var netdataTheme = 'slate';
+    var netdataNoBootstrap = true;
+</script>
 <script type="text/javascript" src="https://monitoring.paxterya.com/netdata/txt-game02/dashboard.js"></script>
+<script>
+    NETDATA.options.current.destroy_on_hide = true;
+    NETDATA.options.current.stop_updates_when_focus_is_lost = true;
+</script>
 <style>
-    main{
+    main {
         width: 60%;
-        /* background-color: #1a1a1a; */
     }
-    #wrapper{
+    #wrapper {
         width: calc(100% - 120px);
     }
-
 </style>
 <h1>
     <div class="wrapper">
@@ -18,12 +25,22 @@
 <div id="wrapper" class="wrapper content">
     <article class="lesspadding" width="100%">
 
-        <script>
-            var dash = new Dash('https://monitoring.paxterya.com/netdata/txt-game02');    
-        </script>
+        <p>
+            Welcome to the hardware and server overview of Paxterya!<br>I will try to give you a short introduction and then we can take a look at what the different servers are doing and how they are performing!
+        </p>
+        <p>
+            To monitor the performance of our servers we are using the incredible tool <a href="https://www.netdata.cloud/">netdata</a>! It's free, easy and extremely powerful. But it's only nice for realtime statistics, so to archive our data and to get the bigger picture over longer timespans we are using the time-series database <a href="https://prometheus.io/">prometheus</a> together with <a href="https://grafana.com/">grafana</a>.
+        </p>
+        <p>
+            Here are some links to our Dashboards:<br>Netdata (realtime): <a target="_blank" rel="noopener noreferrer" href="https://monitoring.paxterya.com/netdata/txt-game02/">txt-game02</a>, <a target="_blank" rel="noopener noreferrer" href="https://monitoring.paxterya.com/netdata/txt-web01/">txt-web01</a>, <a target="_blank" rel="noopener noreferrer" href="https://monitoring.paxterya.com/netdata/txt-mon01/">txt-mon01</a> and <a target="_blank" rel="noopener noreferrer" href="https://monitoring.paxterya.com/d/ueugugoZz/">grafana</a>
+        </p>
 
         <h3>txt-game02</h3>
         <br>
+        <p>
+            Let's start with the most important server, txt-game02. It is hosting both the paxterya minecraft server and a small factorio server. We are also using it to store larger media files like the screenshots in the header and the world download of the first paxterya beta, because of it's unlimeted bandwith and generous amount of fast nvme storage.<br>
+            Hardware-wise its currently our only bare-metal root server. It features an i7-6700 processor, 64GB memory, 2x512GB in RAID 1 for added redundancy and unmetered 1gbit/s internet. Physically it's located in beatiful finland thanks to cheaper electricity ;)
+        </p>
         <div class="netdata-row">
             <div data-host="https://monitoring.paxterya.com/netdata/txt-game02/" class="netdata-container-easypiechart"
                 style="margin-right: 10px; width: 9%;" data-netdata="system.swap" data-dimensions="used"
@@ -73,7 +90,12 @@
 
         <h3>txt-web01</h3>
         <br>
-
+        <p>
+            Our second most important server, txt-web01, is used to run our self-made node.js program which host our website and our discord bot.
+        </p>
+        <p>
+            Unlike txt-game02, this server is located in germany and also completely virtualized to reduce costs. We currently run it with 1 cpu core, 2GB memory with 20GB nvme storage and 20TB bandwith per month.
+        </p>
         <div class="netdata-row">
             <div data-host="https://monitoring.paxterya.com/netdata/txt-web01/" class="netdata-container-easypiechart"
                 style="margin-right: 10px; width: 11%;" data-netdata="system.io" data-dimensions="in"
@@ -116,6 +138,12 @@
 
         <h3>txt-mon01</h3>
         <br>
+        <p>
+            txt-mon01 is the only server of our trio that is completely unnecessary. It handles all the performance monitoring. Well, while netdata is installed on all servers, this one reverse-proxies all our netdata instances. txt-mon01 also hosts prometheus and grafana.
+        </p>
+        <p>
+            This server has the same configuration as txt-web01, so that's 1 cpu core, 2GB memory with 20GB nvme storage and 20TB bandwith per month.
+        </p>
         <div class="netdata-row">
             <div data-host="https://monitoring.paxterya.com/netdata/txt-mon01/" class="netdata-container-easypiechart"
                 style="margin-right: 10px; width: 11%;" data-netdata="system.io" data-dimensions="in"
@@ -156,6 +184,12 @@
         </div>
         <br>
 
+        <p>
+            Ok, that were all our servers. To make this site more interesting, I added some custom grafana charts to display historical data over the past six hours.<br>
+            For more info about the graphs, you can hover over the small 'i' in the upper-left corner of each graph.<br>
+            To view custom timeframes and even more graphs, you should take a look at our <a target="_blank" rel="noopener noreferrer" href="https://monitoring.paxterya.com/d/ueugugoZz/">public grafana dashboards</a>.
+        </p>
+
         <iframe src="https://monitoring.paxterya.com/d-solo/0RlHKXaZk/website?orgId=1&panelId=2&refresh=30s"
             width="100%" height="500" frameborder="0">
         </iframe>
@@ -171,5 +205,8 @@
         <iframe src="https://monitoring.paxterya.com/d-solo/0RlHKXaZk/website?orgId=1&refresh=30s&panelId=8"
             width="100%" height="500" frameborder="0">
         </iframe>
+        <p>
+            Thanks for reading through this little fun site! If you have any questions or suggestions for more data or literally anything else, please don't hesitate to contact TxT#0001 on discord (:
+        </p>
     </article>
 </div>
