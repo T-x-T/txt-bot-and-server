@@ -469,7 +469,7 @@ article h3 {
     margin-top: 10px;
 }
 
-article.news p:first-of-type::first-letter {
+article.news p:first-of-type::first-letter, p.initial-letter:first-of-type::first-letter {
     color: #007787;
     font-weight: bold;
     font-size: 270%;
@@ -1478,4 +1478,29 @@ button[id="submit"]:hover {
   font-size: 16pt;
   width: 45%;
   margin: 20px 2.5%;
+}
+
+
+/* ################### hardware ###################*/
+.netdata-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    background: #f0f0f0;
+    padding: 20px;
+}
+
+p.note-box {
+  background: #f0f0f0;
+  border-left: 5px solid #007787;
+  padding: 20px;
+}
+
+p.note-box.margin-top {
+  margin-top: 40px;
+}
+
+p.note-box.margin-bottom {
+  margin-bottom: 40px;
 }
