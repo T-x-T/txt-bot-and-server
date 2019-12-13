@@ -1486,7 +1486,7 @@ button[id="submit"]:hover {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: right;
+    justify-content: center;
     background: #f0f0f0;
     padding: 20px;
 }
