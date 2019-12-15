@@ -144,18 +144,20 @@ module.exports = function(local_data, callback) {
   if(os.platform() != 'win32'){
     local_data.path = local_data.path.replace(__dirname, '').replace('/html', '');
   }else{
-    local_data.path = local_data.path.replace(__dirname, '').replace('\\html', '').replace('\\','/').replace('\\','/');
+    local_data.path = local_data.path.replace(__dirname, '').replace('\\html', '').replace('\\','/').replace('\\','/').replace('\\','/');
   }
 
   data = local_data;
   let templateData = template[data.path];
   if(typeof templateData == 'object'){
     templateData['online_players'] = global.mcPlayerCount;
+    templateData['oauth_staff'] = config.oauth_uris.login;
     callback(templateData);
   }else{
     if(typeof templateData == 'function'){
       templateData(function(variables){
         variables['online_players'] = global.mcPlayerCount;
+        variables['oauth_staff'] = config.oauth_uris.login;
         callback(variables);
       });
     }else{

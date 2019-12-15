@@ -131,14 +131,14 @@ handlers.paxStaff = function(data, callback){
             }
           });
         }else{
-          callback(302, {Location: 'https://discordapp.com/api/oauth2/authorize?client_id=624980994889613312&redirect_uri=https%3A%2F%2Fpaxterya.com%2Flogin.html&response_type=code&scope=identify'}, 'plain');
+          callback(302, {Location: config.oauth_uris.login}, 'plain');
         }
       });
     }else{
-      callback(302, {Location: 'https://discordapp.com/api/oauth2/authorize?client_id=624980994889613312&redirect_uri=https%3A%2F%2Fpaxterya.com%2Flogin.html&response_type=code&scope=identify'}, 'plain');
+      callback(302, {Location: config.oauth_uris.login}, 'plain');
     }
   }else{
-    callback(302, {Location: 'https://discordapp.com/api/oauth2/authorize?client_id=624980994889613312&redirect_uri=https%3A%2F%2Fpaxterya.com%2Flogin.html&response_type=code&scope=identify'}, 'plain');
+    callback(302, {Location: config.oauth_uris.login}, 'plain');
   }
 };
 
@@ -150,9 +150,9 @@ handlers.paxLogin = function(data, callback){
     oauth.isCodeAdmin(code, 'staffLogin', function(isAdmin, access_token){
       if(isAdmin){
         //Now set the access_token as a cookie and redirect the user to the interface.html
-        callback(302, {Location: `https://${data.headers.host}/staff/interface.html`, 'Set-Cookie': 'access_token=' + access_token + ';path=/'}, 'plain');
+        callback(302, {Location: `https://${data.headers.host}/staff/interface.html`, 'Set-Cookie': `access_token=${access_token};expires=${new Date(Date.now() + 1000 * 60 * 60 * 6).toGMTString()};path=/`}, 'plain');
       }else{
-        callback(302, {Location: 'https://discordapp.com/api/oauth2/authorize?client_id=624980994889613312&redirect_uri=https%3A%2F%2Fpaxterya.com%2Flogin.html&response_type=code&scope=identify'}, 'plain');
+        callback(302, {Location: config.oauth_uris.login}, 'plain');
       }
     });
   }else{
