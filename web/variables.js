@@ -10,6 +10,7 @@ const application     = require('./../lib/application.js');
 const discord_helpers = require('./../discord-bot/discord_helpers.js');
 const mc_helpers      = require('./../lib/mc_helpers.js');
 const stats           = require('./../lib/stats.js');
+const os              = require('os');
 
 //Create internal container
 var _internal = {};
@@ -140,7 +141,12 @@ const template = {
 
 //Export the variables
 module.exports = function(local_data, callback) {
-  local_data.path = local_data.path.replace(__dirname, '').replace('/html', '');
+  if(os.platform() != 'win32'){
+    local_data.path = local_data.path.replace(__dirname, '').replace('/html', '');
+  }else{
+    local_data.path = local_data.path.replace(__dirname, '').replace('\\html', '').replace('\\','/').replace('\\','/');
+  }
+
   data = local_data;
   let templateData = template[data.path];
   if(typeof templateData == 'object'){
