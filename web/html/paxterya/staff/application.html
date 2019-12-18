@@ -1,60 +1,105 @@
+<a href="../staff/interface.html">
+  <button class="hover-left" style="margin-bottom: 5px;">
+    <i class="fas fa-chevron-left"></i> Go back
+  </button>
+</a>
+
 <h1>
   <div class="wrapper">
-    {pax_title}
+    {pax_title} #{id}
   </div>
 </h1>
-<br><br>
-<h3>
-  <p>
-    <a href="../staff/interface.html">Go back</a>
-  </p>
-</h3>
 
 <div class="wrapper content">
-  <h2>Application #{id}</h2>
-  <hr>
-  <p>Please read everything the applicant provided thoroughly</p>
-  <hr>
 
-  <div id="applicant-wrapper" class="applicant-wrapper">
-    <div id="applicant-details">
-      <table id="single-application-table">
-        <tbody>
-          <tr>
-            <td>Discord: <b>{discord_nick}</b></td>
-            <td>Mc IGN: <b>{mc_ign}</b></td>
-          </tr>
-          <tr>
-            <td colspan="2"><i>About me text:</i><br>{about_me}<br><br></td>
-          </tr>
-          <tr>
-            <td colspan="2"><i>Motivation text:</i><br>{motivation}<br><br></td>
-          </tr>
-          <tr>
-            <td colspan="2"><i>Building pictures:</i><br>{buildings}<br><br></td>
-          </tr>
-          <tr>
-            <td>Country: <b>{country}</b></td>
-            <td>Age: <b>{age}</b></td>
-          </tr>
-          <tr>
-            <td>Birth year: <b>{birth_year}</b></td>
-            <td>Birth month: <b>{birth_month}</b></td>
-          </tr>
-          <tr>
-            <td colspan="2">Publish about me: {publish_about_me}<br>Publish age: {publish_age}<br>Publish country: {publish_country}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div id="applicant-avatar">
-      {discord_avatar}<br>{mc_skin}
-    </div>
+  <div class="applicant">
+      <div class="applicant-info">
+          <div class="counter counter-horizontal">
+            <h2>MC IGN</h2><p>{mc_ign}</p>
+          </div>
+
+          <div class="counter counter-horizontal">
+            <h2>Discord</h2><p>{discord_nick}</p>
+          </div>
+
+          <div class="counter counter-horizontal">
+            <h2>Country</h2><p>{country}</p>
+          </div>
+
+          <div class="counter counter-horizontal">
+            <h2>Age</h2><p>{age}</p>
+          </div>
+      </div>
+      <div class="applicant-images">
+        {discord_avatar}{mc_skin}
+      </div>
+      <div class="clear"></div>
   </div>
-  <br><hr><br>
-  <p>Current status: <b>{status}</b></p><br>
+
+
+  <article>
+    <h2>About me</h2>
+    <span class="subtitle"></span>
+    <section>
+      <p>{about_me}</p>
+    </section>
+  </article>
+
+
+  <article>
+    <h2>Motivation</h2>
+    <span class="subtitle"></span>
+    <section>
+      <p>{motivation}</p>
+    </section>
+  </article>
+
+  <article>
+    <h2>Building pictures</h2>
+    <span class="subtitle"></span>
+    <section>
+      <p>{buildings}</p>
+    </section>
+  </article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="counter counter-horizontal">
+    <h2>Publish About Me</h2><p>{publish_about_me}</p>
+  </div>
+
+  <div class="counter counter-horizontal">
+    <h2>Publish Age</h2><p>{publish_age}</p>
+  </div>
+
+  <div class="counter counter-horizontal">
+    <h2>Publish Country</h2><p>{publish_country}</p>
+  </div>
+
+  <div class="counter counter-horizontal">
+    <h2>Current status</h2><p>{status}</p>
+  </div>
+
+  <div class="clear"></div>
+
+<div class="applicant-controls">
   <input placeholder="Deny reason" type="text" id="deny_reason" name="deny_reason">
   <button id="application-accept" onclick="root.application.accept()">Accept</button>
   <button id="application-deny" onclick="root.application.deny()">Deny</button>
-  <br><br><br><br>
+  <div class="clear"></div>
+</div>
+
+
 </div>

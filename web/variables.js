@@ -63,7 +63,7 @@ _getters.application = function(callback){
           'motivation': doc.motivation,
           'buildings': doc.build_images,
           'country': doc.country,
-          'age': '≈' + (new Date().getFullYear() - new Date(doc.birth_year, doc.birth_month).getFullYear()).toString(),
+          'age': '~' + (new Date().getFullYear() - new Date(doc.birth_year, doc.birth_month).getFullYear()).toString(),
           'birth_year': doc.birth_year,
           'birth_month': doc.birth_month,
           'publish_about_me': doc.publish_about_me,
@@ -99,7 +99,7 @@ const template = {
   '/paxterya/staff/application.html': _getters.application,
   '/paxterya/statistics.html': _getters.statistics,
   '/paxterya/index.html': {
-    'pax_title': 'Start page'
+    'pax_title': 'Start Page'
   },
   '/paxterya/applicant.html': {
     'pax_title': 'Applicant'
@@ -111,7 +111,7 @@ const template = {
     'pax_title': 'Contact us!'
   },
   '/paxterya/staff/interface.html': {
-    'pax_title': 'Sicco admin Interface'
+    'pax_title': 'Sicco Admin Interface'
   },
   '/paxterya/join-us.html': {
     'pax_title': 'Join us!',
@@ -121,7 +121,7 @@ const template = {
     'pax_title': 'Member'
   },
   '/paxterya/members.html': {
-    'pax_title': 'All members'
+    'pax_title': 'All Members'
   },
   '/paxterya/privacy-policy.html': {
     'pax_title': 'Privacy Policy'
@@ -130,7 +130,7 @@ const template = {
     'pax_title': 'Rules'
   },
   '/paxterya/hardware.html': {
-    'pax_title': 'Server hardware'
+    'pax_title': 'Server Hardware'
   },
 
 

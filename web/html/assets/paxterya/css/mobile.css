@@ -1,9 +1,10 @@
 @media screen and (max-width:999px) {
 
-    .mobile-hide, header .dots, header .banner, .dots,
-    a.prev, a.next, img.author, #mapsection {
+    .mobile-hide, header .dots, .dots,
+    a.prev, a.next, img.author, #mapsection, .banner {
         display: none;
     }
+
 
     img#logo {
         width: 250px;
@@ -209,16 +210,29 @@ nav li ul li i {
     margin-top: 20px;
 }
 
-/* ################### interface applicant profile ###################*/
-
-#applicant-wrapper .counter {
-    width: 95%;
+/* ################### interface application list ###################*/
+#applications-table th, #applications-table td {
+  display: none;
 }
 
-#applicant-wrapper {
-    display: block;
-    margin: 30px 0 0 20px;
-    width: 80%;
+#applications-table th:nth-child(4), #applications-table td:nth-child(4),
+#applications-table th:nth-child(6), #applications-table td:nth-child(6) {
+  display: block;
+  max-width: 100%;
+  width: auto;
+}
+
+
+/* ################### interface applicant profile ###################*/
+
+.applicant-info {
+  width: 100%;
+  float: none;
+}
+
+.applicant-images {
+  width: 100%;
+  float: none;
 }
 
 /* ################### our world ###################*/

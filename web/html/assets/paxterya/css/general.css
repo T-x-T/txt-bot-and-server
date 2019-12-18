@@ -87,11 +87,7 @@ header img#logo:hover {
     transform: scale(.9);
 }
 
-header .banner {
-    position: absolute;
-    z-index: 99;
-    right: 17.5%;
-    top: 200px;
+header .banner, .players {
     font-family: "semibold", sans-serif;
 }
 
@@ -126,7 +122,7 @@ header .banner {
 
 
 
-.banner .players {
+.players {
     background: #00515c;
     color: white;
     padding: 3px 0;
@@ -1315,6 +1311,27 @@ button[id="submit"]:hover {
     word-break: break-all;
 }
 
+.counter-horizontal {
+  text-align: left;
+  width: auto;
+}
+
+.counter-horizontal h2, .counter-horizontal p {
+  display: inline;
+  font-size: 12pt!important;
+  padding-left: 10px;
+  padding-right: 10px;
+  line-height: 2;
+  word-break: normal;
+}
+
+.counter-horizontal p {
+  text-shadow: 1px 1px 0px #00515c;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+
 #vmap {
     width: 100%;
     height: 500px;
@@ -1417,67 +1434,88 @@ button[id="submit"]:hover {
         left: 0;
     }
 
+    #applications-table caption {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    #applications-table tr:hover > td {
+      background: #007787;
+      color: white;
+      cursor: pointer;
+    }
+
+    select#status {
+      font-family: "semibold", sans-serif;
+      font-size: 12pt;
+      color: white;
+      width: 100%;
+      padding-left: 10px;
+      background-color: #00515c;
+      border: none;
+      cursor: pointer;
+    }
+
+    select#status:focus {
+      outline: none;
+    }
+
 /* #########################################*/
 
 /* ################### interface applicant profile ###################*/
 
-#applicant-wrapper {
-    display: flex;
-    width: 100%;
+.applicant {
+  background: #f0f0f0;
 }
 
-#applicant-details {
+.applicant-info {
+  width: 50%;
   float: left;
-  width: 80%;
+  padding: 10px 0 0 20px;
 }
 
-#applicant-avatar {
+.applicant-images {
+  width: 30%;
   float: right;
-  width: 20%;
 }
 
-#applicant-avatar img {
-  max-width: 100%;
+.applicant-images img {
+  max-height: 100px;
+  margin: 20px;
 }
 
-#single-application-table {
-  font-family: "regular", sans-serif;
+.applicant-controls {
+  background: #f0f0f0;
+  margin: 50px 0 30px 0;
+  padding: 10px 20px 20px 20px;
+}
+
+.applicant-controls input {
+  width: 100%;
 }
 
 #application-accept {
-  background: #e9fced;
-  color: #7d7d7d;
   float: left;
-  border-color: #b8b8b8;
   font-size: 16pt;
-  width: 45%;
-  margin: 20px 2.5%;
+  width: 49%;
+  opacity: .5;
 }
 
 #application-accept:hover {
-  color: #222424;
-  background: #18AE39;
-  font-size: 16pt;
-  width: 45%;
-  margin: 20px 2.5%;
+  opacity: 1;
 }
 
 #application-deny {
-  background: #ffcccc;
-  color: #7d7d7d;
+  background: #a50101;
   float: right;
-  border-color: #b8b8b8;
+  border-color: #580f0f;
   font-size: 16pt;
-  width: 45%;
-  margin: 20px 2.5%;
+  width: 49%;
+  opacity: .5;
 }
 
 #application-deny:hover {
-  color: #ffffff;
-  background: #a50101;
-  font-size: 16pt;
-  width: 45%;
-  margin: 20px 2.5%;
+  opacity: 1;
 }
 
 

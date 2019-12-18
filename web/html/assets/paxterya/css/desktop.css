@@ -1,28 +1,35 @@
 @media screen and (min-width:1000px) {
-    
+
     .mobile-only, nav .fa-chevron-right {
         display: none;
     }
-    
+
     header img#logo {
         height: 130px;
         width: 380px;
         top: 60px;
         left: 8%;
     }
-    
+
     .mySlides::after {
         background-image: linear-gradient(135deg, rgba(0,0,0,.4) 20%, transparent 50%, transparent 80%, rgba(0,0,0,.4) 100%), linear-gradient(0deg, rgba(0,0,0,.6) 0%, transparent 5%, transparent 80%, rgba(0,0,0,.3) 100%);
-    }    
-    
+    }
+
     .mySlides, .header-height {
         height: 400px;
     }
-    
+
+    header .banner {
+        position: absolute;
+        z-index: 99;
+        right: 17.5%;
+        top: 200px;
+    }
+
     main p, main ul {
         width: 80%;
     }
-    
+
 /* ############### nav ###############*/
 
 nav ul {
@@ -54,10 +61,10 @@ nav li { position: relative; }
 
 nav ul ul {
     display: inline;
-    position: absolute; 
-    top: 100%; 
-    left: 0; 
-    visibility: hidden; 
+    position: absolute;
+    top: 100%;
+    left: 0;
+    visibility: hidden;
     opacity: 0;
     background: #00515c;
     width: 300px;
@@ -75,60 +82,60 @@ nav ul ul li {
     padding: 10px 0px 10px 20px;
     font-size: 16pt;
 }
-    
+
 nav ul ul li i.fa-chevron-right {
     font-size: 12pt;
     opacity: 0;
     visibility: hidden;
 }
-    
+
 nav ul ul li:hover {
     background: #007787;
 }
 
-nav ul li:hover > ul { 
-    visibility: visible; 
-    opacity: 1; 
+nav ul li:hover > ul {
+    visibility: visible;
+    opacity: 1;
     -webkit-transform:perspective(400) rotate3d(0,0,0,0);
 }
-    
-nav ul ul li:hover > i { 
-    visibility: visible; 
+
+nav ul ul li:hover > i {
+    visibility: visible;
     opacity: 1;
 }
-    
+
 
 /* #########################################*/
-    
+
 /* ############### main ###############*/
-    
+
     .wrapper {
         width: 880px;
         margin: 0 auto;
     }
-    
+
     main {
         width: 1000px;
         margin: 30px auto;
     }
-    
+
     .wrapper.content {
         background: white;
         padding: 15px 30px 30px 30px;
     }
-    
+
 /* #########################################*/
 
 /* ############### join us ###############*/
-    
+
     #app-form, #contact-form {
         width: 50%;
     }
-    
+
 /* #########################################*/
 
 /* ############### our team, member stats ###############*/
-    
+
 .team-profile {
     display: table;
     margin: 50px 0;
@@ -136,7 +143,7 @@ nav ul ul li:hover > i {
     border-right: 5px solid #00515c;
     width: 80%;
 }
-    
+
 .member-profile {
     display: table;
     margin: 50px 0;
@@ -144,13 +151,13 @@ nav ul ul li:hover > i {
     border-right: 5px solid #b8b8b8;
     width: 100%;
 }
-    
+
 .team-profile .avatar, .team-profile .tasks,
 .team-profile .person {
     display: table-cell;
     vertical-align: top;
 }
-    
+
 .member-profile .avatar,
 .member-profile .person {
     display: table-cell;
@@ -161,5 +168,5 @@ nav ul ul li:hover > i {
     vertical-align: middle;
     width: 500px;
 }
-    
+
 }
