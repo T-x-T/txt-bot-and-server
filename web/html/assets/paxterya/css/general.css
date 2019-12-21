@@ -484,6 +484,7 @@ article .article-img {
 article .article-img img {
     vertical-align: bottom;
     width: 250px;
+    max-width: 100%;
 }
 
 .article-img.big img {
@@ -525,6 +526,16 @@ button {
     cursor: pointer;
     padding: 2px 15px;
     margin-top: 10px;
+}
+
+button.secondary {
+  background: none;
+  color: #343838;
+  border: 1px solid #bebebe;
+}
+
+button.secondary:hover {
+  background: #bebebe;
 }
 
 button.hover-right i {
@@ -1456,8 +1467,12 @@ button[id="submit"]:hover {
       cursor: pointer;
     }
 
-    select#status:focus {
+    select {
       outline: none;
+    }
+
+    #applications-table {
+      margin-bottom: 40px;
     }
 
 /* #########################################*/
@@ -1541,4 +1556,18 @@ p.note-box.margin-top {
 
 p.note-box.margin-bottom {
   margin-bottom: 40px;
+}
+
+/* ################### interface cms ###################*/
+
+#post-editor input {
+  background: white;
+}
+
+#post-preview .counter {
+  float: none;
+}
+
+#post-body {
+  margin-top: 20px;
 }
