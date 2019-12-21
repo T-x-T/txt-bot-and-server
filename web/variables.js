@@ -115,13 +115,28 @@ _getters.statistics = function(callback){
   });
 };
 
+//Calls back an object for the index.html
+_getters.index = function(callback){
+  post.get(false, function(posts){
+    body = '';
+    posts.forEach((post) => {
+      body += `<article class="news"><h2>${post.title}</h2><img class="author" src="assets/paxterya/img/avatar-${post.author.toLowerCase()}.png"><span class="subtitle">${new Date(post.date).toISOString().substring(0, 10)}. Author: ${post.author}</span><section>`;
+      body += post.body;
+      body += `</section></article>`;
+    });
+    
+    callback({
+      'pax_title': 'Start page',
+      'posts': body
+    });
+  });
+};
+
 const template = {
   '/paxterya/staff/application.html': _getters.application,
   '/paxterya/staff/post.html': _getters.post,
   '/paxterya/statistics.html': _getters.statistics,
-  '/paxterya/index.html': {
-    'pax_title': 'Start Page'
-  },
+  '/paxterya/index.html': _getters.index,
   '/paxterya/application-sent.html': {
     'pax_title': 'Success!'
   },
