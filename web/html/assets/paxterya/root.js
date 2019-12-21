@@ -10,8 +10,14 @@ var root = {};
 //Container for the all functions necessary for interface.html to work properly
 root.interface = {};
 
+//Called on page load
+root.interface.init = function(){
+  root.interface.loadApplications();
+  root.interface.loadPost();
+}
+
 //Loads the applications from the api and puts them into the table; bs is just some random variable because we get some shit from the onload
-root.interface.loadApplications = function(bs, filter){
+root.interface.loadApplications = function(filter){
   //We need to send the cookie, but the browser is doing that for us!
   _internal.send('application', false, 'GET', filter, false, function(status, res){
     console.log(res);
@@ -65,11 +71,105 @@ root.interface.changeStatus = function(){
   if(table.length > 2) for(let i = 1; i < table.length; i++) document.getElementById('applications-table').deleteRow(i);
   if(table.length > 2) for(let i = 1; i < table.length; i++) document.getElementById('applications-table').deleteRow(i);
 
-  root.interface.loadApplications(null, {status: document.getElementById('status').value});
+  root.interface.loadApplications({status: document.getElementById('status').value});
 };
 
 root.interface.redirectToApplication = function(id){
   window.location.href = `https://${window.location.host}/staff/application.html?id=${id}`;
+};
+
+//Loads the posts from the api and puts them into the table; bs is just some random variable because we get some shit from the onload
+root.interface.loadPost = function(filter) {
+  //We need to send the cookie, but the browser is doing that for us!
+  _internal.send('post', false, 'GET', filter, false, function(status, res) {
+    console.log(res);
+    if(status == 200) {
+      if(res.length > 0) {
+        //Get our table rows
+        let table = document.getElementById('post-table').rows;
+
+        //Clone row 0 as much as we need it, start at one because we already have row 0
+        for(let i = 1;i < res.length;i++) document.getElementById('post-table').appendChild(table[1].cloneNode(true));
+
+        //Update our table rows
+        table = document.getElementById('post-table').rows;
+
+        //Iterate over all applications we got from the api
+        for(let i = 0;i < res.length;i++) {
+
+          //Fill the cells
+          table[i + 1].cells[0].childNodes[0].textContent = res[i].id;
+          table[i + 1].cells[1].childNodes[0].textContent = res[i].date;
+          table[i + 1].cells[2].childNodes[0].textContent = res[i].author;
+          table[i + 1].cells[3].childNodes[0].textContent = res[i].title;
+          table[i + 1].cells[4].childNodes[0].textContent = res[i].public;
+          table[i + 1].setAttribute("onclick", `root.interface.redirectToPost(${res[i].id})`);
+        }
+      } else {
+
+      }
+
+    } else {
+      window.alert('Failed to retrieve posts: ', res);
+    }
+  });
+};
+
+//Gets called whenever the user changes the status to filter the table
+root.interface.filterPublic = function() {
+  //Refresh the table
+  //Get our table rows
+  let table = document.getElementById('post-table').rows;
+
+  //Emtpy any existing data
+  if(table.length > 2) for(let i = 1;i < table.length;i++) document.getElementById('post-table').deleteRow(i);
+  if(table.length > 2) for(let i = 1;i < table.length;i++) document.getElementById('post-table').deleteRow(i);
+  if(table.length > 2) for(let i = 1;i < table.length;i++) document.getElementById('post-table').deleteRow(i);
+  if(table.length > 2) for(let i = 1;i < table.length;i++) document.getElementById('post-table').deleteRow(i);
+  if(document.getElementById('public').value == 2){
+    root.interface.loadPost(false);
+  }else{
+    root.interface.loadPost({public: document.getElementById('public').value});
+  }
+};
+
+root.interface.redirectToPost = function(id) {
+  window.location.href = `https://${window.location.host}/staff/post.html?id=${id}`;
+};
+
+//Container for all functions necessary for post.html to work properly
+root.post = {};
+
+//Init for post.html
+root.post.init = function(){
+  if(_internal.getQueryValue('id') === 'new'){ 
+    root.post.edit();
+    document.getElementById('post-preview').hidden = true;
+  }
+};
+
+//Changes the editing mode
+root.post.edit = function(){
+  document.getElementById("post-edit-form").hidden = false;
+};
+
+root.post.send = function(){
+  //Build the object
+  let postData = {
+    title: document.getElementById('edit-title').value,
+    author: document.getElementById('edit-author').value,
+    body: document.getElementById('edit-body').value,
+    date: document.getElementById('edit-date').value,
+    public: document.getElementById('edit-public').checked
+  };
+
+  //Add the post id to the object, if its not new
+  if(_internal.getQueryValue('id') !== 'new') postData.id = _internal.getQueryValue('id');
+
+  _internal.send('post', false, 'POST', false, postData, function(status, res){
+    if(status != 200) window.alert(res);
+    else window.alert('Success!');
+  });
 };
 
 //Container for all functions necessary for application.html to work properly
@@ -220,7 +320,7 @@ root.members.update = function(){
         div.querySelector('#playtime').innerText = doc.playtime + 'h';
 
         //Fill out date
-        div.querySelector('#joined').innerText = new Date(doc.joined_date).toISOString().substring(0, 10);;
+        div.querySelector('#joined').innerText = new Date(doc.joined_date).toISOString().substring(0, 10);
 
         //Add country or remove it if its false
         if (doc.country != 'false') {

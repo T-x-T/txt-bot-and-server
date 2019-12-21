@@ -1,5 +1,5 @@
 <script type="text/javascript">
-  window.onload = root.interface.loadApplications;
+  window.onload = root.interface.init;
 </script>
 <h1>
   <div class="wrapper">
@@ -9,7 +9,7 @@
 
 <div class="wrapper content">
 
-    <table id="applications-table">
+    <table class="interface-table" id="applications-table">
       <caption><h2>Applications</h2><p>To fully view and accept or deny an application, click on the applicant's row.</p></caption>
       <thead>
         <th>ID</th>
@@ -42,10 +42,42 @@
       </tbody>
     </table>
 
+    <table class="interface-table" id="post-table">
+      <caption>
+        <h2>Posts</h2>
+        <p>To edit a post click on its row. To create a new one click this nice and soft button :======> <button id="new-post" onclick="window.location.href = 'post.html?id=new';">Make a new post</button></p>
+      </caption>
+      <thead>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Author</th>
+        <th>Title</th>
+        <th>
+    
+          <select id="public" onchange="root.interface.filterPublic()">
+            <option value="0">Not public</option>
+            <option value="1">Public</option>
+            <option value="2">All</option>
+          </select>
+    
+        </th>
+      </thead>
+    
+      <tbody>
+        <tr>
+          <td>l</td>
+          <td>o</td>
+          <td>a</td>
+          <td>d</td>
+          <td>i</td>
+        </tr>
+    
+      </tbody>
+    </table>
 </div>
 
 <!-- custom selection dropdown list -->
-<script>
+<!-- <script>
     var x, i, j, selElmnt, a, b, c;
     /*look for any elements with the class "custom-select":*/
     x = document.getElementsByClassName("custom-select");
@@ -120,3 +152,4 @@
     then close all select boxes:*/
     document.addEventListener("click", closeAllSelect);
 </script>
+ -->

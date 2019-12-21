@@ -1256,7 +1256,7 @@ button[id="submit"]:hover {
 
 .member-profile .person {
     width: 150px;
-    padding: 20px; 10px 20px 30px;
+    padding: 20px;
 }
 
 .member-profile .person p {
@@ -1383,27 +1383,27 @@ button[id="submit"]:hover {
         margin-top: 20px;
     }
 
-    #applications-table {
+    .interface-table {
         font-family: "regular", sans-serif;
         border-collapse: separate;
         border-spacing: 0px;
         width: 100%;
     }
 
-    #applications-table button {
+    .interface-table button {
         padding: 2px 10px 2px 15px;
         margin: 5px 0;
     }
 
-    #applications-table i {
+    .interface-table i {
         margin-left: 10px;
     }
 
-    #applications-table button:hover > i {
+    .interface-table button:hover > i {
         margin-left: 15px;
     }
 
-    #applications-table td {
+    .interface-table td {
         padding: 3px 10px;
         background: #e9e9e9;
         font-size: 12pt;
@@ -1415,7 +1415,7 @@ button[id="submit"]:hover {
         text-align: center;
     }
 
-    #applications-table th {
+    .interface-table th {
         background: #007787;
         color: white;
         font-family: "semibold", sans-serif;
@@ -1424,7 +1424,7 @@ button[id="submit"]:hover {
         text-align: center;
     }
 
-    #applications-table tr:nth-child(even) td {
+    .interface-table tr:nth-child(even) td {
         background: white;
     }
 
@@ -1434,18 +1434,18 @@ button[id="submit"]:hover {
         left: 0;
     }
 
-    #applications-table caption {
+    .interface-table caption {
       text-align: left;
       margin-bottom: 20px;
     }
 
-    #applications-table tr:hover > td {
+    .interface-table tr:hover > td {
       background: #007787;
       color: white;
       cursor: pointer;
     }
 
-    select#status {
+    select#status, select#public {
       font-family: "semibold", sans-serif;
       font-size: 12pt;
       color: white;

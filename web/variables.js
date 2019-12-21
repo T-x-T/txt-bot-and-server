@@ -11,6 +11,7 @@ const discord_helpers = require('./../discord-bot/discord_helpers.js');
 const mc_helpers      = require('./../lib/mc_helpers.js');
 const stats           = require('./../lib/stats.js');
 const os              = require('os');
+const post            = require('./../lib/post.js');
 
 //Create internal container
 var _internal = {};
@@ -80,6 +81,25 @@ _getters.application = function(callback){
   });
 };
 
+//Calls back an object for the current post in the interface
+_getters.post = function(callback){
+  if(data.queryStringObject.id === 'new'){
+    callback({'pax_title': 'Post', 'id': 'new'})
+  }else{
+    post.get({id: data.queryStringObject.id}, function(post){
+      post = post[0];
+      callback({
+        'pax_title': 'Post',
+        'id': post.id,
+        'title': post.title,
+        'author': post.author,
+        'date': new Date(post.date).toISOString().substring(0, 10),
+        'body': post.body
+      });
+    });
+  }
+};
+
 //Calls back an object containing some basic statistics
 _getters.statistics = function(callback){
   stats.overview(function(obj){
@@ -97,12 +117,10 @@ _getters.statistics = function(callback){
 
 const template = {
   '/paxterya/staff/application.html': _getters.application,
+  '/paxterya/staff/post.html': _getters.post,
   '/paxterya/statistics.html': _getters.statistics,
   '/paxterya/index.html': {
     'pax_title': 'Start Page'
-  },
-  '/paxterya/applicant.html': {
-    'pax_title': 'Applicant'
   },
   '/paxterya/application-sent.html': {
     'pax_title': 'Success!'
