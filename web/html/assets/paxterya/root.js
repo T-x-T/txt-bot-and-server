@@ -99,7 +99,7 @@ root.interface.loadPost = function(filter) {
 
           //Fill the cells
           table[i + 1].cells[0].childNodes[0].textContent = res[i].id;
-          table[i + 1].cells[1].childNodes[0].textContent = res[i].date;
+          table[i + 1].cells[1].childNodes[0].textContent = new Date(res[i].date).toISOString().substring(0, 10);
           table[i + 1].cells[2].childNodes[0].textContent = res[i].author;
           table[i + 1].cells[3].childNodes[0].textContent = res[i].title;
           table[i + 1].cells[4].childNodes[0].textContent = res[i].public;
