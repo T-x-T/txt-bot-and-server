@@ -172,7 +172,7 @@ handlers.paxapi.post = function(data, callback) {
   if(typeof handlers.paxapi.post[data.method] == 'function') {
     handlers.paxapi.post[data.method](data, callback);
   } else {
-    callback(404, {err: 'Verb not allowed'}, 'json');
+    callback(405, {err: 'Verb not allowed'}, 'json');
   }
 };
 
@@ -203,7 +203,7 @@ handlers.paxapi.post.post = function(data, callback){
 
 //Get posts
 handlers.paxapi.post.get = function(data, callback){
-  post.get(data.payload.filter, function(posts){
+  post.get(data.queryStringObject, function(posts){
     if(posts) callback(200, posts, 'json');
     else callback(404, {err: 'Couldnt get any posts for the filter'}, 'json');
   });
@@ -237,7 +237,7 @@ handlers.paxapi.contact = function(data, callback){
   if(typeof handlers.paxapi.contact[data.method] == 'function'){
     handlers.paxapi.contact[data.method](data, callback);
   }else{
-    callback(404, {err: 'Verb not allowed'}, 'json');
+    callback(405, {err: 'Verb not allowed'}, 'json');
   }
 };
 
@@ -287,7 +287,7 @@ handlers.paxapi.application = function(data, callback){
       handlers.paxapi.application[data.method](data, callback);
     }
   }else{
-    callback(404, {err: 'Verb not allowed'}, 'json');
+    callback(405, {err: 'Verb not allowed'}, 'json');
   }
 };
 

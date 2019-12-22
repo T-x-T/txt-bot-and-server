@@ -150,6 +150,22 @@ root.post.init = function(){
 
 //Changes the editing mode
 root.post.edit = function(){
+  if(_internal.getQueryValue('id') != 'new'){
+    //Get the current data of the post if its not new
+    _internal.send('post', false, 'GET', {id: _internal.getQueryValue('id')}, false, function(status, res) {
+      if(status == 200){
+        document.getElementById('edit-title').value = res[0].title;
+        document.getElementById('edit-author').value = res[0].author;
+        document.getElementById('edit-body').value = res[0].body;
+        document.getElementById('edit-date').value = new Date(res[0].date).toISOString().substring(0, 10);
+        document.getElementById('edit-public').checked = res[0].public;
+      }else{
+        window.alert('Couldnt load post ): ', res);
+      }
+    });
+  }
+
+  //Show the edit form
   document.getElementById("post-edit-form").hidden = false;
 };
 

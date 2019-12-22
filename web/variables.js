@@ -118,6 +118,13 @@ _getters.statistics = function(callback){
 //Calls back an object for the index.html
 _getters.index = function(callback){
   post.get({public: true}, function(posts){
+    //Check if the post is in the future (here, because we cant really compare the dates directly)
+    let filteredPosts = [];
+    posts.forEach((post) => {
+      if(new Date(post.date).toISOString().substring(0, 10) <= new Date(Date.now()).toISOString().substring(0, 10)) filteredPosts.push(post);
+    });
+    posts = filteredPosts;
+
     //Sort the array after the date
     posts.sort((a, b) => {
       return b.date - a.date;
