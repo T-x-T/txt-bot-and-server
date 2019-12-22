@@ -11,6 +11,7 @@ const discord_helpers = require('./../discord-bot/discord_helpers.js');
 const mc_helpers      = require('./../lib/mc_helpers.js');
 const stats           = require('./../lib/stats.js');
 const os              = require('os');
+const post            = require('./../lib/post.js');
 
 //Create internal container
 var _internal = {};
@@ -80,6 +81,25 @@ _getters.application = function(callback){
   });
 };
 
+//Calls back an object for the current post in the interface
+_getters.post = function(callback){
+  if(data.queryStringObject.id === 'new'){
+    callback({'pax_title': 'Post', 'id': 'new'})
+  }else{
+    post.get({id: data.queryStringObject.id}, function(post){
+      post = post[0];
+      callback({
+        'pax_title': 'Post',
+        'id': post.id,
+        'title': post.title,
+        'author': post.author,
+        'date': new Date(post.date).toISOString().substring(0, 10),
+        'body': post.body
+      });
+    });
+  }
+};
+
 //Calls back an object containing some basic statistics
 _getters.statistics = function(callback){
   stats.overview(function(obj){
@@ -95,15 +115,41 @@ _getters.statistics = function(callback){
   });
 };
 
+//Calls back an object for the index.html
+_getters.index = function(callback){
+  post.get({public: true}, function(posts){
+    //Check if the post is in the future (here, because we cant really compare the dates directly)
+    let filteredPosts = [];
+    posts.forEach((post) => {
+      if(new Date(post.date).toISOString().substring(0, 10) <= new Date(Date.now()).toISOString().substring(0, 10)) filteredPosts.push(post);
+    });
+    posts = filteredPosts;
+
+    //Sort the array after the date
+    posts.sort((a, b) => {
+      return b.date - a.date;
+    });
+
+    //Build the final html
+    body = '';
+    posts.forEach((post) => {
+      body += `<article class="news"><h2>${post.title}</h2><img class="author" src="assets/paxterya/img/avatar-${post.author.toLowerCase()}.png"><span class="subtitle">${new Date(post.date).toISOString().substring(0, 10)}. Author: ${post.author}</span><section>`;
+      body += post.body;
+      body += `</section></article>`;
+    });
+    
+    callback({
+      'pax_title': 'Start page',
+      'posts': body
+    });
+  });
+};
+
 const template = {
   '/paxterya/staff/application.html': _getters.application,
+  '/paxterya/staff/post.html': _getters.post,
   '/paxterya/statistics.html': _getters.statistics,
-  '/paxterya/index.html': {
-    'pax_title': 'Start Page'
-  },
-  '/paxterya/applicant.html': {
-    'pax_title': 'Applicant'
-  },
+  '/paxterya/index.html': _getters.index,
   '/paxterya/application-sent.html': {
     'pax_title': 'Success!'
   },

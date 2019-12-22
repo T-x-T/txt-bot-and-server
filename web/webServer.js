@@ -60,19 +60,17 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
       if (data.headers.host.indexOf('paxterya.com') > -1) data.path = '/paxterya/' + data.path;
     }
 
+    //necessary for testing purposes
     if(!config['use-external-certs']){
-      //necessary for testing purposes
       data.headers.host = origHost;
       console.log(data.method, data.path)
       if(data.method == 'post') console.log(data.payload);
     }
-
     //Fixing links in staff pages
     if(data.path.startsWith('/paxterya/staff')){
       if(data.path.startsWith('/paxterya/staff/assets')) data.path = data.path.replace('/paxterya/staff', '');
-      if(!data.path.startsWith('/paxterya/staff/interface') && !data.path.startsWith('/paxterya/staff/application')) data.path = data.path.replace('/staff', '');
+      if(!data.path.startsWith('/paxterya/staff/interface') && !data.path.startsWith('/paxterya/staff/application') && !data.path.startsWith('/paxterya/staff/post')) data.path = data.path.replace('/staff', '');
     }
-    
     //Check the path and choose a handler
     var chosenHandler = handlers.assets;
 
@@ -98,6 +96,7 @@ const router = {
   '/paxterya/api/application': handlers.paxapi.application,
   '/paxterya/api/contact': handlers.paxapi.contact,
   '/paxterya/api/member': handlers.paxapi.member,
+  '/paxterya/api/post': handlers.paxapi.post,
   '/paxterya/login': handlers.paxLogin,
   '/paxterya/staff': handlers.paxStaff
 };

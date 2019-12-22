@@ -12,6 +12,7 @@ const application = require('./../lib/application.js');
 const oauth       = require('./../lib/oauth2.js');
 const email       = require('./../lib/email.js');
 const stats       = require('./../lib/stats.js');
+const post        = require('./../lib/post.js');
 
 //Create the container
 var handlers = {};
@@ -166,6 +167,48 @@ handlers.paxLogin = function(data, callback){
 *
 */
 
+//API functionality for handling blog posts
+handlers.paxapi.post = function(data, callback) {
+  if(typeof handlers.paxapi.post[data.method] == 'function') {
+    handlers.paxapi.post[data.method](data, callback);
+  } else {
+    callback(405, {err: 'Verb not allowed'}, 'json');
+  }
+};
+
+//Save a new/modified post to the database (ADMIN ONLY!)
+handlers.paxapi.post.post = function(data, callback){
+  //Check if there is an access_token
+  if(data.headers.hasOwnProperty('cookie')) {
+    if(data.headers.cookie.indexOf('access_token' > -1)) {
+      //There is an access_token cookie, lets check if it belongs to an admin
+      oauth.isTokenAdmin(data.headers.cookie.split('=')[1], function(isAdmin) {
+        if(isAdmin) {
+          //The requester is allowed to get the records
+          post.save(data.payload, function(err){
+            if(err) callback(500, err, 'plain');
+              else callback(200, '', 'plain');
+          });
+        } else {
+          callback(403, {err: 'You are not authorized to do that!'}, 'json');
+        }
+      });
+    } else {
+      callback(401, {err: 'Your client didnt send an access_token, please log in again'}, 'json');
+    }
+  } else {
+    callback(401, {err: 'Your client didnt send an access_token, please log in again'}, 'json');
+  }
+};
+
+//Get posts
+handlers.paxapi.post.get = function(data, callback){
+  post.get(data.queryStringObject, function(posts){
+    if(posts) callback(200, posts, 'json');
+    else callback(404, {err: 'Couldnt get any posts for the filter'}, 'json');
+  });
+};
+
 //API functionallity surrounding member stuff
 handlers.paxapi.member = function(data, callback){
   if(typeof handlers.paxapi.member[data.method] == 'function'){
@@ -194,7 +237,7 @@ handlers.paxapi.contact = function(data, callback){
   if(typeof handlers.paxapi.contact[data.method] == 'function'){
     handlers.paxapi.contact[data.method](data, callback);
   }else{
-    callback(404, {err: 'Verb not allowed'}, 'json');
+    callback(405, {err: 'Verb not allowed'}, 'json');
   }
 };
 
@@ -244,7 +287,7 @@ handlers.paxapi.application = function(data, callback){
       handlers.paxapi.application[data.method](data, callback);
     }
   }else{
-    callback(404, {err: 'Verb not allowed'}, 'json');
+    callback(405, {err: 'Verb not allowed'}, 'json');
   }
 };
 

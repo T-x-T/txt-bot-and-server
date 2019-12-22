@@ -210,18 +210,24 @@ nav li ul li i {
     margin-top: 20px;
 }
 
-/* ################### interface application list ###################*/
-#applications-table th, #applications-table td {
+/* ################### interface ###################*/
+#applications-table th, #applications-table td,
+#post-table th, #post-table td {
   display: none;
 }
 
 #applications-table th:nth-child(4), #applications-table td:nth-child(4),
-#applications-table th:nth-child(6), #applications-table td:nth-child(6) {
+#applications-table th:nth-child(6), #applications-table td:nth-child(6),
+#post-table th:nth-child(4), #post-table td:nth-child(4),
+#post-table th:nth-child(5), #post-table td:nth-child(5) {
   display: block;
   max-width: 100%;
   width: auto;
 }
 
+#post-table td:nth-child(4) {
+  white-space: pre-line;
+}
 
 /* ################### interface applicant profile ###################*/
 
