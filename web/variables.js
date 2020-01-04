@@ -64,7 +64,7 @@ _getters.application = function(callback){
           'motivation': doc.motivation,
           'buildings': doc.build_images,
           'country': doc.country,
-          'age': '~' + (new Date().getFullYear() - new Date(doc.birth_year, doc.birth_month).getFullYear()).toString(),
+          'age': '~' + (doc.birth_month > new Date(Date.now()).getMonth() + 1 ? parseInt((new Date().getFullYear() - new Date(doc.birth_year, doc.birth_month).getFullYear()).toString()) - 1 : parseInt((new Date().getFullYear() - new Date(doc.birth_year, doc.birth_month).getFullYear()).toString())),
           'birth_year': doc.birth_year,
           'birth_month': doc.birth_month,
           'publish_about_me': doc.publish_about_me,
