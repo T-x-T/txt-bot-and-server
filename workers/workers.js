@@ -18,6 +18,7 @@ try {
 }
 mc_helpers.updateOnlinePlayers();
 log.prune(30);
+mc_helpers.createStatsObjectTemplate(function(){});
 
 //Contains discord user objects mapped by the discord id; gets cleared once an hour in workers
 global.cache = {}
@@ -45,9 +46,13 @@ setInterval(function(){
 //Every six hours
 setInterval(function(){
   mc_helpers.downloadStats();
+
+  //Timeout so the stats finished downloading
   setTimeout(function(){
     mc_helpers.updateStats();
-  }, 1000)
+  }, 1000);
+
+  mc_helpers.createStatsObjectTemplate(function() {});
 }, 1000 * 60 * 60 * 6);
 
 //Every day
