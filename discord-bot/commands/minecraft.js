@@ -192,7 +192,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
           output += `Items crafted: ${stats.crafted.rank} of ${stats._totalPlayers} (${stats.crafted.stat})\n`;
           output += `Items broken: ${stats.broken.rank} of ${stats._totalPlayers} (${stats.broken.stat})\n`;
           output += `Items dropped: ${stats.dropped.rank} of ${stats._totalPlayers} (${stats.dropped.stat})\n`;
-          output += `Distance traveled: ${stats.traveled.rank} of ${stats._totalPlayers} (${stats.traveled.stat})\n`;
+          output += `Distance travelled: ${stats.travelled.rank} of ${stats._totalPlayers} (${stats.travelled.stat})\n`;
         }else{
           output += `Totals from ${ign}:\n`;
           output += `Blocks mined: ${stats.mined}\n`;
@@ -200,7 +200,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
           output += `Items crafted: ${stats.crafted}\n`;
           output += `Items broken: ${stats.broken}\n`;
           output += `Items dropped: ${stats.dropped}\n`;
-          output += `Distance traveled: ${stats.traveled}\n`;
+          output += `Distance travelled: ${stats.travelled}\n`;
         }
       }else{
         output += 'Something went wrong and I couldnt get the stats';
@@ -370,7 +370,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
           output += `Items crafted: ${stats.crafted.rank} of ${stats._totalPlayers} (${stats.crafted.stat})\n`;
           output += `Items broken: ${stats.broken.rank} of ${stats._totalPlayers} (${stats.broken.stat})\n`;
           output += `Items dropped: ${stats.dropped.rank} of ${stats._totalPlayers} (${stats.dropped.stat})\n`;
-          output += `Distance traveled: ${stats.traveled.rank} of ${stats._totalPlayers} (${stats.traveled.stat})\n`;
+          output += `Distance travelled: ${stats.travelled.rank} of ${stats._totalPlayers} (${stats.travelled.stat})\n`;
         }else{
           output += `Totals per death from ${ign}:\n`;
           output += `Blocks mined: ${stats.mined}\n`;
@@ -378,7 +378,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
           output += `Items crafted: ${stats.crafted}\n`;
           output += `Items broken: ${stats.broken}\n`;
           output += `Items dropped: ${stats.dropped}\n`;
-          output += `Distance traveled: ${stats.traveled}\n`;
+          output += `Distance travelled: ${stats.travelled}\n`;
         }
       }else{
         output += 'Something went wrong and I couldnt get the stats';
