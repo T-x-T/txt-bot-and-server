@@ -120,8 +120,8 @@ handlers.paxStaff = function(data, callback){
   if(data.headers.hasOwnProperty('cookie')){
     if(data.headers.cookie.indexOf('access_token' > -1)){
       let access_token = data.headers.cookie.split('=')[1];
-      oauth.isTokenAdmin(access_token, function(isAdmin){
-        if(isAdmin){
+      oauth.getTokenAccessLevel(access_token, function(access_level){
+        if(access_level >= 3){
           //Everything is fine, serve the website
           data.path = path.join(__dirname, './html/' + data.path);
           webHelpers.finishHtml(data, 'paxterya', function(err, fileData){
@@ -148,12 +148,12 @@ handlers.paxLogin = function(data, callback){
   //Get the the code from the querystring
   let code = typeof data.queryStringObject.code == 'string' && data.queryStringObject.code.length == 30 ? data.queryStringObject.code : false;
   if(code){
-    oauth.isCodeAdmin(code, 'staffLogin', function(isAdmin, access_token){
-      if(isAdmin){
+    oauth.getCodeAccessLevel(code, 'staffLogin', function(access_level, access_token){
+      if(access_level >= 3){
         //Now set the access_token as a cookie and redirect the user to the interface.html
         callback(302, {Location: `https://${data.headers.host}/staff/interface.html`, 'Set-Cookie': `access_token=${access_token};expires=${new Date(Date.now() + 1000 * 60 * 60 * 6).toGMTString()};path=/`}, 'plain');
       }else{
-        callback(302, {Location: config.oauth_uris.login}, 'plain');
+        callback(401, 'You are not authorized to view the member interface. Please login with the Discord account you are using on our server, if you are a member<br><a href="../">go back to safety</a>', 'html');
       }
     });
   }else{
@@ -182,9 +182,9 @@ handlers.paxapi.post.post = function(data, callback){
   if(data.headers.hasOwnProperty('cookie')) {
     if(data.headers.cookie.indexOf('access_token' > -1)) {
       //There is an access_token cookie, lets check if it belongs to an admin
-      oauth.isTokenAdmin(data.headers.cookie.split('=')[1], function(isAdmin) {
-        if(isAdmin) {
-          //The requester is allowed to get the records
+      oauth.getTokenAccessLevel(data.headers.cookie.split('=')[1], function(access_level) {
+        if(access_level >= 9) {
+          //The requester is allowed to post the records
           post.save(data.payload, function(err){
             if(err) callback(500, err, 'plain');
               else callback(200, '', 'plain');
@@ -269,8 +269,8 @@ handlers.paxapi.application = function(data, callback){
       if(data.headers.hasOwnProperty('cookie')){
         if(data.headers.cookie.indexOf('access_token' > -1)){
           //There is an access_token cookie, lets check if it belongs to an admin
-          oauth.isTokenAdmin(data.headers.cookie.split('=')[1], function(isAdmin){
-            if(isAdmin){
+          oauth.getTokenAccessLevel(data.headers.cookie.split('=')[1], function(access_level){
+            if(access_level >= 9){
               //The requester is allowed to get the records
               handlers.paxapi.application[data.method](data, callback);
             }else{

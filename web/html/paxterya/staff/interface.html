@@ -1,6 +1,3 @@
-<script type="text/javascript">
-  window.onload = root.interface.init;
-</script>
 <h1>
   <div class="wrapper">
     {pax_title}
@@ -8,76 +5,5 @@
 </h1>
 
 <div class="wrapper content">
-
-    <table class="interface-table" id="applications-table">
-      <caption>
-        <h2>Applications</h2>
-        <p>To fully view and accept or deny an application, click on the applicant's row.</p>
-      </caption>
-      <thead>
-        <th>ID</th>
-        <th>Timestamp</th>
-        <th>Discord</th>
-        <th>MC IGN</th>
-        <th>About me</th>
-        <th>
-
-        <select id="status" onchange="root.interface.changeStatus()">
-          <option selected disabled>Status</option>
-          <option value="0">All</option>
-          <option value="1">pending review</option>
-          <option value="2">denied</option>
-          <option value="3">accepted</option>
-        </select>
-
-      </th>
-      </thead>
-
-      <tbody>
-        <tr>
-          <td>l</td>
-          <td>o</td>
-          <td>a</td>
-          <td>d</td>
-          <td>i</td>
-          <td>n</td>
-        </tr>
-
-      </tbody>
-    </table>
-
-    <table class="interface-table" id="post-table">
-      <caption>
-        <h2>Posts</h2>
-        <p>To edit a post, click on its row. To create a new one, click the button.</p>
-        <button id="new-post" onclick="window.location.href = 'post.html?id=new';">Make a new post</button>
-      </caption>
-      <thead>
-        <th>ID</th>
-        <th>Date</th>
-        <th>Author</th>
-        <th>Title</th>
-        <th>
-
-          <select id="public" onchange="root.interface.filterPublic()">
-            <option selected disabled>Visibility</option>
-            <option value="0">Not public</option>
-            <option value="1">Public</option>
-            <option value="2">All</option>
-          </select>
-
-        </th>
-      </thead>
-
-      <tbody>
-        <tr>
-          <td>l</td>
-          <td>o</td>
-          <td>a</td>
-          <td>d</td>
-          <td>i</td>
-        </tr>
-
-      </tbody>
-    </table>
+  {widgets}
 </div>

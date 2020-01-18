@@ -12,6 +12,7 @@ const mc_helpers      = require('./../lib/mc_helpers.js');
 const stats           = require('./../lib/stats.js');
 const os              = require('os');
 const post            = require('./../lib/post.js');
+const widgets         = require('./widgets.js');
 
 //Create internal container
 var _internal = {};
@@ -42,6 +43,17 @@ _internal.getApplication = function(){
 
 
 var _getters = {};
+
+//Callsback the html for all interface widgets that the current user is allowed to see
+_getters.interface = function(callback){
+  let access_token = data.headers.cookie.split('=')[1];
+  widgets.get(access_token, function(html){
+    callback({
+      'widgets': html,
+      'pax_title': 'Member interface'
+    });
+  });
+};
 
 //Calls back an object for the current application
 _getters.application = function(callback){
@@ -146,6 +158,7 @@ _getters.index = function(callback){
 };
 
 const template = {
+  '/paxterya/staff/interface.html': _getters.interface,
   '/paxterya/staff/application.html': _getters.application,
   '/paxterya/staff/post.html': _getters.post,
   '/paxterya/statistics.html': _getters.statistics,
@@ -155,9 +168,6 @@ const template = {
   },
   '/paxterya/contact-us.html': {
     'pax_title': 'Contact us!'
-  },
-  '/paxterya/staff/interface.html': {
-    'pax_title': 'Sicco Admin Interface'
   },
   '/paxterya/join-us.html': {
     'pax_title': 'Join us!',
