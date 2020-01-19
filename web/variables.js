@@ -13,6 +13,8 @@ const stats           = require('./../lib/stats.js');
 const os              = require('os');
 const post            = require('./../lib/post.js');
 const widgets         = require('./widgets.js');
+const oauth           = require('./../lib/oauth2.js');
+const _data           = require('./../lib/data.js');
 
 //Create internal container
 var _internal = {};
@@ -157,6 +159,25 @@ _getters.index = function(callback){
   });
 };
 
+//Callsback an object for all widgets on the interface
+_getters.widgets = function(callback){
+  oauth.getUserObject(data.access_token, function(userObject){
+    if(userObject){
+      _data.getMembers({discord: userObject.id}, true, true, function(userData){
+        if(userData.length > 0){
+          callback({
+            IGN: userData[0].mcName
+          });
+        }else{
+          callback({IGN: 'Error'});
+        }
+      });
+    }else{
+      callback({IGN: 'Error'});
+    }
+  });
+};
+
 const template = {
   '/paxterya/staff/interface.html': _getters.interface,
   '/paxterya/staff/application.html': _getters.application,
@@ -188,6 +209,7 @@ const template = {
   '/paxterya/hardware.html': {
     'pax_title': 'Server Hardware'
   },
+  '/widgets.html': _getters.widgets,
 
 
   '/landing/index.html': {
@@ -202,7 +224,6 @@ module.exports = function(local_data, callback) {
   }else{
     local_data.path = local_data.path.replace(__dirname, '').replace('\\html', '').replace('\\','/').replace('\\','/').replace('\\','/');
   }
-
   data = local_data;
   let templateData = template[data.path];
   if(typeof templateData == 'object'){
