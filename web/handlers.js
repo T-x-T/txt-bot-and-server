@@ -121,7 +121,7 @@ handlers.paxStaff = function(data, callback){
     if(data.headers.cookie.indexOf('access_token' > -1)){
       let access_token = data.headers.cookie.split('=')[1];
       oauth.getTokenAccessLevel(access_token, function(access_level){
-        if(access_level >= 3){
+        if(data.path.indexOf('application') > -1 && access_level >= 9 || data.path.indexOf('post') > -1 && access_level >= 9 || data.path.indexOf('interface') > -1 && access_level >= 3 || data.path.indexOf('blackboard') > -1 && access_level >= 3){
           //Everything is fine, serve the website
           data.path = path.join(__dirname, './html/' + data.path);
           webHelpers.finishHtml(data, 'paxterya', function(err, fileData){
