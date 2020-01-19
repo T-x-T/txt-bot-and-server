@@ -1,0 +1,39 @@
+<script type="text/javascript">
+  window.onload = root.interface.init;
+</script>
+<table class="interface-table" id="applications-table">
+  <caption>
+    <h2>Applications</h2>
+    <p>To fully view and accept or deny an application, click on the applicant's row.</p>
+  </caption>
+  <thead>
+    <th>ID</th>
+    <th>Timestamp</th>
+    <th>Discord</th>
+    <th>MC IGN</th>
+    <th>About me</th>
+    <th>
+
+      <select id="status" onchange="root.interface.changeStatus()">
+        <option selected disabled>Status</option>
+        <option value="0">All</option>
+        <option value="1">pending review</option>
+        <option value="2">denied</option>
+        <option value="3">accepted</option>
+      </select>
+
+    </th>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>l</td>
+      <td>o</td>
+      <td>a</td>
+      <td>d</td>
+      <td>i</td>
+      <td>n</td>
+    </tr>
+
+  </tbody>
+</table>

@@ -92,8 +92,15 @@ helpers.addMemberToRole = function(discordID, roleID, callback){
 };
 
 //Returns true if  the given member is admin and false if not
-helpers.isAdmin = function(userID){
-  return client.guilds.get(config['guild']).members.get(userID).roles.has(config["admin-role"]);
+helpers.getAccessLevel = function(userID){
+  let access_level = 0;
+  
+  try{
+    if(client.guilds.get(config['guild']).members.get(userID).roles.has(config["paxterya-role"])) access_level = 3;
+    if(client.guilds.get(config['guild']).members.get(userID).roles.has(config["admin-role"])) access_level = 9;
+  }catch(e){}
+
+  return access_level;
 };
 
 //Returns true if the given discord id is member of the guild and false if not

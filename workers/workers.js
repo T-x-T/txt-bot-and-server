@@ -9,6 +9,7 @@ const youtube = require('./../lib/youtube.js');
 const log = require('./../lib/log.js');
 const mc_helpers = require('./../lib/mc_helpers.js');
 const oauth = require('./../lib/oauth2.js');
+const widgets = require('./../web/widgets.js');
 
 //Stuff that should run on startup
 try {
@@ -19,6 +20,7 @@ try {
 mc_helpers.updateOnlinePlayers();
 log.prune(30);
 mc_helpers.createStatsObjectTemplate(function(){});
+widgets.init();
 
 //Contains discord user objects mapped by the discord id; gets cleared once an hour in workers
 global.cache = {}

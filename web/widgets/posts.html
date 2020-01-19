@@ -1,0 +1,34 @@
+<table class="interface-table" id="post-table">
+  <caption>
+    <h2>Posts</h2>
+    <p>To edit a post, click on its row. To create a new one, click the button.</p>
+    <button id="new-post" onclick="window.location.href = 'post.html?id=new';">Make a new post</button>
+  </caption>
+  <thead>
+    <th>ID</th>
+    <th>Date</th>
+    <th>Author</th>
+    <th>Title</th>
+    <th>
+
+      <select id="public" onchange="root.interface.filterPublic()">
+        <option selected disabled>Visibility</option>
+        <option value="0">Not public</option>
+        <option value="1">Public</option>
+        <option value="2">All</option>
+      </select>
+
+    </th>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>l</td>
+      <td>o</td>
+      <td>a</td>
+      <td>d</td>
+      <td>i</td>
+    </tr>
+
+  </tbody>
+</table>
