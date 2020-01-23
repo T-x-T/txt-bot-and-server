@@ -137,6 +137,78 @@ root.interface.redirectToPost = function(id) {
   window.location.href = `https://${window.location.host}/staff/post.html?id=${id}`;
 };
 
+root.interface.bulletin_last_element = false;
+root.interface.bulletin_edit_row_index = false;
+root.interface.selectBulletin = function(element){
+  let table = element.parentNode.parentNode;
+  //Close the last element
+  if(root.interface.bulletin_last_element) root.interface.bulletin_last_element.style["white-space"] = "nowrap"
+  for(let i = 0;i < table.rows.length;i++) if(table.rows[i].firstElementChild.colSpan > 1 && table.rows[i].hidden == false) table.deleteRow(i);
+  
+  //Stop here if this is the same element like time, this means the user clicked again and wants this to just close
+  if(element === root.interface.bulletin_last_element) return;
+
+  //Expand new element
+  root.interface.bulletin_last_element = element;
+  element.style["white-space"] = "break-spaces";
+
+  //Insert edit row after current row
+  let edit_row = element.parentNode.insertBefore(table.rows[1].cloneNode(true), element.nextElementSibling);
+  root.interface.bulletin_edit_row_index = edit_row.rowIndex;
+  edit_row.hidden = false;
+  
+};
+
+root.interface.bulletin_my_active = false;
+root.interface.toggleMyBulletins = function(element){
+  let table = document.getElementById('bulletin-table');
+
+  if(!root.interface.bulletin_my_active){
+    //Update table to only show bulletins of logged in user
+    //Remove the edit row
+    for(let i = 0;i < table.rows.length;i++) if(table.rows[i].firstElementChild.colSpan > 1 && table.rows[i].hidden == false) table.deleteRow(i);
+
+    //Hide rows from other authors
+    let j = 1;
+    for(let i = 2;i < table.rows.length;i++) {
+      //Hide row
+      if(table.rows[i].cells[0].colSpan == 1 && table.rows[i].cells[1].innerText != 'The__TxT') table.rows[i].hidden = true;
+
+      //Reapply the zebra effect with temp classes
+      if(!table.rows[i].hidden) {
+        if(j % 2) for(let k = 0;k < 3;k++) table.rows[i].cells[k].className = 'temp_bright'
+        else for(let k = 0;k < 3;k++) table.rows[i].cells[k].className = 'temp_dark'
+        j++;
+      } 
+    }
+    
+    root.interface.bulletin_my_active = true;
+    element.innerText = "all posts"
+  }else{
+    //Update table to show all bulletins
+    for(let i = 2;i < table.rows.length;i++) table.rows[i].hidden = false;
+
+    //Remove temp classes for fixed zebra effect
+    for(let i = 2;i < table.rows.length;i++) if(!table.rows[i].hidden) for(let j = 0; j < table.rows[i].cells.length;j++) table.rows[i].cells[j].className = "";
+
+    root.interface.bulletin_my_active = false;
+    element.innerText = "my posts";
+  }
+};
+
+root.interface.editBulletin = function(){
+  //Summon the popup
+  root.framework.popup.create_textbox({maxLength: 100, required: true}, function(input){
+    console.log(input)
+  });
+};
+
+root.interface.deleteBulletin = function(){
+  root.framework.popup.create_confirmation({text: 'Do you really want to delete this bulletin?'}, function(deleteConfirmed){
+    console.log(deleteConfirmed)
+  });
+};
+
 //Container for all functions necessary for post.html to work properly
 root.post = {};
 
@@ -397,6 +469,169 @@ root.members.search = function(){
   });
 }
 
+//Framework stuff to make my life easier
+root.framework = {};
+
+//Everything handling popups
+root.framework.popup = {};
+
+//Create a basic popup from a div
+//options: div: the div to put into the popup; confirmClose: add confirmation before closing if true; closeCall: function to call before destroying giving back the popup and callback
+//callback: entire popup div
+root.framework.popup.create = function(options, callback){
+  if(options.hasOwnProperty('div')){
+    //Clone template
+    let popup = document.getElementById('popup').cloneNode(true);
+    document.body.appendChild(popup);
+    
+    //Add the given div as child
+    popup.childNodes[1].childNodes[1].appendChild(options.div);
+
+    //Make popup visible
+    popup.hidden = false;
+
+    //Add options to popup
+    popup.options = options;
+
+    //Add close function to popup
+    popup.close = function(){
+      //Check if we need to confirm the close
+      if(popup.options.confirmClose){
+        //Ask for confirmation
+        root.framework.popup.create_confirmation({}, function(confirmed){
+          if(confirmed){
+            //Yes, close the popup please
+            root.framework.popup.close_for_real(popup);
+          }else{
+            //Do nothing
+          }
+        });
+      }else{
+        //Dont ask for confirmation
+        root.framework.popup.close_for_real(popup);
+      }
+    }
+
+    //Callback the popup
+    callback(popup);
+  }else{
+    callback(false);
+  }
+};
+
+//Deletes the given popup, no confirmation, NEVER CALL THIS!! THIS IS ONLY TO BE CALLED FROM WITHING popup.close()
+root.framework.popup.close_for_real = function(popup){
+  //Execute the closeCall function if it got attached
+  if(typeof popup.options.closeCall == 'function') {
+    popup.options.closeCall(popup, function() {
+      popup.parentNode.removeChild(popup);
+    });
+  } else {
+    //No closeCall function given, just delete
+    popup.parentNode.removeChild(popup);
+  }
+};
+
+//Calls the close function of the popup
+root.framework.popup.bg_click = function(popup) {
+  popup.close();
+};
+
+//Calls the close function of the popup
+root.framework.popup.cancel_click = function(popup) {
+  popup.close();
+};
+
+//Uses root.framework.popup.create to create a textbox for inputing text
+//options: maxlength, required
+//callback: user input, or false if there is no input given (was cancelled by user)
+root.framework.popup.create_textbox = function(options, callback){
+  //Clone textbox template
+  let textbox = document.getElementById('textbox-popup').cloneNode(true);
+  textbox.hidden = false;
+
+  //Apply options
+  if(options.maxLength) textbox.childNodes[1].maxLength = options.maxLength;
+  if(options.required) textbox.childNodes[1].required = options.required;
+
+  //Create the popup; confirmClose gets set to true once text gets entered
+  root.framework.popup.create({div: textbox, confirmClose: false, closeCall: function(popup, _callback){
+    //Stuff that should be done before closing
+    //Check if we need to save
+    if(popup.save){
+      //Save input
+      let input = textbox.childNodes[1].value;
+
+      //Callback the user input
+      callback(input);
+    }else{
+      callback(false);
+    }
+    //Callback to finally delete this
+    _callback();
+  }}, function(popup){
+    //Callback of the create function
+    
+  });
+};
+
+//Saves the user input and closes the popup
+root.framework.popup.textbox_save_click = function(popup){
+  //Check if the user has entered any text, abort if not
+  if(popup.childNodes[1].childNodes[1].childNodes[1].childNodes[1].value){
+    //User entered text
+    popup.save = true;
+    popup.options.confirmClose = false;
+    popup.close();
+  }else{
+    //User didnt enter text - show info popup
+    root.framework.popup.create_info({text: 'Please enter some text before saving your new bulletin.'}, function(){});
+  }
+};
+
+//Creates a confirmation popup
+//options: text: text that is shown in the popup
+//Callback: true if user said yes, false if otherwise
+root.framework.popup.create_confirmation = function(options, callback){
+  //Clone the template
+  let confirmation = document.getElementById('confirmation-popup').cloneNode(true);
+  confirmation.hidden = false;
+
+  //Create the popup
+  root.framework.popup.create({div: confirmation, confirmClose: false, closeCall: function(popup, _callback){
+    //Stuff that should be done before closing
+    callback(popup.confirmation);
+    _callback();
+  }}, function(popup){
+    //Callback of the create function
+    popup.options.confirmClose = false;
+  });
+};
+
+//Gets executed when yes is clicked
+root.framework.popup.confirmation_yes = function(popup){
+  popup.confirmation = true;
+  popup.close();
+};
+
+//Create a information popup
+//options: text: text that is shown in the popup
+//callback: gets called once user closed it (no parameters)
+root.framework.popup.create_info = function(options, callback){
+  //Clone the template
+  let info = document.getElementById('info-popup').cloneNode(true);
+  info.hidden = false;
+
+  //Apply the options
+  if(options.text) info.childNodes[1].innerText = options.text;
+
+  //Create the popup
+  root.framework.popup.create({div: info, confirmClose: false}, function(){
+    //Callback of the create function
+
+  });
+};
+
 //Internal helper functions
 var _internal = {};
 
@@ -502,5 +737,5 @@ _internal.clearChildren = function(elementToClear, blacklist_id){
     if (children[i].id != blacklist_id) children[i].parentNode.removeChild(children[i]);
     console.log(i)
   };
-  console.log('done')
+  //console.log('done')
 };

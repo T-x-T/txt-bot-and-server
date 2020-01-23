@@ -1439,6 +1439,14 @@ button[id="submit"]:hover {
         background: white;
     }
 
+    .temp_dark {
+      background: #e9e9e9 !important;
+    }
+
+    .temp_bright {
+      background: white !important;
+    }
+
     td.stickycol {
         position: -webkit-sticky;
         position: sticky;
@@ -1451,7 +1459,7 @@ button[id="submit"]:hover {
     }
 
     .interface-table tr:hover > td {
-      background: #007787;
+      background: #007787 !important;
       color: white;
       cursor: pointer;
     }
@@ -1570,4 +1578,42 @@ p.note-box.margin-bottom {
 
 #post-body {
   margin-top: 20px;
+}
+
+/* ################### popup ###################*/
+.popup-background {
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  opacity: 60%;
+  z-index: 1000;
+  top: 0; 
+  left: 0; 
+  position: fixed; 
+}
+
+.popup-foreground {
+  z-index: 1001;
+  top: 20%;
+  left: 20%;
+  width: 25%;
+  height: auto;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.6);
+  border: solid #ffffff;
+  border-width: 5px;
+  text-align: center;
+}
+
+.popup-foreground-content {
+  padding: 20px;
+}
+
+#textbox-popup-textarea {
+  width: 100%;
+  padding: 0px;
+}
+
+#textbox-popup-buttons {
+  margin: auto;
 }
