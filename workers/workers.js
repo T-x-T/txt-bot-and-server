@@ -12,11 +12,6 @@ const oauth = require('./../lib/oauth2.js');
 const widgets = require('./../web/widgets.js');
 
 //Stuff that should run on startup
-try {
-  youtube.getNewestVideo()
-} catch (e) {
-  log.write(3, 'Workers: Cant execute getNewestVideo', { Error: e });
-}
 mc_helpers.updateOnlinePlayers();
 log.prune(30);
 mc_helpers.createStatsObjectTemplate(function(){});
@@ -29,14 +24,17 @@ oauth.updateUserIdCache();
 
 //Every minute
 setInterval(function () {
-  try {
-    youtube.getNewestVideo();
-  } catch (e) {
-    log.write(3, 'Workers: Cant execute getNewestVideo', { Error: e });
-  }
-
   mc_helpers.updateOnlinePlayers();
 }, 1000 * 60);
+
+//Every 5 minutes
+setInterval(function(){
+  try {
+    youtube.getNewestVideo();
+  } catch(e) {
+    log.write(3, 'Workers: Cant execute getNewestVideo', {Error: e});
+  }
+}, 1000 * 60 * 5);
 
 //Every hour
 setInterval(function(){
