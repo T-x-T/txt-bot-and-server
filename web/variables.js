@@ -151,7 +151,7 @@ _getters.index = function(callback){
       body += post.body;
       body += `</section></article>`;
     });
-    
+
     callback({
       'pax_title': 'Start page',
       'posts': body
@@ -208,6 +208,15 @@ const template = {
   },
   '/paxterya/hardware.html': {
     'pax_title': 'Server Hardware'
+  },
+  '/paxterya/our-world.html': {
+    'pax_title': 'Our World'
+  },
+  '/paxterya/faq.html': {
+    'pax_title': 'FAQ'
+  },
+  '/paxterya/downloads.html': {
+    'pax_title': 'Downloads'
   },
   '/widgets.html': _getters.widgets,
 
