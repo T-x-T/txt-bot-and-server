@@ -16,11 +16,15 @@ var conf = {
     'guild': 'guild id goes here as a number',
     'admin-role': 'The role ID of the admin role goes here',
     'paxterya-role': 'The role ID of the paxterya role goes here',
-    'upload-role': 'The role ID of the upload role goes here',
     'log-level': 1,
-    'channelID': 'youtube channel ID here',
     'google-api-key': 'google api key here',
-    'youtube-video-announcement-channel': 'channel id',
+    'youtube-video-announcements': [
+      {
+        'youtube_id': 'youtube channel id',
+        'channel_id': 'discord channel id',
+        'role': 'id of the role to ping'
+      }
+    ],
     'mc-stats-remote': 'rclone remote name',
     'rcon-server': '',
     'rcon-port': 25575,
