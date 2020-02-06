@@ -45,6 +45,12 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
     //Log the request
     log.write(0, 'Web Request received', {data: data, sourceIP: req.connection.remoteAddress});
 
+    //Some requests seem to come in without any header, which is bad, so lets add one here if thats the case, also log it
+    if(!data.headers.hasOwnProperty('host')){
+      log.write(1, 'Web request without host header received', {data: data, sourceIP: req.connection.remoteAddress});
+      data.headers.host = 'paxterya.com';
+    }
+
     if(!config['use-external-certs']){
       //FOR TESTING ONLY
       var origHost = data.headers.host;
