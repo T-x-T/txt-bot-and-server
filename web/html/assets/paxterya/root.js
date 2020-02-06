@@ -476,16 +476,22 @@ root.framework = {};
 root.framework.popup = {};
 
 //Create a basic popup from a div
-//options: div: the div to put into the popup; confirmClose: add confirmation before closing if true; closeCall: function to call before destroying giving back the popup and callback
+//options: div: the div to put into the popup; confirmClose: add confirmation before closing if true; closeCall: function to call before destroying giving back the popup and callback; title: the title lol
 //callback: entire popup div
 root.framework.popup.create = function(options, callback){
   if(options.hasOwnProperty('div')){
     //Clone template
     let popup = document.getElementById('popup').cloneNode(true);
-    document.body.appendChild(popup);
     
+    //Add title
+    if(options.title) popup.childNodes[1].childNodes[1].childNodes[1].childNodes[1].innerText = options.title;
+    else popup.childNodes[1].childNodes[1].childNodes[1].childNodes[1].innerText = "";
+
     //Add the given div as child
-    popup.childNodes[1].childNodes[1].appendChild(options.div);
+    popup.childNodes[1].childNodes[3].appendChild(options.div);
+    
+    //Attach popup to the DOM   
+    document.body.appendChild(popup);
 
     //Make popup visible
     popup.hidden = false;
@@ -555,7 +561,7 @@ root.framework.popup.create_textbox = function(options, callback){
   if(options.required) textbox.childNodes[1].required = options.required;
 
   //Create the popup; confirmClose gets set to true once text gets entered
-  root.framework.popup.create({div: textbox, confirmClose: false, closeCall: function(popup, _callback){
+  root.framework.popup.create({div: textbox, confirmClose: false, title: 'Sample textbox tile', closeCall: function(popup, _callback){
     //Stuff that should be done before closing
     //Check if we need to save
     if(popup.save){
@@ -578,7 +584,7 @@ root.framework.popup.create_textbox = function(options, callback){
 //Saves the user input and closes the popup
 root.framework.popup.textbox_save_click = function(popup){
   //Check if the user has entered any text, abort if not
-  if(popup.childNodes[1].childNodes[1].childNodes[1].childNodes[1].value){
+  if(popup.childNodes[1].childNodes[3].childNodes[1].childNodes[1].value){
     //User entered text
     popup.save = true;
     popup.options.confirmClose = false;
@@ -598,7 +604,7 @@ root.framework.popup.create_confirmation = function(options, callback){
   confirmation.hidden = false;
 
   //Create the popup
-  root.framework.popup.create({div: confirmation, confirmClose: false, closeCall: function(popup, _callback){
+  root.framework.popup.create({div: confirmation, confirmClose: false, title: 'Confirmation', closeCall: function(popup, _callback){
     //Stuff that should be done before closing
     callback(popup.confirmation);
     _callback();
@@ -626,7 +632,7 @@ root.framework.popup.create_info = function(options, callback){
   if(options.text) info.childNodes[1].innerText = options.text;
 
   //Create the popup
-  root.framework.popup.create({div: info, confirmClose: false}, function(){
+  root.framework.popup.create({div: info, confirmClose: false, title: 'Information'}, function(){
     //Callback of the create function
 
   });

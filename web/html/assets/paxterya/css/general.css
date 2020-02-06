@@ -1603,8 +1603,8 @@ p.note-box.margin-bottom {
   width: 25%;
   height: auto;
   position: fixed;
-  background-color: rgba(0, 0, 0, 0.6);
-  border: solid #ffffff;
+  background-color: #f0f0f0;
+  border: solid #000000;
   border-width: 5px;
   text-align: center;
 }
@@ -1621,6 +1621,29 @@ p.note-box.margin-bottom {
 #textbox-popup-buttons {
   margin: auto;
 }
+
+.popup-head {
+  display: flex;
+  padding: 5px;
+  width: 100%;
+}
+
+#popuo-head-title{
+  float: left;
+}
+
+#popup-head-close{
+  float: right;
+}
+
+#popup-title{
+  padding: inherit;
+}
+
+#popup-close{
+  padding: inherit;
+}
+
 /* ################### download section ###################*/
 
 .img-download img {

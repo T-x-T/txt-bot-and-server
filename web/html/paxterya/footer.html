@@ -17,6 +17,14 @@
     <!-- popup template-->
     <div id="popup" hidden>
       <div class="popup-foreground">
+        <div class="popup-head">
+          <div id="popup-head-title">
+            <span id="popup-title">TITLE</span>
+          </div>
+          <div id="popup-head-close">
+            <button id="popup-close" onclick="root.framework.popup.bg_click(this.parentNode.parentNode.parentNode.parentNode)">X</button>
+          </div>
+        </div>
         <div class="popup-foreground-content">
         </div>
       </div>
