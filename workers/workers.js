@@ -17,6 +17,11 @@ log.prune(30);
 mc_helpers.createStatsObjectTemplate(function(){});
 widgets.init();
 
+//Stuff that should be run 5 seconds after startup, ONLY FOR THINGS THAT NEED THE BOT LOGGED IN
+setTimeout(function(){
+  mc_helpers.updateRoles();
+}, 1000 * 5);
+
 //Contains discord user objects mapped by the discord id; gets cleared once an hour in workers
 global.cache = {}
 global.cache.discordUserObjects = {};
@@ -40,6 +45,7 @@ setInterval(function(){
 setInterval(function(){
   mc_helpers.updateAllUUIDs(false);
   mc_helpers.updateAllIGNs();
+  mc_helpers.updateRoles();
   oauth.updateUserIdCache();
 }, 1000 * 60 * 60);
 
