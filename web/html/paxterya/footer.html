@@ -2,7 +2,7 @@
 
         <footer>
             <div class="wrapper">
-                <div class="left"><span><i class="far fa-copyright"></i> 2019 Paxterya.com</span></div>
+                <div class="left"><span><i class="far fa-copyright"></i> 2020 Paxterya.com</span></div>
                 <div class="right">
                     <a id="login" href="{oauth_staff}"><i class="fas fa-sign-in-alt"></i> Login</a>
                     <a href="privacy-policy.html">Privacy Policy</a>
@@ -70,51 +70,6 @@
       slides[slideIndex-1].style.opacity = 1;
       dots[slideIndex-1].className += " active";
     }
-</script>
-
-<!-- mobile nav accordion (deactivated on desktop version) -->
-<script>
-  $(document).ready(function() {
-    // run test on initial page load
-    checkSize();
-
-    // run test on resize of the window
-    $(window).resize(checkSize);
-  });
-
-  //Function to the css rule
-  function checkSize(){
-
-    // mobile.css : #logo width 250px
-    if ($("#logo").css("width") == "250px" ){
-
-      // accordion toggle
-      var acc = document.getElementsByClassName("accordion");
-
-      for (i = 0; i < acc.length; i++) {
-        acc[i].addEventListener("click", function() {
-
-          this.classList.toggle("nav-active");
-
-          var panel = this.nextElementSibling;
-
-          if (panel.style.maxHeight){
-            panel.style.maxHeight = null;
-          } else {
-            panel.style.maxHeight = "100%";
-          }
-
-        });
-      }
-
-      // deactivate main hyperlink so that subnav can show
-      $('a.accordion').click(function(e) {
-        e.preventDefault();
-      });
-
-
-    }
-  }
 </script>
 
 <!-- nav button animation toggle -->
