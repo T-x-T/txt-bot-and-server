@@ -1591,6 +1591,10 @@ p.note-box.margin-bottom {
   width: 100%;
 }
 
+div.worldsave:not(:last-child) {
+  margin-bottom: 25px;
+}
+
 /* ################### faq ###################*/
 p.faq {
   margin-bottom: 20px;
