@@ -231,6 +231,9 @@ module.exports = {
             case 'updateallnicks':
               _internal.addIgnToNick(message, true);
               break;
+            case 'updateingameroles':
+              mc_helpers.updateRoles();
+              break;
             default:
               message.reply('I didnt quite understand you moron');
               break;

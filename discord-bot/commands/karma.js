@@ -11,7 +11,7 @@ module.exports = {
   name: 'karma',
   description: 'Returns the current karma of score of a user\nYour amount of karma changes when someone reacts to one of your messages with the upvote or downvote emoji',
   aliases: ['level', 'xp'],
-  usage: 'mention user OR top',
+  usage: 'mention user OR top\n+karma @txt\n+karma top\n+karma rank',
 
   execute(message, args) {
     var userID;

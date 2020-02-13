@@ -11,7 +11,7 @@ module.exports = {
   name: 'minecraft',
   description: 'This command provides different functionality for minecraft server integration',
   aliases: ['mc', 'mcserver'],
-  usage: '*Sub-Commands:*\nIGN add OR remove OR show [mention user to view other IGNs]\nstats [mention user to view other stats]',
+  usage: '*Sub-Commands:*\nstats ([rank]) [collection]  [mention user to view other stats]\n+mc stats general\n+mc stats rank total',
 
   execute(message, args) {
     switch(args[0]){
