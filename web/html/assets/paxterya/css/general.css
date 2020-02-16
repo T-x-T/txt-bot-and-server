@@ -1627,6 +1627,17 @@ button#popup-close {
   margin: 0 0 20px 0;
 }
 
+div#popup p {
+  font-family: "regular";
+}
+
+div#confirmation-popup, div#info-popup {
+  color: white;
+  background: #007787;
+  margin-top: 50px;
+  padding: 5px;
+}
+
 
 /* ################### download section ###################*/
 
