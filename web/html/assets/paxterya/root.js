@@ -12,131 +12,85 @@ root.interface = {};
 
 //Called on page load
 root.interface.init = function(){
-  root.interface.loadApplications();
-  root.interface.loadPost();
-}
+  root.interface.application.load();
+  root.interface.post.load();
+};
+
+//All application functions
+root.interface.application = {};
 
 //Loads the applications from the api and puts them into the table; bs is just some random variable because we get some shit from the onload
-root.interface.loadApplications = function(filter){
-  //We need to send the cookie, but the browser is doing that for us!
-  _internal.send('application', false, 'GET', filter, false, function(status, res){
-    console.log(res);
-    if(status == 200){
-      if(res.length > 0){
-        //Get our table rows
-        let table = document.getElementById('applications-table').rows;
+root.interface.application.load = function(filter){
+  //Init table
+  root.framework.table.init(document.getElementById('applications-table'), {api_path: 'application', data_mapping: function(input){
+    let statusString = 'invalid';
+    statusString = input.status == 1 ? 'pending review' : statusString;
+    statusString = input.status == 2 ? 'denied' : statusString;
+    statusString = input.status == 3 ? 'accepted' : statusString;
 
-        //Clone row 0 as much as we need it, start at one because we already have row 0
-        for(let i = 1; i < res.length; i++) document.getElementById('applications-table').appendChild(table[1].cloneNode(true));
-
-        //Update our table rows
-        table = document.getElementById('applications-table').rows;
-
-        //Iterate over all applications we got from the api
-        for(let i = 0; i < res.length; i++){
-          //Translate the status number into a string
-          let statusString = 'invalid';
-          statusString = res[i].status == 1 ? 'pending review' : statusString;
-          statusString = res[i].status == 2 ? 'denied'         : statusString;
-          statusString = res[i].status == 3 ? 'accepted'       : statusString;
-
-          //Fill the cells
-          table[i+1].cells[0].childNodes[0].textContent = res[i].id;
-          table[i+1].cells[1].childNodes[0].textContent = new Date(res[i].timestamp).toLocaleString('de');
-          table[i+1].cells[2].childNodes[0].textContent = res[i].discord_nick;
-          table[i+1].cells[3].childNodes[0].textContent = res[i].mc_ign;
-          table[i+1].cells[4].childNodes[0].textContent = res[i].about_me.substring(0, 50);
-          table[i+1].cells[5].childNodes[0].textContent = statusString;
-          table[i+1].setAttribute("onclick", `root.interface.redirectToApplication(${res[i].id})`);
-        }
-      }else{
-
-      }
-
-    }else{
-      window.alert('Failed to retrieve applications: ', res);
-    }
-  });
+    return [
+      input.id,
+      new Date(input.timestamp).toLocaleString('de'),
+      input.discord_nick,
+      input.mc_ign,
+      input.about_me.substring(0, 50),
+      statusString
+    ];
+  }, api_method: 'GET', edit_bar: false, row_onclick: root.interface.application.redirect});
 };
 
 //Gets called whenever the user changes the status to filter the table
-root.interface.changeStatus = function(){
-  //Refresh the table
-  //Get our table rows
-  let table = document.getElementById('applications-table').rows;
+root.interface.application.filter = function(select, table){
+  let filter = false;
+  let value = select.value;
+  filter = value == 1 ? 'pending review' : filter;
+  filter = value == 2 ? 'denied' : filter;
+  filter = value == 3 ? 'accepted' : filter;
 
-  //Emtpy any existing data
-  if(table.length > 2) for(let i = 1; i < table.length; i++) document.getElementById('applications-table').deleteRow(i);
-  if(table.length > 2) for(let i = 1; i < table.length; i++) document.getElementById('applications-table').deleteRow(i);
-  if(table.length > 2) for(let i = 1; i < table.length; i++) document.getElementById('applications-table').deleteRow(i);
-  if(table.length > 2) for(let i = 1; i < table.length; i++) document.getElementById('applications-table').deleteRow(i);
-
-  root.interface.loadApplications({status: document.getElementById('status').value});
+  table.filter(5, filter, true);
 };
 
-root.interface.redirectToApplication = function(id){
-  window.location.href = `https://${window.location.host}/staff/application.html?id=${id}`;
+root.interface.application.redirect = function(row){
+  window.location.href = `https://${window.location.host}/staff/application.html?id=${row.cells[0].innerText}`;
 };
+
+//All post cms functions
+root.interface.post = {};
 
 //Loads the posts from the api and puts them into the table; bs is just some random variable because we get some shit from the onload
-root.interface.loadPost = function(filter) {
-  //We need to send the cookie, but the browser is doing that for us!
-  _internal.send('post', false, 'GET', filter, false, function(status, res) {
-    console.log(res);
-    if(status == 200) {
-      if(res.length > 0) {
-        //Get our table rows
-        let table = document.getElementById('post-table').rows;
+root.interface.post.load = function(filter) {
+  root.framework.table.init(document.getElementById('post-table'), {api_path: 'post', data_mapping: function(input){
+    let visiblity = 'error';
+    if(input.public) visiblity = 'Public';
+      else visiblity = 'Private';
 
-        //Clone row 0 as much as we need it, start at one because we already have row 0
-        for(let i = 1;i < res.length;i++) document.getElementById('post-table').appendChild(table[1].cloneNode(true));
-
-        //Update our table rows
-        table = document.getElementById('post-table').rows;
-
-        //Iterate over all applications we got from the api
-        for(let i = 0;i < res.length;i++) {
-
-          //Fill the cells
-          table[i + 1].cells[0].childNodes[0].textContent = res[i].id;
-          table[i + 1].cells[1].childNodes[0].textContent = new Date(res[i].date).toISOString().substring(0, 10);
-          table[i + 1].cells[2].childNodes[0].textContent = res[i].author;
-          table[i + 1].cells[3].childNodes[0].textContent = res[i].title;
-          table[i + 1].cells[4].childNodes[0].textContent = res[i].public;
-          table[i + 1].setAttribute("onclick", `root.interface.redirectToPost(${res[i].id})`);
-        }
-      } else {
-
-      }
-
-    } else {
-      window.alert('Failed to retrieve posts: ', res);
-    }
-  });
+    return [
+      input.id,
+      new Date(input.date).toISOString().substring(0, 10),
+      input.author,
+      input.title,
+      visiblity
+    ];
+  }, api_method: 'GET', edit_bar: false, row_onclick: root.interface.post.redirect});
 };
 
 //Gets called whenever the user changes the status to filter the table
-root.interface.filterPublic = function() {
-  //Refresh the table
-  //Get our table rows
-  let table = document.getElementById('post-table').rows;
+root.interface.post.filter = function(select, table) {
+  let filter = false;
+  let value = select.value;
+  
+  if(value == 0) filter = 'Private';
+  if(value == 1) filter = 'Public';
 
-  //Emtpy any existing data
-  if(table.length > 2) for(let i = 1;i < table.length;i++) document.getElementById('post-table').deleteRow(i);
-  if(table.length > 2) for(let i = 1;i < table.length;i++) document.getElementById('post-table').deleteRow(i);
-  if(table.length > 2) for(let i = 1;i < table.length;i++) document.getElementById('post-table').deleteRow(i);
-  if(table.length > 2) for(let i = 1;i < table.length;i++) document.getElementById('post-table').deleteRow(i);
-  if(document.getElementById('public').value == 2){
-    root.interface.loadPost(false);
-  }else{
-    root.interface.loadPost({public: document.getElementById('public').value});
-  }
+  table.filter(4, filter, true);
 };
 
-root.interface.redirectToPost = function(id) {
-  window.location.href = `https://${window.location.host}/staff/post.html?id=${id}`;
+root.interface.post.redirect = function(row) {
+  window.location.href = `https://${window.location.host}/staff/post.html?id=${row.cells[0].innerText}`;
 };
 
+
+//All bulletin board functions
 root.interface.bulletin_last_element = false;
 root.interface.bulletin_edit_row_index = false;
 root.interface.selectBulletin = function(element){
@@ -636,6 +590,123 @@ root.framework.popup.create_info = function(options, callback){
     //Callback of the create function
 
   });
+};
+
+
+//everything handling tables
+root.framework.table = {};
+
+//Initialize a table; This sets up the DOM object with our custom functions
+//options: required:api_path to get data, data_mapping: function that turns one object from the api into an array of values that can be put into a single row
+//         optional: api_method, edit_bar (bool), row_onclick: function
+root.framework.table.init = function(table, options){
+  if(!options.hasOwnProperty('api_path')) options.api_path = 'GET';
+  if(!options.hasOwnProperty('edit_bar')) options.edit_bar = false;
+  if(!options.hasOwnProperty('row_onclick')) options.row_onclick = false;
+
+  //Attach all the neccessary things to the table
+  table.options = options;
+  table.update = root.framework.table.update;
+  table.filter = root.framework.table.filter;
+  table.data_mapping = options.data_mapping;
+  table.add_row = root.framework.table.add_row;
+  table.remove_row = root.framework.table.remove_row;
+  table.remove_all_rows = root.framework.table.remove_all_rows;
+  table.select_row = root.framework.table.select_row;
+
+  //Update table, to fill it with data
+  table.update();
+};
+
+//Update the data of the table, based on filter, if given
+root.framework.table.update = function(filter){
+  if(typeof filter == 'undefined') filter = false;
+  //Set table to this, so we can use it later on
+  let table = this;
+
+  //Query the api for the data
+  _internal.send(this.options.api_path, false, this.options.api_method, this.options.filter, false, function(status, res){
+    if(status == 200 && res.length > 0){
+      //Remove all existing rows
+      table.remove_all_rows();
+
+      //Add the data to the table
+      res.forEach((_res) => {
+        table.add_row(_res);
+      });
+    }else{
+      window.alert('Failed to update table');
+    }
+  });
+};
+
+//Filters the table
+//The id is the number of which td to filter after and the filter is the keyword that should be checked, include: include/exclude keyword
+root.framework.table.filter = function(id, filter, include){
+  let table = this;
+  let rows = table.rows;
+
+  if(!filter){
+    //No filter given, show all rows again
+    for(let i = 1;i < rows.length;i++) rows[i].hidden = false;
+  }else{
+    //Loop through all rows and test them against our filter, hide if neccessary
+    for(let i = 1;i < rows.length;i++) {
+      let match = rows[i].cells[id].innerText == filter;
+      rows[i].hidden = ((include && !match) || (!include && match)) //Credit to Zyl 
+    }
+  }
+};
+
+//Add row to the table
+//Values: either an array or an object of values, if its an object convert to an array using the data_mapping function
+root.framework.table.add_row = function(values){
+  //Check if we got an object and thus have to convert it first
+  if(!Array.isArray(values)){
+    //We gotta convert the object to an array using the data_mapping function
+    this.add_row(this.data_mapping(values));
+  }else{
+    //We got an array, create the row and append to the table
+    //Create row and append values in separate td's
+    let row = document.createElement('tr');
+    values.forEach((value) => {
+      let temp_td = document.createElement('td');
+      temp_td.innerText = value;
+      row.appendChild(temp_td);
+    });
+    //Add the onclick event 
+    if(this.options.row_onclick) row.onclick = this.select_row;
+    row.table = this;
+
+
+    //Append row to the table
+    this.appendChild(row);
+  }
+};
+
+//Remove row from the table
+//when index is given remove row at index, otherwise remove row this was called on
+root.framework.table.remove_row = function(index){
+  if(typeof index != 'undefined'){
+    //Remove row at index
+    this.removeChild(this.rows[index]);
+  }else{
+
+  }
+};
+
+//Cleares all rows from table
+root.framework.table.remove_all_rows = function(){
+  let rows = this.rows;
+  if(rows.length > 1) for(let i = 0; i < rows.length; i++) this.remove_row(1);
+};
+
+//Select row; this is called to append the edit_row behind this one
+//when index is given act on the row at the index, otherwise at the row this was called on
+root.framework.table.select_row = function(index){
+  let table = this.table;
+  //Execute the onclick function if neccessary
+  if(table.options.row_onclick) this.onclick = table.options.row_onclick(this);
 };
 
 //Internal helper functions

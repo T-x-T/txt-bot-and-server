@@ -11,24 +11,14 @@
     <th>Title</th>
     <th>
 
-      <select id="public" onchange="root.interface.filterPublic()">
+      <select id="public" onchange="root.interface.post.filter(this, this.parentNode.parentNode.parentNode.parentNode)">
         <option selected disabled>Visibility</option>
-        <option value="0">Not public</option>
+        <option value="0">Private</option>
         <option value="1">Public</option>
         <option value="2">All</option>
       </select>
 
     </th>
   </thead>
-
-  <tbody>
-    <tr>
-      <td>l</td>
-      <td>o</td>
-      <td>a</td>
-      <td>d</td>
-      <td>i</td>
-    </tr>
-
-  </tbody>
+  <tbody></tbody>
 </table>
