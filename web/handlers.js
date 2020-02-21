@@ -13,6 +13,7 @@ const oauth       = require('./../lib/oauth2.js');
 const email       = require('./../lib/email.js');
 const stats       = require('./../lib/stats.js');
 const post        = require('./../lib/post.js');
+const bulletin    = require('./../lib/bulletin.js');
 
 //Create the container
 var handlers = {};
@@ -166,6 +167,116 @@ handlers.paxLogin = function(data, callback){
 * paxapi stuff
 *
 */
+
+//API functionality for handling the bulletin board
+//Auth: access_level >= 3
+handlers.paxapi.bulletin = function(data, callback){
+  if(typeof handlers.paxapi.bulletin[data.method] == 'function'){
+    //Check if user is authorized to send that request
+    if(data.headers.hasOwnProperty('cookie') && data.headers.cookie.indexOf('access_token' > -1)){
+      oauth.getTokenAccessLevel(data.headers.cookie.split('=')[1], function(access_level) {
+        if(access_level >= 3){
+          //User is authorized
+          handlers.paxapi.bulletin[data.method](data, callback);
+        }else{
+          callback(403, {err: 'You are not authorized to do that!'}, 'json');
+        }
+      });
+    }else{
+      callback(401, {err: 'Your client didnt send an access_token, please log in again'}, 'json');
+    }
+  }else{
+    callback(405, {err: 'Verb not allowed'}, 'json');
+  }
+};
+
+//Save a new bulletin
+handlers.paxapi.bulletin.post = function(data, callback){
+  //Get the discord id of the author
+  oauth.getDiscordIdFromToken(data.headers.cookie.split('=')[1], function(discord_id){
+    if(discord_id){
+      data.payload.author = discord_id;
+      bulletin.save(data.payload, function(err, doc){
+        if(!err && doc){
+          callback(200, doc, 'json');
+        }else{
+          callback(500, {err: err}, 'json');
+        }
+      });
+    }else{
+      callback(500, {err: 'Failed to get discord_id for user'}, 'json');
+    }
+  });
+};
+
+//Update an existing bulletin
+handlers.paxapi.bulletin.put = function(data, callback){
+  //Get the discord id of the author
+  oauth.getDiscordIdFromToken(data.headers.cookie.split('=')[1], function(discord_id) {
+    if(discord_id) {
+      //Check if discord_id is the same as author from the database
+      bulletin.get({_id: data.payload._id}, function(err, docs){
+        if(!err && docs){
+          if(docs[0].author === discord_id){
+            //Everything in order, save to db
+            bulletin.save(data.payload, function(err, doc) {
+              if(!err && doc) {
+                callback(200, doc, 'json');
+              } else {
+                callback(500, {err: err}, 'json');
+              }
+            });
+          }else{
+            callback(403, {err: 'Youre not the author of the object you tried to modify'}, 'json');
+          }
+        }else{
+          callback(500, {err: 'Failed to verify that youre the author'}, 'json');
+        }
+      });
+    } else {
+      callback(500, {err: 'Failed to get discord_id for user'}, 'json');
+    }
+  });
+};
+
+//Get bulletin(s) based on filter
+//Update an existing bulletin
+handlers.paxapi.bulletin.get = function(data, callback) {
+  bulletin.get(data.queryStringObject, function(err, docs) {
+    if(docs) callback(200, docs, 'json');
+    else callback(404, {err: 'Couldnt get any posts for the filter'}, 'json');
+  });
+};
+
+//Remove bulletin
+handlers.paxapi.bulletin.delete = function(data, callback) {
+  //Get the discord id of the author
+  oauth.getDiscordIdFromToken(data.headers.cookie.split('=')[1], function(discord_id) {
+    if(discord_id) {
+      //Check if discord_id is the same as author from the database
+      bulletin.get({_id: data.payload._id}, function(err, docs) {
+        if(!err && docs) {
+          if(docs[0].author === discord_id) {
+            //Everything in order, save to db
+            bulletin.remove(data.payload, function(err, doc) {
+              if(!err && doc) {
+                callback(200, doc, 'json');
+              } else {
+                callback(500, {err: 'Error saving new entry to database'}, 'json');
+              }
+            });
+          } else {
+            callback(403, {err: 'Youre not the author of the object you tried to modify'}, 'json');
+          }
+        } else {
+          callback(500, {err: 'Failed to verify that youre the author'}, 'json');
+        }
+      });
+    } else {
+      callback(500, {err: 'Failed to get discord_id for user'}, 'json');
+    }
+  });
+};
 
 //API functionality for handling blog posts
 handlers.paxapi.post = function(data, callback) {

@@ -14,6 +14,7 @@ root.interface = {};
 root.interface.init = function(){
   root.interface.application.load();
   root.interface.post.load();
+  root.interface.bulletin.init();
 };
 
 //All application functions
@@ -91,25 +92,27 @@ root.interface.post.redirect = function(row) {
 
 
 //All bulletin board functions
+root.interface.bulletin = {};
 root.interface.bulletin_last_element = false;
 root.interface.bulletin_edit_row_index = false;
-root.interface.selectBulletin = function(element){
-  let table = element.parentNode.parentNode;
-  //Close the last element
-  if(root.interface.bulletin_last_element) root.interface.bulletin_last_element.style["white-space"] = "nowrap"
-  for(let i = 0;i < table.rows.length;i++) if(table.rows[i].firstElementChild.colSpan > 1 && table.rows[i].hidden == false) table.deleteRow(i);
+
+root.interface.bulletin.init = function(){
+  root.framework.table.init(document.getElementById('bulletin-table'), {api_path: 'bulletin', data_mapping: function(input){
+    return [
+      new Date(input.date).toISOString().substring(0, 10),
+      input.mc_ign,
+      input.message
+    ]
+  }, api_method: 'GET', edit_bar: true, row_onclick: root.interface.bulletin.select, expand_row: true});
+};
+
+root.interface.bulletin.select = function(row){
+/*   let table = row.parentNode.parentNode;
   
-  //Stop here if this is the same element like time, this means the user clicked again and wants this to just close
-  if(element === root.interface.bulletin_last_element) return;
-
-  //Expand new element
-  root.interface.bulletin_last_element = element;
-  element.style["white-space"] = "break-spaces";
-
   //Insert edit row after current row
-  let edit_row = element.parentNode.insertBefore(table.rows[1].cloneNode(true), element.nextElementSibling);
+  let edit_row = row.parentNode.insertBefore(table.rows[1].cloneNode(true), element.nextElementSibling);
   root.interface.bulletin_edit_row_index = edit_row.rowIndex;
-  edit_row.hidden = false;
+  edit_row.hidden = false; */
   
 };
 
@@ -148,6 +151,20 @@ root.interface.toggleMyBulletins = function(element){
     root.interface.bulletin_my_active = false;
     element.innerText = "my posts";
   }
+};
+
+root.interface.bulletin.new = function(){
+  //Summon the popup
+  root.framework.popup.create_textbox({maxLength: 100, required: true}, function(input) {
+    //Send the message to the API
+    _internal.send('bulletin', false, 'POST', false, {message: input}, function(status, res){
+      if(status === 200){
+        root.framework.popup.create_info({text: 'Success!'});
+      }else{
+        root.framework.popup.create_info({text: 'oops something bad happened, maybe this message helps someone figure it out\n' + res.err});
+      }
+    });
+  });
 };
 
 root.interface.editBulletin = function(){
@@ -598,9 +615,9 @@ root.framework.table = {};
 
 //Initialize a table; This sets up the DOM object with our custom functions
 //options: required:api_path to get data, data_mapping: function that turns one object from the api into an array of values that can be put into a single row
-//         optional: api_method, edit_bar (bool), row_onclick: function
+//         optional: api_method, edit_bar (bool), row_onclick: function, expand_row: (bool) when true it expands the clicked row
 root.framework.table.init = function(table, options){
-  if(!options.hasOwnProperty('api_path')) options.api_path = 'GET';
+  if(!options.hasOwnProperty('api_method')) options.api_method = 'GET';
   if(!options.hasOwnProperty('edit_bar')) options.edit_bar = false;
   if(!options.hasOwnProperty('row_onclick')) options.row_onclick = false;
 
@@ -680,7 +697,7 @@ root.framework.table.add_row = function(values){
 
 
     //Append row to the table
-    this.appendChild(row);
+    this.tBodies[0].appendChild(row);
   }
 };
 
@@ -702,11 +719,29 @@ root.framework.table.remove_all_rows = function(){
 };
 
 //Select row; this is called to append the edit_row behind this one
-//when index is given act on the row at the index, otherwise at the row this was called on
-root.framework.table.select_row = function(index){
+//when index is given act on the row at the index, otherwise at the row this was called on; bs is the click event
+root.framework.table.select_row = function(bs, index){
+  if(typeof index == 'undefined') index = this.rowIndex;
   let table = this.table;
+  let row = table.rows[index];
+  
+  //Check if we need to expand this row
+  if(table.options.expand_row == true){
+    //Check if there already is an expanded row
+    if(table.hasOwnProperty('last_expanded_row') && index !== table.last_expanded_row){
+      //There is already an expanded row, collapse it
+      table.rows[table.last_expanded_row].style["white-space"] = "nowrap";
+    }
+    //Expand current row
+    table.last_expanded_row = index;
+    row.style["white-space"] = "pre-line";
+  }
+
   //Execute the onclick function if neccessary
   if(table.options.row_onclick) this.onclick = table.options.row_onclick(this);
+
+  //Set the onclick property to this function here again; no idea why, but the onclick event gets cleared once we execute it
+  row.onclick = root.framework.table.select_row;
 };
 
 //Internal helper functions

@@ -103,6 +103,7 @@ const router = {
   '/paxterya/api/contact': handlers.paxapi.contact,
   '/paxterya/api/member': handlers.paxapi.member,
   '/paxterya/api/post': handlers.paxapi.post,
+  '/paxterya/api/bulletin': handlers.paxapi.bulletin,
   '/paxterya/login': handlers.paxLogin,
   '/paxterya/staff': handlers.paxStaff
 };
