@@ -1612,6 +1612,7 @@ p.note-box.margin-bottom {
   left: 50%;
   margin-top: -200px;
   margin-left: -250px;
+  box-sizing: border-box;
 }
 
 #popup-title {
