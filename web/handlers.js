@@ -215,8 +215,9 @@ handlers.paxapi.bulletin.put = function(data, callback){
   oauth.getDiscordIdFromToken(data.headers.cookie.split('=')[1], function(discord_id) {
     if(discord_id) {
       //Check if discord_id is the same as author from the database
+      console.log(data.payload)
       bulletin.get({_id: data.payload._id}, function(err, docs){
-        if(!err && docs){
+        if(!err && docs.length > 0){
           if(docs[0].author === discord_id){
             //Everything in order, save to db
             bulletin.save(data.payload, function(err, doc) {
@@ -230,7 +231,7 @@ handlers.paxapi.bulletin.put = function(data, callback){
             callback(403, {err: 'Youre not the author of the object you tried to modify'}, 'json');
           }
         }else{
-          callback(500, {err: 'Failed to verify that youre the author'}, 'json');
+          callback(500, {err: 'I couldnt find the bulletin youre trying to modify!'}, 'json');
         }
       });
     } else {
@@ -257,16 +258,16 @@ handlers.paxapi.bulletin.delete = function(data, callback) {
       bulletin.get({_id: data.payload._id}, function(err, docs) {
         if(!err && docs) {
           if(docs[0].author === discord_id) {
-            //Everything in order, save to db
-            bulletin.remove(data.payload, function(err, doc) {
-              if(!err && doc) {
-                callback(200, doc, 'json');
+            //Everything in order, remove from db
+            bulletin.remove({_id: data.payload._id}, function(err) {
+              if(!err) {
+                callback(200, {}, 'json');
               } else {
-                callback(500, {err: 'Error saving new entry to database'}, 'json');
+                callback(500, {err: 'Error deleting entry from database'}, 'json');
               }
             });
           } else {
-            callback(403, {err: 'Youre not the author of the object you tried to modify'}, 'json');
+            callback(403, {err: 'Youre not the author of the object you tried to delete'}, 'json');
           }
         } else {
           callback(500, {err: 'Failed to verify that youre the author'}, 'json');

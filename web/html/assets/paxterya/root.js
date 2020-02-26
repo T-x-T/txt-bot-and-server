@@ -93,8 +93,6 @@ root.interface.post.redirect = function(row) {
 
 //All bulletin board functions
 root.interface.bulletin = {};
-root.interface.bulletin_last_element = false;
-root.interface.bulletin_edit_row_index = false;
 
 root.interface.bulletin.init = function(){
   root.framework.table.init(document.getElementById('bulletin-table'), {api_path: 'bulletin', data_mapping: function(input){
@@ -103,17 +101,7 @@ root.interface.bulletin.init = function(){
       input.mc_ign,
       input.message
     ]
-  }, api_method: 'GET', edit_bar: true, row_onclick: root.interface.bulletin.select, expand_row: true});
-};
-
-root.interface.bulletin.select = function(row){
-/*   let table = row.parentNode.parentNode;
-  
-  //Insert edit row after current row
-  let edit_row = row.parentNode.insertBefore(table.rows[1].cloneNode(true), element.nextElementSibling);
-  root.interface.bulletin_edit_row_index = edit_row.rowIndex;
-  edit_row.hidden = false; */
-  
+  }, api_method: 'GET', edit_bar: 'bulletin_edit_bar', row_onclick: false, expand_row: true});
 };
 
 root.interface.bulletin_my_active = false;
@@ -153,13 +141,14 @@ root.interface.toggleMyBulletins = function(element){
   }
 };
 
-root.interface.bulletin.new = function(){
+root.interface.bulletin.new = function(table){
   //Summon the popup
-  root.framework.popup.create_textbox({maxLength: 100, required: true}, function(input) {
+  root.framework.popup.create_textbox({maxLength: 1000, required: true}, function(input) {
     //Send the message to the API
     _internal.send('bulletin', false, 'POST', false, {message: input}, function(status, res){
       if(status === 200){
         root.framework.popup.create_info({text: 'Success!'});
+        table.update();
       }else{
         root.framework.popup.create_info({text: 'oops something bad happened, maybe this message helps someone figure it out\n' + res.err});
       }
@@ -167,16 +156,35 @@ root.interface.bulletin.new = function(){
   });
 };
 
-root.interface.editBulletin = function(){
+root.interface.bulletin.edit = function(row){
   //Summon the popup
-  root.framework.popup.create_textbox({maxLength: 100, required: true}, function(input){
-    console.log(input)
+  root.framework.popup.create_textbox({maxLength: 1000, required: true, text: row.raw_data.message}, function(input){
+    if(input){
+      let new_data = row.raw_data;
+      new_data.message = input;
+      _internal.send('bulletin', false, 'PUT', false, new_data, function(status, res) {
+        if(status === 200) {
+          root.framework.popup.create_info({text: 'Success!'});
+          row.table.update();
+        } else {
+          root.framework.popup.create_info({text: 'oops something bad happened, maybe this message helps someone figure it out\n' + res.err});
+        }
+      });
+    }
   });
 };
 
-root.interface.deleteBulletin = function(){
+root.interface.bulletin.delete = function(row){
   root.framework.popup.create_confirmation({text: 'Do you really want to delete this bulletin?'}, function(deleteConfirmed){
-    console.log(deleteConfirmed)
+    if(deleteConfirmed){
+      _internal.send('bulletin', false, 'DELETE', false, row.raw_data, function(status, res){
+        if(status != 200){
+          root.framework.popup.create_info({text: 'oops something bad happened, maybe this message helps someone figure it out\n' + res.err});
+        }else{
+          row.table.update();
+        }
+      });
+    }
   });
 };
 
@@ -520,7 +528,7 @@ root.framework.popup.cancel_click = function(popup) {
 };
 
 //Uses root.framework.popup.create to create a textbox for inputing text
-//options: maxlength, required
+//options: maxlength, required, text
 //callback: user input, or false if there is no input given (was cancelled by user)
 root.framework.popup.create_textbox = function(options, callback){
   //Clone textbox template
@@ -530,6 +538,7 @@ root.framework.popup.create_textbox = function(options, callback){
   //Apply options
   if(options.maxLength) textbox.childNodes[1].maxLength = options.maxLength;
   if(options.required) textbox.childNodes[1].required = options.required;
+  if(options.text) textbox.childNodes[1].innerText = options.text;
 
   //Create the popup; confirmClose gets set to true once text gets entered
   root.framework.popup.create({div: textbox, confirmClose: false, title: 'Sample textbox tile', closeCall: function(popup, _callback){
@@ -615,7 +624,7 @@ root.framework.table = {};
 
 //Initialize a table; This sets up the DOM object with our custom functions
 //options: required:api_path to get data, data_mapping: function that turns one object from the api into an array of values that can be put into a single row
-//         optional: api_method, edit_bar (bool), row_onclick: function, expand_row: (bool) when true it expands the clicked row
+//         optional: api_method, edit_bar id of the edit_bar, row_onclick: function, expand_row: (bool) when true it expands the clicked row
 root.framework.table.init = function(table, options){
   if(!options.hasOwnProperty('api_method')) options.api_method = 'GET';
   if(!options.hasOwnProperty('edit_bar')) options.edit_bar = false;
@@ -631,6 +640,14 @@ root.framework.table.init = function(table, options){
   table.remove_all_rows = root.framework.table.remove_all_rows;
   table.select_row = root.framework.table.select_row;
 
+  //If we have an edit bar, remove it from the DOM and store in the table
+  if(table.options.edit_bar){
+    let edit_bar = document.getElementById(table.options.edit_bar);
+    edit_bar.hidden = true;
+    table.edit_bar = edit_bar.cloneNode(true);
+    table.tBodies[0].removeChild(edit_bar);
+  }
+
   //Update table, to fill it with data
   table.update();
 };
@@ -644,7 +661,8 @@ root.framework.table.update = function(filter){
   //Query the api for the data
   _internal.send(this.options.api_path, false, this.options.api_method, this.options.filter, false, function(status, res){
     if(status == 200 && res.length > 0){
-      //Remove all existing rows
+      //Remove all existing rows including the edit row
+      if(table.options.edit_bar && table.hasOwnProperty('last_expanded_row')) table.tBodies[0].removeChild(document.getElementById(table.options.edit_bar));
       table.remove_all_rows();
 
       //Add the data to the table
@@ -677,11 +695,12 @@ root.framework.table.filter = function(id, filter, include){
 
 //Add row to the table
 //Values: either an array or an object of values, if its an object convert to an array using the data_mapping function
-root.framework.table.add_row = function(values){
+//raw_data: optional object containing the raw data for the row, useful for editing/removing it later on and passing that data to the api
+root.framework.table.add_row = function(values, raw_data){
   //Check if we got an object and thus have to convert it first
   if(!Array.isArray(values)){
     //We gotta convert the object to an array using the data_mapping function
-    this.add_row(this.data_mapping(values));
+    this.add_row(this.data_mapping(values), values);
   }else{
     //We got an array, create the row and append to the table
     //Create row and append values in separate td's
@@ -692,9 +711,11 @@ root.framework.table.add_row = function(values){
       row.appendChild(temp_td);
     });
     //Add the onclick event 
-    if(this.options.row_onclick) row.onclick = this.select_row;
+    row.onclick = this.select_row;
     row.table = this;
 
+    //Add raw_data if neccessary
+    if(typeof raw_data == 'object') row.raw_data = raw_data;
 
     //Append row to the table
     this.tBodies[0].appendChild(row);
@@ -705,17 +726,15 @@ root.framework.table.add_row = function(values){
 //when index is given remove row at index, otherwise remove row this was called on
 root.framework.table.remove_row = function(index){
   if(typeof index != 'undefined'){
+    //console.log(index)
     //Remove row at index
-    this.removeChild(this.rows[index]);
-  }else{
-
+    this.deleteRow(index);
   }
 };
 
-//Cleares all rows from table
+//Cleares all rows from table                               @TODO removes one row too few when called from update
 root.framework.table.remove_all_rows = function(){
-  let rows = this.rows;
-  if(rows.length > 1) for(let i = 0; i < rows.length; i++) this.remove_row(1);
+  while(this.rows.length > 1) this.remove_row(-1);
 };
 
 //Select row; this is called to append the edit_row behind this one
@@ -732,9 +751,25 @@ root.framework.table.select_row = function(bs, index){
       //There is already an expanded row, collapse it
       table.rows[table.last_expanded_row].style["white-space"] = "nowrap";
     }
-    //Expand current row
-    table.last_expanded_row = index;
-    row.style["white-space"] = "pre-line";
+    //Check if user clicked same row again
+    if(index === table.last_expanded_row){
+      //User clicked it again, collapse it
+      row.style["white-space"] = "nowrap";
+      delete table.last_expanded_row;
+
+      //Remove the edit bar, if neccessary
+      row.parentNode.removeChild(document.getElementById(table.options.edit_bar))
+    }else{
+      //Expand current row
+      table.last_expanded_row = index;
+      row.style["white-space"] = "pre-line";
+
+      //Check if we need to do something about the edit bar
+      if(table.options.edit_bar) {
+        let edit_bar = row.parentNode.insertBefore(table.edit_bar, row.nextSibling);
+        edit_bar.hidden = false;
+      }
+    }
   }
 
   //Execute the onclick function if neccessary
@@ -743,6 +778,13 @@ root.framework.table.select_row = function(bs, index){
   //Set the onclick property to this function here again; no idea why, but the onclick event gets cleared once we execute it
   row.onclick = root.framework.table.select_row;
 };
+
+
+
+/*
+ *  INTERNAL HELPER FUNCTIONS
+ *
+ */
 
 //Internal helper functions
 var _internal = {};
