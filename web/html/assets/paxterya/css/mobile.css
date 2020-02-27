@@ -216,7 +216,6 @@ nav li ul li i {
   color: currentColor;
 }
 
-
 #applications-table th, #applications-table td,
 #post-table th, #post-table td {
   display: none;
@@ -236,8 +235,17 @@ nav li ul li i {
 }
 
 .popup-foreground {
-  margin-left: -40%;
-  margin-top: -100px;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  position: fixed;
+  margin: 0;
+}
+
+.popup-background {
+  display: none;
 }
 
 /* ################### bulletin board ###################*/
@@ -284,8 +292,20 @@ nav li ul li i {
 	#bulletin-table td:nth-of-type(1):before { content: "Timestamp"; }
 	#bulletin-table td:nth-of-type(2):before { content: "Author"; }
 	#bulletin-table td:nth-of-type(3):before { content: "Message"; }
-
   #bulletin_edit_bar td:nth-of-type(1):before { content: ""; }
+
+  #textbox-popup-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  #textbox-popup-buttons button {
+    width: calc(50% - 5px);
+  }
+
+  #textbox-popup textarea {
+    height: 50vh;
+  }
 
 /* ################### interface applicant profile ###################*/
 

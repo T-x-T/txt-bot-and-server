@@ -1606,7 +1606,7 @@ p.note-box.margin-bottom {
   padding: 20px;
   text-align: center;
   width: 500px;
-  max-width: 80%;
+  max-width: 100%;
   height: auto;
   top: 40%;
   left: 50%;
