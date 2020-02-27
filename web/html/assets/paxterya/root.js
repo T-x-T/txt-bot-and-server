@@ -143,22 +143,24 @@ root.interface.toggleMyBulletins = function(element){
 
 root.interface.bulletin.new = function(table){
   //Summon the popup
-  root.framework.popup.create_textbox({maxLength: 1000, required: true}, function(input) {
-    //Send the message to the API
-    _internal.send('bulletin', false, 'POST', false, {message: input}, function(status, res){
-      if(status === 200){
-        root.framework.popup.create_info({text: 'Success!'});
-        table.update();
-      }else{
-        root.framework.popup.create_info({text: 'oops something bad happened, maybe this message helps someone figure it out\n' + res.err});
-      }
-    });
+  root.framework.popup.create_textbox({title: 'Create new bulletin', maxLength: 1000, required: true}, function(input) {
+    if(input){
+      //Send the message to the API
+      _internal.send('bulletin', false, 'POST', false, {message: input}, function(status, res) {
+        if(status === 200) {
+          root.framework.popup.create_info({text: 'Success!'});
+          table.update();
+        } else {
+          root.framework.popup.create_info({title: 'Error', text: 'oops something bad happened, maybe this message helps someone figure it out\n' + res.err});
+        }
+      });
+    }
   });
 };
 
 root.interface.bulletin.edit = function(row){
   //Summon the popup
-  root.framework.popup.create_textbox({maxLength: 1000, required: true, text: row.raw_data.message}, function(input){
+  root.framework.popup.create_textbox({title: 'Edit existing bulletin', maxLength: 1000, required: true, text: row.raw_data.message}, function(input){
     if(input){
       let new_data = row.raw_data;
       new_data.message = input;
@@ -167,7 +169,7 @@ root.interface.bulletin.edit = function(row){
           root.framework.popup.create_info({text: 'Success!'});
           row.table.update();
         } else {
-          root.framework.popup.create_info({text: 'oops something bad happened, maybe this message helps someone figure it out\n' + res.err});
+          root.framework.popup.create_info({title: 'Error', text: 'oops something bad happened, maybe this message helps someone figure it out\n' + res.err});
         }
       });
     }
@@ -179,7 +181,7 @@ root.interface.bulletin.delete = function(row){
     if(deleteConfirmed){
       _internal.send('bulletin', false, 'DELETE', false, row.raw_data, function(status, res){
         if(status != 200){
-          root.framework.popup.create_info({text: 'oops something bad happened, maybe this message helps someone figure it out\n' + res.err});
+          root.framework.popup.create_info({title: 'Error', text: 'oops something bad happened, maybe this message helps someone figure it out\n' + res.err});
         }else{
           row.table.update();
         }
@@ -528,7 +530,7 @@ root.framework.popup.cancel_click = function(popup) {
 };
 
 //Uses root.framework.popup.create to create a textbox for inputing text
-//options: maxlength, required, text
+//options: maxlength, required, text; title: the title lol
 //callback: user input, or false if there is no input given (was cancelled by user)
 root.framework.popup.create_textbox = function(options, callback){
   //Clone textbox template
@@ -540,8 +542,11 @@ root.framework.popup.create_textbox = function(options, callback){
   if(options.required) textbox.childNodes[1].required = options.required;
   if(options.text) textbox.childNodes[1].innerText = options.text;
 
+  let title = 'Sample textbox title';
+  if(options.title) title = options.title;
+
   //Create the popup; confirmClose gets set to true once text gets entered
-  root.framework.popup.create({div: textbox, confirmClose: false, title: 'Sample textbox tile', closeCall: function(popup, _callback){
+  root.framework.popup.create({div: textbox, confirmClose: false, title: title, closeCall: function(popup, _callback){
     //Stuff that should be done before closing
     //Check if we need to save
     if(popup.save){
@@ -576,15 +581,18 @@ root.framework.popup.textbox_save_click = function(popup){
 };
 
 //Creates a confirmation popup
-//options: text: text that is shown in the popup
+//options: text: text that is shown in the popup; title: the title lol
 //Callback: true if user said yes, false if otherwise
 root.framework.popup.create_confirmation = function(options, callback){
   //Clone the template
   let confirmation = document.getElementById('confirmation-popup').cloneNode(true);
   confirmation.hidden = false;
 
+  let title = 'Confirmation';
+  if(options.title) title = options.title;
+
   //Create the popup
-  root.framework.popup.create({div: confirmation, confirmClose: false, title: 'Confirmation', closeCall: function(popup, _callback){
+  root.framework.popup.create({div: confirmation, confirmClose: false, title: title, closeCall: function(popup, _callback){
     //Stuff that should be done before closing
     callback(popup.confirmation);
     _callback();
@@ -601,7 +609,7 @@ root.framework.popup.confirmation_yes = function(popup){
 };
 
 //Create a information popup
-//options: text: text that is shown in the popup
+//options: text: text that is shown in the popup; title: the title lol
 //callback: gets called once user closed it (no parameters)
 root.framework.popup.create_info = function(options, callback){
   //Clone the template
@@ -611,8 +619,11 @@ root.framework.popup.create_info = function(options, callback){
   //Apply the options
   if(options.text) info.childNodes[1].innerText = options.text;
 
+  let title = 'Information';
+  if(options.title) title = options.title;
+
   //Create the popup
-  root.framework.popup.create({div: info, confirmClose: false, title: 'Information'}, function(){
+  root.framework.popup.create({div: info, confirmClose: false, title: title}, function(){
     //Callback of the create function
 
   });
