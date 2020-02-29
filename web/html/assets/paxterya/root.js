@@ -19,8 +19,11 @@ root.interface.init = function(){
     return re;
   }, {});
 
-  root.interface.application.load();
-  root.interface.post.load();
+  //Only initialize tables that are there
+  if(root.cookies.access_level == 9){
+    root.interface.application.load();
+    root.interface.post.load();
+  }
   root.interface.bulletin.init();
 };
 
