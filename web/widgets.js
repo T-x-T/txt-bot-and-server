@@ -21,6 +21,7 @@ widgets.get = function(access_token, callback){
       let html = '';
       widgets.list.forEach((widget) => {
         if(widget.level <= access_level) html += widget.html;
+        html += '<br>'
       });
       web_helpers.insertVariables({path: path.join(__dirname, '/widgets.html'), access_token: access_token}, html, function(err, finishedHtml) {
         callback(finishedHtml);
@@ -39,6 +40,10 @@ widgets.init = function(){
       level: 3
     },
     {
+      name: 'bulletin',
+      level: 3
+    },
+    {
       name: 'applications',
       level: 9
     }, 
@@ -49,8 +54,9 @@ widgets.init = function(){
 
   //Read in the html for the widgets and add that too
   fs.readFile(path.join(__dirname, './widgets/welcome.html'), function(err, fileData) {if(!err && fileData) widgets.list[0].html = fileData;});
-  fs.readFile(path.join(__dirname, './widgets/applications.html'), function(err, fileData) {if(!err && fileData) widgets.list[1].html = fileData;});
-  fs.readFile(path.join(__dirname, './widgets/posts.html'), function(err, fileData) {if(!err && fileData) widgets.list[2].html = fileData;});
+  fs.readFile(path.join(__dirname, './widgets/bulletin.html'), function(err, fileData) {if(!err && fileData) widgets.list[1].html = fileData;});
+  fs.readFile(path.join(__dirname, './widgets/applications.html'), function(err, fileData) {if(!err && fileData) widgets.list[2].html = fileData;});
+  fs.readFile(path.join(__dirname, './widgets/posts.html'), function(err, fileData) {if(!err && fileData) widgets.list[3].html = fileData;});
 };
 
 //Export the container

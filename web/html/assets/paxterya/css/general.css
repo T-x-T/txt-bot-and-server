@@ -533,7 +533,7 @@ button {
 }
 
 button.secondary {
-  background: none;
+  background: white;
   color: #343838;
   border: 1px solid #bebebe;
 }
@@ -825,10 +825,8 @@ textarea {
     padding: 5px;
     width: 100%;
     height: 150px;
+    box-sizing: border-box;
 }
-
-
-
 
 .tooltip {
     position: absolute;
@@ -1403,6 +1401,7 @@ button[id="submit"]:hover {
         border-collapse: separate;
         border-spacing: 0px;
         width: 100%;
+        white-space: nowrap;
     }
 
     .interface-table button {
@@ -1423,7 +1422,7 @@ button[id="submit"]:hover {
         background: #e9e9e9;
         font-size: 12pt;
         text-overflow: ellipsis;
-        white-space: nowrap;
+        white-space: inherit;
         overflow: hidden;
         color: #222424;
         max-width: 150px;
@@ -1443,6 +1442,18 @@ button[id="submit"]:hover {
         background: white;
     }
 
+    .interface-table p {
+      white-space: pre-line;
+    }
+
+    .temp_dark {
+      background: #e9e9e9 !important;
+    }
+
+    .temp_bright {
+      background: white !important;
+    }
+
     td.stickycol {
         position: -webkit-sticky;
         position: sticky;
@@ -1455,7 +1466,7 @@ button[id="submit"]:hover {
     }
 
     .interface-table tr:hover > td {
-      background: #007787;
+      background: #007787 !important;
       color: white;
       cursor: pointer;
     }
@@ -1575,6 +1586,64 @@ p.note-box.margin-bottom {
 #post-body {
   margin-top: 20px;
 }
+
+/* ################### popup ###################*/
+.popup-background {
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  opacity: 60%;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  position: fixed;
+}
+
+.popup-foreground {
+  z-index: 1001;
+  position: fixed;
+  background-color: #f0f0f0;
+  padding: 20px;
+  text-align: center;
+  width: 500px;
+  max-width: 100%;
+  height: auto;
+  top: 40%;
+  left: 50%;
+  margin-top: -200px;
+  margin-left: -250px;
+  box-sizing: border-box;
+}
+
+#popup-title {
+  font-family: "semibold";
+  color: #007787;
+  font-size: 14pt;
+}
+
+#popup-head-title {
+  float: left;
+}
+
+#popup-head-close {
+  float: right;
+}
+
+button#popup-close {
+  margin: 0 0 20px 0;
+}
+
+div#popup p {
+  font-family: "regular";
+}
+
+div#confirmation-popup, div#info-popup {
+  color: white;
+  background: #007787;
+  margin-top: 50px;
+  padding: 5px;
+}
+
 
 /* ################### download section ###################*/
 

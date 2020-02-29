@@ -103,6 +103,7 @@ const router = {
   '/paxterya/api/contact': handlers.paxapi.contact,
   '/paxterya/api/member': handlers.paxapi.member,
   '/paxterya/api/post': handlers.paxapi.post,
+  '/paxterya/api/bulletin': handlers.paxapi.bulletin,
   '/paxterya/login': handlers.paxLogin,
   '/paxterya/staff': handlers.paxStaff
 };
@@ -124,12 +125,18 @@ server.getDataObject = function (req, callback) {
     } catch (e) {
       var jsonObject = {};
     }
+    let cookies = {};
+    if(req.headers.cookie) req.headers.cookie.replace(/\s/g, '').split(';').forEach((cookie) => {
+      let parts = cookie.split('=');
+      cookies[parts[0]] = parts[1];
+    });
     var data = {
       'path': parsedUrl.pathname.replace(/^\/+|\/+$/g, ''),
       'queryStringObject': JSON.parse(JSON.stringify(parsedUrl.query)),
       'method': req.method.toLowerCase(),
       'headers': req.headers,
-      'payload': jsonObject
+      'payload': jsonObject,
+      'cookies': cookies
     };
 
     callback(data);

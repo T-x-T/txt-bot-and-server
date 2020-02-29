@@ -212,6 +212,11 @@ nav li ul li i {
 }
 
 /* ################### interface ###################*/
+.interface-table tr:hover > td {
+  background: none !important;
+  color: currentColor;
+}
+
 #applications-table th, #applications-table td,
 #post-table th, #post-table td {
   display: none;
@@ -229,6 +234,79 @@ nav li ul li i {
 #post-table td:nth-child(4) {
   white-space: pre-line;
 }
+
+.popup-foreground {
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  position: fixed;
+  margin: 0;
+}
+
+.popup-background {
+  display: none;
+}
+
+/* ################### bulletin board ###################*/
+
+/* Force table to not be like tables anymore */
+	#bulletin-table, #bulletin-table thead, #bulletin-table tbody, #bulletin-table th, #bulletin-table td, #bulletin-table tr {
+		display: block;
+    text-align: left;
+	}
+
+  button#bulletin-new {
+    margin: 0 10px 10px 0;
+  }
+
+	/* Hide table headers (but not display: none;, for accessibility) */
+	#bulletin-table thead tr {
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+
+	#bulletin-table td {
+		/* Behave  like a "row" */
+		border: none;
+		position: relative;
+		padding-left: 40%;
+    max-width: none;
+	}
+
+	#bulletin-table td:before {
+		/* Now like a table header */
+		position: absolute;
+    font-family: "semibold";
+    color: #007787;
+		/* Top/left values mimic padding */
+		top: 3px;
+		left: 6px;
+		width: 40%;
+	}
+
+	/*
+	Label the data
+	*/
+	#bulletin-table td:nth-of-type(1):before { content: "Timestamp"; }
+	#bulletin-table td:nth-of-type(2):before { content: "Author"; }
+	#bulletin-table td:nth-of-type(3):before { content: "Message"; }
+  #bulletin_edit_bar td:nth-of-type(1):before { content: ""; }
+
+  #textbox-popup-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  #textbox-popup-buttons button {
+    width: calc(50% - 5px);
+  }
+
+  #textbox-popup textarea {
+    height: 50vh;
+  }
 
 /* ################### interface applicant profile ###################*/
 
