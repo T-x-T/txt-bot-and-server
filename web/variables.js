@@ -48,7 +48,7 @@ var _getters = {};
 
 //Callsback the html for all interface widgets that the current user is allowed to see
 _getters.interface = function(callback){
-  let access_token = data.headers.cookie.split('=')[1];
+  let access_token = data.cookies.access_token;
   widgets.get(access_token, function(html){
     callback({
       'widgets': html,

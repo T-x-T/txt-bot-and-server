@@ -14,6 +14,7 @@ const email       = require('./../lib/email.js');
 const stats       = require('./../lib/stats.js');
 const post        = require('./../lib/post.js');
 const bulletin    = require('./../lib/bulletin.js');
+const _data        = require('./../lib/data.js');
 
 //Create the container
 var handlers = {};
@@ -115,31 +116,26 @@ handlers.assets = function (data, callback) {
   }
 };
 
-//Special handler for staff only sites
-handlers.paxStaff = function(data, callback){
+//Special handler for staff and member only sites
+handlers.paxStaff = function(data, callback) {
   //Check if the user provided an access_token cookie
-  if(data.headers.hasOwnProperty('cookie')){
-    if(data.headers.cookie.indexOf('access_token' > -1)){
-      let access_token = data.headers.cookie.split('=')[1];
-      oauth.getTokenAccessLevel(access_token, function(access_level){
-        if(data.path.indexOf('application') > -1 && access_level >= 9 || data.path.indexOf('post') > -1 && access_level >= 9 || data.path.indexOf('interface') > -1 && access_level >= 3 || data.path.indexOf('blackboard') > -1 && access_level >= 3){
-          //Everything is fine, serve the website
-          data.path = path.join(__dirname, './html/' + data.path);
-          webHelpers.finishHtml(data, 'paxterya', function(err, fileData){
-            if(!err && fileData.length > 0){
-              callback(200, fileData, 'html');
-            }else{
-              callback(500, 'Something bad happend. Not like a nuclear war, but still bad. Please contact TxT#0001 on Discord if you see this', 'html');
-            }
-          });
-        }else{
-          callback(302, {Location: config.oauth_uris.login}, 'plain');
-        }
-      });
-    }else{
-      callback(302, {Location: config.oauth_uris.login}, 'plain');
-    }
-  }else{
+  if(data.cookies.access_token) {
+    oauth.getTokenAccessLevel(data.cookies.access_token, function(access_level) {
+      if(data.path.indexOf('application') > -1 && access_level >= 9 || data.path.indexOf('post') > -1 && access_level >= 9 || data.path.indexOf('interface') > -1 && access_level >= 3 || data.path.indexOf('blackboard') > -1 && access_level >= 3) {
+        //Everything is fine, serve the website
+        data.path = path.join(__dirname, './html/' + data.path);
+        webHelpers.finishHtml(data, 'paxterya', function(err, fileData) {
+          if(!err && fileData.length > 0) {
+            callback(200, fileData, 'html');
+          } else {
+            callback(500, 'Something bad happend. Not like a nuclear war, but still bad. Please contact TxT#0001 on Discord if you see this', 'html');
+          }
+        });
+      } else {
+        callback(302, {Location: config.oauth_uris.login}, 'plain');
+      }
+    });
+  } else {
     callback(302, {Location: config.oauth_uris.login}, 'plain');
   }
 };
@@ -151,8 +147,12 @@ handlers.paxLogin = function(data, callback){
   if(code){
     oauth.getCodeAccessLevel(code, 'staffLogin', function(access_level, access_token){
       if(access_level >= 3){
-        //Now set the access_token as a cookie and redirect the user to the interface.html
-        callback(302, {Location: `https://${data.headers.host}/staff/interface.html`, 'Set-Cookie': `access_token=${access_token};expires=${new Date(Date.now() + 1000 * 60 * 60 * 6).toGMTString()};path=/`}, 'plain');
+        oauth.getUserObject(access_token, function(userData){
+          _data.getMembers({discord: userData.id}, true, true, function(memberData){
+            //Now set the access_token as a cookie and redirect the user to the interface.html, also set access_level and mc_ign cookies THIS SHOULD NEVER BE TRUSTED FOR SECURITY, ONLY FOR MAKING THINGS SMOOTHER!!!
+            callback(302, {Location: `https://${data.headers.host}/staff/interface.html`, 'Set-Cookie': [`access_token=${access_token};Max-Age=21000};path=/`, `access_level=${access_level};Max-Age=22000};path=/`, `mc_ign=${memberData[0].mcName};Max-Age=22000};path=/`]}, 'plain');
+          });
+        });
       }else{
         callback(401, 'You are not authorized to view the member interface. Please login with the Discord account you are using on our server, if you are a member<br><a href="../">go back to safety</a>', 'html');
       }
@@ -173,8 +173,8 @@ handlers.paxLogin = function(data, callback){
 handlers.paxapi.bulletin = function(data, callback){
   if(typeof handlers.paxapi.bulletin[data.method] == 'function'){
     //Check if user is authorized to send that request
-    if(data.headers.hasOwnProperty('cookie') && data.headers.cookie.indexOf('access_token' > -1)){
-      oauth.getTokenAccessLevel(data.headers.cookie.split('=')[1], function(access_level) {
+    if(data.cookies.access_token){
+      oauth.getTokenAccessLevel(data.cookies.access_token, function(access_level) {
         if(access_level >= 3){
           //User is authorized
           handlers.paxapi.bulletin[data.method](data, callback);
@@ -193,7 +193,7 @@ handlers.paxapi.bulletin = function(data, callback){
 //Save a new bulletin
 handlers.paxapi.bulletin.post = function(data, callback){
   //Get the discord id of the author
-  oauth.getDiscordIdFromToken(data.headers.cookie.split('=')[1], function(discord_id){
+  oauth.getDiscordIdFromToken(data.cookies.access_token, function(discord_id){
     if(discord_id){
       data.payload.author = discord_id;
       bulletin.save(data.payload, function(err, doc){
@@ -212,7 +212,7 @@ handlers.paxapi.bulletin.post = function(data, callback){
 //Update an existing bulletin
 handlers.paxapi.bulletin.put = function(data, callback){
   //Get the discord id of the author
-  oauth.getDiscordIdFromToken(data.headers.cookie.split('=')[1], function(discord_id) {
+  oauth.getDiscordIdFromToken(data.cookies.access_token, function(discord_id) {
     if(discord_id) {
       //Check if discord_id is the same as author from the database
       console.log(data.payload)
@@ -252,7 +252,7 @@ handlers.paxapi.bulletin.get = function(data, callback) {
 //Remove bulletin
 handlers.paxapi.bulletin.delete = function(data, callback) {
   //Get the discord id of the author
-  oauth.getDiscordIdFromToken(data.headers.cookie.split('=')[1], function(discord_id) {
+  oauth.getDiscordIdFromToken(data.cookies.access_token, function(discord_id) {
     if(discord_id) {
       //Check if discord_id is the same as author from the database
       bulletin.get({_id: data.payload._id}, function(err, docs) {
@@ -294,7 +294,7 @@ handlers.paxapi.post.post = function(data, callback){
   if(data.headers.hasOwnProperty('cookie')) {
     if(data.headers.cookie.indexOf('access_token' > -1)) {
       //There is an access_token cookie, lets check if it belongs to an admin
-      oauth.getTokenAccessLevel(data.headers.cookie.split('=')[1], function(access_level) {
+      oauth.getTokenAccessLevel(data.cookies.access_token, function(access_level) {
         if(access_level >= 9) {
           //The requester is allowed to post the records
           post.save(data.payload, function(err){
@@ -381,7 +381,7 @@ handlers.paxapi.application = function(data, callback){
       if(data.headers.hasOwnProperty('cookie')){
         if(data.headers.cookie.indexOf('access_token' > -1)){
           //There is an access_token cookie, lets check if it belongs to an admin
-          oauth.getTokenAccessLevel(data.headers.cookie.split('=')[1], function(access_level){
+          oauth.getTokenAccessLevel(data.cookies.access_token, function(access_level){
             if(access_level >= 9){
               //The requester is allowed to get the records
               handlers.paxapi.application[data.method](data, callback);

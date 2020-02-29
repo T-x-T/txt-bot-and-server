@@ -12,6 +12,13 @@ root.interface = {};
 
 //Called on page load
 root.interface.init = function(){
+  //Code from stackoverflow which converts to object as saves it in root.cookies
+  root.cookies = (document.cookie || '').split(/;\s*/).reduce(function(re, c) {
+    var tmp = c.match(/([^=]+)=(.*)/);
+    if(tmp) re[tmp[1]] = unescape(tmp[2]);
+    return re;
+  }, {});
+
   root.interface.application.load();
   root.interface.post.load();
   root.interface.bulletin.init();
@@ -64,7 +71,6 @@ root.interface.post.load = function(filter) {
     let visiblity = 'error';
     if(input.public) visiblity = 'Public';
       else visiblity = 'Private';
-
     return [
       input.id,
       new Date(input.date).toISOString().substring(0, 10),
@@ -95,19 +101,21 @@ root.interface.post.redirect = function(row) {
 root.interface.bulletin = {};
 
 root.interface.bulletin.init = function(){
+  //This enables admins to open the edit bar on all bulletins
+  let edit_bar_filter_value = root.cookies.access_level >= 9 ? false : root.cookies.mc_ign;
   root.framework.table.init(document.getElementById('bulletin-table'), {api_path: 'bulletin', data_mapping: function(input){
     return [
       new Date(input.date).toISOString().substring(0, 10),
-      input.mc_ign,
+      input.author_name,
       input.message
     ]
-  }, api_method: 'GET', edit_bar: 'bulletin_edit_bar', row_onclick: false, expand_row: true});
+  }, api_method: 'GET', edit_bar: 'bulletin_edit_bar', edit_bar_filter_column: 1, edit_bar_filter_value: edit_bar_filter_value, row_onclick: false, expand_row: true});
 };
 
 root.interface.bulletin_my_active = false;
 root.interface.toggleMyBulletins = function(element){
   let table = document.getElementById('bulletin-table');
-
+  
   if(!root.interface.bulletin_my_active){
     //Update table to only show bulletins of logged in user
     //Remove the edit row
@@ -635,7 +643,7 @@ root.framework.table = {};
 
 //Initialize a table; This sets up the DOM object with our custom functions
 //options: required:api_path to get data, data_mapping: function that turns one object from the api into an array of values that can be put into a single row
-//         optional: api_method, edit_bar id of the edit_bar, row_onclick: function, expand_row: (bool) when true it expands the clicked row
+//         optional: api_method, edit_bar id of the edit_bar, edit_bar_filter_column: set a column for filtering, edit_bar_filter_value: value for the filter, row_onclick: function, expand_row: (bool) when true it expands the clicked row
 root.framework.table.init = function(table, options){
   if(!options.hasOwnProperty('api_method')) options.api_method = 'GET';
   if(!options.hasOwnProperty('edit_bar')) options.edit_bar = false;
@@ -769,7 +777,9 @@ root.framework.table.select_row = function(bs, index){
       delete table.last_expanded_row;
 
       //Remove the edit bar, if neccessary
-      row.parentNode.removeChild(document.getElementById(table.options.edit_bar))
+      let edit_bar = document.getElementById(table.options.edit_bar);
+      if(edit_bar) row.parentNode.removeChild(edit_bar);
+
     }else{
       //Expand current row
       table.last_expanded_row = index;
@@ -777,8 +787,17 @@ root.framework.table.select_row = function(bs, index){
 
       //Check if we need to do something about the edit bar
       if(table.options.edit_bar) {
-        let edit_bar = row.parentNode.insertBefore(table.edit_bar, row.nextSibling);
-        edit_bar.hidden = false;
+        //Check if we need to extra work with filtering
+        if(table.options.edit_bar_filter_value){
+          //Check if the filter applies here
+          if(row.cells[table.options.edit_bar_filter_column].innerText == table.options.edit_bar_filter_value){
+            let edit_bar = row.parentNode.insertBefore(table.edit_bar, row.nextSibling);
+            edit_bar.hidden = false;
+          }
+        }else{
+          let edit_bar = row.parentNode.insertBefore(table.edit_bar, row.nextSibling);
+          edit_bar.hidden = false;
+        }
       }
     }
   }
