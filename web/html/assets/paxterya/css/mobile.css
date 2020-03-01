@@ -330,9 +330,21 @@ nav li ul li i {
     width: 100%;
 }
 
+
+
+/* ################### zoom & pan feature ###################*/
+
+.toggle_controls {
+  display: flex;
+  flex-wrap: wrap;
 }
 
-/* ################## adaptions for very small screens #####################*/
+.toggle_controls label {
+  margin: 15px 20px;
+}
+
+
+}/* ################## adaptions for very small screens #####################*/
 @media screen and (max-width:500px) {
 
   .member-card-wrapper{
@@ -360,4 +372,6 @@ nav li ul li i {
   }
   main h1::before, main h1::after, footer::before, footer::after {
     border-color: transparent;
+}
+
 }

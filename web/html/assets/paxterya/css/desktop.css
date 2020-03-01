@@ -169,4 +169,9 @@ nav ul ul li:hover > i {
     width: 500px;
 }
 
+/* ################### zoom & pan feature ###################*/
+
+.toggle_controls {
+  display: flex;
+  justify-content: space-around;
 }

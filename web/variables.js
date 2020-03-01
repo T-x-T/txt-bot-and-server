@@ -212,6 +212,24 @@ const template = {
   '/paxterya/our-world.html': {
     'pax_title': 'Our World'
   },
+  '/paxterya/town-of-paxterya.html': {
+    'pax_title': 'Town of Paxterya'
+  },
+  '/paxterya/penliam.html': {
+    'pax_title': 'Penliam'
+  },
+  '/paxterya/cookieville.html': {
+    'pax_title': 'Cookieville'
+  },
+  '/paxterya/paxterdam.html': {
+    'pax_title': 'Paxterdam'
+  },
+  '/paxterya/paxendorf.html': {
+    'pax_title': 'Paxendorf'
+  },
+  '/paxterya/littleroot-city.html': {
+    'pax_title': 'Littleroot City'
+  },
   '/paxterya/faq.html': {
     'pax_title': 'FAQ'
   },
