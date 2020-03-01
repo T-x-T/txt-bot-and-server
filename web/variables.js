@@ -15,6 +15,8 @@ const post            = require('./../lib/post.js');
 const widgets         = require('./widgets.js');
 const oauth           = require('./../lib/oauth2.js');
 const _data           = require('./../lib/data.js');
+const fs              = require('fs');
+const path            = require('path');
 
 //Create internal container
 var _internal = {};
@@ -159,6 +161,20 @@ _getters.index = function(callback){
   });
 };
 
+_getters.town_of_paxterya = function(callback){
+  fs.readFile(path.join(__dirname + '/html/assets/paxterya/img/town_of_paxterya_roads.svg'), function(err, data){
+    let output = {
+      'pax_title': 'Town of Paxterya'
+    };
+    if(!err && data){
+      output.map = data;
+    }else{
+      output.map = 'Error';
+    }
+    callback(output);
+  })
+};
+
 //Callsback an object for all widgets on the interface
 _getters.widgets = function(callback){
   oauth.getUserObject(data.access_token, function(userObject){
@@ -184,6 +200,7 @@ const template = {
   '/paxterya/staff/post.html': _getters.post,
   '/paxterya/statistics.html': _getters.statistics,
   '/paxterya/index.html': _getters.index,
+  '/paxterya/town-of-paxterya.html': _getters.town_of_paxterya,
   '/paxterya/application-sent.html': {
     'pax_title': 'Success!'
   },
@@ -211,9 +228,6 @@ const template = {
   },
   '/paxterya/our-world.html': {
     'pax_title': 'Our World'
-  },
-  '/paxterya/town-of-paxterya.html': {
-    'pax_title': 'Town of Paxterya'
   },
   '/paxterya/penliam.html': {
     'pax_title': 'Penliam'
