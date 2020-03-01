@@ -37,6 +37,7 @@ var conf = {
     'discord_redirect_uri_staffLogin': '',
     'new_member_announcement_channel': 'id of the channel new members get announced to',
     'new_application_announcement_channel': '',
+    'new_bulletin_announcement_channel': '',
     'oauth_uris': {
       'application': '',
       'login': ''
