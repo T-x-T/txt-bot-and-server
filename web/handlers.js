@@ -121,14 +121,21 @@ handlers.paxStaff = function(data, callback) {
   //Check if the user provided an access_token cookie
   if(data.cookies.access_token) {
     oauth.getTokenAccessLevel(data.cookies.access_token, function(access_level) {
-      if(data.path.indexOf('application') > -1 && access_level >= 9 || data.path.indexOf('post') > -1 && access_level >= 9 || data.path.indexOf('interface') > -1 && access_level >= 3 || data.path.indexOf('blackboard') > -1 && access_level >= 3) {
+      if(data.path.indexOf('application') > -1 && access_level >= 9 || data.path.indexOf('post') > -1 && access_level >= 9 || data.path.indexOf('interface') > -1 && access_level >= 3) {
         //Everything is fine, serve the website
         data.path = path.join(__dirname, './html/' + data.path);
         webHelpers.finishHtml(data, 'paxterya', function(err, fileData) {
           if(!err && fileData.length > 0) {
             callback(200, fileData, 'html');
           } else {
-            callback(500, 'Something bad happend. Not like a nuclear war, but still bad. Please contact TxT#0001 on Discord if you see this', 'html');
+            data.path = data.path + '.html';
+            webHelpers.finishHtml(data, 'paxterya', function(err, fileData) {
+              if(!err && fileData.length > 0) {
+                callback(200, fileData, 'html');
+              } else {
+                callback(500, 'Something bad happend. Not like a nuclear war, but still bad. Please contact TxT#0001 on Discord if you see this', 'html');
+              }
+            });
           }
         });
       } else {
@@ -176,6 +183,9 @@ handlers.paxapi.bulletin = function(data, callback){
     if(data.cookies.access_token){
       oauth.getTokenAccessLevel(data.cookies.access_token, function(access_level) {
         if(access_level >= 3){
+          //Add access_level to data, to allow edits by admins (>=9)
+          data.access_level = access_level;
+
           //User is authorized
           handlers.paxapi.bulletin[data.method](data, callback);
         }else{
@@ -215,10 +225,9 @@ handlers.paxapi.bulletin.put = function(data, callback){
   oauth.getDiscordIdFromToken(data.cookies.access_token, function(discord_id) {
     if(discord_id) {
       //Check if discord_id is the same as author from the database
-      console.log(data.payload)
       bulletin.get({_id: data.payload._id}, function(err, docs){
         if(!err && docs.length > 0){
-          if(docs[0].author === discord_id){
+          if(docs[0].author === discord_id || data.access_level >= 9){
             //Everything in order, save to db
             bulletin.save(data.payload, function(err, doc) {
               if(!err && doc) {
@@ -257,7 +266,7 @@ handlers.paxapi.bulletin.delete = function(data, callback) {
       //Check if discord_id is the same as author from the database
       bulletin.get({_id: data.payload._id}, function(err, docs) {
         if(!err && docs) {
-          if(docs[0].author === discord_id) {
+          if(docs[0].author === discord_id || data.access_level >= 9) {
             //Everything in order, remove from db
             bulletin.remove({_id: data.payload._id}, function(err) {
               if(!err) {

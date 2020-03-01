@@ -117,7 +117,7 @@ root.interface.bulletin.init = function(){
 
 root.interface.bulletin_my_active = false;
 root.interface.toggleMyBulletins = function(element){
-  let table = document.getElementById('bulletin-table');
+  let table = element.parentNode.parentNode;
   
   if(!root.interface.bulletin_my_active){
     //Update table to only show bulletins of logged in user
@@ -126,9 +126,9 @@ root.interface.toggleMyBulletins = function(element){
 
     //Hide rows from other authors
     let j = 1;
-    for(let i = 2;i < table.rows.length;i++) {
+    for(let i = 1;i < table.rows.length;i++) {
       //Hide row
-      if(table.rows[i].cells[0].colSpan == 1 && table.rows[i].cells[1].innerText != 'The__TxT') table.rows[i].hidden = true;
+      if(table.rows[i].cells[1].innerText != root.cookies.mc_ign) table.rows[i].hidden = true;
 
       //Reapply the zebra effect with temp classes
       if(!table.rows[i].hidden) {
@@ -159,7 +159,6 @@ root.interface.bulletin.new = function(table){
       //Send the message to the API
       _internal.send('bulletin', false, 'POST', false, {message: input}, function(status, res) {
         if(status === 200) {
-          root.framework.popup.create_info({text: 'Success!'});
           table.update();
         } else {
           root.framework.popup.create_info({title: 'Error', text: 'oops something bad happened, maybe this message helps someone figure it out\n' + res.err});
@@ -177,7 +176,6 @@ root.interface.bulletin.edit = function(row){
       new_data.message = input;
       _internal.send('bulletin', false, 'PUT', false, new_data, function(status, res) {
         if(status === 200) {
-          root.framework.popup.create_info({text: 'Success!'});
           row.table.update();
         } else {
           root.framework.popup.create_info({title: 'Error', text: 'oops something bad happened, maybe this message helps someone figure it out\n' + res.err});
@@ -684,7 +682,7 @@ root.framework.table.update = function(filter){
   _internal.send(this.options.api_path, false, this.options.api_method, this.options.filter, false, function(status, res){
     if(status == 200 && res.length > 0){
       //Remove all existing rows including the edit row
-      if(table.options.edit_bar && table.hasOwnProperty('last_expanded_row')) table.tBodies[0].removeChild(document.getElementById(table.options.edit_bar));
+      if(table.options.edit_bar && table.hasOwnProperty('last_expanded_row' && document.getElementById(table.options.edit_bar))) table.tBodies[0].removeChild(document.getElementById(table.options.edit_bar));
       table.remove_all_rows();
 
       //Add the data to the table
