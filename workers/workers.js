@@ -10,6 +10,7 @@ const log = require('./../lib/log.js');
 const mc_helpers = require('./../lib/mc_helpers.js');
 const oauth = require('./../lib/oauth2.js');
 const widgets = require('./../web/widgets.js');
+const discord_helpers = require('./../discord-bot/discord_helpers.js');
 
 //Stuff that should run on startup
 mc_helpers.updateOnlinePlayers();
@@ -46,6 +47,7 @@ setInterval(function(){
   mc_helpers.updateAllUUIDs(false);
   mc_helpers.updateAllIGNs();
   mc_helpers.updateRoles();
+  discord_helpers.updateAllNicks();
   oauth.updateUserIdCache();
 }, 1000 * 60 * 60);
 

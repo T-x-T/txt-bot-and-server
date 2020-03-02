@@ -5,8 +5,13 @@
 
 //Dependencies
 const config = require('./../config.js');
-const data   = require('./../lib/data.js');
+var data;
 const log    = require('./../lib/log.js');
+
+//This is somehow neccessary, otherwise data will just be an empty object for whatever reason
+setTimeout(function(){
+  data = require('./../lib/data.js');
+}, 0)
 
 //Global var
 var client;
@@ -108,35 +113,37 @@ helpers.isGuildMember = function(userID){
   return client.guilds.get(config['guild']).members.has(userID);
 };
 
-//Add the ign to the users nick if necessary. the user variable requires a discord guildmember object
-helpers.addIgnToNick = function(member){
-  let nick = member.displayName;
-  data.getUserData(member.id, function(err, document){
-    if(!err){
-      let ign = typeof document.mcName == 'string' ? document.mcName : '';
-      try{
-        //Now we have the discord nick and the mc ign, so lets compare them to find out if they are different
-        if(!(nick.toLowerCase().indexOf(ign.toLowerCase()) > -1 || ign.toLowerCase().indexOf(nick.toLowerCase()) > -1)){
+//Set the nick of a user to their mc_ign
+helpers.updateNick = function(discord_id) {
+  data.getMembers({discord: discord_id}, true, true, function(docs) {
+    if(docs) {
+      let doc = docs[0];
+      let ign = typeof doc.mcName == 'string' ? doc.mcName : '';
+      //Get the members object
+      helpers.getMemberObjectByID(discord_id, function(member) {
+        if(member) {
           //Now its time to change the users nick
-          member.setNickname(`${nick} (${ign})`)
-          .catch((e) => {log.write(2, 'discord_helpers.addIgnToNick failed to set the members nickname', {user: member.id, nick: nick, ign: ign, err: e});});
+          member.setNickname(ign)
+            .catch((e) => {log.write(2, 'discord_helpers.updateNick failed to set the members nickname', {user: member.id, err: e});});
+        } else {
+          log.write(2, 'discord_helpers.updateNick couldnt get the member object');
         }
-      }catch(e){
-        log.write(2, 'discord_helpers.addIgnToNick failed to compare or change the nickname', {user: member.id, err: e});
-      }
-    }else{
-      log.write(2, 'discord_helpers.addIgnToNick couldnt get the member document', {user: member.id, err: err});
+      });
+    } else {
+      log.write(2, 'discord_helpers.updateNick couldnt get the member document', {user: discord_id});
     }
   });
 };
 
-//Add the ign to the users nick if necessary. the user variable requires a discord_id
-helpers.addIgnToNickById = function(discordID){
-  helpers.getMemberObjectByID(discordID, function(member){
-    if(member){
-      helpers.addIgnToNick(member);
+//Set the nick of all users to their mc_ign
+helpers.updateAllNicks = function(){
+  data.getMembers(false, true, true, function(docs){
+    if(docs){
+      docs.forEach((doc) => {
+        helpers.updateNick(doc.discord)
+      });
     }else{
-      log.write(2, 'discord_helpers.addIgnToNickById couldnt get the member object');
+      log.write(2, 'discord_helpers.updateAllNicks couldnt get the member database entries', {});
     }
   });
 };

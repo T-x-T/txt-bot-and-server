@@ -225,11 +225,8 @@ module.exports = {
             case 'updatestats':
               mc_helpers.updateStats();
               break;
-            case 'updatenick':
-              _internal.addIgnToNick(message, false);
-              break;
             case 'updateallnicks':
-              _internal.addIgnToNick(message, true);
+              discord_helpers.updateAllNicks();
               break;
             case 'updateingameroles':
               mc_helpers.updateRoles();
@@ -298,33 +295,6 @@ module.exports = {
       }
     } else {
       message.channel.send('Sorry, you are not authorized to do that');
-    }
-  }
-};
-
-var _internal = {};
-
-//if all is true, it will update the nick for all users with an ign
-_internal.addIgnToNick = function(msg, all){
-  if(all){
-    data.listAllMembers(function(docs){
-      //add ign to nick for each member with a nick
-      docs.forEach((user) => {
-        if(typeof user.mcName == 'string'){
-          let dummyMsg = {member: user.discord};
-          _internal.addIgnToNick(dummyMsg, false);
-        }
-      });
-    });
-  }else{
-    let user;
-    try{
-      user = msg.mentions.members.first();
-      discord_helpers.addIgnToNick(user);
-    }catch(e){
-      user = discord_helpers.getMemberObjectByID(msg.member, function(member){
-        discord_helpers.addIgnToNick(member);
-      });
     }
   }
 };
