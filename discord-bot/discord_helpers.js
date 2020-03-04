@@ -11,7 +11,7 @@ const log    = require('./../lib/log.js');
 //This is somehow neccessary, otherwise data will just be an empty object for whatever reason
 setTimeout(function(){
   data = require('./../lib/data.js');
-}, 0)
+}, 0);
 
 //Global var
 var client;

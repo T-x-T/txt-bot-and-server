@@ -71,7 +71,7 @@ root.interface.post = {};
 //Loads the posts from the api and puts them into the table; bs is just some random variable because we get some shit from the onload
 root.interface.post.load = function(filter) {
   root.framework.table.init(document.getElementById('post-table'), {api_path: 'post', data_mapping: function(input){
-    let visiblity = 'error';
+    let visiblity;
     if(input.public) visiblity = 'Public';
       else visiblity = 'Private';
     return [
@@ -457,7 +457,7 @@ root.members.search = function(){
     if(element.querySelector('#mc_ign').innerText.toLowerCase().includes(term) || element.querySelector('#discord_name').innerText.toLowerCase().includes(term)) element.style = '';
       else element.style = 'display: none;';
   });
-}
+};
 
 //Framework stuff to make my life easier
 root.framework = {};
@@ -506,7 +506,7 @@ root.framework.popup.create = function(options, callback){
         //Dont ask for confirmation
         root.framework.popup.close_for_real(popup);
       }
-    }
+    };
 
     //Callback the popup
     callback(popup);
@@ -675,11 +675,13 @@ root.framework.table.init = function(table, options){
 //Update the data of the table, based on filter, if given
 root.framework.table.update = function(filter){
   if(typeof filter == 'undefined') filter = false;
+  if(!filter) filter = this.options.filter;
+
   //Set table to this, so we can use it later on
   let table = this;
 
   //Query the api for the data
-  _internal.send(this.options.api_path, false, this.options.api_method, this.options.filter, false, function(status, res){
+  _internal.send(this.options.api_path, false, this.options.api_method, filter, false, function(status, res){
     if(status == 200 && res.length > 0){
       //Remove all existing rows including the edit row
       if(table.options.edit_bar && table.hasOwnProperty('last_expanded_row' && document.getElementById(table.options.edit_bar))) table.tBodies[0].removeChild(document.getElementById(table.options.edit_bar));

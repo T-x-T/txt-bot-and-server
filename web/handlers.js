@@ -301,7 +301,7 @@ handlers.paxapi.post = function(data, callback) {
 handlers.paxapi.post.post = function(data, callback){
   //Check if there is an access_token
   if(data.headers.hasOwnProperty('cookie')) {
-    if(data.headers.cookie.indexOf('access_token' > -1)) {
+    if(data.headers.cookie.indexOf('access_token'.length > -1)) {
       //There is an access_token cookie, lets check if it belongs to an admin
       oauth.getTokenAccessLevel(data.cookies.access_token, function(access_level) {
         if(access_level >= 9) {
@@ -388,7 +388,7 @@ handlers.paxapi.application = function(data, callback){
       //All non post requests require authorization
       //Check if there is an access_token
       if(data.headers.hasOwnProperty('cookie')){
-        if(data.headers.cookie.indexOf('access_token' > -1)){
+        if(data.headers.cookie.indexOf('access_token'.length > -1)){
           //There is an access_token cookie, lets check if it belongs to an admin
           oauth.getTokenAccessLevel(data.cookies.access_token, function(access_level){
             if(access_level >= 9){

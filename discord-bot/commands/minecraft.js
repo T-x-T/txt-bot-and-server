@@ -5,7 +5,6 @@
 
 const data = require('./../../lib/data.js');
 const mc_helpers = require('./../../lib/mc_helpers.js');
-const discord_helpers = require('./../discord_helpers.js');
 
 module.exports = {
   name: 'minecraft',

@@ -3,10 +3,7 @@
 *	Command for all the admin thingys
 */
 
-const fs = require('fs');
 const log = require('./../../lib/log.js');
-const path = require('path');
-const discord = require('discord.js');
 const config = require('./../../config.js');
 const mc_helpers = require('./../../lib/mc_helpers.js');
 const discord_helpers = require('./../discord_helpers.js');

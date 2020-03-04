@@ -4,7 +4,7 @@
 */
 
 //Dependencies
-const config = require('./../config.js');
+//const config = require('./../config.js');
 const youtube = require('./../lib/youtube.js');
 const log = require('./../lib/log.js');
 const mc_helpers = require('./../lib/mc_helpers.js');
@@ -24,7 +24,7 @@ setTimeout(function(){
 }, 1000 * 5);
 
 //Contains discord user objects mapped by the discord id; gets cleared once an hour in workers
-global.cache = {}
+global.cache = {};
 global.cache.discordUserObjects = {};
 oauth.updateUserIdCache();
 

@@ -5,7 +5,6 @@
 
 //Dependencies
 const config          = require('./../config.js');
-const log             = require('./../lib/log.js');
 const application     = require('./../lib/application.js');
 const discord_helpers = require('./../discord-bot/discord_helpers.js');
 const mc_helpers      = require('./../lib/mc_helpers.js');
@@ -147,7 +146,7 @@ _getters.index = function(callback){
     });
 
     //Build the final html
-    body = '';
+    let body = '';
     posts.forEach((post) => {
       body += `<article class="news"><h2>${post.title}</h2><img class="author" src="assets/paxterya/img/avatar-${post.author.toLowerCase()}.png"><span class="subtitle">${new Date(post.date).toISOString().substring(0, 10)}. Author: ${post.author}</span><section>`;
       body += post.body;
@@ -263,7 +262,7 @@ module.exports = function(local_data, callback) {
   if(os.platform() != 'win32'){
     local_data.path = local_data.path.replace(__dirname, '').replace('/html', '');
   }else{
-    local_data.path = local_data.path.replace(__dirname, '').replace('\\html', '').replace('\\','/').replace('\\','/').replace('\\','/');
+    local_data.path = local_data.path.replace(__dirname, '').replace(/(\\\\html){1}(\\\\){3}/g,'/');
   }
   data = local_data;
   let templateData = template[data.path];

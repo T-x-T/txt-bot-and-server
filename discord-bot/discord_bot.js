@@ -39,7 +39,7 @@ client.on('message', message => {
   var tempArgs = [];
   args.forEach((cur) => {
     tempArgs.push(cur.toLowerCase());
-  })
+  });
   args = tempArgs;
 
   //Stop processing the message if the command specified cant be found
