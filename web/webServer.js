@@ -132,7 +132,7 @@ server.getDataObject = function (req, callback) {
       cookies[parts[0]] = parts[1];
     });
     var data = {
-      'path': santize_path(parsedUrl.pathname.replace(/^\/+|\/+$/g, ''), {replacement: 'ÿ'}).replace(/ÿ/g, '/'),
+      'path': santize_path(parsedUrl.pathname.replace(/^\/+|\/+$/g, ''), {replacement: 'ÿ'}).replace(/ÿ/g, '/').replace(/\.\./g, ''),
       'queryStringObject': JSON.parse(JSON.stringify(parsedUrl.query)),
       'method': req.method.toLowerCase(),
       'headers': req.headers,
