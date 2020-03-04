@@ -13,6 +13,7 @@ const path = require('path');
 const url = require('url');
 const handlers = require('./handlers');
 const log = require('./../lib/log.js');
+const santize_path = require('sanitize-filename');
 
 //Create the container
 var server = {};
@@ -131,14 +132,14 @@ server.getDataObject = function (req, callback) {
       cookies[parts[0]] = parts[1];
     });
     var data = {
-      'path': parsedUrl.pathname.replace(/^\/+|\/+$/g, ''),
+      'path': santize_path(parsedUrl.pathname.replace(/^\/+|\/+$/g, ''), {replacement: 'ÿ'}).replace(/ÿ/g, '/'),
       'queryStringObject': JSON.parse(JSON.stringify(parsedUrl.query)),
       'method': req.method.toLowerCase(),
       'headers': req.headers,
       'payload': jsonObject,
       'cookies': cookies
     };
-
+    
     callback(data);
   });
 };
