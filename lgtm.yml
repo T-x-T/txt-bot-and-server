@@ -295,8 +295,12 @@ extraction:
     index:
       # Specify a list of files and folders to extract.
       # Default: The project root directory.
-      #include:
-      #  - src/js
+      include:
+        - discord-bot
+        - lib
+        - web
+        - workers
+        - index.js
       # Specify a list of files and folders to exclude from extraction.
       exclude:
         - thirdparty/lib
