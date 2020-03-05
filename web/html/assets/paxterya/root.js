@@ -826,7 +826,7 @@ var _internal = {};
 _internal.send = function(path, headers, method, queryStringObject, payload, callback){
   //Build the querystring
   let querystring = '';
-  for(key in queryStringObject){
+  for(let key in queryStringObject){
     querystring += key + '=' + queryStringObject[key] + '&';
   }
 

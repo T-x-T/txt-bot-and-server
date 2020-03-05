@@ -137,7 +137,7 @@
 
 
   <script>
-    document.addEventListener("onload",fix_toggle())
+    document.addEventListener("onload",fix_toggle()); //lgtm [js/use-of-returnless-function]
     function fix_toggle() {
         document.getElementById("dynmap").setAttribute("opacity","100");
         document.getElementById("road_labels").setAttribute("opacity","100");

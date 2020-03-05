@@ -7,7 +7,7 @@
 const log = require('./lib/log.js');
 const webServer = require('./web/webServer.js');
 const discordBot = require('./discord-bot/discord_bot.js');
-const workers = require('./workers/workers.js');
+const workers = require('./workers/workers.js'); //lgtm [js/unused-local-variable]
 
 //Log that the app got started
 log.write(1, 'Application started', null);
