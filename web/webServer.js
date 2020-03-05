@@ -52,32 +52,21 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
       data.headers.host = 'paxterya.com';
     }
 
-    if(!config['use-external-certs']){
-      //FOR TESTING ONLY
-      var origHost = data.headers.host;
-      data.headers.host = 'thetxt.club'
-      data.headers.host = 'paxterya.com'
-    }
-
-
-    if(data.headers.hasOwnProperty('landingtesting')) data.headers.host = 'thetxt.club';
-    //Insert the correct path for different hosts
-    if(!data.path.startsWith('assets')){
-      if (data.headers.host.indexOf('thetxt.club') > -1) data.path = '/landing/' + data.path;
-      if (data.headers.host.indexOf('paxterya.com') > -1) data.path = '/paxterya/' + data.path;
-    }
+    if(!data.path.startsWith('assets')) data.path = '/html/' + data.path;
+    
 
     //necessary for testing purposes
     if(!config['use-external-certs']){
-      data.headers.host = origHost;
       console.log(data.method, data.path)
       if(data.method == 'post') console.log(data.payload);
     }
+
     //Fixing links in staff pages
-    if(data.path.startsWith('/paxterya/staff')){
-      if(data.path.startsWith('/paxterya/staff/assets')) data.path = data.path.replace('/paxterya/staff', '');
-      if(!data.path.startsWith('/paxterya/staff/interface') && !data.path.startsWith('/paxterya/staff/application') && !data.path.startsWith('/paxterya/staff/post')) data.path = data.path.replace('/staff', '');
+    if(data.path.startsWith('/html/staff')){
+      if(data.path.startsWith('/html/staff/assets')) data.path = data.path.replace('/html/staff', '');
+      if(!data.path.startsWith('/html/staff/interface') && !data.path.startsWith('/html/staff/application') && !data.path.startsWith('/html/staff/post')) data.path = data.path.replace('/staff', '');
     }
+
     //Check the path and choose a handler
     var chosenHandler = handlers.assets;
 
@@ -99,14 +88,14 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
 
 const router = {
   '/landing': handlers.landing,
-  '/paxterya': handlers.paxterya,
+  '/html': handlers.paxterya,
   '/paxterya/api/application': handlers.paxapi.application,
   '/paxterya/api/contact': handlers.paxapi.contact,
   '/paxterya/api/member': handlers.paxapi.member,
   '/paxterya/api/post': handlers.paxapi.post,
   '/paxterya/api/bulletin': handlers.paxapi.bulletin,
-  '/paxterya/login': handlers.paxLogin,
-  '/paxterya/staff': handlers.paxStaff
+  '/html/login': handlers.paxLogin,
+  '/html/staff': handlers.paxStaff
 };
 
 //Take a request and return a nice data object w/o payload
