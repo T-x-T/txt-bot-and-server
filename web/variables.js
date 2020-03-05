@@ -194,67 +194,63 @@ _getters.widgets = function(callback){
 };
 
 const template = {
-  '/paxterya/staff/interface.html': _getters.interface,
-  '/paxterya/staff/application.html': _getters.application,
-  '/paxterya/staff/post.html': _getters.post,
-  '/paxterya/statistics.html': _getters.statistics,
-  '/paxterya/index.html': _getters.index,
-  '/paxterya/town-of-paxterya.html': _getters.town_of_paxterya,
-  '/paxterya/application-sent.html': {
+  'staff/interface.html': _getters.interface,
+  'staff/application.html': _getters.application,
+  'staff/post.html': _getters.post,
+  'statistics.html': _getters.statistics,
+  'index.html': _getters.index,
+  'town-of-paxterya.html': _getters.town_of_paxterya,
+  'application-sent.html': {
     'pax_title': 'Success!'
   },
-  '/paxterya/contact-us.html': {
+  'contact-us.html': {
     'pax_title': 'Contact us!'
   },
-  '/paxterya/join-us.html': {
+  'join-us.html': {
     'pax_title': 'Join us!',
     'birthyears': _internal.generateBirthyearOptions
   },
-  '/paxterya/member.html': {
+  'member.html': {
     'pax_title': 'Member'
   },
-  '/paxterya/members.html': {
+  'members.html': {
     'pax_title': 'All Members'
   },
-  '/paxterya/privacy-policy.html': {
+  'privacy-policy.html': {
     'pax_title': 'Privacy Policy'
   },
-  '/paxterya/rules.html': {
+  'rules.html': {
     'pax_title': 'Rules'
   },
-  '/paxterya/hardware.html': {
+  'hardware.html': {
     'pax_title': 'Server Hardware'
   },
-  '/paxterya/our-world.html': {
+  'our-world.html': {
     'pax_title': 'Our World'
   },
-  '/paxterya/penliam.html': {
+  'penliam.html': {
     'pax_title': 'Penliam'
   },
-  '/paxterya/cookieville.html': {
+  'cookieville.html': {
     'pax_title': 'Cookieville'
   },
-  '/paxterya/paxterdam.html': {
+  'paxterdam.html': {
     'pax_title': 'Paxterdam'
   },
-  '/paxterya/paxendorf.html': {
+  'paxendorf.html': {
     'pax_title': 'Paxendorf'
   },
-  '/paxterya/littleroot-city.html': {
+  'littleroot-city.html': {
     'pax_title': 'Littleroot City'
   },
-  '/paxterya/faq.html': {
+  'faq.html': {
     'pax_title': 'FAQ'
   },
-  '/paxterya/downloads.html': {
+  'downloads.html': {
     'pax_title': 'Downloads'
   },
   '/widgets.html': _getters.widgets,
 
-
-  '/landing/index.html': {
-    'landing_videoID': global.newestVideo.id
-  }
 };
 
 //Export the variables

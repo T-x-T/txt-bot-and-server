@@ -53,7 +53,7 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
     }
 
     if(!data.path.startsWith('assets')) data.path = '/html/' + data.path;
-    
+      else data.path = data.path.replace('/paxterya', '');
 
     //necessary for testing purposes
     if(!config['use-external-certs']){
@@ -87,13 +87,12 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
 });
 
 const router = {
-  '/landing': handlers.landing,
   '/html': handlers.paxterya,
-  '/paxterya/api/application': handlers.paxapi.application,
-  '/paxterya/api/contact': handlers.paxapi.contact,
-  '/paxterya/api/member': handlers.paxapi.member,
-  '/paxterya/api/post': handlers.paxapi.post,
-  '/paxterya/api/bulletin': handlers.paxapi.bulletin,
+  '/html/api/application': handlers.paxapi.application,
+  '/html/api/contact': handlers.paxapi.contact,
+  '/html/api/member': handlers.paxapi.member,
+  '/html/api/post': handlers.paxapi.post,
+  '/html/api/bulletin': handlers.paxapi.bulletin,
   '/html/login': handlers.paxLogin,
   '/html/staff': handlers.paxStaff
 };
