@@ -1,3 +1,4 @@
+# config for lgtm
 ##########################################################################################
 # Customize file classifications.                                                        #
 # Results from files under any classifier will be excluded from LGTM                     #
@@ -284,7 +285,7 @@ extraction:
     # The `prepare` step exists for customization on LGTM.com only.
     # prepare:
     #   packages:
-    #     - example_package
+         - npm install
     # Add an `after-prepare` step if you need to run commands after the prepare step.
     # Each command should be listed on a separate line.
     after_prepare:
@@ -300,8 +301,8 @@ extraction:
         - workers
         - index.js
       # Specify a list of files and folders to exclude from extraction.
-      exclude:
-        - thirdparty/lib
+      # exclude:
+      #  - thirdparty/lib
       # You can add additional file types for LGTM to extract, by mapping file 
       # extensions (including the leading dot) to file types. The usual 
       # include/exclude patterns apply, so, for example, `.jsm` files under
