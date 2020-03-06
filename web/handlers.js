@@ -14,7 +14,7 @@ const email       = require('./../lib/email.js');
 const stats       = require('./../lib/stats.js');
 const post        = require('./../lib/post.js');
 const bulletin    = require('./../lib/bulletin.js');
-const _data        = require('./../lib/data.js');
+const _data       = require('./../lib/data.js');
 
 //Create the container
 var handlers = {};
@@ -25,36 +25,6 @@ handlers.notFound = function (data, callback) {
   callback(404, 'The page you requested is not available', 'html');
 };
 
-//Handler for landing html sites
-handlers.landing = function (data, callback){
-  fs.readFile(path.join(__dirname, './html/' + data.path), 'utf8', function (err, fileData) {
-    if (!err && fileData.length > 0) {
-      webHelpers.insertVariables(data, fileData, function(err, newFileData){
-        if(!err && fileData.length > 0){
-          callback(200, newFileData, 'html');
-        }else{
-          callback(500, 'Something bad happend. Not like a nuclear war, but still bad. Please contact TxT#0001 on Discord if you see this', 'html');
-        }
-      });
-    } else {
-      fs.readFile(path.join(__dirname, './html/' + data.path + '/index.html'), 'utf8', function (err, fileData) {
-        if (!err && fileData.length > 0) {
-          data.path += 'index.html';
-          webHelpers.insertVariables(data, fileData, function(err, newFileData){
-            if(!err && fileData.length > 0){
-              callback(200, newFileData, 'html');
-            }else{
-              callback(500, 'Something bad happend. Not like a nuclear war, but still bad. Please contact TxT#0001 on Discord if you see this', 'html');
-            }
-          })
-        } else {
-          callback(404, 'html handler couldnt find the file', 'html');
-        }
-      });
-    }
-  });
-};
-
 //Handler for all paxterya html sites
 handlers.paxterya = function (data, callback) {
   let origPath = data.path;
@@ -63,19 +33,19 @@ handlers.paxterya = function (data, callback) {
     _internal.redirectToDiscordId(data, function(status, file, type){ callback(status, file, type); });
   }else{
     //Its a normal website
-    data.path = path.join(__dirname, './html/' + data.path);
+    data.path = path.join(__dirname, './web/' + data.path);
     webHelpers.finishHtml(data, 'paxterya', function (err, fileData) {
       if(!err && fileData.length > 0){
         callback(200, fileData, 'html');
       }else{
         //Nothing found, maybe its the index.html site?
-        data.path = path.join(__dirname, './html/' + origPath + '/index.html');
+        data.path = path.join(__dirname, './web/' + origPath + '/index.html');
         webHelpers.finishHtml(data, 'paxterya', function(err, fileData){
           if(!err && fileData.length > 0){
             callback(200, fileData, 'html');
           }else{
             //maybe that is without the .html?
-            data.path = path.join(__dirname, './html/' + origPath + '.html');
+            data.path = path.join(__dirname, './web/' + origPath + '.html');
             webHelpers.finishHtml(data, 'paxterya', function(err, fileData){
               if(!err && fileData.length > 0){
                 callback(200, fileData, 'html');
@@ -95,7 +65,7 @@ handlers.paxterya = function (data, callback) {
 handlers.assets = function (data, callback) {
   if (data.path.length > 0) {
     //Read in the asset
-    fs.readFile(path.join(__dirname, './html/' + data.path), function (err, fileData) {
+    fs.readFile(path.join(__dirname, './web/' + data.path), function (err, fileData) {
       //console.log(data.path);
       if (!err && fileData) {
         //Choose the contentType and default to plain
@@ -123,7 +93,7 @@ handlers.paxStaff = function(data, callback) {
     oauth.getTokenAccessLevel(data.cookies.access_token, function(access_level) {
       if(data.path.indexOf('application') > -1 && access_level >= 9 || data.path.indexOf('post') > -1 && access_level >= 9 || data.path.indexOf('interface') > -1 && access_level >= 3) {
         //Everything is fine, serve the website
-        data.path = path.join(__dirname, './html/' + data.path);
+        data.path = path.join(__dirname, './web/' + data.path);
         webHelpers.finishHtml(data, 'paxterya', function(err, fileData) {
           if(!err && fileData.length > 0) {
             callback(200, fileData, 'html');
