@@ -94,12 +94,12 @@ handlers.paxStaff = function(data, callback) {
       if(data.path.indexOf('application') > -1 && access_level >= 9 || data.path.indexOf('post') > -1 && access_level >= 9 || data.path.indexOf('interface') > -1 && access_level >= 3) {
         //Everything is fine, serve the website
         data.path = path.join(__dirname, './web/' + data.path);
-        webHelpers.finishHtml(data, 'paxterya', function(err, fileData) {
+        webHelpers.finishHtml(data, 'paxteryaStaff', function(err, fileData) {
           if(!err && fileData.length > 0) {
             callback(200, fileData, 'html');
           } else {
             data.path = data.path + '.html';
-            webHelpers.finishHtml(data, 'paxterya', function(err, fileData) {
+            webHelpers.finishHtml(data, 'paxteryaStaff', function(err, fileData) {
               if(!err && fileData.length > 0) {
                 callback(200, fileData, 'html');
               } else {

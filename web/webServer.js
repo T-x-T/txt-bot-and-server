@@ -69,11 +69,10 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
 
     //Check the path and choose a handler
     var chosenHandler = handlers.assets;
-
     for(let key in router){
       chosenHandler = data.path.startsWith(key) ? router[key] : chosenHandler;
     }
-
+    
     //Send the request to the chosenHandler
     try {
       chosenHandler(data, function (statusCode, payload, contentType) {
