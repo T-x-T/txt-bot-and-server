@@ -13,7 +13,7 @@ const path = require('path');
 const url = require('url');
 const handlers = require('./handlers');
 const log = require('./../lib/log.js');
-const santize_path = require('sanitize-filename');
+const santize_path = require('sanitize-filename')
 
 //Create the container
 var server = {};
