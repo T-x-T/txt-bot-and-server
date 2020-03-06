@@ -18,7 +18,6 @@ path_classifiers:
     - exclude: /
     # Classify all files in the top-level directories test/ and testsuites/ as test code.
     - test
-    - testsuites
     # Classify all files with suffix `.test` as test code.
     #        Note: use only forward slash / as a path separator.
     #        Use ** to indicate an arbitrary parent path.
@@ -41,8 +40,7 @@ path_classifiers:
   # to the `library` section.
   library:
     - exclude: path/to/libary/code/**/*.c
-    - web/html/assets/paxterya/js
-    - web/html/assets/landing/js
+    - web/web/assets/js
   # The default behavior is to tag template files as `template`. Results are hidden 
   # for template files. You can tag further files as being template files by adding 
   # them to the `template` section.
@@ -50,10 +48,10 @@ path_classifiers:
     - exclude: path/to/template/code/**/*.c
     - template.js
   # Define your own category, for example: 'some_custom_category'.
-  some_custom_category:
+  # some_custom_category:
     # Classify all files in the top-level directory tools/ (or the top-level file 
     # called tools).
-    - tools
+    # - tools
 
 #########################################################################################
 # Use the `queries` block to change the default display of query results.               #
@@ -309,8 +307,6 @@ extraction:
       # include/exclude patterns apply, so, for example, `.jsm` files under
       # `thirdparty/lib` will not be extracted.
       filetypes:
-        ".jsm": "js"
-        ".tmpl": "html"
       # Specify a list of glob patterns to include/exclude files from extraction; this 
       # is applied on top of the include/exclude paths from above; patterns are 
       # processed in the same way as for path classifiers above.
@@ -318,10 +314,6 @@ extraction:
       # but exclude files ending in `-min.js` or `.min.js` and folders named `node_modules`
       # or `bower_components`
       filters:
-        # exclude any *.ts files anywhere.
-        - exclude: "**/*.ts"
-        # but include *.ts files under src/js/typescript.
-        - include: "src/js/typescript/**/*.ts"
       # Specify how TypeScript files should be extracted:
       #   none = exclude all TypeScript files.
       #   basic = extract syntactic information from TypeScript files.
