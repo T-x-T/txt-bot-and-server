@@ -441,7 +441,7 @@ _internal.redirectToDiscordId = function(data, callback){
   let code = data.queryStringObject.code;
   oauth.getDiscordIdFromCode(code, 'application', function(id){
     if(id){
-      callback(302, {Location: `https://${data.headers.host}/${data.path.replace('/paxterya/', '')}?id=${id}`}, 'plain');
+      callback(302, {Location: `https://${data.headers.host}/${data.path.replace('/paxterya/html/', '')}?id=${id}`}, 'plain');
     }else{
       callback(500, 'Couldnt get your user data from discord', 'html');
     }
