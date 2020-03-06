@@ -54,26 +54,26 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
 
     if(!data.path.startsWith('assets')) data.path = '/html/' + data.path;
       else data.path = data.path.replace('/paxterya', '');
-
+    
     //necessary for testing purposes
     if(!config['use-external-certs']){
       console.log(data.method, data.path)
       if(data.method == 'post') console.log(data.payload);
     }
-
+    
     //Fixing links in staff pages
     if(data.path.startsWith('/html/staff')){
       if(data.path.startsWith('/html/staff/assets')) data.path = data.path.replace('/html/staff', '');
       if(!data.path.startsWith('/html/staff/interface') && !data.path.startsWith('/html/staff/application') && !data.path.startsWith('/html/staff/post')) data.path = data.path.replace('/staff', '');
+      if(data.path.startsWith('/assets/paxterya')) data.path = data.path.replace('paxterya/', '');
     }
 
     //Check the path and choose a handler
     var chosenHandler = handlers.assets;
-
     for(let key in router){
       chosenHandler = data.path.startsWith(key) ? router[key] : chosenHandler;
     }
-
+    
     //Send the request to the chosenHandler
     try {
       chosenHandler(data, function (statusCode, payload, contentType) {
