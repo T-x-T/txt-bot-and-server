@@ -8,6 +8,7 @@
 var conf = {
     'http-port': 3000,
     'https-port': 3001,
+    'https-redirect': true, //enables automatic redirecting from http queries to https
     'use-external-certs': true, //false for testing
     'cert-path': '/etc/letsencrypt/live/{Domain}/',
     'bot-prefix': '+',

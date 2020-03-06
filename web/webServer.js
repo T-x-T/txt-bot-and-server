@@ -20,10 +20,14 @@ var server = {};
 
 //Instanciate the http server
 server.httpServer = http.createServer(function (req, res) {
-  server.getDataObject(req, function(data){
-    res.writeHead(301, {Location: `https://${data.headers.host}/${data.path}`});
+  if(config['https-redirect']){
+    server.getDataObject(req, function(data){
+      res.writeHead(302, {Location: `https://${data.headers.host}/${data.path}`});
       res.end();
-  });
+    });
+  }else{
+    server.uniserver(req, res);
+  }
 });
 
 //https stuff
@@ -41,28 +45,32 @@ if(config['use-external-certs']){
 
 //Instanciate the https server
 server.httpsServer = https.createServer(server.httpsConfig, function (req, res) {
+  server.uniserver(req, res);
+});
+
+server.uniserver = function(req, res){
   //Form the data object
-  server.getDataObject(req, function(data){
+  server.getDataObject(req, function(data) {
     //Log the request
     log.write(0, 'Web Request received', {data: data, sourceIP: req.connection.remoteAddress});
 
     //Some requests seem to come in without any header, which is bad, so lets add one here if thats the case, also log it
-    if(!data.headers.hasOwnProperty('host')){
+    if(!data.headers.hasOwnProperty('host')) {
       log.write(1, 'Web request without host header received', {data: data, sourceIP: req.connection.remoteAddress});
       data.headers.host = 'paxterya.com';
     }
 
     if(!data.path.startsWith('assets')) data.path = '/html/' + data.path;
-      else data.path = data.path.replace('/paxterya', '');
-    
+    else data.path = data.path.replace('/paxterya', '');
+
     //necessary for testing purposes
-    if(!config['use-external-certs']){
+    if(!config['use-external-certs']) {
       console.log(data.method, data.path)
       if(data.method == 'post') console.log(data.payload);
     }
-    
+
     //Fixing links in staff pages
-    if(data.path.startsWith('/html/staff')){
+    if(data.path.startsWith('/html/staff')) {
       if(data.path.startsWith('/html/staff/assets')) data.path = data.path.replace('/html/staff', '');
       if(!data.path.startsWith('/html/staff/interface') && !data.path.startsWith('/html/staff/application') && !data.path.startsWith('/html/staff/post')) data.path = data.path.replace('/staff', '');
       if(data.path.startsWith('/assets/paxterya')) data.path = data.path.replace('paxterya/', '');
@@ -70,21 +78,21 @@ server.httpsServer = https.createServer(server.httpsConfig, function (req, res) 
 
     //Check the path and choose a handler
     var chosenHandler = handlers.assets;
-    for(let key in router){
+    for(let key in router) {
       chosenHandler = data.path.startsWith(key) ? router[key] : chosenHandler;
     }
-    
+
     //Send the request to the chosenHandler
     try {
-      chosenHandler(data, function (statusCode, payload, contentType) {
+      chosenHandler(data, function(statusCode, payload, contentType) {
         server.processHandlerResponse(res, data.method, data.path, statusCode, payload, contentType);
       });
-    } catch (e) {
+    } catch(e) {
       console.log(e);
       server.processHandlerResponse(res, data.method, data.path, 500, 'Internal server error :(\n(Please notify TxT#0001 on Discord if you see this!)', 'html');
     }
   });
-});
+}
 
 const router = {
   '/html': handlers.paxterya,
