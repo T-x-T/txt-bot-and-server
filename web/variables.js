@@ -161,7 +161,7 @@ _getters.index = function(callback){
 };
 
 _getters.town_of_paxterya = function(callback){
-  fs.readFile(path.join(__dirname + '/html/assets/paxterya/img/town_of_paxterya_roads.svg'), function(err, data){
+  fs.readFile(path.join(__dirname + '/web/assets/img/town_of_paxterya_roads.svg'), function(err, data){
     let output = {
       'pax_title': 'Town of Paxterya'
     };
