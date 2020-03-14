@@ -8,8 +8,8 @@ const config = require('../../config.js');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const sanitize = require('sanitize-html');
-const data = require('../../lib/data.js');
-const discord_helpers = require('./../discord-bot/discord_helpers.js');
+const data = require('../data/data.js');
+const discord_helpers = require('../discord_bot/discord_helpers.js');
 
 //Create the container
 var bulletin = {};

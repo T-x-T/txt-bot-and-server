@@ -7,8 +7,8 @@
 const config = require('../../config.js');
 const qs     = require('querystring');
 const https  = require('https');
-const log    = require('./log.js');
-const discord_helpers = require('./../discord-bot/discord_helpers.js');
+const log    = require('../log/log.js');
+const discord_helpers = require('../discord_bot/discord_helpers.js');
 
 //Create the container
 var oauth = {};
@@ -148,7 +148,7 @@ oauth.getUserObjectById = function(id, callback) {
 
 oauth.updateUserIdCache = function() {
   //Needs to be imported here, otherwise data hasnt initialized or something like that
-  const data = require('./data.js');
+  const data = require('../data/data.js');
   const application = require('../application/application.js');
 
   //Get all discord Ids

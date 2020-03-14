@@ -12,7 +12,7 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const handlers = require('./handlers');
-const log = require('./../lib/log.js');
+const log = require('../log/log.js');
 const santize_path = require('sanitize-filename');
 
 //Create the container
@@ -38,8 +38,8 @@ if(config['use-external-certs']){
   };
 }else{
   server.httpsConfig = {
-    'key': fs.readFileSync(path.join(__dirname, './certs/localhost.key')),
-    'cert': fs.readFileSync(path.join(__dirname, './certs/localhost.crt'))
+    'key': fs.readFileSync(path.join(__dirname, '../../web/certs/localhost.key')),
+    'cert': fs.readFileSync(path.join(__dirname, '../../web/certs/localhost.crt'))
   };
 }
 

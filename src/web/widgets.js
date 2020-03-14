@@ -53,10 +53,10 @@ widgets.init = function(){
     }];
 
   //Read in the html for the widgets and add that too
-  fs.readFile(path.join(__dirname, './widgets/welcome.html'), function(err, fileData) {if(!err && fileData) widgets.list[0].html = fileData;});
-  fs.readFile(path.join(__dirname, './widgets/bulletin.html'), function(err, fileData) {if(!err && fileData) widgets.list[1].html = fileData;});
-  fs.readFile(path.join(__dirname, './widgets/applications.html'), function(err, fileData) {if(!err && fileData) widgets.list[2].html = fileData;});
-  fs.readFile(path.join(__dirname, './widgets/posts.html'), function(err, fileData) {if(!err && fileData) widgets.list[3].html = fileData;});
+  fs.readFile(path.join(__dirname, '../../web/widgets/welcome.html'), function(err, fileData) {if(!err && fileData) widgets.list[0].html = fileData;});
+  fs.readFile(path.join(__dirname, '../../web/widgets/bulletin.html'), function(err, fileData) {if(!err && fileData) widgets.list[1].html = fileData;});
+  fs.readFile(path.join(__dirname, '../../web/widgets/applications.html'), function(err, fileData) {if(!err && fileData) widgets.list[2].html = fileData;});
+  fs.readFile(path.join(__dirname, '../../web/widgets/posts.html'), function(err, fileData) {if(!err && fileData) widgets.list[3].html = fileData;});
 };
 
 //Export the container

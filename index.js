@@ -4,9 +4,9 @@
 */
 
 //Dependencies
-const log = require('./lib/log.js');
-const webServer = require('./web/webServer.js');
-const discordBot = require('./discord-bot/discord_bot.js');
+const log = require('./src/log/log.js');
+const webServer = require('./src/web/webServer.js');
+const discordBot = require('./src/discord_bot/discord_bot.js');
 const workers = require('./workers/workers.js'); //lgtm [js/unused-local-variable]
 
 //Log that the app got started

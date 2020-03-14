@@ -4,10 +4,10 @@
  */
 
 //Dependencies
-const config   = require('./../config.js');
+const config   = require('../../config.js');
 const mailer   = require('nodemailer');
 const sanitize = require('sanitize-html');
-const log      = require('./log.js');
+const log      = require('../log/log.js');
 
 //Create the container
 var email = {};

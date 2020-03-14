@@ -6,13 +6,13 @@
 //Dependencies
 const config = require('../../config.js');
 const https = require('https');
-const data = require('./data.js');
-const log = require('./log.js');
+const data = require('../data/data.js');
+const log = require('../log/log.js');
 const fs = require('fs');
 const path = require('path');
 const Rcon = require('rcon');
 const { exec } = require('child_process');
-const discord_helpers = require('./../discord-bot/discord_helpers.js');
+const discord_helpers = require('../discord_bot/discord_helpers.js');
 
 //Create a global variable
 global.minecraft = {};

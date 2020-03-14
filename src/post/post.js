@@ -4,7 +4,7 @@
  */
 
 //Dependencies
-const config = require('./../config.js');
+const config = require('../../config.js');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 

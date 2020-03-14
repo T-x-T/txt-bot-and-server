@@ -3,11 +3,11 @@
 *	Command for all the admin thingys
 */
 
-const log = require('./../../lib/log.js');
-const config = require('./../../config.js');
-const mc_helpers = require('./../../lib/mc_helpers.js');
-const discord_helpers = require('./../discord_helpers.js');
-const data = require('./../../lib/data.js');
+const log = require('../../log/log.js');
+const config = require('../../../config.js');
+const mc_helpers = require('../../minecraft/mc_helpers.js');
+const discord_helpers = require('../discord_helpers.js');
+const data = require('../../data/data.js');
 
 module.exports = {
   name: 'admin',

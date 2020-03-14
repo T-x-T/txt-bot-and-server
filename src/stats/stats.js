@@ -4,10 +4,10 @@
  */
 
 //Dependencies
-const data = require('./data.js');
+const data = require('../data/data.js');
 const mc_helpers = require('../minecraft/mc_helpers.js');
 const oauth = require('../auth/oauth2.js');
-const log = require('./log.js');
+const log = require('../log/log.js');
 
 //Create the container
 var stats = {};

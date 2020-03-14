@@ -5,8 +5,8 @@
 //Dependencies
 const config = require('../../config.js');
 const https = require('https');
-const discordHelpers = require('./../discord-bot/discord_helpers.js');
-const log = require('./log.js');
+const discordHelpers = require('../discord_bot/discord_helpers.js');
+const log = require('../log/log.js');
 
 //Create the container
 var youtube = {};

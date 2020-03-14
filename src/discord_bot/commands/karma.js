@@ -4,8 +4,8 @@
  */
 
 //Requirements
-const data = require('./../../lib/data.js');
-const discordHelpers = require('./../discord_helpers.js');
+const data = require('../../data/data.js');
+const discordHelpers = require('../discord_helpers.js');
 
 module.exports = {
   name: 'karma',

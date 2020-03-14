@@ -4,13 +4,13 @@
 */
 
 //Dependencies
-const config = require('./../config.js');
+const config = require('../../config.js');
 var data;
-const log    = require('./../lib/log.js');
+const log    = require('../log/log.js');
 
 //This is somehow neccessary, otherwise data will just be an empty object for whatever reason
 setTimeout(function(){
-  data = require('./../lib/data.js');
+  data = require('../data/data.js');
 }, 0);
 
 //Global var

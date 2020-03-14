@@ -3,9 +3,9 @@
 *	With this command users can manage their role membership for certain roles
 */
 
-const discordHelpers = require('../../../discord-bot/discord_helpers.js');
+const discordHelpers = require('../discord_helpers.js');
 const config = require('../../../config.js');
-const log = require('../../../lib/log.js');
+const log = require('../../log/log.js');
 
 module.exports = {
   name: 'role',

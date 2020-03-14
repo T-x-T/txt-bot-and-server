@@ -6,11 +6,11 @@
 //Dependencies
 //const config = require('./../config.js');
 const youtube = require('../src/youtube/youtube.js');
-const log = require('./../lib/log.js');
+const log = require('./../src/log/log.js');
 const mc_helpers = require('../src/minecraft/mc_helpers.js');
 const oauth = require('../src/auth/oauth2.js');
 const widgets = require('../src/web/widgets.js');
-const discord_helpers = require('./../discord-bot/discord_helpers.js');
+const discord_helpers = require('./../src/discord_bot/discord_helpers.js');
 
 //Stuff that should run on startup
 mc_helpers.updateOnlinePlayers();

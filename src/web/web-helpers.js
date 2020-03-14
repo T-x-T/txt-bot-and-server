@@ -31,10 +31,10 @@ webHelpers.finishHtml = function(data, site, callback){
 //Reads in an html file and encapsulates it
 webHelpers.readHtmlAndEncapsulate = function(path, site, callback){
   let headerPath, footerPath;
-  headerPath = site === 'paxterya' ? _path.join(__dirname, './web/html/header.html') : 'false';
-  footerPath = site === 'paxterya' ? _path.join(__dirname, './web/html/footer.html') : 'false';
-  headerPath = site === 'paxteryaStaff' ? _path.join(__dirname, './web/html/header.html') : headerPath;
-  footerPath = site === 'paxteryaStaff' ? _path.join(__dirname, './web/html/footer.html') : footerPath;
+  headerPath = site === 'paxterya' ? _path.join(__dirname, '../../web/web/html/header.html') : 'false';
+  footerPath = site === 'paxterya' ? _path.join(__dirname, '../../web/web/html/footer.html') : 'false';
+  headerPath = site === 'paxteryaStaff' ? _path.join(__dirname, '../../web/web/html/header.html') : headerPath;
+  footerPath = site === 'paxteryaStaff' ? _path.join(__dirname, '../../web/web/html/footer.html') : footerPath;
   //console.log(site)
   fs.readFile(path, 'utf8', function(err, html){
     if(!err && html.length > 0){
@@ -59,7 +59,7 @@ webHelpers.readHtmlAndEncapsulate = function(path, site, callback){
 
 //Finish HTML files by replacing variables
 webHelpers.insertVariables = function(data, file, callback){
-  data.path = data.path.replace('/web/html/', '');
+  data.path = data.path.replace('/web/html', '');
   //Load variables
   require('./variables.js')(data, function(variables){
     //Loop through all possible variables and replace

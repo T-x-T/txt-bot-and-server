@@ -6,14 +6,14 @@
 //Dependencies
 const config          = require('../../config.js');
 const application     = require('../application/application.js');
-const discord_helpers = require('./../discord-bot/discord_helpers.js');
+const discord_helpers = require('../discord_bot/discord_helpers.js');
 const mc_helpers      = require('../minecraft/mc_helpers.js');
 const stats           = require('../stats/stats.js');
 const os              = require('os');
-const post            = require('./../lib/post.js');
+const post            = require('../post/post.js');
 const widgets         = require('./widgets.js');
 const oauth           = require('../auth/oauth2.js');
-const _data           = require('./../lib/data.js');
+const _data           = require('../data/data.js');
 const fs              = require('fs');
 const path            = require('path');
 
@@ -161,7 +161,7 @@ _getters.index = function(callback){
 };
 
 _getters.town_of_paxterya = function(callback){
-  fs.readFile(path.join(__dirname + '/web/assets/img/town_of_paxterya_roads.svg'), function(err, data){
+  fs.readFile(path.join(__dirname, '../../web/web/assets/img/town_of_paxterya_roads.svg'), function(err, data){
     let output = {
       'pax_title': 'Town of Paxterya'
     };
@@ -256,9 +256,9 @@ const template = {
 //Export the variables
 module.exports = function(local_data, callback) {
   if(os.platform() != 'win32'){
-    local_data.path = local_data.path.replace(__dirname, '').replace('/html', '');
+    local_data.path = local_data.path.replace(path.join(__dirname, '../../web/'), '').replace('/html', '');
   }else{
-    local_data.path = local_data.path.replace(__dirname, '').replace(/(\\\\html){1}(\\\\){3}/g,'/');
+    local_data.path = local_data.path.replace(path.join(__dirname, '../../web/'), '').replace(/(\\\\html){1}(\\\\){3}/g,'/');
   }
   data = local_data;
   let templateData = template[data.path];

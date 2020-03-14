@@ -8,9 +8,9 @@ const config         = require('../../config.js');
 const fs             = require('fs');
 const Discord        = require('discord.js');
 const client         = new Discord.Client();
-const data           = require('../../lib/data.js');
-const discordHelpers = require('../../discord-bot/discord_helpers.js');
-const log            = require('../../lib/log.js');
+const data           = require('../data/data.js');
+const discordHelpers = require('../discord_bot/discord_helpers.js');
+const log            = require('../log/log.js');
 const application    = require('../application/application.js');
 
 //Create the container
@@ -151,7 +151,7 @@ client.on('guildMemberAdd', (user) =>{
 discordBot.init = function () {
   //Read in and require all command files dynamically
   client.commands = new Discord.Collection();
-  const commandFiles = fs.readdirSync('./discord-bot/commands').filter(file => file.endsWith('.js'));
+  const commandFiles = fs.readdirSync('./src/discord_bot/commands').filter(file => file.endsWith('.js'));
   for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
     client.commands.set(command.name, command);
