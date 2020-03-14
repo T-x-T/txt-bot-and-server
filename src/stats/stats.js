@@ -5,8 +5,8 @@
 
 //Dependencies
 const data = require('./data.js');
-const mc_helpers = require('./mc_helpers.js');
-const oauth = require('./oauth2.js');
+const mc_helpers = require('../minecraft/mc_helpers.js');
+const oauth = require('../auth/oauth2.js');
 const log = require('./log.js');
 
 //Create the container
@@ -151,7 +151,7 @@ var _internal = {};
 _internal.addNicks = function(doc, callback) {
   oauth.getUserObjectById(doc.discord, function(userObject) {
     if(userObject) {
-      const mc_helpers = require('./mc_helpers.js');
+      const mc_helpers = require('../minecraft/mc_helpers.js');
       mc_helpers.getIGN(doc.mcUUID, function(mc_ign) {
         if(mc_ign) {
           try {

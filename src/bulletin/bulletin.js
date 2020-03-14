@@ -4,11 +4,11 @@
  */
 
 //Dependencies
-const config = require('./../config.js');
+const config = require('../../config.js');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const sanitize = require('sanitize-html');
-const data = require('./data.js');
+const data = require('../../lib/data.js');
 const discord_helpers = require('./../discord-bot/discord_helpers.js');
 
 //Create the container

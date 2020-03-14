@@ -7,7 +7,7 @@
 //const config = require('./../config.js');
 const path = require('path');
 const fs = require('fs');
-const oauth = require('./../lib/oauth2.js');
+const oauth = require('../auth/oauth2.js');
 const web_helpers = require('./web-helpers.js');
 
 //Create the container

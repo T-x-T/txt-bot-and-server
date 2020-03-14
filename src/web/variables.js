@@ -4,15 +4,15 @@
  */
 
 //Dependencies
-const config          = require('./../config.js');
-const application     = require('./../lib/application.js');
+const config          = require('../../config.js');
+const application     = require('../application/application.js');
 const discord_helpers = require('./../discord-bot/discord_helpers.js');
-const mc_helpers      = require('./../lib/mc_helpers.js');
-const stats           = require('./../lib/stats.js');
+const mc_helpers      = require('../minecraft/mc_helpers.js');
+const stats           = require('../stats/stats.js');
 const os              = require('os');
 const post            = require('./../lib/post.js');
 const widgets         = require('./widgets.js');
-const oauth           = require('./../lib/oauth2.js');
+const oauth           = require('../auth/oauth2.js');
 const _data           = require('./../lib/data.js');
 const fs              = require('fs');
 const path            = require('path');

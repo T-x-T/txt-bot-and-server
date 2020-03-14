@@ -4,7 +4,7 @@
 */
 
 //Dependencies
-const config = require('./../config.js');
+const config = require('../../config.js');
 const http = require('http');
 const https = require('https');
 const StringDecoder = require('string_decoder').StringDecoder;

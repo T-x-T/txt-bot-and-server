@@ -4,7 +4,7 @@
  */
 
 //Dependencies
-const config = require('./../config.js');
+const config = require('../../config.js');
 const https = require('https');
 const data = require('./data.js');
 const log = require('./log.js');

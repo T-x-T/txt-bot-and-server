@@ -4,7 +4,7 @@
  */
 
 //Dependencies
-const config = require('./../config.js');
+const config = require('../../config.js');
 const qs     = require('querystring');
 const https  = require('https');
 const log    = require('./log.js');
@@ -149,7 +149,7 @@ oauth.getUserObjectById = function(id, callback) {
 oauth.updateUserIdCache = function() {
   //Needs to be imported here, otherwise data hasnt initialized or something like that
   const data = require('./data.js');
-  const application = require('./application.js');
+  const application = require('../application/application.js');
 
   //Get all discord Ids
   data.getMembers(false, false, false, function(docs) {

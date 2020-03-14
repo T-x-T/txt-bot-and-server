@@ -4,15 +4,15 @@
  */
 
 //Dependencies
-const config     = require('./../config.js');
-const log        = require('./log.js');
+const config     = require('../../config.js');
+const log        = require('../../lib/log.js');
 const mongoose   = require('mongoose');
 const Schema     = mongoose.Schema;
-const mc_helpers = require('./mc_helpers.js');
-const email      = require('./email.js');
-const oauth      = require('./oauth2.js');
+const mc_helpers = require('../minecraft/mc_helpers.js');
+const email      = require('../../lib/email.js');
+const oauth      = require('../auth/oauth2.js');
 const sanitize   = require('sanitize-html');
-const data       = require('./data.js');
+const data       = require('../../lib/data.js');
 const discord_helpers = require('./../discord-bot/discord_helpers.js');
 
 //Create the container

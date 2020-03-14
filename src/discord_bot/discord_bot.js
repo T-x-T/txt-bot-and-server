@@ -4,14 +4,14 @@
 */
 
 //Dependencies
-const config         = require('./../config.js');
+const config         = require('../../config.js');
 const fs             = require('fs');
 const Discord        = require('discord.js');
 const client         = new Discord.Client();
-const data           = require('./../lib/data.js');
-const discordHelpers = require('./discord_helpers.js');
-const log            = require('./../lib/log.js');
-const application    = require('./../lib/application.js');
+const data           = require('../../lib/data.js');
+const discordHelpers = require('../../discord-bot/discord_helpers.js');
+const log            = require('../../lib/log.js');
+const application    = require('../application/application.js');
 
 //Create the container
 var discordBot = {};
