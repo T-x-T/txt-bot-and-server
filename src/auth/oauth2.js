@@ -7,7 +7,6 @@
 const config = require('../../config.js');
 const qs     = require('querystring');
 const https  = require('https');
-const log    = require('../log/log.js');
 const discord_helpers = require('../discord_bot/discord_helpers.js');
 
 //Create the container
@@ -96,7 +95,7 @@ oauth.getAccess_token = function(code, redirect, callback){
       }
     });
     req.on('error', (e) => {
-      log.write(2, 'oauth.getAccess_token encountered an error', {err: e});
+      global.log(2, 'oauth.getAccess_token encountered an error', {err: e});
       callback(false);
     });
   });
@@ -127,7 +126,7 @@ oauth.getUserObject = function(access_token, callback){
         userData = JSON.parse(userData);
         success = true;
       }catch(e){
-        log.write(2, 'oauth.getUserObject encountered an error', {err: e});
+        global.log(2, 'oauth.getUserObject encountered an error', {err: e});
         callback(false);
       }
       if(success) callback(userData);
@@ -148,13 +147,13 @@ oauth.getUserObjectById = function(id, callback) {
 
 oauth.updateUserIdCache = function() {
   //Needs to be imported here, otherwise data hasnt initialized or something like that
-  const data = require('../data/data.js');
-  const application = require('../application/application.js');
+  const data = require('../user/data.js');
+  const application = require('../application');
 
   //Get all discord Ids
   data.getMembers(false, false, false, function(docs) {
     //Get all applications as well
-    application.readAll({}, function(applications){
+    application.get({}, false, function(err, applications){
       docs = Object.assign(docs, applications);
     });
 
@@ -192,7 +191,7 @@ oauth.getUserObjectByIdFromApi = function(id, callback) {
       try {
         userData = JSON.parse(userData);
       } catch(e) {
-        log.write(2, 'oauth.getUserObject encountered an error', {err: e});
+        global.log(2, 'oauth.getUserObject encountered an error', {err: e});
         error = true;
       }
       if(!error) {

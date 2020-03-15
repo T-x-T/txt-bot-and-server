@@ -6,8 +6,7 @@
 //Dependencies
 const config = require('../../config.js');
 const https = require('https');
-const data = require('../data/data.js');
-const log = require('../log/log.js');
+const data = require('../user/data.js');
 const fs = require('fs');
 const path = require('path');
 const Rcon = require('rcon');
@@ -44,7 +43,7 @@ mc.updateAllUUIDs = function(forceUpdate){
             data.updateUserData(member.discord, member, function(err){});
           }else{
             //Something bad happened, log it
-            log.write(2, 'mc_helpers.updateAllUUIDs couldnt get valid UUID for user', member);
+            global.log(2, 'mc_helpers.updateAllUUIDs couldnt get valid UUID for user', member);
           }
         });
       }else{}
@@ -66,7 +65,7 @@ mc.updateAllIGNs = function(){
             member.mcName = ign;
             data.updateUserData(member.discord, member, function(err){});
           }else{
-            log.write(2, 'mc_helpers.updateAllIGNs couldnt get a valid IGN for user', member);
+            global.log(2, 'mc_helpers.updateAllIGNs couldnt get a valid IGN for user', member);
           }
         })
       }
@@ -95,7 +94,7 @@ mc.getUUID = function(ign, callback){
         try{
           data = JSON.parse(data);
         }catch(e){
-          log.write(2, 'mc_helpers.getUUID couldnt pare the JSON returned from Mojangs API', {error: e, data: data,ign: ign});
+          global.log(2, 'mc_helpers.getUUID couldnt pare the JSON returned from Mojangs API', {error: e, data: data,ign: ign});
         }
 
         //Check if the returned data makes sense
@@ -141,7 +140,7 @@ mc.getIGN = function(uuid, callback){
           data = JSON.parse(data);
           dataOK = true;
         }catch(e){
-          log.write(2, 'mc_helpers.getIGN couldnt pare the JSON returned from Mojangs API', {error: e, data: data, uuid: uuid});
+          global.log(2, 'mc_helpers.getIGN couldnt pare the JSON returned from Mojangs API', {error: e, data: data, uuid: uuid});
           dataOK = false;
         }
         if(dataOK){
@@ -199,26 +198,26 @@ mc.updateStats = function(){
                     try{
                       stats = JSON.parse(fileData);
                     }catch(e){
-                      log.write(2, 'mc_helpers.updateStats couldnt save the new data', {err: e, data: fileData});
+                      global.log(2, 'mc_helpers.updateStats couldnt save the new data', {err: e, data: fileData});
                     }
                     if(stats){
                       data.addMcStats(uuid, stats, function(err){
-                        if(err) log.write(2, 'mc_helpers.updateStats couldnt parse the data read from disk', {err: e, data: fileData});
+                        if(err) global.log(2, 'mc_helpers.updateStats couldnt parse the data read from disk', {err: e, data: fileData});
                       });
                     }
                   }else{
-                    log.write(2, 'mc_helpers.updateStats couldnt read the stats from disk', {err: err, file: file});
+                    global.log(2, 'mc_helpers.updateStats couldnt read the stats from disk', {err: err, file: file});
                   }
                 });
               }
             });
           }else{
-            log.write(2, 'mc_helpers.updateStats couldnt read the modified data of the file', {err: err, mcUUID: member.mcUUID});
+            global.log(2, 'mc_helpers.updateStats couldnt read the modified data of the file', {err: err, mcUUID: member.mcUUID});
           }
         });
       });
     }else{
-      log.write(2, 'mc_helpers.updateStats couldnt read the files from the directory', {err: err});
+      global.log(2, 'mc_helpers.updateStats couldnt read the files from the directory', {err: err});
     }
   });
 };
@@ -227,7 +226,7 @@ mc.updateStats = function(){
 mc.downloadStats = function(){
   void(exec(`rclone copy ${config['mc-stats-remote']}:/stats ./mc_stats`), (err, stdout, stderr) => {
     if (err) {
-      log.write(2, 'Couldnt start the process to mount the sftp server', {error: err});
+      global.log(2, 'Couldnt start the process to mount the sftp server', {error: err});
     }
   });
 };
@@ -283,7 +282,7 @@ mc.getStatTemplate = function(uuid, collection, rank, callback){
                 };
               }
             }else{
-              log.write(0, 'mc_helpers.getStatTemplate couldnt find the specified user', {user: uuid});
+              global.log(0, 'mc_helpers.getStatTemplate couldnt find the specified user', {user: uuid});
               callback('I couldnt find any stats for the specified player', false);
             }
 
@@ -294,7 +293,7 @@ mc.getStatTemplate = function(uuid, collection, rank, callback){
             callback(false, finalStats);
           });
         }else{
-          log.write(0, 'mc_helpers.getStatTemplate couldnt find the specified user', {user: uuid});
+          global.log(0, 'mc_helpers.getStatTemplate couldnt find the specified user', {user: uuid});
           callback('I couldnt find any stats for the specified player', false);
         }
       });
@@ -307,7 +306,7 @@ mc.getStatTemplate = function(uuid, collection, rank, callback){
           //Pass the stats to the template and callback the result
           callback(false, _statsTemplates[collection](stats));
         }else{
-          log.write(0, 'mc_helpers.getStatTemplate couldnt find the specified user', {user: uuid});
+          global.log(0, 'mc_helpers.getStatTemplate couldnt find the specified user', {user: uuid});
           callback('I couldnt find any stats for the specified player', false);
         }
       });
@@ -321,7 +320,7 @@ mc.getStatTemplate = function(uuid, collection, rank, callback){
         //Pass the stats to the function which sums it all together and give its output to the template and callback the result
         callback(false, _statsTemplates[collection](mc.sumStats(stats)));
       }else{
-        log.write(0, 'mc_helpers.getStatTemplate couldnt find the specified user', {user: 'All'});
+        global.log(0, 'mc_helpers.getStatTemplate couldnt find the specified user', {user: 'All'});
         callback('I couldnt find any stats for the specified player', false);
       }
     });
@@ -519,7 +518,7 @@ mc.rcon = function(cmd, callback){
     });
     rconCon.on('auth', function() {
       //Everything fine, send the command
-      log.write(0, 'mc_helpers successfully authenticated to the rcon server', {cmd: cmd});
+      global.log(0, 'mc_helpers successfully authenticated to the rcon server', {cmd: cmd});
       rconCon.send(cmd);
       //We can disconnect again
       rconCon.disconnect();
@@ -616,7 +615,7 @@ mc.fixDistances = function(stats){
     //We need to create the stats object template
     mc.createStatsObjectTemplate(function(err){
       if(err){
-        log.write(3, 'mc.fixDistances didnt get data from the database', {});
+        global.log(3, 'mc.fixDistances didnt get data from the database', {});
         return false;
       }else{
         //Object got created, lets try again

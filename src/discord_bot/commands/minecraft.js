@@ -3,7 +3,7 @@
 *	Command to handle all minecraft related tasks
 */
 
-const data = require('../../data/data.js');
+const data = require('../../user/data.js');
 const mc_helpers = require('../../minecraft/mc_helpers.js');
 
 module.exports = {

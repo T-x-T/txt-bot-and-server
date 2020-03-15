@@ -6,11 +6,10 @@
 //Dependencies
 const config = require('../../config.js');
 var data;
-const log    = require('../log/log.js');
 
 //This is somehow neccessary, otherwise data will just be an empty object for whatever reason
 setTimeout(function(){
-  data = require('../data/data.js');
+  data = require('../user/data.js');
 }, 0);
 
 //Global var
@@ -124,13 +123,13 @@ helpers.updateNick = function(discord_id) {
         if(member) {
           //Now its time to change the users nick
           member.setNickname(ign)
-            .catch((e) => {log.write(2, 'discord_helpers.updateNick failed to set the members nickname', {user: member.id, err: e});});
+            .catch((e) => {global.log(2, 'discord_helpers.updateNick failed to set the members nickname', {user: member.id, err: e});});
         } else {
-          log.write(2, 'discord_helpers.updateNick couldnt get the member object');
+          global.log(2, 'discord_helpers.updateNick couldnt get the member object');
         }
       });
     } else {
-      log.write(2, 'discord_helpers.updateNick couldnt get the member document', {user: discord_id});
+      global.log(2, 'discord_helpers.updateNick couldnt get the member document', {user: discord_id});
     }
   });
 };
@@ -143,7 +142,7 @@ helpers.updateAllNicks = function(){
         helpers.updateNick(doc.discord)
       });
     }else{
-      log.write(2, 'discord_helpers.updateAllNicks couldnt get the member database entries', {});
+      global.log(2, 'discord_helpers.updateAllNicks couldnt get the member database entries', {});
     }
   });
 };
@@ -152,7 +151,7 @@ helpers.updateAllNicks = function(){
 helpers.getAvatarUrl = function(discord_id, callback){
   client.fetchUser(discord_id).then(myUser => {
       callback(myUser.avatarURL);
-  });
+  }).catch(function(){callback(false)});
 };
 
 //Init script, needs to be called from discord_bot.js, so we can use the client object here

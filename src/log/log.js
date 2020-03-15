@@ -86,6 +86,10 @@ log.prune = function(days){
 };
 
 //Init stuff
+
+//Make log.write global
+global.log = log.write;
+
 //Log schema
 var logSchema = new Schema({
   timestamp: {

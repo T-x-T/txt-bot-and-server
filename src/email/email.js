@@ -7,7 +7,6 @@
 const config   = require('../../config.js');
 const mailer   = require('nodemailer');
 const sanitize = require('sanitize-html');
-const log      = require('../log/log.js');
 
 //Create the container
 var email = {};
@@ -34,7 +33,7 @@ email.send = function(recipient, subject, text){
   mailTransporter.sendMail(mailOptions, function(err, info){
     console.log(err, info);
     if(err){
-      log.write(2, 'email.send couldnt sent the email out', {mail: mailOptions});
+      global.log(2, 'email.send couldnt sent the email out', {mail: mailOptions});
     }
   });
 };

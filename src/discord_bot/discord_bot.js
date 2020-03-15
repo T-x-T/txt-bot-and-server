@@ -8,10 +8,9 @@ const config         = require('../../config.js');
 const fs             = require('fs');
 const Discord        = require('discord.js');
 const client         = new Discord.Client();
-const data           = require('../data/data.js');
+const data           = require('../user/data.js');
 const discordHelpers = require('../discord_bot/discord_helpers.js');
-const log            = require('../log/log.js');
-const application    = require('../application/application.js');
+const application    = require('../application');
 
 //Create the container
 var discordBot = {};
@@ -23,7 +22,7 @@ client.once('ready', () => {
   //Hand the client object over to discord_helpers.js
   discordHelpers.init(client);
   //Finally log that we sucessfully started
-  log.write(1, 'Discord Bot connected sucessfully', null);
+  global.log(1, 'Discord Bot connected sucessfully', null);
 });
 
 //Gets called when the bot receives a new message
@@ -63,7 +62,7 @@ client.on('message', message => {
   try {
     command.execute(message, args);
   } catch (e) {
-    log.write(3, 'Some Discord command just broke', {error: e, msg: message.content});
+    global.log(3, 'Some Discord command just broke', {error: e, msg: message.content});
     message.reply('There was an oopsie when I tried to do that');
   }
 });
@@ -137,13 +136,17 @@ client.on('guildMemberRemove', (user) => {
   discordHelpers.sendMessage(`${user.displayName} left the server`, config['new_application_announcement_channel'], function(e){});
 });
 
+emitter.on('application_accepted', (application) => {
+  if(discordHelpers.isGuildMember(application.discord_id)){
+    application.acceptWorkflow(application.discord_id)
+  }
+});
+
 //Gets called whenever a new member joins the guild
 client.on('guildMemberAdd', (user) =>{
   //Check if the new member got accepted as a member
-  application.readAll({discord_id: user.id}, function(err, docs){
-    docs.forEach((doc) =>{
-      if(doc.status == 3) application.acceptWorkflow(user.id, doc);
-    });
+  application.get({discord_id: user.id}, {first: true}, function(err, doc){
+    if(doc.status == 3) application.acceptWorkflow(user.id);
   });
 });
 

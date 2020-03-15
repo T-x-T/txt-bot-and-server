@@ -4,7 +4,7 @@
  */
 
 //Requirements
-const data = require('../../data/data.js');
+const data = require('../../user/data.js');
 const discordHelpers = require('../discord_helpers.js');
 
 module.exports = {

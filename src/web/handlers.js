@@ -8,13 +8,13 @@ const config      = require('../../config.js');
 const fs          = require('fs');
 const path        = require('path');
 const webHelpers  = require('./web-helpers.js');
-const application = require('../application/application.js');
+const application = require('../application');
 const oauth       = require('../auth/oauth2.js');
 const email       = require('../email/email.js');
 const stats       = require('../stats/stats.js');
 const post        = require('../post/post.js');
 const bulletin    = require('../bulletin/bulletin.js');
-const _data       = require('../data/data.js');
+const _data       = require('../user/data.js');
 
 //Create the container
 var handlers = {};
@@ -384,7 +384,7 @@ handlers.paxapi.application = function(data, callback){
 
 //To send a new application
 handlers.paxapi.application.post = function(data, callback){
-  application.write(data.payload, function(status, err){
+  application.save(data.payload, false, function(status, err){
     if(!err){
       callback(status, {}, 'json');
     }else{
@@ -401,7 +401,7 @@ handlers.paxapi.application.get = function(data, callback){
   //Retrieve all records
   //Clear the 0 status code, as 0 means get all data
   if(data.queryStringObject.status == 0) data.queryStringObject = undefined;
-  application.readAll(data.queryStringObject, function(err, docs){
+  application.get(data.queryStringObject, false, function(err, docs){
     if(!err){
       callback(200, docs, 'json');
     }else{
@@ -421,7 +421,7 @@ handlers.paxapi.application.patch = function(data, callback){
 
   if(typeof id == 'number' && status){
     //Hand it over to the correct function
-    application.changeStatus(id, status, reason, function(status, err){
+    application.save(data.payload, false, function(status, err){
       if(!err){
         callback(200, {}, 'json');
       }else{

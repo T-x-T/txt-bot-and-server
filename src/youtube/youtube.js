@@ -6,7 +6,6 @@
 const config = require('../../config.js');
 const https = require('https');
 const discordHelpers = require('../discord_bot/discord_helpers.js');
-const log = require('../log/log.js');
 
 //Create the container
 var youtube = {};
@@ -57,14 +56,14 @@ youtube.checkIfNewVideos = function(channel){
           youtube.postIfNew(latestVideo);
         } else {
           //Data object isnt valid
-          log.write(3, 'Youtube: Retrieved data from youtube is invalid', data);
+          global.log(3, 'Youtube: Retrieved data from youtube is invalid', data);
         }
       } else {
         //Data object isnt valid
-        log.write(3, 'Youtube: Retrieved data from youtube is invalid', data);
+        global.log(3, 'Youtube: Retrieved data from youtube is invalid', data);
       }
     }).on('error', function(e) {
-      log.write(3, 'Youtube: Cant retrieve video data from youtube', null);
+      global.log(3, 'Youtube: Cant retrieve video data from youtube', null);
     });
   });
 };
@@ -91,7 +90,7 @@ youtube.postIfNew = function (video) {
 youtube.post = function(video){
   discordHelpers.sendMessage(`New Video: ${video.title} by ${video.channel_title}\n${video.url}\n<@&${video.channel.role}>`, video.channel.channel_id, function(err) {
     if(err) {
-      log.write(3, 'YouTube: Cant send message about new video', {Error: err});
+      global.log(3, 'YouTube: Cant send message about new video', {Error: err});
     }
   });
 };

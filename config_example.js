@@ -42,7 +42,8 @@ var conf = {
     'oauth_uris': {
       'application': '',
       'login': ''
-    }
+    },
+    'data_backend': 'mongo'
 };
 
 //Export the container

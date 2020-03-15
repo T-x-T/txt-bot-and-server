@@ -4,10 +4,9 @@
  */
 
 //Dependencies
-const data = require('../data/data.js');
+const data = require('../user/data.js');
 const mc_helpers = require('../minecraft/mc_helpers.js');
 const oauth = require('../auth/oauth2.js');
-const log = require('../log/log.js');
 
 //Create the container
 var stats = {};
@@ -75,12 +74,12 @@ stats.memberOverview = function(discord_id, filter, callback) {
               callback(obj);
             });
           } else {
-            log.write(2, 'stats.memberOverview coulnt add the nicks to an object', {id: discord_id});
+            global.log(2, 'stats.memberOverview coulnt add the nicks to an object', {id: discord_id});
             callback(false);
           }
         });
       } else {
-        log.write(2, 'stats.memberOverview coulnt get the member object', {id: discord_id});
+        global.log(2, 'stats.memberOverview coulnt get the member object', {id: discord_id});
         callback(false);
       }
     });
@@ -103,7 +102,7 @@ stats.memberOverview = function(discord_id, filter, callback) {
           });
         }
       } else {
-        log.write(2, 'stats.memberOverview coulnt get any member objects', {});
+        global.log(2, 'stats.memberOverview coulnt get any member objects', {});
         callback(false);
       }
     });
@@ -124,7 +123,7 @@ stats.countryList = function(callback) {
         if(iso){
           countries[iso].numberOfThings++;
         }else{
-          log.write(0, 'stats.countryList doesnt contain a country', {country: doc.country})
+          global.log(0, 'stats.countryList doesnt contain a country', {country: doc.country})
         }
       });
 
@@ -138,7 +137,7 @@ stats.countryList = function(callback) {
 
       callback(countries);
     } else {
-      log.write(0, 'stats.countryList couldnt get the data from the db', {});
+      global.log(0, 'stats.countryList couldnt get the data from the db', {});
       callback(false);
     }
   });

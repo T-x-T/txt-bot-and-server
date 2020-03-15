@@ -8,7 +8,7 @@ const config = require('../../config.js');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const sanitize = require('sanitize-html');
-const data = require('../data/data.js');
+const data = require('../user/data.js');
 const discord_helpers = require('../discord_bot/discord_helpers.js');
 
 //Create the container

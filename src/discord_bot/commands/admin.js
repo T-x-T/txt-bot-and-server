@@ -7,7 +7,7 @@ const log = require('../../log/log.js');
 const config = require('../../../config.js');
 const mc_helpers = require('../../minecraft/mc_helpers.js');
 const discord_helpers = require('../discord_helpers.js');
-const data = require('../../data/data.js');
+const data = require('../../user/data.js');
 
 module.exports = {
   name: 'admin',
@@ -182,7 +182,7 @@ module.exports = {
               //Just delete the amount
               message.channel.bulkDelete(amount, false)
               .catch(err => {
-                log.write(2, 'Admin Command: Bulk delete failed', { message: message.content, error: err });
+                global.log(2, 'Admin Command: Bulk delete failed', { message: message.content, error: err });
                 message.channel.send('Welp, that didnt work :(');
               });
             } else {
@@ -190,13 +190,13 @@ module.exports = {
                 if (amount >= 50) {
                   message.channel.bulkDelete(50, false)
                   .catch(err => {
-                    log.write(2, 'Admin Command: Mass bulk delete failed', { message: message.content, error: err });
+                    global.log(2, 'Admin Command: Mass bulk delete failed', { message: message.content, error: err });
                     message.channel.send('Welp, that didnt work :(');
                   });
                 } else {
                   message.channel.bulkDelete(amount, false)
                   .catch(err => {
-                    log.write(2, 'Admin Command: Mass bulk delete failed', { message: message.content, error: err });
+                    global.log(2, 'Admin Command: Mass bulk delete failed', { message: message.content, error: err });
                     message.channel.send('Welp, that didnt work :(');
                   });
                 }

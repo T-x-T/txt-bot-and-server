@@ -5,7 +5,7 @@
 
 //Dependencies
 const config          = require('../../config.js');
-const application     = require('../application/application.js');
+const application     = require('../application');
 const discord_helpers = require('../discord_bot/discord_helpers.js');
 const mc_helpers      = require('../minecraft/mc_helpers.js');
 const stats           = require('../stats/stats.js');
@@ -13,7 +13,7 @@ const os              = require('os');
 const post            = require('../post/post.js');
 const widgets         = require('./widgets.js');
 const oauth           = require('../auth/oauth2.js');
-const _data           = require('../data/data.js');
+const _data           = require('../user/data.js');
 const fs              = require('fs');
 const path            = require('path');
 
@@ -32,19 +32,6 @@ _internal.generateBirthyearOptions = function(callback){
   callback(output);
 };
 
-//Gets the application for the current user id and store it in the globalObject;
-_internal.getApplication = function(){
-  application.readById(data.queryStringObject.id, function(applicationObject){
-    if(applicationObject){
-      globalObject = applicationObject;
-    }else{
-      globalObject = false;
-    }
-  });
-};
-
-
-
 var _getters = {};
 
 //Callsback the html for all interface widgets that the current user is allowed to see
@@ -60,7 +47,7 @@ _getters.interface = function(callback){
 
 //Calls back an object for the current application
 _getters.application = function(callback){
-  application.readById(data.queryStringObject.id, function(doc){
+  application.get({id: data.queryStringObject.id}, {first: true}, function(err, doc){
     if(doc){
       discord_helpers.getAvatarUrl(doc.discord_id, function(discord_avatar_url){
         if(!discord_avatar_url) discord_avatar_url = 'not found';

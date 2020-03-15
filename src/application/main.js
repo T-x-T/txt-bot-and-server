@@ -5,14 +5,12 @@
 
 //Dependencies
 const config     = require('../../config.js');
-const log        = require('../log/log.js');
-const mongoose   = require('mongoose');
-const Schema     = mongoose.Schema;
 const mc_helpers = require('../minecraft/mc_helpers.js');
 const email      = require('../email/email.js');
 const oauth      = require('../auth/oauth2.js');
 const sanitize   = require('sanitize-html');
-const data       = require('../data/data.js');
+const user       = require('../user/data.js');
+const data       = require('../data');
 const discord_helpers = require('../discord_bot/discord_helpers.js');
 
 //Create the container
@@ -24,8 +22,7 @@ application.write = function(input, callback){
   mc_helpers.getUUID(input.mc_ign, function(uuid){
     if(uuid){
       //Get all applications of the member to find out if they already have accepted or pending review applications
-      application.readAll({$or: [{mc_uuid: uuid}, {discord_id: input.discord_id}]}, function(err, docs){
-        console.log(docs);
+      application.read({$or: [{mc_uuid: uuid}, {discord_id: input.discord_id}]}, function(err, docs){
         let ok = true;
         docs.forEach((doc) => {
           if(doc.status == 1 || doc.status == 3) ok = false;
@@ -48,7 +45,7 @@ application.write = function(input, callback){
           if(input.accept_privacy_policy && input.accept_rules){
             if(input.discord_id && input.email_address && input.country && input.birth_month && input.birth_year && input.about_me && input.motivation){
               //Everything is fine, write to db
-              let document = new applicationModel({
+              let document = {
                 timestamp:        Date.now(),
                 mc_uuid:          input.mc_uuid,
                 discord_id:       input.discord_id,
@@ -62,23 +59,23 @@ application.write = function(input, callback){
                 publish_about_me: input.publish_about_me,
                 publish_age:      input.publish_age,
                 publish_country:  input.publish_country
-              });
-              document.save(function(err, doc){
+              };
+              data.new(document, 'application', false, function(err, doc){
                 if(!err){
                   callback(201, false);
-                  application.sendConfirmationEmail(input.mc_uuid);
-                  discord_helpers.sendMessage('New application from ' + input.mc_ign + '\nhttps://paxterya.com/staff/application.html?id=' + doc.id, config['new_application_announcement_channel'], function(err){});
+                  emitter.emit('application_new', document)
+                  //discord_helpers.sendMessage('New application from ' + input.mc_ign + '\nhttps://paxterya.com/staff/application.html?id=' + doc.id, config['new_application_announcement_channel'], function(err){});
                 }else{
-                  log.write(2, 'application_write couldnt save an application to the db', {err: err, application: input});
+                  global.log(2, 'application_write couldnt save an application to the db', {err: err, application: input});
                   callback(500, 'An error occured while trying to save your application');
                 }
               });
             }else{
-              log.write(0, 'application_write received a malformed request', {application: input});
+              global.log(0, 'application_write received a malformed request', {application: input});
               callback(400, 'One or more inputs are malformed');
             }
           }else{
-            log.write(0, 'application_write received a request where the privacy policy or the rules werent accepted', {application: application});
+            global.log(0, 'application_write received a request where the privacy policy or the rules werent accepted', {application: application});
             callback(400, 'You have to accept the rules and the privacy policy');
           }
         }else{
@@ -86,49 +83,15 @@ application.write = function(input, callback){
         }
       });
     }else{
-      log.write(0, 'application_write couldnt verify the mc_ign', {application: input});
+      global.log(0, 'application_write couldnt verify the mc_ign', {application: input});
       callback(400, 'Couldnt verify your Minecraft In game Name! Maybe you misspelled it or mojangs API is currently down');
     }
   });
 };
 
-//Retrieve an application by mc_uuid
-application.readNewestByMcUUID = function(mc_uuid, callback){
-  applicationModel.findOne({mc_uuid: mc_uuid}, {}, {sort: {'timestamp': -1}}, function(err, doc){
-    if(!err && doc){
-      _internal.addNicks(doc, function(err, newDoc){
-        if(!err){
-          callback(newDoc);
-        }else{
-          callback(false);
-        }
-      });
-    }else{
-      callback(false);
-    }
-  });
-};
-
-//Retrieve an application by id
-application.readById = function(id, callback){
-  applicationModel.findOne({id: id}, {}, {}, function(err, doc){
-    if(!err && doc){
-      _internal.addNicks(doc, function(err, newDoc){
-        if(!err){
-          callback(newDoc);
-        }else{
-          callback(false);
-        }
-      });
-    }else{
-      callback(false);
-    }
-  });
-};
-
 //Retrieve all applications
-application.readAll = function(filter, callback){
-  applicationModel.find(filter, {}, {}, function(err, docs){
+application.read = function(filter, callback){
+  data.get(filter, 'application', false, function(err, docs){
     if(!err){
       //Iterate over all items and add the current discord nick and mc ign
       let count = 0;
@@ -152,7 +115,7 @@ application.readAll = function(filter, callback){
 };
 
 //Send an success email to tell the applicant that the application was sent successfully
-application.sendConfirmationEmail = function(mc_uuid){
+application.sendConfirmationEmail = function(mc_uuid){                                      //REMOVE
   //Get the latest application from the mc_uuid
   application.readNewestByMcUUID(mc_uuid, function(doc){
     if(doc){
@@ -180,65 +143,66 @@ application.sendConfirmationEmail = function(mc_uuid){
 
           email.send(doc.email_address, 'We have received your application', text);
         }else{
-          log.write(2, 'application_sendConfirmationEmail couldnt get the nicks for the user', {mc_uuid: mc_uuid});
+          global.log(2, 'application_sendConfirmationEmail couldnt get the nicks for the user', {mc_uuid: mc_uuid});
         }
       });
     }else{
-      log.write(2, 'application_sendConfirmationEmail cant get the data for the user', {mc_uuid: mc_uuid});
+      global.log(2, 'application_sendConfirmationEmail cant get the data for the user', {mc_uuid: mc_uuid});
     }
   });
 };
 
 application.changeStatus = function(id, newStatus, reason, callback){
   //Get the application, so we can update it and save it back
-  application.readById(id, function(doc){
+  application.read({id: id}, function(err, doc){
+    doc = doc[0];
     if(doc){
       if(doc.status == 1){
         doc.status = newStatus;
         if(newStatus == 2 && reason) doc.deny_reason = reason;
 
         //Save the changes back to the db
-        applicationModel.findOneAndUpdate({id: id}, doc, function(err){
+        data.edit(doc, 'application', false, function(err){
           if(!err){
             //Execute the correct workflow based on status
             if(newStatus == 2){
               //Member got denied
               //Build the text for the email
-              let text = '';
-              text += `Hi ${doc.mc_ign},\n`;
-              text += 'we read your application and decided it was not good enough and didnt meet our standards.\n';
-              text += 'We came to this conclusion for the following reason:\n';
-              text += reason;
-              text += '\nYou have two options now:\n';
-              text += 'If you believe you can write a better application, then we welcome you to write us another one!\n';
-              text += 'Alternatively, you can search for another server that better suits your needs and preferences.\n';
-              text += 'No matter how you decide, we wish you the best of luck for the future!\n';
-              text += 'Yours sincerly,\nExxPlore and TxT';
+              // let text = '';
+              // text += `Hi ${doc.mc_ign},\n`;
+              // text += 'we read your application and decided it was not good enough and didnt meet our standards.\n';
+              // text += 'We came to this conclusion for the following reason:\n';
+              // text += reason;
+              // text += '\nYou have two options now:\n';
+              // text += 'If you believe you can write a better application, then we welcome you to write us another one!\n';
+              // text += 'Alternatively, you can search for another server that better suits your needs and preferences.\n';
+              // text += 'No matter how you decide, we wish you the best of luck for the future!\n';
+              // text += 'Yours sincerly,\nExxPlore and TxT';
 
-              //Send the email
-              email.send(doc.email_address, 'Your application was unsuccessful :(', text);
-
+              // //Send the email
+              // email.send(doc.email_address, 'Your application was unsuccessful :(', text);
+              emitter.emit('application_denied', doc);
               //We are done
               callback(200);
             }else{
               if(newStatus == 3){
                 //Member got accepted
                 //Build the text for the email
-                let text = '';
-                text += `Hi ${doc.mc_ign},\n`;
-                text += 'we liked your application and want you in our community. Congratulations!\n';
-                text += 'Please read the rest of this mail, so you know what you have to do now!\n';
-                text += '1. Join our Discord server if you havent already. Here is the invite link in case you missed it: http://discord.gg/mAjZCTG\n';
-                text += '2. Once you have joined, our bot will notice and give you the right roles and whitelist you on the Minecraft server.\n';
-                text += '3. Join the server and have fun!\n';
-                text += '4. Engage with the community for even more fun.\n';
-                text += 'For more information please check out the FAQ on our website: https://paxterya.com/faq\n';
-                text += 'If something isnt working properly or if you have questions and suggestions for the application process, please do not hesitate to contact TxT#0001 on Discord or reply to this mail.\n';
-                text += 'Yours sincerly,\nExxPlore and TxT';
+                // let text = '';
+                // text += `Hi ${doc.mc_ign},\n`;
+                // text += 'we liked your application and want you in our community. Congratulations!\n';
+                // text += 'Please read the rest of this mail, so you know what you have to do now!\n';
+                // text += '1. Join our Discord server if you havent already. Here is the invite link in case you missed it: http://discord.gg/mAjZCTG\n';
+                // text += '2. Once you have joined, our bot will notice and give you the right roles and whitelist you on the Minecraft server.\n';
+                // text += '3. Join the server and have fun!\n';
+                // text += '4. Engage with the community for even more fun.\n';
+                // text += 'For more information please check out the FAQ on our website: https://paxterya.com/faq\n';
+                // text += 'If something isnt working properly or if you have questions and suggestions for the application process, please do not hesitate to contact TxT#0001 on Discord or reply to this mail.\n';
+                // text += 'Yours sincerly,\nExxPlore and TxT';
 
-                //Send the email
-                email.send(doc.email_address, 'Welcome! You got accepted :)', text);
-
+                // //Send the email
+                // email.send(doc.email_address, 'Welcome! You got accepted :)', text);
+                emitter.emit('application_accepted', doc);
                 //Check if the member is already on the discord server
                 if(discord_helpers.isGuildMember(doc.discord_id)){
                   //Start the acception routine
@@ -271,101 +235,62 @@ application.changeStatus = function(id, newStatus, reason, callback){
 //3. Whitelist the member on the server
 //4. Announce the new member on the discord and if publish_about_me is true, publish that too.
 //Then the member will automatically appear in the member list on the website as well
-application.acceptWorkflow = function(discord_id, app){
-  //1. Create the member object in the db
-  data.checkMemberExist(discord_id, true, function(exists){
-    //It doesnt matter if the member already exists or not, we can now get their object and modify it
-    data.getUserData(discord_id, function(err, doc){
-      if(!err){
-        doc.mcName = app.mc_ign;
-        doc.mcUUID = app.mc_uuid;
-        doc.birth_year = app.birth_year;
-        doc.birth_month = app.birth_month;
-        doc.country = app.country;
-        doc.publish_age = app.publish_age;
-        doc.publish_country = app.publish_country;
-        doc.status = 1;
+application.acceptWorkflow = function(discord_id){
+  application.read({discord_id: discord_id}, function(err, app){
+    app = app[0];
+    if(!err && doc){
+      //1. Create the member object in the db
+      user.checkMemberExist(discord_id, true, function(exists) {
+        //It doesnt matter if the member already exists or not, we can now get their object and modify it
+        user.getUserData(discord_id, function(err, doc) {
+          if(!err) {
+            doc.mcName = app.mc_ign;
+            doc.mcUUID = app.mc_uuid;
+            doc.birth_year = app.birth_year;
+            doc.birth_month = app.birth_month;
+            doc.country = app.country;
+            doc.publish_age = app.publish_age;
+            doc.publish_country = app.publish_country;
+            doc.status = 1;
 
-        //Save the changes back into the db
-        data.updateUserData(discord_id, doc, function(err){
-          if(!err){
-            //2. Give the member the paxterya role
-            discord_helpers.addMemberToRole(discord_id, discord_helpers.getRoleId('paxterya'), function(err){
-              if(!err){
-                //3. Whitelist the member on the server
-                mc_helpers.rcon(`whitelist add ${app.mc_ign}`);
-                discord_helpers.updateNick(app.discord_id);
+            //Save the changes back into the db
+            user.updateUserData(discord_id, doc, function(err) {
+              if(!err) {
+                //2. Give the member the paxterya role
+                discord_helpers.addMemberToRole(discord_id, discord_helpers.getRoleId('paxterya'), function(err) {
+                  if(!err) {
+                    //3. Whitelist the member on the server
+                    mc_helpers.rcon(`whitelist add ${app.mc_ign}`);
+                    discord_helpers.updateNick(app.discord_id);
 
-                //4. Announce the new member on the discord and if publish_about_me is true, publish that too.
-                let msg = '';
-                if(app.publish_about_me) msg = `Welcome <@${app.discord_id}> to Paxterya!\nHere is the about me text they sent us:\n${app.about_me}`;
-                  else msg = `Welcome <@${app.discord_id}> to Paxterya!`
+                    //4. Announce the new member on the discord and if publish_about_me is true, publish that too.
+                    let msg = '';
+                    if(app.publish_about_me) msg = `Welcome <@${app.discord_id}> to Paxterya!\nHere is the about me text they sent us:\n${app.about_me}`;
+                    else msg = `Welcome <@${app.discord_id}> to Paxterya!`
 
-                discord_helpers.sendMessage(msg, config['new_member_announcement_channel'], function(err){
-                  if(err) log.write(2, 'application.acceptWorkflow couldnt send the welcome message', {err: err});
+                    discord_helpers.sendMessage(msg, config['new_member_announcement_channel'], function(err) {
+                      if(err) global.log(2, 'application.acceptWorkflow couldnt send the welcome message', {err: err});
+                    });
+                  } else {
+                    global.log(2, 'application.acceptWorkflow couldnt add the member to the paxterya role', {});
+                  }
                 });
-              }else{
-                log.write(2, 'application.acceptWorkflow couldnt add the member to the paxterya role', {});
+              } else {
+                global.log(2, 'application.acceptWorkflow couldnt update the member object', {err: err});
               }
             });
-          }else{
-            log.write(2, 'application.acceptWorkflow couldnt update the member object', {err: err});
+          } else {
+            global.log(2, 'application.acceptWorkflow couldnt get the member object', {});
           }
         });
-      }else{
-        log.write(2, 'application.acceptWorkflow couldnt get the member object', {});
-      }
-    });
-  });
+      });
+    }else{
+      global.log(2, 'application.acceptWorkflow couldnt find the user', app);
+    }
+  })
 };
 
-//Set up the application schema
-var applicationSchema = new Schema({
-  id:{
-    type:           Number,
-    index:          true,
-    unique:         true,
-    default:        0
-  },
-  timestamp:        Date,
-  mc_uuid:          String,
-  discord_id:       String,
-  email_address:    String,
-  country:          String,
-  birth_month:      Number,
-  birth_year:       Number,
-  about_me:         String,
-  motivation:       String,
-  build_images:     String,
-  publish_about_me: Boolean,
-  publish_age:      Boolean,
-  publish_country:  Boolean,
-  status:           {
-    type:           Number,
-    default:        1         //1 = pending review; 2 = denied; 3 = accepted
-  },
-  deny_reason:      String,
-  testing:          {
-    type:           Boolean,
-    default:        false
-  }
-});
 
-//Code from stackoverflow to increment the counter id
-applicationSchema.pre('save', function (next) {
-  // Only increment when the document is new
-  if (this.isNew) {
-    applicationModel.count().then(res => {
-      this.id = res; // Increment count
-      next();
-    });
-  } else {
-    next();
-  }
-});
-
-//Set up the model
-var applicationModel = mongoose.model('applications', applicationSchema);
 
 var _internal = {};
 
