@@ -58,12 +58,15 @@ application.write = function(input, callback){
                 build_images:     sanitize(input.build_images,{allowedTags: [], allowedAttributes: {}}),
                 publish_about_me: input.publish_about_me,
                 publish_age:      input.publish_age,
-                publish_country:  input.publish_country
+                publish_country:  input.publish_country,
+                status:           1
               };
               data.new(document, 'application', false, function(err, doc){
                 if(!err){
                   callback(201, false);
-                  emitter.emit('application_new', document)
+                  _internal.addNicks(document, function(err, newDoc){
+                    emitter.emit('application_new', newDoc);
+                  });
                   //discord_helpers.sendMessage('New application from ' + input.mc_ign + '\nhttps://paxterya.com/staff/application.html?id=' + doc.id, config['new_application_announcement_channel'], function(err){});
                 }else{
                   global.log(2, 'application_write couldnt save an application to the db', {err: err, application: input});
@@ -114,44 +117,6 @@ application.read = function(filter, callback){
   });
 };
 
-//Send an success email to tell the applicant that the application was sent successfully
-application.sendConfirmationEmail = function(mc_uuid){                                      //REMOVE
-  //Get the latest application from the mc_uuid
-  application.readNewestByMcUUID(mc_uuid, function(doc){
-    if(doc){
-      _internal.addNicks(doc, function(err, doc){
-        if(!err){
-          //Build the test for the mail
-          let text = `Hi ${doc.mc_ign},\n`;
-          text    += 'thank you for applying to join Paxterya! We are happy to tell you that we received your application successfully!\n',
-          text    += 'Here are the details you sent us, please verify that this is all correct. If there are any mistakes or questions you may have, please do not hesitate to answer this email.\n\n';
-          text    += `MC IGN: ${doc.mc_ign}\n`;
-          text    += `MC UUID: ${doc.mc_uuid}\n`;
-          text    += `Discord Nick: ${doc.discord_nick}\n`;
-          text    += `Discord ID: ${doc.discord_id}\n`;
-          text    += `Country: ${doc.country}\n`;
-          text    += `Birth Month: ${doc.birth_month}\n`;
-          text    += `Birth Year: ${doc.birth_year}\n`;
-          text    += `About me: ${doc.about_me}\n`;
-          text    += `Motivation: ${doc.motivation}\n`;
-          text    += `Buildings: ${doc.build_images}\n`;
-          text    += `Publish about me: ${doc.publish_about_me}\n`;
-          text    += `Publish age: ${doc.publish_age}\n`;
-          text    += `Publish country: ${doc.publish_country}\n\n`;
-          text    += 'You will hear back from us within a few days tops.\n';
-          text    += 'We wish you the best of luck,\nExxPlore and TxT';
-
-          email.send(doc.email_address, 'We have received your application', text);
-        }else{
-          global.log(2, 'application_sendConfirmationEmail couldnt get the nicks for the user', {mc_uuid: mc_uuid});
-        }
-      });
-    }else{
-      global.log(2, 'application_sendConfirmationEmail cant get the data for the user', {mc_uuid: mc_uuid});
-    }
-  });
-};
-
 application.changeStatus = function(id, newStatus, reason, callback){
   //Get the application, so we can update it and save it back
   application.read({id: id}, function(err, doc){
@@ -167,41 +132,12 @@ application.changeStatus = function(id, newStatus, reason, callback){
             //Execute the correct workflow based on status
             if(newStatus == 2){
               //Member got denied
-              //Build the text for the email
-              // let text = '';
-              // text += `Hi ${doc.mc_ign},\n`;
-              // text += 'we read your application and decided it was not good enough and didnt meet our standards.\n';
-              // text += 'We came to this conclusion for the following reason:\n';
-              // text += reason;
-              // text += '\nYou have two options now:\n';
-              // text += 'If you believe you can write a better application, then we welcome you to write us another one!\n';
-              // text += 'Alternatively, you can search for another server that better suits your needs and preferences.\n';
-              // text += 'No matter how you decide, we wish you the best of luck for the future!\n';
-              // text += 'Yours sincerly,\nExxPlore and TxT';
-
-              // //Send the email
-              // email.send(doc.email_address, 'Your application was unsuccessful :(', text);
               emitter.emit('application_denied', doc);
               //We are done
               callback(200);
             }else{
               if(newStatus == 3){
                 //Member got accepted
-                //Build the text for the email
-                // let text = '';
-                // text += `Hi ${doc.mc_ign},\n`;
-                // text += 'we liked your application and want you in our community. Congratulations!\n';
-                // text += 'Please read the rest of this mail, so you know what you have to do now!\n';
-                // text += '1. Join our Discord server if you havent already. Here is the invite link in case you missed it: http://discord.gg/mAjZCTG\n';
-                // text += '2. Once you have joined, our bot will notice and give you the right roles and whitelist you on the Minecraft server.\n';
-                // text += '3. Join the server and have fun!\n';
-                // text += '4. Engage with the community for even more fun.\n';
-                // text += 'For more information please check out the FAQ on our website: https://paxterya.com/faq\n';
-                // text += 'If something isnt working properly or if you have questions and suggestions for the application process, please do not hesitate to contact TxT#0001 on Discord or reply to this mail.\n';
-                // text += 'Yours sincerly,\nExxPlore and TxT';
-
-                // //Send the email
-                // email.send(doc.email_address, 'Welcome! You got accepted :)', text);
                 emitter.emit('application_accepted', doc);
                 //Check if the member is already on the discord server
                 if(discord_helpers.isGuildMember(doc.discord_id)){

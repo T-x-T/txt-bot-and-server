@@ -17,6 +17,7 @@ var discordBot = {};
 
 //Gets called when everything is ok and the bot is logged in
 client.once('ready', () => {
+  emitter.emit('discord_bot_ready');
   console.log('The Discord bot is ready!');
   client.user.setActivity('your messages',{type: 'LISTENING'});
   //Hand the client object over to discord_helpers.js
@@ -136,9 +137,9 @@ client.on('guildMemberRemove', (user) => {
   discordHelpers.sendMessage(`${user.displayName} left the server`, config['new_application_announcement_channel'], function(e){});
 });
 
-emitter.on('application_accepted', (application) => {
-  if(discordHelpers.isGuildMember(application.discord_id)){
-    application.acceptWorkflow(application.discord_id)
+emitter.on('application_accepted', (doc) => {
+  if(discordHelpers.isGuildMember(doc.discord_id)){
+    application.acceptWorkflow(doc.discord_id)
   }
 });
 

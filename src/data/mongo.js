@@ -11,7 +11,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 //Connect to the db
-mongoose.connect(config["mongodb-url"]);
+mongoose.connect(config["mongodb-url"], {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 var con = mongoose.connection;
 
 //Gets called when there is an error connecting to the db
@@ -34,7 +34,11 @@ main.new = function(input, type, options, callback) {
   let model = models[type];
   let document = new model(input);
   document.save(function(err, doc){
-    callback(err, doc);
+    if(!err && doc){
+      callback(false, doc);
+    }else{
+      callback(err, false);
+    }
   });
 };
 
@@ -80,9 +84,9 @@ main.delete = function(filter, type, options, callback) {
   let model = models[type];
   model.deleteMany(filter, function(err){
     if(!err){
-      callback(false, input);
+      callback(false);
     }else{
-      callback(err, false);
+      callback(true);
     }
   });
 };

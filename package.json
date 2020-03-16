@@ -1,0 +1,34 @@
+{
+  "scripts": {
+    "test": "mocha",
+    "prod": "index.js"
+  },
+  "name": "txt-bot-and-server",
+  "description": "Combination of all Software related to txt's discord and servers",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "mongoose": "^5.9.4",
+    "node-mailer": "^0.1.1",
+    "rcon": "^1.0.3",
+    "sanitize-filename": "^1.6.3",
+    "sanitize-html": "^1.22.1"
+  },
+  "devDependencies": {
+    "mocha": "^7.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/T-x-T/txt-bot-and-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/T-x-T/txt-bot-and-server/issues"
+  },
+  "homepage": "https://github.com/T-x-T/txt-bot-and-server#readme"
+}
