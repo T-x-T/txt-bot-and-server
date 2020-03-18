@@ -13,7 +13,7 @@ const oauth       = require('../auth/oauth2.js');
 const email       = require('../email/email.js');
 const stats       = require('../stats/stats.js');
 const post        = require('../post/post.js');
-const bulletin    = require('../bulletin/bulletin.js');
+const bulletin    = require('../bulletin');
 const _data       = require('../user/data.js');
 
 //Create the container
@@ -176,7 +176,7 @@ handlers.paxapi.bulletin.post = function(data, callback){
   oauth.getDiscordIdFromToken(data.cookies.access_token, function(discord_id){
     if(discord_id){
       data.payload.author = discord_id;
-      bulletin.save(data.payload, function(err, doc){
+      bulletin.save(data.payload, false, function(err, doc){
         if(!err && doc){
           callback(200, doc, 'json');
         }else{
@@ -195,11 +195,11 @@ handlers.paxapi.bulletin.put = function(data, callback){
   oauth.getDiscordIdFromToken(data.cookies.access_token, function(discord_id) {
     if(discord_id) {
       //Check if discord_id is the same as author from the database
-      bulletin.get({_id: data.payload._id}, function(err, docs){
+      bulletin.get({_id: data.payload._id}, false, function(err, docs){
         if(!err && docs.length > 0){
           if(docs[0].author === discord_id || data.access_level >= 9){
             //Everything in order, save to db
-            bulletin.save(data.payload, function(err, doc) {
+            bulletin.save(data.payload, false, function(err, doc) {
               if(!err && doc) {
                 callback(200, doc, 'json');
               } else {
@@ -222,7 +222,7 @@ handlers.paxapi.bulletin.put = function(data, callback){
 //Get bulletin(s) based on filter
 //Update an existing bulletin
 handlers.paxapi.bulletin.get = function(data, callback) {
-  bulletin.get(data.queryStringObject, function(err, docs) {
+  bulletin.get(data.queryStringObject, false, function(err, docs) {
     if(docs) callback(200, docs, 'json');
     else callback(404, {err: 'Couldnt get any posts for the filter'}, 'json');
   });
@@ -234,11 +234,11 @@ handlers.paxapi.bulletin.delete = function(data, callback) {
   oauth.getDiscordIdFromToken(data.cookies.access_token, function(discord_id) {
     if(discord_id) {
       //Check if discord_id is the same as author from the database
-      bulletin.get({_id: data.payload._id}, function(err, docs) {
+      bulletin.get({_id: data.payload._id}, false, function(err, docs) {
         if(!err && docs) {
           if(docs[0].author === discord_id || data.access_level >= 9) {
             //Everything in order, remove from db
-            bulletin.remove({_id: data.payload._id}, function(err) {
+            bulletin.delete({_id: data.payload._id}, false, function(err) {
               if(!err) {
                 callback(200, {}, 'json');
               } else {

@@ -91,7 +91,7 @@ main.delete = function(filter, type, options, callback) {
   });
 };
 
-//Set up the application schema
+//Set up the schemas
 var applicationSchema = new Schema({
   id: {
     type: Number,
@@ -123,6 +123,12 @@ var applicationSchema = new Schema({
   }
 });
 
+var bulletinSchema = new Schema({
+  author: String, //discord_id
+  message: String,
+  date: Date,
+});
+
 //Code from stackoverflow to increment the counter id
 applicationSchema.pre('save', function(next) {
   // Only increment when the document is new
@@ -136,12 +142,14 @@ applicationSchema.pre('save', function(next) {
   }
 });
 
-//Set up the model
+//Set up the models
 var applicationModel = mongoose.model('applications', applicationSchema);
+var bulletinModel = mongoose.model('bulletin', bulletinSchema);
 
 //Container for all database models
 const models = {
-  'application': applicationModel
+  'application': applicationModel,
+  'bulletin': bulletinModel
 };
 
 //Export the container

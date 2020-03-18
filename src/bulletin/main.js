@@ -5,29 +5,13 @@
 
 //Dependencies
 const config = require('../../config.js');
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 const sanitize = require('sanitize-html');
-const data = require('../user/data.js');
+const user = require('../user/data.js');
 const discord_helpers = require('../discord_bot/discord_helpers.js');
+const data = require('../data');
 
 //Create the container
 var bulletin = {};
-
-//Connect to the db
-mongoose.connect(config["mongodb-url"]);
-var con = mongoose.connection;
-
-//Gets called when there is an error connecting to the db
-con.on('error', function() {
-  console.log('Error connecting to database');
-});
-
-//Gets called when the connection to the db succeeds
-con.on('open', function() {
-  console.log('Bulletin Sucessfully connected to database');
-  db = con;
-});
 
 //Combines create and update, chooses whatever makes sense based on if the input has an _id associated
 //This also validates input 
@@ -73,16 +57,16 @@ bulletin.create = function(input, callback){
   bulletin.get({author: input.author}, function(err, docs){
     if(docs.length == 0 || docs.length < 5){
       //Everything ok
-      let document = new bulletinModel({
+      let document = {
         author: input.author,
         message: input.message,
         date: Date.now()
-      });
-      document.save(function(err, doc) {
+      };
+      data.new(document, 'bulletin', false, function(err, doc) {
         if(!err && doc) {
           //Also send message in discord
           let message = `<@${input.author}> posted a new bulletin:\n${input.message}`;
-          discord_helpers.sendMessage(message, config['new_bulletin_announcement_channel'], function(err){});
+          emitter.emit('bulletin_new', message);
 
           callback(false, doc);
         } else {
@@ -99,12 +83,11 @@ bulletin.create = function(input, callback){
 //Update an entry in the database; CB: Error, new entry
 bulletin.update = function(input, callback){
   if(typeof input === 'object'){
-    bulletinModel.findOneAndUpdate({_id: input._id}, input, function(err, doc){
+    data.edit(input, 'bulletin', false, function(err, doc){
       if(!err && doc){
         //Also send message in discord
         let message = `<@${input.author}> edited a bulletin:\n${input.message}`;
-        discord_helpers.sendMessage(message, config['new_bulletin_announcement_channel'], function(err) {});
-
+        emitter.emit('bulletin_edit', message);
         callback(false, doc);
       }else{
         callback('Error updating entry in database', false);
@@ -118,12 +101,12 @@ bulletin.update = function(input, callback){
 //Gets entries from the database matching the filter, if no filter is given return all; CB: Error, array of results
 bulletin.get = function(filter, callback){
   if(typeof filter !== 'object') filter = {};
-  bulletinModel.find(filter, function(err, docs){
+  data.get(filter, 'bulletin', false, function(err, docs){
     if(!err && docs.length > 0){
       //Fill in the authors name
       let newDocs = [];
       for(let i = 0; i < docs.length; i++){
-        data.getMembers({discord: docs[i].author}, true, true, function(memberData){
+        user.getMembers({discord: docs[i].author}, true, true, function(memberData){
           let newDoc = {};
           newDoc._id = docs[i]._id;
           newDoc.author = docs[i].author;
@@ -149,27 +132,20 @@ bulletin.get = function(filter, callback){
 };
 
 //Removes entries from the database based on a filter, if no filter is given, no entries are removed; CB: Error
-bulletin.remove = function(filter, callback){
+bulletin.delete = function(filter, callback){
   if(typeof filter === 'object'){
-    bulletinModel.findByIdAndRemove(filter, function(err){
+    data.delete(filter, 'bulletin', false, function(err){
       if(!err){
+        emitter.emit('bulletin_deleted');
         callback(false);
       }else{
         callback('Error removing entries from database');
       }
-    })
+    });
   }else{
     callback('Cant remove entries, no filter given');
   }
 };
-
-var bulletinSchema = new Schema({
-  author: String, //discord_id
-  message: String,
-  date: Date,
-});
-
-var bulletinModel = mongoose.model('bulletin', bulletinSchema);
 
 //Export the container
 module.exports = bulletin;
