@@ -38,13 +38,13 @@ main.edit = function(input, type, options, callback){
         if(data[type][i].hasOwnProperty(key)) {
           if(data[type][i][key] === filter[key]) {
             data[type][i] = input;
-            callback(false);
+            callback(false, input);
           }
         }
       }
     }
   }else{
-    callback('No valid input')
+    callback('No valid input', false)
   }
 };
 

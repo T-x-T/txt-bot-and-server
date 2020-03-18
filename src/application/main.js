@@ -174,7 +174,7 @@ application.changeStatus = function(id, newStatus, reason, callback){
 application.acceptWorkflow = function(discord_id){
   application.read({discord_id: discord_id}, function(err, app){
     app = app[0];
-    if(!err && doc){
+    if(!err && app){
       //1. Create the member object in the db
       user.checkMemberExist(discord_id, true, function(exists) {
         //It doesnt matter if the member already exists or not, we can now get their object and modify it
