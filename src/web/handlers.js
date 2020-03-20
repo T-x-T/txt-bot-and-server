@@ -194,23 +194,13 @@ handlers.paxapi.bulletin.put = function(data, callback){
   //Get the discord id of the author
   oauth.getDiscordIdFromToken(data.cookies.access_token, function(discord_id) {
     if(discord_id) {
-      //Check if discord_id is the same as author from the database
-      bulletin.get({_id: data.payload._id}, false, function(err, docs){
-        if(!err && docs.length > 0){
-          if(docs[0].author === discord_id || data.access_level >= 9){
-            //Everything in order, save to db
-            bulletin.save(data.payload, false, function(err, doc) {
-              if(!err && doc) {
-                callback(200, doc, 'json');
-              } else {
-                callback(500, {err: err}, 'json');
-              }
-            });
-          }else{
-            callback(403, {err: 'Youre not the author of the object you tried to modify'}, 'json');
-          }
+      //Edit
+      data.payload.editAuthor = discord_id;
+      bulletin.save(data.payload, false, function(err, doc){
+        if(err){
+          callback(403, {err: err}, 'json');
         }else{
-          callback(500, {err: 'I couldnt find the bulletin youre trying to modify!'}, 'json');
+          callback(200);
         }
       });
     } else {
@@ -233,23 +223,13 @@ handlers.paxapi.bulletin.delete = function(data, callback) {
   //Get the discord id of the author
   oauth.getDiscordIdFromToken(data.cookies.access_token, function(discord_id) {
     if(discord_id) {
-      //Check if discord_id is the same as author from the database
-      bulletin.get({_id: data.payload._id}, false, function(err, docs) {
-        if(!err && docs) {
-          if(docs[0].author === discord_id || data.access_level >= 9) {
-            //Everything in order, remove from db
-            bulletin.delete({_id: data.payload._id}, false, function(err) {
-              if(!err) {
-                callback(200, {}, 'json');
-              } else {
-                callback(500, {err: 'Error deleting entry from database'}, 'json');
-              }
-            });
-          } else {
-            callback(403, {err: 'Youre not the author of the object you tried to delete'}, 'json');
-          }
-        } else {
-          callback(500, {err: 'Failed to verify that youre the author'}, 'json');
+      //Delete
+      data.payload.deleteAuthor = discord_id;
+      bulletin.delete(data.payload, false, function(err){
+        if(err){
+          callback(403, {err: err}, 'json');
+        }else{
+          callback(200);
         }
       });
     } else {

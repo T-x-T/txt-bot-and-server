@@ -43,7 +43,10 @@ var conf = {
       'application': '',
       'login': ''
     },
-    'data_backend': 'mongo'
+  'data_backend': 'mongo',
+  'bulletin': {
+    'max_per_usr': 5
+  }
 };
 
 //Export the container

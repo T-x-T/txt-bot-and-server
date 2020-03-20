@@ -34,23 +34,26 @@ main.edit = function(input, type, options, callback){
 
   if(filter){
      for(let i = 0; i < data[type].length; i++){
-      for(let key in filter) {
-        if(data[type][i].hasOwnProperty(key)) {
-          if(data[type][i][key] === filter[key]) {
-            data[type][i] = input;
-            callback(false, input);
-          }
-        }
+      if(data[type][i].hasOwnProperty('_id') && data[type][i]['_id'] == input['_id'] || 
+        data[type][i].hasOwnProperty('id') && data[type][i]['id'] == input['id'] || 
+        data[type][i].hasOwnProperty('discord') && data[type][i]['discord'] == input['discord'] || 
+        data[type][i].hasOwnProperty('discord_id') && data[type][i]['discord_id'] == input['discord_id']){
+
+          input._id = data[type][i]._id;
+          data[type][i] = input;
+          console.log('end editing')
+          callback(false, input);
+          break;
+      }else{
       }
     }
   }else{
-    callback('No valid input', false)
   }
 };
 
 main.get = function(filter, type, options, callback){
   if(!data.hasOwnProperty(type)) data[type] = [];
-  if(filter === {}) filter = false;
+  if(Object.keys(filter).length === 0) filter = false;
   if(!filter){
     callback(false, data[type]);
   }else{

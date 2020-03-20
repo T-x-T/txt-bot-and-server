@@ -13,6 +13,13 @@ global.cache.discordUserObjects = {};
 const discordBot = require('../src/discord_bot/discord_bot.js');
 discordBot.init();
 
+before(function(done){
+  this.timeout(1000 * 10);
+  emitter.once('discord_bot_ready', () => {
+    done();
+  });
+});
+
 const oauth = require('../src/auth/oauth2.js');
 oauth.updateUserIdCache();
 
