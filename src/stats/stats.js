@@ -4,7 +4,7 @@
  */
 
 //Dependencies
-const data = require('../user/data.js');
+const user = require('../user');
 const mc_helpers = require('../minecraft/mc_helpers.js');
 const oauth = require('../auth/oauth2.js');
 
@@ -13,7 +13,7 @@ var stats = {};
 
 //Gets the basic stats for the statistics.html overview
 stats.overview = function(callback) {
-  data.listAllMembers(function(memberData) {
+  user.get({}, false, function(memberData) {
     if(memberData) {
       mc_helpers.getStatTemplate(false, 'playtime', false, function(err, playtime) {
         if(!err && playtime) {
@@ -50,7 +50,7 @@ stats.overview = function(callback) {
 stats.memberOverview = function(discord_id, filter, callback) {
   if(discord_id) {
     //Get stats only for one member
-    data.getMembers({discord: discord_id}, true, true, function(member) {
+    user.get({discord: discord_id}, {privacy: true, onlyPaxterians: true}, function(err, member) {
       if(member) {
         member = member[0];
 
@@ -85,7 +85,7 @@ stats.memberOverview = function(discord_id, filter, callback) {
     });
   } else {
     //Get stats for all players
-    data.getMembers(filter, true, true, function(docs) {
+    user.get(filter, {privacy: true, onlyPaxterians: true}, function(err, docs) {
       if(docs) {
         let error = false;
         let output = [];
@@ -111,7 +111,7 @@ stats.memberOverview = function(discord_id, filter, callback) {
 
 //callsback a list of all countries with their respective member count and coloring for the map-view in statistics.html
 stats.countryList = function(callback) {
-  data.getMembers(false, false, true, function(docs) {
+  user.get({}, {privacy: true, onlyPaxterians: true}, function(err, docs) {
     if(docs) {
       //Get the country list
       let countries = _internal.getCountries();

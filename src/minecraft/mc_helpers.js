@@ -6,12 +6,15 @@
 //Dependencies
 const config = require('../../config.js');
 const https = require('https');
-const data = require('../user/data.js');
+const user = require('../user');
 const fs = require('fs');
 const path = require('path');
 const Rcon = require('rcon');
 const { exec } = require('child_process');
 const discord_helpers = require('../discord_bot/discord_helpers.js');
+
+//REMOVE
+const data = require('../user/main.js');
 
 //Create a global variable
 global.minecraft = {};
@@ -31,7 +34,7 @@ global.mcPlayerCount = 0;
 //Updates all UUIDs from all members, if forceUpdate is true all UUIDs get overwritten, otherwise only check for users without an UUID
 mc.updateAllUUIDs = function(forceUpdate){
   //Get all members from the db
-  data.listAllMembers(function(members){
+  user.get({}, false, function(members){
     members.forEach((member) => {
       //Check if we need to update this members UUID
       if(forceUpdate || member.mcName != null && member.mcUUID == null){
@@ -40,7 +43,7 @@ mc.updateAllUUIDs = function(forceUpdate){
           if(uuid){
             //Save UUID
             member.mcUUID = uuid;
-            data.updateUserData(member.discord, member, function(err){});
+            user.edit(member, false, function(err, docs){});
           }else{
             //Something bad happened, log it
             global.log(2, 'mc_helpers.updateAllUUIDs couldnt get valid UUID for user', member);
@@ -54,7 +57,7 @@ mc.updateAllUUIDs = function(forceUpdate){
 //Updates all IGNs from all members based on their UUID
 mc.updateAllIGNs = function(){
   //Get all members from db
-  data.listAllMembers(function(members){
+  user.get({}, false, function(members){
     members.forEach((member) => {
       //Check if the user has a ign, if not, then we have nothing to do
       if(member.mcUUID != null){
@@ -63,7 +66,7 @@ mc.updateAllIGNs = function(){
           if(ign){
             //Save ign
             member.mcName = ign;
-            data.updateUserData(member.discord, member, function(err){});
+            user.edit(member, false, function(err, docs){});
           }else{
             global.log(2, 'mc_helpers.updateAllIGNs couldnt get a valid IGN for user', member);
           }
@@ -551,7 +554,7 @@ mc.updateRoles = function(){
   if(!config['use-external-certs']) return;
 
   //Get all members
-  data.getMembers({}, true, true, function(members){
+  user.get({}, {privacy: true, onlyPaxterians: true}, function(members){
     if(members){
       //Container for all commands to send once where done preparing
       let commands = [];

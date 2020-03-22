@@ -147,11 +147,11 @@ oauth.getUserObjectById = function(id, callback) {
 
 oauth.updateUserIdCache = function() {
   //Needs to be imported here, otherwise data hasnt initialized or something like that
-  const data = require('../user/data.js');
+  const user = require('../user');
   const application = require('../application');
 
   //Get all discord Ids
-  data.getMembers(false, false, false, function(docs) {
+  user.get({}, false, function(err, docs) {
     //Get all applications as well
     application.get({}, false, function(err, applications){
       docs = Object.assign(docs, applications);

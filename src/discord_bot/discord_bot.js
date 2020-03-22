@@ -8,7 +8,7 @@ const config         = require('../../config.js');
 const fs             = require('fs');
 const Discord        = require('discord.js');
 const client         = new Discord.Client();
-const data           = require('../user/data.js');
+const _user          = require('../user');
 const discordHelpers = require('../discord_bot/discord_helpers.js');
 const application    = require('../application');
 
@@ -97,10 +97,10 @@ client.on('messageReactionAdd', (reaction, user) => {
       //Cancel the operation if someones reacts to themself
       if (user.id === reaction.message.author.id) return;
       if (reaction.emoji.name == 'upvote'){
-        data.updateKarma(reaction.message.author.id, 1, function (err) {});
+        _user.modify({discord: reaction.message.author.id}, 'karma', 1, false, function (err, doc) {});
       }
       if (reaction.emoji.name == 'downvote'){
-        data.updateKarma(reaction.message.author.id, -1, function (err) {});
+        _user.modify({discord: reaction.message.author.id}, 'karma', -1, false, function (err, doc) {});
       }
     }
   } catch (e) {}
@@ -114,18 +114,10 @@ client.on('messageReactionRemove', (reaction, user) => {
       //Cancel the operation if someones reacts to themself
       if (user.id === reaction.message.author.id) return;
       if (reaction.emoji.name == 'upvote'){
-        data.updateKarma(reaction.message.author.id, -1, function (err) {
-          if (err) {
-            console.log(err);
-          }
-        });
+        _user.modify({discord: reaction.message.author.id}, 'karma', -1, false, function(err, doc) {});
       }
       if (reaction.emoji.name == 'downvote'){
-        data.updateKarma(reaction.message.author.id, 1, function (err) {
-          if (err) {
-            console.log(err);
-          }
-        });
+        _user.modify({discord: reaction.message.author.id}, 'karma', 1, false, function(err, doc) {});
       }
     }
   } catch (e) {}
@@ -133,7 +125,7 @@ client.on('messageReactionRemove', (reaction, user) => {
 
 //Gets called whenever a member leaves the guild
 client.on('guildMemberRemove', (user) => {
-  data.removeMember(user.id, function(err){});
+  _user.delete({discord: user.id}, options, function(err){});
   discordHelpers.sendMessage(`${user.displayName} left the server`, config['new_application_announcement_channel'], function(e){});
 });
 

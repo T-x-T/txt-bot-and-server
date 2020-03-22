@@ -3,8 +3,6 @@
  *  Handles the communication with a mongoDB database
  */
 
-//@TODO configure config path
-
 //Dependencies
 const config = require('../../config.js');
 const mongoose = require('mongoose');
@@ -129,6 +127,35 @@ var bulletinSchema = new Schema({
   date: Date,
 });
 
+var userSchema = new Schema({
+  discord: String,
+  mcName: String,
+  mcUUID: {
+    type: String,
+    default: null
+  },
+  status: {
+    type: Number,
+    default: 0
+  }, //0 = regular pleb, 1 = whitelisted paxterya member
+  birth_year: Number,
+  birth_month: Number,
+  country: String,
+  publish_age: Boolean,
+  publish_country: Boolean,
+  karma: {
+    type: Number,
+    default: 0
+  }
+});
+
+//mcStats Schema
+var mcStatsSchema = new Schema({
+  timestamp: Date,
+  uuid: String,
+  stats: Object
+});
+
 //Code from stackoverflow to increment the counter id
 applicationSchema.pre('save', function(next) {
   // Only increment when the document is new
@@ -144,12 +171,16 @@ applicationSchema.pre('save', function(next) {
 
 //Set up the models
 var applicationModel = mongoose.model('applications', applicationSchema);
-var bulletinModel = mongoose.model('bulletin', bulletinSchema);
+var bulletinModel    = mongoose.model('bulletin', bulletinSchema);
+var userModel        = mongoose.model('members', userSchema);
+//var mcStatsModel     = mongoose.model('mcStats', mcStatsSchema);
 
 //Container for all database models
 const models = {
   'application': applicationModel,
-  'bulletin': bulletinModel
+  'bulletin': bulletinModel,
+  'user': userModel,
+  //'mcstats': mcStatsModel
 };
 
 //Export the container

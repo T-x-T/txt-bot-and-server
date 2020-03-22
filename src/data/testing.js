@@ -41,7 +41,6 @@ main.edit = function(input, type, options, callback){
 
           input._id = data[type][i]._id;
           data[type][i] = input;
-          console.log('end editing')
           callback(false, input);
           break;
       }else{
@@ -58,7 +57,9 @@ main.get = function(filter, type, options, callback){
     callback(false, data[type]);
   }else{
     let output = [];
+    //Check if the filter uses an or
     if(filter.hasOwnProperty('$or')){
+      //It uses an or
       let done = false
       data[type].forEach((doc) => {
         filter['$or'].forEach((_filter) => {
@@ -73,6 +74,7 @@ main.get = function(filter, type, options, callback){
         });
       });
     } else {
+      //No or
       data[type].forEach((doc) => {
         for(let key in filter) {
           if(doc.hasOwnProperty(key)) {
@@ -89,8 +91,23 @@ main.get = function(filter, type, options, callback){
 };
 
 main.delete = function(filter, type, options, callback){
-  data[type] = [];
-  callback(false)
+  if(!data.hasOwnProperty(type)) data[type] = [];
+  if(Object.keys(filter).length === 0) filter = false;
+  if(!filter) {
+    data[type] = [];
+    callback(false);
+  } else {
+    for(let i = 0; i < data[type].length; i++){
+      for(let key in filter) {
+        if(data[type][i].hasOwnProperty(key)) {
+          if(data[type][i][key] === filter[key]) {
+            data[type].splice(i, 1);
+          }
+        }
+      }
+    }
+    callback(false);
+  }
 };
 
 //Export the container

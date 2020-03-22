@@ -6,10 +6,8 @@
 //Dependencies
 const config     = require('../../config.js');
 const mc_helpers = require('../minecraft/mc_helpers.js');
-const email      = require('../email/email.js');
 const oauth      = require('../auth/oauth2.js');
 const sanitize   = require('sanitize-html');
-const user       = require('../user/data.js');
 const data       = require('../data');
 const discord_helpers = require('../discord_bot/discord_helpers.js');
 
@@ -173,7 +171,10 @@ application.changeStatus = function(id, newStatus, reason, callback){
 //Then the member will automatically appear in the member list on the website as well
 application.acceptWorkflow = function(discord_id){
   application.read({discord_id: discord_id}, function(err, app){
-    app = app[0];
+    emitter.emit('application_accepted_joined', app[0]);
+    
+    
+    /* app = app[0];
     if(!err && app){
       //1. Create the member object in the db
       user.checkMemberExist(discord_id, true, function(exists) {
@@ -219,11 +220,14 @@ application.acceptWorkflow = function(discord_id){
             global.log(2, 'application.acceptWorkflow couldnt get the member object', {});
           }
         });
-      });
+      }); 
     }else{
       global.log(2, 'application.acceptWorkflow couldnt find the user', app);
     }
-  })
+    */
+
+
+  });
 };
 
 

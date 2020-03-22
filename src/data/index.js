@@ -23,8 +23,17 @@ index.edit = function(input, type, options, callback) {
 };
 
 //Get multiple entries
+//Options:
+//first = true: get only first element as an object
 index.get = function(filter, type, options, callback) {
-  backend.get(filter, type, options, callback);
+  backend.get(filter, type, options, function(err, docs){
+    if(options.first === true){
+      let output = docs.length > 0 ? docs[0] : [];
+      callback(err, output);
+    }else{
+      callback(err, docs);
+    }
+  });
 };
 
 //Delete one entry

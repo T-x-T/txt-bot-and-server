@@ -4,7 +4,7 @@
  */
 
 //Requirements
-const data = require('../../user/data.js');
+const user = require('../../user');
 const discordHelpers = require('../discord_helpers.js');
 
 module.exports = {
@@ -38,13 +38,13 @@ module.exports = {
         //Get the sorted karma array
         _internals.getSortedKarmaArray(false, function(entries){
           //Get the karma of the current user
-          data.getKarma(userID, function(err, karma){
+          user.get({discord: userID}, {first: true}, function(err, doc){
             if(!err){
               //Get the rank of the user
-              let rank = entries.indexOf(karma);
+              let rank = entries.indexOf(doc.karma);
               //Get the total amount of users
               let totalUsers = entries.length;
-              message.channel.send(`<@${userID}> has ${karma} karma and thus has the rank ${rank + 1} of ${totalUsers} total Users!`);
+              message.channel.send(`<@${userID}> has ${doc.karma} karma and thus has the rank ${rank + 1} of ${totalUsers} total Users!`);
             }else{
               message.channel.send('There was an oopsie (Im kinda sorry)');
             }
@@ -58,9 +58,9 @@ module.exports = {
           message.channel.send('The specified user is not really a user! (maybe you wanted to use top or rank?)');
         }else{
           //The user is valid
-          data.getKarma(userID, function (err, karma) {
-            if (typeof (karma) == 'number' && !err) {
-              message.channel.send('<@' + userID + '> has ' + karma + ' karma');
+          user.get({discord: userID}, {first: true}, function (err, doc) {
+            if (typeof doc.karma == 'number' && !err) {
+              message.channel.send('<@' + userID + '> has ' + doc.karma + ' karma');
             } else {
               message.channel.send('There was an oopsie (Im kinda sorry)');
             }
@@ -102,7 +102,7 @@ _internals.generateTopList = function(callback){
 
 _internals.getSortedKarmaArray = function(includeNames, callback){
   //Get all user objects and put them into array entries
-  data.listAllMembers(function (userObjects) {
+  user.get({}, false, function (err, userObjects) {
     let entries = [];
     userObjects.forEach((document) => {
       let name = 'Wumpus';

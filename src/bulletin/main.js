@@ -5,7 +5,7 @@
 
 //Dependencies
 const config = require('../../config.js');
-const user = require('../user/data.js');
+const user = require('../user');
 const discord_helpers = require('../discord_bot/discord_helpers.js');
 const data = require('../data');
 
@@ -69,7 +69,7 @@ bulletin.get = function(filter, callback){
       //console.log(0)
       for(let i = 0; i < docs.length; i++){
         //console.log('get member data',i,docs.length)
-        user.getMembers({discord: docs[i].author}, true, true, function(memberData){
+        user.get({discord: docs[i].author}, {privacy: true, onlyPaxterians: true}, function(err, memberData){
           //console.log('got member data',i,docs.length)
           let newDoc = {};
           newDoc._id = docs[i]._id;

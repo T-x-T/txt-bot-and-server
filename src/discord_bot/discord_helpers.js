@@ -5,11 +5,11 @@
 
 //Dependencies
 const config = require('../../config.js');
-var data;
+var user;
 
 //This is somehow neccessary, otherwise data will just be an empty object for whatever reason
 setTimeout(function(){
-  data = require('../user/data.js');
+  user = require('../user');
 }, 0);
 
 //Global var
@@ -114,7 +114,7 @@ helpers.isGuildMember = function(userID){
 
 //Set the nick of a user to their mc_ign
 helpers.updateNick = function(discord_id) {
-  data.getMembers({discord: discord_id}, true, true, function(docs) {
+  user.get({discord: discord_id}, {privacy: true, onlyPaxterians: true}, function(err, docs) {
     if(docs) {
       let doc = docs[0];
       let ign = typeof doc.mcName == 'string' ? doc.mcName : '';

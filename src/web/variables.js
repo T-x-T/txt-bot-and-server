@@ -13,7 +13,7 @@ const os              = require('os');
 const post            = require('../post/post.js');
 const widgets         = require('./widgets.js');
 const oauth           = require('../auth/oauth2.js');
-const _data           = require('../user/data.js');
+const user            = require('../user');
 const fs              = require('fs');
 const path            = require('path');
 
@@ -165,7 +165,7 @@ _getters.town_of_paxterya = function(callback){
 _getters.widgets = function(callback){
   oauth.getUserObject(data.access_token, function(userObject){
     if(userObject){
-      _data.getMembers({discord: userObject.id}, true, true, function(userData){
+      user.get({discord: userObject.id}, {privacy: true, onlyPaxterians: true}, function(userData){
         if(userData.length > 0){
           callback({
             IGN: userData[0].mcName

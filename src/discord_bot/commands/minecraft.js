@@ -3,7 +3,7 @@
 *	Command to handle all minecraft related tasks
 */
 
-const data = require('../../user/data.js');
+const user = require('../../user');
 const mc_helpers = require('../../minecraft/mc_helpers.js');
 
 module.exports = {
@@ -32,7 +32,7 @@ module.exports = {
         if(userID){
           //If we made it here, the user wants to get the stats for one specific person
           //Find the IGN out as well
-          data.getUserData(userID, function(err, data){
+          user.get({discord: userID}, {first: true}, function(err, data){
             if(!err && data.mcName != null){
               let ign = data.mcName;
               let uuid = data.mcUUID;

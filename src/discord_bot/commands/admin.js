@@ -7,7 +7,6 @@ const log = require('../../log/log.js');
 const config = require('../../../config.js');
 const mc_helpers = require('../../minecraft/mc_helpers.js');
 const discord_helpers = require('../discord_helpers.js');
-const data = require('../../user/data.js');
 
 module.exports = {
   name: 'admin',
@@ -235,44 +234,6 @@ module.exports = {
           break;
         case 'mc':
           switch(args[1]){
-            case 'wladd':
-              //Add mentioned user to whitelist
-              data.getUserData(message.mentions.users.first().id, function(err, user){
-                if(!err){
-                  mc_helpers.rcon('whitelist add ' + user.mcName);
-                }else{
-                  message.reply('Couldnt find the user');
-                }
-              });
-              break;
-            case 'wlrm':
-              //Remove mentioned user from whitelist
-              data.getUserData(message.mentions.users.first().id, function(err, user){
-                if(!err){
-                  mc_helpers.rcon('whitelist remove ' + user.mcName);
-                }else{
-                  message.reply('Couldnt find the user');
-                }
-              });
-              break;
-            case 'ban':
-              //Bans mentioned user
-              data.getUserData(message.mentions.users.first().id, function(err, user) {
-                if(!err) {
-                  mc_helpers.rcon('whitelist remove ' + user.mcName);
-                  user.status = 2;
-                  data.updateUserData(user.discord, user, function(err){
-                    if(err){
-                      message.reply(err);
-                    }else{
-                      message.reply('success!');
-                    }
-                  })
-                } else {
-                  message.reply('Couldnt find the user');
-                }
-              });
-              break;
             case 'cmd':
               let cmd = '';
               args[0] = '';
