@@ -11,6 +11,7 @@ const mc_helpers = require('../src/minecraft/mc_helpers.js');
 const oauth = require('../src/auth/oauth2.js');
 const widgets = require('../src/web/widgets.js');
 const discord_helpers = require('./../src/discord_bot/discord_helpers.js');
+const user = require('../src/user');
 
 //Stuff that should run on startup
 mc_helpers.updateOnlinePlayers();
@@ -44,8 +45,7 @@ setInterval(function(){
 
 //Every hour
 setInterval(function(){
-  mc_helpers.updateAllUUIDs(false);
-  mc_helpers.updateAllIGNs();
+  user.updateNicks();
   mc_helpers.updateRoles();
   discord_helpers.updateAllNicks();
   oauth.updateUserIdCache();

@@ -6,6 +6,8 @@
 //Dependencies
 const config = require('../../config.js');
 const data = require('../data');
+const mc = require('../minecraft/mc_helpers.js');
+const discord = require('../discord_bot/discord_helpers.js');
 
 //Create the container
 var user = {};
@@ -95,6 +97,39 @@ user.modify = function(filter, key, modifier, options, callback) {
       });
     }else{
       callback('Couldnt find user: ' + err, false);
+    }
+  });
+};
+
+//Triggers the update of all IGNs and Nicks from all users
+user.updateNicks = function(){
+  //Get all users
+  user.get({}, false, function(err, docs){
+    if(!err && docs){
+      docs.forEach((doc) => {
+        //Update discord nick
+        discord.getNicknameByID(doc.discord, function(discord_nick){
+          if(discord_nick) doc.discord_nick = discord_nick
+          
+          //Update Minecraft IGN if user has UUID
+          if(doc.hasOwnProperty('uuid')){
+            //Update Minecraft IGN as well
+            mc.getIGN(doc.uuid, function(ign){
+              if(ign) doc.ign = ign;
+              user.edit(doc, false, function(err, doc){
+                if(err) global.log(2, 'user.updateNick couldnt update user (with ign)', {err: err, doc: doc});
+              });
+            });
+          }else{
+            //User has no Minecraft UUID associated, edit directly
+            user.edit(doc, false, function(err, doc){
+              if(err) global.log(2, 'user.updateNick couldnt update user (without ign)', {err: err, doc: doc});
+            });
+          }
+        });
+      });
+    }else{
+      global.log(2, 'user.updateNicks cant get any users', {err: err});
     }
   });
 };

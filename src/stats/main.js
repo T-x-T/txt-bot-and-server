@@ -6,15 +6,17 @@
 //Dependencies
 const user = require('../user');
 const mc_helpers = require('../minecraft/mc_helpers.js');
-const oauth = require('../auth/oauth2.js');
 
 //Create the container
 var stats = {};
 
+//Container for all templates
+stats.template = {};
+
 //Gets the basic stats for the statistics.html overview
-stats.overview = function(callback) {
-  user.get({}, false, function(memberData) {
-    if(memberData) {
+stats.template.overview = function(options, callback) {
+  user.get({}, {onlyPaxterians: true}, function(err, memberData) {
+    if(!err && memberData) {
       mc_helpers.getStatTemplate(false, 'playtime', false, function(err, playtime) {
         if(!err && playtime) {
           //Get an array with only whitelisted players for paxterya and calculate average age
@@ -47,36 +49,29 @@ stats.overview = function(callback) {
 
 //Gets the basic overview of one or multiple members
 //This includes: discord_id, mc_uuid, discord_nick, mc_nick, age, country, playtime, mc_render_url, discord_avatar_url
-stats.memberOverview = function(discord_id, filter, callback) {
+stats.template.memberOverview = function(options, callback) {
+  let discord_id = options.hasOwnProperty('discord_id') ? options.discord_id : false;
+  let filter = options.hasOwnProperty('filter') ? options.filter : {};
   if(discord_id) {
     //Get stats only for one member
-    user.get({discord: discord_id}, {privacy: true, onlyPaxterians: true}, function(err, member) {
-      if(member) {
-        member = member[0];
+    user.get({ discord: discord_id }, { privacy: true, onlyPaxterians: true, first: true }, function (err, member) {
+      if (member) {
+        let mc_render_url = mc_helpers.getRenderUrl(member.mcUUID);
 
-        _internal.addNicks(member, function(member) {
-          if(member) {
-            let mc_render_url = mc_helpers.getRenderUrl(member.mcUUID);
+        mc_helpers.getStatTemplate(member.mcUUID, 'playtime', false, function (err, playtime) {
+          if (err || !playtime) playtime = 0;
+          //Build the object to send back
+          let obj = {
+            discord_nick: member.discord_nick,
+            mc_nick: member.mc_ign,
+            age: member.birth_month >= 1 ? member.birth_month > new Date(Date.now()).getMonth() + 1 ? parseInt((new Date().getFullYear() - new Date(member.birth_year, member.birth_month).getFullYear()).toString()) - 1 : parseInt((new Date().getFullYear() - new Date(member.birth_year, member.birth_month).getFullYear()).toString()) : false,
+            country: member.country,
+            playtime: playtime.playtime,
+            mc_render_url: mc_render_url,
+            joined_date: new Date(member._id.getTimestamp()).valueOf()
+          };
 
-            mc_helpers.getStatTemplate(member.mcUUID, 'playtime', false, function(err, playtime) {
-              if(err || !playtime) playtime = 0;
-              //Build the object to send back
-              let obj = {
-                discord_nick: member.discord_nick,
-                mc_nick: member.mc_ign,
-                age: member.birth_month >= 1 ? member.birth_month > new Date(Date.now()).getMonth() + 1 ? parseInt((new Date().getFullYear() - new Date(member.birth_year, member.birth_month).getFullYear()).toString()) - 1 : parseInt((new Date().getFullYear() - new Date(member.birth_year, member.birth_month).getFullYear()).toString()) : false,
-                country: member.country,
-                playtime: playtime.playtime,
-                mc_render_url: mc_render_url,
-                joined_date: new Date(member._id.getTimestamp()).valueOf()
-              };
-
-              callback(obj);
-            });
-          } else {
-            global.log(2, 'stats.memberOverview coulnt add the nicks to an object', {id: discord_id});
-            callback(false);
-          }
+          callback(obj);
         });
       } else {
         global.log(2, 'stats.memberOverview coulnt get the member object', {id: discord_id});
@@ -110,7 +105,7 @@ stats.memberOverview = function(discord_id, filter, callback) {
 }
 
 //callsback a list of all countries with their respective member count and coloring for the map-view in statistics.html
-stats.countryList = function(callback) {
+stats.template.countryList = function(options, callback) {
   user.get({}, {privacy: true, onlyPaxterians: true}, function(err, docs) {
     if(docs) {
       //Get the country list
@@ -146,35 +141,12 @@ stats.countryList = function(callback) {
 //Internal stuff
 var _internal = {};
 
-//Adds the current discord nick and mc ign to an application object
-_internal.addNicks = function(doc, callback) {
-  oauth.getUserObjectById(doc.discord, function(userObject) {
-    if(userObject) {
-      const mc_helpers = require('../minecraft/mc_helpers.js');
-      mc_helpers.getIGN(doc.mcUUID, function(mc_ign) {
-        if(mc_ign) {
-          try {
-            doc = doc.toObject(); //Convert to a normal object
-          } catch(e) {}
-          doc.discord_nick = userObject.username + '#' + userObject.discriminator;
-          doc.mc_ign = mc_ign;
-          callback(doc);
-        } else {
-          callback(false);
-        }
-      });
-    } else {
-      callback(false);
-    }
-  });
-};
-
 //Finds an objects key by its value
 _internal.getCountryIsoByName = function(object, value) {
   let iso = false;
   for(let key in object) if(object[key].name === value) iso = object[key].ISO;
   return iso;
-}
+};
 
 //Returns an object containing all countries as keys, with an empty object as a value
 _internal.getCountries = function() {

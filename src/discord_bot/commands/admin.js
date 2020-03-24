@@ -7,6 +7,7 @@ const log = require('../../log/log.js');
 const config = require('../../../config.js');
 const mc_helpers = require('../../minecraft/mc_helpers.js');
 const discord_helpers = require('../discord_helpers.js');
+const user = require('../../user');
 
 module.exports = {
   name: 'admin',
@@ -206,17 +207,9 @@ module.exports = {
         case 'exec':
           //Command to execute manual tasks
           switch(args[1]){
-            case 'updateuuids':
-              //Updates all minecraft UUIDs, but only if its not already known
-              mc_helpers.updateAllUUIDs(false);
-              break;
-            case 'forceupdateuuids':
-              //Will update ALL minecraft UUIDs, even if they are already recorded!
-              mc_helpers.updateAllUUIDs(true);
-              break;
-            case 'updateigns':
+            case 'updatenicks':
               //Updates all minecraft IGNs
-              mc_helpers.updateAllIGNs();
+              user.updateNicks();
               break;
             case 'updatestats':
               mc_helpers.updateStats();

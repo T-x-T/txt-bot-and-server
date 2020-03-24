@@ -34,6 +34,11 @@ index.modify = function(filter, key, modifier, options, callback){
   main.modify(filter, key, modifier, options, callback);
 };
 
+//Triggers the update of all IGNs and Nicks from all users
+index.updateNicks = function(){
+  main.updateNicks();
+};
+
 setTimeout(function(){
   emitter.on('user_left', (discord_id) => {
     main.delete({discord: discord_id}, false, function(err) {
