@@ -84,6 +84,7 @@ user.edit = function(input, options, callback) {
 user.modify = function(filter, key, modifier, options, callback) {
   user.get(filter, {first: true}, function(err, doc){
     if(!err && doc){
+      if(!doc.hasOwnProperty(key) || isNaN(doc[key])) doc[key] = 0;
       doc[key] += modifier;
       user.edit(doc, false, function(err, doc){
         if(!err && doc){

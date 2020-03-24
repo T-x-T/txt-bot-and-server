@@ -48,19 +48,23 @@ setTimeout(function(){
   });
 
   emitter.on('application_accepted_joined', (app) => {
-    let input = {
-      discord: app.discord_id,
-      mcName: app.mc_ign,
-      mcUUID: app.mc_uuid,
-      birth_year: app.birth_year,
-      birth_month: app.birth_month,
-      country: app.country,
-      publish_age: app.publish_age,
-      publish_country: app.publish_country,
-      status: 1
-    };
-    main.create(input, false, function(err, doc) {
-      if(err) global.log(0, 'Couldnt create accepted user', {application: doc});
+    index.get({discord: app.discord}, {first: true}, function(err, doc){
+      if(!err && doc){
+        doc.mcName = app.mcName;
+        doc.mcUUID = app.mcUUID;
+        doc.birth_year = app.birth_year;
+        doc.birth_month = app.birth_month;
+        doc.country = app.country;
+        doc.publish_age = app.publish_age;
+        doc.publish_country = app.publish_country;
+        doc.status = 1;
+
+        index.edit(doc, false, function(err, doc){
+          if(err || !doc) global.log(0, 'Failed modifying accepted user', {application: doc, err: err});
+        });
+      }else{
+        if(err) global.log(0, 'Couldnt get accepted user', {application: doc, err: err});
+      }
     });
   });
 }, 1);

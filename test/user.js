@@ -162,11 +162,139 @@ describe('user', function(){
 
   describe('modify', function() {
 
+    beforeEach(function(done){
+      user.get({discord: '212826594123710464'}, false, function(err, docs) {
+        assert.ok(!err);
+        assert.ok(docs);
+        done();
+      });
+    });
+
+    it('modify karma by 1', function(done){
+      user.modify({discord: '212826594123710464'}, 'karma', 1, false, function(err, doc){
+        user.get({discord: '212826594123710464'}, {first: true}, function(err, doc) {
+          assert.ok(!err);
+          assert.ok(doc);
+          assert.equal(doc.karma, 1);
+          done();
+        });
+      });
+    });
+
+    it('modify karma by -1', function(done){
+      user.modify({discord: '212826594123710464'}, 'karma', -1, false, function(err, doc){
+        user.get({discord: '212826594123710464'}, {first: true}, function(err, doc) {
+          assert.ok(!err);
+          assert.ok(doc);
+          assert.equal(doc.karma, -1);
+          done();
+        });
+      });
+    });
+
+    it('modify karma by 1 then by -1', function(done){
+      user.modify({discord: '212826594123710464'}, 'karma', 1, false, function(err, doc){
+        user.modify({discord: '212826594123710464'}, 'karma', -1, false, function(err, doc){
+          user.get({discord: '212826594123710464'}, {first: true}, function(err, doc) {
+            assert.ok(!err);
+            assert.ok(doc);
+            assert.equal(doc.karma, 0);
+            done();
+          });
+        });
+      });
+    });
+    
+    it('modify karma by 1000', function(done){
+      user.modify({discord: '212826594123710464'}, 'karma', 1000, false, function(err, doc){
+        user.get({discord: '212826594123710464'}, {first: true}, function(err, doc) {
+          assert.ok(!err);
+          assert.ok(doc);
+          assert.equal(doc.karma, 1000);
+          done();
+        });
+      });
+    });
+
+    it('modify karma by 1000 then by -500', function(done){
+      user.modify({discord: '212826594123710464'}, 'karma', 1000, false, function(err, doc){
+        user.modify({discord: '212826594123710464'}, 'karma', -500, false, function(err, doc){
+          user.get({discord: '212826594123710464'}, {first: true}, function(err, doc) {
+            assert.ok(!err);
+            assert.ok(doc);
+            assert.equal(doc.karma, 500);
+            done();
+          });
+        });
+      });
+    });
+    
 
   });
 
   describe('events', function() {
 
+    beforeEach(function(done){
+      user.get({discord: '212826594123710464'}, false, function(err, docs) {
+        assert.ok(!err);
+        assert.ok(docs);
+        user.modify({discord: '212826594123710464'}, 'karma', 1, false, function(err, doc){
+          assert.ok(!err);
+          assert.ok(doc);
+          done();
+        });
+      });
+    });
+
+    it('user_left deletes user from database', function(done){
+      emitter.emit('user_left', '212826594123710464');
+      setTimeout(function(){
+        user.get({discord: '212826594123710464'}, false, function(err, docs) {
+          assert.ok(!err);
+          assert.ok(docs);
+          assert.ok(!docs[0].karma);
+          done();
+        });
+      }, 100);
+    });
+
+    it('user_banned deletes user from database', function(done){
+      emitter.emit('user_banned', '212826594123710464');
+      setTimeout(function(){
+        user.get({discord: '212826594123710464'}, false, function(err, docs) {
+          assert.ok(!err);
+          assert.ok(docs);
+          assert.ok(!docs[0].karma);
+          done();
+        });
+      }, 100);
+    });
+
+    it('application_accepted_joined adds application details to user', function(done){
+      let input = {
+        discord: '212826594123710464',
+        mcName: 'The__TxT',
+        mcUUID: 'dac25e44d1024f3b819978ed62d209a1',
+        birth_year: 2000,
+        birth_month: 7,
+        country: 'Germany',
+        publish_age: true,
+        publish_country: true,
+      };
+      emitter.emit('application_accepted_joined', input);
+      setTimeout(function(){
+        user.get({discord: '212826594123710464'}, {first: true}, function(err, doc) {
+          assert.ok(!err);
+          assert.ok(doc);
+          assert.equal(doc.mcName, input.mcName);
+          assert.equal(doc.mcUUID, input.mcUUID);
+          assert.equal(doc.birth_month, input.birth_month);
+          assert.equal(doc.publish_age, input.publish_age);
+          assert.equal(doc.status, 1);
+          done();
+        });
+      }, 100);
+    });
 
   });
 
