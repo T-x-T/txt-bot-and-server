@@ -18,7 +18,7 @@ stats.template = {};
 stats.template.overview = function(options, callback) {
   user.get({}, {onlyPaxterians: true}, function(err, memberData) {
     if(!err && memberData) {
-      mc_helpers.getStatTemplate(false, 'playtime', false, function(err, playtime) {
+      stats.template.mc({collection: 'playtime', uuid: memberData.mcUUID}, function(err, playtime) {
         if(!err && playtime) {
           //Get an array with only whitelisted players for paxterya and calculate average age
           let paxterians = [];
@@ -59,7 +59,7 @@ stats.template.memberOverview = function(options, callback) {
       if (member) {
         let mc_render_url = mc_helpers.getRenderUrl(member.mcUUID);
 
-        mc_helpers.getStatTemplate(member.mcUUID, 'playtime', false, function (err, playtime) {
+        stats.template.mc({uuid: member.mcUUID, collection: 'playtime'}, function (err, playtime) {
           if (err || !playtime) playtime = 0;
           //Build the object to send back
           let obj = {
@@ -86,7 +86,7 @@ stats.template.memberOverview = function(options, callback) {
         let error = false;
         let output = [];
         for(let i = 0; i < docs.length; i++) {
-          stats.memberOverview(docs[i].discord, {}, function(doc) {
+          stats.template.memberOverview(docs[i].discord, {}, function(doc) {
             if(doc) output.push(doc);
             else error = true;
 
@@ -147,12 +147,12 @@ stats.template.countryList = function(options, callback) {
 stats.template.mc = function(options, callback){
   if(options.uuid){
     if(options.rank){
-      mc.getRanked(collection, uuid, callback);
+      mc.getRanked(options.collection, options.uuid, callback);
     }else{
-      mc.getSingle(collection, uuid, callback);
+      mc.getSingle(options.collection, options.uuid, callback);
     }
   }else{
-    mc.getAll(collection, callback);
+    mc.getAll(options.collection, callback);
   }
 };
 

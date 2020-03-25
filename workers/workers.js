@@ -16,7 +16,7 @@ const user = require('../src/user');
 //Stuff that should run on startup
 mc_helpers.updateOnlinePlayers();
 log.prune(30);
-mc_helpers.createStatsObjectTemplate(function(){});
+//mc_helpers.createStatsObjectTemplate(function(){});
 widgets.init();
 
 //Stuff that should be run 5 seconds after startup, ONLY FOR THINGS THAT NEED THE BOT LOGGED IN
@@ -51,7 +51,7 @@ setInterval(function(){
   oauth.updateUserIdCache();
 }, 1000 * 60 * 60);
 
-//Every six hours
+/* //Every six hours
 setInterval(function(){
   mc_helpers.downloadStats();
 
@@ -61,7 +61,7 @@ setInterval(function(){
   }, 1000);
 
   mc_helpers.createStatsObjectTemplate(function() {});
-}, 1000 * 60 * 60 * 6);
+}, 1000 * 60 * 60 * 6); */
 
 //Every day
 setInterval(function(){

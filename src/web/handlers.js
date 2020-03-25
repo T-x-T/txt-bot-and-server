@@ -11,10 +11,10 @@ const webHelpers  = require('./web-helpers.js');
 const application = require('../application');
 const oauth       = require('../auth/oauth2.js');
 const email       = require('../email/email.js');
-const stats       = require('../stats/stats.js');
+const stats       = require('../stats');
 const post        = require('../post/post.js');
 const bulletin    = require('../bulletin');
-const user       = require('../user');
+const user        = require('../user');
 
 //Create the container
 var handlers = {};
@@ -294,11 +294,11 @@ handlers.paxapi.member.get = function(data, callback){
   let filter = {};
   if(data.queryStringObject.hasOwnProperty('id')) filter = filter['discord'] = id;
   //Retrieve the data with our custom made filter
-  stats.memberOverview(false, filter, function(docs){
+  stats.get('memberOverview', {filter: filter}, function(err, docs){
     if(docs){
       callback(200, docs, 'json');
     }else{
-      callback(500, {err: 'Couldnt retrieve data'}, 'json');
+      callback(500, {err: 'Couldnt retrieve data: ' + err}, 'json');
     }
   });
 };

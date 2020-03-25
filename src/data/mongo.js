@@ -173,14 +173,14 @@ applicationSchema.pre('save', function(next) {
 var applicationModel = mongoose.model('applications', applicationSchema);
 var bulletinModel    = mongoose.model('bulletin', bulletinSchema);
 var userModel        = mongoose.model('members', userSchema);
-//var mcStatsModel     = mongoose.model('mcStats', mcStatsSchema);
+var mcStatsModel     = mongoose.model('mcstats', mcStatsSchema);
 
 //Container for all database models
 const models = {
   'application': applicationModel,
   'bulletin': bulletinModel,
   'user': userModel,
-  //'mcstats': mcStatsModel
+  'stats': mcStatsModel
 };
 
 //Export the container

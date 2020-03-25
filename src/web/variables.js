@@ -8,7 +8,7 @@ const config          = require('../../config.js');
 const application     = require('../application');
 const discord_helpers = require('../discord_bot/discord_helpers.js');
 const mc_helpers      = require('../minecraft/mc_helpers.js');
-const stats           = require('../stats/stats.js');
+const stats           = require('../stats');
 const os              = require('os');
 const post            = require('../post/post.js');
 const widgets         = require('./widgets.js');
@@ -104,8 +104,9 @@ _getters.post = function(callback){
 
 //Calls back an object containing some basic statistics
 _getters.statistics = function(callback){
-  stats.overview(function(obj){
-    stats.countryList(function(map_data){
+  stats.get('overview', false,  function(err, obj){
+    stats.get('countryList', false, function(err, map_data){
+      console.log(obj)
       callback({
         'pax_title': 'Statistics',
         'total_members': obj.total_members,

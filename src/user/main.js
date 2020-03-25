@@ -152,7 +152,7 @@ _internal.applyPrivacy = function (docs, callback){
 
 
 
-const mongoose = require('mongoose');
+/* const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 //Connect to the db
@@ -251,7 +251,7 @@ user.getLastTimestampMcStats = function(uuid, callback) {
       callback(0);
     }
   });
-};
+}; */
 
 
 
