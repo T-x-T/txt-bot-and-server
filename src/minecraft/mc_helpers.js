@@ -32,7 +32,7 @@ global.mcPlayerCount = 0;
  */
 
 //Updates all UUIDs from all members, if forceUpdate is true all UUIDs get overwritten, otherwise only check for users without an UUID
-mc.updateAllUUIDs = function(forceUpdate){
+/* mc.updateAllUUIDs = function(forceUpdate){
   //Get all members from the db
   user.get({}, false, function(members){
     members.forEach((member) => {
@@ -52,7 +52,7 @@ mc.updateAllUUIDs = function(forceUpdate){
       }else{}
     });
   });
-};
+}; */
 
 //Updates all IGNs from all members based on their UUID
 mc.updateAllIGNs = function(){
@@ -70,7 +70,7 @@ mc.updateAllIGNs = function(){
           }else{
             global.log(2, 'mc_helpers.updateAllIGNs couldnt get a valid IGN for user', member);
           }
-        })
+        });
       }
     });
   });

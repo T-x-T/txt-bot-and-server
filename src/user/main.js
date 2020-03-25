@@ -108,26 +108,15 @@ user.updateNicks = function(){
     if(!err && docs){
       docs.forEach((doc) => {
         //Update discord nick
-        discord.getNicknameByID(doc.discord, function(discord_nick){
-          if(discord_nick) doc.discord_nick = discord_nick
-          
-          //Update Minecraft IGN if user has UUID
-          if(doc.hasOwnProperty('uuid')){
-            //Update Minecraft IGN as well
-            mc.getIGN(doc.uuid, function(ign){
-              if(ign) doc.ign = ign;
-              user.edit(doc, false, function(err, doc){
-                if(err) global.log(2, 'user.updateNick couldnt update user (with ign)', {err: err, doc: doc});
-              });
-            });
-          }else{
-            //User has no Minecraft UUID associated, edit directly
-            user.edit(doc, false, function(err, doc){
-              if(err) global.log(2, 'user.updateNick couldnt update user (without ign)', {err: err, doc: doc});
-            });
-          }
+        discord.getNicknameByID(doc.discord, function (discord_nick) {
+          if (discord_nick) doc.discord_nick = discord_nick;
+          user.edit(doc, false, function (err, doc) {
+            if (err) global.log(2, 'user.updateNick couldnt update user (without ign)', { err: err, doc: doc });
+          });
         });
       });
+      //Trigger update of minecraft igns
+      mc.updateAllIGNs();
     }else{
       global.log(2, 'user.updateNicks cant get any users', {err: err});
     }

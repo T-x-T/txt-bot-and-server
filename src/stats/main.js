@@ -6,6 +6,7 @@
 //Dependencies
 const user = require('../user');
 const mc_helpers = require('../minecraft/mc_helpers.js');
+const mc = require('./minecraft.js');
 
 //Create the container
 var stats = {};
@@ -136,6 +137,23 @@ stats.template.countryList = function(options, callback) {
       callback(false);
     }
   });
+};
+
+//This is template for all kinds of different minecraft stats collections
+//Options:
+//collections: See mc_collections.js
+//uuid: uuid if stats of a single player are wanted; if false or not set this returns stats for all players
+//rank: include rank; only gets evaluated if uuid is given
+stats.template.mc = function(options, callback){
+  if(options.uuid){
+    if(options.rank){
+      mc.getRanked(collection, uuid, callback);
+    }else{
+      mc.getSingle(collection, uuid, callback);
+    }
+  }else{
+    mc.getAll(collection, callback);
+  }
 };
 
 //Internal stuff
