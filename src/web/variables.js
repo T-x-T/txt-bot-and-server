@@ -104,9 +104,8 @@ _getters.post = function(callback){
 
 //Calls back an object containing some basic statistics
 _getters.statistics = function(callback){
-  stats.get('overview', false,  function(err, obj){
-    stats.get('countryList', false, function(err, map_data){
-      console.log(obj)
+  stats.get('overview', false,  function(err1, obj){
+    stats.get('countryList', false, function(err2, map_data){
       callback({
         'pax_title': 'Statistics',
         'total_members': obj.total_members,

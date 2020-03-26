@@ -32,18 +32,18 @@ stats.template.overview = function(options, callback) {
           averageAge = Math.round(averageAge / paxterians.length);
 
           //Constuct and callback the final object
-          callback({
+          callback(false, {
             'total_members': paxterians.length,
             'average_age': averageAge,
             'total_playtime': playtime.playtime
           });
 
         } else {
-          callback(false);
+          callback('Couldnt get mc stats', false);
         }
       });
     } else {
-      callback(false);
+      callback('Couldnt get players', false);
     }
   });
 };
@@ -60,11 +60,12 @@ stats.template.memberOverview = function(options, callback) {
         let mc_render_url = mc_helpers.getRenderUrl(member.mcUUID);
 
         stats.template.mc({uuid: member.mcUUID, collection: 'playtime'}, function (err, playtime) {
+          console.log(member)
           if (err || !playtime) playtime = 0;
           //Build the object to send back
           let obj = {
             discord_nick: member.discord_nick,
-            mc_nick: member.mc_ign,
+            mc_nick: member.mc_name,
             age: member.birth_month >= 1 ? member.birth_month > new Date(Date.now()).getMonth() + 1 ? parseInt((new Date().getFullYear() - new Date(member.birth_year, member.birth_month).getFullYear()).toString()) - 1 : parseInt((new Date().getFullYear() - new Date(member.birth_year, member.birth_month).getFullYear()).toString()) : false,
             country: member.country,
             playtime: playtime.playtime,
@@ -72,11 +73,11 @@ stats.template.memberOverview = function(options, callback) {
             joined_date: new Date(member._id.getTimestamp()).valueOf()
           };
 
-          callback(obj);
+          callback(false, obj);
         });
       } else {
         global.log(2, 'stats.memberOverview coulnt get the member object', {id: discord_id});
-        callback(false);
+        callback('Couldnt get the member object', false);
       }
     });
   } else {
@@ -86,20 +87,20 @@ stats.template.memberOverview = function(options, callback) {
         let error = false;
         let output = [];
         for(let i = 0; i < docs.length; i++) {
-          stats.template.memberOverview(docs[i].discord, {}, function(doc) {
+          stats.template.memberOverview({discord_id: docs[i].discord}, function(err, doc) {
             if(doc) output.push(doc);
             else error = true;
 
             //Check if this is the last callback
             if(output.length == docs.length) {
-              if(!error) callback(output);
-              else callback(false);
+              if(!error) callback(false, output);
+              else callback('There was some error, idk I cant read my own code, no idea what it is', false);
             }
           });
         }
       } else {
         global.log(2, 'stats.memberOverview coulnt get any member objects', {});
-        callback(false);
+        callback('Couldnt get any member objects bru', false);
       }
     });
   }
@@ -131,10 +132,10 @@ stats.template.countryList = function(options, callback) {
       //Do the actual colorcoding
       for(let key in countries) if(countries[key].numberOfThings > 0) countries[key].fillKey = ((countries[key].numberOfThings / max).toFixed(1) * 100) + '%';
 
-      callback(countries);
+      callback(false, countries);
     } else {
       global.log(0, 'stats.countryList couldnt get the data from the db', {});
-      callback(false);
+      callback('Couldnt get the important data from the database', false);
     }
   });
 };

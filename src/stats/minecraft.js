@@ -54,7 +54,7 @@ mc.getRanked = function(collection, uuid, callback){
 mc.getSingle = function(collection, uuid, callback){
   getLatestStats(uuid, function(err, doc){
     if(!err && doc){
-      callback(_statsTemplates[collection](doc));
+      callback(false, _statsTemplates[collection](doc));
     }else{
       callback(err, false);
     }
@@ -63,10 +63,9 @@ mc.getSingle = function(collection, uuid, callback){
 
 mc.getAll = function(collection, callback){
   getLatestStats(false, function(err, docs){
-    console.log(err, docs)
     if(!err && docs){
-      console.log(_statsTemplates[collection](sumArray(docs)))
-      callback(false, _statsTemplates[collection](sumArray(docs)));
+      let data = _statsTemplates[collection](sumArray(docs));
+      callback(false, data);
     }else{
       callback(err, false);
     }
@@ -104,13 +103,11 @@ function getLatestStats(uuid, callback){
   }else{
     user.get({}, {privacy: true, onlyPaxterians: true}, function(err, docs){
       if(!err && docs){
-        let errored = false;
         let stats = [];
         for(let i = 0; i < docs.length; i++){
           getLatestStats(docs[i].mcUUID, function(err, doc){
-            if(err) errored = err;
             if(doc) stats.push(doc);
-            if(i == docs.length - 1) callback(errored, stats);
+            if(i == docs.length - 1) callback(false, stats);
           });
         }
       }else{
@@ -280,11 +277,16 @@ _statsTemplates.totalPerDeath = function(stats) {
 _statsTemplates.playtime = function(stats) {
   let output = {};
 
-  output.playtime = mc.prettifyDuration(stats['minecraft:custom']['minecraft:play_one_minute']);
+  output.playtime = prettifyDuration(stats['minecraft:custom']['minecraft:play_one_minute']);
 
   return output;
 };
 
+
+function prettifyDuration(duration) {
+  var prettyDuration = Math.round(duration / 20 / 60 / 60) + 'h';
+  return prettyDuration;
+};
 
 //Export the container
 module.exports = mc;

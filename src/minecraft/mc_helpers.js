@@ -57,7 +57,7 @@ global.mcPlayerCount = 0;
 //Updates all IGNs from all members based on their UUID
 mc.updateAllIGNs = function(){
   //Get all members from db
-  user.get({}, false, function(members){
+  user.get({}, false, function(err, members){
     members.forEach((member) => {
       //Check if the user has a ign, if not, then we have nothing to do
       if(member.mcUUID != null){

@@ -6,7 +6,6 @@
 //Dependencies
 const config = require('../../config.js');
 const data = require('../data');
-const mc = require('../minecraft/mc_helpers.js');
 const discord = require('../discord_bot/discord_helpers.js');
 
 //Create the container
@@ -103,6 +102,7 @@ user.modify = function(filter, key, modifier, options, callback) {
 
 //Triggers the update of all IGNs and Nicks from all users
 user.updateNicks = function(){
+  const mc = require('../minecraft/mc_helpers.js');
   //Get all users
   user.get({}, false, function(err, docs){
     if(!err && docs){
@@ -127,19 +127,33 @@ user.updateNicks = function(){
 var _internal = {};
 
 _internal.applyPrivacy = function (docs, callback){
-  let newData = [];
-  docs.forEach((cur) => {
-    if (!cur.publish_age) {
-      cur.birth_month = false;
-      cur.birth_year = false;
+  if(docs){
+    if(Array.isArray(docs)){
+      let newData = [];
+      docs.forEach((cur) => {
+        if(!cur.publish_age) {
+          cur.birth_month = false;
+          cur.birth_year = false;
+        }
+        if(!cur.publish_country) cur.country = false;
+
+        newData.push(cur);
+      });
+
+      //Send back the cleaned array
+      callback(newData);
+    }else{
+      if(!docs.publish_age) {
+        docs.birth_month = false;
+        docs.birth_year = false;
+      }
+      if(!docs.publish_country) docs.country = false;
+
+      callback(docs)
     }
-    if (!cur.publish_country) cur.country = false;
-
-    newData.push(cur);
-  });
-
-  //Send back the cleaned array
-  callback(newData);
+  }else{
+    callback(false);
+  }
 };
 
 
