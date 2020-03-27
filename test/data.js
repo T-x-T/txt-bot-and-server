@@ -61,19 +61,16 @@ describe('data', function(){
       });
     });
 
-    //Not implemented yet
-/*     it('get a document by its id using first=true', function(done) {
+    it('get a document by its id using first=true', function(done) {
       data.new({id: 1, text: 'test'}, 'test', false, function(a, b) {
         data.get({id: 1}, 'test', {first: true}, function(err, doc) {
-          console.log(err, doc)
           assert.ok(!err);
           assert.equal(doc.id, 1);
           assert.equal(doc.text, 'test');
           done();
         });
       });
-    }); */
-
+    });
 
 
   });
@@ -84,10 +81,11 @@ describe('data', function(){
 
     it('edit a document by its id', function(done) {
       data.new({id: 1, text: 'test'}, 'test', false, function(a, b) {
+        assert.ok(!a);
         b.text = 'bla';
         data.edit(b, 'test', false, function(c, d) {
-          data.get({id: 1}, 'test', false, function(err, docs){
-            let doc = docs[0];
+          assert.ok(!c);
+          data.get({id: 1}, 'test', {first: true}, function(err, doc){
             assert.ok(!err);
             assert.equal(doc.id, 1);
             assert.equal(doc.text, 'bla');

@@ -33,7 +33,7 @@ main.new = function(input, type, options, callback) {
   let document = new model(input);
   document.save(function(err, doc){
     if(!err && doc){
-      callback(false, doc);
+      callback(false, doc._doc);
     }else{
       callback(err, false);
     }
@@ -47,13 +47,12 @@ main.edit = function(input, type, options, callback) {
   filter = input.hasOwnProperty('id') ? {id : input.id} : filter;
   filter = input.hasOwnProperty('discord') ? {discord: input.discord} : filter;
   filter = input.hasOwnProperty('discord_id') ? {discord_id: input.discord_id} : filter;
-
   if(filter){
     //Get our current model
     let model = models[type];
-    model.findOneAndUpdate(filter, input, function(err, doc){
+    model.findOneAndUpdate(filter, input, {new: true, useFindAndModify: false}, function(err, doc){
       if(!err && doc){
-        callback(false, doc);
+        callback(false, doc._doc);
       }else{
         callback(err, false);
       }
@@ -67,9 +66,14 @@ main.edit = function(input, type, options, callback) {
 main.get = function(filter, type, options, callback) {
   //Get our current model
   let model = models[type];
-  model.find(filter, {}, {}, function(err, docs){
-    if(!err && docs){
-      callback(false, docs);
+  let _options = options.hasOwnProperty('sort') ? {sort: sort} : {};
+  model.find(filter, {}, _options, function(err, docs){
+    if(!err && docs) {
+      let output = [];
+      docs.forEach((doc) => {
+        output.push(doc._doc);
+      });
+      callback(false, output);
     }else{
       callback(err, false);
     }
@@ -169,18 +173,26 @@ applicationSchema.pre('save', function(next) {
   }
 });
 
+//test Schema
+var testSchema = new Schema({
+  id: Number,
+  text: String
+});
+
 //Set up the models
 var applicationModel = mongoose.model('applications', applicationSchema);
 var bulletinModel    = mongoose.model('bulletin', bulletinSchema);
 var userModel        = mongoose.model('members', userSchema);
 var mcStatsModel     = mongoose.model('mcstats', mcStatsSchema);
+var testModel        = mongoose.model('test', testSchema);
 
 //Container for all database models
 const models = {
   'application': applicationModel,
   'bulletin': bulletinModel,
   'user': userModel,
-  'stats': mcStatsModel
+  'stats': mcStatsModel,
+  'test': testModel
 };
 
 //Export the container

@@ -66,17 +66,14 @@ bulletin.get = function(filter, callback){
     if(!err && docs.length > 0){
       //Fill in the authors name
       let newDocs = [];
-      //console.log(0)
       for(let i = 0; i < docs.length; i++){
-        //console.log('get member data',i,docs.length)
-        user.get({discord: docs[i].author}, {privacy: true, onlyPaxterians: true}, function(err, memberData){
-          //console.log('got member data',i,docs.length)
+        user.get({discord: docs[i].author}, {privacy: true, onlyPaxterians: true, first: true}, function(err, memberData){
           let newDoc = {};
           newDoc._id = docs[i]._id;
           newDoc.author = docs[i].author;
           newDoc.message = docs[i].message;
           newDoc.date = docs[i].date;
-          newDoc.author_name = memberData[0].mcName;
+          newDoc.author_name = memberData.mcName;
           newDocs.push(newDoc);
           //Check if this is the last callback, if so, callback
           if(newDocs.length === docs.length){

@@ -25,7 +25,15 @@ index.edit = function(input, type, options, callback) {
 //Get multiple entries
 //Options:
 //first = true: get only first element as an object
+//latest = true: get only the newest document as an object
+//sub_type = some value: if a sub_type is given only return things that match the sub_type
 index.get = function(filter, type, options, callback) {
+  if(filter === false) filter = {};
+
+  if(options.hasOwnProperty('sub_type')) filter = {$and: [{sub_type: sub_type}, filter]};
+  if(options.latest) options.first = true;
+  if(options.hasOwnProperty('latest')) options.sort = {_id: -1};
+  
   backend.get(filter, type, options, function(err, docs){
     if(options.first === true){
       let output = docs.length > 0 ? docs[0] : [];
