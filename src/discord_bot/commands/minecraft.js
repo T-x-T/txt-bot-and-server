@@ -5,6 +5,7 @@
 
 const user = require('../../user');
 const mc_helpers = require('../../minecraft/mc_helpers.js');
+const stats = require('../../stats');
 
 module.exports = {
   name: 'minecraft',
@@ -90,7 +91,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
   let output = '';
   switch(collection){
     case 'general':
-    mc_helpers.getStatTemplate(userID, 'general', rankInfo, function(err, stats){
+      stats.get('mc', {collection: 'general', rank: rankInfo, uuid: userID}, function(err, stats){
       if(!err){
         if(rankInfo){
           output += `General statistics for ${ign}:\n`;
@@ -118,7 +119,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     });
     break;
     case 'distance':
-    mc_helpers.getStatTemplate(userID, 'distances', rankInfo, function(err, stats){
+    stats.get('mc', {uuid: userID, collection: 'distances', rank: rankInfo}, function(err, stats){
       if(!err){
         if(rankInfo){
           output += `Distance statistics for ${ign}:\n`;
@@ -154,7 +155,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     });
     break;
     case 'ores':
-    mc_helpers.getStatTemplate(userID, 'minedOres', rankInfo, function(err, stats){
+    stats.get('mc', {uuid: userID, collection: 'minedOres', rank: rankInfo}, function(err, stats){
       if(!err){
         if(rankInfo){
           output += `Mined ores from ${ign}:\n`;
@@ -182,7 +183,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     });
     break;
     case 'total':
-    mc_helpers.getStatTemplate(userID, 'totals', rankInfo, function(err, stats){
+    stats.get('mc', {uuid: userID, collection: 'total', rank: rankInfo}, function(err, stats){
       if(!err){
         if(rankInfo){
           output += `Totals from ${ign}:\n`;
@@ -209,7 +210,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_usage':
     if(!rankInfo){
-      mc_helpers.getStatTemplate(userID, 'topUsageItems', false, function(err, stats){
+      stats.get('mc', {uuid: userID, collection: 'topUsageItems'}, function(err, stats){
         if(!err){
           output += `Top used items from ${ign}:\n`;
           let i = 0;
@@ -228,7 +229,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_picked_up':
     if(!rankInfo){
-      mc_helpers.getStatTemplate(userID, 'topPickedUpItems', false, function(err, stats){
+      stats.get('mc', {uuid: userID, collection: 'topPickedUpItems'}, function(err, stats){
         if(!err){
           output += `Top picked up items from ${ign}:\n`;
           let i = 0;
@@ -247,7 +248,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_mined':
     if(!rankInfo){
-      mc_helpers.getStatTemplate(userID, 'topMinedBlocks', false, function(err, stats){
+      stats.get('mc', {uuid: userID, collection: 'topMinedBlocks'}, function(err, stats){
         if(!err){
           output += `Top mined items from ${ign}:\n`;
           let i = 0;
@@ -266,7 +267,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_dropped':
     if(!rankInfo){
-      mc_helpers.getStatTemplate(userID, 'topDroppedItems', false, function(err, stats){
+      stats.get('mc', {uuid: userID, collection: 'topDroppedItems'}, function(err, stats){
         if(!err){
           output += `Top dropped items from ${ign}:\n`;
           let i = 0;
@@ -285,7 +286,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_crafted':
     if(!rankInfo){
-      mc_helpers.getStatTemplate(userID, 'topCraftedItems', false, function(err, stats){
+      stats.get('mc', {uuid: userID, collection: 'topCraftedItems'}, function(err, stats){
         if(!err){
           output += `Top crafted items from ${ign}:\n`;
           let i = 0;
@@ -304,7 +305,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_broken':
     if(!rankInfo){
-      mc_helpers.getStatTemplate(userID, 'topBrokenItems', false, function(err, stats){
+      stats.get('mc', {uuid: userID, collection: 'topBrokenItems'}, function(err, stats){
         if(!err){
           output += `Top broken items from ${ign}:\n`;
           let i = 0;
@@ -323,7 +324,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_killed':
     if(!rankInfo){
-      mc_helpers.getStatTemplate(userID, 'topKilledMobs', false, function(err, stats){
+      stats.get('mc', {uuid: userID, collection: 'topKilledMobs'}, function(err, stats){
         if(!err){
           output += `Top killed mobs from ${ign}:\n`;
           let i = 0;
@@ -342,7 +343,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_killed_by':
     if(!rankInfo){
-      mc_helpers.getStatTemplate(userID, 'topKilledByMobs', false, function(err, stats){
+      stats.get('mc', {uuid: userID, collection: 'topKilledByMobs'}, function(err, stats){
         if(!err){
           output += `Top mobs killed by from ${ign}:\n`;
           let i = 0;
@@ -360,7 +361,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     }
     break;
     case 'total_per_death':
-    mc_helpers.getStatTemplate(userID, 'totalPerDeath', rankInfo, function(err, stats){
+    stats.get('mc', {uuid: userID, collection: 'totalPerDeath', rank: rankInfo}, function(err, stats){
       if(!err){
         if(rankInfo){
           output += `Totals per death from ${ign}:\n`;

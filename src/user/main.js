@@ -109,10 +109,12 @@ user.updateNicks = function(){
       docs.forEach((doc) => {
         //Update discord nick
         discord.getNicknameByID(doc.discord, function (discord_nick) {
-          if (discord_nick) doc.discord_nick = discord_nick;
-          user.edit(doc, false, function (err, doc) {
-            if (err) global.log(2, 'user.updateNick couldnt update user (without ign)', { err: err, doc: doc });
-          });
+          if(discord_nick){
+            doc.discord_nick = discord_nick;
+            user.edit(doc, false, function(err, doc) {
+              if(err) global.log(2, 'user.updateNick couldnt update user', {err: err, doc: doc});
+            });
+          } 
         });
       });
       //Trigger update of minecraft igns

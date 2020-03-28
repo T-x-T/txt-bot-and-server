@@ -66,8 +66,8 @@ main.edit = function(input, type, options, callback) {
 main.get = function(filter, type, options, callback) {
   //Get our current model
   let model = models[type];
-  let _options = options.hasOwnProperty('sort') ? {sort: sort} : {};
-  model.find(filter, {}, _options, function(err, docs){
+  let _options = options.hasOwnProperty('sort') ? {sort: options.sort} : {};
+  model.find(filter, null, _options, function(err, docs){
     if(!err && docs) {
       let output = [];
       docs.forEach((doc) => {
@@ -133,6 +133,7 @@ var bulletinSchema = new Schema({
 
 var userSchema = new Schema({
   discord: String,
+  discord_nick: String,
   mcName: String,
   mcUUID: {
     type: String,
@@ -154,8 +155,9 @@ var userSchema = new Schema({
 });
 
 //mcStats Schema
-var mcStatsSchema = new Schema({
+var statsSchema = new Schema({
   timestamp: Date,
+  sub_type: String,
   uuid: String,
   stats: Object
 });
@@ -183,7 +185,7 @@ var testSchema = new Schema({
 var applicationModel = mongoose.model('applications', applicationSchema);
 var bulletinModel    = mongoose.model('bulletin', bulletinSchema);
 var userModel        = mongoose.model('members', userSchema);
-var mcStatsModel     = mongoose.model('mcstats', mcStatsSchema);
+var statsModel       = mongoose.model('mcstats', statsSchema);
 var testModel        = mongoose.model('test', testSchema);
 
 //Container for all database models
@@ -191,9 +193,20 @@ const models = {
   'application': applicationModel,
   'bulletin': bulletinModel,
   'user': userModel,
-  'stats': mcStatsModel,
+  'stats': statsModel,
   'test': testModel
 };
+
+//Converts all old style mcstats objects to new style
+/* main.get({}, 'stats', false, function(err, docs) {
+  docs.forEach((doc) => {
+    doc.sub_type = 'mc_stats'
+    main.edit(doc, 'stats', false, function(err, doc) {
+      if(err) console.log(err)
+    })
+  });
+}); */
+
 
 //Export the container
 module.exports = main;

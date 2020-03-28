@@ -165,10 +165,10 @@ _getters.town_of_paxterya = function(callback){
 _getters.widgets = function(callback){
   oauth.getUserObject(data.access_token, function(userObject){
     if(userObject){
-      user.get({discord: userObject.id}, {privacy: true, onlyPaxterians: true}, function(userData){
-        if(userData.length > 0){
+      user.get({discord: userObject.id}, {privacy: true, onlyPaxterians: true, first: true}, function(err, userData){
+        if(!err){
           callback({
-            IGN: userData[0].mcName
+            IGN: userData.mcName
           });
         }else{
           callback({IGN: 'Error'});
@@ -236,7 +236,7 @@ const template = {
   'downloads.html': {
     'pax_title': 'Downloads'
   },
-  '/widgets.html': _getters.widgets,
+  'widgets': _getters.widgets,
 
 };
 

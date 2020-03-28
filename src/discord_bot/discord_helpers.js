@@ -21,7 +21,7 @@ var helpers = {};
 //Get the nickname of user by their id
 helpers.getNicknameByID = function (userID, callback) {
   try {
-    callback(client.users.get(userID).username);
+    callback(`${client.guilds.get(config.guild).members.get(userID).user.username}#${client.guilds.get(config.guild).members.get(userID).user.discriminator}`);
   } catch (e) {
     callback(false);
   }

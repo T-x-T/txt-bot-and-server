@@ -30,7 +30,7 @@ index.edit = function(input, type, options, callback) {
 index.get = function(filter, type, options, callback) {
   if(filter === false) filter = {};
 
-  if(options.hasOwnProperty('sub_type')) filter = {$and: [{sub_type: sub_type}, filter]};
+  if(options.hasOwnProperty('sub_type')) filter = {$and: [{sub_type: options.sub_type}, filter]};
   if(options.latest) options.first = true;
   if(options.hasOwnProperty('latest')) options.sort = {_id: -1};
   

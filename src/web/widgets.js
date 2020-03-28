@@ -23,7 +23,7 @@ widgets.get = function(access_token, callback){
         if(widget.level <= access_level) html += widget.html;
         html += '<br>'
       });
-      web_helpers.insertVariables({path: path.join(__dirname, '/widgets.html'), access_token: access_token}, html, function(err, finishedHtml) {
+      web_helpers.insertVariables({path: 'widgets', access_token: access_token}, html, function(err, finishedHtml) {
         callback(finishedHtml);
       });
     }else{

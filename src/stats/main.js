@@ -17,8 +17,8 @@ stats.template = {};
 //Gets the basic stats for the statistics.html overview
 stats.template.overview = function(options, callback) {
   user.get({}, {onlyPaxterians: true}, function(err, memberData) {
-    if(!err && memberData) {
-      stats.template.mc({collection: 'playtime', uuid: memberData.mcUUID}, function(err, playtime) {
+    if(!err) {
+      stats.template.mc({collection: 'playtime'}, function(err, playtime) {
         if(!err && playtime) {
           //Get an array with only whitelisted players for paxterya and calculate average age
           let paxterians = [];
@@ -35,7 +35,7 @@ stats.template.overview = function(options, callback) {
           callback(false, {
             'total_members': paxterians.length,
             'average_age': averageAge,
-            'total_playtime': playtime.playtime
+            'total_playtime': playtime
           });
 
         } else {
@@ -60,12 +60,11 @@ stats.template.memberOverview = function(options, callback) {
         let mc_render_url = mc_helpers.getRenderUrl(member.mcUUID);
 
         stats.template.mc({uuid: member.mcUUID, collection: 'playtime'}, function (err, playtime) {
-          console.log(member)
           if (err || !playtime) playtime = 0;
           //Build the object to send back
           let obj = {
             discord_nick: member.discord_nick,
-            mc_nick: member.mc_name,
+            mc_nick: member.mcName,
             age: member.birth_month >= 1 ? member.birth_month > new Date(Date.now()).getMonth() + 1 ? parseInt((new Date().getFullYear() - new Date(member.birth_year, member.birth_month).getFullYear()).toString()) - 1 : parseInt((new Date().getFullYear() - new Date(member.birth_year, member.birth_month).getFullYear()).toString()) : false,
             country: member.country,
             playtime: playtime.playtime,
@@ -148,12 +147,12 @@ stats.template.countryList = function(options, callback) {
 stats.template.mc = function(options, callback){
   if(options.uuid){
     if(options.rank){
-      mc.getRanked(options.collection, options.uuid, callback);
+      mc.getRanked(options, callback);
     }else{
-      mc.getSingle(options.collection, options.uuid, callback);
+      mc.getSingle(options, callback);
     }
   }else{
-    mc.getAll(options.collection, callback);
+    mc.getAll(options, callback);
   }
 };
 
