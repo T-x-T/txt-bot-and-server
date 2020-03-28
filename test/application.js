@@ -43,6 +43,7 @@ const input = {
 describe('application', function() {
   beforeEach(function(done) {
     data.delete({}, 'application', false, (err) => {
+      assert.ok(!err);
       done();
     });
   });
@@ -55,14 +56,7 @@ describe('application', function() {
     it('saves new application', function(done) {
       application.save(input, false, function(status, res) {
         assert.equal(status, 201);
-        emitter.once('data_testing_new', (_input, _type, _options) => {
-          assert.equal(input.about_me, _input.about_me);
-          assert.equal(input.birth_year, _input.birth_year);
-          assert.equal(input.discord_id, _input.discord_id);
-          assert.equal(input.country, _input.country);
-
-          done();
-        });
+        done();
       });
     });
 

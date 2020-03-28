@@ -17,8 +17,7 @@ main.new = function(input, type, options, callback){
     input._id = Object.keys(data[type]).length + 1;
     if(type == 'application') input.id = input._id;
     data[type].push(input);
-    callback(false, input)
-    emitter.emit('data_testing_new', input, type, options);
+    callback(false, input);
   }else{
     data[type] = [];
     main.new(input, type, options, callback);
