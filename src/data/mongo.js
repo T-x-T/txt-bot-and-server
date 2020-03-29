@@ -154,12 +154,38 @@ var userSchema = new Schema({
   }
 });
 
-//mcStats Schema
 var statsSchema = new Schema({
   timestamp: Date,
   sub_type: String,
   uuid: String,
   stats: Object
+});
+
+var postSchema = new Schema({
+  id: {
+    type: Number,
+    index: true,
+    unique: true,
+    default: 0
+  },
+  title: String,
+  author: String,
+  body: String,
+  date: Date,
+  public: Boolean
+});
+
+//Code from stackoverflow to increment the counter id
+postSchema.pre('save', function(next) {
+  // Only increment when the document is new
+  if(this.isNew) {
+    postModel.count().then(res => {
+      this.id = res; // Increment count
+      next();
+    });
+  } else {
+    next();
+  }
 });
 
 //Code from stackoverflow to increment the counter id
@@ -187,6 +213,7 @@ var bulletinModel    = mongoose.model('bulletin', bulletinSchema);
 var userModel        = mongoose.model('members', userSchema);
 var statsModel       = mongoose.model('mcstats', statsSchema);
 var testModel        = mongoose.model('test', testSchema);
+var postModel        = mongoose.model('posts', postSchema);
 
 //Container for all database models
 const models = {
@@ -194,7 +221,8 @@ const models = {
   'bulletin': bulletinModel,
   'user': userModel,
   'stats': statsModel,
-  'test': testModel
+  'test': testModel,
+  'post': postModel
 };
 
 //Converts all old style mcstats objects to new style

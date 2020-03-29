@@ -136,7 +136,7 @@ helpers.updateNick = function(discord_id) {
 
 //Set the nick of all users to their mc_ign
 helpers.updateAllNicks = function(){
-  data.getMembers(false, true, true, function(docs){
+  user.get({}, {onlyPaxterians: true, privacy: true}, function(err, docs){
     if(docs){
       docs.forEach((doc) => {
         helpers.updateNick(doc.discord)

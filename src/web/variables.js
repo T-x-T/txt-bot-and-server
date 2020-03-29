@@ -10,7 +10,7 @@ const discord_helpers = require('../discord_bot/discord_helpers.js');
 const mc_helpers      = require('../minecraft/mc_helpers.js');
 const stats           = require('../stats');
 const os              = require('os');
-const post            = require('../post/post.js');
+const post            = require('../post');
 const widgets         = require('./widgets.js');
 const oauth           = require('../auth/oauth2.js');
 const user            = require('../user');
@@ -88,8 +88,7 @@ _getters.post = function(callback){
   if(data.queryStringObject.id === 'new'){
     callback({'pax_title': 'Post', 'id': 'new'})
   }else{
-    post.get({id: data.queryStringObject.id}, function(post){
-      post = post[0];
+    post.get({id: data.queryStringObject.id}, {first: true}, function(err, post){
       callback({
         'pax_title': 'Post',
         'id': post.id,
@@ -119,7 +118,7 @@ _getters.statistics = function(callback){
 
 //Calls back an object for the index.html
 _getters.index = function(callback){
-  post.get({public: true}, function(posts){
+  post.get({public: true}, false, function(err, posts){
     //Check if the post is in the future (here, because we cant really compare the dates directly)
     let filteredPosts = [];
     posts.forEach((post) => {

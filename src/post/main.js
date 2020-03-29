@@ -5,29 +5,13 @@
 
 //Dependencies
 const config = require('../../config.js');
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const data   = require('../data');
 
 //Create the container
 var post = {};
 
-//Connect to the db
-mongoose.connect(config["mongodb-url"]);
-var con = mongoose.connection;
-
-//Gets called when there is an error connecting to the db
-con.on('error', function() {
-  console.log('Error connecting to database');
-});
-
-//Gets called when the connection to the db succeeds
-con.on('open', function() {
-  console.log('Post Sucessfully connected to database');
-  db = con;
-});
-
 //This combines create and update, dynamically chooses the correct one
-post.save = function(postData, callback) {
+post.save = function(postData, options, callback) {
   postData.title = typeof postData.title == 'string' ? postData.title : false;
   postData.author = typeof postData.author == 'string' ? postData.author : false;
   postData.body = typeof postData.body == 'string' ? postData.body : false;
@@ -39,12 +23,12 @@ post.save = function(postData, callback) {
     if(postData.id === 'false' || typeof postData.id == 'undefined'){
       //Its a new post
       post.create(postData, function(err){
-        callback(err);
+        callback(err, postData);
       });
     }else{
       //Edit the post
       post.update(postData, function(err){
-        callback(err);
+        callback(err, postData);
       });
     }
   } else {
@@ -54,18 +38,18 @@ post.save = function(postData, callback) {
 
 //Creates a post
 post.create = function(postData, callback) {
-  let document = new postModel({
+  let document = {
     title: postData.title,
     author: postData.author,
     body: postData.body,
-    date: postData.date,
+    date: new Date(postData.date),
     public: postData.public
-  });
-  document.save(function(err, doc) {
+  };
+  data.new(document, 'post', false, function(err, doc){
     if(!err) {
-      callback(false)
+      callback(false, doc)
     } else {
-      callback('Error saving to the database');
+      callback('Error saving to the database: ' + err, false);
     }
   });
 };
@@ -73,11 +57,11 @@ post.create = function(postData, callback) {
 //Update a post
 post.update = function(newPostData, callback) {
   if(typeof newPostData == 'object') {
-    postModel.findOneAndUpdate({id: newPostData.id}, newPostData, function(err, doc) {
+    data.edit(newPostData, 'post', false, function(err, doc){
       if(!err) {
-        callback(false);
+        callback(false, doc);
       } else {
-        callback(err);
+        callback('Error editing the post: ' + err, false);
       }
     });
   } else {
@@ -86,46 +70,16 @@ post.update = function(newPostData, callback) {
 };
 
 //Retrieve posts (if no filter is given, return all)
-post.get = function(filter, callback) {
+post.get = function(filter, options, callback) {
   if(filter === false) filter = {};
-  postModel.find(filter, function(err, docs) {
-    if(!err && docs) {
-      callback(docs);
+  data.get(filter, 'post', false, function(err, docs){
+    if(!err) {
+      callback(false, docs);
     } else {
-      callback(false);
+      callback('Error retrieving documents from database: ' + err, false);
     }
   });
 };
-
-var postSchema = new Schema({
-  id: {
-    type: Number,
-    index: true,
-    unique: true,
-    default: 0
-  },
-  title: String,
-  author: String,
-  body: String,
-  date: Date,
-  public: Boolean
-});
-
-//Code from stackoverflow to increment the counter id
-postSchema.pre('save', function(next) {
-  // Only increment when the document is new
-  if(this.isNew) {
-    postModel.count().then(res => {
-      this.id = res; // Increment count
-      next();
-    });
-  } else {
-    next();
-  }
-});
-
-//Set up the model
-var postModel = mongoose.model('posts', postSchema);
 
 //Export the container
 module.exports = post;

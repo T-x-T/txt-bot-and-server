@@ -14,8 +14,8 @@ var main = {};
 
 main.new = function(input, type, options, callback){
   if(data.hasOwnProperty(type)){
-    input._id = Object.keys(data[type]).length + 1;
-    if(type == 'application') input.id = input._id;
+    input._id = Object.keys(data[type]).length;
+    if(type == 'application' || type == 'post') input.id = input._id;
     data[type].push(input);
     callback(false, input);
   }else{

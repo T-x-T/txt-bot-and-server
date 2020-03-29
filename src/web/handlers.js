@@ -12,7 +12,7 @@ const application = require('../application');
 const oauth       = require('../auth/oauth2.js');
 const email       = require('../email/email.js');
 const stats       = require('../stats');
-const post        = require('../post/post.js');
+const post        = require('../post');
 const bulletin    = require('../bulletin');
 const user        = require('../user');
 
@@ -256,9 +256,9 @@ handlers.paxapi.post.post = function(data, callback){
       oauth.getTokenAccessLevel(data.cookies.access_token, function(access_level) {
         if(access_level >= 9) {
           //The requester is allowed to post the records
-          post.save(data.payload, function(err){
-            if(err) callback(500, err, 'plain');
-              else callback(200, '', 'plain');
+          post.save(data.payload, false, function(err, doc){
+            if(err) callback(500, {err: err}, 'json');
+              else callback(200, {doc: doc}, 'json');
           });
         } else {
           callback(403, {err: 'You are not authorized to do that!'}, 'json');
@@ -274,7 +274,7 @@ handlers.paxapi.post.post = function(data, callback){
 
 //Get posts
 handlers.paxapi.post.get = function(data, callback){
-  post.get(data.queryStringObject, function(posts){
+  post.get(data.queryStringObject, false, function(err, posts){
     if(posts) callback(200, posts, 'json');
     else callback(404, {err: 'Couldnt get any posts for the filter'}, 'json');
   });
