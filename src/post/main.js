@@ -15,7 +15,7 @@ post.save = function(postData, options, callback) {
   postData.title = typeof postData.title == 'string' ? postData.title : false;
   postData.author = typeof postData.author == 'string' ? postData.author : false;
   postData.body = typeof postData.body == 'string' ? postData.body : false;
-  postData.date = typeof postData.date == 'string' ? postData.date : new Date(Date.now()).toISOString().substring(0, 10);
+  postData.date = typeof postData.date == 'string' ? postData.date : new Date(Date.now()) //.toISOString().substring(0, 10);
   postData.public = typeof postData.public == 'boolean' ? postData.public : false;
 
   if(postData.title && postData.author && postData.body) {
@@ -42,7 +42,7 @@ post.create = function(postData, callback) {
     title: postData.title,
     author: postData.author,
     body: postData.body,
-    date: new Date(postData.date),
+    date: postData.date,
     public: postData.public
   };
   data.new(document, 'post', false, function(err, doc){

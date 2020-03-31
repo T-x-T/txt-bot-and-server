@@ -9,7 +9,7 @@ let input1 = {
   title: 'This is a test post',
   author: 'TxT',
   body: '<h1>TEST</h1><br>This was created from automated testing',
-  date: Date.now(),
+  date: new Date(Date.now()).toISOString().substring(0, 10),
   public: true
 };
 
@@ -17,7 +17,7 @@ let input2 = {
   title: 'This is a second test post',
   author: 'TxT',
   body: '<h1>TEST</h1><br>This was created from very automated testing',
-  date: Date.now(),
+  date: new Date(Date.now()).toISOString().substring(0, 10),
   public: false
 };
 
@@ -68,6 +68,7 @@ describe('post', function(){
         assert.ok(!err);
         assert.ok(doc);
         post.get({id: 0}, {first: true}, function(err, doc){
+          console.log(doc.date, input1.date)
           assert.ok(!err);
           assert.ok(doc);
           assert.equal(doc.title, input1.title);

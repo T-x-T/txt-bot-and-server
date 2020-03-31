@@ -241,11 +241,13 @@ const template = {
 
 //Export the variables
 module.exports = function(local_data, callback) {
+  console.log(local_data.path)
   if(os.platform() != 'win32'){
     local_data.path = local_data.path.replace(path.join(__dirname, '../../web/'), '').replace('/html', '');
   }else{
-    local_data.path = local_data.path.replace(path.join(__dirname, '../../web/'), '').replace(/(\\\\html){1}(\\\\){3}/g,'/');
+    local_data.path = local_data.path.replace(path.join(__dirname, '../../web/'), '').replace('web\\html\\','').replace('\\', '/');
   }
+  console.log(local_data.path)
   data = local_data;
   let templateData = template[data.path];
   if(typeof templateData == 'object'){

@@ -171,7 +171,7 @@ var postSchema = new Schema({
   title: String,
   author: String,
   body: String,
-  date: Date,
+  date: String,
   public: Boolean
 });
 

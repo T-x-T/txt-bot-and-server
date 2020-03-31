@@ -125,9 +125,9 @@ handlers.paxLogin = function(data, callback){
     oauth.getCodeAccessLevel(code, 'staffLogin', function(access_level, access_token){
       if(access_level >= 3){
         oauth.getUserObject(access_token, function(userData){
-          user.get({discord: userData.id}, {privacy: true, onlyPaxterians: true}, function(err, memberData){
+          user.get({discord: userData.id}, {privacy: true, onlyPaxterians: true, first: true}, function(err, memberData){
             //Now set the access_token as a cookie and redirect the user to the interface.html, also set access_level and mc_ign cookies THIS SHOULD NEVER BE TRUSTED FOR SECURITY, ONLY FOR MAKING THINGS SMOOTHER!!!
-            callback(302, {Location: `https://${data.headers.host}/staff/interface.html`, 'Set-Cookie': [`access_token=${access_token};Max-Age=21000};path=/`, `access_level=${access_level};Max-Age=22000};path=/`, `mc_ign=${memberData[0].mcName};Max-Age=22000};path=/`]}, 'plain');
+            callback(302, {Location: `https://${data.headers.host}/staff/interface.html`, 'Set-Cookie': [`access_token=${access_token};Max-Age=21000};path=/`, `access_level=${access_level};Max-Age=22000};path=/`, `mc_ign=${memberData.mcName};Max-Age=22000};path=/`]}, 'plain');
           });
         });
       }else{
