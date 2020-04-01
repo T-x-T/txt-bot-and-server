@@ -5,7 +5,7 @@
 
 //Dependencies
 //const config = require('./../config.js');
-const youtube = require('../src/youtube/youtube.js');
+const youtube = require('../src/youtube');
 const log = require('./../src/log/log.js');
 const mc_helpers = require('../src/minecraft/mc_helpers.js');
 const oauth = require('../src/auth/oauth2.js');

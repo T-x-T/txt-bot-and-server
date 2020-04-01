@@ -5,15 +5,11 @@
 //Dependencies
 const config = require('../../config.js');
 const https = require('https');
-const discordHelpers = require('../discord_bot/discord_helpers.js');
 
 //Create the container
 var youtube = {};
 
-//DONT USE!! Create a global variable that always contains the newest youtube video from the main channel (at position 0 in the config-array); for legacy reasons
-global.newestVideo = {};
-
-//Use this!! Create a global variable that contains the newest video for each channel
+//Create a global variable that contains the newest video for each channel
 global.newestVideos = {};
 
 //Check what the newest video is
@@ -39,12 +35,11 @@ youtube.checkIfNewVideos = function(channel){
     }).on('end', function() {
       //Parse the data object
       data = JSON.parse(data);
-
       //Check if the response from youtube is valid
       if(data['items']) {
         if(data.items[0].hasOwnProperty('contentDetails')) {
           //Data object seems valid
-          var latestVideo = {
+          let latestVideo = {
             id: data.items[0].contentDetails.upload.videoId,
             title: data.items[0].snippet.title,
             url: 'https://youtu.be/' + data.items[0].contentDetails.upload.videoId,
@@ -52,7 +47,7 @@ youtube.checkIfNewVideos = function(channel){
             channel: channel,
             channel_title: data.items[0].snippet.channelTitle
           };
-          global.newestVideo = latestVideo;
+          emitter.emit('test_youtube_got_video', latestVideo);
           youtube.postIfNew(latestVideo);
         } else {
           //Data object isnt valid
@@ -70,30 +65,32 @@ youtube.checkIfNewVideos = function(channel){
 
 //Check if a given video is new
 youtube.postIfNew = function (video) {
-  if(global.newestVideos.hasOwnProperty(video.channel)) {
+  if(global.newestVideos.hasOwnProperty(video.channel.youtube_id)) {
     if(global.newestVideos[video.channel.youtube_id].id != video.id){
       //there is a video stored and it is different
-      youtube.post(video);
+      emitter.emit('youtube_new', video);
+
+      //Set newest video object to the current video
+      global.newestVideos[video.channel.youtube_id] = video
     }
   }else{
     //there is no video stored; store it and check if the current video might be new
     global.newestVideos[video.channel.youtube_id] = video;
-
     if(video.date > new Date(Date.now() - 5 * 60 * 1000)) {
       //looks like its new
-      youtube.post(video);
+      emitter.emit('youtube_new', video);
     }
   }
 };
 
 //posts a new video to discord
-youtube.post = function(video){
+/* youtube.post = function(video){
   discordHelpers.sendMessage(`New Video: ${video.title} by ${video.channel_title}\n${video.url}\n<@&${video.channel.role}>`, video.channel.channel_id, function(err) {
     if(err) {
       global.log(3, 'YouTube: Cant send message about new video', {Error: err});
     }
   });
-};
+}; */
 
 //Export the container
 module.exports = youtube;
