@@ -3,7 +3,7 @@
 *	Command for all the admin thingys
 */
 
-const log = require('../../log/log.js');
+const log = require('../../log');
 const config = require('../../../config.js');
 const mc_helpers = require('../../minecraft/mc_helpers.js');
 const discord_helpers = require('../discord_helpers.js');
@@ -23,7 +23,7 @@ module.exports = {
           //Check if the user wants multiple entries or more info about a spefic one by checking if args[1] is a log id
           if (args[1].length > 10) {
             //The user wants details on a specific entry
-            log.readById(args[1], function (data) {
+            log.readById(args[1], function (err, data) {
               if (data != null) {
                 var output = '```';
                 output += data.timestamp.toString();
@@ -58,7 +58,7 @@ module.exports = {
               let timespan = new Date(Date.now() - minutes * 60000);
 
               //Get all log entries from the given period
-              log.read(false, timespan, function (data) {
+              log.read(false, timespan, function (err, data) {
                 if (data.length > 0) {
                   //Do something with the data
                   //Define everything we want to count
@@ -120,7 +120,7 @@ module.exports = {
                 var timespan = new Date(Date.now() - minutes * 60000);
 
                 //Get the log entries after the timespan date and with the given log-level
-                log.read(level, timespan, function (data) {
+                log.read(level, timespan, function (err, data) {
                   if (data.length > 0) {
                     let output = '```';
                     output += `There are ${data.length} entries!\n\n`;

@@ -9,7 +9,7 @@ class Emitter extends EventEmitter {}
 emitter = new Emitter(); 
 
 //Dependencies
-const log = require('./src/log/log.js'); //lgtm [js/unused-local-variable]
+const log = require('./src/log'); //lgtm [js/unused-local-variable]
 const webServer = require('./src/web/webServer.js');
 const discordBot = require('./src/discord_bot/discord_bot.js');
 const workers = require('./workers/workers.js'); //lgtm [js/unused-local-variable]

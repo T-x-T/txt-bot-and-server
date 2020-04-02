@@ -88,7 +88,7 @@ main.delete = function(filter, type, options, callback) {
     if(!err){
       callback(false);
     }else{
-      callback(true);
+      callback(err);
     }
   });
 };
@@ -175,6 +175,16 @@ var postSchema = new Schema({
   public: Boolean
 });
 
+var logSchema = new Schema({
+  timestamp: {
+    type: Date,
+    default: Date.now()
+  },
+  level: Number, //0 = debug, 1 = info, 2 = warn, 3 = error
+  name: String,
+  data: Object
+});
+
 //Code from stackoverflow to increment the counter id
 postSchema.pre('save', function(next) {
   // Only increment when the document is new
@@ -214,6 +224,7 @@ var userModel        = mongoose.model('members', userSchema);
 var statsModel       = mongoose.model('mcstats', statsSchema);
 var testModel        = mongoose.model('test', testSchema);
 var postModel        = mongoose.model('posts', postSchema);
+var logModel         = mongoose.model('log', logSchema);
 
 //Container for all database models
 const models = {
@@ -222,7 +233,8 @@ const models = {
   'user': userModel,
   'stats': statsModel,
   'test': testModel,
-  'post': postModel
+  'post': postModel,
+  'log': logModel
 };
 
 //Converts all old style mcstats objects to new style

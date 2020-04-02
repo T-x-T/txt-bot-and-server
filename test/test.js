@@ -24,4 +24,4 @@ const oauth = require('../src/auth/oauth2.js');
 oauth.updateUserIdCache();
 
 //Dependencies
-const log = require('../src/log/log.js'); //lgtm [js/unused-local-variable]
+const log = require('../src/log'); //lgtm [js/unused-local-variable]
