@@ -8,7 +8,7 @@
 const youtube = require('../src/youtube');
 const log = require('./../src/log');
 const mc_helpers = require('../src/minecraft/mc_helpers.js');
-const oauth = require('../src/auth/oauth2.js');
+const discord_api = require('../src/discord_api');
 const widgets = require('../src/web/widgets.js');
 const discord_helpers = require('./../src/discord_bot/discord_helpers.js');
 const user = require('../src/user');
@@ -27,7 +27,7 @@ setTimeout(function(){
 //Contains discord user objects mapped by the discord id; gets cleared once an hour in workers
 global.cache = {};
 global.cache.discordUserObjects = {};
-oauth.updateUserIdCache();
+discord_api.updateCache();
 
 //Every minute
 setInterval(function () {
@@ -48,7 +48,7 @@ setInterval(function(){
   user.updateNicks();
   mc_helpers.updateRoles();
   discord_helpers.updateAllNicks();
-  oauth.updateUserIdCache();
+  discord_api.updateCache();
 }, 1000 * 60 * 60);
 
 /* //Every six hours

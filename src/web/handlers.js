@@ -9,7 +9,8 @@ const fs          = require('fs');
 const path        = require('path');
 const webHelpers  = require('./web-helpers.js');
 const application = require('../application');
-const oauth       = require('../auth/oauth2.js');
+const oauth       = require('../auth');
+const discord_api = require('../discord_api');
 const email       = require('../email/email.js');
 const stats       = require('../stats');
 const post        = require('../post');
@@ -90,7 +91,7 @@ handlers.assets = function (data, callback) {
 handlers.paxStaff = function(data, callback) {
   //Check if the user provided an access_token cookie
   if(data.cookies.access_token) {
-    oauth.getTokenAccessLevel(data.cookies.access_token, function(access_level) {
+    oauth.getAccessLevel({token: data.cookies.access_token}, false, function(err, access_level) {
       if(data.path.indexOf('application') > -1 && access_level >= 9 || data.path.indexOf('post') > -1 && access_level >= 9 || data.path.indexOf('interface') > -1 && access_level >= 3) {
         //Everything is fine, serve the website
         data.path = path.join(__dirname, '../../web/web/' + data.path);
@@ -122,9 +123,9 @@ handlers.paxLogin = function(data, callback){
   //Get the the code from the querystring
   let code = typeof data.queryStringObject.code == 'string' && data.queryStringObject.code.length == 30 ? data.queryStringObject.code : false;
   if(code){
-    oauth.getCodeAccessLevel(code, 'staffLogin', function(access_level, access_token){
+    oauth.getAccessLevel({code: code}, {redirect: 'staffLogin'}, function(err, access_level, access_token){
       if(access_level >= 3){
-        oauth.getUserObject(access_token, function(userData){
+        discord_api.getUserObject({token: access_token}, false, function(err, userData){
           user.get({discord: userData.id}, {privacy: true, onlyPaxterians: true, first: true}, function(err, memberData){
             //Now set the access_token as a cookie and redirect the user to the interface.html, also set access_level and mc_ign cookies THIS SHOULD NEVER BE TRUSTED FOR SECURITY, ONLY FOR MAKING THINGS SMOOTHER!!!
             callback(302, {Location: `https://${data.headers.host}/staff/interface.html`, 'Set-Cookie': [`access_token=${access_token};Max-Age=21000};path=/`, `access_level=${access_level};Max-Age=22000};path=/`, `mc_ign=${memberData.mcName};Max-Age=22000};path=/`]}, 'plain');
@@ -151,7 +152,7 @@ handlers.paxapi.bulletin = function(data, callback){
   if(typeof handlers.paxapi.bulletin[data.method] == 'function'){
     //Check if user is authorized to send that request
     if(data.cookies.access_token){
-      oauth.getTokenAccessLevel(data.cookies.access_token, function(access_level) {
+      oauth.getAccessLevel({token: data.cookies.access_token}, false, function(err, access_level) {
         if(access_level >= 3){
           //Add access_level to data, to allow edits by admins (>=9)
           data.access_level = access_level;
@@ -173,7 +174,7 @@ handlers.paxapi.bulletin = function(data, callback){
 //Save a new bulletin
 handlers.paxapi.bulletin.post = function(data, callback){
   //Get the discord id of the author
-  oauth.getDiscordIdFromToken(data.cookies.access_token, function(discord_id){
+  oauth.getDiscordId({token: data.cookies.access_token}, false, function(err, discord_id){
     if(discord_id){
       data.payload.author = discord_id;
       bulletin.save(data.payload, false, function(err, doc){
@@ -192,7 +193,7 @@ handlers.paxapi.bulletin.post = function(data, callback){
 //Update an existing bulletin
 handlers.paxapi.bulletin.put = function(data, callback){
   //Get the discord id of the author
-  oauth.getDiscordIdFromToken(data.cookies.access_token, function(discord_id) {
+  oauth.getDiscordId({token: data.cookies.access_token}, false, function(err, discord_id) {
     if(discord_id) {
       //Edit
       data.payload.editAuthor = discord_id;
@@ -221,7 +222,7 @@ handlers.paxapi.bulletin.get = function(data, callback) {
 //Remove bulletin
 handlers.paxapi.bulletin.delete = function(data, callback) {
   //Get the discord id of the author
-  oauth.getDiscordIdFromToken(data.cookies.access_token, function(discord_id) {
+  oauth.getDiscordId({token: data.cookies.access_token}, false, function(err, discord_id) {
     if(discord_id) {
       //Delete
       data.payload.deleteAuthor = discord_id;
@@ -253,7 +254,7 @@ handlers.paxapi.post.post = function(data, callback){
   if(data.headers.hasOwnProperty('cookie')) {
     if(data.headers.cookie.indexOf('access_token'.length > -1)) {
       //There is an access_token cookie, lets check if it belongs to an admin
-      oauth.getTokenAccessLevel(data.cookies.access_token, function(access_level) {
+      oauth.getAccessLevel({token: data.cookies.access_token}, false, function(err, access_level) {
         if(access_level >= 9) {
           //The requester is allowed to post the records
           post.save(data.payload, false, function(err, doc){
@@ -340,7 +341,7 @@ handlers.paxapi.application = function(data, callback){
       if(data.headers.hasOwnProperty('cookie')){
         if(data.headers.cookie.indexOf('access_token'.length > -1)){
           //There is an access_token cookie, lets check if it belongs to an admin
-          oauth.getTokenAccessLevel(data.cookies.access_token, function(access_level){
+          oauth.getAccessLevel({token: data.cookies.access_token}, false, function(err, access_level){
             if(access_level >= 9){
               //The requester is allowed to get the records
               handlers.paxapi.application[data.method](data, callback);
@@ -419,7 +420,7 @@ var _internal = {};
 //Redirect user to the same url with the discord_id as queryStringObject
 _internal.redirectToDiscordId = function(data, callback){
   let code = data.queryStringObject.code;
-  oauth.getDiscordIdFromCode(code, 'application', function(id){
+  oauth.getDiscordId({code: code}, {redirect: 'application'}, function(err, id){
     if(id){
       callback(302, {Location: `https://${data.headers.host}/${data.path.replace('/html/', '')}?id=${id}`}, 'plain');
     }else{

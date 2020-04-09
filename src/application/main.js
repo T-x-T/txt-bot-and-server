@@ -6,7 +6,7 @@
 //Dependencies
 const config     = require('../../config.js');
 const mc_helpers = require('../minecraft/mc_helpers.js');
-const oauth      = require('../auth/oauth2.js');
+const discord_api= require('../discord_api');
 const sanitize   = require('sanitize-html');
 const data       = require('../data');
 const discord_helpers = require('../discord_bot/discord_helpers.js');
@@ -236,7 +236,7 @@ var _internal = {};
 
 //Adds the current discord nick and mc ign to an application object
 _internal.addNicks = function(doc, callback){
-  oauth.getUserObjectById(doc.discord_id, function(userObject){
+  discord_api.getUserObject({id: doc.discord_id}, false, function(err, userObject){
     if(userObject){
       mc_helpers.getIGN(doc.mc_uuid, function(mc_ign){
         if(mc_ign){

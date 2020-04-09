@@ -7,7 +7,7 @@
 //const config = require('./../config.js');
 const path = require('path');
 const fs = require('fs');
-const oauth = require('../auth/oauth2.js');
+const oauth = require('../auth');
 const web_helpers = require('./web-helpers.js');
 
 //Create the container
@@ -16,7 +16,7 @@ var widgets = {};
 //Get widgets for given access_level
 widgets.get = function(access_token, callback){
   //Get the access_level
-  oauth.getTokenAccessLevel(access_token, function(access_level){
+  oauth.getAccessLevel({token: access_token}, false, function(err, access_level){
     if(access_level >= 3 && access_level <= 9){
       let html = '';
       widgets.list.forEach((widget) => {

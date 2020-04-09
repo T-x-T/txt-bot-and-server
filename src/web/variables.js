@@ -12,7 +12,7 @@ const stats           = require('../stats');
 const os              = require('os');
 const post            = require('../post');
 const widgets         = require('./widgets.js');
-const oauth           = require('../auth/oauth2.js');
+const discord_api     = require('../discord_api');
 const user            = require('../user');
 const fs              = require('fs');
 const path            = require('path');
@@ -162,7 +162,7 @@ _getters.town_of_paxterya = function(callback){
 
 //Callsback an object for all widgets on the interface
 _getters.widgets = function(callback){
-  oauth.getUserObject(data.access_token, function(userObject){
+  discord_api.getUserObject({token: data.access_token}, false, function(err, userObject){
     if(userObject){
       user.get({discord: userObject.id}, {privacy: true, onlyPaxterians: true, first: true}, function(err, userData){
         if(!err){
