@@ -33,7 +33,7 @@ index.get = function(filter, type, options, callback) {
   if(options.hasOwnProperty('sub_type')) filter = {$and: [{sub_type: options.sub_type}, filter]};
   if(options.latest) options.first = true;
   if(options.hasOwnProperty('latest')) options.sort = {_id: -1};
-  
+  console.log(filter)
   backend.get(filter, type, options, function(err, docs){
     if(options.first === true){
       let output = docs.length > 0 ? docs[0] : [];
