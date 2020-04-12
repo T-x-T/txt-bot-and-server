@@ -190,6 +190,9 @@ const template = {
   'application-sent.html': {
     'pax_title': 'Success!'
   },
+  'index.html': {
+    'pax_title': 'Paxterya Minecraft Community'
+  },
   'contact-us.html': {
     'pax_title': 'Contact us!'
   },
@@ -229,6 +232,9 @@ const template = {
   },
   'littleroot-city.html': {
     'pax_title': 'Littleroot City'
+  },
+  'other-towns.html': {
+    'pax_title': 'Other Towns'
   },
   'faq.html': {
     'pax_title': 'FAQ'
