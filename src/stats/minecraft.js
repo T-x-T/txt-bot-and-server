@@ -113,8 +113,10 @@ function getLatestStats(uuid, callback){
         for(let i = 0; i < docs.length; i++){
           getLatestStats(docs[i].mcUUID, function(err, doc){
             stats.push(doc);
+            let errored = false;
+            if(err) errored = err;
             if(stats.length == docs.length){
-              callback(false, stats);
+              callback(errored, stats);
             } 
           });
         }

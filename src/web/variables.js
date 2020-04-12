@@ -138,7 +138,6 @@ _getters.blog = function(callback){
       body += post.body;
       body += `</section></article>`;
     });
-
     callback({
       'pax_title': 'Start page',
       'posts': body
@@ -184,9 +183,11 @@ const template = {
   'staff/application.html': _getters.application,
   'staff/post.html': _getters.post,
   'statistics.html': _getters.statistics,
-  'index.html': _getters.index,
   'blog.html': _getters.blog,
   'town-of-paxterya.html': _getters.town_of_paxterya,
+  'index.html': {
+    'pax_title': 'Paxterya'
+  },
   'application-sent.html': {
     'pax_title': 'Success!'
   },
@@ -236,22 +237,19 @@ const template = {
   'downloads.html': {
     'pax_title': 'Downloads'
   },
-  'blog.html': {
-    'pax_title': 'Blog'
-  },
   'widgets': _getters.widgets,
 
 };
 
 //Export the variables
 module.exports = function(local_data, callback) {
-  console.log(local_data.path)
+  //console.log(local_data.path)
   if(os.platform() != 'win32'){
     local_data.path = local_data.path.replace(path.join(__dirname, '../../web/'), '').replace('/html', '');
   }else{
     local_data.path = local_data.path.replace(path.join(__dirname, '../../web/'), '').replace('web\\html\\','').replace('\\', '/');
   }
-  console.log(local_data.path)
+  //console.log(local_data.path)
   data = local_data;
   let templateData = template[data.path];
   if(typeof templateData == 'object'){
