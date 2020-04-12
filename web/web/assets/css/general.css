@@ -1708,6 +1708,7 @@ p.faq {
 /* ################### town pages ###################*/
 article.town-screenies section {
   padding: 0;
+  border: none;
 }
 
 article.town-screenies img {
@@ -1717,4 +1718,15 @@ article.town-screenies img {
 
 .town-shortcuts {
   margin-bottom: 20px;
+}
+
+.screenie-gallery {
+  height: 400px;
+  width: 100%;
+  position: relative;
+  background: #343838;
+}
+
+.town {
+  margin-bottom: 50px;
 }
