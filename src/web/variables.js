@@ -117,7 +117,7 @@ _getters.statistics = function(callback){
 };
 
 //Calls back an object for the index.html
-_getters.index = function(callback){
+_getters.blog = function(callback){
   post.get({public: true}, false, function(err, posts){
     //Check if the post is in the future (here, because we cant really compare the dates directly)
     let filteredPosts = [];
@@ -185,6 +185,7 @@ const template = {
   'staff/post.html': _getters.post,
   'statistics.html': _getters.statistics,
   'index.html': _getters.index,
+  'blog.html': _getters.blog,
   'town-of-paxterya.html': _getters.town_of_paxterya,
   'application-sent.html': {
     'pax_title': 'Success!'
@@ -234,6 +235,9 @@ const template = {
   },
   'downloads.html': {
     'pax_title': 'Downloads'
+  },
+  'blog.html': {
+    'pax_title': 'Blog'
   },
   'widgets': _getters.widgets,
 

@@ -37,7 +37,7 @@ setInterval(function () {
 //Every 5 minutes
 setInterval(function(){
   try {
-    youtube.getNewestVideo();
+//    youtube.getNewestVideo();
   } catch(e) {
     global.log(3, 'Workers: Cant execute getNewestVideo', {Error: e});
   }
