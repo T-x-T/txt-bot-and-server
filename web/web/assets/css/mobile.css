@@ -5,7 +5,6 @@
         display: none;
     }
 
-
     img#logo {
         width: 250px;
         height: auto;
@@ -24,7 +23,6 @@
     #logoutbar {
         top: 55px;
     }
-
 
 /* ############### nav ###############*/
 
@@ -74,9 +72,12 @@ nav li a {
     font-size: 16pt;
 }
 
-nav li#join {
+nav li#join, nav li#nav-login {
     border: none;
-    padding: 20px 30px;
+    padding: 20px 0px 5px 30px;
+}
+
+nav li#nav-login {
     margin-bottom: 100px;
 }
 

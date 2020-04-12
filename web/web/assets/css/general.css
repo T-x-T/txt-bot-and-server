@@ -291,7 +291,7 @@ nav ul li:hover {
     background: #00515c;
 }
 
-nav ul li#join:hover {
+nav ul li#join:hover, nav ul li#nav-login:hover {
     background: transparent;
 }
 
@@ -310,13 +310,25 @@ nav i.fa-scroll {
     font-size: 13pt;
 }
 
-nav li#join a {
-    background: white;
-    color: #007787;
+nav li#join a, nav li#nav-login a {
     padding: 3px 20px;
     border-radius: 100px;
     pointer-events: auto;
     text-shadow: none;
+}
+
+nav li#join a {
+    background: white;
+    color: #007787;
+}
+
+nav li#nav-login a {
+    background: #60aeb8;
+    color: #00515c;
+}
+
+nav li#nav-login i {
+    color: #007787;
 }
 
 /* #########################################*/
@@ -417,18 +429,13 @@ footer a {
 }
 
 footer span,
-footer a:hover,
-footer #login {
+footer a:hover {
     color: #b8b8b8;
 }
 
 footer i {
     font-size: 10pt;
 
-}
-
-footer #login i {
-    margin-right: 5px;
 }
 
 /* #########################################*/

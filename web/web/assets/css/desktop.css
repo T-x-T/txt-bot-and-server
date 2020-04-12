@@ -44,15 +44,15 @@ nav ul li {
     padding: 15px;
 }
 
-nav li#join {
+nav li#join, nav li#nav-login {
     pointer-events: none;
 }
 
-nav li#join:hover {
+nav li#join:hover, nav li#nav-login:hover {
     transform: scale(1.1);
 }
 
-nav li#join:hover a {
+nav li#join:hover a, nav li#nav-login:hover a {
     box-shadow: 0px 0px 0px 3px #00515c;
 }
 
