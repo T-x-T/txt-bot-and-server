@@ -6,6 +6,10 @@
     list-style-type: none;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 ::selection {
     background: #00515c;
     color: #fff;
