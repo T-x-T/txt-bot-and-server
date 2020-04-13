@@ -35,13 +35,15 @@ handlers.paxterya = function (data, callback) {
   }else{
     //Its a normal website
     data.path = path.join(__dirname, '../../web/web/' + data.path);
-    webHelpers.finishHtml(data, 'paxterya', function (err, fileData) {
+    let site = 'paxterya';
+    if(data.path.indexOf('index') > 0) site = 'paxteryaIndex';
+    webHelpers.finishHtml(data, site, function (err, fileData) {
       if(!err && fileData.length > 0){
         callback(200, fileData, 'html');
       }else{
         //Nothing found, maybe its the index.html site?
         data.path = path.join(__dirname, '../../web/web/' + origPath + '/index.html');
-        webHelpers.finishHtml(data, 'paxterya', function(err, fileData){
+        webHelpers.finishHtml(data, 'paxteryaIndex', function(err, fileData){
           if(!err && fileData.length > 0){
             callback(200, fileData, 'html');
           }else{

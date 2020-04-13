@@ -35,6 +35,8 @@ webHelpers.readHtmlAndEncapsulate = function(path, site, callback){
   footerPath = site === 'paxterya' ? _path.join(__dirname, '../../web/web/html/footer.html') : 'false';
   headerPath = site === 'paxteryaStaff' ? _path.join(__dirname, '../../web/web/html/header.html') : headerPath;
   footerPath = site === 'paxteryaStaff' ? _path.join(__dirname, '../../web/web/html/footer.html') : footerPath;
+  headerPath = site === 'paxteryaIndex' ? _path.join(__dirname, '../../web/web/html/header_index.html') : headerPath;
+  footerPath = site === 'paxteryaIndex' ? _path.join(__dirname, '../../web/web/html/footer.html') : footerPath;
   //console.log(site)
   fs.readFile(path, 'utf8', function(err, html){
     if(!err && html.length > 0){

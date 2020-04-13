@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="assets/img/logo-icon.png" />
+    <link type="text/css" rel="stylesheet" href="assets/css/index.css">
     <link type="text/css" rel="stylesheet" href="assets/css/general.css">
     <link type="text/css" rel="stylesheet" href="assets/css/desktop.css">
     <link type="text/css" rel="stylesheet" href="assets/css/mobile.css">
@@ -20,62 +21,39 @@
     <title>{pax_title}</title>
 </head>
 
-<body>
+<body id="index">
 
     <div class="mobile-nav-height"></div>
 
     <header>
-        <a href="index.html"><img id="logo" src="assets/img/logo-big-white.svg" alt="Paxterya logo"></a>
 
-        <div class="mySlides fade">
-            <img src='https://play.paxterya.com/assets/screenshots-2019-12-08/compressed/2019-12-08_12.57.32.jpg' alt="Minecraft screenshot">
-        </div>
+        <div class="overlay">
+            <div class="fotorama" data-width="100%" data-height="100%" data-nav="none" data-transition="dissolve" data-autoplay="true" data-loop="true" data-click="false" data-arrows="false" data-fit="cover">
+                <img src="https://play.paxterya.com/assets/screenshots-2019-12-08/compressed/2019-12-08_12.57.32.jpg"/>
+                <img src="https://play.paxterya.com/assets/screenshots-2019-12-08/compressed/2019-12-08_12.57.45.jpg"/>
+                <img src="https://play.paxterya.com/assets/screenshots-2019-12-08/compressed/2019-12-08_12.58.07.jpg"/>
+                <img src="https://play.paxterya.com/assets/screenshots-2019-12-08/compressed/2019-12-08_12.58.17.jpg"/>>
+                <img src="https://play.paxterya.com/assets/screenshots-2019-12-08/compressed/2019-12-08_12.58.59.jpg"/>
+          </div>
+      </div>
 
-        <div class="mySlides fade">
-            <img src='https://play.paxterya.com/assets/screenshots-2019-12-08/compressed/2019-12-08_12.57.45.jpg' alt="Minecraft screenshot">
-        </div>
+      <a href="index.html"><img id="index-logo" src="assets/img/logo-vertical-white.svg" alt="Paxterya logo"></a>
 
-        <div class="mySlides fade">
-            <img src='https://play.paxterya.com/assets/screenshots-2019-12-08/compressed/2019-12-08_12.58.07.jpg' alt="Minecraft screenshot">
-        </div>
+      <p>Paxterya is a close-knit and dedicated Minecraft community playing on a Survival server. What we most enjoy is the freedom Minecraft has to offer. You can do anything on Paxterya: start big projects with others, construct a town, or go far away to found your very own empire. Let's be creative together!
+        <a href="https://discord.gg/mAjZCTG"><button><i class="fab fa-discord"></i> Join our Discord!</button></a>
+      </p>
 
-        <div class="mySlides fade">
-            <img src='https://play.paxterya.com/assets/screenshots-2019-12-08/compressed/2019-12-08_12.58.17.jpg' alt="Minecraft screenshot">
-        </div>
 
-        <div class="mySlides fade">
-            <img src='https://play.paxterya.com/assets/screenshots-2019-12-08/compressed/2019-12-08_12.58.59.jpg' alt="Minecraft screenshot">
-        </div>
 
-        <a class="prev" onclick='plusSlides(-1)'><i class="fas fa-chevron-left"></i></a>
-        <a class="next" onclick='plusSlides(1)'><i class="fas fa-chevron-right"></i></a>
-
-        <div class="banner">
-            <p class="headline">Visit us in-game:</p>
-
-            <span class="tooltip2" id="copyip">
-                <p class="ip" onclick="copyToClip(this.innerHTML)">play.paxterya.com</p>
-                <span class="tooltiptext" id="copiedip">Copy to clipboard</span>
-            </span>
-
-            <p class="players">{online_players} players online</p>
-            <p class="version">MC version 1.15.2 (Java Edition)</p>
-        </div>
+      <div class="header-down">
+          <a href="#navbar"><i class="fas fa-chevron-down"></i></a>
+      </div>
 
     </header>
 
-    <div class="header-height"></div>
-
-<p class="players mobile-only">{online_players} players online</p>
 
 
-    <div class="dots">
-        <span class="dot" onclick='currentSlide(1)'></span>
-        <span class="dot" onclick='currentSlide(2)'></span>
-        <span class="dot" onclick='currentSlide(3)'></span>
-        <span class="dot" onclick='currentSlide(4)'></span>
-        <span class="dot" onclick='currentSlide(5)'></span>
-    </div>
+
 
 
     <nav id="navbar">
