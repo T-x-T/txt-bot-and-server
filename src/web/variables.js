@@ -234,8 +234,8 @@ const template = {
   'littleroot-city.html': {
     'pax_title': 'Littleroot City'
   },
-  'other-towns.html': {
-    'pax_title': 'Other Towns'
+  'more-towns.html': {
+    'pax_title': 'More Towns'
   },
   'faq.html': {
     'pax_title': 'FAQ'
