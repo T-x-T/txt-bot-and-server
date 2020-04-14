@@ -73,6 +73,10 @@ button:focus {
     visibility: hidden;
 }
 
+.margin-top-20 {
+  margin-top: 20px;
+}
+
 iframe {
   border: none;
 }
@@ -1304,7 +1308,7 @@ button[id="submit"]:hover {
 /* world map */
 #map-container .datamap {
     margin-top: 20px;
-    max-width: 100%;
+  /*  max-width: 100%;*/
 }
 
 
@@ -1687,8 +1691,6 @@ p.faq {
 /* ################### zoom & pan feature ###################*/
 #SVGContainer {
   position: relative;
-  background-color: #f9f9f9;
-  margin-top: 20px;
 }
 
 #SVGContainer svg {

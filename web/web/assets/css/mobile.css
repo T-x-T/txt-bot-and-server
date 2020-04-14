@@ -1,7 +1,7 @@
 @media screen and (max-width:999px) {
 
     .mobile-hide, header .dots, .dots,
-    a.prev, a.next, img.author, #mapsection, .banner {
+    a.prev, a.next, img.author, .banner, #mapsection #controls {
         display: none;
     }
 
@@ -210,6 +210,11 @@ nav li ul li i {
 
 .member-profile .avatar {
     margin-top: 20px;
+}
+
+#mapsection section {
+  border-left: none;
+  padding: 0;
 }
 
 /* ################### interface ###################*/
