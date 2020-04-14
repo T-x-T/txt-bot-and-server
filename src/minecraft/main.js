@@ -9,23 +9,13 @@ const https = require('https');
 const user = require('../user');
 const fs = require('fs');
 const path = require('path');
-const Rcon = require('rcon');
 const { exec } = require('child_process');
-const discord_helpers = require('../discord_bot/discord_helpers.js');
 
 //REMOVE
 const data = require('../user/main.js');
 
 //Create the container
 var mc = {};
-
-//Create the global variable that holds the current player count
-global.mcPlayerCount = 0;
-
-/*
- *  Stuff about UUID -> IGN and IGN -> UUID conversion
- *
- */
 
 //Updates all IGNs from all members based on their UUID
 mc.updateAllIGNs = function(){
@@ -77,19 +67,19 @@ mc.getUUID = function(ign, callback){
         if(data.hasOwnProperty('id')){
           if(data.id.length == 32){
             //Returned object is valid
-            callback(data.id);
+            callback(false, data.id);
           }else{
-            callback(false);
+            callback('Data from API doesnt contain valid id. ' + data, false);
           }
         }else{
           //Data isnt valid
-          callback(false);
+          callback('Data from API doesnt contain id. ' + data, false);
         }
       });
     });
   }else{
     //The ign isnt ok
-    callback(false);
+    callback('The input isnt ok: ' + ign, false);
   }
 };
 
@@ -125,23 +115,23 @@ mc.getIGN = function(uuid, callback){
           //Check if the returned data makes sense
           if(data.hasOwnProperty('name')){
             //Returned object is valid
-            callback(data.name);
+            callback(false, data.name);
           }else{
             //Data isnt valid
-            callback(false);
+            callback('Data from API doesnt contain valid ign: ' + data, false);
           }
         }else{
-          callback(false);
+          callback('data isnt valid: ' + data, false);
         }
       });
     });
   }else{
     //The ign isnt ok
-    callback(false);
+    callback('The input isnt ok: ' + ign, false);
   }
 };
 
-mc.getRenderUrl = function(mcUUID){
+mc.returnRenderUrl = function(mcUUID){
   return `https://crafatar.com/renders/body/${mcUUID}?overlay=true`;
 };
 
@@ -203,102 +193,6 @@ mc.downloadStats = function(){
   void(exec(`rclone copy ${config['mc-stats-remote']}:/stats ./mc_stats`), (err, stdout, stderr) => {
     if (err) {
       global.log(2, 'Couldnt start the process to mount the sftp server', {error: err});
-    }
-  });
-};
-
-/*
- *  RCON
- *
- */
-
-//Initializes the connection to the rcon server, sends a message and terminates the connection again
-mc.rcon = function(cmd, callback){
-  //Check if cmd is an array
-  if(Array.isArray(cmd)){
-    cmd.forEach((_cmd) => {
-      mc.rcon(_cmd);
-    });
-  }else{
-    //Setup of the connection
-    let rconCon = new Rcon(config['rcon-server'], config['rcon-port'], config['rcon-password']);
-
-    //Establish the connection
-    rconCon.on('response', function(str) {
-      if(typeof callback == 'function') callback(str);
-    });
-    rconCon.on('auth', function() {
-      //Everything fine, send the command
-      global.log(0, 'mc_helpers successfully authenticated to the rcon server', {cmd: cmd});
-      rconCon.send(cmd);
-      //We can disconnect again
-      rconCon.disconnect();
-    });
-
-    //Connect
-    try {
-      rconCon.connect();
-    } catch(e) {
-      //Dont do anything
-    }
-  }
-};
-
-mc.getOnlinePlayers = function(callback){
-  mc.rcon('list', function(str){
-    callback(parseInt(str.replace('There are ', '')));
-  });
-};
-
-mc.updateOnlinePlayers = function(){
-  mc.getOnlinePlayers(function(count){
-    global.mcPlayerCount = count;
-  });
-};
-
-//Updates the role prefixes on the server
-mc.updateRoles = function(){
-  //Dont run this when we are testing
-  if(!config['use-external-certs']) return;
-
-  //Get all members
-  user.get({}, {privacy: true, onlyPaxterians: true}, function(members){
-    if(members){
-      //Container for all commands to send once where done preparing
-      let commands = [];
-      //Build and Add prefix for each member to commands
-      let j = 0;
-      members.forEach((member) => {
-        discord_helpers.getMemberObjectByID(member.discord, function(memberObj) {
-          if(memberObj) {
-            //Check roles
-            let roles = memberObj.roles.array();
-            for(let i = 0;i < roles.length;i++) roles[i] = roles[i].name;
-            
-            //Set up the prefix
-            let prefix = "";
-            if(roles.indexOf('veteran') > -1) prefix = '&5og';
-            if(roles.indexOf('cool kid squad') > -1) prefix = '&bcool';
-            if(roles.indexOf('utp') > -1) prefix = '&6utp';
-            if(roles.indexOf('developer') > -1) prefix = '&3dev';
-            if(roles.indexOf('admin') > -1) prefix = '&4admin';
-
-            if(prefix) {
-              //There is a prefix, lets finish it up
-              prefix = `[${prefix}&r]`;
-            }else{
-              //There is no prefix, send clear to clear it
-              prefix = 'clear';
-            }
-
-            //Now add the command to the list of commands to send
-            commands.push(`paxprefix ${member.mcName} ${prefix}`);
-          }
-          //Now check if this was the last execution of the loop
-          j++;
-          if(j == members.length - 1) mc.rcon(commands);
-        });
-      }); 
     }
   });
 };
