@@ -5,7 +5,7 @@
 
 const log = require('../../log');
 const config = require('../../../config.js');
-const mc_helpers = require('../../minecraft/mc_helpers.js');
+const mc_helpers = require('../../minecraft');
 const discord_helpers = require('../discord_helpers.js');
 const user = require('../../user');
 
@@ -212,7 +212,7 @@ module.exports = {
               user.updateNicks();
               break;
             case 'updatestats':
-              mc_helpers.updateStats();
+              //mc_helpers.updateStats();
               break;
             case 'updateallnicks':
               discord_helpers.updateAllNicks();
@@ -235,7 +235,7 @@ module.exports = {
                 cmd += arg;
                 cmd += ' ';
               });
-              mc_helpers.rcon(cmd.trim());
+              mc_helpers.sendCmd(cmd.trim());
               break;
           }
           break;

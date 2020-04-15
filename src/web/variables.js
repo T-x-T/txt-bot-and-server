@@ -7,7 +7,7 @@
 const config          = require('../../config.js');
 const application     = require('../application');
 const discord_helpers = require('../discord_bot/discord_helpers.js');
-const mc_helpers      = require('../minecraft/mc_helpers.js');
+const mc_helpers      = require('../minecraft');
 const stats           = require('../stats');
 const os              = require('os');
 const post            = require('../post');
@@ -73,7 +73,7 @@ _getters.application = function(callback){
           'publish_age': doc.publish_age,
           'publish_country': doc.publish_country,
           'discord_avatar': discord_avatar_url,
-          'mc_skin': `<img src="${mc_helpers.getRenderUrl(doc.mc_uuid)}"></img>`,
+          'mc_skin': `<img src="${mc_helpers.returnRenderUrl(doc.mc_uuid)}"></img>`,
           'status': statusText
         });
       });

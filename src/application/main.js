@@ -5,7 +5,7 @@
 
 //Dependencies
 const config     = require('../../config.js');
-const mc_helpers = require('../minecraft/mc_helpers.js');
+const mc_helpers = require('../minecraft');
 const discord_api= require('../discord_api');
 const sanitize   = require('sanitize-html');
 const data       = require('../data');
@@ -17,7 +17,7 @@ var application = {};
 //Save an application
 application.write = function(input, callback){
   //Check if all inputs are ok
-  mc_helpers.getUUID(input.mc_ign, function(uuid){
+  mc_helpers.getUUID(input.mc_ign, function(er, uuid){
     if(uuid){
       //Get all applications of the member to find out if they already have accepted or pending review applications
       application.read({$or: [{mc_uuid: uuid}, {discord_id: input.discord_id}]}, function(err, docs){
@@ -238,7 +238,7 @@ var _internal = {};
 _internal.addNicks = function(doc, callback){
   discord_api.getUserObject({id: doc.discord_id}, false, function(err, userObject){
     if(userObject){
-      mc_helpers.getIGN(doc.mc_uuid, function(mc_ign){
+      mc_helpers.getIGN(doc.mc_uuid, function(err, mc_ign){
         if(mc_ign){
           try{
             doc = doc.toObject(); //Convert to a normal object

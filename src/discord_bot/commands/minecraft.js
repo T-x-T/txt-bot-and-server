@@ -4,7 +4,6 @@
 */
 
 const user = require('../../user');
-const mc_helpers = require('../../minecraft/mc_helpers.js');
 const stats = require('../../stats');
 
 module.exports = {
