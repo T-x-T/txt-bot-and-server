@@ -12,6 +12,7 @@ const discord_api = require('../src/discord_api');
 const widgets = require('../src/web/widgets.js');
 const discord_helpers = require('./../src/discord_bot/discord_helpers.js');
 const user = require('../src/user');
+const stats = require('../src/stats');
 
 //Stuff that should run on startup
 mc_helpers.updateOnlinePlayers();
@@ -51,17 +52,10 @@ setInterval(function(){
   discord_api.updateCache();
 }, 1000 * 60 * 60);
 
-/* //Every six hours
+//Every six hours
 setInterval(function(){
-  mc_helpers.downloadStats();
-
-  //Timeout so the stats finished downloading
-  setTimeout(function(){
-    mc_helpers.updateStats();
-  }, 1000);
-
-  mc_helpers.createStatsObjectTemplate(function() {});
-}, 1000 * 60 * 60 * 6); */
+  stats.updateMcStats();
+}, 1000 * 60 * 60 * 6);
 
 //Every day
 setInterval(function(){
