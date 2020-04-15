@@ -11,8 +11,8 @@
 
 <p>The Town of Paxterya was the very first town on our server, founded by TxT who was the temporary mayor until elections were held. Currently, the undoubtedly biggest town in the paxteryan lands is governed by Veikmaster and jadesheep. Have a look at our map below and come visit us!</p>
 
-    <div onload="fix_toggle" id="SVGContainer">
-      {map}    
+    <div onload="fix_toggle" id="SVGContainer" class="margin-top-20">
+      {map}
       <div id="controls">
         <svg version="1.1">
           <g transform="translate(10,10)">
@@ -81,25 +81,23 @@
     </section>
 </article>
 
-<article class="town-screenies">
-    <h2>Impressions</h2>
-    <span class="subtitle"></span>
-    <section>
-      <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya1.jpg"/>
-      <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya2.jpg"/>
-      <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya3.jpg"/>
-      <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya4.jpg"/>
-      <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya5.jpg"/>
-      <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya6.jpg"/>
-      <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya7.jpg"/>
-      <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya8.jpg"/>
-      <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya9.jpg"/>
-      <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya10.jpg"/>
-      <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya11.jpg"/>
-      <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya12.jpg"/>
 
-    </section>
-</article>
+
+<div class="fotorama" data-width="100%" data-ratio="1920/1080" data-max-width="100%" data-nav="thumbs" data-thumbwidth="100" data-thumbheight="50" data-transition="crossfade" data-loop="true">
+  <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya1.jpg">
+  <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya2.jpg"/>
+  <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya3.jpg"/>
+  <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya4.jpg"/>
+  <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya5.jpg"/>
+  <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya6.jpg"/>
+  <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya7.jpg"/>
+  <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya8.jpg"/>
+  <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya9.jpg"/>
+  <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya10.jpg"/>
+  <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya11.jpg"/>
+  <img src="https://play.paxterya.com/assets/screenshots-2020-03-01/townofpaxterya12.jpg"/>
+</div>
+
 
 </div>
 
@@ -133,9 +131,6 @@
             });
         </script>
 
-
-
-
   <script>
     document.addEventListener("onload",fix_toggle()); //lgtm [js/use-of-returnless-function]
     function fix_toggle() {
@@ -145,8 +140,6 @@
     }
   </script>
 
-
-
   <script>
     function toggleDisplay(me) {
       if(me.getAttribute("opacity")=="100")
@@ -155,8 +148,6 @@
         me.setAttribute("opacity","100")
     }
   </script>
-
-
 
 
   </body>

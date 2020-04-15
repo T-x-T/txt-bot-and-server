@@ -1,0 +1,251 @@
+/* ----------- ALL DEVICES ----------- */
+body#index {
+  background: #00515c;
+}
+
+/* HEADER */
+#index header {
+  border: none;
+}
+
+#index header #index-logo, #index .header-down, #index header p, #index header button {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+#index header #index-logo {
+  width: auto;
+  top: 10%;
+  filter: drop-shadow(0px 3px 10px rgba(0, 0, 0, .5));
+}
+
+#index header #index-logo:hover {
+  opacity: .7;
+}
+
+#index header p {
+  top: 50%;
+  transform: translate(-50%,-50%);
+  width: 500px;
+  max-width: 90%;
+  font-family: "regular";
+  color: white;
+  font-size: 14pt;
+  text-shadow: 0px 1px 0px black;
+  line-height: 1.5;
+  text-align: justify;
+  background-color: rgba(16,47,54,.5);
+  box-shadow: 0px 0px 5px #102f36 inset;
+  padding: 10px 15px;
+}
+
+#index header button {
+  bottom: -60px;
+  border-radius: 100px;
+  font-size: 16pt;
+  text-shadow: 1px 2px 0px #00515c;
+  padding: 2px 18px;
+  box-shadow: 0px 0px 10px #102f36;
+}
+
+#index header button i {
+  color: #60aeb8;
+  margin-right: 5px;
+}
+
+#index .header-down {
+  position: absolute;
+  bottom: 20px;
+}
+
+#index .header-down a {
+  color: white;
+  font-size: 30pt;
+  opacity: .5;
+}
+
+#index .header-down a:hover {
+  opacity: 1;
+}
+
+#index .overlay::after {
+    background-image: radial-gradient(transparent 50%, rgba(0,0,0,.3) 70%),
+    linear-gradient(0deg, rgba(0,0,0,.3) 0%, transparent 5%, transparent 80%, rgba(0,0,0,.3) 100%),
+    linear-gradient(rgba(0,81,92,.6) 0%, rgba(0,81,92,.6) 100%);
+    display: block;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    content: '';
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+/* CINEMATIC */
+
+section#cinematic {
+  background: #007787;
+  padding: 20px 0;
+  border-top: 20px solid #00626f;
+  border-bottom: 20px solid #00626f;
+  box-shadow: 0px 0px 100px black;
+  box-shadow: 0px 0px 100px #003840;
+}
+
+section#cinematic iframe {
+  width: 100%;
+  height: 600px;
+}
+
+
+/* FEATURES */
+section#features {
+    padding: 50px 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+section#features .featurelist {
+    width: 300px;
+    max-width: 75%;
+    margin-bottom: 30px;
+}
+
+section#howtojoin {
+  display: flex;
+  justify-content: space-around;
+  margin: 50px 0;
+}
+
+section#howtojoin .featurelist {
+    width: 600px;
+    max-width: 75%;
+}
+
+section#howtojoin .featurelist li {
+    padding-bottom: 15px;
+}
+
+.featurelist .headline {
+    background: white;
+    color: #007787;
+    margin-left: -30px;
+    font-size: 18pt;
+    padding: 5px 15px;
+    display: inline-block;
+    height: 32px;
+    position: relative;
+    font-family: "semibold";
+    white-space: nowrap;
+    width: 150px;
+}
+
+.featurelist .headline:before {
+    content: "";
+    border-style: solid;
+    border-width: 0 30px 30px 0;
+    border-color: transparent #b8b8b8 transparent transparent;
+    position: absolute;
+    left: 0px;
+    top: 42px;
+}
+
+.featurelist .text {
+    background: #007787;
+    color: white;
+    padding: 10px 15px;
+    font-size: 14pt;
+    text-shadow: 0px 1px 0px #00515c;
+    line-height: 1.5;
+    width: 100%;
+}
+
+.featurelist .text a {
+  color: #fff;
+  font-family: "semibold";
+}
+
+.featurelist p {
+  color: #fff;
+  width: 100%;
+}
+
+section#howtojoin .text > :first-child {
+  padding-bottom: 15px;
+}
+
+section#howtojoin .text {
+  padding: 20px 15px 10px 15px;
+}
+
+section#howtojoin .text li p {
+  padding-left: 12px;
+
+}
+
+.featurelist .text a:hover {
+  opacity: .7;
+}
+
+.featurelist .text li:before {
+    content: "▪";
+    color: #60aeb8;
+    padding-right: 5px;
+}
+
+/* FOOTER */
+
+#index main {
+  width: 100%;
+}
+
+#index footer {
+  background: #003941;
+  width: 100%;
+}
+
+#index footer span, #index footer a {
+  color: #60aeb8;
+}
+
+#index footer::before, #index footer::after {
+  display: none;
+}
+
+
+/* ----------- DESKTOP VIEW ----------- */
+@media screen and (min-width:1000px) {
+  #index header #index-logo {
+    height: 200px;
+  }
+}
+
+
+/* ----------- MOBILE VIEW ----------- */
+@media screen and (max-width:999px) {
+  section#cinematic iframe {
+    width: 100%;
+    height: 200px;
+  }
+
+  #index header #index-logo {
+    width: 100px;
+    max-width: 30%;
+    height: auto;
+  }
+
+  #index header p {
+    font-size: 12pt;
+    width: 80%;
+  }
+
+  #index .header-down {
+    bottom: 60px;
+  }
+}

@@ -117,7 +117,7 @@ _getters.statistics = function(callback){
 };
 
 //Calls back an object for the index.html
-_getters.index = function(callback){
+_getters.blog = function(callback){
   post.get({public: true}, false, function(err, posts){
     //Check if the post is in the future (here, because we cant really compare the dates directly)
     let filteredPosts = [];
@@ -138,7 +138,6 @@ _getters.index = function(callback){
       body += post.body;
       body += `</section></article>`;
     });
-
     callback({
       'pax_title': 'Start page',
       'posts': body
@@ -184,10 +183,16 @@ const template = {
   'staff/application.html': _getters.application,
   'staff/post.html': _getters.post,
   'statistics.html': _getters.statistics,
-  'index.html': _getters.index,
+  'blog.html': _getters.blog,
   'town-of-paxterya.html': _getters.town_of_paxterya,
+  'index.html': {
+    'pax_title': 'Paxterya'
+  },
   'application-sent.html': {
     'pax_title': 'Success!'
+  },
+  'index.html': {
+    'pax_title': 'Paxterya Minecraft Community'
   },
   'contact-us.html': {
     'pax_title': 'Contact us!'
@@ -229,6 +234,9 @@ const template = {
   'littleroot-city.html': {
     'pax_title': 'Littleroot City'
   },
+  'more-towns.html': {
+    'pax_title': 'More Towns'
+  },
   'faq.html': {
     'pax_title': 'FAQ'
   },
@@ -241,13 +249,13 @@ const template = {
 
 //Export the variables
 module.exports = function(local_data, callback) {
-  console.log(local_data.path)
+  //console.log(local_data.path)
   if(os.platform() != 'win32'){
     local_data.path = local_data.path.replace(path.join(__dirname, '../../web/'), '').replace('/html', '');
   }else{
     local_data.path = local_data.path.replace(path.join(__dirname, '../../web/'), '').replace('web\\html\\','').replace('\\', '/');
   }
-  console.log(local_data.path)
+  //console.log(local_data.path)
   data = local_data;
   let templateData = template[data.path];
   if(typeof templateData == 'object'){
