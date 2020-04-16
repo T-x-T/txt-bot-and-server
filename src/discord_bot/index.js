@@ -47,7 +47,14 @@ emitter.on('application_accepted_joined', (doc) => {
   discord_helpers.addMemberToRole(discord_id, discord_helpers.getRoleId('paxterya'), function(err) {
     if(err) global.log(2, 'discord_bot couldnt add accepted member to role', {application: doc, err: err});
   });
-  discord_helpers.updateNick(app.discord_id);
+  discord_helpers.updateNick(doc.discord_id);
+
+  let msg = '';
+  if(doc.publish_about_me) msg = `Welcome <@${doc.discord_id}> to Paxterya!\nHere is the about me text they sent us:\n${doc.about_me}`;
+    else msg = `Welcome <@${doc.discord_id}> to Paxterya!`;
+  msg += '\n\n This means you can now join the Server! If you have any troubles please ping the admins!\n';
+  msg += 'It is also a good time to give our rules a read: https://paxterya.com/rules \n';
+  msg += 'Please also take a look at our FAQ: https://paxterya.com/faq';
   discord_helpers.sendMessage(msg, config['new_member_announcement_channel'], function(err) {
     if(err) global.log(2, 'discord_bot couldnt send the welcome message', {err: err, application: doc});
   });
