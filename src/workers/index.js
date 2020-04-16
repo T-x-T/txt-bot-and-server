@@ -5,35 +5,42 @@
 
 //Dependencies
 //const config = require('./../config.js');
-const youtube = require('../src/youtube');
-const log = require('./../src/log');
-const mc_helpers = require('../src/minecraft');
-const discord_api = require('../src/discord_api');
-const widgets = require('../src/web/widgets.js');
-const discord_helpers = require('./../src/discord_bot');
-const user = require('../src/user');
-const stats = require('../src/stats');
+const youtube         = require('../youtube');
+const log             = require('../log');
+const mc_helpers      = require('../minecraft');
+const discord_api     = require('../discord_api');
+const widgets         = require('../web/widgets.js');
+const discord_helpers = require('../discord_bot');
+const user            = require('../user');
+const stats           = require('../stats');
 
 //Stuff that should run on startup
 mc_helpers.updateOnlinePlayers();
-log.prune(30);
-//mc_helpers.createStatsObjectTemplate(function(){});
-widgets.init();
 
-//Stuff that should be run 5 seconds after startup, ONLY FOR THINGS THAT NEED THE BOT LOGGED IN
-setTimeout(function(){
-  mc_helpers.updateRoles();
-}, 1000 * 5);
+log.prune(30);
+
+widgets.init();
 
 //Contains discord user objects mapped by the discord id; gets cleared once an hour in workers
 global.cache = {};
 global.cache.discordUserObjects = {};
 discord_api.updateCache();
 
+
+
+//Stuff that should be run once the bot logged in
+emitter.once('discord_bot_ready', (client) => {
+  mc_helpers.updateRoles();
+});
+
+
+
 //Every minute
 setInterval(function () {
   mc_helpers.updateOnlinePlayers();
 }, 1000 * 60);
+
+
 
 //Every 5 minutes
 setInterval(function(){
@@ -44,6 +51,8 @@ setInterval(function(){
   }
 }, 1000 * 60 * 5);
 
+
+
 //Every hour
 setInterval(function(){
   user.updateNicks();
@@ -52,10 +61,14 @@ setInterval(function(){
   discord_api.updateCache();
 }, 1000 * 60 * 60);
 
+
+
 //Every six hours
 setInterval(function(){
   stats.updateMcStats();
 }, 1000 * 60 * 60 * 6);
+
+
 
 //Every day
 setInterval(function(){
