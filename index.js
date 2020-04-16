@@ -11,7 +11,7 @@ emitter = new Emitter();
 //Dependencies
 const log = require('./src/log'); //lgtm [js/unused-local-variable]
 const webServer = require('./src/web/webServer.js');
-const discordBot = require('./src/discord_bot/discord_bot.js');
+const discordBot = require('./src/discord_bot');
 const workers = require('./workers/workers.js'); //lgtm [js/unused-local-variable]
 
 //Log that the app got started

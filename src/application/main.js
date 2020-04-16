@@ -9,7 +9,7 @@ const mc_helpers = require('../minecraft');
 const discord_api= require('../discord_api');
 const sanitize   = require('sanitize-html');
 const data       = require('../data');
-const discord_helpers = require('../discord_bot/discord_helpers.js');
+const auth       = require('../auth');
 
 //Create the container
 var application = {};
@@ -65,7 +65,6 @@ application.write = function(input, callback){
                   _internal.addNicks(document, function(err, newDoc){
                     emitter.emit('application_new', newDoc);
                   });
-                  //discord_helpers.sendMessage('New application from ' + input.mc_ign + '\nhttps://paxterya.com/staff/application.html?id=' + doc.id, config['new_application_announcement_channel'], function(err){});
                 }else{
                   global.log(2, 'application_write couldnt save an application to the db', {err: err, application: input});
                   callback(500, 'An error occured while trying to save your application');
@@ -138,7 +137,7 @@ application.changeStatus = function(id, newStatus, reason, callback){
                 //Member got accepted
                 emitter.emit('application_accepted', doc);
                 //Check if the member is already on the discord server
-                if(discord_helpers.isGuildMember(doc.discord_id)){
+                if(auth.isGuildMember(doc.discord_id)){
                   //Start the acception routine
                   application.acceptWorkflow(doc.discord_id, doc);
                   callback(200);
@@ -163,7 +162,7 @@ application.changeStatus = function(id, newStatus, reason, callback){
   });
 };
 
-//This functions does everything necessary to make an accepted member a real member:
+//This functions emits the even necessary so everything makes an accepted member a real member:
 //1. Create the member object in the db
 //2. Give the member the paxterya role
 //3. Whitelist the member on the server
@@ -172,64 +171,8 @@ application.changeStatus = function(id, newStatus, reason, callback){
 application.acceptWorkflow = function(discord_id){
   application.read({discord_id: discord_id}, function(err, app){
     emitter.emit('application_accepted_joined', app[0]);
-    
-    
-    /* app = app[0];
-    if(!err && app){
-      //1. Create the member object in the db
-      user.checkMemberExist(discord_id, true, function(exists) {
-        //It doesnt matter if the member already exists or not, we can now get their object and modify it
-        user.getUserData(discord_id, function(err, doc) {
-          if(!err) {
-            doc.mcName = app.mc_ign;
-            doc.mcUUID = app.mc_uuid;
-            doc.birth_year = app.birth_year;
-            doc.birth_month = app.birth_month;
-            doc.country = app.country;
-            doc.publish_age = app.publish_age;
-            doc.publish_country = app.publish_country;
-            doc.status = 1;
-
-            //Save the changes back into the db
-            user.updateUserData(discord_id, doc, function(err) {
-              if(!err) {
-                //2. Give the member the paxterya role
-                discord_helpers.addMemberToRole(discord_id, discord_helpers.getRoleId('paxterya'), function(err) {
-                  if(!err) {
-                    //3. Whitelist the member on the server
-                    mc_helpers.rcon(`whitelist add ${app.mc_ign}`);
-                    discord_helpers.updateNick(app.discord_id);
-
-                    //4. Announce the new member on the discord and if publish_about_me is true, publish that too.
-                    let msg = '';
-                    if(app.publish_about_me) msg = `Welcome <@${app.discord_id}> to Paxterya!\nHere is the about me text they sent us:\n${app.about_me}`;
-                    else msg = `Welcome <@${app.discord_id}> to Paxterya!`
-
-                    discord_helpers.sendMessage(msg, config['new_member_announcement_channel'], function(err) {
-                      if(err) global.log(2, 'application.acceptWorkflow couldnt send the welcome message', {err: err});
-                    });
-                  } else {
-                    global.log(2, 'application.acceptWorkflow couldnt add the member to the paxterya role', {});
-                  }
-                });
-              } else {
-                global.log(2, 'application.acceptWorkflow couldnt update the member object', {err: err});
-              }
-            });
-          } else {
-            global.log(2, 'application.acceptWorkflow couldnt get the member object', {});
-          }
-        });
-      }); 
-    }else{
-      global.log(2, 'application.acceptWorkflow couldnt find the user', app);
-    }
-    */
-
-
   });
 };
-
 
 
 var _internal = {};

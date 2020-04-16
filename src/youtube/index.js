@@ -83,14 +83,5 @@ youtube.postIfNew = function (video) {
   }
 };
 
-//posts a new video to discord
-/* youtube.post = function(video){
-  discordHelpers.sendMessage(`New Video: ${video.title} by ${video.channel_title}\n${video.url}\n<@&${video.channel.role}>`, video.channel.channel_id, function(err) {
-    if(err) {
-      global.log(3, 'YouTube: Cant send message about new video', {Error: err});
-    }
-  });
-}; */
-
 //Export the container
 module.exports = youtube;

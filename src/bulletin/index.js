@@ -7,7 +7,7 @@
 const config = require('../../config.js');
 const main = require('./main.js');
 const sanitize = require('sanitize-html');
-const discord_helpers = require('../discord_bot/discord_helpers.js');
+const auth = require('../auth');
 
 //Create the container
 var index = {};
@@ -43,7 +43,7 @@ index.save = function(input, options, callback){
             main.update(input, callback);
           } else {
             //Check if new author is admin
-            if(discord_helpers.getAccessLevel(input.editAuthor) >= 9) {
+            if(auth.getAccessLevel({id: input.editAuthor}, false) >= 9) {
               //New author is admin
               main.update(input, callback);
             } else {
@@ -84,7 +84,7 @@ index.delete = function(input, options, callback) {
         main.delete({_id: input._id}, callback);
       } else {
         //Check if new author is admin
-        if(discord_helpers.getAccessLevel(input.deleteAuthor) >= 9) {
+        if(auth.getAccessLevel({id: input.deleteAuthor}, false) >= 9) {
           //New author is admin
           main.delete({_id: input._id}, callback);
         } else {

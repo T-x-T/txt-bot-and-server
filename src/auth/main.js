@@ -7,11 +7,34 @@
 const config = require('../../config.js');
 const qs     = require('querystring');
 const https  = require('https');
-const discord_helpers = require('../discord_bot/discord_helpers.js');
+const discord_helpers = require('../discord_bot');
 const discord_api = require('../discord_api');
+
+var client;
+
+emitter.once('discord_bot_ready', (_client) => {
+  client = _client;
+});
+
 
 //Create the container
 var oauth = {};
+
+oauth.returnAccessLevel = function(userID){
+  let access_level = 0;
+  
+  try{
+    if(client.guilds.get(config['guild']).members.get(userID).roles.has(config["paxterya-role"])) access_level = 3;
+    if(client.guilds.get(config['guild']).members.get(userID).roles.has(config["admin-role"])) access_level = 9;
+  }catch(e){}
+
+  return access_level;
+};
+
+//Returns true if the given discord id is member of the guild and false if not
+oauth.isGuildMember = function(userID){
+  return client.guilds.get(config['guild']).members.has(userID);
+};
 
 //Takes a code and returns the discord_id
 oauth.getDiscordIdFromCode = function(code, redirect, callback){
@@ -27,7 +50,7 @@ oauth.getDiscordIdFromCode = function(code, redirect, callback){
 //Calls back true if the given access_token belongs to an admin
 oauth.getTokenAccessLevel = function(access_token, callback){
   oauth.getDiscordIdFromToken(access_token, function(err, discord_id){
-    let access_level = discord_helpers.getAccessLevel(discord_id);
+    let access_level = oauth.returnAccessLevel(discord_id);
     if(access_level){
       callback(false, access_level);
     }else{
@@ -51,7 +74,7 @@ oauth.getDiscordIdFromToken = function(access_token, callback) {
 oauth.getCodeAccessLevel = function(code, redirect, callback){
   oauth.getDiscordIdFromCode(code, redirect, function(err, discord_id, access_token){
     if(discord_id){
-      callback(false, discord_helpers.getAccessLevel(discord_id), access_token); //handlers.paxLogin sets the access_token as a cookie
+      callback(false, oauth.returnAccessLevel(discord_id), access_token); //handlers.paxLogin sets the access_token as a cookie
     }else{
       callback('Couldnt get valid discord_id, this is what we got: ' + discord_id, false);
     }

@@ -9,7 +9,7 @@ const fs             = require('fs');
 const Discord        = require('discord.js');
 const client         = new Discord.Client();
 const _user          = require('../user');
-const discordHelpers = require('../discord_bot/discord_helpers.js');
+const discordHelpers = require('../discord_bot/helpers.js');
 const application    = require('../application');
 
 //Create the container
@@ -17,11 +17,9 @@ var discordBot = {};
 
 //Gets called when everything is ok and the bot is logged in
 client.once('ready', () => {
-  emitter.emit('discord_bot_ready');
+  emitter.emit('discord_bot_ready', client);
   console.log('The Discord bot is ready!');
   client.user.setActivity('your messages',{type: 'LISTENING'});
-  //Hand the client object over to discord_helpers.js
-  discordHelpers.init(client);
   //Finally log that we sucessfully started
   global.log(1, 'Discord Bot connected sucessfully', null);
 });
@@ -135,12 +133,6 @@ client.on('guildBanAdd', (guild, user) => {
   _user.delete({discord: user.id}, options, function(err){});
   emitter.emit('user_banned', user);
   discordHelpers.sendMessage(`${user.displayName} was banned from the server`, config['new_application_announcement_channel'], function(e){});
-});
-
-emitter.on('application_accepted', (doc) => {
-  if(discordHelpers.isGuildMember(doc.discord_id)){
-    application.acceptWorkflow(doc.discord_id)
-  }
 });
 
 //Gets called whenever a new member joins the guild

@@ -6,7 +6,7 @@
 const log = require('../../log');
 const config = require('../../../config.js');
 const mc_helpers = require('../../minecraft');
-const discord_helpers = require('../discord_helpers.js');
+const discord_helpers = require('../helpers.js');
 const user = require('../../user');
 
 module.exports = {

@@ -5,7 +5,7 @@
 
 //Requirements
 const user = require('../../user');
-const discordHelpers = require('../discord_helpers.js');
+const discordHelpers = require('../helpers.js');
 
 module.exports = {
   name: 'karma',

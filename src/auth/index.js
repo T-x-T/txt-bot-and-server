@@ -25,16 +25,21 @@ index.getDiscordId = function(input, options, callback){
 
 //Gets the access_level from an input
 //input is an object containing one key for the type of input and the value
-//Valid types are: code, token
+//Valid types are: code, token, id
 index.getAccessLevel = function(input, options, callback){
   if(input.hasOwnProperty('code')){
     main.getCodeAccessLevel(input.code, options.redirect, callback);
   }else if (input.hasOwnProperty('token')){
     main.getTokenAccessLevel(input.token, callback);
+  }else if (input.hasOwnProperty('id')){
+    if(typeof callback == 'function') callback(main.returnAccessLevel(input.id));
+      else return main.returnAccessLevel(input.id);
   }else{
     callback('No valid input received, input: ' + input, false);
   }
 };
+
+index.isGuildMember = main.isGuildMember;
 
 //Export the container
 module.exports = index;

@@ -3,7 +3,7 @@
 *	With this command users can manage their role membership for certain roles
 */
 
-const discordHelpers = require('../discord_helpers.js');
+const discordHelpers = require('../helpers.js');
 const config = require('../../../config.js');
 
 module.exports = {

@@ -6,7 +6,7 @@
 //Dependencies
 const config          = require('../../config.js');
 const application     = require('../application');
-const discord_helpers = require('../discord_bot/discord_helpers.js');
+const discord_helpers = require('../discord_bot');
 const mc_helpers      = require('../minecraft');
 const stats           = require('../stats');
 const os              = require('os');
@@ -20,7 +20,6 @@ const path            = require('path');
 //Create internal container
 var _internal = {};
 var data;
-var globalObject;
 
 //Generates options for all years from the current year-80 and current year - 8
 _internal.generateBirthyearOptions = function(callback){

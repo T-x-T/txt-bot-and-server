@@ -10,7 +10,7 @@ const log = require('./../src/log');
 const mc_helpers = require('../src/minecraft');
 const discord_api = require('../src/discord_api');
 const widgets = require('../src/web/widgets.js');
-const discord_helpers = require('./../src/discord_bot/discord_helpers.js');
+const discord_helpers = require('./../src/discord_bot');
 const user = require('../src/user');
 const stats = require('../src/stats');
 

@@ -55,7 +55,7 @@ helpers.sendMessage = function (message, channelID, callback) {
 
 //Returns all roles from the guild defined in config.js
 //Returns only roles that members are allowed to join/leave themselves!
-helpers.getRoles = function(){
+helpers.returnRoles = function(){
   let roles = [];
   client.guilds.get(config.guild).roles.map(function(item){
     if(item.name.indexOf('#') > -1) roles.push({id: item.id, name: item.name});
@@ -64,7 +64,7 @@ helpers.getRoles = function(){
 };
 
 //Returns the role ID of a role by name
-helpers.getRoleId = function(roleName){
+helpers.returnRoleId = function(roleName){
   let id = -1;
   client.guilds.get(config.guild).roles.map(function(item){
     if(item.name == roleName) id = item.id;
@@ -77,18 +77,6 @@ helpers.addMemberToRole = function(discordID, roleID, callback){
   client.guilds.get(config['guild']).members.get(discordID).addRole(roleID)
   .then(callback(false))
   .catch(callback(true));
-};
-
-//Returns true if  the given member is admin and false if not
-helpers.getAccessLevel = function(userID){
-  let access_level = 0;
-  
-  try{
-    if(client.guilds.get(config['guild']).members.get(userID).roles.has(config["paxterya-role"])) access_level = 3;
-    if(client.guilds.get(config['guild']).members.get(userID).roles.has(config["admin-role"])) access_level = 9;
-  }catch(e){}
-
-  return access_level;
 };
 
 //Returns true if the given discord id is member of the guild and false if not
