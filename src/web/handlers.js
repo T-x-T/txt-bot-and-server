@@ -69,7 +69,6 @@ handlers.assets = function (data, callback) {
   if (data.path.length > 0) {
     //Read in the asset
     fs.readFile(path.join(__dirname, '../../web/web/' + data.path), function (err, fileData) {
-      //console.log(data.path);
       if (!err && fileData) {
         //Choose the contentType and default to plain
         var contentType = 'plain';

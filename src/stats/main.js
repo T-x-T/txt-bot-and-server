@@ -58,14 +58,13 @@ stats.template.memberOverview = function(options, callback) {
     user.get({ discord: discord_id }, { privacy: true, onlyPaxterians: true, first: true }, function (err, member) {
       if (member) {
         let mc_render_url = mc_helpers.returnRenderUrl(member.mcUUID);
-
         stats.template.mc({uuid: member.mcUUID, collection: 'playtime'}, function (err, playtime) {
           if (err || !playtime) playtime = 0;
           //Build the object to send back
           let obj = {
             discord_nick: member.discord_nick,
             mc_nick: member.mcName,
-            age: member.birth_month >= 1 ? member.birth_month > new Date(Date.now()).getMonth() + 1 ? parseInt((new Date().getFullYear() - new Date(member.birth_year, member.birth_month).getFullYear()).toString()) - 1 : parseInt((new Date().getFullYear() - new Date(member.birth_year, member.birth_month).getFullYear()).toString()) : false,
+            age: member.birth_month >= 1 ? member.birth_month > new Date(Date.now()).getMonth() + 1 ? parseInt(new Date().getFullYear() - member.birth_year) - 1 : parseInt(new Date().getFullYear() - member.birth_year) : false,
             country: member.country,
             playtime: playtime.playtime,
             mc_render_url: mc_render_url,
@@ -89,7 +88,6 @@ stats.template.memberOverview = function(options, callback) {
           stats.template.memberOverview({discord_id: docs[i].discord}, function(err, doc) {
             if(doc) output.push(doc);
             else error = true;
-
             //Check if this is the last callback
             if(output.length == docs.length) {
               if(!error) callback(false, output);
