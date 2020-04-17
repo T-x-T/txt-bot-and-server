@@ -255,7 +255,7 @@ describe('user', function(){
           assert.ok(!docs[0].karma);
           done();
         });
-      }, 100);
+      }, 1100);
     });
 
     it('user_banned deletes user from database', function(done){
@@ -267,14 +267,13 @@ describe('user', function(){
           assert.ok(!docs[0].karma);
           done();
         });
-      }, 100);
+      }, 1100);
     });
 
     it('application_accepted_joined adds application details to user', function(done){
       let input = {
-        discord: '212826594123710464',
-        mcName: 'The__TxT',
-        mcUUID: 'dac25e44d1024f3b819978ed62d209a1',
+        discord_id: '293029505457586176',
+        mc_uuid: 'dac25e44d1024f3b819978ed62d209a1',
         birth_year: 2000,
         birth_month: 7,
         country: 'Germany',
@@ -283,11 +282,11 @@ describe('user', function(){
       };
       emitter.emit('application_accepted_joined', input);
       setTimeout(function(){
-        user.get({discord: '212826594123710464'}, {first: true}, function(err, doc) {
+        user.get({discord: '293029505457586176'}, {first: true}, function(err, doc) {
           assert.ok(!err);
           assert.ok(doc);
           assert.equal(doc.mcName, input.mcName);
-          assert.equal(doc.mcUUID, input.mcUUID);
+          assert.equal(doc.mcUUID, input.mc_uuid);
           assert.equal(doc.birth_month, input.birth_month);
           assert.equal(doc.publish_age, input.publish_age);
           assert.equal(doc.status, 1);

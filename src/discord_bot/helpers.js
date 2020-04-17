@@ -14,6 +14,9 @@ setTimeout(function(){
 
 //Global var
 var client;
+emitter.on('discord_bot_ready', (_client) => {
+  client = _client;
+});
 
 //Create the container
 var helpers = {};
@@ -86,9 +89,8 @@ helpers.isGuildMember = function(userID){
 
 //Set the nick of a user to their mc_ign
 helpers.updateNick = function(discord_id) {
-  user.get({discord: discord_id}, {privacy: true, onlyPaxterians: true}, function(err, docs) {
-    if(docs) {
-      let doc = docs[0];
+  user.get({discord: discord_id}, {privacy: true, onlyPaxterians: true, first: true}, function(err, doc) {
+    if(doc) {
       let ign = typeof doc.mcName == 'string' ? doc.mcName : '';
       //Get the members object
       helpers.getMemberObjectByID(discord_id, function(member) {

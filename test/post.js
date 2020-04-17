@@ -68,7 +68,6 @@ describe('post', function(){
         assert.ok(!err);
         assert.ok(doc);
         post.get({id: 0}, {first: true}, function(err, doc){
-          console.log(doc.date, input1.date)
           assert.ok(!err);
           assert.ok(doc);
           assert.equal(doc.title, input1.title);

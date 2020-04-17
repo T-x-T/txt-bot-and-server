@@ -62,8 +62,8 @@ application.write = function(input, callback){
               data.new(document, 'application', false, function(err, doc){
                 if(!err){
                   callback(201, false);
-                  _internal.addNicks(document, function(err, newDoc){
-                    emitter.emit('application_new', newDoc);
+                  _internal.addNicks(doc, function(err, doc){
+                    emitter.emit('application_new', doc);
                   });
                 }else{
                   global.log(2, 'application_write couldnt save an application to the db', {err: err, application: input});
@@ -136,15 +136,7 @@ application.changeStatus = function(id, newStatus, reason, callback){
               if(newStatus == 3){
                 //Member got accepted
                 emitter.emit('application_accepted', doc);
-                //Check if the member is already on the discord server
-                if(auth.isGuildMember(doc.discord_id)){
-                  //Start the acception routine
-                  application.acceptWorkflow(doc.discord_id, doc);
-                  callback(200);
-                }else{
-                  //Member hasnt joined yet, so there is nothing to do
-                  callback(200);
-                }
+                callback(200);
               }else{
                 callback(500, 'If we got here, something went very, very wrong');
               }
@@ -170,7 +162,15 @@ application.changeStatus = function(id, newStatus, reason, callback){
 //Then the member will automatically appear in the member list on the website as well
 application.acceptWorkflow = function(discord_id){
   application.read({discord_id: discord_id}, function(err, app){
-    emitter.emit('application_accepted_joined', app[0]);
+    app = app[0];
+    if(!err){
+      _internal.addNicks(app, function(err, doc){
+        if(err || !doc) global.log(2, 'application.acceptWorkflow couldnt get the ign', {application: app, newDoc: doc, err: err});
+        emitter.emit('application_accepted_joined', app);
+      });
+    }else{
+      global.log(2, 'application.acceptWorkflow couldnt get the application from the database', {err: err, application: app, discord_id: discord_id});
+    } 
   });
 };
 
@@ -181,6 +181,7 @@ var _internal = {};
 _internal.addNicks = function(doc, callback){
   discord_api.getUserObject({id: doc.discord_id}, false, function(err, userObject){
     if(userObject){
+      if(!doc.mc_uuid) console.log(doc)
       mc_helpers.getIGN(doc.mc_uuid, function(err, mc_ign){
         if(mc_ign){
           try{
@@ -191,11 +192,11 @@ _internal.addNicks = function(doc, callback){
           doc.mc_ign = mc_ign;
           callback(false, doc);
         }else{
-          callback(true, false);
+          callback('_internal.addNicks couldnt get the mc_ign', false);
         }
       });
     }else{
-      callback(true, false);
+      callback('_internal.addNicks couldnt get the discord user object', false);
     }
   });
 };

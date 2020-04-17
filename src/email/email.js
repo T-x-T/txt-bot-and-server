@@ -93,7 +93,6 @@ email.send = function(recipient, subject, text){
     text: sanitize(text,{allowedTags: [], allowedAttributes: {}}),
   };
   mailTransporter.sendMail(mailOptions, function(err, info){
-    console.log(err, info);
     if(err){
       global.log(2, 'email.send couldnt sent the email out', {mail: mailOptions});
     }

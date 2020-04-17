@@ -10,7 +10,7 @@ emitter = new Emitter();
 global.cache = {};
 global.cache.discordUserObjects = {};
 
-const discordBot = require('../src/discord_bot/discord_bot.js');
+const discordBot = require('../src/discord_bot');
 discordBot.init();
 
 before(function(done){
@@ -20,8 +20,7 @@ before(function(done){
   });
 });
 
-const oauth = require('../src/auth/oauth2.js');
-oauth.updateUserIdCache();
-
 //Dependencies
 const log = require('../src/log'); //lgtm [js/unused-local-variable]
+
+global.log(0, 'Mocha test started', false);

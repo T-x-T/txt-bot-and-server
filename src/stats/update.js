@@ -5,6 +5,10 @@
 
 //Dependencies
 const config = require('../../config.js');
+const fs = require('fs');
+const path = require('path');
+const { exec } = require('child_process');
+const data = require('../data');
 
 //Create the container
 var updater = {};
@@ -40,8 +44,9 @@ function read_mc_stats(){
             let fileWriteTime = stats.mtimeMs;
             //Get the uuid from the filename
             let uuid = file.replace('.json', '').replace('-', '').replace('-', '').replace('-', '').replace('-', '');
-            data.getLastTimestampMcStats(uuid, function (dbWriteTime) {
+            data.get({uuid: uuid}, 'stats', {sub_type: 'mc_stats', latest: true} ,function (err, doc) {
               //Compare both timestamps
+              let dbWriteTime = doc.timestamp;
               if (new Date(dbWriteTime).getTime() < fileWriteTime) {
                 //DB version is older
                 //Read the stats file for the current member
@@ -55,8 +60,15 @@ function read_mc_stats(){
                       global.log(2, 'mc_helpers.updateStats couldnt save the new data', { err: e, data: fileData });
                     }
                     if (stats) {
-                      data.addMcStats(uuid, stats, function (err) {
-                        if (err) global.log(2, 'mc_helpers.updateStats couldnt parse the data read from disk', { err: e, data: fileData });
+                      let final_stat = {
+                        uuid: uuid,
+                        stats: stats,
+                        sub_type: 'mc_stats',
+                        timestamp: Date.now()
+                      };
+                      
+                      data.new(final_stat, 'stats', false, function (err, doc) {
+                        if (err || !doc) global.log(2, 'mc_helpers.updateStats couldnt parse the data read from disk', { err: e, data: fileData });
                       });
                     }
                   } else {

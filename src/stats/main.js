@@ -35,7 +35,7 @@ stats.template.overview = function(options, callback) {
           callback(false, {
             'total_members': paxterians.length,
             'average_age': averageAge,
-            'total_playtime': playtime
+            'total_playtime': playtime + 'h'
           });
 
         } else {
@@ -66,7 +66,7 @@ stats.template.memberOverview = function(options, callback) {
             mc_nick: member.mcName,
             age: member.birth_month >= 1 ? member.birth_month > new Date(Date.now()).getMonth() + 1 ? parseInt(new Date().getFullYear() - member.birth_year) - 1 : parseInt(new Date().getFullYear() - member.birth_year) : false,
             country: member.country,
-            playtime: playtime.playtime,
+            playtime: playtime,
             mc_render_url: mc_render_url,
             joined_date: new Date(member._id.getTimestamp()).valueOf()
           };
@@ -74,7 +74,7 @@ stats.template.memberOverview = function(options, callback) {
           callback(false, obj);
         });
       } else {
-        global.log(2, 'stats.memberOverview coulnt get the member object', {id: discord_id});
+        global.log(2, 'stats.memberOverview couldnt get the member object', {id: discord_id});
         callback('Couldnt get the member object', false);
       }
     });
@@ -96,7 +96,7 @@ stats.template.memberOverview = function(options, callback) {
           });
         }
       } else {
-        global.log(2, 'stats.memberOverview coulnt get any member objects', {});
+        global.log(2, 'stats.memberOverview couldnt get any member objects', {});
         callback('Couldnt get any member objects bru', false);
       }
     });

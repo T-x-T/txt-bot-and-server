@@ -198,7 +198,8 @@ const template = {
   },
   'join-us.html': {
     'pax_title': 'Join us!',
-    'birthyears': _internal.generateBirthyearOptions
+    'birthyears': _internal.generateBirthyearOptions,
+    'oauth': config['oauth_uris']['application']
   },
   'member.html': {
     'pax_title': 'Member'

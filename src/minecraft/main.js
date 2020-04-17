@@ -7,12 +7,6 @@
 const config = require('../../config.js');
 const https = require('https');
 const user = require('../user');
-const fs = require('fs');
-const path = require('path');
-const { exec } = require('child_process');
-
-//REMOVE
-const data = require('../user/main.js');
 
 //Create the container
 var mc = {};
@@ -25,7 +19,7 @@ mc.updateAllIGNs = function(){
       //Check if the user has a ign, if not, then we have nothing to do
       if(member.mcUUID != null){
         //Get the ign for the uuid
-        mc.getIGN(member.mcUUID, function(ign){
+        mc.getIGN(member.mcUUID, function(err, ign){
           if(ign){
             //Save ign
             member.mcName = ign;
@@ -127,7 +121,7 @@ mc.getIGN = function(uuid, callback){
     });
   }else{
     //The ign isnt ok
-    callback('The input isnt ok: ' + ign, false);
+    callback('The input isnt ok: ' + uuid, false);
   }
 };
 

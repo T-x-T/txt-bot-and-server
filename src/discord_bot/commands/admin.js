@@ -8,6 +8,7 @@ const config = require('../../../config.js');
 const mc_helpers = require('../../minecraft');
 const discord_helpers = require('../helpers.js');
 const user = require('../../user');
+const stats = require('../../stats');
 
 module.exports = {
   name: 'admin',
@@ -212,7 +213,7 @@ module.exports = {
               user.updateNicks();
               break;
             case 'updatestats':
-              //mc_helpers.updateStats();
+              stats.updateMcStats();
               break;
             case 'updateallnicks':
               discord_helpers.updateAllNicks();

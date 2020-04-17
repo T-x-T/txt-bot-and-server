@@ -59,10 +59,10 @@ setTimeout(function(){
   });
 
   emitter.on('application_accepted_joined', (app) => {
-    index.get({discord: app.discord}, {first: true}, function(err, doc){
+    index.get({discord: app.discord_id}, {first: true}, function(err, doc){
       if(!err && doc){
         doc.mcName = app.mcName;
-        doc.mcUUID = app.mcUUID;
+        doc.mcUUID = app.mc_uuid;
         doc.birth_year = app.birth_year;
         doc.birth_month = app.birth_month;
         doc.country = app.country;

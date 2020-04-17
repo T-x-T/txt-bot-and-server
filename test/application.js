@@ -62,7 +62,7 @@ describe('application', function() {
 
     it('saves new application when the same discord account got denied already', function(done) {
       application.save(input, false, function(status, res) {
-        application.save({id: 1, status: 2, reason: 'no'}, false, function(status, res) {
+        application.save({id: 0, status: 2, reason: 'no'}, false, function(status, res) {
           application.save(input, false, function(status, res) {
             assert.equal(status, 201);
             done();
@@ -146,7 +146,7 @@ describe('application', function() {
     });
 
     it('read specific application by id and without option first=true', function(done) {
-      application.get({id: 1}, {first: false}, function(err, docs) {
+      application.get({id: 0}, {first: false}, function(err, docs) {
         assert.ok(!err);
         assert.ok(Array.isArray(docs));
         assert.ok(docs.length == 1)
@@ -163,9 +163,9 @@ describe('application', function() {
 
 
     it('accepting an application saves the result properly', function(done) {
-      application.save(input_nonexistent_discord, false, function(status, res) {
-        application.save({id: 1, status: 3, reason: 'no'}, false, function(status, res) {
-          application.get({id: 1}, {first: true}, function(err, doc) {
+      application.save(input, false, function(status, res) {
+        application.save({id: 0, status: 3, reason: 'no'}, false, function(status, res) {
+          application.get({id: 0}, {first: true}, function(err, doc) {
             assert.ok(!err);
             assert.ok(doc);
             assert.equal(doc.status, 3);
@@ -177,7 +177,7 @@ describe('application', function() {
 
     it('accepting an application emits the event correctly', function(done) {
       application.save(input_nonexistent_discord, false, function(status, res) {
-        application.save({id: 1, status: 3, reason: 'no'}, false, function(status, res) {});
+        application.save({id: 0, status: 3, reason: 'no'}, false, function(status, res) {});
       });
 
       emitter.once('application_accepted', done());
@@ -203,8 +203,8 @@ describe('application', function() {
 
 
     it('denying an application saves the result properly', function(done) {
-      application.save({id: 1, status: 2, reason: 'no'}, false, function(status, res) {
-        application.get({id: 1}, {first: true}, function(err, doc) {
+      application.save({id: 0, status: 2, reason: 'no'}, false, function(status, res) {
+        application.get({id: 0}, {first: true}, function(err, doc) {
           assert.ok(!err);
           assert.ok(doc);
           assert.equal(doc.status, 2);
@@ -214,7 +214,7 @@ describe('application', function() {
     });
 
     it('denying an application emits the event correctly', function(done) {
-      application.save({id: 1, status: 2, reason: 'no'}, false, function(status, res) {});
+      application.save({id: 0, status: 2, reason: 'no'}, false, function(status, res) {});
       emitter.once('application_denied', done());
     });
 

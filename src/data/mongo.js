@@ -237,16 +237,22 @@ const models = {
   'log': logModel
 };
 
-//Converts all old style mcstats objects to new style
-/* main.get({}, 'stats', false, function(err, docs) {
-  docs.forEach((doc) => {
-    doc.sub_type = 'mc_stats'
-    main.edit(doc, 'stats', false, function(err, doc) {
-      if(err) console.log(err)
-    })
-  });
-}); */
+/*
+ *  DB Upgrades/Migrations
+ *
+ */
 
+//Converts all old style mcstats objects to new style
+if(config['db_upgrades']['mc_stats_sub_type']){
+  main.get({}, 'stats', false, function(err, docs) {
+    docs.forEach((doc) => {
+      doc.sub_type = 'mc_stats'
+      main.edit(doc, 'stats', false, function(err, doc) {
+        if(err) console.log(err)
+      })
+    });
+  });
+}
 
 //Export the container
 module.exports = main;

@@ -13,6 +13,7 @@ const log = require('./src/log'); //lgtm [js/unused-local-variable]
 const webServer = require('./src/web/webServer.js');
 const discordBot = require('./src/discord_bot');
 const workers = require('./src/workers'); //lgtm [js/unused-local-variable]
+const email = require('./src/email'); //lgtm [js/unused-local-variable]
 
 //Log that the app got started
 global.log(1, 'Application started', null);

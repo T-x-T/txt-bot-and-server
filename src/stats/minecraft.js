@@ -60,7 +60,7 @@ mc.getRanked = function(options, callback){
 mc.getSingle = function(options, callback){
   getLatestStats(options.uuid, function(err, doc){
     if(!err && doc){
-      callback(false, _statsTemplates[options.collection](doc));
+      callback(false, _statsTemplates.single[options.collection](doc));
     }else{
       callback(err, false);
     }

@@ -47,6 +47,9 @@ var conf = {
   'data_backend': 'mongo',
   'bulletin': {
     'max_per_usr': 5
+  },
+  'db_upgrades':{
+    'mc_stats_sub_type': false
   }
 };
 
