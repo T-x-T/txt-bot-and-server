@@ -399,7 +399,6 @@ handlers.paxapi.application.patch = function(data, callback){
   //Check if the required fields are set
   let id     = typeof data.payload.id     == 'number' && data.payload.id     > -1 ? data.payload.id     : false;
   let status = typeof data.payload.status == 'number' && data.payload.status >= 2 && data.payload.status <= 3 ? data.payload.status : false;
-  let reason = typeof data.payload.reason == 'string' && data.payload.reason.length > 0 ? data.payload.reason : false;
 
   if(typeof id == 'number' && status){
     //Hand it over to the correct function

@@ -4,7 +4,6 @@
  */
 
 //Dependencies
-const config = require('../../config.js');
 const main = require('./main.js');
 const rcon = require('./rcon.js');
 const user = require('../user');

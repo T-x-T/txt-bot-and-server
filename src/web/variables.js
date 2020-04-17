@@ -184,9 +184,6 @@ const template = {
   'statistics.html': _getters.statistics,
   'blog.html': _getters.blog,
   'town-of-paxterya.html': _getters.town_of_paxterya,
-  'index.html': {
-    'pax_title': 'Paxterya'
-  },
   'application-sent.html': {
     'pax_title': 'Success!'
   },

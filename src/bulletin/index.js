@@ -4,7 +4,6 @@
  */
 
 //Dependencies
-const config = require('../../config.js');
 const main = require('./main.js');
 const sanitize = require('sanitize-html');
 const auth = require('../auth');

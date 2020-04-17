@@ -4,12 +4,10 @@
  */
 
 //Dependencies
-const config     = require('../../config.js');
 const mc_helpers = require('../minecraft');
 const discord_api= require('../discord_api');
 const sanitize   = require('sanitize-html');
 const data       = require('../data');
-const auth       = require('../auth');
 
 //Create the container
 var application = {};

@@ -4,7 +4,6 @@
  */
 
 //Dependencies
-const config = require('../../config.js');
 const data = require('../data');
 const user = require('../user');
 

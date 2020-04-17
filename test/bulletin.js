@@ -152,7 +152,6 @@ describe('bulletin', function(){
   //Editing
   describe('editing', function() {
     
-    let ouput;
     beforeEach(function(done){
       bulletin.save(input1, false, function(err, doc){
         output = doc;

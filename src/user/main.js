@@ -4,7 +4,6 @@
 */
 
 //Dependencies
-const config = require('../../config.js');
 const data = require('../data');
 const discord = require('../discord_bot');
 
