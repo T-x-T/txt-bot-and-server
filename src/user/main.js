@@ -102,7 +102,7 @@ user.modify = function(filter, key, modifier, options, callback) {
 
 //Triggers the update of all IGNs and Nicks from all users
 user.updateNicks = function(){
-  const mc = require('../minecraft/mc_helpers.js');
+  const mc = require('../minecraft');
   //Get all users
   user.get({}, false, function(err, docs){
     if(!err && docs){
