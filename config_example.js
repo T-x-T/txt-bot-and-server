@@ -39,10 +39,18 @@ var conf = {
     'new_member_announcement_channel': 'id of the channel new members get announced to',
     'new_application_announcement_channel': '',
     'new_bulletin_announcement_channel': '',
+    'general_channel': '',
     'oauth_uris': {
       'application': '',
       'login': ''
-    }
+    },
+  'data_backend': 'mongo',
+  'bulletin': {
+    'max_per_usr': 5
+  },
+  'db_upgrades':{
+    'mc_stats_sub_type': false
+  }
 };
 
 //Export the container

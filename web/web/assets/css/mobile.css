@@ -1,10 +1,9 @@
 @media screen and (max-width:999px) {
 
     .mobile-hide, header .dots, .dots,
-    a.prev, a.next, img.author, #mapsection, .banner {
+    a.prev, a.next, img.author, .banner, #mapsection #controls {
         display: none;
     }
-
 
     img#logo {
         width: 250px;
@@ -24,7 +23,6 @@
     #logoutbar {
         top: 55px;
     }
-
 
 /* ############### nav ###############*/
 
@@ -74,9 +72,12 @@ nav li a {
     font-size: 16pt;
 }
 
-nav li#join {
+nav li#join, nav li#nav-login {
     border: none;
-    padding: 20px 30px;
+    padding: 20px 0px 5px 30px;
+}
+
+nav li#nav-login {
     margin-bottom: 100px;
 }
 
@@ -209,6 +210,11 @@ nav li ul li i {
 
 .member-profile .avatar {
     margin-top: 20px;
+}
+
+#mapsection section {
+  border-left: none;
+  padding: 0;
 }
 
 /* ################### interface ###################*/
