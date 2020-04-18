@@ -127,9 +127,8 @@ _getters.blog = function(callback){
 
     //Sort the array after the date
     posts.sort((a, b) => {
-      return b.date - a.date;
+      return new Date(b.date) - new Date(a.date);
     });
-
     //Build the final html
     let body = '';
     posts.forEach((post) => {
