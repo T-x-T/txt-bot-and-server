@@ -401,15 +401,15 @@ root.members.update = function(){
         div.querySelector('#joined').innerText = new Date(doc.joined_date).toISOString().substring(0, 10);
 
         //Add country or remove it if its false
-        if (doc.country != 'false' || doc.country) {
-          div.querySelector('#country').innerText = doc.country;
-        } else {
+        div.querySelector('#country').innerText = doc.country;
+
+        if(div.querySelector('#country').innerText === 'false'){
           let toDel = div.querySelector('#country-desc');
           toDel.parentNode.removeChild(toDel);
           toDel = div.querySelector('#country');
           toDel.parentNode.removeChild(toDel);
         }
-
+      
         //Add age or remove it if its false
         if(doc.age){
           div.querySelector('#age').innerText = doc.age;
