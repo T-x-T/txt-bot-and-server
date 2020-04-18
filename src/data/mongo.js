@@ -146,7 +146,7 @@ var userSchema = new Schema({
   status: {
     type: Number,
     default: 0
-  }, //0 = regular pleb, 1 = whitelisted paxterya member
+  }, //0 = regular pleb, 1 = whitelisted paxterya member, 2 = inactive paxterya member
   birth_year: Number,
   birth_month: Number,
   country: String,

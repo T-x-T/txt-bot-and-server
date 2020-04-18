@@ -401,7 +401,7 @@ root.members.update = function(){
         div.querySelector('#joined').innerText = new Date(doc.joined_date).toISOString().substring(0, 10);
 
         //Add country or remove it if its false
-        if (doc.country != 'false') {
+        if (doc.country != 'false' || !doc.country) {
           div.querySelector('#country').innerText = doc.country;
         } else {
           let toDel = div.querySelector('#country-desc');
