@@ -5,7 +5,7 @@
 
 //Dependencies
 const data = require('../data');
-const discord = require('../discord_bot');
+const discord = require('../discord_api');
 
 //Create the container
 var user = {};

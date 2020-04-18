@@ -24,8 +24,7 @@ client.once('ready', () => {
   global.log(1, 'Discord Bot connected sucessfully', null);
 });
 
-//Set immidiate so these handlers will only be registered once everything got initalized
-setTimeout(function(){
+emitter.on('discord_bot_ready' ,() => {
   //Gets called when the bot receives a new message
   client.on('message', message => {
     //Stop processing the message when it doesnt start with our prefix or if its from another bot
@@ -140,15 +139,17 @@ setTimeout(function(){
   //Gets called whenever a new member joins the guild
   client.on('guildMemberAdd', (user) => {
     //Send a welcome message
-    discordHelpers.sendMessage(`Welcome <@user.id>! If you are here for joining the Minecraft server, then please apply under https://paxterya.com/join-us, read the rules at https://paxterya.com/rules and consult our FAQ at https://paxterya.com/faq \n If you have any question just ping the admins (they like getting pinged, trust me)`, config['general_channel'], function (err) {
+    discordHelpers.sendMessage(`Welcome <@${user.id}>! If you are here for joining the Minecraft server, then please apply under https://paxterya.com/join-us, read the rules at https://paxterya.com/rules and consult our FAQ at https://paxterya.com/faq \n If you have any question just ping the admins (they like getting pinged, trust me)`, config['general_channel'], function (err) {
       if (err) global.log(2, 'discord_bot couldnt send the new application message', { err: err, application: doc });
     });
     //Check if the new member got accepted as a member
     application.get({ discord_id: user.id }, { first: true }, function (err, doc) {
-      if (doc.status == 3) application.acceptWorkflow(user.id);
+      if(doc){
+        if (doc.status == 3) application.acceptWorkflow(user.id);
+      }
     });
   });
-}, 100);
+});
 
 //Init script
 discordBot.init = function () {

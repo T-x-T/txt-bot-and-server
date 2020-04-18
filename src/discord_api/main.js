@@ -10,6 +10,12 @@ const https = require('https');
 //Create the container
 var main = {};
 
+var client;
+
+emitter.on('discord_bot_ready', (_client) => {
+  client = _client;
+});
+
 //Get the user object from an access_token
 main.getUserObject = function(access_token, callback){
   //Get the users object
@@ -121,6 +127,14 @@ main.getUserObjectByIdFromApi = function(id, callback) {
       }
     });
   });
+};
+
+main.getNicknameByID = function (userID, callback) {
+  try {
+    callback(`${client.guilds.get(config.guild).members.get(userID).user.username}#${client.guilds.get(config.guild).members.get(userID).user.discriminator}`);
+  } catch (e) {
+    callback(false);
+  }
 };
 
 //Export the container

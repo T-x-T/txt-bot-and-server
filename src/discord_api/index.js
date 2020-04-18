@@ -27,5 +27,9 @@ index.updateCache = function(){
   main.updateUserIdCache();
 };
 
+index.getNicknameByID = function(userID, callback){
+  main.getNicknameByID(userID, callback);
+};
+
 //Export the container
 module.exports = index;
