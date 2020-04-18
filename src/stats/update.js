@@ -57,7 +57,7 @@ function read_mc_stats(){
                     try {
                       stats = JSON.parse(fileData);
                     } catch (e) {
-                      global.log(2, 'mc_helpers.updateStats couldnt save the new data', { err: e, data: fileData });
+                      global.log(2, 'read_mc_stats couldnt parse the new data', { err: e, data: fileData });
                     }
                     if (stats) {
                       let final_stat = {
@@ -68,22 +68,22 @@ function read_mc_stats(){
                       };
                       
                       data.new(final_stat, 'stats', false, function (err, doc) {
-                        if (err || !doc) global.log(2, 'mc_helpers.updateStats couldnt parse the data read from disk', { err: e, data: fileData });
+                        if (err || !doc) global.log(2, 'read_mc_stats couldnt parse the data read from disk', { err: e, data: fileData });
                       });
                     }
                   } else {
-                    global.log(2, 'mc_helpers.updateStats couldnt read the stats from disk', { err: err, file: file });
+                    global.log(2, 'read_mc_stats couldnt read the stats from disk', { err: err, file: file });
                   }
                 });
               }
             });
           } else {
-            global.log(2, 'mc_helpers.updateStats couldnt read the modified data of the file', { err: err, mcUUID: member.mcUUID });
+            global.log(2, 'read_mc_stats couldnt read the modified data of the file', { err: err, mcUUID: member.mcUUID });
           }
         });
       });
     } else {
-      global.log(2, 'mc_helpers.updateStats couldnt read the files from the directory', { err: err });
+      global.log(2, 'read_mc_stats couldnt read the files from the directory', { err: err });
     }
   });
 };
