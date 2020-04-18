@@ -50,6 +50,10 @@ main.edit = function(input, type, options, callback) {
   if(filter){
     //Get our current model
     let model = models[type];
+
+    //Delete _id field
+    delete input._id;
+
     model.findOneAndUpdate(filter, input, {new: true, useFindAndModify: false}, function(err, doc){
       if(!err && doc){
         callback(false, doc._doc);
