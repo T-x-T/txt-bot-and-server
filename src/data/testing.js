@@ -84,7 +84,6 @@ main.get = function(filter, type, options, callback){
         }
       });
     }
-    //console.log({filter: filter, output: output, data: data[type]})
     callback(false, output);
   }
 };

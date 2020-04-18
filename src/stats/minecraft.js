@@ -16,7 +16,6 @@ mc.getRanked = function(options, callback){
     if(!err && doc){
       //Get the collections data
       let stats = _statsTemplates[options.collection](doc);
-  
       //Get stats from all players to create the ranking
       getLatestStats(false, function(err, docs) {
         if(!err && docs) {
@@ -24,7 +23,7 @@ mc.getRanked = function(options, callback){
           let finalStats = {};
           let allStats = [];
           docs.forEach((doc) => {
-            allStats.push(_statsTemplates[options.collection](doc));
+            if(doc) allStats.push(_statsTemplates[options.collection](doc));
           });
           //Get an array of all users stat
           for(let key in stats) {
@@ -51,7 +50,7 @@ mc.getRanked = function(options, callback){
         }
       });
     }else{
-      callback('Couldnt get stats for user: ' + uuid + err, false);
+      callback('Couldnt get stats for user: ' + options.uuid + err, false);
     }
   });
 };
@@ -59,7 +58,11 @@ mc.getRanked = function(options, callback){
 mc.getSingle = function(options, callback){
   getLatestStats(options.uuid, function(err, doc){
     if(!err && doc){
-      callback(false, _statsTemplates.single[options.collection](doc));
+      if(typeof _statsTemplates[options.collection] === 'function'){
+        callback(false, _statsTemplates[options.collection](doc));
+      }else{
+        callback(false, _statsTemplates.single[options.collection](doc));
+      }
     }else{
       callback(err, false);
     }
@@ -98,7 +101,7 @@ function getLatestStats(uuid, callback){
         //No stats for this user
         callback('Couldnt get stats for user: ' + uuid, false);
       }else{
-        if(!err) {
+        if(!err && doc) {
           callback(false, doc.stats.stats);
         } else {
           callback(err, false);

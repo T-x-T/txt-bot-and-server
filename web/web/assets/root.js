@@ -748,7 +748,6 @@ root.framework.table.add_row = function(values, raw_data){
 //when index is given remove row at index, otherwise remove row this was called on
 root.framework.table.remove_row = function(index){
   if(typeof index != 'undefined'){
-    //console.log(index)
     //Remove row at index
     this.deleteRow(index);
   }
@@ -918,11 +917,8 @@ _internal.sortings = {
 //Removes all children of given element, only keeps children with the id == blacklist_id
 _internal.clearChildren = function(elementToClear, blacklist_id){
   let children = elementToClear.children;
-  console.log(children)
   
   for (let i = 0; i < children.length; i++) {
     if (children[i].id != blacklist_id) children[i].parentNode.removeChild(children[i]);
-    console.log(i)
   };
-  //console.log('done')
 };

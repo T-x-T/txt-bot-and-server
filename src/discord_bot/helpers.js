@@ -89,6 +89,7 @@ helpers.isGuildMember = function(userID){
 
 //Set the nick of a user to their mc_ign
 helpers.updateNick = function(discord_id) {
+  if(discord_id == client.guilds.get(config['guild']).ownerID) return; //Dont update the owner of the guild, this will fail
   user.get({discord: discord_id}, {privacy: true, onlyPaxterians: true, first: true}, function(err, doc) {
     if(doc) {
       let ign = typeof doc.mcName == 'string' ? doc.mcName : '';
@@ -99,7 +100,7 @@ helpers.updateNick = function(discord_id) {
           member.setNickname(ign)
             .catch((e) => {global.log(2, 'discord_helpers.updateNick failed to set the members nickname', {user: member.id, err: e});});
         } else {
-          global.log(2, 'discord_helpers.updateNick couldnt get the member object');
+          global.log(2, 'discord_helpers.updateNick couldnt get the member object', {user: discord_id, member: member});
         }
       });
     } else {

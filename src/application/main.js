@@ -179,7 +179,6 @@ var _internal = {};
 _internal.addNicks = function(doc, callback){
   discord_api.getUserObject({id: doc.discord_id}, false, function(err, userObject){
     if(userObject){
-      if(!doc.mc_uuid) console.log(doc)
       mc_helpers.getIGN(doc.mc_uuid, function(err, mc_ign){
         if(mc_ign){
           try{
