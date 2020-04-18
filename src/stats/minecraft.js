@@ -51,7 +51,7 @@ mc.getRanked = function(options, callback){
         }
       });
     }else{
-      callback('Couldnt get stats for user: ' + uuid + err, false);
+      callback('Couldnt get stats for user: ' + options.uuid + err, false);
     }
   });
 };
