@@ -140,6 +140,7 @@ application.changeStatus = function(id, newStatus, reason, callback){
               }
             }
           }else{
+            global.log(2, 'application.changestatus couldnt save changes into the database', {err: err, id: id, newStatus: newStatus, reason: reason});
             callback(500, 'Couldnt save the changes back to the database');
           }
         });
