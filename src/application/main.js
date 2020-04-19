@@ -122,18 +122,18 @@ application.changeStatus = function(id, newStatus, reason, callback){
         if(newStatus == 2 && reason) doc.deny_reason = reason;
 
         //Save the changes back to the db
-        data.edit(doc, 'application', false, function(err){
-          if(!err){
+        data.edit(doc, 'application', false, function(err, newDoc){
+          if(!err && newDoc){
             //Execute the correct workflow based on status
             if(newStatus == 2){
               //Member got denied
-              emitter.emit('application_denied', doc);
+              emitter.emit('application_denied', newDoc);
               //We are done
               callback(200);
             }else{
               if(newStatus == 3){
                 //Member got accepted
-                emitter.emit('application_accepted', doc);
+                emitter.emit('application_accepted', newDoc);
                 callback(200);
               }else{
                 callback(500, 'If we got here, something went very, very wrong');

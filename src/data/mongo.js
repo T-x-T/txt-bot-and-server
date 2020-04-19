@@ -44,9 +44,10 @@ main.new = function(input, type, options, callback) {
 main.edit = function(input, type, options, callback) {
   let filter = false;
   filter = input.hasOwnProperty('_id') ? {_id: input._id} : filter;
-  filter = input.hasOwnProperty('id') ? {id : input.id} : filter;
   filter = input.hasOwnProperty('discord') ? {discord: input.discord} : filter;
   filter = input.hasOwnProperty('discord_id') ? {discord_id: input.discord_id} : filter;
+  filter = input.hasOwnProperty('id') ? {id : input.id} : filter;
+  console.log(filter)
   if(filter){
     //Get our current model
     let model = models[type];
