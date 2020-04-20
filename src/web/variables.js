@@ -137,7 +137,7 @@ _getters.blog = function(callback){
       body += `</section></article>`;
     });
     callback({
-      'pax_title': 'Start page',
+      'pax_title': 'Blog',
       'posts': body
     });
   });
