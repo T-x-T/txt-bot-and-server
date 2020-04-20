@@ -104,7 +104,7 @@ application.read = function(filter, callback){
               count++;
               if(count == docs.length) callback(false, docs);
             }else{
-              docs[i] = false;
+              if(count == docs.length) callback(false, docs);
             }
           });
         }else{
@@ -184,27 +184,23 @@ application.acceptWorkflow = function(discord_id){
 var _internal = {};
 
 //Adds the current discord nick and mc ign to an application object
-_internal.addNicks = function(doc, callback){
-  discord_api.getUserObject({id: doc.discord_id}, false, function(err, userObject){
-    if(!err && userObject){
-      mc_helpers.getIGN(doc.mc_uuid, function(err, mc_ign){
-        if(!err && mc_ign){
-          try{
-            doc = doc.toObject(); //Convert to a normal object
-          }catch(e){}
+_internal.addNicks = function (doc, callback) {
+  discord_api.getUserObject({ id: doc.discord_id }, false, function (err, userObject) {
+    if (err || !userObject) global.log(2, 'application.addNicks couldnt get the discord user object', { doc: doc });
+    mc_helpers.getIGN(doc.mc_uuid, function (err, mc_ign) {
+      if (!err && mc_ign) {
+        try {
+          doc = doc.toObject(); //Convert to a normal object
+        } catch (e) { }
 
-          doc.discord_nick = userObject.username + '#' + userObject.discriminator;
-          doc.mc_ign = mc_ign;
-          callback(false, doc);
-        }else{
-          global.log(2, 'application.addNicks couldnt get the mc_ign', {doc: doc, userObject: userObject});
-          callback('application.addNicks couldnt get the mc_ign', false);
-        }
-      });
-    }else{
-      global.log(2, 'application.addNicks couldnt get the discord user object', {doc: doc});
-      callback('application.addNicks couldnt get the discord user object', false);
-    }
+        doc.discord_nick = userObject.username + '#' + userObject.discriminator;
+        doc.mc_ign = mc_ign;
+        callback(false, doc);
+      } else {
+        global.log(2, 'application.addNicks couldnt get the mc_ign', { doc: doc, userObject: userObject });
+        callback('application.addNicks couldnt get the mc_ign', false);
+      }
+    });
   });
 };
 
