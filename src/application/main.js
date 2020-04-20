@@ -93,7 +93,25 @@ application.write = function(input, callback){
 application.read = function(filter, callback){
   data.get(filter, 'application', false, function(err, docs){
     if(!err){
-      callback(false, docs);
+      //Iterate over all items and add the current discord nick and mc ign
+      let count = 0;
+      for(let i = 0; i < docs.length; i++){
+        if(!docs[i].mc_ign || !docs[i].discord_nick){
+          _internal.addNicks(docs[i], function(err, newDoc){
+            if(!err){
+              docs[i] = newDoc;
+              //If this was the last item, Callback
+              count++;
+              if(count == docs.length) callback(false, docs);
+            }else{
+              docs[i] = false;
+            }
+          });
+        }else{
+          if(count == docs.length) callback(false, docs);
+        }
+      }
+      if(docs.length == 0) callback(false, docs);
     }else{
       callback(true, false);
     }
