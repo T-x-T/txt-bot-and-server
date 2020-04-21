@@ -124,14 +124,12 @@ emitter.on('discord_bot_ready' ,() => {
 
   //Gets called whenever a member leaves the guild; user is a guildMember
   client.on('guildMemberRemove', (user) => {
-    _user.delete({ discord: user.id }, false, function (err) { });
     emitter.emit('user_left', user);
     discordHelpers.sendMessage(`${user.displayName} left the server`, config['new_application_announcement_channel'], function (e) { });
   });
 
   //Gets called whenever a member gets banned from the guild; user is a guildMember
   client.on('guildBanAdd', (guild, user) => {
-    _user.delete({ discord: user.id }, false, function (err) { });
     emitter.emit('user_banned', user);
     discordHelpers.sendMessage(`${user.displayName} was banned from the server`, config['new_application_announcement_channel'], function (e) { });
   });
