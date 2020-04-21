@@ -195,7 +195,7 @@ _internal.addNicks = function (doc, callback) {
         doc.mc_ign = mc_ign;
         callback(false, doc);
       } else {
-        global.log(2, 'application.addNicks couldnt get the mc_ign', { doc: doc, userObject: userObject });
+        global.log(0, 'application.addNicks couldnt get the mc_ign', { doc: doc, userObject: userObject });
         callback('application.addNicks couldnt get the mc_ign', false);
       }
     });
