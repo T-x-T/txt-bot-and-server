@@ -102,7 +102,7 @@ mc.getIGN = function(uuid, callback){
           global.log(2, 'mc_helpers.getIGN couldnt pare the JSON returned from Mojangs API', {error: e, data: data, uuid: uuid});
           dataOK = false;
         }
-        if(typeof data != 'object') dataOK = false;
+        if(typeof data != 'object' || typeof data == 'undefined') dataOK = false;
         if(dataOK){
           //Only save the latest entry
           data = data[data.length - 1];
