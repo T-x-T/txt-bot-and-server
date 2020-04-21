@@ -132,6 +132,16 @@ button.hover-left:hover > i {
     padding: 0 0 0 2px;
 }
 
+summary {
+  font-family: "semibold";
+  color: #007787;
+  margin-top: 10px;
+}
+
+summary:focus { outline: none; }
+
+details { cursor: pointer; }
+
 /* #########################################*/
 
 /* ################### main ###################*/
