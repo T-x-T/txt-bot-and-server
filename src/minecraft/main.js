@@ -107,13 +107,18 @@ mc.getIGN = function(uuid, callback){
           //Only save the latest entry
           data = data[data.length - 1];
           //Check if the returned data makes sense
-          if(data.hasOwnProperty('name')){
-            //Returned object is valid
-            callback(false, data.name);
+          if(typeof data !== 'undefined'){
+            if(data.hasOwnProperty('name')){
+              //Returned object is valid
+              callback(false, data.name);
+            }else{
+              //Data isnt valid
+              callback('Data from API doesnt contain valid ign: ' + data, false);
+            }
           }else{
-            //Data isnt valid
-            callback('Data from API doesnt contain valid ign: ' + data, false);
+            callback('Data from API doesnt is undefined and doesnt contain valid ign: ' + data, false);
           }
+          
         }else{
           callback('data isnt valid: ' + data, false);
         }
