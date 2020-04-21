@@ -61,9 +61,7 @@ application.write = function(input, callback){
                 data.new(newDoc, 'application', false, function(err, doc){
                   if(!err){
                     callback(201, false);
-                    _internal.addNicks(doc, function(err, doc){
-                      emitter.emit('application_new', doc);
-                    });
+                    emitter.emit('application_new', doc);
                   }else{
                     global.log(2, 'application_write couldnt save an application to the db', {err: err, application: input});
                     callback(500, 'An error occured while trying to save your application');
