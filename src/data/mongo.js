@@ -119,6 +119,8 @@ var applicationSchema = new Schema({
   publish_about_me: Boolean,
   publish_age: Boolean,
   publish_country: Boolean,
+  discord_nick: String,
+  mc_ign: String,
   status: {
     type: Number,
     default: 1         //1 = pending review; 2 = denied; 3 = accepted
@@ -137,7 +139,11 @@ var bulletinSchema = new Schema({
 });
 
 var userSchema = new Schema({
-  discord: String,
+  discord: {
+    type: String,
+    index: true,
+    unique: true
+  },
   discord_nick: String,
   mcName: String,
   mcUUID: {
