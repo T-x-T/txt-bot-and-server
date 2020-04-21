@@ -142,6 +142,13 @@ summary:focus { outline: none; }
 
 details { cursor: pointer; }
 
+details > summary {
+  list-style: none;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
 /* #########################################*/
 
 /* ################### main ###################*/
