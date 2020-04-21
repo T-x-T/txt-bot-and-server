@@ -3,7 +3,10 @@
     padding: 0;
     text-decoration: none;
     transition-duration: .3s;
-    list-style-type: none;
+}
+
+li {
+  list-style-type: none;
 }
 
 html {
@@ -142,12 +145,6 @@ summary:focus { outline: none; }
 
 details { cursor: pointer; }
 
-details > summary {
-  list-style: none;
-}
-details > summary::-webkit-details-marker {
-  display: none;
-}
 
 /* #########################################*/
 
