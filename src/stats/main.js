@@ -105,7 +105,7 @@ stats.template.memberOverview = function(options, callback) {
 
 //callsback a list of all countries with their respective member count and coloring for the map-view in statistics.html
 stats.template.countryList = function(options, callback) {
-  user.get({}, {privacy: true, onlyPaxterians: true}, function(err, docs) {
+  user.get({}, {privacy: false, onlyPaxterians: true}, function(err, docs) {
     if(docs) {
       //Get the country list
       let countries = _internal.getCountries();
