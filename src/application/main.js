@@ -106,6 +106,7 @@ application.read = function(filter, callback){
             }
           });
         }else{
+          count++;
           if(count == docs.length) callback(false, docs);
         }
       }
