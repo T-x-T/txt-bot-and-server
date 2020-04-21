@@ -184,7 +184,7 @@ var _internal = {};
 //Adds the current discord nick and mc ign to an application object
 _internal.addNicks = function (doc, callback) {
   discord_api.getUserObject({ id: doc.discord_id }, false, function (err, userObject) {
-    if (err || !userObject) global.log(2, 'application.addNicks couldnt get the discord user object', { doc: doc });
+    if (err || !userObject) global.log(0, 'application.addNicks couldnt get the discord user object', { doc: doc });
     mc_helpers.getIGN(doc.mc_uuid, function (err, mc_ign) {
       if (!err && mc_ign) {
         try {
