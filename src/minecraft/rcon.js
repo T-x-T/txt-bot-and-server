@@ -80,6 +80,7 @@ rcon.updateRoles = function(){
             if(roles.indexOf('cool kid squad') > -1) prefix = '&bcool';
             if(roles.indexOf('utp') > -1) prefix = '&6utp';
             if(roles.indexOf('developer') > -1) prefix = '&3dev';
+            if(roles.indexOf('moderator') > -1) prefix = '&9mod';
             if(roles.indexOf('admin') > -1) prefix = '&4admin';
 
             if(prefix) {
