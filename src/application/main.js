@@ -88,9 +88,10 @@ application.write = function(input, callback){
 };
 
 //Retrieve all applications
-application.read = function(filter, callback){
+application.read = function(filter, options, callback){
   data.get(filter, 'application', false, function(err, docs){
     if(!err){
+      if(options.addNicks){
       //Iterate over all items and add the current discord nick and mc ign
       let count = 0;
       for(let i = 0; i < docs.length; i++){
@@ -111,6 +112,9 @@ application.read = function(filter, callback){
         }
       }
       if(docs.length == 0) callback(false, docs);
+      }else{
+        callback(err, docs)
+      }
     }else{
       callback(true, false);
     }

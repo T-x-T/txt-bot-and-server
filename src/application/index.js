@@ -24,7 +24,7 @@ index.save = function(input, options, callback){
 //Options:
 //first: if true only returns the first doc
 index.get = function(filter, options, callback){
-  main.read(filter, function(err, docs){
+  main.read(filter, options, function(err, docs){
     if(options.first) docs = docs[0];
     callback(err, docs);
   });
