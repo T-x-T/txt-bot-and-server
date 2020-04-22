@@ -18,7 +18,7 @@ application.write = function(input, callback){
   mc_helpers.getUUID(input.mc_ign, function(er, uuid){
     if(uuid){
       //Get all applications of the member to find out if they already have accepted or pending review applications
-      application.read({$or: [{mc_uuid: uuid}, {discord_id: input.discord_id}]}, function(err, docs){
+      application.read({$or: [{mc_uuid: uuid}, {discord_id: input.discord_id}]}, false, function(err, docs){
         let ok = true;
         docs.forEach((doc) => {
           if(doc.status == 1 || doc.status == 3) ok = false;
@@ -123,7 +123,7 @@ application.read = function(filter, options, callback){
 
 application.changeStatus = function(id, newStatus, reason, callback){
   //Get the application, so we can update it and save it back
-  application.read({id: id}, function(err, doc){
+  application.read({id: id}, false, function(err, doc){
     doc = doc[0];
     if(doc){
       if(doc.status == 1){
@@ -169,7 +169,7 @@ application.changeStatus = function(id, newStatus, reason, callback){
 //4. Announce the new member on the discord and if publish_about_me is true, publish that too.
 //Then the member will automatically appear in the member list on the website as well
 application.acceptWorkflow = function(discord_id){
-  application.read({discord_id: discord_id}, function(err, app){
+  application.read({discord_id: discord_id}, false, function(err, app){
     app = app[0];
     if(!err){
       if(!app.mc_ign || !app.discord_nick || app.discord_nick == 'load#ing'){
