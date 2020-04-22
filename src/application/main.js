@@ -168,7 +168,7 @@ application.acceptWorkflow = function(discord_id){
   application.read({discord_id: discord_id}, function(err, app){
     app = app[0];
     if(!err){
-      if(!app.mc_ign || !app.discord_nick || discord_nick == 'load#ing'){
+      if(!app.mc_ign || !app.discord_nick || app.discord_nick == 'load#ing'){
         _internal.addNicks(app, function(err, doc){
           if(err || !doc) global.log(2, 'application.acceptWorkflow couldnt get the ign', {application: app, newDoc: doc, err: err});
           if(!err) app = doc;

@@ -58,6 +58,7 @@ setTimeout(function(){
   });
 
   emitter.on('application_accepted_joined', (app) => {
+    global.log(0, 'user component got event application_accepted_joined', {application: app});
     index.get({discord: app.discord_id}, {first: true}, function(err, doc){
       if(!err && doc){
         if(doc.mcName) doc.mcName = app.mcName;
