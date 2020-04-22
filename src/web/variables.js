@@ -46,7 +46,7 @@ _getters.interface = function(callback){
 
 //Calls back an object for the current application
 _getters.application = function(callback){
-  application.get({id: data.queryStringObject.id}, {first: true}, function(err, doc){
+  application.get({id: data.queryStringObject.id}, {first: true, addNicks: true}, function(err, doc){
     if(doc){
       discord_helpers.getAvatarUrl(doc.discord_id, function(discord_avatar_url){
         if(!discord_avatar_url) discord_avatar_url = 'not found';

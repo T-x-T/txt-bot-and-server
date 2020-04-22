@@ -57,7 +57,7 @@ application.write = function(input, callback){
                 publish_country:  input.publish_country,
                 status:           1
               };
-              _internal.addNicks(document, function(err, newDoc){
+              _internal.addNicks(document, {fromApi: true}, function(err, newDoc){
                 data.new(newDoc, 'application', false, function(err, doc){
                   if(!err){
                     callback(201, false);
@@ -95,8 +95,8 @@ application.read = function(filter, options, callback){
       //Iterate over all items and add the current discord nick and mc ign
       let count = 0;
       for(let i = 0; i < docs.length; i++){
-        if(!docs[i].mc_ign || !docs[i].discord_nick){
-          _internal.addNicks(docs[i], function(err, newDoc){
+        if(!docs[i].mc_ign || !docs[i].discord_nick || docs[i].discord_nick == 'load#ing'){
+          _internal.addNicks(docs[i], {fromApi: true}, function(err, newDoc){
             if(!err){
               docs[i] = newDoc;
               //If this was the last item, Callback
@@ -173,7 +173,7 @@ application.acceptWorkflow = function(discord_id){
     app = app[0];
     if(!err){
       if(!app.mc_ign || !app.discord_nick || app.discord_nick == 'load#ing'){
-        _internal.addNicks(app, function(err, doc){
+        _internal.addNicks(app, false, function(err, doc){
           if(err || !doc) global.log(2, 'application.acceptWorkflow couldnt get the ign', {application: app, newDoc: doc, err: err});
           if(!err) app = doc;
           emitter.emit('application_accepted_joined', app);
@@ -191,8 +191,8 @@ application.acceptWorkflow = function(discord_id){
 var _internal = {};
 
 //Adds the current discord nick and mc ign to an application object
-_internal.addNicks = function (doc, callback) {
-  discord_api.getUserObject({ id: doc.discord_id }, false, function (err, userObject) {
+_internal.addNicks = function (doc, options, callback) {
+  discord_api.getUserObject({ id: doc.discord_id }, options, function (err, userObject) {
     if (err || !userObject) global.log(0, 'application.addNicks couldnt get the discord user object', { doc: doc });
     mc_helpers.getIGN(doc.mc_uuid, function (err, mc_ign) {
       if (!err && mc_ign) {

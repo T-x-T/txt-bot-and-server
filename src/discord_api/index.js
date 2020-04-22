@@ -14,7 +14,7 @@ var index = {};
 //Allowed types are: id, token
 index.getUserObject = function(input, options, callback){
   if(input.hasOwnProperty('id')){
-    main.getUserObjectById(input.id, callback);
+    main.getUserObjectById(input.id, options, callback);
   }else if (input.hasOwnProperty('token')){
     main.getUserObject(input.token, callback);
   }else{

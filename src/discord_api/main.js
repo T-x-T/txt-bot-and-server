@@ -47,14 +47,25 @@ main.getUserObject = function(access_token, callback){
   });
 };
 
-main.getUserObjectById = function(id, callback) {
+main.getUserObjectById = function(id, options, callback) {
   //Check if this id is already cached
   if(global.cache.discordUserObjects.hasOwnProperty(id)) {
     //Its cached, return that
     callback(false, global.cache.discordUserObjects[id]);
   } else {
-    //Its not cached, so we are probably still working on it (:
-    callback('The username isnt cached yet', {username: 'load', discriminator: 'ing'})
+    if(options.fromApi){
+      //Ask the api anyways
+      main.getUserObjectByIdFromApi(id, function(userData){
+        if(userData){
+          callback(false, userData);
+        }else{
+          callback('Couldnt get object from api', false);
+        }
+      });
+    }else{
+      //Its not cached, so we are probably still working on it (:
+      callback('The username isnt cached yet', {username: 'load', discriminator: 'ing'})
+    }
   }
 };
 
@@ -112,7 +123,7 @@ main.getUserObjectByIdFromApi = function(id, callback) {
         if(userData.hasOwnProperty("retry_after")) {
           //We got rate-limited, try again after it expired
           setTimeout(function() {
-            main.getUserObjectById(id, function(_userData) {
+            main.getUserObjectById(id, false, function(_userData) {
               callback(_userData);
             });
           }, userData.retry_after + 10);
