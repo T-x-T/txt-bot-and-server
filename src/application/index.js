@@ -21,9 +21,12 @@ index.save = function(input, options, callback){
 };
 
 //Get applications based on filter
-//Options:
+//Options: first: only return first result as an object and not an array; archived: also return applications older than 14 days when querying all applications
 //first: if true only returns the first doc
 index.get = function(filter, options, callback){
+  //If filter indicates that all applications should be returned and option archived isnt set, then return only applications from the last 14 days
+  if((Object.keys(filter).length === 0 || !filter) && !options.archived) filter = {timestamp: {$gt: Date.now() - 1000 * 60 * 60 * 24 * 14}};
+  
   main.read(filter, options, function(err, docs){
     if(options.first) docs = docs[0];
     callback(err, docs);

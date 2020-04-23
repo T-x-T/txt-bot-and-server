@@ -76,11 +76,6 @@ main.updateUserIdCache = function() {
 
   //Get all discord Ids
   user.get({}, false, function(err, docs) {
-    //Get all applications as well
-    application.get({}, false, function(err, applications){
-      docs = Object.assign(docs, applications);
-    });
-
     //Update the cache for each user
     i = 0;
     docs.forEach((doc) => {
