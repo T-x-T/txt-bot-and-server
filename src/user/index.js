@@ -70,9 +70,16 @@ setTimeout(function(){
         doc.publish_age = app.publish_age;
         doc.publish_country = app.publish_country;
         doc.status = 1;
-
+        let newDoc = doc;
         index.edit(doc, false, function(err, doc){
           if(err || !doc) global.log(0, 'Failed modifying accepted user', {application: doc, err: err});
+          index.get({discord: app.discord_id}, {first: true}, function(err, doc){
+            if(doc.status != newDoc.status){
+              index.edit(newDoc, false, function(err, doc){
+                global.log(2, 'user application_accepted_joined had to try two times', {application: app, doc: doc, origDoc: doc});
+              });
+            }
+          });
         });
       }else{
         if(err) global.log(0, 'Couldnt get accepted user', {application: doc, err: err});
