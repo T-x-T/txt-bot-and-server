@@ -296,9 +296,9 @@ root.join_us.onload = function(){
 root.join_us.sendApplication = function(){
   //Assemble the object to send to the api
   let application = {
-    mc_ign:                document.getElementById('ign').value,
+    mc_ign:                document.getElementById('ign').value.trim(),
     discord_id:            _internal.getQueryValue('id'),
-    email_address:         document.getElementById('email').value,
+    email_address:         document.getElementById('email').value.trim(),
     country:               document.getElementById('country').value,
     birth_month:           document.getElementById('selectmonth').value,
     birth_year:            document.getElementById('selectyear').value,
