@@ -53,6 +53,7 @@ index.sendCmd = function(cmd, callback){
 
 //Even listeners
 emitter.on('user_left', (member) => {
+  global.log(0, 'minecraft', 'event user_left received', {member: member});
   user.get({discord: member.id}, {onlyPaxterians: true, first: true}, function(err, doc){
     if(!err && doc){
       rcon.send(`whitelist remove ${doc.mcName}`, function(res){});
@@ -63,6 +64,7 @@ emitter.on('user_left', (member) => {
 });
 
 emitter.on('user_banned', (member) => {
+  global.log(0, 'minecraft', 'event user_banned received', {member: member});
   user.get({discord: member.id}, {onlyPaxterians: true, first: true}, function(err, doc){
     if(!err && doc){
       rcon.send(`whitelist remove ${doc.mcName}`, function(res){});
@@ -74,6 +76,7 @@ emitter.on('user_banned', (member) => {
 });
 
 emitter.on('application_accepted_joined', (app) => {
+  global.log(0, 'minecraft', 'event application_accepted_joined received', {app: app});
   main.getIGN(app.mc_uuid, function(err, ign){
     if(!err && ign){
       rcon.send(`whitelist add ${ign}`, function(res){});
