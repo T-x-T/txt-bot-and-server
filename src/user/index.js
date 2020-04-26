@@ -48,15 +48,6 @@ setTimeout(function(){
     }, 1000);
   });
 
-  emitter.on('user_banned', (discord_id) => {
-    //Wait one second, so other code can still do their cleanup and get more data about the user
-    setTimeout(function(){
-      main.delete({discord: discord_id}, false, function(err) {
-        if(err) global.log(0, 'Couldnt delete user that got banned', {discord_id: discord_id});
-      });
-    }, 1000);
-  });
-
   emitter.on('application_accepted_joined', (app) => {
     global.log(0, 'user component got event application_accepted_joined', {application: app});
     index.get({discord: app.discord_id}, {first: true}, function(err, doc){
