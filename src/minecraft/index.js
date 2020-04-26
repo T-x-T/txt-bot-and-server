@@ -57,7 +57,7 @@ emitter.on('user_left', (member) => {
     if(!err && doc){
       rcon.send(`whitelist remove ${doc.mcName}`, function(res){});
     }else{
-      global.log(2, 'emitter.on user_left in minecraft component couldnt get the user object', {err: err, doc: doc, member: member});
+      global.log(2, 'minecraft', 'emitter.on user_left in minecraft component couldnt get the user object', {err: err, doc: doc, member: member});
     }
   });
 });
@@ -68,7 +68,7 @@ emitter.on('user_banned', (member) => {
       rcon.send(`whitelist remove ${doc.mcName}`, function(res){});
       rcon.send(`ban ${doc.mcName}`, function(res){});
     }else{
-      global.log(2, 'emitter.on user_banned in minecraft component couldnt get the user object', {err: err, doc: doc, member: member});
+      global.log(2, 'minecraft', 'emitter.on user_banned in minecraft component couldnt get the user object', {err: err, doc: doc, member: member});
     }
   });
 });
@@ -78,7 +78,7 @@ emitter.on('application_accepted_joined', (app) => {
     if(!err && ign){
       rcon.send(`whitelist add ${ign}`, function(res){});
     }else{
-      global.log(2, 'emitter.on application_accepted_joined couldnt get the ign', {err: err, ign: ign, application: app});
+      global.log(2, 'minecraft', 'emitter.on application_accepted_joined couldnt get the ign', {err: err, ign: ign, application: app});
     }
   });
 });

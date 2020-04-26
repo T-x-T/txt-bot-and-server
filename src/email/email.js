@@ -94,7 +94,7 @@ email.send = function(recipient, subject, text){
   };
   mailTransporter.sendMail(mailOptions, function(err, info){
     if(err){
-      global.log(2, 'email.send couldnt sent the email out', {mail: mailOptions});
+      global.log(2, 'email', 'email.send couldnt sent the email out', {mail: mailOptions});
     }
   });
 };

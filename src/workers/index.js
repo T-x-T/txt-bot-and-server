@@ -48,7 +48,7 @@ setInterval(function(){
   try {
     youtube.getNewestVideo();
   } catch(e) {
-    global.log(3, 'Workers: Cant execute getNewestVideo', {Error: e});
+    global.log(3, 'workers', 'Workers: Cant execute getNewestVideo', {Error: e});
   }
 }, 1000 * 60 * 5);
 

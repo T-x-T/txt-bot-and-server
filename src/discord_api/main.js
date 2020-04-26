@@ -38,7 +38,7 @@ main.getUserObject = function(access_token, callback){
         userData = JSON.parse(userData);
         success = true;
       }catch(e){
-        global.log(2, 'oauth.getUserObject encountered an error', {err: e});
+        global.log(2, 'discord_api', 'oauth.getUserObject encountered an error', {err: e});
         callback(e, false);
       }
       if(success) callback(false, userData);
@@ -110,7 +110,7 @@ main.getUserObjectByIdFromApi = function(id, callback) {
       try {
         userData = JSON.parse(userData);
       } catch(e) {
-        global.log(2, 'oauth.getUserObject encountered an error', {err: e});
+        global.log(2, 'discord_api', 'oauth.getUserObject encountered an error', {err: e});
         error = true;
       }
       if(!error) {

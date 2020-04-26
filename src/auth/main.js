@@ -123,7 +123,7 @@ oauth.getAccess_token = function(code, redirect, callback){
       }
     });
     req.on('error', (e) => {
-      global.log(2, 'oauth.getAccess_token encountered an error', {err: e});
+      global.log(2, 'auth', 'oauth.getAccess_token encountered an error', {err: e});
       callback(e, false);
     });
   });

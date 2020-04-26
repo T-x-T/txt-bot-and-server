@@ -63,17 +63,17 @@ application.write = function(input, callback){
                     callback(201, false);
                     emitter.emit('application_new', doc);
                   }else{
-                    global.log(2, 'application_write couldnt save an application to the db', {err: err, application: input});
+                    global.log(2, 'application', 'application_write couldnt save an application to the db', {err: err, application: input});
                     callback(500, 'An error occured while trying to save your application');
                   }
                 });
               });
             }else{
-              global.log(0, 'application_write received a malformed request', {application: input});
+              global.log(0, 'application', 'application_write received a malformed request', {application: input});
               callback(400, 'One or more inputs are malformed');
             }
           }else{
-            global.log(0, 'application_write received a request where the privacy policy or the rules werent accepted', {application: application});
+            global.log(0, 'application', 'application_write received a request where the privacy policy or the rules werent accepted', {application: application});
             callback(400, 'You have to accept the rules and the privacy policy');
           }
         }else{
@@ -81,7 +81,7 @@ application.write = function(input, callback){
         }
       });
     }else{
-      global.log(0, 'application_write couldnt verify the mc_ign', {application: input});
+      global.log(0, 'application', 'application_write couldnt verify the mc_ign', {application: input});
       callback(400, 'Couldnt verify your Minecraft In game Name! Maybe you misspelled it or mojangs API is currently down');
     }
   });
@@ -149,7 +149,7 @@ application.changeStatus = function(id, newStatus, reason, callback){
               }
             }
           }else{
-            global.log(2, 'application.changestatus couldnt save changes into the database', {err: err, id: id, newStatus: newStatus, reason: reason, application: doc});
+            global.log(2, 'application', 'application.changestatus couldnt save changes into the database', {err: err, id: id, newStatus: newStatus, reason: reason, application: doc});
             callback(500, 'Couldnt save the changes back to the database');
           }
         });
@@ -174,7 +174,7 @@ application.acceptWorkflow = function(discord_id){
     if(!err){
       if(!app.mc_ign || !app.discord_nick || app.discord_nick == 'load#ing'){
         _internal.addNicks(app, false, function(err, doc){
-          if(err || !doc) global.log(2, 'application.acceptWorkflow couldnt get the ign', {application: app, newDoc: doc, err: err});
+          if(err || !doc) global.log(2, 'application', 'application.acceptWorkflow couldnt get the ign', {application: app, newDoc: doc, err: err});
           if(!err) app = doc;
           emitter.emit('application_accepted_joined', app);
         });
@@ -182,7 +182,7 @@ application.acceptWorkflow = function(discord_id){
         emitter.emit('application_accepted_joined', app);
       }
     }else{
-      global.log(2, 'application.acceptWorkflow couldnt get the application from the database', {err: err, application: app, discord_id: discord_id});
+      global.log(2, 'application', 'application.acceptWorkflow couldnt get the application from the database', {err: err, application: app, discord_id: discord_id});
     } 
   });
 };
@@ -193,7 +193,7 @@ var _internal = {};
 //Adds the current discord nick and mc ign to an application object
 _internal.addNicks = function (doc, options, callback) {
   discord_api.getUserObject({ id: doc.discord_id }, options, function (err, userObject) {
-    if (err || !userObject) global.log(0, 'application.addNicks couldnt get the discord user object', { doc: doc });
+    if (err || !userObject) global.log(0, 'application', 'application.addNicks couldnt get the discord user object', { doc: doc });
     mc_helpers.getIGN(doc.mc_uuid, function (err, mc_ign) {
       if (!err && mc_ign) {
         try {
@@ -204,7 +204,7 @@ _internal.addNicks = function (doc, options, callback) {
         doc.mc_ign = mc_ign;
         callback(false, doc);
       } else {
-        global.log(0, 'application.addNicks couldnt get the mc_ign', { doc: doc, userObject: userObject });
+        global.log(0, 'application', 'application.addNicks couldnt get the mc_ign', { doc: doc, userObject: userObject });
         callback('application.addNicks couldnt get the mc_ign', false);
       }
     });

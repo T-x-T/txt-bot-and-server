@@ -74,7 +74,7 @@ stats.template.memberOverview = function(options, callback) {
           callback(false, obj);
         });
       } else {
-        global.log(2, 'stats.memberOverview couldnt get the member object', {id: discord_id});
+        global.log(2, 'stats', 'stats.memberOverview couldnt get the member object', {id: discord_id});
         callback('Couldnt get the member object', false);
       }
     });
@@ -96,7 +96,7 @@ stats.template.memberOverview = function(options, callback) {
           });
         }
       } else {
-        global.log(2, 'stats.memberOverview couldnt get any member objects', {});
+        global.log(2, 'stats', 'stats.memberOverview couldnt get any member objects', {});
         callback('Couldnt get any member objects bru', false);
       }
     });
@@ -117,7 +117,7 @@ stats.template.countryList = function(options, callback) {
         if(iso){
           countries[iso].numberOfThings++;
         }else{
-          global.log(0, 'stats.countryList doesnt contain a country', {country: doc.country})
+          global.log(0, 'stats', 'stats.countryList doesnt contain a country', {country: doc.country})
         }
       });
 
@@ -131,7 +131,7 @@ stats.template.countryList = function(options, callback) {
 
       callback(false, countries);
     } else {
-      global.log(0, 'stats.countryList couldnt get the data from the db', {});
+      global.log(0, 'stats', 'stats.countryList couldnt get the data from the db', {});
       callback('Couldnt get the important data from the database', false);
     }
   });

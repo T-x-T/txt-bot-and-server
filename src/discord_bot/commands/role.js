@@ -25,7 +25,7 @@ module.exports = {
           //Role exists, add it
           message.member.addRole(discordHelpers.returnRoleId('#' + args[1]))
           .then(message.reply(`Welcome in the ${args[1]} role!`))
-          .catch(global.log(2, 'Role Command: Couldnt add user into role', {Message: message.content}));
+          .catch(global.log(2, 'discord_bot', 'Role Command: Couldnt add user into role', {Message: message.content}));
         }else{
           //Role doesnt exist
           message.reply('That role doesnt exist :(')

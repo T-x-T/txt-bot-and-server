@@ -44,13 +44,13 @@ setImmediate(function(){
   
   emitter.on('application_new', (doc) => {
     discord_helpers.sendMessage('New application from ' + doc.mc_ign + '\nhttps://paxterya.com/staff/application.html?id=' + doc.id, config['new_application_announcement_channel'], function(err){
-      if(err) global.log(2, 'discord_bot couldnt send the new application message', {err: err, application: doc});
+      if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new application message', {err: err, application: doc});
     });
   });
   
   emitter.on('application_accepted_joined', (doc) => {
     discord_helpers.addMemberToRole(doc.discord_id, discord_helpers.returnRoleId('paxterya'), function(err) {
-      if(err) global.log(2, 'discord_bot couldnt add accepted member to role', {application: doc, err: err});
+      if(err) global.log(2, 'discord_bot', 'discord_bot couldnt add accepted member to role', {application: doc, err: err});
     });
     discord_helpers.updateNick(doc.discord_id);
   
@@ -63,26 +63,26 @@ setImmediate(function(){
     msg += 'The server IP is play.paxterya.com';
     
     discord_helpers.sendMessage(msg, config['new_member_announcement_channel'], function(err) {
-      if(err) global.log(2, 'discord_bot couldnt send the welcome message', {err: err, application: doc});
+      if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the welcome message', {err: err, application: doc});
     });
   });
   
   emitter.on('bulletin_new', (msg) => {
     discord_helpers.sendMessage(msg, config['new_bulletin_announcement_channel'], function(err) {
-      if(err) global.log(2, 'discord_bot couldnt send the new bulletin message', {err: err, message: msg});
+      if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new bulletin message', {err: err, message: msg});
     });
   });
   
   emitter.on('bulletin_edit', (msg) => {
     discord_helpers.sendMessage(msg, config['new_bulletin_announcement_channel'], function(err) {
-      if(err) global.log(2, 'discord_bot couldnt send the edited bulletin message', {err: err, message: msg});
+      if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the edited bulletin message', {err: err, message: msg});
     });
   });
   
   emitter.on('youtube_new', (video) => {
     discord_helpers.sendMessage(`New Video: ${video.title} by ${video.channel_title}\n${video.url}\n<@&${video.channel.role}>`, video.channel.channel_id, function(err) {
       if(err) {
-        global.log(2, 'discord_bot couldnt send the new youtube video message', {err: err, video: video});
+        global.log(2, 'discord_bot', 'discord_bot couldnt send the new youtube video message', {err: err, video: video});
       }
     });
   });

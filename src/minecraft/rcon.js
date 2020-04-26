@@ -28,7 +28,7 @@ rcon.send = function(cmd, callback){
     });
     rconCon.on('auth', function() {
       //Everything fine, send the command
-      global.log(0, 'mc_helpers successfully authenticated to the rcon server', {cmd: cmd});
+      global.log(0, 'minecraft', 'mc_helpers successfully authenticated to the rcon server', {cmd: cmd});
       rconCon.send(cmd);
       //We can disconnect again
       rconCon.disconnect();

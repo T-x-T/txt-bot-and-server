@@ -21,7 +21,7 @@ client.once('ready', () => {
   console.log('The Discord bot is ready!');
   client.user.setActivity('your messages',{type: 'LISTENING'});
   //Finally log that we sucessfully started
-  global.log(1, 'Discord Bot connected sucessfully', null);
+  global.log(1, 'discord_bot', 'Discord Bot connected sucessfully', null);
 });
 
 emitter.on('discord_bot_ready' ,() => {
@@ -62,7 +62,7 @@ emitter.on('discord_bot_ready' ,() => {
     try {
       command.execute(message, args);
     } catch (e) {
-      global.log(3, 'Some Discord command just broke', { error: e, msg: message.content });
+      global.log(3, 'discord_bot', 'Some Discord command just broke', { error: e, msg: message.content });
       message.reply('There was an oopsie when I tried to do that');
     }
   });
@@ -138,7 +138,7 @@ emitter.on('discord_bot_ready' ,() => {
   client.on('guildMemberAdd', (user) => {
     //Send a welcome message
     discordHelpers.sendMessage(`Welcome <@${user.id}>! If you are here for joining the Minecraft server, then please apply under https://paxterya.com/join-us, read the rules at https://paxterya.com/rules and consult our FAQ at https://paxterya.com/faq \nIf you have any questions just ping the admins (they like getting pinged, trust me)`, config['general_channel'], function (err) {
-      if (err) global.log(2, 'discord_bot couldnt send the new application message', { err: err, application: doc });
+      if (err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new application message', { err: err, application: doc });
     });
     //Check if the new member got accepted as a member
     application.get({ discord_id: user.id }, { first: true }, function (err, doc) {

@@ -51,11 +51,11 @@ server.uniserver = function(req, res){
   //Form the data object
   server.getDataObject(req, function(data) {
     //Log the request
-    global.log(0, 'Web Request received', {data: data, sourceIP: req.connection.remoteAddress});
+    global.log(0, 'web', 'Web Request received', {data: data, sourceIP: req.connection.remoteAddress});
 
     //Some requests seem to come in without any header, which is bad, so lets add one here if thats the case, also log it
     if(!data.headers.hasOwnProperty('host')) {
-      global.log(1, 'Web request without host header received', {data: data, sourceIP: req.connection.remoteAddress});
+      global.log(1, 'web', 'Web request without host header received', {data: data, sourceIP: req.connection.remoteAddress});
       data.headers.host = 'paxterya.com';
     }
 
@@ -87,7 +87,7 @@ server.uniserver = function(req, res){
         server.processHandlerResponse(res, data.method, data.path, statusCode, payload, contentType);
       });
     } catch(e) {
-      global.log(2, 'web request encountered a fatal error', {err: e, data: data});
+      global.log(3, 'web', 'web request encountered a fatal error', {err: e, data: data});
       server.processHandlerResponse(res, data.method, data.path, 500, 'Internal server error :(\n(Please notify TxT#0001 on Discord if you see this!)', 'html');
     }
   });
@@ -146,8 +146,8 @@ server.processHandlerResponse = function (res, method, path, statusCode, payload
   contentType = typeof (contentType) == 'string' ? contentType : 'html';
 
   //Log 404 and 500 errors
-  if (statusCode == 404) global.log(0, 'Answered web request with 404', { path: path, payload: payload });
-  if (statusCode == 500) global.log(2, 'Answered web request with 500', { path: path, payload: payload });
+  if (statusCode == 404) global.log(0, 'web', 'Answered web request with 404', { path: path, payload: payload });
+  if (statusCode == 500) global.log(2, 'web', 'Answered web request with 500', { path: path, payload: payload });
 
   //Build the response parts that are content specific
   var payloadStr = '';
@@ -205,11 +205,11 @@ server.init = function () {
   //Start http server
   server.httpServer.listen(config["http-port"], function () {
     console.log('HTTP server online on port ' + config["http-port"]);
-    global.log(1, 'HTTP server is online', { 'port': config["http-port"] });
+    global.log(1, 'web', 'HTTP server is online', { 'port': config["http-port"] });
   });
   server.httpsServer.listen(config["https-port"], function () {
     console.log('HTTPS server online on port ' + config["https-port"]);
-    global.log(1, 'HTTPS server is online', { 'port': config["https-port"] });
+    global.log(1, 'web', 'HTTPS server is online', { 'port': config["https-port"] });
   });
 };
 

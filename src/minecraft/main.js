@@ -24,7 +24,7 @@ mc.updateAllIGNs = function(){
             member.mcName = ign;
             user.edit(member, false, function(err, docs){});
           }else{
-            global.log(2, 'mc_helpers.updateAllIGNs couldnt get a valid IGN for user', member);
+            global.log(2, 'minecraft', 'mc_helpers.updateAllIGNs couldnt get a valid IGN for user', member);
           }
         });
       }
@@ -53,7 +53,7 @@ mc.getUUID = function(ign, callback){
         try{
           data = JSON.parse(data);
         }catch(e){
-          global.log(2, 'mc_helpers.getUUID couldnt pare the JSON returned from Mojangs API', {error: e, data: data,ign: ign});
+          global.log(2, 'minecraft', 'mc_helpers.getUUID couldnt pare the JSON returned from Mojangs API', {error: e, data: data,ign: ign});
         }
 
         //Check if the returned data makes sense
@@ -99,7 +99,7 @@ mc.getIGN = function(uuid, callback){
           data = JSON.parse(data);
           dataOK = true;
         }catch(e){
-          global.log(2, 'mc_helpers.getIGN couldnt pare the JSON returned from Mojangs API', {error: e, data: data, uuid: uuid});
+          global.log(2, 'minecraft', 'mc_helpers.getIGN couldnt pare the JSON returned from Mojangs API', {error: e, data: data, uuid: uuid});
           dataOK = false;
         }
         if(typeof data != 'object' || typeof data == 'undefined') dataOK = false;

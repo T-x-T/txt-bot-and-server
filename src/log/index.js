@@ -10,10 +10,11 @@ const data = require('../data');
 var log = {};
 
 //Write a log entry
-log.write = function (level, name, payload, callback) {
+log.write = function (level, component, name, payload, callback) {
   data.new({
     timestamp: Date.now(),
     level: level,
+    component: component,
     name: name,
     data: payload
   }, 'log', false, function (err, doc) {
