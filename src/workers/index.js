@@ -18,6 +18,7 @@ const stats           = require('../stats');
 mc_helpers.updateOnlinePlayers();
 
 log.prune(30);
+log.pruneLevel(1, 0);
 
 widgets.init();
 
@@ -73,4 +74,5 @@ setInterval(function(){
 //Every day
 setInterval(function(){
   log.prune(30);
+  log.pruneLevel(1, 0);
 }, 1000 * 60 * 60 * 24);
