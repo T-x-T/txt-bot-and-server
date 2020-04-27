@@ -67,9 +67,9 @@ rcon.updateRoles = function(){
       //Build and Add prefix for each member to commands
       let j = 0;
       members.forEach((member) => {
-        global.log(0, 'minecraft', 'rcone.updateRoles start processing user', {members: members, member: member});
+        global.log(0, 'minecraft', 'rcon.updateRoles start processing user', {members: members, member: member});
         discord_helpers.getMemberObjectByID(member.discord, function(memberObj) {
-          global.log(0, 'minecraft', 'rcone.updateRoles got discord object from user', {memberObj: memberObj});
+          global.log(0, 'minecraft', 'rcon.updateRoles got discord object from user', {memberObj: memberObj});
           if(memberObj) {
             //Check roles
             let roles = memberObj.roles.array();
