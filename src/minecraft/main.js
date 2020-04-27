@@ -104,7 +104,7 @@ mc.getIGN = function(uuid, callback){
         }
         if(typeof data != 'object' || typeof data == 'undefined') dataOK = false;
         if(dataOK){
-          global.log(0, 'minecraft', 'getIGN received valid data', {uuid: ign, data: data});
+          global.log(0, 'minecraft', 'getIGN received valid data', {uuid: uuid, data: data});
           //Only save the latest entry
           data = data[data.length - 1];
           //Check if the returned data makes sense
