@@ -90,9 +90,11 @@ rcon.updateRoles = function(){
               //There is no prefix, send clear to clear it
               prefix = 'clear';
             }
-
+            global.log(0, 'minecraft', 'rcon.updateRoles determined prefix for user', {memberObj: memberObj, prefix: prefix});
             //Now add the command to the list of commands to send
             commands.push(`paxprefix ${member.mcName} ${prefix}`);
+          }else{
+            global.log(0, 'minecraft', 'rcon.updateRoles couldnt get the member object', {member: member});
           }
           //Now check if this was the last execution of the loop
           j++;
