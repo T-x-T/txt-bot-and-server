@@ -55,7 +55,7 @@ mc.getUUID = function(ign, callback){
         }catch(e){
           global.log(2, 'minecraft', 'mc_helpers.getUUID couldnt pare the JSON returned from Mojangs API', {error: e, data: data,ign: ign});
         }
-
+        global.log(0, 'minecraft', 'getUUID received valid data', {ign: ign, data: data});
         //Check if the returned data makes sense
         if(data.hasOwnProperty('id')){
           if(data.id.length == 32){
@@ -104,6 +104,7 @@ mc.getIGN = function(uuid, callback){
         }
         if(typeof data != 'object' || typeof data == 'undefined') dataOK = false;
         if(dataOK){
+          global.log(0, 'minecraft', 'getIGN received valid data', {uuid: ign, data: data});
           //Only save the latest entry
           data = data[data.length - 1];
           //Check if the returned data makes sense

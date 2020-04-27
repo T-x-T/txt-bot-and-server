@@ -72,7 +72,6 @@ main.getUserObjectById = function(id, options, callback) {
 main.updateUserIdCache = function() {
   //Needs to be imported here, otherwise data hasnt initialized or something like that
   const user = require('../user');
-  const application = require('../application');
 
   //Get all discord Ids
   user.get({}, false, function(err, docs) {
@@ -139,6 +138,7 @@ main.getNicknameByID = function (userID, callback) {
   try {
     callback(`${client.guilds.get(config.guild).members.get(userID).user.username}#${client.guilds.get(config.guild).members.get(userID).user.discriminator}`);
   } catch (e) {
+    console.log(0, 'discord_api', 'main.getNicknameByID encountered an error', {err: e, userID: userID});
     callback(false);
   }
 };

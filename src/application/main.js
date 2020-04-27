@@ -176,9 +176,11 @@ application.acceptWorkflow = function(discord_id){
         _internal.addNicks(app, false, function(err, doc){
           if(err || !doc) global.log(2, 'application', 'application.acceptWorkflow couldnt get the ign', {application: app, newDoc: doc, err: err});
           if(!err) app = doc;
+          global.log(0, 'application', 'emitted application_accepted_joined with having to add nicks', {application: app});
           emitter.emit('application_accepted_joined', app);
         });
       }else{
+        global.log(0, 'application', 'emitted application_accepted_joined without having to add nicks', {application: app});
         emitter.emit('application_accepted_joined', app);
       }
     }else{

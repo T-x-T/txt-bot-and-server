@@ -11,6 +11,7 @@ var index = {};
 
 //Saves a new or existing application
 index.save = function(input, options, callback){
+  global.log(0, 'application', 'index received application to save', {input: input, options: options});
   if(!input.hasOwnProperty('id')){
     //Its a new application
     main.write(input, callback);
@@ -24,6 +25,7 @@ index.save = function(input, options, callback){
 //Options: first: only return first result as an object and not an array; archived: also return applications older than 14 days when querying all applications
 //first: if true only returns the first doc
 index.get = function(filter, options, callback){
+  global.log(0, 'application', 'index received get request', {filter: filter, options: options});
   //If filter indicates that all applications should be returned and option archived isnt set, then return only applications from the last 14 days
   if((Object.keys(filter).length === 0 || !filter) && !options.archived) filter = {timestamp: {$gt: Date.now() - 1000 * 60 * 60 * 24 * 14}};
   
@@ -35,6 +37,7 @@ index.get = function(filter, options, callback){
 
 //Execute the acceptWorkflow
 index.acceptWorkflow = function(discord_id, application){
+  global.log(0, 'application', 'index received trigger to start acceptWorkflow', {discord_id: discord_id});
   main.acceptWorkflow(discord_id, application);
 };
 

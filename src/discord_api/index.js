@@ -13,6 +13,7 @@ var index = {};
 //Input is an object with the type as a key
 //Allowed types are: id, token
 index.getUserObject = function(input, options, callback){
+  global.log(0, 'discord_api', 'index.getUserObject got called', {input: input, options: options});
   if(input.hasOwnProperty('id')){
     main.getUserObjectById(input.id, options, callback);
   }else if (input.hasOwnProperty('token')){
@@ -24,10 +25,13 @@ index.getUserObject = function(input, options, callback){
 
 //Updates the userobject cache
 index.updateCache = function(){
+  global.log(0, 'discord_api', 'index.updateCache', {});
   main.updateUserIdCache();
 };
 
+//only works for guildMembers
 index.getNicknameByID = function(userID, callback){
+  global.log(0, 'discord_api', 'index.getNicknameByID', {userID: userID});
   main.getNicknameByID(userID, callback);
 };
 

@@ -20,16 +20,19 @@ index.get = function(filter, options, callback){
 
 //Deletes documents based on filter
 index.delete = function(filter, options, callback) {
+  global.log(0, 'user', 'index.delete got called', {filter: filter, options: options});
   main.delete(filter, options, callback);
 };
 
 //Replaces the document that matches the input with the input
 index.edit = function(input, options, callback) {
+  global.log(0, 'user', 'index.edit got called', {input: input, options: options});
   main.edit(input, options, callback);
 };
 
 //Adds modifier to key of first documents matching filter 
 index.modify = function(filter, key, modifier, options, callback){
+  global.log(0, 'user', 'index.modify got called', {filter: filter, options: options, key: key, modifier: modifier});
   main.modify(filter, key, modifier, options, callback);
 };
 
@@ -42,6 +45,7 @@ setTimeout(function(){
   emitter.on('user_left', (discord_id) => {
     //Wait one second, so other code can still do their cleanup and get more data about the user
     setTimeout(function(){
+      global.log(0, 'user', 'user_left, deletion triggered', {discord_id: discord_id});
       main.delete({discord: discord_id}, false, function(err) {
         if(err) global.log(0, 'user', 'Couldnt delete user that left', {discord_id: discord_id});
       });

@@ -96,7 +96,10 @@ rcon.updateRoles = function(){
           }
           //Now check if this was the last execution of the loop
           j++;
-          if(j == members.length - 1) mc.rcon(commands);
+          if(j == members.length - 1) {
+            global.log(0, 'minecraft', 'rcon.updateRoles sent commands to rcon.send', {commands: commands});
+            mc.rcon(commands);
+          }
         });
       }); 
     }

@@ -13,6 +13,7 @@ var index = {};
 //input is an object containing one key for the type of input and the value
 //Valid types are: code, token
 index.getDiscordId = function(input, options, callback){
+  global.log(0, 'auth', 'index.getDiscordId got called', {input: input, options: options});
   if(input.hasOwnProperty('code')){
     main.getDiscordIdFromCode(input.code, options.redirect, callback);
   }else if (input.hasOwnProperty('token')){
@@ -26,6 +27,7 @@ index.getDiscordId = function(input, options, callback){
 //input is an object containing one key for the type of input and the value
 //Valid types are: code, token, id
 index.getAccessLevel = function(input, options, callback){
+  global.log(0, 'auth', 'index.getAccessLevel got called', {input: input, options: options});
   if(input.hasOwnProperty('code')){
     main.getCodeAccessLevel(input.code, options.redirect, callback);
   }else if (input.hasOwnProperty('token')){
