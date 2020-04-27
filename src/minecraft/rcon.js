@@ -57,18 +57,19 @@ rcon.updateOnlinePlayers = function(){
 
 //Updates the role prefixes on the server
 rcon.updateRoles = function(){
-  //Dont run this when we are testing
-  if(!config['use-external-certs']) return;
-
+  global.log(0, 'minecraft', 'rcon.updateRoles got triggered', false);
   //Get all members
   user.get({}, {privacy: true, onlyPaxterians: true}, function(members){
+    global.log(0, 'minecraft', 'rcon.updateRoles got users from db', {members: members});
     if(members){
       //Container for all commands to send once where done preparing
       let commands = [];
       //Build and Add prefix for each member to commands
       let j = 0;
       members.forEach((member) => {
+        global.log(0, 'minecraft', 'rcone.updateRoles start processing user', {members: members, member: member});
         discord_helpers.getMemberObjectByID(member.discord, function(memberObj) {
+          global.log(0, 'minecraft', 'rcone.updateRoles got discord object from user', {memberObj: memberObj});
           if(memberObj) {
             //Check roles
             let roles = memberObj.roles.array();
@@ -94,7 +95,7 @@ rcon.updateRoles = function(){
             //Now add the command to the list of commands to send
             commands.push(`paxprefix ${member.mcName} ${prefix}`);
           }else{
-            global.log(0, 'minecraft', 'rcon.updateRoles couldnt get the member object', {member: member});
+            global.log(0, 'minecraft', 'rcon.updateRoles couldnt get members from the db', {member: member});
           }
           //Now check if this was the last execution of the loop
           j++;
