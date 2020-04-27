@@ -16,7 +16,7 @@ const workers = require('./src/workers'); //lgtm [js/unused-local-variable]
 const email = require('./src/email'); //lgtm [js/unused-local-variable]
 
 //Log that the app got started
-global.log(1, 'Application started', null);
+global.log(1, 'index', 'Application started', null);
 
 //Create the container
 var app = {};

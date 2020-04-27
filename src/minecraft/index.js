@@ -53,32 +53,35 @@ index.sendCmd = function(cmd, callback){
 
 //Even listeners
 emitter.on('user_left', (member) => {
+  global.log(0, 'minecraft', 'event user_left received', {member: member});
   user.get({discord: member.id}, {onlyPaxterians: true, first: true}, function(err, doc){
     if(!err && doc){
       rcon.send(`whitelist remove ${doc.mcName}`, function(res){});
     }else{
-      global.log(2, 'emitter.on user_left in minecraft component couldnt get the user object', {err: err, doc: doc, member: member});
+      global.log(2, 'minecraft', 'emitter.on user_left in minecraft component couldnt get the user object', {err: err, doc: doc, member: member});
     }
   });
 });
 
 emitter.on('user_banned', (member) => {
+  global.log(0, 'minecraft', 'event user_banned received', {member: member});
   user.get({discord: member.id}, {onlyPaxterians: true, first: true}, function(err, doc){
     if(!err && doc){
       rcon.send(`whitelist remove ${doc.mcName}`, function(res){});
       rcon.send(`ban ${doc.mcName}`, function(res){});
     }else{
-      global.log(2, 'emitter.on user_banned in minecraft component couldnt get the user object', {err: err, doc: doc, member: member});
+      global.log(2, 'minecraft', 'emitter.on user_banned in minecraft component couldnt get the user object', {err: err, doc: doc, member: member});
     }
   });
 });
 
 emitter.on('application_accepted_joined', (app) => {
+  global.log(0, 'minecraft', 'event application_accepted_joined received', {app: app});
   main.getIGN(app.mc_uuid, function(err, ign){
     if(!err && ign){
       rcon.send(`whitelist add ${ign}`, function(res){});
     }else{
-      global.log(2, 'emitter.on application_accepted_joined couldnt get the ign', {err: err, ign: ign, application: app});
+      global.log(2, 'minecraft', 'emitter.on application_accepted_joined couldnt get the ign', {err: err, ign: ign, application: app});
     }
   });
 });

@@ -51,14 +51,14 @@ youtube.checkIfNewVideos = function(channel){
           youtube.postIfNew(latestVideo);
         } else {
           //Data object isnt valid
-          global.log(3, 'Youtube: Retrieved data from youtube is invalid', data);
+          global.log(3, 'youtube', 'Youtube: Retrieved data from youtube is invalid', data);
         }
       } else {
         //Data object isnt valid
-        global.log(3, 'Youtube: Retrieved data from youtube is invalid', data);
+        global.log(3, 'youtube', 'Youtube: Retrieved data from youtube is invalid', data);
       }
     }).on('error', function(e) {
-      global.log(3, 'Youtube: Cant retrieve video data from youtube', null);
+      global.log(3, 'youtube', 'Youtube: Cant retrieve video data from youtube', null);
     });
   });
 };

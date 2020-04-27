@@ -98,13 +98,13 @@ helpers.updateNick = function(discord_id) {
         if(member) {
           //Now its time to change the users nick
           member.setNickname(ign)
-            .catch((e) => {global.log(2, 'discord_helpers.updateNick failed to set the members nickname', {user: member.id, err: e});});
+            .catch((e) => {global.log(2, 'discord_bot', 'discord_helpers.updateNick failed to set the members nickname', {user: member.id, err: e});});
         } else {
-          global.log(2, 'discord_helpers.updateNick couldnt get the member object', {user: discord_id, member: member});
+          global.log(2, 'discord_bot', 'discord_helpers.updateNick couldnt get the member object', {user: discord_id, member: member});
         }
       });
     } else {
-      global.log(2, 'discord_helpers.updateNick couldnt get the member document', {user: discord_id});
+      global.log(2, 'discord_bot', 'discord_helpers.updateNick couldnt get the member document', {user: discord_id});
     }
   });
 };
@@ -117,7 +117,7 @@ helpers.updateAllNicks = function(){
         helpers.updateNick(doc.discord)
       });
     }else{
-      global.log(2, 'discord_helpers.updateAllNicks couldnt get the member database entries', {});
+      global.log(2, 'discord_bot', 'discord_helpers.updateAllNicks couldnt get the member database entries', {});
     }
   });
 };

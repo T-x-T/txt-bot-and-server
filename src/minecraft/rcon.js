@@ -28,7 +28,7 @@ rcon.send = function(cmd, callback){
     });
     rconCon.on('auth', function() {
       //Everything fine, send the command
-      global.log(0, 'mc_helpers successfully authenticated to the rcon server', {cmd: cmd});
+      global.log(0, 'minecraft', 'mc_helpers successfully authenticated to the rcon server', {cmd: cmd});
       rconCon.send(cmd);
       //We can disconnect again
       rconCon.disconnect();
@@ -96,7 +96,10 @@ rcon.updateRoles = function(){
           }
           //Now check if this was the last execution of the loop
           j++;
-          if(j == members.length - 1) mc.rcon(commands);
+          if(j == members.length - 1) {
+            global.log(0, 'minecraft', 'rcon.updateRoles sent commands to rcon.send', {commands: commands});
+            mc.rcon(commands);
+          }
         });
       }); 
     }

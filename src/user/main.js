@@ -111,7 +111,7 @@ user.updateNicks = function(){
           if(discord_nick){
             doc.discord_nick = discord_nick;
             user.edit(doc, false, function(err, doc) {
-              if(err) global.log(2, 'user.updateNick couldnt update user', {err: err, doc: doc});
+              if(err) global.log(2, 'user', 'user.updateNick couldnt update user', {err: err, doc: doc});
             });
           } 
         });
@@ -119,7 +119,7 @@ user.updateNicks = function(){
       //Trigger update of minecraft igns
       mc.updateAllIGNs();
     }else{
-      global.log(2, 'user.updateNicks cant get any users', {err: err});
+      global.log(2, 'user', 'user.updateNicks cant get any users', {err: err});
     }
   });
 };

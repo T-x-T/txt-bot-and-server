@@ -27,12 +27,15 @@ oauth.returnAccessLevel = function(userID){
     if(client.guilds.get(config['guild']).members.get(userID).roles.has(config["admin-role"])) access_level = 9;
   }catch(e){}
 
+  global.log(0, 'auth', 'main.returnAcessLevel returned', {input: input, options: options, access_level: access_level});
   return access_level;
 };
 
 //Returns true if the given discord id is member of the guild and false if not
 oauth.isGuildMember = function(userID){
-  return client.guilds.get(config['guild']).members.has(userID);
+  let is = client.guilds.get(config['guild']).members.has(userID);
+  global.log(0, 'auth', 'main.isGuildMember returned', {userID: userID, isGuildMember: is});
+  return is
 };
 
 //Takes a code and returns the discord_id
@@ -123,7 +126,7 @@ oauth.getAccess_token = function(code, redirect, callback){
       }
     });
     req.on('error', (e) => {
-      global.log(2, 'oauth.getAccess_token encountered an error', {err: e});
+      global.log(2, 'auth', 'oauth.getAccess_token encountered an error', {err: e});
       callback(e, false);
     });
   });

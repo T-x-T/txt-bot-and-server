@@ -23,4 +23,4 @@ before(function(done){
 //Dependencies
 const log = require('../src/log'); //lgtm [js/unused-local-variable]
 
-global.log(0, 'Mocha test started', false);
+global.log(0, 'test', 'Mocha test started', false);

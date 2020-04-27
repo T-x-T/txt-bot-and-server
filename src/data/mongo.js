@@ -192,6 +192,7 @@ var logSchema = new Schema({
     default: Date.now()
   },
   level: Number, //0 = debug, 1 = info, 2 = warn, 3 = error
+  component: String,
   name: String,
   data: Object
 });

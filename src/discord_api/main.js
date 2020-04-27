@@ -38,7 +38,7 @@ main.getUserObject = function(access_token, callback){
         userData = JSON.parse(userData);
         success = true;
       }catch(e){
-        global.log(2, 'oauth.getUserObject encountered an error', {err: e});
+        global.log(2, 'discord_api', 'oauth.getUserObject encountered an error', {err: e});
         callback(e, false);
       }
       if(success) callback(false, userData);
@@ -72,7 +72,6 @@ main.getUserObjectById = function(id, options, callback) {
 main.updateUserIdCache = function() {
   //Needs to be imported here, otherwise data hasnt initialized or something like that
   const user = require('../user');
-  const application = require('../application');
 
   //Get all discord Ids
   user.get({}, false, function(err, docs) {
@@ -110,7 +109,7 @@ main.getUserObjectByIdFromApi = function(id, callback) {
       try {
         userData = JSON.parse(userData);
       } catch(e) {
-        global.log(2, 'oauth.getUserObject encountered an error', {err: e});
+        global.log(2, 'discord_api', 'oauth.getUserObject encountered an error', {err: e});
         error = true;
       }
       if(!error) {
@@ -139,6 +138,7 @@ main.getNicknameByID = function (userID, callback) {
   try {
     callback(`${client.guilds.get(config.guild).members.get(userID).user.username}#${client.guilds.get(config.guild).members.get(userID).user.discriminator}`);
   } catch (e) {
+    console.log(0, 'discord_api', 'main.getNicknameByID encountered an error', {err: e, userID: userID});
     callback(false);
   }
 };

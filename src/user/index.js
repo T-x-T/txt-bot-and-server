@@ -20,16 +20,19 @@ index.get = function(filter, options, callback){
 
 //Deletes documents based on filter
 index.delete = function(filter, options, callback) {
+  global.log(0, 'user', 'index.delete got called', {filter: filter, options: options});
   main.delete(filter, options, callback);
 };
 
 //Replaces the document that matches the input with the input
 index.edit = function(input, options, callback) {
+  global.log(0, 'user', 'index.edit got called', {input: input, options: options});
   main.edit(input, options, callback);
 };
 
 //Adds modifier to key of first documents matching filter 
 index.modify = function(filter, key, modifier, options, callback){
+  global.log(0, 'user', 'index.modify got called', {filter: filter, options: options, key: key, modifier: modifier});
   main.modify(filter, key, modifier, options, callback);
 };
 
@@ -42,14 +45,15 @@ setTimeout(function(){
   emitter.on('user_left', (discord_id) => {
     //Wait one second, so other code can still do their cleanup and get more data about the user
     setTimeout(function(){
+      global.log(0, 'user', 'user_left, deletion triggered', {discord_id: discord_id});
       main.delete({discord: discord_id}, false, function(err) {
-        if(err) global.log(0, 'Couldnt delete user that left', {discord_id: discord_id});
+        if(err) global.log(0, 'user', 'Couldnt delete user that left', {discord_id: discord_id});
       });
     }, 1000);
   });
 
   emitter.on('application_accepted_joined', (app) => {
-    global.log(0, 'user component got event application_accepted_joined', {application: app});
+    global.log(0, 'user', 'user component got event application_accepted_joined', {application: app});
     index.get({discord: app.discord_id}, {first: true}, function(err, doc){
       if(!err && doc){
         if(app.mcName) doc.mcName = app.mcName;
@@ -63,17 +67,17 @@ setTimeout(function(){
         doc.status = 1;
         let newDoc = doc;
         index.edit(doc, false, function(err, doc){
-          if(err || !doc) global.log(0, 'Failed modifying accepted user', {application: doc, err: err});
+          if(err || !doc) global.log(0, 'user', 'Failed modifying accepted user', {application: doc, err: err});
           index.get({discord: app.discord_id}, {first: true}, function(err, doc){
             if(doc.status != newDoc.status){
               index.edit(newDoc, false, function(err, doc){
-                global.log(2, 'user application_accepted_joined had to try two times', {application: app, doc: doc, origDoc: doc});
+                global.log(2, 'user', 'user application_accepted_joined had to try two times', {application: app, doc: doc, origDoc: doc});
               });
             }
           });
         });
       }else{
-        if(err) global.log(0, 'Couldnt get accepted user', {application: doc, err: err});
+        if(err) global.log(0, 'user', 'Couldnt get accepted user', {application: doc, err: err});
       }
     });
   });

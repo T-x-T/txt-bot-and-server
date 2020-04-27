@@ -191,13 +191,13 @@ module.exports = {
                 if (amount >= 50) {
                   message.channel.bulkDelete(50, false)
                   .catch(err => {
-                    global.log(2, 'Admin Command: Mass bulk delete failed', { message: message.content, error: err });
+                    global.log(2, 'discord_bot', 'Admin Command: Mass bulk delete failed', { message: message.content, error: err });
                     message.channel.send('Welp, that didnt work :(');
                   });
                 } else {
                   message.channel.bulkDelete(amount, false)
                   .catch(err => {
-                    global.log(2, 'Admin Command: Mass bulk delete failed', { message: message.content, error: err });
+                    global.log(2, 'discord_bot', 'discord_bot', 'Admin Command: Mass bulk delete failed', { message: message.content, error: err });
                     message.channel.send('Welp, that didnt work :(');
                   });
                 }
