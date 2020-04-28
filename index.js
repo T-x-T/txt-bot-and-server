@@ -3,13 +3,17 @@
 *  for starting all components
 */
 
+//Initialize config
+ENVIRONMENT = process.env.NODE_ENV || 'staging';
+console.log(ENVIRONMENT)
+require('./config_example.js')();
+
 //Setup the global emitter
 const EventEmitter = require('events');
 class Emitter extends EventEmitter {}
 emitter = new Emitter(); 
 
 //Dependencies
-require('./config.js')();
 const log = require('./src/log'); //lgtm [js/unused-local-variable]
 const webServer = require('./src/web/webServer.js');
 const discordBot = require('./src/discord_bot');
