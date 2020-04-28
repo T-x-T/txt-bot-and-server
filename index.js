@@ -4,7 +4,7 @@
 */
 
 //Initialize config
-ENVIRONMENT = process.env.NODE_ENV ? process.env.NODE_ENV : 'prod';
+ENVIRONMENT = process.env.NODE_ENV ? process.env.NODE_ENV : 'staging';
 console.log(ENVIRONMENT)
 require('./config.js')();
 
