@@ -4,7 +4,6 @@
  */
 
 //Dependencies
-//const config = require('./../config.js');
 const path = require('path');
 const fs = require('fs');
 const oauth = require('../auth');

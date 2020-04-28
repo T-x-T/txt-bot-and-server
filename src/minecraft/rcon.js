@@ -4,7 +4,6 @@
  */
 
 //Dependencies
-const config = require('../../config.js');
 const Rcon = require('rcon');
 const user = require('../user');
 const discord_helpers = require('../discord_bot');
@@ -22,7 +21,7 @@ rcon.send = function(cmd, callback){
     });
   }else{
     //Setup of the connection
-    let rconCon = new Rcon(config['rcon-server'], config['rcon-port'], config['rcon-password']);
+    let rconCon = new Rcon(config.minecraft.rcon_server, config.minecraft.rcon_port, config.minecraft.rcon_password);
 
     //Establish the connection
     rconCon.on('response', (str) => {

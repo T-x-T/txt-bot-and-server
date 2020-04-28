@@ -4,7 +4,6 @@
 */
 
 const log = require('../../log');
-const config = require('../../../config.js');
 const mc_helpers = require('../../minecraft');
 const discord_helpers = require('../helpers.js');
 const user = require('../../user');
@@ -17,7 +16,7 @@ module.exports = {
 
   execute(message, args) {
     //Check if the author is admin
-    if (message.member.roles.has(config["admin-role"])) {
+    if (message.member.roles.has(config.discord_bot.roles.admin)) {
       //Check the first argument and execute it
       switch (args[0]) {
         case 'log':

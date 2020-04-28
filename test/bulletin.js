@@ -1,7 +1,6 @@
 //Tests for the data component
 
 //Dependencies
-const config = require('../config');
 const assert = require('assert');
 const data = require('../src/data');
 const bulletin = require('../src/bulletin');
@@ -18,7 +17,7 @@ const input2 = {
 
 function run(i, max, input, callback) {
   bulletin.save(input, false, function(err, doc) {
-    if(i < config.bulletin['max_per_usr']) {
+    if(i < config.bulletin.max_per_usr) {
       assert.ok(!err);
       assert.ok(doc);
       assert.equal(doc.author, input.author);
@@ -57,13 +56,13 @@ describe('bulletin', function(){
     });
 
     it('saving max count bulletins', function(done){
-      run(0, config.bulletin['max_per_usr'], input1, function() {
+      run(0, config.bulletin.max_per_usr, input1, function() {
         done();
       });
     });
 
     it('saving one more than max count bulletins', function(done){
-      run(0, config.bulletin['max_per_usr'], input1, function(){
+      run(0, config.bulletin.max_per_usr, input1, function(){
         bulletin.save(input1, false, function(err, doc) {
           assert.ok(err);
           done();
@@ -72,21 +71,21 @@ describe('bulletin', function(){
     });
 
     it('saving 100 more than max count bulletins', function(done) {
-      run(0, config.bulletin['max_per_usr'] + 100, input1, function() {
+      run(0, config.bulletin.max_per_usr + 100, input1, function() {
         done();
       });
     });
 
     it('saving max count bulletins for two users', function(done) {
-      run(0, config.bulletin['max_per_usr'], input1, function() {
-        run(0, config.bulletin['max_per_usr'], input2, function() {
+      run(0, config.bulletin.max_per_usr, input1, function() {
+        run(0, config.bulletin.max_per_usr, input2, function() {
           done();
         });
       });
     });
 
     it('saving max count bulletins for the first and one more for the second user', function(done) {
-      run(0, config.bulletin['max_per_usr'], input1, function(){
+      run(0, config.bulletin.max_per_usr, input1, function(){
         bulletin.save(input2, false, function(err, doc) {
           assert.ok(!err);
           assert.ok(doc);
@@ -114,33 +113,33 @@ describe('bulletin', function(){
     });
 
     it('get all bulletins with max number saved', function(done) {
-      run(0, config.bulletin['max_per_usr'], input1, function() {
+      run(0, config.bulletin.max_per_usr, input1, function() {
         bulletin.get({}, false, function(err, docs) {
           assert.ok(!err);
           assert.ok(docs);
-          assert.equal(docs[config.bulletin['max_per_usr'] - 1].author, input1.author);
-          assert.equal(docs[config.bulletin['max_per_usr'] - 1].message, input1.message);
+          assert.equal(docs[config.bulletin.max_per_usr - 1].author, input1.author);
+          assert.equal(docs[config.bulletin.max_per_usr - 1].message, input1.message);
           assert.equal(docs[0].author, input1.author);
           assert.equal(docs[0].message, input1.message);
-          assert.equal(docs.length, config.bulletin['max_per_usr']);
+          assert.equal(docs.length, config.bulletin.max_per_usr);
           done();
         });
       });
     });
 
     it('get all bulletins with max number from two users saved', function(done) {
-      run(0, config.bulletin['max_per_usr'], input1, function() {
-        run(0, config.bulletin['max_per_usr'], input2, function() {
+      run(0, config.bulletin.max_per_usr, input1, function() {
+        run(0, config.bulletin.max_per_usr, input2, function() {
           bulletin.get({}, false, function(err, docs){
             assert.ok(!err);
             assert.ok(docs);
-            assert.ok(docs[config.bulletin['max_per_usr'] - 1].author == input1.author || docs[config.bulletin['max_per_usr'] - 1].author == input2.author);
-            assert.ok(docs[config.bulletin['max_per_usr'] - 1].message == input1.message || docs[config.bulletin['max_per_usr'] - 1].message == input2.message);
-            assert.ok(docs[config.bulletin['max_per_usr'] * 2 - 1].author == input1.author || docs[config.bulletin['max_per_usr'] * 2 - 1].author == input2.author);
-            assert.ok(docs[config.bulletin['max_per_usr'] * 2 - 1].message == input1.message || docs[config.bulletin['max_per_usr'] * 2 - 1].message == input2.message);
+            assert.ok(docs[config.bulletin.max_per_usr - 1].author == input1.author || docs[config.bulletin.max_per_usr - 1].author == input2.author);
+            assert.ok(docs[config.bulletin.max_per_usr - 1].message == input1.message || docs[config.bulletin.max_per_usr - 1].message == input2.message);
+            assert.ok(docs[config.bulletin.max_per_usr * 2 - 1].author == input1.author || docs[config.bulletin.max_per_usr * 2 - 1].author == input2.author);
+            assert.ok(docs[config.bulletin.max_per_usr * 2 - 1].message == input1.message || docs[config.bulletin.max_per_usr * 2 - 1].message == input2.message);
             assert.ok(docs[0].author == input1.author || docs[0].author == input2.author);
             assert.ok(docs[0].message == input1.message || docs[0].message == input2.message);
-            assert.equal(docs.length, config.bulletin['max_per_usr'] * 2);
+            assert.equal(docs.length, config.bulletin.max_per_usr * 2);
             done();
           });
         });

@@ -4,7 +4,6 @@
 */
 
 //Dependencies
-//const config = require('./../config.js');
 const youtube         = require('../youtube');
 const log             = require('../log');
 const mc_helpers      = require('../minecraft');

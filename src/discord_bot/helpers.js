@@ -4,7 +4,6 @@
 */
 
 //Dependencies
-const config = require('../../config.js');
 var user;
 
 //This is somehow neccessary, otherwise data will just be an empty object for whatever reason
@@ -24,7 +23,7 @@ var helpers = {};
 //Get the nickname of user by their id
 helpers.getNicknameByID = function (userID, callback) {
   try {
-    callback(`${client.guilds.get(config.guild).members.get(userID).user.username}#${client.guilds.get(config.guild).members.get(userID).user.discriminator}`);
+    callback(`${client.guilds.get(config.discord_bot.guild).members.get(userID).user.username}#${client.guilds.get(config.discord_bot.guild).members.get(userID).user.discriminator}`);
   } catch (e) {
     callback(false);
   }
@@ -32,7 +31,7 @@ helpers.getNicknameByID = function (userID, callback) {
 
 helpers.getMemberObjectByID = function(userID, callback){
   try {
-    callback(client.guilds.get(config['guild']).members.get(userID));
+    callback(client.guilds.get(config.discord_bot.guild).members.get(userID));
   } catch (e) {
     callback(false);
   }
@@ -42,7 +41,7 @@ helpers.getMemberObjectByID = function(userID, callback){
 helpers.sendMessage = function (message, channelID, callback) {
   if (message.length > 0 && channelID.length > 0) {
     //Input seems fine
-    var curChannel = client.guilds.get(config.guild).channels.get(channelID);
+    var curChannel = client.guilds.get(config.discord_bot.guild).channels.get(channelID);
     curChannel.send(message)
     .then(message => {
       callback(false);
@@ -60,7 +59,7 @@ helpers.sendMessage = function (message, channelID, callback) {
 //Returns only roles that members are allowed to join/leave themselves!
 helpers.returnRoles = function(){
   let roles = [];
-  client.guilds.get(config.guild).roles.map(function(item){
+  client.guilds.get(config.discord_bot.guild).roles.map(function(item){
     if(item.name.indexOf('#') > -1) roles.push({id: item.id, name: item.name});
   });
   return roles;
@@ -69,7 +68,7 @@ helpers.returnRoles = function(){
 //Returns the role ID of a role by name
 helpers.returnRoleId = function(roleName){
   let id = -1;
-  client.guilds.get(config.guild).roles.map(function(item){
+  client.guilds.get(config.discord_bot.guild).roles.map(function(item){
     if(item.name == roleName) id = item.id;
   });
   return id;
@@ -77,19 +76,19 @@ helpers.returnRoleId = function(roleName){
 
 //Adds the given discord member to the given role
 helpers.addMemberToRole = function(discordID, roleID, callback){
-  client.guilds.get(config['guild']).members.get(discordID).addRole(roleID)
+  client.guilds.get(config.discord_bot.guild).members.get(discordID).addRole(roleID)
   .then(callback(false))
   .catch(callback(true));
 };
 
 //Returns true if the given discord id is member of the guild and false if not
 helpers.isGuildMember = function(userID){
-  return client.guilds.get(config['guild']).members.has(userID);
+  return client.guilds.get(config.discord_bot.guild).members.has(userID);
 };
 
 //Set the nick of a user to their mc_ign
 helpers.updateNick = function(discord_id) {
-  if(discord_id == client.guilds.get(config['guild']).ownerID) return; //Dont update the owner of the guild, this will fail
+  if(discord_id == client.guilds.get(config.discord_bot.guild).ownerID) return; //Dont update the owner of the guild, this will fail
   user.get({discord: discord_id}, {privacy: true, onlyPaxterians: true, first: true}, function(err, doc) {
     if(doc) {
       let ign = typeof doc.mcName == 'string' ? doc.mcName : '';

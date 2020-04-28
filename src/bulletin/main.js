@@ -4,7 +4,6 @@
  */
 
 //Dependencies
-const config = require('../../config.js');
 const user = require('../user');
 const data = require('../data');
 
@@ -15,7 +14,7 @@ var bulletin = {};
 bulletin.create = function(input, callback){
   //First get all bulletins from the author. to check if they already have 5
   bulletin.get({author: input.author}, function(err, docs){
-    if(docs.length < config.bulletin['max_per_usr']){
+    if(docs.length < config.bulletin.max_per_usr){
       //Everything ok
       let document = {
         author: input.author,

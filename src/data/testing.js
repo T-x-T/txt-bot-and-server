@@ -4,7 +4,6 @@
  */
 
 //Dependencies
-const config = require('../../config.js');
 
 //Create the container for all the data
 var data = {};

@@ -4,7 +4,6 @@
 */
 
 const discordHelpers = require('../helpers.js');
-const config = require('../../../config.js');
 
 module.exports = {
   name: 'role',
@@ -63,7 +62,7 @@ module.exports = {
             roleCount++;
           }
         });
-        if(roleCount == 0) output += `There are none, get started by typing ${config["bot-prefix"]}role add <Role-Name>`
+        if(roleCount == 0) output += `There are none, get started by typing ${config.discord_bot.bot_prefix}role add <Role-Name>`
 
         //Finalize the output and send it
         output += '```';
