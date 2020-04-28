@@ -15,7 +15,9 @@ var rcon = {};
 //Initializes the connection to the rcon server, sends a message and terminates the connection again
 rcon.send = function(cmd, callback){
   //Check if cmd is an array
-  if(Array.isArray(cmd)){
+  //if(Array.isArray(cmd)){
+  if(false){  
+    global.log(0, 'minecraft', 'rcon.send received array', {cmd: cmd});
     cmd.forEach((_cmd) => {
       mc.rcon(_cmd);
     });
@@ -29,8 +31,14 @@ rcon.send = function(cmd, callback){
     });
     rconCon.on('auth', function() {
       //Everything fine, send the command
-      global.log(0, 'minecraft', 'mc_helpers successfully authenticated to the rcon server', {cmd: cmd});
-      rconCon.send(cmd);
+      global.log(0, 'minecraft', 'rcon.send successfully authenticated to the rcon server', {cmd: cmd});
+      if(Array.isArray(cmd)){
+        cmd.forEach((_cmd) => {
+          rconCon.send(_cmd);
+        });
+      }else{
+        rconCon.send(cmd);
+      }
       //We can disconnect again
       rconCon.disconnect();
     });
@@ -96,7 +104,7 @@ rcon.updateRoles = function(){
             //Now add the command to the list of commands to send
             commands.push(`paxprefix ${member.mcName} ${prefix}`);
           }else{
-            global.log(0, 'minecraft', 'rcon.updateRoles couldnt get members from the db', {member: member});
+            global.log(0, 'minecraft', 'rcon.updateRoles couldnt get members from discord', {member: member});
           }
           //Now check if this was the last execution of the loop
           j++;
