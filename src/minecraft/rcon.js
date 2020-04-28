@@ -7,6 +7,7 @@
 const config = require('../../config.js');
 const Rcon = require('rcon');
 const user = require('../user');
+const discord_helpers = require('../discord_bot');
 
 //Create the container
 var rcon = {};
@@ -59,9 +60,9 @@ rcon.updateOnlinePlayers = function(){
 rcon.updateRoles = function(){
   global.log(0, 'minecraft', 'rcon.updateRoles got triggered', false);
   //Get all members
-  user.get({}, {privacy: true, onlyPaxterians: true}, function(members){
+  user.get({}, {privacy: true, onlyPaxterians: true}, function(err, members){
     global.log(0, 'minecraft', 'rcon.updateRoles got users from db', {members: members});
-    if(members){
+    if(!err && members){
       //Container for all commands to send once where done preparing
       let commands = [];
       //Build and Add prefix for each member to commands
