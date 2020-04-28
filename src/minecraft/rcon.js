@@ -15,8 +15,7 @@ var rcon = {};
 //Initializes the connection to the rcon server, sends a message and terminates the connection again
 rcon.send = function(cmd, callback){
   //Check if cmd is an array
-  //if(Array.isArray(cmd)){
-  if(false){  
+  if(Array.isArray(cmd)){  
     global.log(0, 'minecraft', 'rcon.send received array', {cmd: cmd});
     cmd.forEach((_cmd) => {
       mc.rcon(_cmd);
@@ -39,13 +38,7 @@ rcon.send = function(cmd, callback){
     rconCon.on('auth', () => {
       //Everything fine, send the command
       global.log(0, 'minecraft', 'rcon.send successfully authenticated to the rcon server', {cmd: cmd});
-      if(Array.isArray(cmd)){
-        cmd.forEach((_cmd) => {
-          rconCon.send(_cmd);
-        });
-      }else{
         rconCon.send(cmd);
-      }
       //We can disconnect again
       rconCon.disconnect();
     });
