@@ -236,7 +236,9 @@ module.exports = {
                 cmd += arg;
                 cmd += ' ';
               });
-              mc_helpers.sendCmd(cmd.trim());
+              mc_helpers.sendCmd(cmd.trim(), (res) => {
+                message.channel.send(res)
+              });
               break;
           }
           break;

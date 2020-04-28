@@ -79,7 +79,6 @@ rcon.updateRoles = function(){
         global.log(0, 'minecraft', 'rcon.updateRoles start processing user', {members: members, member: member});
         discord_helpers.getMemberObjectByID(member.discord, function(memberObj) {
           if(memberObj) {
-            console.log(3)
             global.log(0, 'minecraft', 'rcon.updateRoles got discord object from user', {memberObj: memberObj});
             //Check roles
             let roles = memberObj.roles.array();
