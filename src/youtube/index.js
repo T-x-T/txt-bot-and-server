@@ -13,7 +13,7 @@ global.newestVideos = {};
 
 //Check what the newest video is
 youtube.getNewestVideo = function () {
-  let channels = config["youtube-video-announcements"];
+  let channels = config.youtube.youtube_video_announcements;
   channels.forEach((channel) => {
     youtube.checkIfNewVideos(channel);
   });
@@ -24,7 +24,7 @@ youtube.checkIfNewVideos = function(channel){
   var options = {
     host: 'www.googleapis.com',
     port: 443,
-    path: `/youtube/v3/activities?part=snippet%2CcontentDetails&channelId=${channel.youtube_id}&maxResults=1&fields=items&key=${config["google-api-key"]}`
+    path: `/youtube/v3/activities?part=snippet%2CcontentDetails&channelId=${channel.youtube_id}&maxResults=1&fields=items&key=${config.youtube.google_api_key}`
   };
   https.get(options, function(res) {
     res.setEncoding('utf8');

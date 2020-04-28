@@ -6,7 +6,7 @@
 //Initialize config
 ENVIRONMENT = process.env.NODE_ENV || 'staging';
 console.log(ENVIRONMENT)
-require('./config_example.js')();
+require('./config.js')();
 
 //Setup the global emitter
 const EventEmitter = require('events');

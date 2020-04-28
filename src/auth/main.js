@@ -22,17 +22,17 @@ oauth.returnAccessLevel = function(userID){
   let access_level = 0;
   
   try{
-    if(client.guilds.get(config['guild']).members.get(userID).roles.has(config["paxterya-role"])) access_level = 3;
-    if(client.guilds.get(config['guild']).members.get(userID).roles.has(config["admin-role"])) access_level = 9;
+    if(client.guilds.get(config.discord_bot.guild).members.get(userID).roles.has(config.discord_bot.roles.paxterya)) access_level = 3;
+    if(client.guilds.get(config.discord_bot.guild).members.get(userID).roles.has(config.discord_bot.roles.admin)) access_level = 9;
   }catch(e){}
 
-  global.log(0, 'auth', 'main.returnAcessLevel returned', {input: input, options: options, access_level: access_level});
+  global.log(0, 'auth', 'main.returnAcessLevel returned', {userID: userID, access_level: access_level});
   return access_level;
 };
 
 //Returns true if the given discord id is member of the guild and false if not
 oauth.isGuildMember = function(userID){
-  let is = client.guilds.get(config['guild']).members.has(userID);
+  let is = client.guilds.get(config.discord_bot.guild).members.has(userID);
   global.log(0, 'auth', 'main.isGuildMember returned', {userID: userID, isGuildMember: is});
   return is
 };
@@ -86,13 +86,13 @@ oauth.getCodeAccessLevel = function(code, redirect, callback){
 oauth.getAccess_token = function(code, redirect, callback){
 
   let redirect_uri = '';
-  redirect_uri = redirect == 'application' ? config['discord_redirect_uri_application'] : redirect_uri;
-  redirect_uri = redirect == 'staffLogin'  ? config['discord_redirect_uri_staffLogin'] : redirect_uri;
+  redirect_uri = redirect == 'application' ? config.auth.discord_redirect_uri_application: redirect_uri;
+  redirect_uri = redirect == 'staffLogin'  ? config.auth.discord_redirect_uri_staffLogin : redirect_uri;
 
   //Now lets get the access_token from that code
   let payload = qs.stringify({
-    'client_id': config['discord_client_id'],
-    'client_secret': config['discord_client_secret'],
+    'client_id': config.auth.discord_client_id,
+    'client_secret': config.auth.discord_client_secret,
     'grant_type': 'authorization_code',
     'code': code,
     'redirect_uri': redirect_uri,

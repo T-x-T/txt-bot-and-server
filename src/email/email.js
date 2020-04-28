@@ -4,7 +4,6 @@
  */
 
 //Dependencies
-const config   = require('../../config.js');
 const mailer   = require('nodemailer');
 const sanitize = require('sanitize-html');
 
@@ -81,13 +80,13 @@ email.send = function(recipient, subject, text){
     port: 465,
     secure: true,
     auth: {
-      user: config['mailUser'],
-      pass: config['mailPass']
+      user: config.email.mailUser,
+      pass: config.email.mailPass
     }
   });
 
   let mailOptions = {
-    from: config['mailUser'],
+    from: config.email.mailUser,
     to: recipient,
     subject: subject,
     text: sanitize(text,{allowedTags: [], allowedAttributes: {}}),

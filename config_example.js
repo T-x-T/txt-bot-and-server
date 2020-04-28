@@ -23,7 +23,7 @@ let conf = {
     },
     data: {
       mongodb_url: 'mongodb://HOSTNAME/DATABASE',
-      data_backend: 'mongo',
+      backend: 'mongo',
       db_upgrades:{
         mc_stats_sub_type: false
       }
@@ -108,7 +108,7 @@ let conf = {
     },
     data: {
       mongodb_url: 'mongodb://HOSTNAME/DATABASE',
-      data_backend: 'mongo',
+      backend: 'mongo',
       db_upgrades:{
         mc_stats_sub_type: false
       }
@@ -193,7 +193,7 @@ let conf = {
     },
     data: {
       mongodb_url: 'mongodb://HOSTNAME/DATABASE',
-      data_backend: 'mongo',
+      backend: 'mongo',
       db_upgrades:{
         mc_stats_sub_type: false
       }

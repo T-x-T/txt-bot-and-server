@@ -2,6 +2,14 @@
  *  TESTING OF EXISTING FEATURES
  *  Testing library using mocha
  */
+
+before(function(done){
+  //Configure config
+  ENVIRONMENT = testing;
+  console.log(ENVIRONMENT)
+  require('./config.js')();
+});
+
 //Setup the global emitter
 const EventEmitter = require('events');
 class Emitter extends EventEmitter {}

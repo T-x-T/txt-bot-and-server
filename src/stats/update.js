@@ -23,7 +23,7 @@ updater.update_mc_stats = function(){
 
 //Downloads all stats from the server
 function download_mc_stats(){
-  void(exec(`rclone copy ${config['mc-stats-remote']}:/stats ./mc_stats`), (err, stdout, stderr) => {
+  void(exec(`rclone copy ${config.minecraft.mc_stats_remote}:/stats ./mc_stats`), (err, stdout, stderr) => {
     if (err) {
       global.log(2, 'stats', 'Couldnt start the process to mount the sftp server', {error: err});
     }

@@ -4,7 +4,6 @@
  */
 
 //Dependencies
-const config          = require('../../config.js');
 const application     = require('../application');
 const discord_helpers = require('../discord_bot');
 const mc_helpers      = require('../minecraft');
@@ -195,7 +194,7 @@ const template = {
   'join-us.html': {
     'pax_title': 'Join us!',
     'birthyears': _internal.generateBirthyearOptions,
-    'oauth': config['oauth_uris']['application']
+    'oauth': config.auth.oauth_uris.application
   },
   'member.html': {
     'pax_title': 'Member'
@@ -254,13 +253,13 @@ module.exports = function(local_data, callback) {
   let templateData = template[data.path];
   if(typeof templateData == 'object'){
     templateData['online_players'] = global.mcPlayerCount;
-    templateData['oauth_staff'] = config.oauth_uris.login;
+    templateData['oauth_staff'] = config.auth.oauth_uris.login;
     callback(templateData);
   }else{
     if(typeof templateData == 'function'){
       templateData(function(variables){
         variables['online_players'] = global.mcPlayerCount;
-        variables['oauth_staff'] = config.oauth_uris.login;
+        variables['oauth_staff'] = config.auth.oauth_uris.login;
         callback(variables);
       });
     }else{

@@ -4,7 +4,6 @@
 */
 
 //Dependencies
-const config      = require('../../config.js');
 const fs          = require('fs');
 const path        = require('path');
 const webHelpers  = require('./web-helpers.js');
@@ -111,11 +110,11 @@ handlers.paxStaff = function(data, callback) {
           }
         });
       } else {
-        callback(302, {Location: config.oauth_uris.login}, 'plain');
+        callback(302, {Location: config.auth.oauth_uris.login}, 'plain');
       }
     });
   } else {
-    callback(302, {Location: config.oauth_uris.login}, 'plain');
+    callback(302, {Location: config.auth.oauth_uris.login}, 'plain');
   }
 };
 

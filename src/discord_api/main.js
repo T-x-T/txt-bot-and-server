@@ -96,7 +96,7 @@ main.getUserObjectByIdFromApi = function(id, callback) {
     path: '/api/users/' + id,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Bot ' + config['bot-token']
+      'Authorization': 'Bot ' + config.discord_bot.bot_token
     }
   }, function(res) {
     res.setEncoding('utf8');
@@ -135,7 +135,7 @@ main.getUserObjectByIdFromApi = function(id, callback) {
 
 main.getNicknameByID = function (userID, callback) {
   try {
-    callback(`${client.guilds.get(config.guild).members.get(userID).user.username}#${client.guilds.get(config.guild).members.get(userID).user.discriminator}`);
+    callback(`${client.guilds.get(config.discord_bot.guild).members.get(userID).user.username}#${client.guilds.get(config.discord_bot.guild).members.get(userID).user.discriminator}`);
   } catch (e) {
     console.log(0, 'discord_api', 'main.getNicknameByID encountered an error', {err: e, userID: userID});
     callback(false);

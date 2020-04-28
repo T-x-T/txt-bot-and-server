@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 //Connect to the db
-mongoose.connect(config["mongodb-url"], {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+mongoose.connect(config.data.mongodb_url, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 var con = mongoose.connection;
 
 //Gets called when there is an error connecting to the db
@@ -254,7 +254,7 @@ const models = {
  */
 
 //Converts all old style mcstats objects to new style
-if(config['db_upgrades']['mc_stats_sub_type']){
+if(config.data.db_upgrades.mc_stats_sub_type){
   main.get({}, 'stats', false, function(err, docs) {
     docs.forEach((doc) => {
       doc.sub_type = 'mc_stats'

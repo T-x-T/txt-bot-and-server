@@ -4,7 +4,6 @@
 */
 
 //Dependencies
-const config         = require('../../config.js');
 const fs             = require('fs');
 const Discord        = require('discord.js');
 const client         = new Discord.Client();
@@ -28,10 +27,10 @@ emitter.on('discord_bot_ready' ,() => {
   //Gets called when the bot receives a new message
   client.on('message', message => {
     //Stop processing the message when it doesnt start with our prefix or if its from another bot
-    if (!message.content.startsWith(config["bot-prefix"]) || message.author.bot || message.channel.type === 'dm') return;
+    if (!message.content.startsWith(config.discord_bot.bot_prefix) || message.author.bot || message.channel.type === 'dm') return;
 
     //Split the message into the command name and its arguments
-    var args = message.content.slice(config["bot-prefix"].length).split(/ +/);
+    var args = message.content.slice(config.discord_bot.bot_prefix.length).split(/ +/);
     var commandName = args.shift().toLowerCase();
 
     //Convert all arguments to lowerCase
@@ -92,7 +91,7 @@ emitter.on('discord_bot_ready' ,() => {
   client.on('messageReactionAdd', (reaction, user) => {
     //The check if the emoji is the emoji from our server will throw an exception if its from another server
     try {
-      if (reaction.emoji.guild.id == config["guild"]) {
+      if (reaction.emoji.guild.id == config.discord_bot.guild) {
         //Cancel the operation if someones reacts to themself
         if (user.id === reaction.message.author.id) return;
         if (reaction.emoji.name == 'upvote') {
@@ -109,7 +108,7 @@ emitter.on('discord_bot_ready' ,() => {
   client.on('messageReactionRemove', (reaction, user) => {
     //The check if the emoji is the emoji from our server will throw an exception if its from another server
     try {
-      if (reaction.emoji.guild.id == config["guild"]) {
+      if (reaction.emoji.guild.id == config.discord_bot.guild) {
         //Cancel the operation if someones reacts to themself
         if (user.id === reaction.message.author.id) return;
         if (reaction.emoji.name == 'upvote') {
@@ -125,19 +124,19 @@ emitter.on('discord_bot_ready' ,() => {
   //Gets called whenever a member leaves the guild; user is a guildMember
   client.on('guildMemberRemove', (user) => {
     emitter.emit('user_left', user);
-    discordHelpers.sendMessage(`${user.displayName} left the server`, config['new_application_announcement_channel'], function (e) { });
+    discordHelpers.sendMessage(`${user.displayName} left the server`, config.discord_bot.channel.new_application_announcement, function (e) { });
   });
 
   //Gets called whenever a member gets banned from the guild; user is a guildMember
   client.on('guildBanAdd', (guild, user) => {
     emitter.emit('user_banned', user);
-    discordHelpers.sendMessage(`${user.username} was banned from the server`, config['new_application_announcement_channel'], function (e) { });
+    discordHelpers.sendMessage(`${user.username} was banned from the server`, config.discord_bot.channel.new_application_announcement, function (e) { });
   });
 
   //Gets called whenever a new member joins the guild
   client.on('guildMemberAdd', (user) => {
     //Send a welcome message
-    discordHelpers.sendMessage(`Welcome <@${user.id}>! If you are here for joining the Minecraft server, then please apply under https://paxterya.com/join-us, read the rules at https://paxterya.com/rules and consult our FAQ at https://paxterya.com/faq \nIf you have any questions just ping the admins (they like getting pinged, trust me)`, config['general_channel'], function (err) {
+    discordHelpers.sendMessage(`Welcome <@${user.id}>! If you are here for joining the Minecraft server, then please apply under https://paxterya.com/join-us, read the rules at https://paxterya.com/rules and consult our FAQ at https://paxterya.com/faq \nIf you have any questions just ping the admins (they like getting pinged, trust me)`, config.discord_bot.channel.general, function (err) {
       if (err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new application message', { err: err, application: doc });
     });
     //Check if the new member got accepted as a member
@@ -159,7 +158,7 @@ discordBot.init = function () {
     client.commands.set(command.name, command);
   }
 
-  client.login(config["bot-token"]);
+  client.login(config.discord_bot.bot_token);
 };
 
 //Export the container

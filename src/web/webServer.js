@@ -18,7 +18,7 @@ var server = {};
 
 //Instanciate the http server
 server.httpServer = http.createServer(function (req, res) {
-  if(config['https-redirect']){
+  if(config.web.https_redirect){
     server.getDataObject(req, function(data){
       res.writeHead(302, {Location: `https://${data.headers.host}/${data.path}`});
       res.end();
@@ -29,10 +29,10 @@ server.httpServer = http.createServer(function (req, res) {
 });
 
 //https stuff
-if(config['use-external-certs']){
+if(config.web.use_external_certs){
   server.httpsConfig = {
-    'key': fs.readFileSync(path.join(config['cert-path'], 'privkey.pem')),
-    'cert': fs.readFileSync(path.join(config['cert-path'], 'fullchain.pem'))
+    'key': fs.readFileSync(path.join(config.web.cert_path, 'privkey.pem')),
+    'cert': fs.readFileSync(path.join(config.web.cert_path, 'fullchain.pem'))
   };
 }else{
   server.httpsConfig = {
@@ -62,7 +62,7 @@ server.uniserver = function(req, res){
     else data.path = data.path.replace('/paxterya', '');
 
     //necessary for testing purposes
-    if(!config['use-external-certs']) {
+    if(!config.web.use_external_certs) {
       console.log(data.method, data.path)
       if(data.method == 'post') console.log(data.payload);
     }
@@ -202,13 +202,13 @@ server.processHandlerResponse = function (res, method, path, statusCode, payload
 //Init
 server.init = function () {
   //Start http server
-  server.httpServer.listen(config["http-port"], function () {
-    console.log('HTTP server online on port ' + config["http-port"]);
-    global.log(1, 'web', 'HTTP server is online', { 'port': config["http-port"] });
+  server.httpServer.listen(config.web.http_port, function () {
+    console.log('HTTP server online on port ' + config.web.http_port);
+    global.log(1, 'web', 'HTTP server is online', { 'port': config.web.http_port });
   });
-  server.httpsServer.listen(config["https-port"], function () {
-    console.log('HTTPS server online on port ' + config["https-port"]);
-    global.log(1, 'web', 'HTTPS server is online', { 'port': config["https-port"] });
+  server.httpsServer.listen(config.web.https_port, function () {
+    console.log('HTTPS server online on port ' + config.web.https_port);
+    global.log(1, 'web', 'HTTPS server is online', { 'port': config.web.https_port });
   });
 };
 
