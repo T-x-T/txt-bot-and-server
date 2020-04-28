@@ -26,10 +26,17 @@ rcon.send = function(cmd, callback){
     let rconCon = new Rcon(config['rcon-server'], config['rcon-port'], config['rcon-password']);
 
     //Establish the connection
-    rconCon.on('response', function(str) {
+    rconCon.on('response', (str) => {
+      global.log(0, 'minecraft', 'rcon.send received message from server that was a response', {message: str});
       if(typeof callback == 'function') callback(str);
     });
-    rconCon.on('auth', function() {
+    rconCon.on('server', (str) => {
+      global.log(0, 'minecraft', 'rcon.send received message from server that wasnt a response', {message: str});
+    })
+    rconCon.on('error', (err) => {
+      global.log(0, 'minecraft', 'rcon.send received an error', {err: err});
+    })
+    rconCon.on('auth', () => {
       //Everything fine, send the command
       global.log(0, 'minecraft', 'rcon.send successfully authenticated to the rcon server', {cmd: cmd});
       if(Array.isArray(cmd)){
