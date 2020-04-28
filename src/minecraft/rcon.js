@@ -18,7 +18,7 @@ rcon.send = function(cmd, callback){
   if(Array.isArray(cmd)){  
     global.log(0, 'minecraft', 'rcon.send received array', {cmd: cmd});
     cmd.forEach((_cmd) => {
-      mc.rcon(_cmd);
+      rcon.send(_cmd);
     });
   }else{
     //Setup of the connection
