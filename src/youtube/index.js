@@ -3,7 +3,6 @@
 *  Contains all functionallity for interacting with the youtube API
 */
 //Dependencies
-const config = require('../../config.js');
 const https = require('https');
 
 //Create the container

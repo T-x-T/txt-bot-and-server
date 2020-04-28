@@ -3,8 +3,6 @@
  *	List all commands or all arguments for a single command
  */
 
-const config = require('../../../config.js');
-
 module.exports = {
   name: 'help',
   description: 'List all commands or all arguments for a single command',

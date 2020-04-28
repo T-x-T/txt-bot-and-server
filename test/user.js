@@ -1,7 +1,6 @@
 //Tests for user component
 
 //Dependencies
-const config = require('../config');
 const assert = require('assert');
 const data = require('../src/data');
 const user = require('../src/user');

@@ -54,4 +54,6 @@ var conf = {
 };
 
 //Export the container
-module.exports = conf;
+module.exports = function(){
+  config = conf;
+};

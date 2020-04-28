@@ -4,7 +4,6 @@
  */
 
 //Dependencies
-const config = require('../../config.js');
 const qs     = require('querystring');
 const https  = require('https');
 const discord_api = require('../discord_api');

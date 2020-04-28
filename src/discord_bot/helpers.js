@@ -4,7 +4,6 @@
 */
 
 //Dependencies
-const config = require('../../config.js');
 var user;
 
 //This is somehow neccessary, otherwise data will just be an empty object for whatever reason

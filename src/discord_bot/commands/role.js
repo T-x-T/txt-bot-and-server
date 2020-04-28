@@ -4,7 +4,6 @@
 */
 
 const discordHelpers = require('../helpers.js');
-const config = require('../../../config.js');
 
 module.exports = {
   name: 'role',

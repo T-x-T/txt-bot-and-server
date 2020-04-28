@@ -1,7 +1,6 @@
 //Tests for the data component
 
 //Dependencies
-const config = require('../config');
 const assert = require('assert');
 const data = require('../src/data');
 const bulletin = require('../src/bulletin');

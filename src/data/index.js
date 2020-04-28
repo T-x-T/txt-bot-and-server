@@ -4,7 +4,6 @@
  */
 
 //Dependencies
-const config = require('../../config.js');
 
 //Import the right backend accoring to the config
 const backend = require(`./${config['data_backend']}`);
