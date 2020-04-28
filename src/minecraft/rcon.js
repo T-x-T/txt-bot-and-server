@@ -85,8 +85,9 @@ rcon.updateRoles = function(){
       members.forEach((member) => {
         global.log(0, 'minecraft', 'rcon.updateRoles start processing user', {members: members, member: member});
         discord_helpers.getMemberObjectByID(member.discord, function(memberObj) {
-          global.log(0, 'minecraft', 'rcon.updateRoles got discord object from user', {memberObj: memberObj});
           if(memberObj) {
+            console.log(3)
+            global.log(0, 'minecraft', 'rcon.updateRoles got discord object from user', {memberObj: memberObj});
             //Check roles
             let roles = memberObj.roles.array();
             for(let i = 0;i < roles.length;i++) roles[i] = roles[i].name;
@@ -111,13 +112,13 @@ rcon.updateRoles = function(){
             //Now add the command to the list of commands to send
             commands.push(`paxprefix ${member.mcName} ${prefix}`);
           }else{
-            global.log(0, 'minecraft', 'rcon.updateRoles couldnt get members from discord', {member: member});
+            commands.push(`this_isnt_a_command`);
+            global.log(0, 'minecraft', 'rcon.updateRoles couldnt get memberData from discord', {member: member});
           }
           //Now check if this was the last execution of the loop
-          j++;
-          if(j == members.length - 1) {
+          if(commands.length == members.length) {
             global.log(0, 'minecraft', 'rcon.updateRoles sent commands to rcon.send', {commands: commands});
-            mc.rcon(commands);
+            rcon.send(commands);
           }
         });
       }); 
