@@ -4,7 +4,7 @@
 */
 
 const log = require('../../log');
-const mc_helpers = require('../../minecraft');
+//const mc_helpers = require('../../minecraft'); //Gets required further down cuz dependency problemos
 const discord_helpers = require('../helpers.js');
 const user = require('../../user');
 const stats = require('../../stats');
@@ -17,6 +17,7 @@ module.exports = {
   execute(message, args) {
     //Check if the author is admin
     if (message.member.roles.has(config.discord_bot.roles.admin)) {
+      const mc_helpers = require('../../minecraft');
       //Check the first argument and execute it
       switch (args[0]) {
         case 'log':
