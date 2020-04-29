@@ -199,6 +199,39 @@ section#howtojoin .text li p {
     padding-right: 5px;
 }
 
+
+section#newestpost {
+  background: #007787;
+  padding: 20px 0;
+  border-top: 20px solid #00626f;
+  border-bottom: 20px solid #00626f;
+  box-shadow: 0px 0px 100px black;
+  box-shadow: 0px 0px 100px #003840;
+  margin: 70px 0;
+}
+
+section#newestpost p, section#newestpost article.news p:first-of-type::first-letter  {
+  color: white;
+  text-shadow: 0px 1px 0px #00515c;
+}
+
+section#newestpost img.author {
+  filter: drop-shadow(0px 0px 20px rgba(255, 255, 255, 0.3));
+  box-shadow: none;
+}
+
+section#newestpost span.subtitle {
+  background: #003941;
+}
+
+section#newestpost article {
+  margin: 5px 0 30px 0;
+}
+
+section#newestpost article section {
+  border-left: 5px solid #003941;
+}
+
 /* FOOTER */
 
 #index main {
