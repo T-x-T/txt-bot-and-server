@@ -117,7 +117,7 @@ mc.getIGN = function(uuid, callback){
               callback('Data from API doesnt contain valid ign: ' + data, false);
             }
           }else{
-            callback('Data from API doesnt is undefined and doesnt contain valid ign: ' + data, false);
+            callback('Data from API doesnt is undefined', false);
           }
           
         }else{

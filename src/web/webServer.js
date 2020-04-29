@@ -63,7 +63,7 @@ server.uniserver = function(req, res){
 
     //necessary for testing purposes
     if(!config.web.use_external_certs) {
-      console.log(data.method, data.path)
+      console.log(data.method, data.path);
       if(data.method == 'post') console.log(data.payload);
     }
 
@@ -90,7 +90,7 @@ server.uniserver = function(req, res){
       server.processHandlerResponse(res, data.method, data.path, 500, 'Internal server error :(\n(Please notify TxT#0001 on Discord if you see this!)', 'html');
     }
   });
-}
+};
 
 const router = {
   '/html': handlers.paxterya,

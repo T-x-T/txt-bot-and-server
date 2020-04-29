@@ -840,7 +840,7 @@ _internal.send = function(path, headers, method, queryStringObject, payload, cal
   xhr.setRequestHeader("Content-type", "application/json");
 
   //Add the headers
-  for(key in headers){
+  for(let key in headers){
     if(headers.hasOwnProperty(key)) xhr.setRequestHeader(key, headers[key]);
   }
 

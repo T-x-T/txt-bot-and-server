@@ -101,7 +101,7 @@ stats.template.memberOverview = function(options, callback) {
       }
     });
   }
-}
+};
 
 //callsback a list of all countries with their respective member count and coloring for the map-view in statistics.html
 stats.template.countryList = function(options, callback) {
