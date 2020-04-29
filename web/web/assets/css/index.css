@@ -210,7 +210,7 @@ section#newestpost {
   margin: 70px 0;
 }
 
-section#newestpost p {
+section#newestpost p, section#newestpost article.news p:first-of-type::first-letter  {
   color: white;
   text-shadow: 0px 1px 0px #00515c;
 }
@@ -231,7 +231,6 @@ section#newestpost article {
 section#newestpost article section {
   border-left: 5px solid #003941;
 }
-
 
 /* FOOTER */
 
