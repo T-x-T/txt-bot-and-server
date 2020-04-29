@@ -16,11 +16,16 @@ index.save = function(input, options, callback){
 
 //Retrieves posts
 //Options:
-//first = true: return the first post that matches the filter as an object
+//first = true: return the first post as an object; last = true: return the last post as an object
 index.get = function(filter, options, callback){
   main.get(filter, options, function(err, docs){
     if(!err){
+      //Implements option first
       if(options.first && docs.length > 0) docs = docs[0];
+
+      //Implements option last
+      if(options.last && docs.length > 0) docs = docs[docs.length - 1];
+
       callback(false, docs);
     }else{
       callback(err, false);

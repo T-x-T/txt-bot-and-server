@@ -114,7 +114,7 @@ _getters.statistics = function(callback){
   });
 };
 
-//Calls back an object for the index.html
+//Calls back an object for the blog.html
 _getters.blog = function(callback){
   post.get({public: true}, false, function(err, posts){
     //Check if the post is in the future (here, because we cant really compare the dates directly)
@@ -156,6 +156,22 @@ _getters.town_of_paxterya = function(callback){
   })
 };
 
+_getters.index = function(callback){
+  post.get({}, {last: true}, function(err, doc){
+    let body = '';
+    if(!err && doc){
+      body += `<article class="news"><h2>${doc.title}</h2><img class="author" src="assets/paxterya/img/avatar-${doc.author.toLowerCase()}.png"><span class="subtitle">${new Date(doc.date).toISOString().substring(0, 10)}. Author: ${doc.author}</span><section>`;
+      body += doc.body;
+      body += `</section></article>`;
+
+    }
+    callback({
+      'newest_post': body,
+      'pax_title': 'Paxterya Minecraft Community'
+    });
+  });
+};
+
 //Callsback an object for all widgets on the interface
 _getters.widgets = function(callback){
   discord_api.getUserObject({token: data.access_token}, false, function(err, userObject){
@@ -179,14 +195,12 @@ const template = {
   'staff/interface.html': _getters.interface,
   'staff/application.html': _getters.application,
   'staff/post.html': _getters.post,
+  'index.html': _getters.index,
   'statistics.html': _getters.statistics,
   'blog.html': _getters.blog,
   'town-of-paxterya.html': _getters.town_of_paxterya,
   'application-sent.html': {
     'pax_title': 'Success!'
-  },
-  'index.html': {
-    'pax_title': 'Paxterya Minecraft Community'
   },
   'contact-us.html': {
     'pax_title': 'Contact us!'
