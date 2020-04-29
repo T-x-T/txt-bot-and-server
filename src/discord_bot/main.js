@@ -149,18 +149,16 @@ emitter.on('discord_bot_ready' ,() => {
   });
 });
 
-//Init script
-discordBot.init = function () {
-  //Read in and require all command files dynamically
-  client.commands = new Discord.Collection();
-  const commandFiles = fs.readdirSync('./src/discord_bot/commands').filter(file => file.endsWith('.js'));
-  for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
-    client.commands.set(command.name, command);
-  }
+//Read in and require all command files dynamically
+client.commands = new Discord.Collection();
+const commandFiles = fs.readdirSync('./src/discord_bot/commands').filter(file => file.endsWith('.js'));
+for (const file of commandFiles) {
+  const command = require(`./commands/${file}`);
+  client.commands.set(command.name, command);
+}
 
-  client.login(config.discord_bot.bot_token);
-};
+client.login(config.discord_bot.bot_token);
+
 
 //Export the container
 module.exports = discordBot;

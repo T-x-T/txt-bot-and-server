@@ -199,18 +199,16 @@ server.processHandlerResponse = function (res, method, path, statusCode, payload
   res.end(payloadStr);
 };
 
-//Init
-server.init = function () {
-  //Start http server
-  server.httpServer.listen(config.web.http_port, function () {
-    console.log('HTTP server online on port ' + config.web.http_port);
-    global.log(1, 'web', 'HTTP server is online', { 'port': config.web.http_port });
-  });
-  server.httpsServer.listen(config.web.https_port, function () {
-    console.log('HTTPS server online on port ' + config.web.https_port);
-    global.log(1, 'web', 'HTTPS server is online', { 'port': config.web.https_port });
-  });
-};
+//Start http server
+server.httpServer.listen(config.web.http_port, function () {
+  console.log('HTTP server online on port ' + config.web.http_port);
+  global.log(1, 'web', 'HTTP server is online', { 'port': config.web.http_port });
+});
+server.httpsServer.listen(config.web.https_port, function () {
+  console.log('HTTPS server online on port ' + config.web.https_port);
+  global.log(1, 'web', 'HTTPS server is online', { 'port': config.web.https_port });
+});
+
 
 //Export the container
 module.exports = server;

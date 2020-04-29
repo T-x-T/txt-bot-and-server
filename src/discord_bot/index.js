@@ -15,10 +15,6 @@ var index = {};
  *  Functions
  */
 
-index.init = function(){
-  main.init();
-};
-
 index.getNicknameByID     = discord_helpers.getNicknameByID;
 index.getMemberObjectByID = discord_helpers.getMemberObjectByID;
 index.returnRoles         = discord_helpers.returnRoles;

@@ -13,27 +13,32 @@ const EventEmitter = require('events');
 class Emitter extends EventEmitter {}
 emitter = new Emitter(); 
 
-//Dependencies
-require('./src/log'); //lgtm [js/unused-local-variable]
-const webServer = require('./src/web/webServer.js');
-const discordBot = require('./src/discord_bot');
-require('./src/workers'); //lgtm [js/unused-local-variable]
-require('./src/email'); //lgtm [js/unused-local-variable]
+//Require all modules for init
+require('./src/data');
+require('./src/discord_api');
+
+require('./src/auth');
+require('./src/log');
+
+require('./src/user');
+require('./src/application');
+require('./src/bulletin');
+require('./src/stats');
+require('./src/post');
+require('./src/youtube');
+
+require('./src/discord_bot');
+require('./src/web/webServer.js');
+require('./src/email');
+require('./src/minecraft');
+
+require('./src/workers');
 
 //Log that the app got started
 global.log(1, 'index', 'Application started', null);
 
 //Create the container
 var app = {};
-
-//Init
-app.init = function () {
-  webServer.init();
-  discordBot.init();
-};
-
-//Call init
-app.init();
 
 //Export the container
 module.exports = app;
