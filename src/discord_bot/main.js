@@ -9,7 +9,7 @@ const Discord        = require('discord.js');
 const client         = new Discord.Client();
 const _user          = require('../user');
 const discordHelpers = require('../discord_bot/helpers.js');
-const application    = require('../application');
+//const application    = require('../application');    <- this gets required further down
 
 //Create the container
 var discordBot = {};
@@ -135,6 +135,7 @@ emitter.on('discord_bot_ready' ,() => {
 
   //Gets called whenever a new member joins the guild
   client.on('guildMemberAdd', (user) => {
+    const application    = require('../application');
     //Send a welcome message
     discordHelpers.sendMessage(`Welcome <@${user.id}>! If you are here for joining the Minecraft server, then please apply under https://paxterya.com/join-us, read the rules at https://paxterya.com/rules and consult our FAQ at https://paxterya.com/faq \nIf you have any questions just ping the admins (they like getting pinged, trust me)`, config.discord_bot.channel.general, function (err) {
       if (err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new application message', { err: err, application: doc });
