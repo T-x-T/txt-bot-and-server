@@ -41,7 +41,7 @@ index.updateNicks = function(){
   main.updateNicks();
 };
 
-setTimeout(function(){
+setImmediate(function(){
   emitter.on('user_left', (discord_id) => {
     //Wait one second, so other code can still do their cleanup and get more data about the user
     setTimeout(function(){
@@ -81,7 +81,7 @@ setTimeout(function(){
       }
     });
   });
-}, 1);
+});
 
 //Export the container
 module.exports = index;
