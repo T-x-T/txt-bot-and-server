@@ -10,51 +10,62 @@ const user = require('../user');
 //Create the container
 var mc = {};
 
-//Getters
+//Gets ranked stats for single player
 mc.getRanked = function(options, callback){
-  getLatestStats(options.uuid, function(err, doc){
-    if(!err && doc){
-      //Get the collections data
-      let stats = _statsTemplates[options.collection](doc);
+  
+  //Gets stats from the user
+  mc.getSingle(options, function(err, stats){
+    if(!err && stats){
+      
       //Get stats from all players to create the ranking
-      getLatestStats(false, function(err, docs) {
-        if(!err && docs) {
-          //Get the rank for each key in the stats
+      getLatestStats(false, function(err, allRawStats) {
+        if(!err && allRawStats) {
+          
+          //Create the object that will hold the final ranked data
           let finalStats = {};
-          let allStats = [];
-          docs.forEach((doc) => {
-            if(doc) allStats.push(_statsTemplates[options.collection](doc));
-          });
-          //Get an array of all users stat
-          for(let key in stats) {
-            //Build a new array that only contains all values for the current stat
-            let curAllStat = [];
-            allStats.forEach((cur) => {
-              if(typeof cur[key] == 'undefined') cur[key] = 0;
-              curAllStat.push(parseInt(cur[key]));
+          
+          //Iterate over all single stats
+          for(let key in stats){
+            console.log(key)
+            
+            //Put the each item of allRawStats through the singe template and into allStats
+            let allStats = [];
+            allRawStats.forEach((rawStat) => {
+              if(rawStat) {
+                let stat = _statsTemplates.single[key](rawStat);
+                if(!Number.isNaN(stat)) allStats.push(stat);
+              }
             });
+
             //Sort that array
-            curAllStat = curAllStat.sort(function(a, b) {
+            allStats = allStats.sort(function(a, b) {
               return b - a;
             });
-            //Get the rank for the given player and build the finished object
+
+            //Get the rank for the current stat
             finalStats[key] = {
               stat: stats[key],
-              rank: curAllStat.indexOf(parseInt(stats[key])) + 1
+              rank: allStats.indexOf(parseInt(stats[key])) + 1
             };
+            
           }
-          finalStats._totalPlayers = allStats.length;
+
+          //Finish the object and call it back
+          finalStats._totalPlayers = allRawStats.length;
           callback(false, finalStats);
         } else {
           callback('Couldnt get stats for all users: ' + err, false);
         }
       });
+
     }else{
       callback('Couldnt get stats for user: ' + options.uuid + err, false);
     }
   });
+
 };
 
+//Gets stats for single player
 mc.getSingle = function(options, callback){
   getLatestStats(options.uuid, function(err, doc){
     if(!err && doc){
@@ -69,6 +80,7 @@ mc.getSingle = function(options, callback){
   });
 };
 
+//Gets stats for all players combined
 mc.getAll = function(options, callback){
   getLatestStats(false, function(err, docs){
     if(!err && docs){
@@ -96,7 +108,7 @@ function sumArray(docs){
 function getLatestStats(uuid, callback){
   let filter = uuid ? {uuid: uuid} : {};
   if(uuid){
-    data.get(filter, 'stats', {sub_type: 'mc_stats', latest: true, first: true}, function(err, doc){
+    data.get(filter, 'stats', {sub_type: 'mc_stats', latest: true}, function(err, doc){
       if(Array.isArray(doc) && doc.length === 0){
         //No stats for this user
         callback('Couldnt get stats for user: ' + uuid, false);
@@ -112,13 +124,17 @@ function getLatestStats(uuid, callback){
     user.get({}, {privacy: true, onlyPaxterians: true}, function(err, docs){
       if(!err && docs){
         let stats = [];
+        let errors = 0;
         for(let i = 0; i < docs.length; i++){
           getLatestStats(docs[i].mcUUID, function(err, doc){
             stats.push(doc);
-            let errored = false;
-            if(err) errored = err;
+            if(err) errors++;
             if(stats.length == docs.length){
-              callback(errored, stats);
+              if(errors !== stats.length){
+                callback(false, stats)
+              }else{
+                callback(err, false);
+              }
             } 
           });
         }
