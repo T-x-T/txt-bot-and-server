@@ -71,17 +71,32 @@ main.get = function(filter, type, options, callback) {
   //Get our current model
   let model = models[type];
   let _options = options.hasOwnProperty('sort') ? {sort: options.sort} : {};
-  model.find(filter, null, _options, function(err, docs){
-    if(!err && docs) {
-      let output = [];
-      docs.forEach((doc) => {
+  if(!options.max_results){
+    //Find multiple elements
+    model.find(filter, null, _options, function(err, docs){
+      if(!err && docs) {
+        let output = [];
+        docs.forEach((doc) => {
+          output.push(doc._doc);
+        });
+        callback(false, output);
+      }else{
+        callback(err, false);
+      }
+    });
+  }else{
+    //Find only single document
+    model.findOne(filter, null, _options, function(err, doc){
+      if(!err && doc) {
+        let output = [];
         output.push(doc._doc);
-      });
-      callback(false, output);
-    }else{
-      callback(err, false);
-    }
-  });
+        callback(false, output);
+      }else{
+        if(err === null) err = false;
+        callback(err, false);
+      }
+    });
+  }
 };
 
 //Deletes one existing entry

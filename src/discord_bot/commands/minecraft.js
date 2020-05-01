@@ -122,30 +122,30 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
       if(!err){
         if(rankInfo){
           output += `Distance statistics for ${ign}:\n`;
-          output += `Walk: ${stats.walk.rank} of ${stats._totalPlayers} (${stats.walk.stat})\n`;
-          output += `Sprint: ${stats.sprint.rank} of ${stats._totalPlayers} (${stats.sprint.stat})\n`;
-          output += `Crouch: ${stats.crouch.rank} of ${stats._totalPlayers} (${stats.crouch.stat})\n`;
-          output += `Climb: ${stats.climb.rank} of ${stats._totalPlayers} (${stats.climb.stat})\n`;
-          output += `Fall: ${stats.fall.rank} of ${stats._totalPlayers} (${stats.fall.stat})\n`;
-          output += `Walk on Water: ${stats.walkOnWater.rank} of ${stats._totalPlayers} (${stats.walkOnWater.stat})\n`;
-          output += `Walk under Water: ${stats.walkUnderWater.rank} of ${stats._totalPlayers} (${stats.walkUnderWater.stat})\n`;
-          output += `Swim: ${stats.swim.rank} of ${stats._totalPlayers} (${stats.swim.stat})\n`;
-          output += `Boat: ${stats.boat.rank} of ${stats._totalPlayers} (${stats.boat.stat})\n`;
-          output += `Elytra: ${stats.aviate.rank} of ${stats._totalPlayers} (${stats.aviate.stat})\n`;
-          output += `Fly: ${stats.fly.rank} of ${stats._totalPlayers} (${stats.fly.stat})\n`;
+          output += `Walk: ${stats.distance_walk.rank} of ${stats._totalPlayers} (${stats.distance_walk.stat})\n`;
+          output += `Sprint: ${stats.distance_sprint.rank} of ${stats._totalPlayers} (${stats.distance_sprint.stat})\n`;
+          output += `Crouch: ${stats.distance_crouch.rank} of ${stats._totalPlayers} (${stats.distance_crouch.stat})\n`;
+          output += `Climb: ${stats.distance_climb.rank} of ${stats._totalPlayers} (${stats.distance_climb.stat})\n`;
+          output += `Fall: ${stats.distance_fall.rank} of ${stats._totalPlayers} (${stats.distance_fall.stat})\n`;
+          output += `Walk on Water: ${stats.distance_walkOnWater.rank} of ${stats._totalPlayers} (${stats.distance_walkOnWater.stat})\n`;
+          output += `Walk under Water: ${stats.distance_walkUnderWater.rank} of ${stats._totalPlayers} (${stats.distance_walkUnderWater.stat})\n`;
+          output += `Swim: ${stats.distance_swim.rank} of ${stats._totalPlayers} (${stats.distance_swim.stat})\n`;
+          output += `Boat: ${stats.distance_boat.rank} of ${stats._totalPlayers} (${stats.distance_boat.stat})\n`;
+          output += `Elytra: ${stats.distance_aviate.rank} of ${stats._totalPlayers} (${stats.distance_aviate.stat})\n`;
+          output += `Fly: ${stats.distance_fly.rank} of ${stats._totalPlayers} (${stats.distance_fly.stat})\n`;
         }else{
           output += `Distance statistics for ${ign}:\n`;
-          output += `Walk: ${stats.walk}\n`;
-          output += `Sprint: ${stats.sprint}\n`;
-          output += `Crouch: ${stats.crouch}\n`;
-          output += `Climb: ${stats.climb}\n`;
-          output += `Fall: ${stats.fall}\n`;
-          output += `Walk on Water: ${stats.walkOnWater}\n`;
-          output += `Walk under Water: ${stats.walkUnderWater}\n`;
-          output += `Swim: ${stats.swim}\n`;
-          output += `Boat: ${stats.boat}\n`;
-          output += `Elytra: ${stats.aviate}\n`;
-          output += `Fly: ${stats.fly}\n`;
+          output += `Walk: ${stats.distance_walk}\n`;
+          output += `Sprint: ${stats.distance_sprint}\n`;
+          output += `Crouch: ${stats.distance_crouch}\n`;
+          output += `Climb: ${stats.distance_climb}\n`;
+          output += `Fall: ${stats.distance_fall}\n`;
+          output += `Walk on Water: ${stats.distance_walkOnWater}\n`;
+          output += `Walk under Water: ${stats.distance_walkUnderWater}\n`;
+          output += `Swim: ${stats.distance_swim}\n`;
+          output += `Boat: ${stats.distance_boat}\n`;
+          output += `Elytra: ${stats.distance_aviate}\n`;
+          output += `Fly: ${stats.distance_fly}\n`;
         }
       }else{
         output += 'Something went wrong and I couldnt get the stats';
@@ -158,22 +158,22 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
       if(!err){
         if(rankInfo){
           output += `Mined ores from ${ign}:\n`;
-          output += `Diamond: ${stats.diamond.rank} of ${stats._totalPlayers} (${stats.diamond.stat})\n`;
-          output += `Iron: ${stats.iron.rank} of ${stats._totalPlayers} (${stats.iron.stat})\n`;
-          output += `Gold: ${stats.gold.rank} of ${stats._totalPlayers} (${stats.gold.stat})\n`;
-          output += `Emerald: ${stats.emerald.rank} of ${stats._totalPlayers} (${stats.emerald.stat})\n`;
-          output += `Coal: ${stats.coal.rank} of ${stats._totalPlayers} (${stats.coal.stat})\n`;
-          output += `Lapis Lazuli: ${stats.lapis.rank} of ${stats._totalPlayers} (${stats.lapis.stat})\n`;
-          output += `Redstone: ${stats.redstone.rank} of ${stats._totalPlayers} (${stats.redstone.stat})\n`;
+          output += `Diamond: ${stats.mined_diamond_ore.rank} of ${stats._totalPlayers} (${stats.mined_diamond_ore.stat})\n`;
+          output += `Iron: ${stats.mined_iron_ore.rank} of ${stats._totalPlayers} (${stats.mined_iron_ore.stat})\n`;
+          output += `Gold: ${stats.mined_gold_ore.rank} of ${stats._totalPlayers} (${stats.mined_gold_ore.stat})\n`;
+          output += `Emerald: ${stats.mined_emerald_ore.rank} of ${stats._totalPlayers} (${stats.mined_emerald_ore.stat})\n`;
+          output += `Coal: ${stats.mined_coal_ore.rank} of ${stats._totalPlayers} (${stats.mined_coal_ore.stat})\n`;
+          output += `Lapis Lazuli: ${stats.mined_lapis_ore.rank} of ${stats._totalPlayers} (${stats.mined_lapis_ore.stat})\n`;
+          output += `Redstone: ${stats.mined_redstone_ore.rank} of ${stats._totalPlayers} (${stats.mined_redstone_ore.stat})\n`;
         }else{
           output += `Mined ores from ${ign}:\n`;
-          output += `Diamond: ${stats.diamond}\n`;
-          output += `Iron: ${stats.iron}\n`;
-          output += `Gold: ${stats.gold}\n`;
-          output += `Emerald: ${stats.emerald}\n`;
-          output += `Coal: ${stats.coal}\n`;
-          output += `Lapis Lazuli: ${stats.lapis}\n`;
-          output += `Redstone: ${stats.redstone}\n`;
+          output += `Diamond: ${stats.mined_diamond_ore}\n`;
+          output += `Iron: ${stats.mined_iron_ore}\n`;
+          output += `Gold: ${stats.mined_gold_ore}\n`;
+          output += `Emerald: ${stats.mined_emerald_ore}\n`;
+          output += `Coal: ${stats.mined_coal_ore}\n`;
+          output += `Lapis Lazuli: ${stats.mined_lapis_ore}\n`;
+          output += `Redstone: ${stats.mined_redstone_ore}\n`;
         }
       }else{
         output += 'Something went wrong and I couldnt get the stats';
@@ -186,20 +186,20 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
       if(!err){
         if(rankInfo){
           output += `Totals from ${ign}:\n`;
-          output += `Blocks mined: ${stats.mined.rank} of ${stats._totalPlayers} (${stats.mined.stat})\n`;
-          output += `Blocks built & Items used: ${stats.used.rank} of ${stats._totalPlayers} (${stats.used.stat})\n`;
-          output += `Items crafted: ${stats.crafted.rank} of ${stats._totalPlayers} (${stats.crafted.stat})\n`;
-          output += `Items broken: ${stats.broken.rank} of ${stats._totalPlayers} (${stats.broken.stat})\n`;
-          output += `Items dropped: ${stats.dropped.rank} of ${stats._totalPlayers} (${stats.dropped.stat})\n`;
-          output += `Distance travelled: ${stats.travelled.rank} of ${stats._totalPlayers} (${stats.travelled.stat})\n`;
+          output += `Blocks mined: ${stats.total_mined.rank} of ${stats._totalPlayers} (${stats.total_mined.stat})\n`;
+          output += `Blocks built & Items used: ${stats.total_used.rank} of ${stats._totalPlayers} (${stats.total_used.stat})\n`;
+          output += `Items crafted: ${stats.total_crafted.rank} of ${stats._totalPlayers} (${stats.total_crafted.stat})\n`;
+          output += `Items broken: ${stats.total_broken.rank} of ${stats._totalPlayers} (${stats.total_broken.stat})\n`;
+          output += `Items dropped: ${stats.total_dropped.rank} of ${stats._totalPlayers} (${stats.total_dropped.stat})\n`;
+          output += `Distance travelled: ${stats.total_travelled.rank} of ${stats._totalPlayers} (${stats.total_travelled.stat})\n`;
         }else{
           output += `Totals from ${ign}:\n`;
-          output += `Blocks mined: ${stats.mined}\n`;
-          output += `Blocks built & Items used: ${stats.used}\n`;
-          output += `Items crafted: ${stats.crafted}\n`;
-          output += `Items broken: ${stats.broken}\n`;
-          output += `Items dropped: ${stats.dropped}\n`;
-          output += `Distance travelled: ${stats.travelled}\n`;
+          output += `Blocks mined: ${stats.total_mined}\n`;
+          output += `Blocks built & Items used: ${stats.total_used}\n`;
+          output += `Items crafted: ${stats.total_crafted}\n`;
+          output += `Items broken: ${stats.total_broken}\n`;
+          output += `Items dropped: ${stats.total_dropped}\n`;
+          output += `Distance travelled: ${stats.total_travelled}\n`;
         }
       }else{
         output += 'Something went wrong and I couldnt get the stats';
@@ -364,20 +364,20 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
       if(!err){
         if(rankInfo){
           output += `Totals per death from ${ign}:\n`;
-          output += `Blocks mined: ${stats.mined.rank} of ${stats._totalPlayers} (${stats.mined.stat})\n`;
-          output += `Blocks built / Items used: ${stats.used.rank} of ${stats._totalPlayers} (${stats.used.stat})\n`;
-          output += `Items crafted: ${stats.crafted.rank} of ${stats._totalPlayers} (${stats.crafted.stat})\n`;
-          output += `Items broken: ${stats.broken.rank} of ${stats._totalPlayers} (${stats.broken.stat})\n`;
-          output += `Items dropped: ${stats.dropped.rank} of ${stats._totalPlayers} (${stats.dropped.stat})\n`;
-          output += `Distance travelled: ${stats.travelled.rank} of ${stats._totalPlayers} (${stats.travelled.stat})\n`;
+          output += `Blocks mined: ${stats.total_per_death_mined.rank} of ${stats._totalPlayers} (${stats.total_per_death_mined.stat})\n`;
+          output += `Blocks built / Items used: ${stats.total_per_death_used.rank} of ${stats._totalPlayers} (${stats.total_per_death_used.stat})\n`;
+          output += `Items crafted: ${stats.total_per_death_crafted.rank} of ${stats._totalPlayers} (${stats.total_per_death_crafted.stat})\n`;
+          output += `Items broken: ${stats.total_per_death_broken.rank} of ${stats._totalPlayers} (${stats.total_per_death_broken.stat})\n`;
+          output += `Items dropped: ${stats.total_per_death_dropped.rank} of ${stats._totalPlayers} (${stats.total_per_death_dropped.stat})\n`;
+          output += `Distance travelled: ${stats.total_per_death_travelled.rank} of ${stats._totalPlayers} (${stats.total_per_death_travelled.stat})\n`;
         }else{
           output += `Totals per death from ${ign}:\n`;
-          output += `Blocks mined: ${stats.mined}\n`;
-          output += `Blocks built / Items used: ${stats.used}\n`;
-          output += `Items crafted: ${stats.crafted}\n`;
-          output += `Items broken: ${stats.broken}\n`;
-          output += `Items dropped: ${stats.dropped}\n`;
-          output += `Distance travelled: ${stats.travelled}\n`;
+          output += `Blocks mined: ${stats.total_per_death_mined}\n`;
+          output += `Blocks built / Items used: ${stats.total_per_death_used}\n`;
+          output += `Items crafted: ${stats.total_per_death_crafted}\n`;
+          output += `Items broken: ${stats.total_per_death_broken}\n`;
+          output += `Items dropped: ${stats.total_per_death_dropped}\n`;
+          output += `Distance travelled: ${stats.total_per_death_travelled}\n`;
         }
       }else{
         output += 'Something went wrong and I couldnt get the stats';
