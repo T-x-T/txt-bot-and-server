@@ -59,22 +59,21 @@ setImmediate(function(){
     msg += 'It is also a good time to give our rules a read: https://paxterya.com/rules \n';
     msg += 'Please also take a look at our FAQ: https://paxterya.com/faq \n';
     msg += 'The server IP is play.paxterya.com';
-    
-    discord_helpers.sendMessage(msg, config.discord_bot.new_member_announcement, function(err) {
+    discord_helpers.sendMessage(msg, config.discord_bot.channel.new_member_announcement, function(err) {
       if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the welcome message', {err: err, application: doc});
     });
   });
   
   emitter.on('bulletin_new', (msg) => {
     global.log(0, 'discord_bot', 'event bulletin_new received', {msg: msg});
-    discord_helpers.sendMessage(msg, config.discord_bot.new_bulletin_announcement_channel, function(err) {
+    discord_helpers.sendMessage(msg, config.discord_bot.channel.new_bulletin_announcement_channel, function(err) {
       if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new bulletin message', {err: err, message: msg});
     });
   });
   
   emitter.on('bulletin_edit', (msg) => {
     global.log(0, 'discord_bot', 'event bulletin_edit received', {msg: msg});
-    discord_helpers.sendMessage(msg, config.discord_bot.new_bulletin_announcement_channel, function(err) {
+    discord_helpers.sendMessage(msg, config.discord_bot.channel.new_bulletin_announcement_channel, function(err) {
       if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the edited bulletin message', {err: err, message: msg});
     });
   });

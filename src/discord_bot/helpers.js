@@ -39,20 +39,14 @@ helpers.getMemberObjectByID = function(userID, callback){
 
 //Sends a given message in a given channel
 helpers.sendMessage = function (message, channelID, callback) {
-  if (message.length > 0 && channelID.length > 0) {
-    //Input seems fine
-    var curChannel = client.guilds.get(config.discord_bot.guild).channels.get(channelID);
-    curChannel.send(message)
+  let curChannel = client.guilds.get(config.discord_bot.guild).channels.get(channelID);
+  curChannel.send(message)
     .then(message => {
       callback(false);
     })
     .catch(e => {
       callback(e);
     });
-  } else {
-    //Input isnt fine
-    callback(true);
-  }
 };
 
 //Returns all roles from the guild defined in config.js
