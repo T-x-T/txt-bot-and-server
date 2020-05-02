@@ -37,6 +37,7 @@ user.get = function(filter, options, callback){
       //A specific user got queried, and it doesnt exist => create it
       user.create({discord: filter.discord}, false, function(err, doc){
         if(err){
+          global.log(2, 'user', 'Couldnt create non-existent user', {err: err, doc: doc, docs: docs});
           callback('User doesnt exist and couldnt get created: ' + err, false);
         }else{
           data.get(filter, 'user', options, callback)
