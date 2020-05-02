@@ -4,12 +4,7 @@
 */
 
 //Dependencies
-var user;
-
-//This is somehow neccessary, otherwise data will just be an empty object for whatever reason
-setTimeout(function(){
-  user = require('../user');
-}, 0);
+const user = require('../user');;
 
 //Global var
 var client;
