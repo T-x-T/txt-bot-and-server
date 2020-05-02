@@ -6,7 +6,7 @@
 //Dependencies
 const Rcon = require('rcon');
 const user = require('../user');
-const discord_helpers = require('../discord_bot');
+const discord_api = require('../discord_api');
 
 //Create the container
 var rcon = {};
@@ -75,7 +75,7 @@ rcon.updateRoles = function(){
       //Build and Add prefix for each member to commands
       members.forEach((member) => {
         global.log(0, 'minecraft', 'rcon.updateRoles start processing user', {members: members, member: member});
-        discord_helpers.getMemberObjectByID(member.discord, function(memberObj) {
+        discord_api.getMemberObjectByID(member.discord, function(memberObj) {
           if(memberObj) {
             global.log(0, 'minecraft', 'rcon.updateRoles got discord object from user', {memberObj: memberObj});
             //Check roles

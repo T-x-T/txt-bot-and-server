@@ -23,6 +23,11 @@ index.getUserObject = function(input, options, callback){
   }
 };
 
+//Calls back the guildMember Object using the discord bot
+index.getMemberObjectByID = function(discord_id, callback){
+  main.getMemberObjectByID(discord_id, callback);
+};
+
 //Updates the userobject cache
 index.updateCache = function(){
   global.log(0, 'discord_api', 'index.updateCache', {});

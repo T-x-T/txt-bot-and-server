@@ -29,14 +29,6 @@ helpers.getNicknameByID = function (userID, callback) {
   }
 };
 
-helpers.getMemberObjectByID = function(userID, callback){
-  try {
-    callback(client.guilds.get(config.discord_bot.guild).members.get(userID));
-  } catch (e) {
-    callback(false);
-  }
-};
-
 //Sends a given message in a given channel
 helpers.sendMessage = function (message, channelID, callback) {
   let curChannel = client.guilds.get(config.discord_bot.guild).channels.get(channelID);
@@ -113,6 +105,14 @@ helpers.updateAllNicks = function(){
       global.log(2, 'discord_bot', 'discord_helpers.updateAllNicks couldnt get the member database entries', {});
     }
   });
+};
+
+helpers.getMemberObjectByID = function(userID, callback){
+  try {
+    callback(client.guilds.get(config.discord_bot.guild).members.get(userID));
+  } catch (e) {
+    callback(false);
+  }
 };
 
 //Init script, needs to be called from discord_bot.js, so we can use the client object here
