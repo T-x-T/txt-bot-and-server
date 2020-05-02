@@ -5,7 +5,7 @@
 
 //Dependencies
 const user = require('../user');
-const mc_helpers = require('../minecraft');
+//const mc_helpers = require('../minecraft');
 const mc = require('./minecraft.js');
 
 //Create the container
@@ -57,6 +57,7 @@ stats.template.memberOverview = function(options, callback) {
     //Get stats only for one member
     user.get({ discord: discord_id }, { privacy: true, onlyPaxterians: true, first: true }, function (err, member) {
       if (member) {
+        const mc_helpers = require('../minecraft');
         let mc_render_url = mc_helpers.returnRenderUrl(member.mcUUID);
         stats.template.mc({uuid: member.mcUUID, collection: 'playtime'}, function (err, playtime) {
           if (err || !playtime) playtime = 0;
