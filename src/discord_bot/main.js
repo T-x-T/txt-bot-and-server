@@ -123,13 +123,17 @@ emitter.on('discord_bot_ready' ,() => {
 
   //Gets called whenever a member leaves the guild; user is a guildMember
   client.on('guildMemberRemove', (user) => {
-    emitter.emit('user_left', user);
+    user.get({discord: member.id}, {onlyPaxterians: false, first: true}, function(err, doc){
+      emitter.emit('user_left', user, doc);
+    });
     discordHelpers.sendMessage(`${user.displayName} left the server`, config.discord_bot.channel.new_application_announcement, function (e) { });
   });
 
   //Gets called whenever a member gets banned from the guild; user is a guildMember
   client.on('guildBanAdd', (guild, user) => {
-    emitter.emit('user_banned', user);
+    user.get({discord: member.id}, {onlyPaxterians: false, first: true}, function(err, doc){
+      emitter.emit('user_banned', user, doc);
+    });
     discordHelpers.sendMessage(`${user.username} was banned from the server`, config.discord_bot.channel.new_application_announcement, function (e) { });
   });
 

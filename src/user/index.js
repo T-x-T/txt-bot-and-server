@@ -42,14 +42,11 @@ index.updateNicks = function(){
 };
 
 setImmediate(function(){
-  emitter.on('user_left', (discord_id) => {
-    //Wait one second, so other code can still do their cleanup and get more data about the user
-    setTimeout(function(){
-      global.log(0, 'user', 'user_left, deletion triggered', {discord_id: discord_id});
-      main.delete({discord: discord_id}, false, function(err) {
-        if(err) global.log(0, 'user', 'Couldnt delete user that left', {discord_id: discord_id});
-      });
-    }, 1000);
+  emitter.on('user_left', (member, user) => {
+    global.log(0, 'user', 'user_left, deletion triggered', { member: member, user: user });
+    main.delete({ discord: user.discord }, false, function (err) {
+      if (err) global.log(0, 'user', 'Couldnt delete user that left', { discord_id: user.discord });
+    });
   });
 
   emitter.on('application_accepted_joined', (app) => {
