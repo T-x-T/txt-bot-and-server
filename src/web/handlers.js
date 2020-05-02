@@ -10,7 +10,6 @@ const webHelpers  = require('./web-helpers.js');
 const application = require('../application');
 const oauth       = require('../auth');
 const discord_api = require('../discord_api');
-const email       = require('../email/email.js');
 const stats       = require('../stats');
 const post        = require('../post');
 const bulletin    = require('../bulletin');
@@ -326,7 +325,8 @@ handlers.paxapi.contact.post = function(data, callback){
     text = text + '\n\n' + recipient;
 
     //Send the email
-    email.send('contact@paxterya.com', subject, text);
+    emitter.emit('contact_new', subject, text);
+
     callback(200, {}, 'json');
   }else{
     callback(400, {err: 'One of your inputs is a little off'}, 'json');

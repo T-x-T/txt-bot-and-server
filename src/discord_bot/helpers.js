@@ -4,12 +4,7 @@
 */
 
 //Dependencies
-var user;
-
-//This is somehow neccessary, otherwise data will just be an empty object for whatever reason
-setTimeout(function(){
-  user = require('../user');
-}, 0);
+const user = require('../user');;
 
 //Global var
 var client;
@@ -24,14 +19,6 @@ var helpers = {};
 helpers.getNicknameByID = function (userID, callback) {
   try {
     callback(`${client.guilds.get(config.discord_bot.guild).members.get(userID).user.username}#${client.guilds.get(config.discord_bot.guild).members.get(userID).user.discriminator}`);
-  } catch (e) {
-    callback(false);
-  }
-};
-
-helpers.getMemberObjectByID = function(userID, callback){
-  try {
-    callback(client.guilds.get(config.discord_bot.guild).members.get(userID));
   } catch (e) {
     callback(false);
   }
@@ -115,11 +102,12 @@ helpers.updateAllNicks = function(){
   });
 };
 
-//Callbacks the avatar url of the given userID
-helpers.getAvatarUrl = function(discord_id, callback){
-  client.fetchUser(discord_id).then(myUser => {
-      callback(myUser.avatarURL);
-  }).catch(function(){callback(false)});
+helpers.getMemberObjectByID = function(userID, callback){
+  try {
+    callback(client.guilds.get(config.discord_bot.guild).members.get(userID));
+  } catch (e) {
+    callback(false);
+  }
 };
 
 //Init script, needs to be called from discord_bot.js, so we can use the client object here

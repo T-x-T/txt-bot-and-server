@@ -9,7 +9,7 @@ const Discord        = require('discord.js');
 const client         = new Discord.Client();
 const _user          = require('../user');
 const discordHelpers = require('../discord_bot/helpers.js');
-//const application    = require('../application');    <- this gets required further down
+const application    = require('../application');
 
 //Create the container
 var discordBot = {};
@@ -123,19 +123,22 @@ emitter.on('discord_bot_ready' ,() => {
 
   //Gets called whenever a member leaves the guild; user is a guildMember
   client.on('guildMemberRemove', (user) => {
-    emitter.emit('user_left', user);
+    user.get({discord: member.id}, {onlyPaxterians: false, first: true}, function(err, doc){
+      emitter.emit('user_left', user, doc);
+    });
     discordHelpers.sendMessage(`${user.displayName} left the server`, config.discord_bot.channel.new_application_announcement, function (e) { });
   });
 
   //Gets called whenever a member gets banned from the guild; user is a guildMember
   client.on('guildBanAdd', (guild, user) => {
-    emitter.emit('user_banned', user);
+    user.get({discord: member.id}, {onlyPaxterians: false, first: true}, function(err, doc){
+      emitter.emit('user_banned', user, doc);
+    });
     discordHelpers.sendMessage(`${user.username} was banned from the server`, config.discord_bot.channel.new_application_announcement, function (e) { });
   });
 
   //Gets called whenever a new member joins the guild
   client.on('guildMemberAdd', (user) => {
-    const application    = require('../application');
     //Send a welcome message
     discordHelpers.sendMessage(`Welcome <@${user.id}>! If you are here for joining the Minecraft server, then please apply under https://paxterya.com/join-us, read the rules at https://paxterya.com/rules and consult our FAQ at https://paxterya.com/faq \nIf you have any questions just ping the admins (they like getting pinged, trust me)`, config.discord_bot.channel.general, function (err) {
       if (err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new application message', { err: err, application: doc });

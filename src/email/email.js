@@ -72,6 +72,12 @@ email.application.accepted = function(doc){
   email.send(doc.email_address, 'Welcome! You got accepted :)', text);
 };
 
+email.contact = {};
+
+email.contact.new = function(subject, text){
+  email.send('contact@paxterya.com', subject, text);
+};
+
 //Send an email
 email.send = function(recipient, subject, text){
   //Set up the mail settings

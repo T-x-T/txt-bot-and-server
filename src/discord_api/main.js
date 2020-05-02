@@ -142,5 +142,20 @@ main.getNicknameByID = function (userID, callback) {
   }
 };
 
+//Callbacks the avatar url of the given userID
+main.getAvatarUrl = function(discord_id, callback){
+  client.fetchUser(discord_id).then(myUser => {
+      callback(myUser.avatarURL);
+  }).catch(function(){callback(false)});
+};
+
+main.getMemberObjectByID = function(userID, callback){
+  try {
+    callback(client.guilds.get(config.discord_bot.guild).members.get(userID));
+  } catch (e) {
+    callback(false);
+  }
+};
+
 //Export the container
 module.exports = main;

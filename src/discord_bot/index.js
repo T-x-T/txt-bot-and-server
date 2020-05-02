@@ -16,12 +16,10 @@ var index = {};
  */
 
 index.getNicknameByID     = discord_helpers.getNicknameByID;
-index.getMemberObjectByID = discord_helpers.getMemberObjectByID;
 index.returnRoles         = discord_helpers.returnRoles;
 index.returnRoleId        = discord_helpers.returnRoleId;
 index.addMemberToRole     = discord_helpers.addMemberToRole;
 index.updateAllNicks      = discord_helpers.updateAllNicks;
-index.getAvatarUrl        = discord_helpers.getAvatarUrl;
 
 /*
  *  Event listeners
@@ -67,14 +65,14 @@ setImmediate(function(){
   
   emitter.on('bulletin_new', (msg) => {
     global.log(0, 'discord_bot', 'event bulletin_new received', {msg: msg});
-    discord_helpers.sendMessage(msg, config.discord_bot.channel.new_bulletin_announcement_channel, function(err) {
+    discord_helpers.sendMessage(msg, config.discord_bot.channel.new_bulletin_announcement, function(err) {
       if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new bulletin message', {err: err, message: msg});
     });
   });
   
   emitter.on('bulletin_edit', (msg) => {
     global.log(0, 'discord_bot', 'event bulletin_edit received', {msg: msg});
-    discord_helpers.sendMessage(msg, config.discord_bot.channel.new_bulletin_announcement_channel, function(err) {
+    discord_helpers.sendMessage(msg, config.discord_bot.channel.new_bulletin_announcement, function(err) {
       if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the edited bulletin message', {err: err, message: msg});
     });
   });
@@ -86,6 +84,10 @@ setImmediate(function(){
         global.log(2, 'discord_bot', 'discord_bot couldnt send the new youtube video message', {err: err, video: video});
       }
     });
+  });
+
+  emitter.on('contact_new', (subject, text) => {
+    discord_helpers.sendMessage(`Someone used the contact form!\nSubject: ${subject}\nBody: ${text}`, config.discord_bot.channel.new_application_announcement, function(err){});
   });
 });
 

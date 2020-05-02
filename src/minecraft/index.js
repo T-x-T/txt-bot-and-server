@@ -6,7 +6,6 @@
 //Dependencies
 const main = require('./main.js');
 const rcon = require('./rcon.js');
-const user = require('../user');
 
 //Create the global variable that holds the current player count
 global.mcPlayerCount = 0;
@@ -52,27 +51,15 @@ index.sendCmd = function(cmd, callback){
 
 
 //Even listeners
-emitter.on('user_left', (member) => {
+emitter.on('user_left', (member, user) => {
   global.log(0, 'minecraft', 'event user_left received', {member: member});
-  user.get({discord: member.id}, {onlyPaxterians: true, first: true}, function(err, doc){
-    if(!err && doc){
-      rcon.send(`whitelist remove ${doc.mcName}`, function(res){});
-    }else{
-      global.log(2, 'minecraft', 'emitter.on user_left in minecraft component couldnt get the user object', {err: err, doc: doc, member: member});
-    }
-  });
+  rcon.send(`whitelist remove ${user.mcName}`, function(res){});
 });
 
-emitter.on('user_banned', (member) => {
+emitter.on('user_banned', (member, user) => {
   global.log(0, 'minecraft', 'event user_banned received', {member: member});
-  user.get({discord: member.id}, {onlyPaxterians: true, first: true}, function(err, doc){
-    if(!err && doc){
-      rcon.send(`whitelist remove ${doc.mcName}`, function(res){});
-      rcon.send(`ban ${doc.mcName}`, function(res){});
-    }else{
-      global.log(2, 'minecraft', 'emitter.on user_banned in minecraft component couldnt get the user object', {err: err, doc: doc, member: member});
-    }
-  });
+  rcon.send(`whitelist remove ${user.mcName}`, function(res){});
+  rcon.send(`ban ${user.mcName}`, function(res){});
 });
 
 emitter.on('application_accepted_joined', (app) => {
