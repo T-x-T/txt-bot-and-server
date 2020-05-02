@@ -65,14 +65,14 @@ setImmediate(function(){
   
   emitter.on('bulletin_new', (msg) => {
     global.log(0, 'discord_bot', 'event bulletin_new received', {msg: msg});
-    discord_helpers.sendMessage(msg, config.discord_bot.channel.new_bulletin_announcement_channel, function(err) {
+    discord_helpers.sendMessage(msg, config.discord_bot.channel.new_bulletin_announcement, function(err) {
       if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new bulletin message', {err: err, message: msg});
     });
   });
   
   emitter.on('bulletin_edit', (msg) => {
     global.log(0, 'discord_bot', 'event bulletin_edit received', {msg: msg});
-    discord_helpers.sendMessage(msg, config.discord_bot.channel.new_bulletin_announcement_channel, function(err) {
+    discord_helpers.sendMessage(msg, config.discord_bot.channel.new_bulletin_announcement, function(err) {
       if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the edited bulletin message', {err: err, message: msg});
     });
   });
