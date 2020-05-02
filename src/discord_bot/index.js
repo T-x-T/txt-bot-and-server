@@ -21,7 +21,6 @@ index.returnRoles         = discord_helpers.returnRoles;
 index.returnRoleId        = discord_helpers.returnRoleId;
 index.addMemberToRole     = discord_helpers.addMemberToRole;
 index.updateAllNicks      = discord_helpers.updateAllNicks;
-index.getAvatarUrl        = discord_helpers.getAvatarUrl;
 
 /*
  *  Event listeners

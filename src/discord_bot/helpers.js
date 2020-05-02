@@ -115,13 +115,6 @@ helpers.updateAllNicks = function(){
   });
 };
 
-//Callbacks the avatar url of the given userID
-helpers.getAvatarUrl = function(discord_id, callback){
-  client.fetchUser(discord_id).then(myUser => {
-      callback(myUser.avatarURL);
-  }).catch(function(){callback(false)});
-};
-
 //Init script, needs to be called from discord_bot.js, so we can use the client object here
 helpers.init = function (origClient) {
   client = origClient;

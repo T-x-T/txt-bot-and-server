@@ -35,5 +35,9 @@ index.getNicknameByID = function(userID, callback){
   main.getNicknameByID(userID, callback);
 };
 
+index.getAvatarUrl = function(discord_id, callback){
+  main.getAvatarUrl(discord_id, callback);
+};
+
 //Export the container
 module.exports = index;

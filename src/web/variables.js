@@ -5,7 +5,6 @@
 
 //Dependencies
 const application     = require('../application');
-const discord_helpers = require('../discord_bot');
 const mc_helpers      = require('../minecraft');
 const stats           = require('../stats');
 const os              = require('os');
@@ -47,7 +46,7 @@ _getters.interface = function(callback){
 _getters.application = function(callback){
   application.get({id: data.queryStringObject.id}, {first: true, addNicks: true}, function(err, doc){
     if(doc){
-      discord_helpers.getAvatarUrl(doc.discord_id, function(discord_avatar_url){
+      discord_api.getAvatarUrl(doc.discord_id, function(discord_avatar_url){
         if(!discord_avatar_url) discord_avatar_url = 'not found';
           else discord_avatar_url = `<img src="${discord_avatar_url}"></img>`;
 
