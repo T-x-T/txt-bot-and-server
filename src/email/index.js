@@ -24,5 +24,9 @@ emitter.on('application_accepted', (application) => {
   main.application.accepted(application);
 });
 
+emitter.on('contact_new', (subject, text) => {
+  main.contact.new(subject, text);
+});
+
 //Export the container
 module.exports = index;
