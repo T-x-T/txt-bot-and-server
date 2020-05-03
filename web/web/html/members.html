@@ -178,3 +178,29 @@
     then close all select boxes:*/
     document.addEventListener("click", closeAllSelect);
 </script>
+
+
+<!-- toggle X icon in search bar -->
+<script>
+  $("#searchInput").on('change keydown paste input', function(){
+        if( document.getElementById('searchInput').value === '' ){
+            console.log('empty');
+            document.getElementById("search").style.display="block"
+            document.getElementById("cancel").style.display="none"
+          }
+        else {
+          document.getElementById("search").style.display="none"
+          document.getElementById("cancel").style.display="block"
+        }
+  });
+</script>
+
+<!-- reset search with X click -->
+<script>
+  document.getElementById("cancel").addEventListener("click", clearSearch);
+
+function clearSearch() {
+  $('#searchInput').val('').focus().trigger('change');
+  root.members.update();
+}
+</script>

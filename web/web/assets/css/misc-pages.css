@@ -638,6 +638,15 @@ button[id="submit"]:hover {
     width: 100%;
 }
 
+#cancel {
+  display: none;
+  cursor: pointer;
+}
+
+#cancel:hover {
+  background: #00515c;
+}
+
 .search .searchicon {
     background: #007787;
     color: white;
