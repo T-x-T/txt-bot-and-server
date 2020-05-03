@@ -1,0 +1,34 @@
+@import '_vars'
+
+footer
+    background: $pax-darkgray
+    color: $pax-white
+    @extend %pax-p
+    padding: 5px 0
+    position: relative
+
+    a
+        color: $pax-white
+        padding-left: 20px
+
+    span, a:hover
+        color: $pax-lightgray
+
+    i
+        font-size: 10pt
+
+footer::before, footer::after
+    content: ""
+    border-style: solid
+    bottom: 100%
+    position: absolute
+
+footer::before
+    border-width: 0 0 20px 30px
+    border-color: transparent transparent $pax-black transparent
+    left: 0px
+
+footer::after
+    border-width: 20px 0px 0px 30px
+    border-color: transparent transparent transparent $pax-black
+    right: 0px
