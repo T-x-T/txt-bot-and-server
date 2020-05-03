@@ -354,18 +354,26 @@ nav li ul li i {
 @media screen and (max-width:500px) {
 
   .member-card-wrapper{
-      background: #f0f0f0;
-      margin: 0 0 20px 0;
+      margin: 0!important;
       padding: 15px 0 10px 15px;
+      background: linear-gradient(180deg, rgba(240,240,240,0) 15%, rgba(240,240,240,1) 15%, rgba(240,240,240,1) 100%)!important;
+  }
+
+  .member-card-wrapper h2 {
+      font-size: 14pt;
+  }
+
+  .member-card-wrapper h3 {
+      font-size: 10pt;
+  }
+
+  .member-card-wrapper p {
+      font-size: 11pt;
   }
 
   .member-card-image {
-      display: none;
-  }
-
-  .member-card-description {
-      width: 100%;
-      padding: 0;
+      width: 20%!important;
+      margin-top: 30px;
   }
 
   .wrapper {
