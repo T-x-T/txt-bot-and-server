@@ -802,3 +802,17 @@ article.town-screenies img {
 .town {
   margin-bottom: 50px;
 }
+
+
+/* ############### join us ###############*/
+
+#app-form, #contact-form {
+    width: 50%;
+}
+
+/* ################### zoom & pan feature ###################*/
+
+.toggle_controls {
+  display: flex;
+  justify-content: space-around;
+}

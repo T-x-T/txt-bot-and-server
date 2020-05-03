@@ -19,7 +19,7 @@
     "sanitize-html": "^1.22.1"
   },
   "devDependencies": {
-    "mocha": "^7.1.0"
+    "mocha": "^7.1.2"
   },
   "repository": {
     "type": "git",

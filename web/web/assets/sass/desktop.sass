@@ -1,0 +1,102 @@
+@import '_vars'
+
+@media (min-width:1000px)
+
+    .mobile-only, nav .fa-chevron-right
+        display: none
+
+    header img#logo
+        height: 130px
+        width: 380px
+        top: 60px
+        left: 8%
+
+    .mySlides::after
+        background-image: linear-gradient(135deg, rgba(0,0,0,.4) 20%, transparent 50%, transparent 80%, rgba(0,0,0,.4) 100%), linear-gradient(0deg, rgba(0,0,0,.6) 0%, transparent 5%, transparent 80%, rgba(0,0,0,.3) 100%)
+
+    .mySlides, .header-height
+        height: 400px
+
+    header .banner
+        position: absolute
+        z-index: 99
+        right: 17.5%
+        top: 200px
+
+    main p, main ul
+        width: 80%
+
+    /* ############### nav ###############*/
+
+    nav ul
+        width: 1040px
+        margin: 0 auto
+        display: flex
+        justify-content: space-around
+
+        li
+            text-align: center
+            padding: 15px
+
+        #join, #nav-login
+            pointer-events: none
+
+            &:hover
+                transform: scale(1.1)
+
+                a
+                    box-shadow: 0px 0px 0px 3px $pax-darkcyan
+
+    /* --- dropdown menu --- */
+    nav
+        li
+            position: relative
+
+            &:hover > ul
+                visibility: visible
+                opacity: 1
+                -webkit-transform: perspective(400) rotate3d(0,0,0,0)
+
+        ul ul
+            display: inline
+            position: absolute
+            top: 100%
+            left: 0
+            visibility: hidden
+            opacity: 0
+            background: $pax-darkcyan
+            width: 300px
+            -webkit-transform: perspective(400) rotate3d(1,0,0,-90deg)
+            -webkit-transform-origin: 50% 0
+            -webkit-transition: .3s
+            -moz-transition: .3s
+            -o-transition: .3s
+            transition: .3s
+
+            li
+                display: block
+                text-align: left
+                padding: 10px 0px 10px 20px
+                font-size: 16pt
+
+                i.fa-chevron-right
+                    font-size: 12pt
+                    opacity: 0
+                    visibility: hidden
+
+                &:hover
+                    background: $pax-cyan
+
+    /* ############### main ###############*/
+
+    .wrapper
+        width: 880px
+        margin: 0 auto
+
+    main
+        width: 1000px
+        margin: 30px auto
+
+    .wrapper.content
+        background: $pax-white
+        padding: 15px 30px 30px 30px

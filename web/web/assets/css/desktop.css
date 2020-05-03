@@ -1,4 +1,4 @@
-@media screen and (min-width:1000px) {
+@media (min-width:1000px) {
 
     .mobile-only, nav .fa-chevron-right {
         display: none;

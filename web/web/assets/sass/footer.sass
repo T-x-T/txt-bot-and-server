@@ -3,7 +3,7 @@
 footer
     background: $pax-darkgray
     color: $pax-white
-    @extend %pax-p
+    @extend .pax-p
     padding: 5px 0
     position: relative
 
@@ -17,18 +17,18 @@ footer
     i
         font-size: 10pt
 
-footer::before, footer::after
-    content: ""
-    border-style: solid
-    bottom: 100%
-    position: absolute
+    &::before, &::after
+        content: ""
+        border-style: solid
+        bottom: 100%
+        position: absolute
 
-footer::before
-    border-width: 0 0 20px 30px
-    border-color: transparent transparent $pax-black transparent
-    left: 0px
+    &::before
+        border-width: 0 0 20px 30px
+        border-color: transparent transparent $pax-black transparent
+        left: 0px
 
-footer::after
-    border-width: 20px 0px 0px 30px
-    border-color: transparent transparent transparent $pax-black
-    right: 0px
+    &::after
+        border-width: 20px 0px 0px 30px
+        border-color: transparent transparent transparent $pax-black
+        right: 0px

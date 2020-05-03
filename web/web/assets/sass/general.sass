@@ -1,0 +1,173 @@
+@import '_vars'
+
+*
+    margin: 0
+    padding: 0
+    text-decoration: none
+    transition-duration: .3s
+
+li
+    list-style-type: none
+
+html
+    scroll-behavior: smooth
+
+::selection
+    background: $pax-cyan
+    color: $pax-white
+
+::-moz-selection
+    background: $pax-cyan
+    color: $pax-white
+
+::-webkit-scrollbar
+    width: 10px
+    background-color: #e9e9e9
+
+::-webkit-scrollbar-thumb
+    background: #333
+
+    &:hover
+        background: #030303
+
+@font-face
+    font-family: "semibold"
+    src: url("../fonts/TitilliumWeb-SemiBold.ttf")
+
+@font-face
+    font-family: "regular"
+    src: url("../fonts/TitilliumWeb-Regular.ttf")
+
+body
+    background: $pax-nearlywhite
+
+.left
+    float: left
+
+.right
+    float: right
+
+.clear
+    clear: both
+
+button:focus
+    outline: none
+
+.visible
+    opacity: 1
+    visibility: visible
+
+.hidden
+    opacity: 0
+    visibility: hidden
+
+.margin-top-20
+    margin-top: 20px
+
+iframe
+    border: none
+
+img
+    max-width: 100%
+
+button
+    background: $pax-cyan
+    border: 1px solid $pax-darkcyan
+    color: $pax-white
+    font-family: "semibold", sans-serif
+    font-size: 13pt
+    cursor: pointer
+    padding: 2px 15px
+    margin-top: 10px
+
+    &:hover
+        background: $pax-darkcyan
+
+    &.hover-right i
+        font-size: 10pt
+        margin-left: 5px
+
+    &.hover-left i
+        font-size: 10pt
+        margin-right: 5px
+
+button.secondary
+    background: $pax-white
+    color: $pax-darkgray
+    border: 1px solid #bebebe
+
+    &:hover
+        background: #bebebe
+
+button.hover-right:hover > i
+    margin-left: 10px
+
+button.hover-left:hover > i
+    margin-right: 10px
+
+.lesspadding section
+    padding: 0 0 0 2px
+
+summary
+    font-family: "semibold"
+    color: $pax-cyan
+    margin-top: 10px
+
+    &:focus
+        outline: none
+
+details
+    cursor: pointer
+
+
+/* #########################################*/
+
+/* ################### main ###################*/
+
+h1, h2, h3
+    @extend .pax-semibold
+
+h1
+    background: $pax-cyan
+    color: $pax-white
+    text-shadow: 1px 2px 0px #00515c
+    padding: 5px 0
+    font-size: 18pt
+    position: relative
+
+    &::before, &::after
+        content: ""
+        border-style: solid
+        position: absolute
+        top: 100%
+
+    &::before
+        border-width: 0 30px 20px 0
+        border-color: transparent $pax-darkcyan transparent transparent
+        left: 0px
+
+    &::after
+        border-width: 20px 30px 0px 0
+        border-color: $pax-darkcyan transparent transparent transparent
+        right: 0px
+
+h2
+    color: $pax-cyan
+    font-size: 18pt
+
+h3
+    color: $pax-cyan
+    font-size: 14pt
+
+main
+    p, ul
+        @extend .pax-p
+        line-height: 1.3
+        color: $pax-black
+
+    a
+        color: $pax-cyan
+        @extend .pax-regular
+
+        &:hover
+            color: $pax-darkcyan
