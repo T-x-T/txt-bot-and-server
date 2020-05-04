@@ -277,52 +277,6 @@ root.application.deny = function(){
   });
 };
 
-//Container for all functions necessary for join-us.html to work properly
-root.join_us = {};
-
-root.join_us.onload = function(){
-  //Check if we got redirected here from the discords oauth login
-  let code = _internal.getQueryValue('id');
-  if(code){
-    //We got here from discords oauth login with some code, show the form and hide the button
-    document.getElementById('app-form').hidden = false;
-  }else{
-    //User is new to the site, hide the form and show the button
-    document.getElementById('oauth-login').hidden = false;
-  }
-};
-
-//Sends the data of the application form to the api
-root.join_us.sendApplication = function(){
-  //Assemble the object to send to the api
-  let application = {
-    mc_ign:                document.getElementById('ign').value.trim(),
-    discord_id:            _internal.getQueryValue('id'),
-    email_address:         document.getElementById('email').value.trim(),
-    country:               document.getElementById('country').value,
-    birth_month:           document.getElementById('selectmonth').value,
-    birth_year:            document.getElementById('selectyear').value,
-    about_me:              document.getElementById('about_text').value,
-    motivation:            document.getElementById('motivation_text').value,
-    build_images:          document.getElementById('build_images').value,
-    publish_about_me:      document.getElementById('publish_about_me').checked,
-    publish_age:           document.getElementById('publish_age').checked,
-    publish_country:       document.getElementById('publish_country').checked,
-    accept_privacy_policy: document.getElementById('accept_privacy_policy').checked,
-    accept_rules:          document.getElementById('accept_rules').checked
-  };
-
-  //Lets send the application to the api
-  _internal.send('application', {}, 'POST', {}, application, function(status, res){
-    if(status == 201){
-      //Redirect user to success page
-        window.location.href = `https://${document.location.host}/application-sent.html`;
-    }else{
-      window.alert('Woops something bad happend, we are very sorry for the inconvenience\nHere is the error: ' + res.err);
-    }
-  });
-};
-
 //Framework stuff to make my life easier
 root.framework = {};
 
