@@ -1,10 +1,12 @@
 <script src="assets/paxterya/js/jquery-1.11.3.min.js"></script>
 <script src="assets/paxterya/js/jquery-ui.min.js"></script>
 <script src="assets/paxterya/js/jquery.select-to-autocomplete.js"></script>
+<script src="assets/pax_js/members.js"></script>
+
 <link href="jquery-ui.css">
 <script type="text/javascript">
     window.addEventListener('DOMContentLoaded', (event) => {
-        root.members.init();
+        members.init();
     });
 </script>
 
@@ -32,12 +34,12 @@
             <i class="fas fa-times"></i>
         </div>
 
-        <input type="text" id="searchInput" onkeyup="root.members.search()" placeholder="Search member…">
+        <input type="text" id="searchInput" onkeyup="members.search()" placeholder="Search member…">
     </div>
 
 
             <div class="custom-select membersorting">
-                <select name="sort" id="sort" onchange="root.members.update()">
+                <select name="sort" id="sort" onchange="members.update()">
                     <option value="0">Date joined ASC</option>
                     <option value="1">Date joined DESC</option>
                     <option value="2">Playtime ASC</option>
@@ -50,23 +52,6 @@
                     <option value="9">Discord DESC</option>
                 </select>
             </div>
-
-
-
-    <!--<div class="sort">
-        <select name="sort" id="sort" onchange="root.members.update()">
-            <option value="0">Date joined ASC</option>
-            <option value="1">Date joined DESC</option>
-            <option value="2">Playtime ASC</option>
-            <option value="3">Playtime DESC</option>
-            <option value="4">Age ASC</option>
-            <option value="5">Age DESC</option>
-            <option value="6">IGN ASC</option>
-            <option value="7">IGN DESC</option>
-            <option value="8">Discord ASC</option>
-            <option value="9">Discord DESC</option>
-        </select>
-    </div>-->
 
     <div id="member-list" class="member-list-wrapper">
         <!-- Template that gets copie as needed using js -->
@@ -95,7 +80,7 @@
 
             </div>
         </div>
-        <!-- End of Template that gets copie as needed using js -->
+        <!-- End of Template that gets copied as needed using js -->
     </div>
 
 
@@ -152,7 +137,7 @@
             closeAllSelect(this);
             this.nextSibling.classList.toggle("select-hide");
             this.classList.toggle("select-arrow-active");
-            root.members.update();
+            members.update();
         });
     }
     function closeAllSelect(elmnt) {
@@ -200,6 +185,6 @@
 
 function clearSearch() {
   $('#searchInput').val('').focus().trigger('change');
-  root.members.update();
+  members.update();
 }
 </script>
