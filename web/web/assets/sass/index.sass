@@ -1,0 +1,238 @@
+@import '_vars'
+
+/* ----------- ALL DEVICES ----------- */
+body#index
+    background: $pax-darkcyan
+
+    header
+        border: none
+
+        #index-logo, .header-down, p, button
+            position: absolute
+            left: 50%
+            transform: translateX(-50%)
+            z-index: 1
+
+        p
+            top: 50%
+            transform: translate(-50%,-50%)
+            width: 500px
+            max-width: 90%
+            @extend .pax-regular
+            color: $pax-white
+            font-size: 14pt
+            text-shadow: 0px 1px 0px black
+            line-height: 1.5
+            text-align: justify
+            background-color: rgba(16,47,54,.5)
+            box-shadow: 0px 0px 5px #102f36 inset
+            padding: 10px 15px
+
+        #index-logo
+            width: auto
+            top: 10%
+            filter: drop-shadow(0px 3px 10px rgba(0, 0, 0, .5))
+
+            &:hover
+                opacity: .7
+
+        button
+            bottom: -60px
+            border-radius: 100px
+            font-size: 16pt
+            text-shadow: 1px 2px 0px $pax-darkcyan
+            padding: 2px 18px
+            box-shadow: 0px 0px 10px #102f36
+
+            i
+                color: $pax-lightcyan
+                margin-right: 5px
+
+.header-down
+    position: absolute
+    bottom: 20px
+
+    a
+        color: $pax-white
+        font-size: 30pt
+        opacity: .5
+
+        &:hover
+            opacity: 1
+
+.overlay::after
+    background-image: radial-gradient(transparent 50%, rgba(0,0,0,.3) 70%), linear-gradient(0deg, rgba(0,0,0,.3) 0%, transparent 5%, transparent 80%, rgba(0,0,0,.3) 100%), linear-gradient(rgba(0,81,92,.6) 0%, rgba(0,81,92,.6) 100%)
+    display: block
+    position: absolute
+    height: 100%
+    width: 100%
+    content: ''
+    top: 0
+    right: 0
+    bottom: 0
+    left: 0
+
+
+/* CINEMATIC */
+
+section#cinematic
+    background: $pax-cyan
+    padding: 20px 0
+    border:
+        top: 20px solid #00626f
+        bottom: 20px solid #00626f
+    box-shadow: 0px 0px 100px #003840
+
+    iframe
+        width: 100%
+        height: 600px
+
+/* FEATURES */
+section#features
+    padding: 50px 0
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+    justify-content: space-around
+
+    .featurelist
+        width: 300px
+        max-width: 75%
+        margin-bottom: 30px
+
+section#howtojoin
+    display: flex
+    justify-content: space-around
+    margin: 50px 0
+
+    .text
+        padding: 20px 15px 10px 15px
+
+        > :first-child
+            padding-bottom: 15px
+
+        li p
+            padding-left: 12px
+
+    .featurelist
+        width: 600px
+        max-width: 75%
+
+        li
+            padding-bottom: 15px
+
+.featurelist
+
+    .headline
+        background: $pax-white
+        color: $pax-cyan
+        margin-left: -30px
+        font-size: 18pt
+        padding: 5px 15px
+        display: inline-block
+        height: 32px
+        position: relative
+        @extend .pax-semibold
+        white-space: nowrap
+        width: 150px
+
+        &:before
+            content: ""
+            border-style: solid
+            border-width: 0 30px 30px 0
+            border-color: transparent #b8b8b8 transparent transparent
+            position: absolute
+            left: 0px
+            top: 42px
+
+    .text
+        background: #007787
+        color: white
+        padding: 10px 15px
+        font-size: 14pt
+        text-shadow: 0px 1px 0px #00515c
+        line-height: 1.5
+        width: 100%
+
+        li:before
+            content: "▪"
+            color: #60aeb8
+            padding-right: 5px
+
+    a
+        color: $pax-white
+        @extend .pax-semibold
+
+        &:hover
+            opacity: .7
+
+    p
+        color: $pax-white
+        width: 100%
+
+section#newestpost
+    background: $pax-cyan
+    padding: 20px 0
+    border:
+        top: 20px solid #00626f
+        bottom: 20px solid #00626f
+    box-shadow: 0px 0px 100px #003840
+    margin: 70px 0
+
+    p, article.news p:first-of-type::first-letter, article.news h3
+        color: $pax-white
+        text-shadow: 0px 1px 0px $pax-darkcyan
+
+    img.author
+        filter: drop-shadow(0px 0px 20px rgba(255, 255, 255, 0.3))
+        box-shadow: none
+
+    span.subtitle
+        background: $pax-darkestcyan
+
+    article
+        margin: 5px 0 30px 0
+
+        section
+            border-left: 5px solid $pax-darkestcyan
+
+
+/* FOOTER */
+
+#index
+    main
+        width: 100%
+
+    footer
+        background: $pax-darkestcyan
+        width: 100%
+
+    footer span, footer a
+        color: $pax-lightcyan
+
+    footer::before, footer::after
+        display: none
+
+/* ----------- DESKTOP VIEW ----------- */
+@media ($desktop)
+    #index header #index-logo
+        height: 200px
+
+/* ----------- MOBILE VIEW ----------- */
+@media ($mobile)
+    section#cinematic iframe
+        width: 100%
+        height: 200px
+
+    #index header
+        #index-logo
+            width: 100px
+            max-width: 30%
+            height: auto
+
+        p
+            font-size: 12pt
+            width: 80%
+
+    #index .header-down
+        bottom: 60px
