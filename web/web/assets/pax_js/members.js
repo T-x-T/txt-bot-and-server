@@ -212,3 +212,17 @@ window.onload = function(){
     then close all select boxes:*/
     document.addEventListener("click", closeAllSelect);
 };
+
+
+_internal.sortings = {
+  0: ['joined_date', 'asc'],
+  1: ['joined_date', 'desc'],
+  2: ['playtime', 'asc'],
+  3: ['playtime', 'desc'],
+  4: ['age', 'asc'],
+  5: ['age', 'desc'],
+  6: ['mc_nick', 'asc'],
+  7: ['mc_nick', 'desc'],
+  8: ['discord_nick', 'asc'],
+  9: ['discord_nick', 'desc'],
+};
