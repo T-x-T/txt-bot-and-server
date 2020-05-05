@@ -27,7 +27,7 @@ interface.application = {};
 //Loads the applications from the api and puts them into the table; bs is just some random variable because we get some shit from the onload
 interface.application.load = function(filter){
   //Init table
-  root.framework.table.init(document.getElementById('applications-table'), {api_path: 'application', data_mapping: function(input){
+  framework.table.init(document.getElementById('applications-table'), {api_path: 'application', data_mapping: function(input){
     let statusString = 'invalid';
     statusString = input.status == 1 ? 'pending review' : statusString;
     statusString = input.status == 2 ? 'denied' : statusString;
@@ -64,7 +64,7 @@ interface.post = {};
 
 //Loads the posts from the api and puts them into the table; bs is just some random variable because we get some shit from the onload
 interface.post.load = function(filter) {
-  root.framework.table.init(document.getElementById('post-table'), {api_path: 'post', data_mapping: function(input){
+  framework.table.init(document.getElementById('post-table'), {api_path: 'post', data_mapping: function(input){
     let visiblity;
     if(input.public) visiblity = 'Public';
       else visiblity = 'Private';
@@ -100,7 +100,7 @@ interface.bulletin = {};
 interface.bulletin.init = function(){
   //This enables admins to open the edit bar on all bulletins
   let edit_bar_filter_value = root.cookies.access_level >= 9 ? false : root.cookies.mc_ign;
-  root.framework.table.init(document.getElementById('bulletin-table'), {api_path: 'bulletin', data_mapping: function(input){
+  framework.table.init(document.getElementById('bulletin-table'), {api_path: 'bulletin', data_mapping: function(input){
     return [
       new Date(input.date).toISOString().substring(0, 10),
       input.author_name,
@@ -148,14 +148,14 @@ interface.toggleMyBulletins = function(element){
 
 interface.bulletin.new = function(table){
   //Summon the popup
-  root.framework.popup.create_textbox({title: 'Create new bulletin', maxLength: 1000, required: true}, function(input) {
+  framework.popup.create_textbox({title: 'Create new bulletin', maxLength: 1000, required: true}, function(input) {
     if(input){
       //Send the message to the API
       _internal.send('bulletin', false, 'POST', false, {message: input}, function(status, res) {
         if(status === 200) {
           table.update();
         } else {
-          root.framework.popup.create_info({title: 'Error', text: 'oops something bad happened, maybe this message helps someone figure it out\n' + res.err});
+          framework.popup.create_info({title: 'Error', text: 'oops something bad happened, maybe this message helps someone figure it out\n' + res.err});
         }
       });
     }
@@ -164,7 +164,7 @@ interface.bulletin.new = function(table){
 
 interface.bulletin.edit = function(row){
   //Summon the popup
-  root.framework.popup.create_textbox({title: 'Edit existing bulletin', maxLength: 1000, required: true, text: row.raw_data.message}, function(input){
+  framework.popup.create_textbox({title: 'Edit existing bulletin', maxLength: 1000, required: true, text: row.raw_data.message}, function(input){
     if(input){
       let new_data = row.raw_data;
       new_data.message = input;
@@ -172,7 +172,7 @@ interface.bulletin.edit = function(row){
         if(status === 200) {
           row.table.update();
         } else {
-          root.framework.popup.create_info({title: 'Error', text: 'oops something bad happened, maybe this message helps someone figure it out\n' + res.err});
+          framework.popup.create_info({title: 'Error', text: 'oops something bad happened, maybe this message helps someone figure it out\n' + res.err});
         }
       });
     }
@@ -180,11 +180,11 @@ interface.bulletin.edit = function(row){
 };
 
 interface.bulletin.delete = function(row){
-  root.framework.popup.create_confirmation({text: 'Do you really want to delete this bulletin?'}, function(deleteConfirmed){
+  framework.popup.create_confirmation({text: 'Do you really want to delete this bulletin?'}, function(deleteConfirmed){
     if(deleteConfirmed){
       _internal.send('bulletin', false, 'DELETE', false, row.raw_data, function(status, res){
         if(status != 200){
-          root.framework.popup.create_info({title: 'Error', text: 'oops something bad happened, maybe this message helps someone figure it out\n' + res.err});
+          framework.popup.create_info({title: 'Error', text: 'oops something bad happened, maybe this message helps someone figure it out\n' + res.err});
         }else{
           row.table.update();
         }

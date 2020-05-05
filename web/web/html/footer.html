@@ -21,13 +21,13 @@
             <span id="popup-title">TITLE</span>
           </div>
           <div id="popup-head-close">
-            <button id="popup-close" onclick="root.framework.popup.bg_click(this.parentNode.parentNode.parentNode.parentNode)"><i class="fas fa-times"></i></button>
+            <button id="popup-close" onclick="framework.popup.bg_click(this.parentNode.parentNode.parentNode.parentNode)"><i class="fas fa-times"></i></button>
           </div>
         </div>
         <div class="popup-foreground-content">
         </div>
       </div>
-      <div class="popup-background" onclick="root.framework.popup.bg_click(this.parentNode)"></div>
+      <div class="popup-background" onclick="framework.popup.bg_click(this.parentNode)"></div>
     </div>
 
     <!-- textbox popup template-->
@@ -35,14 +35,14 @@
       <textarea name="textbox-popup-textarea" id="textbox-popup-textarea" cols="30" rows="10" oninput="this.parentNode.parentNode.parentNode.parentNode.options.confirmClose = true;"></textarea>
       <br>
       <div id="textbox-popup-buttons">
-        <button id="textbox-popup-save" onclick="root.framework.popup.textbox_save_click(this.parentNode.parentNode.parentNode.parentNode.parentNode)">save</button> <button class="secondary" id="textbox-popup-cancel" onclick="root.framework.popup.cancel_click(this.parentNode.parentNode.parentNode.parentNode.parentNode)">cancel</button>
+        <button id="textbox-popup-save" onclick="framework.popup.textbox_save_click(this.parentNode.parentNode.parentNode.parentNode.parentNode)">save</button> <button class="secondary" id="textbox-popup-cancel" onclick="framework.popup.cancel_click(this.parentNode.parentNode.parentNode.parentNode.parentNode)">cancel</button>
       </div>
     </div>
 
     <!-- confirmation popup template-->
     <div id="confirmation-popup" hidden>
       <p id="confirmation-popup-text">Do you really want to do that?</p>
-      <button id="confirmation-popup-yes" onclick="root.framework.popup.confirmation_yes(this.parentNode.parentNode.parentNode.parentNode)">YES</button> <button class="secondary" id="confirmation-popup-no" onclick="root.framework.popup.cancel_click(this.parentNode.parentNode.parentNode.parentNode)">NO</button>
+      <button id="confirmation-popup-yes" onclick="framework.popup.confirmation_yes(this.parentNode.parentNode.parentNode.parentNode)">YES</button> <button class="secondary" id="confirmation-popup-no" onclick="framework.popup.cancel_click(this.parentNode.parentNode.parentNode.parentNode)">NO</button>
     </div>
 
     <!-- info popup template-->
