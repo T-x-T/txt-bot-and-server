@@ -4,7 +4,7 @@
     <p>Post interesting things, ads for your services, cool facts, coordinates of your base, or literally anthing else
       you think that might be of interest</p>
     <p>Click on a row to view entire message</p>
-    <button onclick="root.interface.bulletin.new(this.parentNode.parentNode)" id="bulletin-new">new</button> <button onclick="root.interface.toggleMyBulletins(this);">my posts</button>
+    <button onclick="interface.bulletin.new(this.parentNode.parentNode)" id="bulletin-new">new</button> <button onclick="interface.toggleMyBulletins(this);">my posts</button>
 
   </caption>
   <thead>
@@ -14,7 +14,7 @@
   </thead>
   <tbody>
     <tr id="bulletin_edit_bar" hidden=true>
-      <td style="background-color:#c9c9c9" colspan="3"><button onclick="root.interface.bulletin.edit(this.parentNode.parentNode.previousSibling)">edit</button> <button class="secondary" onclick="root.interface.bulletin.delete(this.parentNode.parentNode.previousSibling)">delete</button></td>
+      <td style="background-color:#c9c9c9" colspan="3"><button onclick="interface.bulletin.edit(this.parentNode.parentNode.previousSibling)">edit</button> <button class="secondary" onclick="interface.bulletin.delete(this.parentNode.parentNode.previousSibling)">delete</button></td>
     </tr>
   </tbody>
 </table>
