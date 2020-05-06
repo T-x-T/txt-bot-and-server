@@ -58,30 +58,3 @@ root.post.send = function(){
   });
 };
 
-//Container for all functions necessary for application.html to work properly
-root.application = {};
-
-//Gets executed when an application is accepted
-root.application.accept = function(){
-  _internal.send('application', false, 'PATCH', {}, {id: parseInt(_internal.getQueryValue('id')), status: 3}, function(status, res){
-    if(status == 200){
-      window.alert('success!');
-      window.location.href = `https://${document.location.host}/staff/interface.html`;
-    }else{
-      window.alert('Something went wrong!\n' + res.err);
-    }
-  });
-};
-
-//Gets executed when an application is denied
-root.application.deny = function(){
-  _internal.send('application', false, 'PATCH', {}, {id: parseInt(_internal.getQueryValue('id')), status: 2, reason: document.getElementById('deny_reason').value}, function(status, res){
-    if(status == 200){
-      window.alert('success!');
-      window.location.href = `https://${document.location.host}/staff/interface.html`;
-    }else{
-      window.alert('Something went wrong!\n' + res.err);
-    }
-  });
-};
-

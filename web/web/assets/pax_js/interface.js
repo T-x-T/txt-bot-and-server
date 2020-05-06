@@ -41,7 +41,7 @@ interface.application.load = function(filter){
       input.about_me.substring(0, 50),
       statusString
     ];
-  }, api_method: 'GET', edit_bar: false, row_onclick: interface.application.redirect});
+  }, api_method: 'GET', edit_bar: false, row_onclick: interface.application.open_popup});
 };
 
 //Gets called whenever the user changes the status to filter the table
@@ -55,8 +55,53 @@ interface.application.filter = function(select, table){
   table.filter(5, filter, true);
 };
 
-interface.application.redirect = function(row){
-  window.location.href = `https://${window.location.host}/staff/application.html?id=${row.cells[0].innerText}`;
+interface.application.open_popup = function(row){
+  let element = document.getElementById('application-popup').cloneNode(true);
+  
+  element.querySelector('#' + 'application_mc_ign').innerText = row.raw_data.mc_ign;
+  element.querySelector('#' + 'application_discord_nick').innerText = row.raw_data.discord_nick;
+  element.querySelector('#' + 'application_country').innerText = row.raw_data.country;
+  element.querySelector('#' + 'application_age').innerText = row.raw_data.birth_month >= 1 ? '~' + row.raw_data.birth_month > new Date(Date.now()).getMonth() + 1 ? parseInt(new Date().getFullYear() - row.raw_data.birth_year) - 1 : parseInt(new Date().getFullYear() - row.raw_data.birth_year) : false;
+  element.querySelector('#' + 'application_about_me').innerText = row.raw_data.about_me;
+  element.querySelector('#' + 'application_motivation').innerText = row.raw_data.motivation;
+  element.querySelector('#' + 'application_buildings').innerText = row.raw_data.build_images;
+  element.querySelector('#' + 'application_discord_nick').innerText = row.raw_data.mc_ign;
+  element.querySelector('#' + 'application_publish_about_me').innerText = row.raw_data.publish_about_me ? 'Yes' : 'No';
+  element.querySelector('#' + 'application_publish_age').innerText = row.raw_data.publish_age ? 'Yes' : 'No';
+  element.querySelector('#' + 'application_publish_country').innerText = row.raw_data.publish_country ? 'Yes' : 'No';
+  element.querySelector('#' + 'application_status').innerText = row.raw_data.status === 1 ? 'pending review' : row.raw_data.status === 2 ? 'denied' : row.raw_data.status === 3 ? 'accepted' : 'Some weird code';
+  element.querySelector('#' + 'application_mc_skin').src = row.raw_data.mc_skin_url;
+  element.querySelector('#' + 'application_discord_avatar').src = row.raw_data.discord_avatar_url;
+  console.log(row.raw_data)
+  element.app_id = row.raw_data.id;
+
+  framework.popup.create({div: element, title: 'Application'}, function(popup){
+    popup.childNodes[1].childNodes[3].childNodes[1].hidden = false;
+  });
+};
+
+//Gets executed when an application is accepted
+interface.application.accept = function(id){
+  console.log(popup);
+  
+  _internal.send('application', false, 'PATCH', {}, {id: id, status: 3}, function(status, res){
+    if(status == 200){
+      framework.popup.create_info({title: 'Success!', text: 'Success!'});
+    }else{
+      framework.popup.create_info({title: 'Error!', text: 'Something went wrong!\n' + res.err});
+    }
+  });
+};
+
+//Gets executed when an application is denied
+interface.application.deny = function(id, reason){
+  _internal.send('application', false, 'PATCH', {}, {id: id, status: 2, reason: reason}, function(status, res){
+    if(status == 200){
+      framework.popup.create_info({title: 'Success!', text: 'Success!'});
+    }else{
+      framework.popup.create_info({title: 'Error!', text: 'Something went wrong!\n' + res.err});
+    }
+  });
 };
 
 //All post cms functions
