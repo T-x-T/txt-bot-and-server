@@ -54,7 +54,7 @@ main.edit = function(input, type, options, callback) {
     //Delete _id field
     delete input._id;
 
-    model.findOneAndUpdate(filter, input, {new: true, useFindAndModify: false}, function(err, doc){
+    model.findOneAndUpdate(filter, input, {new: true, useFindAndModify: false, upsert: true}, function(err, doc){
       if(!err && doc){
         callback(false, doc._doc);
       }else{
