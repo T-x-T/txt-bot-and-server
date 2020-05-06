@@ -53,7 +53,7 @@ setImmediate(function () {
     global.log(0, 'user', 'user component got event application_accepted_joined', { application: app });
     
     let doc = {};
-    if (app.mc_ign) doc.mcName = app.mcName;
+    if (app.mc_ign) doc.mcName = app.mc_ign;
     doc.discord = app.discord_id;
     doc.discord_nick = app.discord_nick;
     doc.mcUUID = app.mc_uuid;
