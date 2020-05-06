@@ -4,23 +4,22 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/png" href="assets/img/logo-icon.png" />
+    <link rel="shortcut icon" type="image/png" href="assets/img/logo-icon.svg" />
     <link type="text/css" rel="stylesheet" href="assets/css/general.min.css">
     <link type="text/css" rel="stylesheet" href="assets/css/desktop.min.css">
     <link type="text/css" rel="stylesheet" href="assets/css/mobile.min.css">
-    <link type="text/css" rel="stylesheet" href="assets/css/header.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/header.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/nav.min.css">
     <link type="text/css" rel="stylesheet" href="assets/css/footer.min.css">
-    <link type="text/css" rel="stylesheet" href="assets/css/interface.css">
-    <link type="text/css" rel="stylesheet" href="assets/css/misc-pages.css">
-
-    <!-- import -->
+    <link type="text/css" rel="stylesheet" href="assets/css/interface.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/misc-pages.min.css">
+    <!-- js -->
     <script src="assets/pax_js/root.js"></script>
     <script src="assets/pax_js/helpers.js"></script>
     <script src="assets/js/jquery-1.11.3.min.js"></script>
     <link href="assets/js/fotorama.css" rel="stylesheet">
     <script src="assets/js/fotorama.js"></script>
-
-    <script src="https://kit.fontawesome.com/418da3c82b.js"></script>
+    <script src="assets/js/fontawesome.js"></script>
     <title>{pax_title}</title>
 </head>
 
@@ -31,23 +30,38 @@
         <a href="index.html"><img id="logo" src="assets/img/logo-big-white.svg" alt="Paxterya logo"></a>
 
         <div class="mySlides fade">
-            <img src='https://play.paxterya.com/assets/website/screenshots/paxterdam_01.jpg' alt="Minecraft screenshot">
+            <picture>
+                <img src="https://play.paxterya.com/assets/website/screenshots/paxterdam_01.webp" alt="Minecraft screenshot">
+                <img src='https://play.paxterya.com/assets/website/screenshots/paxterdam_01.jpg' alt="Minecraft screenshot">
+            </picture>
         </div>
 
         <div class="mySlides fade">
-            <img src='https://play.paxterya.com/assets/website/screenshots/penliam_04.jpg' alt="Minecraft screenshot">
+          <picture>
+            <img loading="lazy" src='https://play.paxterya.com/assets/website/screenshots/penliam_04.webp' alt="Minecraft screenshot">
+            <img loading="lazy" src='https://play.paxterya.com/assets/website/screenshots/penliam_04.jpg' alt="Minecraft screenshot">
+          </picture>
         </div>
 
         <div class="mySlides fade">
-            <img src='https://play.paxterya.com/assets/website/screenshots/top_02.jpg' alt="Minecraft screenshot">
+          <picture>
+            <img loading="lazy" src='https://play.paxterya.com/assets/website/screenshots/top_02.webp' alt="Minecraft screenshot">
+            <img loading="lazy" src='https://play.paxterya.com/assets/website/screenshots/top_02.jpg' alt="Minecraft screenshot">
+          </picture>
         </div>
 
         <div class="mySlides fade">
-            <img src='https://play.paxterya.com/assets/website/screenshots/turtlescove_01.jpg' alt="Minecraft screenshot">
+          <picture>
+            <img loading="lazy" src='https://play.paxterya.com/assets/website/screenshots/turtlescove_01.webp' alt="Minecraft screenshot">
+            <img loading="lazy" src='https://play.paxterya.com/assets/website/screenshots/turtlescove_01.jpg' alt="Minecraft screenshot">
+          </picture>
         </div>
 
         <div class="mySlides fade">
-            <img src='https://play.paxterya.com/assets/website/screenshots/littleroot_02.jpg' alt="Minecraft screenshot">
+          <picture>
+            <img loading="lazy" src='https://play.paxterya.com/assets/website/screenshots/littleroot_02.webp' alt="Minecraft screenshot">
+            <img loading="lazy" src='https://play.paxterya.com/assets/website/screenshots/littleroot_02.jpg' alt="Minecraft screenshot">
+          </picture>
         </div>
 
         <a class="prev" onclick='plusSlides(-1)'><i class="fas fa-chevron-left"></i></a>

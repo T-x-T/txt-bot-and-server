@@ -4,25 +4,21 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/png" href="assets/img/logo-icon.png" />
-    <link type="text/css" rel="stylesheet" href="assets/css/general.css">
-    <link type="text/css" rel="stylesheet" href="assets/css/desktop.css">
-    <link type="text/css" rel="stylesheet" href="assets/css/mobile.css">
-    <link type="text/css" rel="stylesheet" href="assets/css/header.css">
-    <link type="text/css" rel="stylesheet" href="assets/css/footer.css">
-    <link type="text/css" rel="stylesheet" href="assets/css/interface.css">
-    <link type="text/css" rel="stylesheet" href="assets/css/misc-pages.css">
-
-    <link type="text/css" rel="stylesheet" href="assets/css/index.css">
-
-    <!-- import -->
+    <link rel="shortcut icon" type="image/png" href="assets/img/logo-icon.svg" />
+    <link type="text/css" rel="stylesheet" href="assets/css/general.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/desktop.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/mobile.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/nav.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/footer.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/misc-pages.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/index.min.css">
+    <!-- js -->
     <script src="assets/pax_js/root.js"></script>
     <script src="assets/pax_js/helpers.js"></script>
     <script src="assets/js/jquery-1.11.3.min.js"></script>
     <link href="assets/js/fotorama.css" rel="stylesheet">
     <script src="assets/js/fotorama.js"></script>
-
-    <script src="https://kit.fontawesome.com/418da3c82b.js"></script>
+    <script src="assets/js/fontawesome.js"></script>
     <title>{pax_title}</title>
 </head>
 
@@ -33,12 +29,23 @@
     <header>
 
         <div class="overlay">
-            <div class="fotorama" data-width="100%" data-height="100%" data-nav="none" data-transition="dissolve" data-autoplay="true" data-loop="true" data-click="false" data-arrows="false" data-fit="cover">
-                <img src="https://play.paxterya.com/assets/website/screenshots/paxterdam_01.jpg"/>
-                <img src="https://play.paxterya.com/assets/website/screenshots/penliam_04.jpg"/>
-                <img src="https://play.paxterya.com/assets/website/screenshots/top_02.jpg"/>
-                <img src="https://play.paxterya.com/assets/website/screenshots/turtlescove_01.jpg"/>
-                <img src="https://play.paxterya.com/assets/website/screenshots/littleroot_02.jpg"/>
+            <div class="fotorama" data-width="100%" data-height="100%" data-nav="none" data-transition="dissolve" data-transition-duration="3000" data-autoplay="true" data-loop="true" data-click="false" data-arrows="false" data-fit="cover">
+              <picture>
+                  <img src="https://play.paxterya.com/assets/website/screenshots/paxterdam_01.webp" alt="Minecraft screenshot">
+                  <img src="https://play.paxterya.com/assets/website/screenshots/paxterdam_01.jpg" alt="Minecraft screenshot">
+              </picture>
+              <picture>
+                <img loading="lazy" src='https://play.paxterya.com/assets/website/screenshots/penliam_04.webp' alt="Minecraft screenshot">
+                <img loading="lazy" src='https://play.paxterya.com/assets/website/screenshots/penliam_04.jpg' alt="Minecraft screenshot">
+              </picture>
+              <picture>
+                <img loading="lazy" src='https://play.paxterya.com/assets/website/screenshots/top_02.webp' alt="Minecraft screenshot">
+                <img loading="lazy" src='https://play.paxterya.com/assets/website/screenshots/top_02.jpg' alt="Minecraft screenshot">
+              </picture>
+              <picture>
+                <img loading="lazy" src='https://play.paxterya.com/assets/website/screenshots/turtlescove_01.webp' alt="Minecraft screenshot">
+                <img loading="lazy" src='https://play.paxterya.com/assets/website/screenshots/turtlescove_01.jpg' alt="Minecraft screenshot">
+              </picture>
           </div>
       </div>
 
@@ -48,17 +55,11 @@
         <a href="https://discord.gg/mAjZCTG"><button><i class="fab fa-discord"></i> Join our Discord!</button></a>
       </p>
 
-
-
       <div class="header-down">
           <a href="#navbar"><i class="fas fa-chevron-down"></i></a>
       </div>
 
     </header>
-
-
-
-
 
 
     <nav id="navbar">
@@ -123,10 +124,8 @@
                 <li id="nav-login"><a id="login" href="{oauth_staff}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
             </ul>
 
-
         </div>
 
     </nav>
-
 
     <main>
