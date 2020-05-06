@@ -48,6 +48,12 @@ body#index
                 color: $pax-lightcyan
                 margin-right: 5px
 
+        .fotorama
+            img
+                object-fit: cover
+                height: 100%
+                width: 100%
+
 .header-down
     position: absolute
     bottom: 20px
@@ -225,8 +231,7 @@ section#newestpost
 
     #index header
         #index-logo
-            width: 100px
-            max-width: 30%
+            max-width: 150px
             height: auto
 
         p
@@ -235,3 +240,7 @@ section#newestpost
 
     #index .header-down
         bottom: 60px
+
+@media ($small-mobile)
+        #index-logo
+            max-width: 120px!important
