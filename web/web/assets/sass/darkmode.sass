@@ -1,0 +1,175 @@
+@import '_vars'
+
+#dark-mode-toggle
+    background: #cecece
+    border: 2px solid $pax-lightgray
+    position: fixed
+    z-index: 1
+    border-radius: 200px
+    padding: 15px
+
+    &:hover
+        transform: scale(1.1)
+    
+    svg
+        fill: $pax-white
+
+body.darkmode
+    background: $pax-darkmodecyan2
+
+    #dark-mode-toggle
+        background: $pax-darkcyan
+        border: 2px solid $pax-darkestcyan
+
+        svg
+            fill: $pax-darkmodecyan2
+
+    nav
+        background: $pax-darkestcyan
+        border-color: transparent
+        
+        a
+            text-shadow: none
+
+    .wrapper.content
+        background: $pax-darkmodecyan1
+
+    button
+        background: $pax-darkcyan
+        border-color: $pax-darkcyan
+
+        &.secondary
+            color: $pax-white
+            background: $pax-darkmodecyan2
+            border-color: $pax-darkmodecyan2
+
+        &:hover
+            background: $pax-darkestcyan
+
+    main p, main ul
+        color: $pax-white
+
+    h1, article h2
+        background: $pax-darkestcyan
+        color: $pax-white
+        text-shadow: none
+
+        &::before
+            border-color: transparent #000 transparent transparent
+
+        &::after
+            border-color: #000 transparent transparent transparent
+
+    footer
+        background: $pax-darkestcyan
+
+        &::before
+            border-color: transparent transparent #000 transparent
+
+        &::after
+            border-color: transparent transparent transparent #000
+
+        span, a
+            color: $pax-lightcyan
+
+    span.subtitle, #app-form, #contact-form
+        background: $pax-darkmodecyan2
+
+    article
+        section
+            border-color: $pax-darkmodecyan2
+
+    img.author, .article-img, .img-download img, .select-items
+        box-shadow: none
+        -webkit-box-shadow: none
+
+    h3, h2, main a, article.news p:first-of-type::first-letter, article p.initial-letter:first-of-type::first-letter 
+        color: $pax-lightcyan
+
+    input
+        background: transparent
+        color: $pax-white
+        border-color: $pax-darkestcyan
+    
+    input:focus::placeholder,  textarea:focus::placeholder, label, ::placeholder
+        color: $pax-lightcyan
+
+
+    ::-ms-input-placeholder
+        color: $pax-lightcyan
+
+    textarea
+        background: $pax-darkmodecyan1
+        border-color: $pax-darkmodecyan1
+        color: $pax-white
+
+    .checkmark
+        background: $pax-lightcyan
+        border-color: $pax-darkestcyan
+        
+        &:hover
+            background: $pax-cyan
+
+    p.note-box, .netdata-row, .applicant, .applicant-controls
+        background: $pax-darkestcyan
+
+    .toggle_controls
+        background: $pax-darkmodecyan2
+
+    .fotorama__dot
+        border-color: $pax-lightcyan
+
+    .img-fullwidth
+        background: $pax-cyan
+
+    #searchInput
+        background: $pax-darkmodecyan2
+        border-color: $pax-darkmodecyan2
+        color: $pax-white
+
+    .member-card-wrapper
+        background: linear-gradient(180deg, rgba(240,240,240,0) 15%, $pax-darkmodecyan2 15%, $pax-darkmodecyan2 85%, rgba(240,240,240,0) 85%)
+
+        h2, h3
+            color: $pax-white
+            text-shadow: none
+
+        h2
+            background: $pax-darkestcyan
+
+        h3
+            background: $pax-darkmodecyan1
+
+    .select-items div, .select-selected
+        border-color: transparent transparent $pax-lightcyan transparent
+        color: $pax-lightcyan
+
+    .select-selected:hover, .select-items, #post-editor input, #post-editor textarea
+        background: $pax-darkestcyan
+
+    .select-items div:hover
+        background: $pax-darkcyan
+
+    .select-selected::after
+        color: $pax-lightcyan
+
+    .interface-table td
+        background: $pax-darkmodecyan2
+        color: $pax-white
+
+    .interface-table tr:nth-child(even) td
+        background: transparent
+
+    .interface-table tr:hover>td
+        background: $pax-darkestcyan!important
+
+    .interface-table th
+        background: $pax-darkestcyan
+        border-color: transparent
+
+    .applicant-controls
+        input
+            border-color: $pax-darkmodecyan1
+
+        #application-accept
+            background: $pax-cyan
