@@ -14,46 +14,52 @@
     svg
         fill: $pax-white
 
-body.darkmode
+.d
     background: $pax-darkmodecyan2
 
     #dark-mode-toggle
-        background: $pax-darkcyan
         border: 2px solid $pax-darkestcyan
 
         svg
             fill: $pax-darkmodecyan2
 
-    nav
-        background: $pax-darkestcyan
-        border-color: transparent
-        
-        a
-            text-shadow: none
+    main p, main ul, button.secondary, h1, article h2, input, textarea, #searchInput, .member-card-wrapper h2, .member-card-wrapper h3, .interface-table td
+        color: $pax-white
 
-    .wrapper.content
+    h3, h2, main a, article.news p:first-of-type::first-letter, article p.initial-letter:first-of-type::first-letter, footer span, input:focus::placeholder,  textarea:focus::placeholder, label, ::placeholder, .select-items div, .select-selected, .select-selected::after
+        color: $pax-lightcyan
+
+    hr, button.secondary, article section, #searchInput
+        border-color: $pax-darkmodecyan2
+
+    button.secondary, span.subtitle, #app-form, #contact-form, #searchInput, .toggle_controls, .interface-table td
+        background: $pax-darkmodecyan2
+
+    .wrapper.content, textarea, .member-card-wrapper h3
         background: $pax-darkmodecyan1
 
-    button
+    #dark-mode-toggle, button, .select-items div:hover
         background: $pax-darkcyan
-        border-color: $pax-darkcyan
 
-        &.secondary
-            color: $pax-white
-            background: $pax-darkmodecyan2
-            border-color: $pax-darkmodecyan2
-
-        &:hover
-            background: $pax-darkestcyan
-
-    main p, main ul
-        color: $pax-white
-
-    h1, article h2
+    nav, button:hover, h1, article h2, footer, p.note-box, .netdata-row, .applicant, .applicant-controls, .member-card-wrapper h2, .select-selected:hover, .select-items, #post-editor input, #post-editor textarea, .interface-table th
         background: $pax-darkestcyan
-        color: $pax-white
+
+    nav, .interface-table th
+        border-color: transparent
+
+    nav a, h1, article h2, .member-card-wrapper h2, .member-card-wrapper h3
         text-shadow: none
 
+    #application-accept, .img-fullwidth, .checkmark:hover
+        background: $pax-cyan
+
+    textarea, .applicant-controls input
+        border-color: $pax-darkmodecyan1
+
+    button
+        border-color: $pax-darkcyan
+
+    h1, article h2
         &::before
             border-color: transparent #000 transparent transparent
 
@@ -61,101 +67,32 @@ body.darkmode
             border-color: #000 transparent transparent transparent
 
     footer
-        background: $pax-darkestcyan
-
         &::before
             border-color: transparent transparent #000 transparent
 
         &::after
             border-color: transparent transparent transparent #000
 
-        span, a
-            color: $pax-lightcyan
-
-    span.subtitle, #app-form, #contact-form
-        background: $pax-darkmodecyan2
-
-    article
-        section
-            border-color: $pax-darkmodecyan2
-
     img.author, .article-img, .img-download img, .select-items
         box-shadow: none
         -webkit-box-shadow: none
 
-    h3, h2, main a, article.news p:first-of-type::first-letter, article p.initial-letter:first-of-type::first-letter 
-        color: $pax-lightcyan
-
     input
         background: transparent
-        color: $pax-white
         border-color: $pax-darkestcyan
-    
-    input:focus::placeholder,  textarea:focus::placeholder, label, ::placeholder
-        color: $pax-lightcyan
-
-
-    ::-ms-input-placeholder
-        color: $pax-lightcyan
-
-    textarea
-        background: $pax-darkmodecyan1
-        border-color: $pax-darkmodecyan1
-        color: $pax-white
 
     .checkmark
         background: $pax-lightcyan
         border-color: $pax-darkestcyan
-        
-        &:hover
-            background: $pax-cyan
-
-    p.note-box, .netdata-row, .applicant, .applicant-controls
-        background: $pax-darkestcyan
-
-    .toggle_controls
-        background: $pax-darkmodecyan2
 
     .fotorama__dot
         border-color: $pax-lightcyan
 
-    .img-fullwidth
-        background: $pax-cyan
-
-    #searchInput
-        background: $pax-darkmodecyan2
-        border-color: $pax-darkmodecyan2
-        color: $pax-white
-
     .member-card-wrapper
         background: linear-gradient(180deg, rgba(240,240,240,0) 15%, $pax-darkmodecyan2 15%, $pax-darkmodecyan2 85%, rgba(240,240,240,0) 85%)
 
-        h2, h3
-            color: $pax-white
-            text-shadow: none
-
-        h2
-            background: $pax-darkestcyan
-
-        h3
-            background: $pax-darkmodecyan1
-
     .select-items div, .select-selected
         border-color: transparent transparent $pax-lightcyan transparent
-        color: $pax-lightcyan
-
-    .select-selected:hover, .select-items, #post-editor input, #post-editor textarea
-        background: $pax-darkestcyan
-
-    .select-items div:hover
-        background: $pax-darkcyan
-
-    .select-selected::after
-        color: $pax-lightcyan
-
-    .interface-table td
-        background: $pax-darkmodecyan2
-        color: $pax-white
 
     .interface-table tr:nth-child(even) td
         background: transparent
@@ -163,13 +100,5 @@ body.darkmode
     .interface-table tr:hover>td
         background: $pax-darkestcyan!important
 
-    .interface-table th
-        background: $pax-darkestcyan
-        border-color: transparent
-
-    .applicant-controls
-        input
-            border-color: $pax-darkmodecyan1
-
-        #application-accept
-            background: $pax-cyan
+    #bulletin_edit_bar td
+        background: $pax-darkcyan!important

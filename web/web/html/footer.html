@@ -162,12 +162,12 @@
     const darkModeToggle = document.querySelector('#dark-mode-toggle');
 
     const enableDarkMode = () => {
-      document.body.classList.add('darkmode');
+      document.body.classList.add('d');
       localStorage.setItem('darkMode', 'enabled');
     }
 
     const disableDarkMode = () => {
-      document.body.classList.remove('darkmode');
+      document.body.classList.remove('d');
       localStorage.setItem('darkMode', null);
     }
     
