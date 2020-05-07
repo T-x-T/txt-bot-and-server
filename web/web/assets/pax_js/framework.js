@@ -27,6 +27,7 @@ framework.popup.create = function(options, callback){
 
     //Make popup visible
     popup.hidden = false;
+    $('html').css('overflow', 'hidden');
 
     //Add options to popup
     popup.options = options;
@@ -73,6 +74,7 @@ framework.popup.close_for_real = function(popup){
 //Calls the close function of the popup
 framework.popup.bg_click = function(popup) {
   popup.close();
+  $('html').css('overflow', 'scroll');
 };
 
 //Calls the close function of the popup
