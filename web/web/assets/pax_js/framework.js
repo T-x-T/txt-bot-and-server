@@ -27,6 +27,7 @@ framework.popup.create = function(options, callback){
 
     //Make popup visible
     popup.hidden = false;
+
     $('html').css('overflow', 'hidden');
 
     //Add options to popup

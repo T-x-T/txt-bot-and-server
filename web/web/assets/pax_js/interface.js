@@ -3,23 +3,29 @@
  */
 
 var interface = {};
-
+var cookies
 //Called on page load
 interface.init = function(){
-  //Code from stackoverflow which converts to object as saves it in root.cookies
-  root.cookies = (document.cookie || '').split(/;\s*/).reduce(function(re, c) {
+  //Code from stackoverflow which converts cookies to object as saves it in cookies
+  cookies = (document.cookie || '').split(/;\s*/).reduce(function(re, c) {
     var tmp = c.match(/([^=]+)=(.*)/);
     if(tmp) re[tmp[1]] = unescape(tmp[2]);
     return re;
   }, {});
 
   //Only initialize tables that are there
-  if(root.cookies.access_level == 9){
+  if(cookies.access_level == 9){
     interface.application.load();
     interface.post.load();
   }
   interface.bulletin.init();
 };
+
+
+
+
+
+
 
 //All application functions
 interface.application = {};
@@ -72,7 +78,7 @@ interface.application.open_popup = function(row){
   element.querySelector('#' + 'application_status').innerText = row.raw_data.status === 1 ? 'pending review' : row.raw_data.status === 2 ? 'denied' : row.raw_data.status === 3 ? 'accepted' : 'Some weird code';
   element.querySelector('#' + 'application_mc_skin').src = row.raw_data.mc_skin_url;
   element.querySelector('#' + 'application_discord_avatar').src = row.raw_data.discord_avatar_url;
-  console.log(row.raw_data)
+  
   element.app_id = row.raw_data.id;
 
   framework.popup.create({div: element, title: 'Application'}, function(popup){
@@ -82,7 +88,6 @@ interface.application.open_popup = function(row){
 
 //Gets executed when an application is accepted
 interface.application.accept = function(id){
-  console.log(popup);
   
   _internal.send('application', false, 'PATCH', {}, {id: id, status: 3}, function(status, res){
     if(status == 200){
@@ -104,6 +109,11 @@ interface.application.deny = function(id, reason){
   });
 };
 
+
+
+
+
+
 //All post cms functions
 interface.post = {};
 
@@ -120,7 +130,7 @@ interface.post.load = function(filter) {
       input.title,
       visiblity
     ];
-  }, api_method: 'GET', edit_bar: false, row_onclick: interface.post.redirect});
+  }, api_method: 'GET', edit_bar: false, row_onclick: interface.post.open_popup});
 };
 
 //Gets called whenever the user changes the status to filter the table
@@ -134,8 +144,17 @@ interface.post.filter = function(select, table) {
   table.filter(4, filter, true);
 };
 
-interface.post.redirect = function(row) {
-  window.location.href = `https://${window.location.host}/staff/post.html?id=${row.cells[0].innerText}`;
+interface.post.open_popup = function(row){
+  let element = document.getElementById('post-popup').cloneNode(true);
+  
+  element.querySelector('#' + 'post-author').innerText = row.raw_data.author;
+  element.querySelector('#' + 'post-date').innerText = new Date(row.raw_data.date).toISOString().substring(0, 10);
+  element.querySelector('#' + 'post-title').innerText = row.raw_data.title;
+  element.querySelector('#' + 'post-body').innerHTML = row.raw_data.body;
+
+  framework.popup.create({div: element, title: 'Blog post'}, function(popup){
+    popup.childNodes[1].childNodes[3].childNodes[1].hidden = false;
+  });
 };
 
 
@@ -144,7 +163,7 @@ interface.bulletin = {};
 
 interface.bulletin.init = function(){
   //This enables admins to open the edit bar on all bulletins
-  let edit_bar_filter_value = root.cookies.access_level >= 9 ? false : root.cookies.mc_ign;
+  let edit_bar_filter_value = cookies.access_level >= 9 ? false : cookies.mc_ign;
   framework.table.init(document.getElementById('bulletin-table'), {api_path: 'bulletin', data_mapping: function(input){
     return [
       new Date(input.date).toISOString().substring(0, 10),
@@ -167,7 +186,7 @@ interface.toggleMyBulletins = function(element){
     let j = 1;
     for(let i = 1;i < table.rows.length;i++) {
       //Hide row
-      if(table.rows[i].cells[1].innerText != root.cookies.mc_ign) table.rows[i].hidden = true;
+      if(table.rows[i].cells[1].innerText != cookies.mc_ign) table.rows[i].hidden = true;
 
       //Reapply the zebra effect with temp classes
       if(!table.rows[i].hidden) {
