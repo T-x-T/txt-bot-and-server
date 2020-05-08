@@ -26,8 +26,8 @@
 <!-- Popup template -->
 <div id="post-popup" hidden>
   <div class="wrapper content">
-    <div id="post-editor">
-      <form id="post-edit-form" method="POST" action="#" onsubmit="root.post.send(); return false" hidden=true>
+    <div id="post-editor" hidden>
+      <form id="post-edit-form" method="POST" action="#" onsubmit="interface.post.send(); return false">
 
         <div class="group">
           <label for="edit-author">Author</label>
@@ -62,7 +62,7 @@
     </div>
 
     <div id="post-preview">
-      <button id="post-edit" onclick="root.post.edit();"><i class="fas fa-edit"></i> Edit</button>
+      <button id="post-edit" onclick="interface.post.edit(this);"><i class="fas fa-edit"></i> Edit</button>
 
       <div class="counter counter-horizontal">
         <h2>Author</h2>

@@ -157,6 +157,10 @@ interface.post.open_popup = function(row){
   });
 };
 
+interface.post.edit = function(popup){
+  console.log(popup)
+};
+
 
 //All bulletin board functions
 interface.bulletin = {};
