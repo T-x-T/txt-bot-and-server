@@ -70,12 +70,12 @@ framework.popup.close_for_real = function(popup){
     //No closeCall function given, just delete
     popup.parentNode.removeChild(popup);
   }
+  $('html').css('overflow', 'scroll');
 };
 
 //Calls the close function of the popup
 framework.popup.bg_click = function(popup) {
   popup.close();
-  $('html').css('overflow', 'scroll');
 };
 
 //Calls the close function of the popup

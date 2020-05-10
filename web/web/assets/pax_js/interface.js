@@ -154,13 +154,60 @@ interface.post.open_popup = function(row){
 
   framework.popup.create({div: element, title: 'Blog post'}, function(popup){
     popup.childNodes[1].childNodes[3].childNodes[1].hidden = false;
+    popup.childNodes[1].childNodes[3].childNodes[1].raw_data = row.raw_data;
   });
 };
 
-interface.post.edit = function(popup){
-  console.log(popup)
+interface.post.edit = function(btn){
+  let editor = btn.parentNode.parentNode.childNodes[1];
+  let raw_data = editor.parentNode.parentNode.raw_data
+  
+  editor.querySelector('#' + 'edit-author').value = raw_data.author;
+  editor.querySelector('#' + 'edit-date').value = new Date(raw_data.date).toISOString().substring(0, 10);
+  editor.querySelector('#' + 'edit-title').value = raw_data.title;
+  editor.querySelector('#' + 'edit-body').value = raw_data.body;
+
+  editor.hidden = false;
 };
 
+interface.post.send = function(form){
+  let postData = {
+    title: form.querySelector('#' + 'edit-title').value,
+    author: form.querySelector('#' + 'edit-author').value,
+    body: form.querySelector('#' + 'edit-body').value,
+    date: form.querySelector('#' + 'edit-date').value,
+    public: form.querySelector('#' + 'edit-public').checked
+  };
+
+  if(form.parentNode.parentNode.parentNode.hasOwnProperty('raw_data')) postData.id = form.parentNode.parentNode.parentNode.raw_data.id;
+
+  _internal.send('post', false, 'POST', false, postData, function(status, res){
+    if(status != 200){
+      framework.popup.create_info({title: 'An error occured', text: res});
+    }
+    else{
+      framework.popup.create_info({title: 'Success', text: 'The post was saved successfully!'});
+      if(typeof form.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.close == 'function'){
+        form.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.close();
+      }else{
+        form.parentNode.parentNode.parentNode.parentNode.close();
+      }
+      document.getElementById('post-table').update();
+    }
+  });
+};
+
+interface.post.edit_cancel = function(btn){
+  btn.parentNode.parentNode.hidden = true;
+};
+
+interface.post.new = function(){
+  let editor = document.getElementById('post-editor').cloneNode(true);
+
+  framework.popup.create({div: editor, title: 'New Blog post'}, function(popup){
+    popup.childNodes[1].childNodes[3].childNodes[1].hidden = false;
+  });
+};
 
 //All bulletin board functions
 interface.bulletin = {};

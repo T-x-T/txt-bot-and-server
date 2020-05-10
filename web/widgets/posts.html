@@ -2,7 +2,7 @@
   <caption>
     <h2>Posts</h2>
     <p>To edit a post, click on its row. To create a new one, click the button.</p>
-    <button id="new-post" onclick="window.location.href = 'post.html?id=new';">Make a new post</button>
+    <button id="new-post" onclick="interface.post.new()">Make a new post</button>
   </caption>
   <thead>
     <th>ID</th>
@@ -27,7 +27,7 @@
 <div id="post-popup" hidden>
   <div class="wrapper content">
     <div id="post-editor" hidden>
-      <form id="post-edit-form" method="POST" action="#" onsubmit="interface.post.send(); return false">
+      <form id="post-edit-form" method="POST" action="#" onsubmit="interface.post.send(this); return false">
 
         <div class="group">
           <label for="edit-author">Author</label>
@@ -57,7 +57,7 @@
         </label>
 
         <button type="submit">Save</button>
-        <button class="secondary" type="reset">Cancel</button>
+        <button class="secondary" type="reset" onclick="interface.post.edit_cancel(this)">Cancel</button>
       </form>
     </div>
 
