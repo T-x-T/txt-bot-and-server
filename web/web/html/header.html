@@ -4,49 +4,66 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/png" href="assets/img/logo-icon.png" />
-    <link type="text/css" rel="stylesheet" href="assets/css/general.css">
-    <link type="text/css" rel="stylesheet" href="assets/css/desktop.css">
-    <link type="text/css" rel="stylesheet" href="assets/css/mobile.css">
-    <link type="text/css" rel="stylesheet" href="assets/css/header.css">
-    <link type="text/css" rel="stylesheet" href="assets/css/footer.css">
-    <link type="text/css" rel="stylesheet" href="assets/css/interface.css">
-    <link type="text/css" rel="stylesheet" href="assets/css/misc-pages.css">
-
-    <!-- import -->
-    <script src="assets/root.js"></script>
+    <link rel="shortcut icon" type="image/png" href="assets/img/logo-icon.svg" />
+    <link type="text/css" rel="stylesheet" href="assets/css/general.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/desktop.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/mobile.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/header.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/nav.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/footer.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/interface.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/misc-pages.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/darkmode.min.css">
+    <!-- js -->
+    <script src="assets/pax_js/helpers.js"></script>
     <script src="assets/js/jquery-1.11.3.min.js"></script>
     <link href="assets/js/fotorama.css" rel="stylesheet">
     <script src="assets/js/fotorama.js"></script>
-
-    <script src="https://kit.fontawesome.com/418da3c82b.js"></script>
+    <script src="assets/js/fontawesome.js"></script>
     <title>{pax_title}</title>
 </head>
 
 <body>
+
+
 
     <div class="mobile-nav-height"></div>
     <header>
         <a href="index.html"><img id="logo" src="assets/img/logo-big-white.svg" alt="Paxterya logo"></a>
 
         <div class="mySlides fade">
-            <img src='https://play.paxterya.com/assets/website/screenshots/paxterdam_01.jpg' alt="Minecraft screenshot">
+            <img srcset="
+            https://play.paxterya.com/assets/website/screenshots/paxterdam_01.webp, https://play.paxterya.com/assets/website/screenshots/paxterdam_01.jpg,
+            https://play.paxterya.com/assets/website/screenshots/880w/paxterdam_01.webp 880w, https://play.paxterya.com/assets/website/screenshots/880w/paxterdam_01.jpg 880w
+            " alt="Minecraft screenshot">
         </div>
 
         <div class="mySlides fade">
-            <img src='https://play.paxterya.com/assets/website/screenshots/penliam_04.jpg' alt="Minecraft screenshot">
+            <img loading="lazy" srcset="
+            https://play.paxterya.com/assets/website/screenshots/penliam_04.webp, https://play.paxterya.com/assets/website/screenshots/penliam_04.jpg,
+            https://play.paxterya.com/assets/website/screenshots/880w/penliam_04.webp 880w, https://play.paxterya.com/assets/website/screenshots/880w/penliam_04.jpg 880w
+            " alt="Minecraft screenshot">
         </div>
 
         <div class="mySlides fade">
-            <img src='https://play.paxterya.com/assets/website/screenshots/top_02.jpg' alt="Minecraft screenshot">
+            <img loading="lazy" srcset="
+            https://play.paxterya.com/assets/website/screenshots/top_02.webp, https://play.paxterya.com/assets/website/screenshots/top_02.jpg,
+            https://play.paxterya.com/assets/website/screenshots/880w/top_02.webp 880w, https://play.paxterya.com/assets/website/screenshots/880w/top_02.jpg 880w
+            " alt="Minecraft screenshot">
         </div>
 
         <div class="mySlides fade">
-            <img src='https://play.paxterya.com/assets/website/screenshots/turtlescove_01.jpg' alt="Minecraft screenshot">
+            <img loading="lazy" srcset="
+            https://play.paxterya.com/assets/website/screenshots/turtlescove_01.webp, https://play.paxterya.com/assets/website/screenshots/turtlescove_01.jpg,
+            https://play.paxterya.com/assets/website/screenshots/880w/turtlescove_01.webp 880w, https://play.paxterya.com/assets/website/screenshots/880w/turtlescove_01.jpg 880w
+            " alt="Minecraft screenshot">
         </div>
 
         <div class="mySlides fade">
-            <img src='https://play.paxterya.com/assets/website/screenshots/littleroot_02.jpg' alt="Minecraft screenshot">
+            <img loading="lazy" srcset="
+            https://play.paxterya.com/assets/website/screenshots/littleroot_02.webp, https://play.paxterya.com/assets/website/screenshots/littleroot_02.jpg,
+            https://play.paxterya.com/assets/website/screenshots/880w/littleroot_02.webp 880w, https://play.paxterya.com/assets/website/screenshots/880w/littleroot_02.jpg 880w
+            " alt="Minecraft screenshot">
         </div>
 
         <a class="prev" onclick='plusSlides(-1)'><i class="fas fa-chevron-left"></i></a>
@@ -87,6 +104,10 @@
             <div class="bar2"></div>
             <div class="bar3"></div>
         </div>
+
+        <button title="Toggle darkmode" id="dark-mode-toggle" class="dark-mode-toggle">
+            <svg width="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 496"><path d="M8,256C8,393,119,504,256,504S504,393,504,256,393,8,256,8,8,119,8,256ZM256,440V72a184,184,0,0,1,0,368Z" transform="translate(-8 -8)"/></svg>
+        </button>
 
         <div id="mobile-nav">
 
@@ -148,4 +169,4 @@
     </nav>
 
 
-    <main>
+    <main>    

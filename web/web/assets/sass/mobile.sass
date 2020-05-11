@@ -1,0 +1,301 @@
+@import '_vars'
+
+@media ($mobile)
+
+    .mobile-hide, header .dots, .dots,
+    a.prev, a.next, img.author, .banner, #mapsection #controls
+        display: none
+
+    img#logo
+        width: 250px
+        height: auto
+        top: 50px
+        left: 10%
+
+    .mySlides, .mySlides img, .header-height
+        height: 200px
+
+    .mySlides::after
+        background-image: linear-gradient(135deg, rgba(0,0,0,.4) 0%, rgba(0,0,0,.4) 100%), linear-gradient(0deg, rgba(0,0,0,.6) 0%, transparent 5%, transparent 80%, rgba(0,0,0,.3) 100%)
+
+    #logoutbar
+        top: 55px
+
+    button#dark-mode-toggle
+        position: relative
+        float: right
+        width: 40px
+        height: 40px
+        top: 0px
+        right: 10px
+        padding: 5px
+
+        &:hover
+            transform: none
+
+    /* ############### nav ###############*/
+
+    #mobile-nav
+        display: none
+        width: 100%
+
+    #mobile-nav.nav-fullscreen
+        display: block
+        height: 100vh
+        background: $pax-darkcyan
+        overflow-y: scroll
+
+    nav
+        position: fixed
+        top: 0
+        width: 100%
+
+        .nav-icon
+            padding: 10px 0 5px 20px
+            cursor: pointer
+            display: inline-block
+
+        li
+            padding: 10px 25px
+            border-bottom: 1px solid $pax-cyan
+
+            a
+                font-size: 16pt
+
+                .fa-chevron-right
+                    font-size: 9pt
+                    margin-left: 10px
+
+            ul li
+                font-size: 14pt
+                border: none
+                padding: 5px 25px
+
+        li#join, nav li#nav-login
+            border: none
+            padding: 20px 0px 5px 30px
+
+        li#nav-login
+            margin-bottom: 100px
+
+    .panel
+        max-height: 0
+        overflow: hidden
+        width: 100%
+
+    .bar1, .bar2, .bar3
+        width: 30px
+        height: 4px
+        background-color: white
+        margin: 6px 0
+
+    .change .bar1
+        -webkit-transform: rotate(-45deg) translate(-7px, 6px)
+        transform: rotate(-45deg) translate(-7px, 6px)
+
+    .change .bar2
+        opacity: 0
+
+    .change .bar3
+        -webkit-transform: rotate(45deg) translate(-8px, -8px)
+        transform: rotate(45deg) translate(-8px, -8px)
+
+    /* ############### main ###############*/
+
+    main
+        width: 95%
+        margin: 30px auto
+
+    .wrapper
+        width: calc(100% - 100px)
+        margin: 0 auto
+
+    .wrapper.content
+        background: $pax-white
+        padding: 10px 20px 30px 20px
+
+    /* ############### news articles ###############*/
+
+    article .article-img
+        margin: 20px auto
+        width: 300px
+        max-width: 100%
+        display: block
+        float: none
+
+    /* ############### footer ###############*/
+
+    footer span, footer a
+        display: block
+        width: 100%
+        text-align: center
+        padding: 5px 0
+
+    footer .left, footer .right
+        float: none
+
+    /* ############### join us ###############*/
+
+    .tooltip .tooltiptext
+        top: 150%
+        left: -1300%
+
+        &::after
+            border-color: transparent transparent #222424 transparent
+            top: 0%
+            right: 4.5%
+            margin-top: -10px
+
+    #app-form, #contact-form
+        width: 80%!important
+
+    /* ############### member stats ###############*/
+
+    #mapsection section
+        border-left: none
+        padding: 0
+
+    /* ################### interface ###################*/
+    .interface-table tr:hover > td
+        background: none !important
+        color: currentColor
+
+    #applications-table th, #applications-table td,
+    #post-table th, #post-table td
+        display: none
+
+    #applications-table th:nth-child(4), #applications-table td:nth-child(4),
+    #applications-table th:nth-child(6), #applications-table td:nth-child(6),
+    #post-table th:nth-child(4), #post-table td:nth-child(4),
+    #post-table th:nth-child(5), #post-table td:nth-child(5)
+        display: block
+        max-width: 100%
+        width: auto
+
+    #post-table td:nth-child(4)
+        white-space: pre-line
+
+    .popup-foreground
+        width: 100%
+        height: 100%
+        z-index: 1000
+        top: 0
+        left: 0
+        position: fixed
+        margin: 0
+
+    .popup-background
+        display: none
+
+    /* ################### bulletin board ###################*/
+
+    /* Force table to not be like tables anymore */
+    #bulletin-table
+        display: block
+        text-align: left
+
+        thead, tbody, th, td, tr
+            display: block
+            text-align: left
+
+        thead tr
+            position: absolute
+            top: -9999px
+            left: -9999px
+
+        td
+            border: none
+            position: relative
+            padding-left: 40%
+            max-width: none
+
+            &:before
+                position: absolute
+                font-family: "semibold"
+                color: #007787
+                top: 3px
+                left: 6px
+                width: 40%
+
+        /*  Label the data  */
+        td:nth-of-type(1):before
+            content: "Timestamp"
+        td:nth-of-type(2):before
+            content: "Author"
+        td:nth-of-type(3):before
+            content: "Message"
+        td:nth-of-type(1):before
+            content: ""
+
+    button#bulletin-new
+        margin: 0 10px 10px 0
+
+    /* Hide table headers (but not display: none, for accessibility) */
+
+    #textbox-popup-buttons
+        display: flex
+        justify-content: space-between
+
+        button
+            width: calc(50% - 5px)
+
+    #textbox-popup textarea
+        height: 50vh
+
+    /* ################### interface applicant profile ###################*/
+
+    .applicant-info
+        width: 100%
+        float: none
+
+    .applicant-images
+        width: 100%
+        float: none
+
+    /* ################### our world ###################*/
+
+    .worlddesc-container
+        flex-wrap: wrap
+
+    .world-explanation
+        width: 100%
+
+    /* ################### zoom & pan feature ###################*/
+
+    .toggle_controls
+        display: flex
+        flex-wrap: wrap
+
+        label
+            margin: 15px 20px
+
+    /* ################## adaptions for very small screens #####################*/
+@media screen and ($small-mobile)
+
+    .wrapper
+        width: calc(100% - 40px)
+
+    main
+        width: 100%
+        margin-top: 10px
+
+        h1::before, h1::after, footer::before, footer::after
+            border-color: transparent!important
+
+    .member-card-wrapper
+        margin: 0!important
+        padding: 15px 0 10px 15px
+        background: linear-gradient(180deg, rgba(240,240,240,0) 15%, rgba(240,240,240,1) 15%, rgba(240,240,240,1) 100%)!important
+
+        h2
+            font-size: 14pt
+
+        h3
+            font-size: 10pt
+
+        p
+            font-size: 11pt
+
+    .member-card-image
+        width: 20%!important
+        margin-top: 30px

@@ -11,7 +11,7 @@
     <th>About me</th>
     <th>
 
-      <select id="status" onchange="root.interface.application.filter(this, this.parentNode.parentNode.parentNode.parentNode)">
+      <select id="status" onchange="interface.application.filter(this, this.parentNode.parentNode.parentNode.parentNode)">
         <option selected disabled>Status</option>
         <option value="0">All</option>
         <option value="1">pending review</option>
@@ -24,3 +24,82 @@
 
   <tbody></tbody>
 </table>
+
+<!-- Popup template -->
+<div id="application-popup" hidden>
+  <div class="wrapper content">
+
+    <div class="applicant">
+      <div class="applicant-info">
+        <div class="counter counter-horizontal">
+          <h2>MC IGN</h2><p id="application_mc_ign"></p>
+        </div>
+
+        <div class="counter counter-horizontal">
+          <h2>Discord</h2><p id="application_discord_nick"></p>
+        </div>
+
+        <div class="counter counter-horizontal">
+          <h2>Country</h2><p id="application_country"></p>
+        </div>
+
+        <div class="counter counter-horizontal">
+          <h2>Age</h2><p id="application_age"></p>
+        </div>
+      </div>
+      <div class="applicant-images">
+        <img id="application_discord_avatar"></img>
+        <img id="application_mc_skin"></img>
+      </div>
+      <div class="clear"></div>
+    </div>
+
+    <article>
+      <h2>About me</h2>
+      <span class="subtitle"></span>
+      <section>
+        <p id="application_about_me"></p>
+      </section>
+    </article>
+
+    <article>
+      <h2>Motivation</h2>
+      <span class="subtitle"></span>
+      <section>
+        <p id="application_motivation"></p>
+      </section>
+    </article>
+
+    <article>
+      <h2>Building pictures</h2>
+      <span class="subtitle"></span>
+      <section>
+        <p id="application_buildings"></p>
+      </section>
+    </article>
+    <div class="counter counter-horizontal">
+      <h2>Publish About Me</h2><p id="application_publish_about_me"></p>
+    </div>
+
+    <div class="counter counter-horizontal">
+      <h2>Publish Age</h2><p id="application_publish_age"></p>
+    </div>
+
+    <div class="counter counter-horizontal">
+      <h2>Publish Country</h2><p id="application_publish_country"></p>
+    </div>
+
+    <div class="counter counter-horizontal">
+      <h2>Current status</h2><p id="application_status"></p>
+    </div>
+
+    <div class="clear"></div>
+
+    <div class="applicant-controls">
+      <input placeholder="Deny reason" type="text" id="deny_reason" name="deny_reason">
+      <button id="application-accept" onclick="interface.application.accept(this.parentNode.parentNode.parentNode.app_id)">Accept</button>
+      <button id="application-deny" onclick="interface.application.deny(this.parentNode.parentNode.parentNode.app_id, this.parentNode.childNodes[1].value)">Deny</button>
+      <div class="clear"></div>
+    </div>
+  </div>
+</div>

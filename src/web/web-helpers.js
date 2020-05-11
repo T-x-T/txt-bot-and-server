@@ -32,8 +32,6 @@ webHelpers.readHtmlAndEncapsulate = function(path, site, callback){
   let headerPath, footerPath;
   headerPath = site === 'paxterya' ? _path.join(__dirname, '../../web/web/html/header.html') : 'false';
   footerPath = site === 'paxterya' ? _path.join(__dirname, '../../web/web/html/footer.html') : 'false';
-  headerPath = site === 'paxteryaStaff' ? _path.join(__dirname, '../../web/web/html/header.html') : headerPath;
-  footerPath = site === 'paxteryaStaff' ? _path.join(__dirname, '../../web/web/html/footer.html') : footerPath;
   headerPath = site === 'paxteryaIndex' ? _path.join(__dirname, '../../web/web/html/header_index.html') : headerPath;
   footerPath = site === 'paxteryaIndex' ? _path.join(__dirname, '../../web/web/html/footer.html') : footerPath;
 
