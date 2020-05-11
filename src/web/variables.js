@@ -4,8 +4,6 @@
  */
 
 //Dependencies
-const application     = require('../application');
-const mc_helpers      = require('../minecraft');
 const stats           = require('../stats');
 const os              = require('os');
 const post            = require('../post');
