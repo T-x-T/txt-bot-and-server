@@ -1,0 +1,121 @@
+@import '_vars'
+
+#dark-mode-toggle
+    background: #cecece
+    border: 2px solid $pax-lightgray
+    position: fixed
+    z-index: 3
+    border-radius: 200px
+    padding: 15px
+
+    &:hover
+        transform: scale(1.1)
+    
+    svg
+        fill: $pax-white
+
+.d
+    background: $pax-darkmodecyan2
+
+    &#index .overlay::after
+        background-image: radial-gradient(transparent 50%, rgba(0,0,0,.3) 70%), linear-gradient(0deg, rgba(0,0,0,.3) 0%, transparent 5%, transparent 80%, rgba(0,0,0,.3) 100%), linear-gradient(rgba(0,81,92,.6) 0%, rgba(0,81,92,.6) 100%)
+
+    &#index main
+        background: $pax-darkmodecyan2
+
+    #dark-mode-toggle
+        border: 2px solid $pax-darkestcyan
+
+        svg
+            fill: $pax-darkmodecyan2
+
+    main p, main ul, button.secondary, h1, article h2, input, textarea, #searchInput, .member-card-wrapper h2, .member-card-wrapper h3, .interface-table td
+        color: $pax-white
+
+    h3, h2, main a, article.news p:first-of-type::first-letter, article p.initial-letter:first-of-type::first-letter, footer span, input:focus::placeholder,  textarea:focus::placeholder, label, ::placeholder, .select-items div, .select-selected, .select-selected::after, .ui-autocomplete li
+        color: $pax-lightcyan
+
+    hr, button.secondary, article section, #searchInput, &#index #newestpost, &#index #cinematic
+        border-color: $pax-darkmodecyan2
+
+    button.secondary, span.subtitle, #app-form, #contact-form, #searchInput, .toggle_controls, .interface-table td, &#index #newestpost button
+        background: $pax-darkmodecyan2
+
+    .wrapper.content, textarea, .member-card-wrapper h3, &#index #newestpost, &#index footer
+        background: $pax-darkmodecyan1
+
+    #dark-mode-toggle, button, .select-items div:hover, &#index #cinematic, .ui-autocomplete li:hover, .ui-autocomplete .ui-state-focus, .container:hover input ~ .checkmark
+        background-color: #bebebe
+        background: $pax-darkcyan
+
+    nav, button:hover, h1, article h2, p.note-box, .netdata-row, .applicant, .applicant-controls, .member-card-wrapper h2, .select-selected:hover, .select-items, #post-editor input, #post-editor textarea, .interface-table th, &#index .featurelist .text, footer, .ui-autocomplete li, .ui-autocomplete, .tooltiptext
+        background: $pax-darkestcyan
+
+    nav, .interface-table th, #newestpost button
+        border-color: transparent
+
+    nav a, h1, article h2, .member-card-wrapper h2, .member-card-wrapper h3
+        text-shadow: none
+
+    #application-accept, .img-fullwidth, .checkmark:hover
+        background: $pax-cyan
+
+    textarea, .applicant-controls input, header
+        border-color: $pax-darkmodecyan1
+
+    button
+        border-color: $pax-darkestcyan
+
+    .tooltiptext:after
+        border-color: transparent $pax-darkestcyan transparent transparent
+
+    .tooltip2 .tooltiptext::after
+        border-color: transparent transparent $pax-darkestcyan  transparent
+
+    h1, article h2
+        &::before
+            border-color: transparent #000 transparent transparent
+
+        &::after
+            border-color: #000 transparent transparent transparent
+
+    footer
+        &::before
+            border-color: transparent transparent #000 transparent
+
+        &::after
+            border-color: transparent transparent transparent #000
+
+    .article-img, .img-download img, .select-items, &#index #newestpost, &#index #cinematic, .ui-autocomplete, img.author
+        box-shadow: none
+        -webkit-box-shadow: none
+
+    section#newestpost img.author, article img.author
+        -webkit-filter: drop-shadow(0px 0px 15px rgba(0, 0, 0, 0.5))
+        filter: drop-shadow(0px 0px 15px rgba(0, 0, 0, 0.5))
+
+    input
+        background: transparent
+        border-color: $pax-darkestcyan
+
+    .checkmark, #app-form hr
+        background: $pax-lightcyan
+        border-color: $pax-darkestcyan
+
+    .fotorama__dot, .ui-autocomplete li
+        border-color: $pax-lightcyan
+
+    .member-card-wrapper
+        background: linear-gradient(180deg, rgba(240,240,240,0) 15%, $pax-darkmodecyan2 15%, $pax-darkmodecyan2 85%, rgba(240,240,240,0) 85%)
+
+    .select-items div, .select-selected
+        border-color: transparent transparent $pax-lightcyan transparent
+
+    .interface-table tr:nth-child(even) td
+        background: transparent
+
+    .interface-table tr:hover>td
+        background: $pax-darkestcyan!important
+
+    #bulletin_edit_bar td
+        background: $pax-darkcyan!important

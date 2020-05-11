@@ -113,6 +113,7 @@
         function changeNavIcon(x) {
             x.classList.toggle("change");
             document.getElementById("mobile-nav").classList.toggle("nav-fullscreen");
+            document.getElementsByTagName("HTML")[0].classList.toggle("noscroll");
         }
 </script>
 
@@ -151,6 +152,40 @@
     document.removeEventListener("copy", listener);
     $('#copiedip').text('Copied!');
   };
+</script>
+
+
+
+<!-- toggle darkmode -->
+<script>
+    let darkMode = localStorage.getItem('darkMode'); 
+
+    const darkModeToggle = document.querySelector('#dark-mode-toggle');
+
+    const enableDarkMode = () => {
+      document.body.classList.add('d');
+      localStorage.setItem('darkMode', 'enabled');
+    }
+
+    const disableDarkMode = () => {
+      document.body.classList.remove('d');
+      localStorage.setItem('darkMode', null);
+    }
+    
+    if (darkMode === 'enabled') {
+      enableDarkMode();
+    }
+
+    darkModeToggle.addEventListener('click', () => {
+      darkMode = localStorage.getItem('darkMode'); 
+      
+      if (darkMode !== 'enabled') {
+        enableDarkMode();
+      } else {  
+        disableDarkMode(); 
+      }
+    });
+
 </script>
 
 
