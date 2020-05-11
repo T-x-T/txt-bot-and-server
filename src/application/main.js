@@ -91,29 +91,37 @@ application.write = function(input, callback){
 application.read = function(filter, options, callback){
   data.get(filter, 'application', false, function(err, docs){
     if(!err){
-      if(options.addNicks){
-      //Iterate over all items and add the current discord nick and mc ign
-      let count = 0;
-      for(let i = 0; i < docs.length; i++){
-        if(!docs[i].mc_ign || !docs[i].discord_nick || docs[i].discord_nick == 'load#ing'){
-          _internal.addNicks(docs[i], {fromApi: true}, function(err, newDoc){
-            if(!err){
-              docs[i] = newDoc;
-              //If this was the last item, Callback
-              count++;
-              if(count == docs.length) callback(false, docs);
-            }else{
-              if(count == docs.length) callback(false, docs);
-            }
-          });
-        }else{
-          count++;
-          if(count == docs.length) callback(false, docs);
+      if (options.addNicks) {
+        //Iterate over all items and add the current discord nick and mc ign
+        let count = 0;
+        for (let i = 0; i < docs.length; i++) {
+          if (!docs[i].mc_ign || !docs[i].discord_nick || docs[i].discord_nick == 'load#ing') {
+            _internal.addNicks(docs[i], { fromApi: true }, function (err, newDoc) {
+              if (!err) {
+                docs[i] = newDoc;
+                //If this was the last item, Callback
+                count++;
+                if (count == docs.length) callback(false, docs);
+              } else {
+                if (count == docs.length) callback(false, docs);
+              }
+            });
+          } else {
+            count++;
+            if (count == docs.length) callback(false, docs);
+          }
         }
-      }
       if(docs.length == 0) callback(false, docs);
       }else{
-        callback(err, docs)
+        //Iterate over all items and add the urls
+        for (let i = 0; i < docs.length; i++) {
+          discord_api.getAvatarUrl(docs[i].discord_id, function(discord_avatar_url){
+            docs[i].discord_avatar_url = discord_avatar_url;
+            docs[i].mc_skin_url = mc_helpers.returnRenderUrl(docs[i].mc_uuid);
+            
+            if(i + 1 == docs.length) callback(err, docs)
+          });
+        }
       }
     }else{
       callback(true, false);

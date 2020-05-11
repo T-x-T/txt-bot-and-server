@@ -91,15 +91,15 @@ handlers.paxStaff = function(data, callback) {
   //Check if the user provided an access_token cookie
   if(data.cookies.access_token) {
     oauth.getAccessLevel({token: data.cookies.access_token}, false, function(err, access_level) {
-      if(data.path.indexOf('application') > -1 && access_level >= 9 || data.path.indexOf('post') > -1 && access_level >= 9 || data.path.indexOf('interface') > -1 && access_level >= 3) {
+      if(access_level >= 3) {
         //Everything is fine, serve the website
         data.path = path.join(__dirname, '../../web/web/' + data.path);
-        webHelpers.finishHtml(data, 'paxteryaStaff', function(err, fileData) {
+        webHelpers.finishHtml(data, 'paxterya', function(err, fileData) {
           if(!err && fileData.length > 0) {
             callback(200, fileData, 'html');
           } else {
             data.path = data.path + '.html';
-            webHelpers.finishHtml(data, 'paxteryaStaff', function(err, fileData) {
+            webHelpers.finishHtml(data, 'paxterya', function(err, fileData) {
               if(!err && fileData.length > 0) {
                 callback(200, fileData, 'html');
               } else {
@@ -127,7 +127,7 @@ handlers.paxLogin = function(data, callback){
         discord_api.getUserObject({token: access_token}, false, function(err, userData){
           user.get({discord: userData.id}, {privacy: true, onlyPaxterians: true, first: true}, function(err, memberData){
             //Now set the access_token as a cookie and redirect the user to the interface.html, also set access_level and mc_ign cookies THIS SHOULD NEVER BE TRUSTED FOR SECURITY, ONLY FOR MAKING THINGS SMOOTHER!!!
-            callback(302, {Location: `https://${data.headers.host}/staff/interface.html`, 'Set-Cookie': [`access_token=${access_token};Max-Age=21000};path=/`, `access_level=${access_level};Max-Age=22000};path=/`, `mc_ign=${memberData.mcName};Max-Age=22000};path=/`]}, 'plain');
+            callback(302, {Location: `https://${data.headers.host}/interface`, 'Set-Cookie': [`access_token=${access_token};Max-Age=21000};path=/`, `access_level=${access_level};Max-Age=22000};path=/`, `mc_ign=${memberData.mcName};Max-Age=22000};path=/`]}, 'plain');
           });
         });
       }else{

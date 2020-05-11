@@ -42,62 +42,6 @@ _getters.interface = function(callback){
   });
 };
 
-//Calls back an object for the current application
-_getters.application = function(callback){
-  application.get({id: data.queryStringObject.id}, {first: true, addNicks: true}, function(err, doc){
-    if(doc){
-      discord_api.getAvatarUrl(doc.discord_id, function(discord_avatar_url){
-        if(!discord_avatar_url) discord_avatar_url = 'not found';
-          else discord_avatar_url = `<img src="${discord_avatar_url}"></img>`;
-
-        let statusText = 'Invalid status';
-        statusText = doc.status == 1 ? 'Pending review' : statusText;
-        statusText = doc.status == 2 ? 'Denied'         : statusText;
-        statusText = doc.status == 3 ? 'Accepted'       : statusText;
-        callback({
-          'pax_title': 'Application',
-          'id': doc.id,
-          'discord_nick': doc.discord_nick,
-          'mc_ign': doc.mc_ign,
-          'about_me': doc.about_me,
-          'motivation': doc.motivation,
-          'buildings': doc.build_images,
-          'country': doc.country,
-          'age': '~' + (doc.birth_month > new Date(Date.now()).getMonth() + 1 ? parseInt((new Date().getFullYear() - new Date(doc.birth_year, doc.birth_month).getFullYear()).toString()) - 1 : parseInt((new Date().getFullYear() - new Date(doc.birth_year, doc.birth_month).getFullYear()).toString())),
-          'birth_year': doc.birth_year,
-          'birth_month': doc.birth_month,
-          'publish_about_me': doc.publish_about_me,
-          'publish_age': doc.publish_age,
-          'publish_country': doc.publish_country,
-          'discord_avatar': discord_avatar_url,
-          'mc_skin': `<img src="${mc_helpers.returnRenderUrl(doc.mc_uuid)}"></img>`,
-          'status': statusText
-        });
-      });
-    }else{
-      callback(false);
-    }
-  });
-};
-
-//Calls back an object for the current post in the interface
-_getters.post = function(callback){
-  if(data.queryStringObject.id === 'new'){
-    callback({'pax_title': 'Post', 'id': 'new'})
-  }else{
-    post.get({id: data.queryStringObject.id}, {first: true}, function(err, post){
-      callback({
-        'pax_title': 'Post',
-        'id': post.id,
-        'title': post.title,
-        'author': post.author,
-        'date': new Date(post.date).toISOString().substring(0, 10),
-        'body': post.body
-      });
-    });
-  }
-};
-
 //Calls back an object containing some basic statistics
 _getters.statistics = function(callback){
   stats.get('overview', false,  function(err1, obj){
@@ -191,9 +135,7 @@ _getters.widgets = function(callback){
 };
 
 const template = {
-  'staff/interface.html': _getters.interface,
-  'staff/application.html': _getters.application,
-  'staff/post.html': _getters.post,
+  'interface.html': _getters.interface,
   'index.html': _getters.index,
   'statistics.html': _getters.statistics,
   'blog.html': _getters.blog,
