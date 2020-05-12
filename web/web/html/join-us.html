@@ -2,6 +2,7 @@
 <script src="assets/paxterya/js/jquery-ui.min.js"></script>
 <script src="assets/paxterya/js/jquery.select-to-autocomplete.js"></script>
 <!-- gets imported at the bottom <script src="assets/pax_js/join_us.js"></script> -->
+<script src="assets/pax_js/framework.js"></script>
 <link href="jquery-ui.css">
 
 <h1>
@@ -32,8 +33,10 @@
             <b>You have to login with the Discord account that you will be using to join the Discord server! If you use a different account, then we will not be able to whitelist you.</b>
           </p>
         </div>
+        
+        
+        
         <form id="app-form" method="post" action="#" onsubmit="join_us.sendApplication(); return false" hidden=true>
-
           <div class="group">
             <label for="ign">Minecraft in-game name</label>
             <input id="ign" name="ign" type="text" placeholder="Minecraft in-game name" required>
@@ -421,16 +424,19 @@
             </label>
           </div>
 
-          <button type="submit" name="submit" id="submit">
+          <button type="submit" name="submit" id="submit" onclick="join_us.validate();">
             <i class="fas fa-paper-plane"></i> Submit
           </button>
 
         </form>
-
-
-
-
       </section>
     </article>
+
+    <!--Popup content-->
+    <div id="popup-sent" hidden>
+      <p>Our staff will soon send you a response via e-mail. An automatic arrival notice has already been sent. If you didn't receive the arrival notice, please <a href="contact-us.html">contact us</a>.<br>
+          While waiting for your response, feel free to <a href="#"><b>join our Discord</b></a> to already get in touch with the community!<br><br></p>
+      <h3>See you soon!</h3>
+    </div>
       
     <script src="assets/pax_js/join_us.js"></script>

@@ -17,6 +17,27 @@ join_us.onload = function(){
   }
 };
 
+//This function ONLY validates the inputs to show a popup when something isnt met. The real validation gets handled by the form itself!!
+join_us.validate = function(){
+  let inputs = {
+    mc_ign:                document.getElementById('ign').value.trim(),
+    email_address:         document.getElementById('email').value.trim(),
+    country:               document.getElementById('country').value,
+    birth_month:           document.getElementById('selectmonth').value,
+    birth_year:            document.getElementById('selectyear').value,
+    about_me:              document.getElementById('about_text').value,
+    motivation:            document.getElementById('motivation_text').value,
+    build_images:          document.getElementById('build_images').value,
+    accept_privacy_policy: document.getElementById('accept_privacy_policy').checked,
+    accept_rules:          document.getElementById('accept_rules').checked
+  };
+
+  let input_ok = true;
+  for(let input in inputs) if(!inputs[input]) input_ok = false;
+  
+  if(!input_ok) framework.popup.create_info({title: 'Missing input', text: 'You missed one or more required inputs!\nAll inputs except privacy controls are required.'});
+};
+
 //Sends the data of the application form to the api
 join_us.sendApplication = function(){
   //Assemble the object to send to the api
@@ -40,10 +61,11 @@ join_us.sendApplication = function(){
   //Lets send the application to the api
   _internal.send('application', {}, 'POST', {}, application, function(status, res){
     if(status == 201){
-      //Redirect user to success page
-        window.location.href = `https://${document.location.host}/application-sent.html`;
+      let div = document.getElementById('popup-sent').cloneNode(true);
+      div.hidden = false;
+      framework.popup.create({title: 'Application sent', div: div}, function(popup){});
     }else{
-      window.alert('Woops something bad happend, we are very sorry for the inconvenience\nHere is the error: ' + res.err);
+      framework.popup.create_info({title: 'Error', text: `An error occured, please show this to TxT#0001 if you think you did everything correctly:\n${status} ${res.err}`});
     }
   });
 };

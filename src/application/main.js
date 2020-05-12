@@ -118,9 +118,7 @@ application.read = function(filter, options, callback){
         } else {
           //Iterate over all items and add the urls
           for (let i = 0; i < docs.length; i++) {
-            console.log(0, i, docs.length)
             discord_api.getAvatarUrl(docs[i].discord_id, function (discord_avatar_url) {
-              console.log(1, i, docs.length)
               docs[i].discord_avatar_url = discord_avatar_url;
               docs[i].mc_skin_url = mc_helpers.returnRenderUrl(docs[i].mc_uuid);
               if (i + 1 == docs.length) callback(err, docs)
