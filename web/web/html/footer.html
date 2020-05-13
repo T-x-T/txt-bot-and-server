@@ -1,55 +1,61 @@
-
-
-        <footer>
-            <div class="wrapper">
-                <div class="left"><span><i class="far fa-copyright"></i> 2020 Paxterya.com</span></div>
-                <div class="right">
-                    <a href="privacy-policy.html">Privacy Policy</a>
-                    <a href="contact-us.html">Contact Us</a>
-                </div>
-                <div class="clear"></div>
-            </div>
-        </footer>
-
-    </main>
-
-    <!-- popup template-->
-    <div id="popup" hidden>
-      <div class="popup-foreground">
-        <div class="popup-head">
-          <div id="popup-head-title">
-            <span id="popup-title">TITLE</span>
-          </div>
-          <div id="popup-head-close">
-            <button id="popup-close" onclick="framework.popup.bg_click(this.parentNode.parentNode.parentNode.parentNode)"><i class="fas fa-times"></i></button>
-          </div>
-        </div>
-        <div class="popup-foreground-content">
-        </div>
-      </div>
-      <div class="popup-background" onclick="framework.popup.bg_click(this.parentNode)"></div>
+<footer>
+  <div class="wrapper">
+    <div class="left"><span><i class="far fa-copyright"></i> 2020 Paxterya.com</span></div>
+    <div class="right">
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="contact-us.html">Contact Us</a>
     </div>
+    <div class="clear"></div>
+  </div>
+</footer>
 
-    <!-- textbox popup template-->
-    <div id="textbox-popup" hidden>
-      <textarea name="textbox-popup-textarea" id="textbox-popup-textarea" cols="30" rows="10" oninput="this.parentNode.parentNode.parentNode.parentNode.options.confirmClose = true;"></textarea>
-      <br>
-      <div id="textbox-popup-buttons">
-        <button id="textbox-popup-save" onclick="framework.popup.textbox_save_click(this.parentNode.parentNode.parentNode.parentNode.parentNode)">save</button> <button class="secondary" id="textbox-popup-cancel" onclick="framework.popup.cancel_click(this.parentNode.parentNode.parentNode.parentNode.parentNode)">cancel</button>
+</main>
+
+<!-- popup template-->
+<div id="popup" hidden>
+  <div class="popup-foreground">
+    <div class="popup-head">
+      <div id="popup-head-title">
+        <span id="popup-title">TITLE</span>
+      </div>
+      <div id="popup-head-close">
+        <button id="popup-close" onclick="framework.popup.bg_click(this.parentNode.parentNode.parentNode.parentNode)"><i
+            class="fas fa-times"></i></button>
       </div>
     </div>
-
-    <!-- confirmation popup template-->
-    <div id="confirmation-popup" hidden>
-      <p id="confirmation-popup-text">Do you really want to do that?</p>
-      <button id="confirmation-popup-yes" onclick="framework.popup.confirmation_yes(this.parentNode.parentNode.parentNode.parentNode)">YES</button> <button class="secondary" id="confirmation-popup-no" onclick="framework.popup.cancel_click(this.parentNode.parentNode.parentNode.parentNode)">NO</button>
+    <div class="popup-foreground-content">
     </div>
+  </div>
+  <div class="popup-background" onclick="framework.popup.bg_click(this.parentNode)"></div>
+</div>
 
-    <!-- info popup template-->
-    <div id="info-popup" hidden>
-      <p id="info-popup-text">This is information</p>
-      <button id="info-popup-ok" onclick="this.parentNode.parentNode.parentNode.parentNode.close()">okay</button>
-    </div>
+<!-- textbox popup template-->
+<div id="textbox-popup" hidden>
+  <textarea name="textbox-popup-textarea" id="textbox-popup-textarea" cols="30" rows="10"
+    oninput="this.parentNode.parentNode.parentNode.parentNode.options.confirmClose = true;"></textarea>
+  <br>
+  <div id="textbox-popup-buttons">
+    <button id="textbox-popup-save"
+      onclick="framework.popup.textbox_save_click(this.parentNode.parentNode.parentNode.parentNode.parentNode)">save</button>
+    <button class="secondary" id="textbox-popup-cancel"
+      onclick="framework.popup.cancel_click(this.parentNode.parentNode.parentNode.parentNode.parentNode)">cancel</button>
+  </div>
+</div>
+
+<!-- confirmation popup template-->
+<div id="confirmation-popup" hidden>
+  <p id="confirmation-popup-text">Do you really want to do that?</p>
+  <button id="confirmation-popup-yes"
+    onclick="framework.popup.confirmation_yes(this.parentNode.parentNode.parentNode.parentNode)">YES</button> <button
+    class="secondary" id="confirmation-popup-no"
+    onclick="framework.popup.cancel_click(this.parentNode.parentNode.parentNode.parentNode)">NO</button>
+</div>
+
+<!-- info popup template-->
+<div id="info-popup" hidden>
+  <p id="info-popup-text">This is information</p>
+  <button id="info-popup-ok" onclick="this.parentNode.parentNode.parentNode.parentNode.close()">okay</button>
+</div>
 </body>
 
 <script src="assets/pax_js/common.js"></script>

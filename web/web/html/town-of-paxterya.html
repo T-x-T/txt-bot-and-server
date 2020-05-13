@@ -1,4 +1,3 @@
-
 <h1>
   <div class="wrapper">
     {pax_title}
@@ -7,44 +6,41 @@
 
 <div class="wrapper content">
 
-<h2>Welcome to the Capital!</h2>
+  <h2>Welcome to the Capital!</h2>
 
-<p>The Town of Paxterya was the very first town on our server, founded by TxT who was the temporary mayor until elections were held. Currently, the undoubtedly biggest town in the paxteryan lands is governed by Veikmaster and jadesheep. Have a look at our map below and come visit us!</p>
+  <p>The Town of Paxterya was the very first town on our server, founded by TxT who was the temporary mayor until elections were held. Currently, the undoubtedly biggest town in the paxteryan lands is governed by Veikmaster and jadesheep. Have a look at our map below and come visit us!</p>
 
-    <div onload="fix_toggle" id="SVGContainer" class="margin-top-20">
-      {map}
-      <div id="controls">
-        <svg version="1.1">
-          <g transform="translate(10,10)">
-            <g transform="translate(0,47)">
-              <g cursor="pointer" id="zoomin">
-                <circle r="18" cx="0" cy="0" fill="#007787" stroke="#00515c" stroke-width="1" transform="translate(16,16)"></circle>
-                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" class="svg-inline--fa fa-plus fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="1790 -160 4000 4000">
-                  <path fill="#fff" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path>
-                </svg>
-              </g>
-              <g cursor="pointer" id="zoomout" transform="translate(0,47)">
-                <circle r="18" cx="0" cy="0" fill="#007787" stroke="#00515c" stroke-width="1" transform="translate(16,16)"></circle>
-                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="minus" class="svg-inline--fa fa-minus fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="1800 -160 4000 4000">
-                  <path fill="#fff" d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path>
-                </svg>
-              </g>
-            </g>
-            <g cursor="pointer" id="resetSVG">
+  <div onload="fix_toggle" id="SVGContainer" class="margin-top-20">
+    {map}
+    <div id="controls">
+      <svg version="1.1">
+        <g transform="translate(10,10)">
+          <g transform="translate(0,47)">
+            <g cursor="pointer" id="zoomin">
               <circle r="18" cx="0" cy="0" fill="#007787" stroke="#00515c" stroke-width="1" transform="translate(16,16)"></circle>
-              <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sync" class="svg-inline--fa fa-sync fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="1820 -160 4000 4000">
-                <path fill="#fff" d="M440.65 12.57l4 82.77A247.16 247.16 0 0 0 255.83 8C134.73 8 33.91 94.92 12.29 209.82A12 12 0 0 0 24.09 224h49.05a12 12 0 0 0 11.67-9.26 175.91 175.91 0 0 1 317-56.94l-101.46-4.86a12 12 0 0 0-12.57 12v47.41a12 12 0 0 0 12 12H500a12 12 0 0 0 12-12V12a12 12 0 0 0-12-12h-47.37a12 12 0 0 0-11.98 12.57zM255.83 432a175.61 175.61 0 0 1-146-77.8l101.8 4.87a12 12 0 0 0 12.57-12v-47.4a12 12 0 0 0-12-12H12a12 12 0 0 0-12 12V500a12 12 0 0 0 12 12h47.35a12 12 0 0 0 12-12.6l-4.15-82.57A247.17 247.17 0 0 0 255.83 504c121.11 0 221.93-86.92 243.55-201.82a12 12 0 0 0-11.8-14.18h-49.05a12 12 0 0 0-11.67 9.26A175.86 175.86 0 0 1 255.83 432z"></path>
+              <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" class="svg-inline--fa fa-plus fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="1790 -160 4000 4000">
+                <path fill="#fff" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path>
+              </svg>
+            </g>
+            <g cursor="pointer" id="zoomout" transform="translate(0,47)">
+              <circle r="18" cx="0" cy="0" fill="#007787" stroke="#00515c" stroke-width="1" transform="translate(16,16)"></circle>
+              <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="minus" class="svg-inline--fa fa-minus fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="1800 -160 4000 4000">
+                <path fill="#fff" d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path>
               </svg>
             </g>
           </g>
-        </svg>
-      </div>
+          <g cursor="pointer" id="resetSVG">
+            <circle r="18" cx="0" cy="0" fill="#007787" stroke="#00515c" stroke-width="1" transform="translate(16,16)"></circle>
+            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sync" class="svg-inline--fa fa-sync fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="1820 -160 4000 4000">
+              <path fill="#fff" d="M440.65 12.57l4 82.77A247.16 247.16 0 0 0 255.83 8C134.73 8 33.91 94.92 12.29 209.82A12 12 0 0 0 24.09 224h49.05a12 12 0 0 0 11.67-9.26 175.91 175.91 0 0 1 317-56.94l-101.46-4.86a12 12 0 0 0-12.57 12v47.41a12 12 0 0 0 12 12H500a12 12 0 0 0 12-12V12a12 12 0 0 0-12-12h-47.37a12 12 0 0 0-11.98 12.57zM255.83 432a175.61 175.61 0 0 1-146-77.8l101.8 4.87a12 12 0 0 0 12.57-12v-47.4a12 12 0 0 0-12-12H12a12 12 0 0 0-12 12V500a12 12 0 0 0 12 12h47.35a12 12 0 0 0 12-12.6l-4.15-82.57A247.17 247.17 0 0 0 255.83 504c121.11 0 221.93-86.92 243.55-201.82a12 12 0 0 0-11.8-14.18h-49.05a12 12 0 0 0-11.67 9.26A175.86 175.86 0 0 1 255.83 432z"></path>
+            </svg>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </div>
 
-</div>
-
-
-
-<div class="toggle_controls">
+  <div class="toggle_controls">
     <label class="container">
       <span class="label">Show labels</span>
       <input type="checkbox" checked onClick="toggleDisplay(road_labels)">
@@ -62,110 +58,102 @@
       <input type="checkbox" checked onClick="toggleDisplay(dynmap)">
       <span class="checkmark"></span>
     </label>
-</div>
+  </div>
 
-
-<article>
+  <article>
     <h2>Government</h2>
     <span class="subtitle"></span>
     <section>
       <p>This feature is coming soon!</p>
     </section>
-</article>
+  </article>
 
-<article>
+  <article>
     <h2>Citizens</h2>
     <span class="subtitle"></span>
     <section>
       <p>This feature is coming soon!</p>
     </section>
-</article>
+  </article>
 
-
-
-<div class="fotorama" data-width="100%" data-ratio="1920/1080" data-max-width="100%" data-transition="crossfade" data-loop="true">
-  <picture>
-    <img srcset="
+  <div class="fotorama" data-width="100%" data-ratio="1920/1080" data-max-width="100%" data-transition="crossfade" data-loop="true">
+    <picture>
+      <img srcset="
     https://play.paxterya.com/assets/website/screenshots/880w/top_01.webp, https://play.paxterya.com/assets/website/screenshots/880w/top_01.jpg,
     https://play.paxterya.com/assets/website/screenshots/440w/top_01.webp 440w, https://play.paxterya.com/assets/website/screenshots/440w/top_01.jpg 440w
     
     " alt="Minecraft screenshot">
-  </picture>
-  <picture>
-    <img loading="lazy" srcset="
+    </picture>
+    <picture>
+      <img loading="lazy" srcset="
     https://play.paxterya.com/assets/website/screenshots/880w/top_02.webp, https://play.paxterya.com/assets/website/screenshots/880w/top_02.jpg,
     https://play.paxterya.com/assets/website/screenshots/440w/top_02.webp 440w, https://play.paxterya.com/assets/website/screenshots/440w/top_02.jpg 440w
     
     " alt="Minecraft screenshot">
-  </picture>
-  <picture>
-    <img loading="lazy" srcset="
+    </picture>
+    <picture>
+      <img loading="lazy" srcset="
     https://play.paxterya.com/assets/website/screenshots/880w/top_03.webp, https://play.paxterya.com/assets/website/screenshots/880w/top_03.jpg,
     https://play.paxterya.com/assets/website/screenshots/440w/top_03.webp 440w, https://play.paxterya.com/assets/website/screenshots/440w/top_03.jpg 440w
     
     " alt="Minecraft screenshot">
-  </picture>
-  <picture>
-    <img loading="lazy" srcset=",
+    </picture>
+    <picture>
+      <img loading="lazy" srcset=",
     https://play.paxterya.com/assets/website/screenshots/880w/top_04.webp, https://play.paxterya.com/assets/website/screenshots/880w/top_04.jpg,
     https://play.paxterya.com/assets/website/screenshots/440w/top_04.webp 440w, https://play.paxterya.com/assets/website/screenshots/440w/top_04.jpg 440w
     
     " alt="Minecraft screenshot">
-  </picture>
-  <picture>
-    <img loading="lazy" srcset="
+    </picture>
+    <picture>
+      <img loading="lazy" srcset="
     https://play.paxterya.com/assets/website/screenshots/880w/top_05.webp, https://play.paxterya.com/assets/website/screenshots/880w/top_05.jpg,
     https://play.paxterya.com/assets/website/screenshots/440w/top_05.webp 440w, https://play.paxterya.com/assets/website/screenshots/440w/top_05.jpg 440w
     
     " alt="Minecraft screenshot">
-  </picture>
-  <picture>
-    <img loading="lazy" srcset="
+    </picture>
+    <picture>
+      <img loading="lazy" srcset="
     https://play.paxterya.com/assets/website/screenshots/880w/top_06.webp, https://play.paxterya.com/assets/website/screenshots/880w/top_06.jpg,
     https://play.paxterya.com/assets/website/screenshots/440w/top_06.webp 440w, https://play.paxterya.com/assets/website/screenshots/440w/top_06.jpg 440w
     
     " alt="Minecraft screenshot">
-  </picture>
-  <picture>
-    <img loading="lazy" srcset="
+    </picture>
+    <picture>
+      <img loading="lazy" srcset="
     https://play.paxterya.com/assets/website/screenshots/880w/top_07.webp, https://play.paxterya.com/assets/website/screenshots/880w/top_07.jpg,
     https://play.paxterya.com/assets/website/screenshots/440w/top_07.webp 440w, https://play.paxterya.com/assets/website/screenshots/440w/top_07.jpg 440w
     
     " alt="Minecraft screenshot">
-  </picture>
-  <picture>
-    <img loading="lazy" srcset="
+    </picture>
+    <picture>
+      <img loading="lazy" srcset="
     https://play.paxterya.com/assets/website/screenshots/880w/top_08.webp, https://play.paxterya.com/assets/website/screenshots/880w/top_08.jpg,
     https://play.paxterya.com/assets/website/screenshots/440w/top_08.webp 440w, https://play.paxterya.com/assets/website/screenshots/440w/top_08.jpg 440w
     
     " alt="Minecraft screenshot">
-  </picture>
-  <picture>
-    <img loading="lazy" srcset="
+    </picture>
+    <picture>
+      <img loading="lazy" srcset="
     https://play.paxterya.com/assets/website/screenshots/880w/top_09.webp, https://play.paxterya.com/assets/website/screenshots/880w/top_09.jpg,
     https://play.paxterya.com/assets/website/screenshots/440w/top_09.webp 440w, https://play.paxterya.com/assets/website/screenshots/440w/top_09.jpg 440w
     
     " alt="Minecraft screenshot">
-  </picture>
-  <picture>
-    <img loading="lazy" srcset="
+    </picture>
+    <picture>
+      <img loading="lazy" srcset="
     https://play.paxterya.com/assets/website/screenshots/880w/top_10.webp, https://play.paxterya.com/assets/website/screenshots/880w/top_10.jpg,
     https://play.paxterya.com/assets/website/screenshots/440w/top_10.webp 440w, https://play.paxterya.com/assets/website/screenshots/440w/top_10.jpg 440w
     
     " alt="Minecraft screenshot">
-  </picture>
+    </picture>
+  </div>
 </div>
 
+<!-- Pan & zoom plugin -->
+<script src="../assets/paxterya/js/SVGPanZoom.js"></script>
+<script src="../assets/paxterya/pax_js/town_of_paxterya.js"></script>
 
-</div>
-
-  <!-- Pan & zoom plugin -->
-  <script src="../assets/paxterya/js/SVGPanZoom.js"></script>
-  <script src="../assets/paxterya/pax_js/town_of_paxterya.js"></script>
-
-
-
-  </body>
-  </html>
-
+</body>
+</html>
 </div>
