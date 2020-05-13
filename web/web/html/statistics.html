@@ -76,8 +76,8 @@
         </div>
       </div>
     </section>
-    <script src="../assets/paxterya/js/SVGPanZoom.js"></script>
-    <script src="../assets/paxterya/pax_js/statistics.js"></script>
+    <script src="../assets/js/SVGPanZoom.js"></script>
+    <script src="../assets/pax_js/statistics.js"></script>
 
     <!--Cant be easily migrated to extra js file, because of {map_data} being set through backend variables-->
     <script>
@@ -111,7 +111,7 @@
             return `<div class='hoverinfo'>${geo.properties.name}: ${data.numberOfThings} Member(s)</div>`;
           },
         },
-        data: { map_data }
+        data: {map_data}
       });
 
       $(window).on('resize', function () {
