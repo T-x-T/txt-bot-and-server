@@ -164,17 +164,11 @@ select
     top: 50%
     transform: translate(-50%, -50%)
 
-#textbox-popup
+#textbox-popup, #popup-sent
     width: 500px
     max-width: 100%
 
-#application-popup
-    overflow-y: scroll
-    height: 85vh
-    clear: both
-    text-align: left
-
-#post-popup
+#application-popup, #post-popup
     overflow-y: scroll
     height: 85vh
     clear: both
@@ -183,6 +177,11 @@ select
 #popup
     p
         @extend .pax-regular
+        clear: both
+        text-align: left
+    
+    a
+        color: $pax-cyan
 
     &-title
         @extend .pax-semibold
