@@ -138,9 +138,6 @@ const template = {
   'statistics.html': _getters.statistics,
   'blog.html': _getters.blog,
   'town-of-paxterya.html': _getters.town_of_paxterya,
-  'application-sent.html': {
-    'pax_title': 'Success!'
-  },
   'contact-us.html': {
     'pax_title': 'Contact us!'
   },
@@ -148,9 +145,6 @@ const template = {
     'pax_title': 'Join us!',
     'birthyears': _internal.generateBirthyearOptions,
     'oauth': config.auth.oauth_uris.application
-  },
-  'member.html': {
-    'pax_title': 'Member'
   },
   'members.html': {
     'pax_title': 'All Members'
@@ -169,18 +163,6 @@ const template = {
   },
   'penliam.html': {
     'pax_title': 'Penliam'
-  },
-  'cookieville.html': {
-    'pax_title': 'Cookieville'
-  },
-  'paxterdam.html': {
-    'pax_title': 'Paxterdam'
-  },
-  'paxendorf.html': {
-    'pax_title': 'Paxendorf'
-  },
-  'littleroot-city.html': {
-    'pax_title': 'Littleroot City'
   },
   'more-towns.html': {
     'pax_title': 'More Towns'
