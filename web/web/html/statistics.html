@@ -38,6 +38,7 @@
 <script src="https://d3js.org/topojson.v1.min.js"></script>
 <script src="https://datamaps.github.io/scripts/datamaps.world.min.js?v=1"></script>
 
+
         <h2>Paxterya all over the world</h2>
         <span class="subtitle"></span>
 
@@ -81,83 +82,51 @@
 
         </section>
 
-        <script>
-            //basic map config with custom fills, mercator projection
-            var map = new Datamap({
-                scope: 'world',
-                element: document.getElementById('map-container'),
-                responsive: true,
-                projection: 'mercator',
-                height: 500,
-                width: 900,
-                aspectRatio: 0.5625,
-                fills: {
-                    defaultFill: '#e9e9e9',
-                    '0%': '#B4B4B4',
-                    '10%': '#A3DFE8',
-                    '20%': '#00acc4',
-                    '30%': '#0099ae',
-                    '40%': '#008395',
-                    '50%': '#007787',
-                    '60%': '#018799',
-                    '80%': '#017a8a',
-                    '70%': '#006c7b',
-                    '90%': '#00616f',
-                    '100%': '#00515c',
-                },
-                geographyConfig: {
-                    highlightOnHover: false,
-                    popupTemplate: function(geo, data) {
-                        return `<div class='hoverinfo'>${geo.properties.name}: ${data.numberOfThings} Member(s)</div>`;
-                    },
-                },
-                data: {map_data}
-            });
 
-            $(window).on('resize', function() {
-                    map.resize();
-                });
-
-        </script>
-
-
-        <!-- Pan & zoom plugin -->
         <script src="../assets/paxterya/js/SVGPanZoom.js"></script>
-              <script type="text/javascript">
+<script src="../assets/paxterya/pax_js/statistics.js"></script>
 
-                // scale worldmap correctly
-                document.addEventListener("onload",fix_worldmap());
-                function fix_worldmap() {
-                      document.getElementById("map-container").children[0].setAttribute('viewBox', '0 50 900 400');
-                }
+<!--Cant be easily migrated to extra js file, because of {map_data} being set through backend variables-->
+<script>
+    //basic map config with custom fills, mercator projection
+    var map = new Datamap({
+        scope: 'world',
+        element: document.getElementById('map-container'),
+        responsive: true,
+        projection: 'mercator',
+        height: 500,
+        width: 900,
+        aspectRatio: 0.5625,
+        responsive: true,
+        fills: {
+            defaultFill: '#e9e9e9',
+            '0%': '#B4B4B4',
+            '10%': '#A3DFE8',
+            '20%': '#00acc4',
+            '30%': '#0099ae',
+            '40%': '#008395',
+            '50%': '#007787',
+            '60%': '#018799',
+            '80%': '#017a8a',
+            '70%': '#006c7b',
+            '90%': '#00616f',
+            '100%': '#00515c',
+        },
+        geographyConfig: {
+            highlightOnHover: false,
+            popupTemplate: function(geo, data) {
+                return `<div class='hoverinfo'>${geo.properties.name}: ${data.numberOfThings} Member(s)</div>`;
+            },
+        },
+        data: {map_data}
+    });
 
-                  // select first child of #map-container
-                  var instance = new SVGPanZoom(document.getElementById("map-container").children[0], {
-                      eventMagnet: document.getElementById('SVGContainer')
-                  });
+    $(window).on('resize', function() {
+            map.resize();
+        });
 
-                  document.getElementById('zoomin').addEventListener('click', function () {
-                      instance.zoomIn(null, 0.4);
-                  });
-                  document.getElementById('zoomout').addEventListener('click', function () {
-                      instance.zoomOut(null, 0.4);
-                  });
-                  document.getElementById('resetSVG').addEventListener('click', function () {
-                      instance.reset();
-                  });
-                  document.getElementById('panleft').addEventListener('click', function() {
-                      instance.panLeft(200);
-                  });
-                  document.getElementById('panright').addEventListener('click', function() {
-                      instance.panRight(200);
-                  });
-                  document.getElementById('panup').addEventListener('click', function() {
-                      instance.panUp(200);
-                  });
-                  document.getElementById('pandown').addEventListener('click', function() {
-                      instance.panDown(200);
-                  });
-              </script>
+</script>
+              
 
     </article>
 
