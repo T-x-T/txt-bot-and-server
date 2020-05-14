@@ -19,17 +19,4 @@ window.onload = function () {
     document.getElementById('resetSVG').addEventListener('click', function () {
         instance.reset();
     });
-    document.getElementById('panleft').addEventListener('click', function() {
-        instance.panLeft(200);
-    });
-    document.getElementById('panright').addEventListener('click', function() {
-        instance.panRight(200);
-    });
-    document.getElementById('panup').addEventListener('click', function() {
-        instance.panUp(200);
-    });
-    document.getElementById('pandown').addEventListener('click', function() {
-        instance.panDown(200);
-    });
-
-}
+};
