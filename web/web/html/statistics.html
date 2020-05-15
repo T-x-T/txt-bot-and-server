@@ -1,164 +1,123 @@
 <h1>
-    <div class="wrapper">
-        {pax_title}
-    </div>
+  <div class="wrapper">
+    {pax_title}
+  </div>
 </h1>
 
 <div class="wrapper content">
 
-    <article class="lesspadding">
+  <article class="lesspadding">
 
-        <div class="counter">
-            <p>
-                {total_members}
-            </p>
-            <h2>Total members</h2>
-        </div>
+    <div class="counter">
+      <p>
+        {total_members}
+      </p>
+      <h2>Total members</h2>
+    </div>
 
-        <div class="counter">
-            <p>
-                {average_age}
-            </p>
-            <h2>Average age</h2>
-        </div>
+    <div class="counter">
+      <p>
+        {average_age}
+      </p>
+      <h2>Average age</h2>
+    </div>
 
-        <div class="counter">
-            <p>
-                {total_playtime}
-            </p>
-            <h2>Total playtime</h2>
-        </div>
+    <div class="counter">
+      <p>
+        {total_playtime}
+      </p>
+      <h2>Total playtime</h2>
+    </div>
 
-        <div class="clear"></div>
+    <div class="clear"></div>
 
-    </article>
+  </article>
 
-<article id="mapsection">
-<script src="https://d3js.org/d3.v3.min.js"></script>
-<script src="https://d3js.org/topojson.v1.min.js"></script>
-<script src="https://datamaps.github.io/scripts/datamaps.world.min.js?v=1"></script>
+  <article id="mapsection">
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="https://d3js.org/topojson.v1.min.js"></script>
+    <script src="https://datamaps.github.io/scripts/datamaps.world.min.js?v=1"></script>
 
-        <h2>Paxterya all over the world</h2>
-        <span class="subtitle"></span>
 
-        <section>
+    <h2>Paxterya all over the world</h2>
+    <span class="subtitle"></span>
 
-            <div id="SVGContainer">
+    <section>
 
-              <div id="map-container"></div>
+      <div id="SVGContainer">
 
-              <div id="controls">
-                <svg version="1.1">
-                  <g transform="translate(10,10)">
-                    <g transform="translate(0,47)">
-                      <g cursor="pointer" id="zoomin">
-                        <circle r="18" cx="0" cy="0" fill="#007787" stroke="#00515c" stroke-width="1" transform="translate(16,16)"></circle>
-                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" class="svg-inline--fa fa-plus fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="1790 -160 4000 4000">
-                          <path fill="#fff" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path>
-                        </svg>
-                      </g>
-                      <g cursor="pointer" id="zoomout" transform="translate(0,47)">
-                        <circle r="18" cx="0" cy="0" fill="#007787" stroke="#00515c" stroke-width="1" transform="translate(16,16)"></circle>
-                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="minus" class="svg-inline--fa fa-minus fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="1800 -160 4000 4000">
-                          <path fill="#fff" d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path>
-                        </svg>
-                      </g>
-                    </g>
-                    <g cursor="pointer" id="resetSVG">
-                      <circle r="18" cx="0" cy="0" fill="#007787" stroke="#00515c" stroke-width="1" transform="translate(16,16)"></circle>
-                      <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sync" class="svg-inline--fa fa-sync fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="1820 -160 4000 4000">
-                        <path fill="#fff" d="M440.65 12.57l4 82.77A247.16 247.16 0 0 0 255.83 8C134.73 8 33.91 94.92 12.29 209.82A12 12 0 0 0 24.09 224h49.05a12 12 0 0 0 11.67-9.26 175.91 175.91 0 0 1 317-56.94l-101.46-4.86a12 12 0 0 0-12.57 12v47.41a12 12 0 0 0 12 12H500a12 12 0 0 0 12-12V12a12 12 0 0 0-12-12h-47.37a12 12 0 0 0-11.98 12.57zM255.83 432a175.61 175.61 0 0 1-146-77.8l101.8 4.87a12 12 0 0 0 12.57-12v-47.4a12 12 0 0 0-12-12H12a12 12 0 0 0-12 12V500a12 12 0 0 0 12 12h47.35a12 12 0 0 0 12-12.6l-4.15-82.57A247.17 247.17 0 0 0 255.83 504c121.11 0 221.93-86.92 243.55-201.82a12 12 0 0 0-11.8-14.18h-49.05a12 12 0 0 0-11.67 9.26A175.86 175.86 0 0 1 255.83 432z"></path>
-                      </svg>
-                    </g>
-                  </g>
+        <div id="map-container"></div>
+
+        <div id="controls">
+          <svg version="1.1">
+            <g transform="translate(10,10)">
+              <g transform="translate(0,47)">
+                <g cursor="pointer" id="zoomin">
+                  <circle r="18" cx="0" cy="0" fill="#007787" stroke="#00515c" stroke-width="1" transform="translate(16,16)"></circle>
+                  <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" class="svg-inline--fa fa-plus fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="1790 -160 4000 4000">
+                    <path fill="#fff" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path>
+                  </svg>
+                </g>
+                <g cursor="pointer" id="zoomout" transform="translate(0,47)">
+                  <circle r="18" cx="0" cy="0" fill="#007787" stroke="#00515c" stroke-width="1" transform="translate(16,16)"></circle>
+                  <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="minus" class="svg-inline--fa fa-minus fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="1800 -160 4000 4000">
+                    <path fill="#fff" d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path>
+                  </svg>
+                </g>
+              </g>
+              <g cursor="pointer" id="resetSVG">
+                <circle r="18" cx="0" cy="0" fill="#007787" stroke="#00515c" stroke-width="1" transform="translate(16,16)"></circle>
+                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sync" class="svg-inline--fa fa-sync fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="1820 -160 4000 4000">
+                  <path fill="#fff" d="M440.65 12.57l4 82.77A247.16 247.16 0 0 0 255.83 8C134.73 8 33.91 94.92 12.29 209.82A12 12 0 0 0 24.09 224h49.05a12 12 0 0 0 11.67-9.26 175.91 175.91 0 0 1 317-56.94l-101.46-4.86a12 12 0 0 0-12.57 12v47.41a12 12 0 0 0 12 12H500a12 12 0 0 0 12-12V12a12 12 0 0 0-12-12h-47.37a12 12 0 0 0-11.98 12.57zM255.83 432a175.61 175.61 0 0 1-146-77.8l101.8 4.87a12 12 0 0 0 12.57-12v-47.4a12 12 0 0 0-12-12H12a12 12 0 0 0-12 12V500a12 12 0 0 0 12 12h47.35a12 12 0 0 0 12-12.6l-4.15-82.57A247.17 247.17 0 0 0 255.83 504c121.11 0 221.93-86.92 243.55-201.82a12 12 0 0 0-11.8-14.18h-49.05a12 12 0 0 0-11.67 9.26A175.86 175.86 0 0 1 255.83 432z"></path>
                 </svg>
-              </div>
+              </g>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+    <script src="../assets/js/SVGPanZoom.js"></script>
+    <script src="../assets/pax_js/statistics.js"></script>
 
-            </div>
+    <!--Cant be easily migrated to extra js file, because of {map_data} being set through backend variables-->
+    <script>
+      //basic map config with custom fills, mercator projection
+      var map = new Datamap({
+        scope: 'world',
+        element: document.getElementById('map-container'),
+        projection: 'mercator',
+        height: 500,
+        width: 900,
+        aspectRatio: 0.5625,
+        responsive: true,
+        fills: {
+          defaultFill: '#e9e9e9',
+          '0%': '#B4B4B4',
+          '10%': '#A3DFE8',
+          '20%': '#00acc4',
+          '30%': '#0099ae',
+          '40%': '#008395',
+          '50%': '#007787',
+          '60%': '#018799',
+          '80%': '#017a8a',
+          '70%': '#006c7b',
+          '90%': '#00616f',
+          '100%': '#00515c',
+        },
+        geographyConfig: {
+          highlightOnHover: false,
+          popupTemplate: function (geo, data) {
+            return `<div class='hoverinfo'>${geo.properties.name}: ${data.numberOfThings} Member(s)</div>`;
+          },
+        },
+        data: {map_data}
+      });
 
+      $(window).on('resize', function () {
+        map.resize();
+      });
 
-
-
-        </section>
-
-        <script>
-            //basic map config with custom fills, mercator projection
-            var map = new Datamap({
-                scope: 'world',
-                element: document.getElementById('map-container'),
-                responsive: true,
-                projection: 'mercator',
-                height: 500,
-                width: 900,
-                aspectRatio: 0.5625,
-                fills: {
-                    defaultFill: '#e9e9e9',
-                    '0%': '#B4B4B4',
-                    '10%': '#A3DFE8',
-                    '20%': '#00acc4',
-                    '30%': '#0099ae',
-                    '40%': '#008395',
-                    '50%': '#007787',
-                    '60%': '#018799',
-                    '80%': '#017a8a',
-                    '70%': '#006c7b',
-                    '90%': '#00616f',
-                    '100%': '#00515c',
-                },
-                geographyConfig: {
-                    highlightOnHover: false,
-                    popupTemplate: function(geo, data) {
-                        return `<div class='hoverinfo'>${geo.properties.name}: ${data.numberOfThings} Member(s)</div>`;
-                    },
-                },
-                data: {map_data}
-            });
-
-            $(window).on('resize', function() {
-                    map.resize();
-                });
-
-        </script>
-
-
-        <!-- Pan & zoom plugin -->
-        <script src="../assets/paxterya/js/SVGPanZoom.js"></script>
-              <script type="text/javascript">
-
-                // scale worldmap correctly
-                document.addEventListener("onload",fix_worldmap());
-                function fix_worldmap() {
-                      document.getElementById("map-container").children[0].setAttribute('viewBox', '0 50 900 400');
-                }
-
-                  // select first child of #map-container
-                  var instance = new SVGPanZoom(document.getElementById("map-container").children[0], {
-                      eventMagnet: document.getElementById('SVGContainer')
-                  });
-
-                  document.getElementById('zoomin').addEventListener('click', function () {
-                      instance.zoomIn(null, 0.4);
-                  });
-                  document.getElementById('zoomout').addEventListener('click', function () {
-                      instance.zoomOut(null, 0.4);
-                  });
-                  document.getElementById('resetSVG').addEventListener('click', function () {
-                      instance.reset();
-                  });
-                  document.getElementById('panleft').addEventListener('click', function() {
-                      instance.panLeft(200);
-                  });
-                  document.getElementById('panright').addEventListener('click', function() {
-                      instance.panRight(200);
-                  });
-                  document.getElementById('panup').addEventListener('click', function() {
-                      instance.panUp(200);
-                  });
-                  document.getElementById('pandown').addEventListener('click', function() {
-                      instance.panDown(200);
-                  });
-              </script>
-
-    </article>
-
+      
+    </script>
+  </article>
 </div>

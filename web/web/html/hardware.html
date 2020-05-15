@@ -1,6 +1,6 @@
 <script>
     var netdataTheme = 'slate';
-    var netdataNoBootstrap = true;
+    var netdataNoBootstrap = false;
     var netdataNoFontAwesome = true;
 </script>
 <script type="text/javascript" src="https://monitoring.paxterya.com/netdata/txt-game02/dashboard.js"></script>
@@ -18,7 +18,21 @@
             width: calc(100% - 120px);
         }
     }
+    h2, h1 { margin:0!important;}
+    .banner p {margin-bottom:0!important;box-sizing:content-box!important;}
+    .wrapper{box-sizing:content-box!important;}
+    *{line-height: 1.5!important;}
+    a{text-decoration: none!important;}
+    nav{margin-top: -3px;}
 </style>
+<link type="text/css" rel="stylesheet" href="assets/css/general.min.css">
+<link type="text/css" rel="stylesheet" href="assets/css/desktop.min.css">
+<link type="text/css" rel="stylesheet" href="assets/css/mobile.min.css">
+<link type="text/css" rel="stylesheet" href="assets/css/header.min.css">
+<link type="text/css" rel="stylesheet" href="assets/css/nav.min.css">
+<link type="text/css" rel="stylesheet" href="assets/css/footer.min.css">
+<link type="text/css" rel="stylesheet" href="assets/css/interface.min.css">
+<link type="text/css" rel="stylesheet" href="assets/css/misc-pages.min.css">
 <h1>
     <div class="wrapper">
         {pax_title}
@@ -242,18 +256,10 @@
             rel="noopener noreferrer" href="https://monitoring.paxterya.com/d/ueugugoZz/">public Grafana dashboards</a>.
     </p>
 
-    <iframe src="https://monitoring.paxterya.com/d-solo/0RlHKXaZk/website?orgId=1&panelId=2&refresh=30s" width="100%"
-        height="500" frameborder="0">
-    </iframe>
-
-    <iframe src="https://monitoring.paxterya.com/d-solo/0RlHKXaZk/website?orgId=1&panelId=4&refresh=30s" width="100%"
-        height="500" frameborder="0">
-    </iframe>
-
-    <iframe src="https://monitoring.paxterya.com/d-solo/0RlHKXaZk/website?orgId=1&panelId=6&refresh=30s" width="100%"
-        height="600" frameborder="0">
-    </iframe>
-
+    <iframe src="https://monitoring.paxterya.com/d-solo/KgH6uDjWk/overview-copy?orgId=1&refresh=30s&panelId=2" width="100%" height="500" frameborder="0"></iframe>
+    <iframe src="https://monitoring.paxterya.com/d-solo/KgH6uDjWk/overview-copy?orgId=1&refresh=30s&panelId=37" width="100%" height="500" frameborder="0"></iframe>
+    <iframe src="https://monitoring.paxterya.com/d-solo/KgH6uDjWk/overview-copy?orgId=1&refresh=30s&panelId=25" width="100%" height="600" frameborder="0"></iframe>
+    <iframe src="https://monitoring.paxterya.com/d-solo/KgH6uDjWk/overview-copy?orgId=1&refresh=30s&panelId=58" width="100%" height="600" frameborder="0"></iframe>
     <iframe src="https://monitoring.paxterya.com/d-solo/0RlHKXaZk/website?orgId=1&refresh=30s&panelId=8" width="100%"
         height="500" frameborder="0">
     </iframe>
