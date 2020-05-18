@@ -355,3 +355,78 @@ framework.table.select_row = function(bs, index){
   //Set the onclick property to this function here again; no idea why, but the onclick event gets cleared once we execute it
   row.onclick = framework.table.select_row;
 };
+
+
+//Everything handling lists
+framework.list = {};
+
+//Call this to initialize div-list
+//Options:
+//Required: div:          div that should act as the root of the list, this will get all the functions attached to it
+//          api_path:     path to the api endpoint that serves the raw_data
+//          data_mapping: function that converts raw_data to array of values to populate the template div
+//          template:     template that gets cloned and filled with data from data_mapping
+//          default_sort: default sort of the list, the default this is the first item returned by data_mapping in asc order
+//Optional: api_method:   api method for querying the api, GET per default
+//          onclick:      function that should get executed when the user clicks on an element
+//          display_mode: horizontal or vertical (default)
+framework.list.init = function(options){
+  //Set default values for optional options that arent specified
+  if(!options.hasOwnProperty('api_method')) options.api_method = 'GET';
+  if(!options.hasOwnProperty('onclick')) options.onclick = false;
+  if(!options.hasOwnProperty('display_mode')) options.display_mode = 'vertical';
+
+  //Attach everything to the root div
+  options.div.options = options;
+  options.div.update = framework.list.update;
+  options.div.filter = framework.list.filter;
+  options.div.sort = framework.list.sort;
+
+  //DOM object is set-up, update
+  options.div.update({});
+};
+
+//optional options: filter, sort
+framework.list.update = function(options){
+  let div = this;
+  let sort = options.hasOwnProperty('sort') ? options.sort : div.options.default_sort;
+  let filter = options.hasOwnProperty('filter') ? options.filter : false;
+
+  //Get data from api
+  _internal.send(div.options.api_path, false, div.options.api_method, filter, false, function(status, res){
+    if(status == 200){
+      
+      //Remove all child object from div
+      div.innterHTML = "";
+
+      //Sort res
+      let data = _internal.sortArray(res, sort.split('.')[0], sort.split('.')[1]);
+
+      //Call add_element function to build up the list
+      data.forEach((raw_data) => {
+        framework.list.add_element(raw_data, div.options.div);
+      });
+
+    }else{
+      console.log(status, res)
+      framework.popup.create_info({title: 'Error', text: `status code: ${status}, response:\n${res}`});
+    }
+  });
+};
+
+//Only show items that match filter
+framework.list.filter = function(filter){
+
+};
+
+//Sort all items based on sorting
+framework.list.sort = function(sort){
+
+};
+
+//Appends new element and fill it with data
+framework.list.add_element = function(raw_data, div){
+  let element = div.options.template.clone(true);
+
+  //instead of doing data_mappings as an array do it as an object with the id of the element that should be filled as a key
+};

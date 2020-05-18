@@ -14,7 +14,26 @@ members.init = function(){
 
 //This updates the member cards
 members.update = function(){
-  //Get all members date from the api
+  framework.list.init({
+    div: document.getElementById('member-list'),
+    api_path: 'member',
+    data_mapping: function(a){
+      return [
+        a.mc_render_url,
+        a.mc_ign,
+        a.discord_name,
+        a.country,
+        a.age,
+        a.playtime,
+        a.joined
+      ];
+    },
+    template: document.getElementById('template'),
+    default_sort: 'joined.asc',
+    display_mode: 'vertical'
+  });
+
+  /* //Get all members date from the api
   _internal.send('member', false, 'GET', false, false, function(status, docs){
     if(status == 200){
       //Get the selected sorting
@@ -89,7 +108,7 @@ members.update = function(){
     }else{
       window.alert('Couldnt get data', docs.err);
     }
-  });
+  }); */
 };
 
 //Makes the search work
