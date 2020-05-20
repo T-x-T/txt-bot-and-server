@@ -37,11 +37,6 @@ index.updateOnlinePlayers = function(){
   rcon.updateOnlinePlayers();
 };
 
-//Updates the role prefixes in the tablist
-index.updateRoles = function(){
-  rcon.updateRoles();
-};
-
 //Sends a command directly to the minecraft server using rcon; Only use in edge cases! Rather use events
 index.sendCmd = function(cmd, callback){
   rcon.send(cmd, function(res){
