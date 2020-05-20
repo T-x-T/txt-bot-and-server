@@ -382,6 +382,13 @@ framework.list.init = function(options){
   options.div.filter = framework.list.filter;
   options.div.sort = framework.list.sort;
 
+  //display_mode
+  if(options.display_mode == 'horizontal'){
+    options.div.style = 'flex-wrap: nowrap; overflow: scroll;';
+  }else{
+    options.div.style = 'flex-wrap: wrap;';
+  }
+
   //DOM object is set-up, update
   options.div.update({});
 };
