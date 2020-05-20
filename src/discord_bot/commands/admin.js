@@ -217,9 +217,6 @@ module.exports = {
             case 'updateallnicks':
               discord_helpers.updateAllNicks();
               break;
-            case 'updateingameroles':
-              mc_helpers.updateRoles();
-              break;
             default:
               message.reply('I didnt quite understand you moron');
               break;
