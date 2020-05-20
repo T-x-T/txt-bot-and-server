@@ -454,7 +454,7 @@ framework.list.add_element = function(raw_data, div){
   let element = div.options.template.cloneNode(true);
 
   //Send raw_data through data mapping
-  mapped_data = div.options.data_mapping(raw_data);
+  let mapped_data = div.options.data_mapping(raw_data);
   
   //Use mapped_data to fill out the template
   mapped_data.forEach((data) => {
