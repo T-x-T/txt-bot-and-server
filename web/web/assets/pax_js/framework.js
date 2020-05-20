@@ -396,16 +396,8 @@ framework.list.update = function(options){
   _internal.send(div.options.api_path, false, div.options.api_method, filter, false, function(status, res){
     if(status == 200){
       
-      //Remove all child object from div
-      div.innterHTML = "";
-
-      //Sort res
-      let data = _internal.sortArray(res, sort.split('.')[0], sort.split('.')[1]);
-
-      //Call add_element function to build up the list
-      data.forEach((raw_data) => {
-        framework.list.add_element(raw_data, div.options.div);
-      });
+      div.raw_data = res;
+      div.sort(sort)
 
     }else{
       console.log(status, res)
@@ -414,19 +406,67 @@ framework.list.update = function(options){
   });
 };
 
-//Only show items that match filter
-framework.list.filter = function(filter){
+//Sort all items based on sorting
+framework.list.sort = function (sort) {
+  let div = this;
 
+  //Remove all child object from div
+  while (div.firstChild) div.removeChild(div.lastChild);
+
+  //Sort res
+  div.raw_data = _internal.sortArray(div.raw_data, sort.split('.')[0], sort.split('.')[1]);
+
+  //Call add_element function to build up the list
+  div.raw_data.forEach((raw_data) => {
+    framework.list.add_element(raw_data, div.options.div);
+  });
 };
 
-//Sort all items based on sorting
-framework.list.sort = function(sort){
-
+//Only show items that match filter
+framework.list.filter = function(filter){
+  Array.from(this.childNodes).forEach((element) => {
+    let match = false;
+    if(this.options.hasOwnProperty('filterable') && Array.isArray(this.options.filterable)){
+      this.options.filterable.forEach((single) => {
+        if(element.hasOwnProperty('raw_data') && element.raw_data.hasOwnProperty(single) && typeof element.raw_data[single] === 'string' && element.raw_data[single].toLowerCase().includes(filter.toLowerCase())) match = true;
+      });
+    }else{
+      for(let key in element.raw_data) if(typeof element.raw_data[key] === 'string' && element.raw_data[key].toLowerCase().includes(filter.toLowerCase())) match = true;
+    }
+    if (match) {
+      element.style = "display: flex;";
+    } else {
+      element.style = "display: none;"
+    }
+  });
 };
 
 //Appends new element and fill it with data
 framework.list.add_element = function(raw_data, div){
-  let element = div.options.template.clone(true);
+  
+  let element = div.options.template.cloneNode(true);
 
-  //instead of doing data_mappings as an array do it as an object with the id of the element that should be filled as a key
+  //Send raw_data through data mapping
+  mapped_data = div.options.data_mapping(raw_data);
+  
+  //Use mapped_data to fill out the template
+  mapped_data.forEach((data) => {
+    let child = element.querySelector(`#${data.element_id}`)
+    if(child) child[data.property] = data.value;
+
+    //Remove all elements and descriptors with value false
+    if(child && (!data.value || data.value == "false")){
+      child.parentNode.removeChild(element.querySelector(`#${data.descriptor_id}`));
+      child.parentNode.removeChild(child);
+    }
+  });
+
+  //Add raw_data to element
+  element.raw_data = raw_data;
+
+  //Append element to div
+  div.appendChild(element);
+
+  //Make element visible
+  element.style.display = null;
 };
