@@ -2,7 +2,7 @@
  *  This file contains all js stuff for the member list on members.html
  */
 
- var members = {};
+var members = {};
 
  //This gets executed onload and should trigger the update of member cards
 members.init = function(){
@@ -14,105 +14,77 @@ members.init = function(){
 
 //This updates the member cards
 members.update = function(){
-  //Get all members date from the api
-  _internal.send('member', false, 'GET', false, false, function(status, docs){
-    if(status == 200){
-      //Get the selected sorting
-      let sorting = document.getElementById('sort').value;
-      //Fix the playtime for sorting
-      for(let i = 0; i < docs.length; i++) docs[i].playtime = typeof docs[i].playtime == 'undefined'? 0 : parseInt(docs[i].playtime);
-
-      //Sort after sorting joined
-      docs = _internal.sortArray(docs, _internal.sortings[sorting][0], _internal.sortings[sorting][1]);
-
-      //Remove existing elements, that are not the template!
-      let parent = document.getElementById('member-list');
-      let elements = parent.children;
-      let newElements = [];
-
-      //Fill newElements with all elements we need to remove
-      for (let i = 0; i < elements.length; i++) {
-        if (elements[i].id != 'template') newElements.push(elements[i]);
-      }
-
-      //Remove elements
-      newElements.forEach((element) => {
-        element.parentNode.removeChild(element);
-      });
-
-      //Iterate over docs: copy template, fill it out, make it visible
-      let i = 0;
-      docs.forEach((doc) => {
-        //Clone template
-        let template = document.getElementById('template');
-        let div = template.cloneNode(true);
-        div.id = i;
-
-        //Fill out the static stuff
-        div.querySelector('#mc_ign').innerText = doc.mc_nick;
-        div.querySelector('#discord_name').innerText = doc.discord_nick;
-        div.querySelector('#playtime').innerText = doc.playtime + 'h';
-
-        //Fill out date
-        div.querySelector('#joined').innerText = new Date(doc.joined_date).toISOString().substring(0, 10);
-
-        //Add country or remove it if its false
-        div.querySelector('#country').innerText = doc.country;
-
-        if(div.querySelector('#country').innerText === 'false'){
-          let toDel = div.querySelector('#country-desc');
-          toDel.parentNode.removeChild(toDel);
-          toDel = div.querySelector('#country');
-          toDel.parentNode.removeChild(toDel);
+  framework.list.init({
+    div: document.getElementById('member-list'),
+    api_path: 'member',
+    data_mapping: function(a){
+      return [
+        {
+          element_id: 'render',
+          property: 'src',
+          value: a.mc_render_url
+        },
+        {
+          element_id: 'mc_ign',
+          property: 'innerText',
+          value: a.mc_nick
+        },
+        {
+          element_id: 'discord_name',
+          property: 'innerText',
+          value: a.discord_nick
+        },
+        {
+          element_id: 'country',
+          descriptor_id: 'country-desc',
+          property: 'innerText',
+          value: a.country
+        },
+        {
+          element_id: 'age',
+          descriptor_id: 'age-desc',
+          property: 'innerText',
+          value: a.age
+        },
+        {
+          element_id: 'playtime',
+          property: 'innerText',
+          value: a.playtime + 'h'
+        },
+        {
+          element_id: 'joined',
+          property: 'innerText',
+          value: new Date(a.joined_date).toISOString().substring(0, 10)
         }
-      
-        //Add age or remove it if its false
-        if(doc.age){
-          div.querySelector('#age').innerText = doc.age;
-        }else{
-          let toDel = div.querySelector('#age-desc');
-          toDel.parentNode.removeChild(toDel);
-          toDel = div.querySelector('#age');
-          toDel.parentNode.removeChild(toDel);
-        }
-
-        //Add correct src to image
-        div.querySelector("#render").src = doc.mc_render_url;
-
-        //Make it visible
-        div.style.display = null;
-        template.parentNode.append(div);
-
-        i++;
-      });
-
-    }else{
-      window.alert('Couldnt get data', docs.err);
-    }
+      ];
+    },
+    template: document.getElementById('template').cloneNode(true),
+    default_sort: 'joined_date.asc',
+    display_mode: 'vertical',
+    filterable: ['mc_nick', 'discord_nick', 'country']
   });
 };
 
 //Makes the search work
 members.search = function(){
-  //Get the search term
-  let term = document.getElementById('searchInput').value.toLowerCase();
-  if(term.length == 0) return;
+  document.getElementById('member-list').filter(document.getElementById('searchInput').value.toLowerCase());
+};
 
-  //Iterate over all member cards and enable/disable them
-  let parent = document.getElementById('member-list');
-  let elements = parent.children;
-  let newElements = [];
-
-  //Fill newElements with all elements we need to evaluate
-  for(let i = 0; i < elements.length; i++) {
-    if(elements[i].id != 'template') newElements.push(elements[i]);
-  }
-  elements = newElements;
-
-  elements.forEach((element) => {
-    if(element.querySelector('#mc_ign').innerText.toLowerCase().includes(term) || element.querySelector('#discord_name').innerText.toLowerCase().includes(term)) element.style = '';
-      else element.style = 'display: none;';
-  });
+members.sort = function(){
+  let sortings = {
+    0: 'joined_date.asc',
+    1: 'joined_date.desc',
+    2: 'playtime.asc',
+    3: 'playtime.desc',
+    4: 'age.asc',
+    5: 'age.desc',
+    6: 'mc_nick.asc',
+    7: 'mc_nick.desc',
+    8: 'discord_nick.asc',
+    9: 'discord_nick.desc'
+  };
+  
+  document.getElementById('member-list').sort(sortings[document.getElementById('sort').value]);
 };
 
 window.onload = function(){
@@ -186,7 +158,7 @@ window.onload = function(){
             closeAllSelect(this);
             this.nextSibling.classList.toggle("select-hide");
             this.classList.toggle("select-arrow-active");
-            members.update();
+            members.sort();
         });
     }
     function closeAllSelect(elmnt) {

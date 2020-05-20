@@ -28,13 +28,6 @@ discord_api.updateCache();
 
 
 
-//Stuff that should be run once the bot logged in
-emitter.once('discord_bot_ready', (client) => {
-  mc_helpers.updateRoles();
-});
-
-
-
 //Every minute
 setInterval(function () {
   mc_helpers.updateOnlinePlayers();
@@ -56,7 +49,6 @@ setInterval(function(){
 //Every hour
 setInterval(function(){
   user.updateNicks();
-  mc_helpers.updateRoles();
   discord_helpers.updateAllNicks();
   discord_api.updateCache();
 }, 1000 * 60 * 60);

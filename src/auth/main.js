@@ -23,6 +23,9 @@ oauth.returnAccessLevel = function(userID){
   
   try{
     if(client.guilds.get(config.discord_bot.guild).members.get(userID).roles.has(config.discord_bot.roles.paxterya)) access_level = 3;
+    if(client.guilds.get(config.discord_bot.guild).members.get(userID).roles.has(config.discord_bot.roles.cool)) access_level = 4;
+    if(client.guilds.get(config.discord_bot.guild).members.get(userID).roles.has(config.discord_bot.roles.utp)) access_level = 5;
+    if(client.guilds.get(config.discord_bot.guild).members.get(userID).roles.has(config.discord_bot.roles.mod)) access_level = 7;
     if(client.guilds.get(config.discord_bot.guild).members.get(userID).roles.has(config.discord_bot.roles.admin)) access_level = 9;
   }catch(e){}
 

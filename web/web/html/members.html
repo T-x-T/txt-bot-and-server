@@ -2,6 +2,7 @@
 <script src="assets/paxterya/js/jquery-ui.min.js"></script>
 <script src="assets/paxterya/js/jquery.select-to-autocomplete.js"></script>
 <script src="assets/pax_js/members.js"></script>
+<script src="assets/pax_js/framework.js"></script>
 
 <link href="jquery-ui.css">
 <script type="text/javascript">
@@ -39,7 +40,8 @@
 
 
     <div class="custom-select membersorting">
-        <select name="sort" id="sort" onchange="members.update()">
+        <select name="sort" id="sort" onchange="members.sort()">
+            <option value="0">Choose sorting criterion</option>
             <option value="0">Date joined ASC</option>
             <option value="1">Date joined DESC</option>
             <option value="2">Playtime ASC</option>

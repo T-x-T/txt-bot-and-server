@@ -43,7 +43,10 @@ let conf = {
       },
       roles: {
         admin: '',
-        paxterya: ''
+        paxterya: '',
+        mod: '',
+        cool: '',
+        utp: ''
       }
     },
     email: {
@@ -128,7 +131,10 @@ let conf = {
       },
       roles: {
         admin: '',
-        paxterya: ''
+        paxterya: '',
+        mod: '',
+        cool: '',
+        utp: ''
       }
     },
     email: {
@@ -213,7 +219,10 @@ let conf = {
       },
       roles: {
         admin: '',
-        paxterya: ''
+        paxterya: '',
+        mod: '',
+        cool: '',
+        utp: ''
       }
     },
     email: {
