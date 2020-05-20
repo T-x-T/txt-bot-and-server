@@ -145,6 +145,21 @@ handlers.paxLogin = function(data, callback){
 *
 */
 
+//API endpoint for querying roles of players; Requires one uuid in the querystring
+handlers.paxapi.roles = function(data, callback){
+  user.get({mcUUID: data.queryStringObject.uuid}, {first: true}, function(err, doc){
+    if(!err){
+      if(doc){
+        callback(200, {role: oauth.getAccessLevel({id: doc.discord}, false)}, 'json'); 
+      }else{
+        callback(404, {}, 'json');
+      }
+    }else{
+      callback(500, {err: 'encountered error while trying to execute query: ' + err}, 'json');
+    }
+  });
+};
+
 //API functionality for handling the bulletin board
 //Auth: access_level >= 3
 handlers.paxapi.bulletin = function(data, callback){
