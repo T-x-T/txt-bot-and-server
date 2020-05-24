@@ -160,7 +160,40 @@ handlers.paxapi.roles = function(data, callback){
   });
 };
 
-//API functionality for handling the bulletin board
+//API functionality for handling the bulletin categories
+//Auth: access_level >= 3
+handlers.paxapi.bulletinCategory = function(data, callback){
+  if(typeof handlers.paxapi.bulletinCategory[data.method] == 'function'){
+    //Check if user is authorized to send that request
+    if(data.cookies.access_token){
+      oauth.getAccessLevel({token: data.cookies.access_token}, false, function(err, access_level) {
+        if(access_level >= 3){
+          //Add access_level to data, to allow edits by admins (>=9)
+          data.access_level = access_level;
+
+          //User is authorized
+          handlers.paxapi.bulletin[data.method](data, callback);
+        }else{
+          callback(403, {err: 'You are not authorized to do that!'}, 'json');
+        }
+      });
+    }else{
+      callback(401, {err: 'Your client didnt send an access_token, please log in again'}, 'json');
+    }
+  }else{
+    callback(405, {err: 'Verb not allowed'}, 'json');
+  }
+};
+
+handlers.paxapi.bulletinCategory.get = function(data, callback){
+  bulletin.getCategories(false, false, function(err, docs){
+    if(docs) callback(200, docs, 'json');
+    else callback(404, {err: 'Couldnt get any posts for the filter'}, 'json');
+  });
+};
+
+
+//API functionality for handling the bulletin cards
 //Auth: access_level >= 3
 handlers.paxapi.bulletin = function(data, callback){
   if(typeof handlers.paxapi.bulletin[data.method] == 'function'){
@@ -227,7 +260,7 @@ handlers.paxapi.bulletin.put = function(data, callback){
 //Get bulletin(s) based on filter
 //Update an existing bulletin
 handlers.paxapi.bulletin.get = function(data, callback) {
-  bulletin.get(data.queryStringObject, false, function(err, docs) {
+  bulletin.getCards(false, false, function(err, docs) {
     if(docs) callback(200, docs, 'json');
     else callback(404, {err: 'Couldnt get any posts for the filter'}, 'json');
   });

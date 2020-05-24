@@ -7,6 +7,7 @@
 const main = require('./main.js');
 const sanitize = require('sanitize-html');
 const auth = require('../auth');
+const user = require('../user');
 
 //Create the container
 var index = {};
@@ -70,6 +71,48 @@ index.get = function(filter, options, callback) {
     }else{
       callback(err, docs);
     }
+  });
+};
+
+//retrieve one or multiple bulletin cards
+//Options: like data.get
+index.getCards = function(filter, options, callback){
+  main.getCards(filter, options, callback);
+};
+
+//retrieve one or multiple bulletin categories
+//Options: like data.get
+index.getCategories = function(filter, options, callback){
+  main.getCategories(filter, options, callback);
+};
+
+//Returns an object with all cards and categories
+index.getAll = function(discordID, callback){
+  index.getCards(false, false, function(err1, docs1){
+    index.getCategories(false, false, function(err2, docs2){
+      if(!err1 && !err2){
+        if(discordID){
+          user.get({discord: discordID}, {first: true}, function(err, doc){
+            if(!err && doc){
+              callback(false, {
+                cards: docs1,
+                categories: docs2,
+                read_states: doc.read_cards
+              });
+            }else{
+              callback('Coulnt get the user object ' + err, false);
+            }
+          });
+        }else{
+          callback(false, {
+            cards: docs1,
+            categories: docs2
+          });
+        }
+      }else{
+        callback('Couldnt get cards or categories: ' + err1 + err2, false);
+      }
+    });
   });
 };
 

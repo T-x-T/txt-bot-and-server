@@ -106,5 +106,27 @@ bulletin.delete = function(filter, callback){
   }
 };
 
+bulletin.getCards = function(filter, options, callback){
+  data.get(filter, 'bulletin_card', options, function(err, docs){
+    if(!err){
+      callback(false, docs);
+    }else{
+      global.log(0, 'bulletin', 'main.getCards encountered an error', {filter: filter, options: options, err: err, docs: docs});
+      callback('Error retrieving documents from database: ' + err, docs);
+    }
+  });
+};
+
+bulletin.getCategories = function(filter, options, callback){
+  data.get(filter, 'bulletin_categories', options, function(err, docs){
+    if(!err){
+      callback(false, docs);
+    }else{
+      global.log(0, 'bulletin', 'main.getCards encountered an error', {filter: filter, options: options, err: err, docs: docs});
+      callback('Error retrieving documents from database: ' + err, docs);
+    }
+  });
+};
+
 //Export the container
 module.exports = bulletin;
