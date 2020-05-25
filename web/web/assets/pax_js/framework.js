@@ -450,7 +450,6 @@ framework.list.filter = function(filter){
 
 //Appends new element and fill it with data
 framework.list.add_element = function(raw_data, div){
-  
   let element = div.options.template.cloneNode(true);
 
   //Send raw_data through data mapping

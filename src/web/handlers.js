@@ -172,7 +172,7 @@ handlers.paxapi.bulletinCategory = function(data, callback){
           data.access_level = access_level;
 
           //User is authorized
-          handlers.paxapi.bulletin[data.method](data, callback);
+          handlers.paxapi.bulletinCategory[data.method](data, callback);
         }else{
           callback(403, {err: 'You are not authorized to do that!'}, 'json');
         }
@@ -188,7 +188,7 @@ handlers.paxapi.bulletinCategory = function(data, callback){
 handlers.paxapi.bulletinCategory.get = function(data, callback){
   bulletin.getCategories(false, false, function(err, docs){
     if(docs) callback(200, docs, 'json');
-    else callback(404, {err: 'Couldnt get any posts for the filter'}, 'json');
+    else callback(404, {err: 'Couldnt get any categories for the filter'}, 'json');
   });
 };
 
@@ -258,9 +258,11 @@ handlers.paxapi.bulletin.put = function(data, callback){
 };
 
 //Get bulletin(s) based on filter
-//Update an existing bulletin
+//Retrieve an existing bulletin
+//Needs to provide that category ID in the path e.g.: api/bulletin/0
 handlers.paxapi.bulletin.get = function(data, callback) {
-  bulletin.getCards(false, false, function(err, docs) {
+  bulletin.getCards({category: data.path.split('/')[data.path.split('/').length - 1]}, false, function(err, docs) {
+    console.log(data.path)
     if(docs) callback(200, docs, 'json');
     else callback(404, {err: 'Couldnt get any posts for the filter'}, 'json');
   });

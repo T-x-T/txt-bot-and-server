@@ -99,7 +99,7 @@ const router = {
   '/html/api/member': handlers.paxapi.member,
   '/html/api/post': handlers.paxapi.post,
   '/html/api/bulletin': handlers.paxapi.bulletin,
-  '/html/api/bulletinCategory': handlers.paxapi.bulletinCategory,
+  '/html/api/bulletincategory': handlers.paxapi.bulletinCategory,
   '/html/api/roles': handlers.paxapi.roles,
   '/html/login': handlers.paxLogin,
   '/html/staff': handlers.paxStaff

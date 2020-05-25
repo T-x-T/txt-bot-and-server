@@ -213,97 +213,134 @@ interface.post.new = function(){
 interface.bulletin = {};
 
 interface.bulletin.init = function(){
-  //This enables admins to open the edit bar on all bulletins
-  let edit_bar_filter_value = cookies.access_level >= 9 ? false : cookies.mc_ign;
-  framework.table.init(document.getElementById('bulletin-table'), {api_path: 'bulletin', data_mapping: function(input){
-    return [
-      new Date(input.date).toISOString().substring(0, 10),
-      input.author_name,
-      input.message
-    ]
-  }, api_method: 'GET', edit_bar: 'bulletin_edit_bar', edit_bar_filter_column: 1, edit_bar_filter_value: edit_bar_filter_value, row_onclick: false, expand_row: true});
-};
-
-interface.bulletin_my_active = false;
-interface.toggleMyBulletins = function(element){
-  let table = element.parentNode.parentNode;
-  
-  if(!interface.bulletin_my_active){
-    //Update table to only show bulletins of logged in user
-    //Remove the edit row
-    for(let i = 0;i < table.rows.length;i++) if(table.rows[i].firstElementChild.colSpan > 1 && table.rows[i].hidden == false) table.deleteRow(i);
-
-    //Hide rows from other authors
-    let j = 1;
-    for(let i = 1;i < table.rows.length;i++) {
-      //Hide row
-      if(table.rows[i].cells[1].innerText != cookies.mc_ign) table.rows[i].hidden = true;
-
-      //Reapply the zebra effect with temp classes
-      if(!table.rows[i].hidden) {
-        if(j % 2) for(let k = 0;k < 3;k++) table.rows[i].cells[k].className = 'temp_bright'
-        else for(let k = 0;k < 3;k++) table.rows[i].cells[k].className = 'temp_dark'
-        j++;
-      } 
+  //Get all categories from API
+  _internal.send('bulletincategory', false, 'GET', false, false, function(status, res){
+    if(res != 200 && Array.isArray(res) && res.length < 1){
+      framework.popup.create_info({title: "Error", text: "Error loading bulletin board categories: " + status + res});
+      return;
     }
+
+    //Create global categories object to hold all the categories for later use in data_mappings
+    interface.bulletin.categories = {};
+
+    //Create a div for each category, customize template and activate framework-list
+    res.forEach((category) => {
+      //Save in the global object for use in data_mappings
+      interface.bulletin.categories[category.id] = category;
+
+      //Create div and attach it to the container
+      let container = document.getElementById('bulletin_category_container');
+      let parent = document.createElement('div');
+      parent.id = 'bulletin_category_' + category.id;
+      container.appendChild(parent);
+      
+      //Clone template and customize it
+      let template = document.getElementById('bulletin_card_template').cloneNode(true);
+      if(!category.enable_coordinates){
+        while(template.querySelector('.bulletin_coords')){
+          template.querySelector('.bulletin_coords').parentNode.removeChild(template.querySelector('.bulletin_coords'));
+        }
+      }
+      if(!category.enable_trading){
+        while(template.querySelector('.bulletin_trading')){
+          template.querySelector('.bulletin_trading').parentNode.removeChild(template.querySelector('.bulletin_trading'));
+        }
+      }
+      if(!category.enable_event){
+        while(template.querySelector('.bulletin_event')){
+          template.querySelector('.bulletin_event').parentNode.removeChild(template.querySelector('.bulletin_event'));
+        }
+      }
+      
+      //Add header and description to div
+      let header = document.createElement('h3');
+      header.innerText = category.name;
+      parent.appendChild(header);
+      
+      let description = document.createElement('h4');
+      description.innerText = category.description;
+      parent.appendChild(description);
     
-    interface.bulletin_my_active = true;
-    element.innerText = "all posts"
-  }else{
-    //Update table to show all bulletins
-    for(let i = 2;i < table.rows.length;i++) table.rows[i].hidden = false;
-
-    //Remove temp classes for fixed zebra effect
-    for(let i = 2;i < table.rows.length;i++) if(!table.rows[i].hidden) for(let j = 0; j < table.rows[i].cells.length;j++) table.rows[i].cells[j].className = "";
-
-    interface.bulletin_my_active = false;
-    element.innerText = "my posts";
-  }
-};
-
-interface.bulletin.new = function(table){
-  //Summon the popup
-  framework.popup.create_textbox({title: 'Create new bulletin', maxLength: 1000, required: true}, function(input) {
-    if(input){
-      //Send the message to the API
-      _internal.send('bulletin', false, 'POST', false, {message: input}, function(status, res) {
-        if(status === 200) {
-          table.update();
-        } else {
-          framework.popup.create_info({title: 'Error', text: 'oops something bad happened, maybe this message helps someone figure it out\n' + res.err});
-        }
+      //Initialize framework-list
+      framework.list.init({
+        div: parent.appendChild(document.createElement('div')),
+        api_path: 'bulletin/' + category.id,
+        data_mapping: interface.bulletin.data_mapping,
+        template: template,
+        default_sort: 'date.desc',
+        onclick: interface.bulletin.open_popup,
+        display_mode: category.display_mode
       });
-    }
+
+    });
   });
 };
 
-interface.bulletin.edit = function(row){
-  //Summon the popup
-  framework.popup.create_textbox({title: 'Edit existing bulletin', maxLength: 1000, required: true, text: row.raw_data.message}, function(input){
-    if(input){
-      let new_data = row.raw_data;
-      new_data.message = input;
-      _internal.send('bulletin', false, 'PUT', false, new_data, function(status, res) {
-        if(status === 200) {
-          row.table.update();
-        } else {
-          framework.popup.create_info({title: 'Error', text: 'oops something bad happened, maybe this message helps someone figure it out\n' + res.err});
-        }
-      });
+interface.bulletin.data_mapping = function(a){
+  let mappings = 
+  [
+    {
+      element_id: 'bulletin_message',
+      property: 'innerText',
+      value: a.message
+    },
+    {
+      element_id: 'bulletin_author',
+      property: 'innerText',
+      value: a.owner
+    },
+    {
+      element_id: 'bulletin_date',
+      property: 'innerText',
+      value: a.date
+    },
+    {
+      element_id: 'bulletin_display_more_a',
+      property: 'href',
+      value: 'wikipedia.com/duck'
     }
-  });
+  ];
+
+  let enable_coordinates = false;
+  if(interface.bulletin.categories[a.category].enable_trading){
+    mappings.push({
+      element_id: 'bulletin_trades',
+      property: 'innerText',
+      value: 'Bulletin trades'
+    });
+    enable_coordinates = true;
+  };
+
+  if(interface.bulletin.categories[a.category].enable_event){
+    mappings.push({
+      element_id: 'bulletin_event_date',
+      property: 'innerText',
+      value: a.event_date
+    });
+    mappings.push({
+      element_id: 'bulletin_event_countdown',
+      property: 'innerText',
+      value: 'Event countdown'
+    });
+    mappings.push({
+      element_id: 'bulletin_event_coords',
+      property: 'innerText',
+      value: 'Event coords'
+    });
+    enable_coordinates = true;
+  };
+
+  if(interface.bulletin.categories[a.category].enable_coordinates || enable_coordinates){
+    mappings.push({
+      element_id: 'bulletin_coords',
+      property: 'innerText',
+      value: `${a.location_x}/${a.location_z}`
+    });
+  };
+  
+  return mappings; 
 };
 
-interface.bulletin.delete = function(row){
-  framework.popup.create_confirmation({text: 'Do you really want to delete this bulletin?'}, function(deleteConfirmed){
-    if(deleteConfirmed){
-      _internal.send('bulletin', false, 'DELETE', false, row.raw_data, function(status, res){
-        if(status != 200){
-          framework.popup.create_info({title: 'Error', text: 'oops something bad happened, maybe this message helps someone figure it out\n' + res.err});
-        }else{
-          row.table.update();
-        }
-      });
-    }
-  });
+interface.bulletin.open_popup = function(card){
+
 };

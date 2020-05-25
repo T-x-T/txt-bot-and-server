@@ -118,7 +118,7 @@ bulletin.getCards = function(filter, options, callback){
 };
 
 bulletin.getCategories = function(filter, options, callback){
-  data.get(filter, 'bulletin_categories', options, function(err, docs){
+  data.get(filter, 'bulletin_category', options, function(err, docs){
     if(!err){
       callback(false, docs);
     }else{
