@@ -251,6 +251,8 @@ interface.bulletin.init = function(){
           template.querySelector('.bulletin_event').parentNode.removeChild(template.querySelector('.bulletin_event'));
         }
       }
+      template.hidden = false;
+      template.id = 'bulletin_card_' + category.id
       
       //Add header and description to div
       let header = document.createElement('h3');
@@ -260,7 +262,7 @@ interface.bulletin.init = function(){
       let description = document.createElement('h4');
       description.innerText = category.description;
       parent.appendChild(description);
-    
+
       //Initialize framework-list
       framework.list.init({
         div: parent.appendChild(document.createElement('div')),
@@ -287,12 +289,12 @@ interface.bulletin.data_mapping = function(a){
     {
       element_id: 'bulletin_author',
       property: 'innerText',
-      value: a.owner
+      value: a.author
     },
     {
       element_id: 'bulletin_date',
       property: 'innerText',
-      value: a.date
+      value: new Date(a.date).toISOString().substring(0, 10)
     },
     {
       element_id: 'bulletin_display_more_a',
@@ -312,25 +314,36 @@ interface.bulletin.data_mapping = function(a){
   };
 
   if(interface.bulletin.categories[a.category].enable_event){
+    let event_date = new Date(a.event_date);
     mappings.push({
       element_id: 'bulletin_event_date',
       property: 'innerText',
-      value: a.event_date
+      value: `${event_date.toISOString().substring(0, 10)} at ${event_date.toLocaleTimeString()} (${Intl.DateTimeFormat().resolvedOptions().timeZone})`
     });
     mappings.push({
       element_id: 'bulletin_event_countdown',
       property: 'innerText',
-      value: 'Event countdown'
+      value: `Something happens in ${_internal.countdown(event_date)} `
     });
     mappings.push({
       element_id: 'bulletin_event_coords',
       property: 'innerText',
-      value: 'Event coords'
+      value: `at: ${a.location_x}/${a.location_z}`
+    });
+    mappings.push({
+      element_id: 'bulletin_event_coords',
+      property: 'href',
+      value: `https://play.paxterya.com/dynmap/?worldname=world2&mapname=flat&zoom=6&x=${a.location_x}&z=${a.location_z}&nogui=true`
     });
     enable_coordinates = true;
   };
 
   if(interface.bulletin.categories[a.category].enable_coordinates || enable_coordinates){
+    mappings.push({
+      element_id: 'bulletin_coords',
+      property: 'href',
+      value: `https://play.paxterya.com/dynmap/?worldname=world2&mapname=flat&zoom=6&x=${a.location_x}&z=${a.location_z}&nogui=true`
+    });
     mappings.push({
       element_id: 'bulletin_coords',
       property: 'innerText',

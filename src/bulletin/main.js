@@ -109,7 +109,20 @@ bulletin.delete = function(filter, callback){
 bulletin.getCards = function(filter, options, callback){
   data.get(filter, 'bulletin_card', options, function(err, docs){
     if(!err){
-      callback(false, docs);
+      if(options.include_author && docs.length > 0){
+        for(let i = 0; i < docs.length; i++){
+          user.get({discord: docs[i].owner}, {first: true}, function(err, doc){
+            if(!err && doc){
+              docs[i].author = doc.mcName;
+            }
+            if(i == docs.length - 1){
+              callback(false, docs);
+            }
+          });
+        }
+      }else{
+        callback(false, docs);
+      }
     }else{
       global.log(0, 'bulletin', 'main.getCards encountered an error', {filter: filter, options: options, err: err, docs: docs});
       callback('Error retrieving documents from database: ' + err, docs);

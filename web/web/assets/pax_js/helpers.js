@@ -92,3 +92,27 @@ _internal.clearChildren = function(elementToClear, blacklist_id){
     if (children[i].id != blacklist_id) children[i].parentNode.removeChild(children[i]);
   };
 };
+
+//Modified from https://stackoverflow.com/a/9335296 could still be updated to allow dynamic updates of the timer
+_internal.countdown = function(end){
+  let _second = 1000;
+  let _minute = _second * 60;
+  let _hour = _minute * 60;
+  let _day = _hour * 24;
+  let timer;
+  let now = new Date();
+  let distance = end - now;
+  if (distance < 0) {
+    clearInterval(timer);
+    return 'Its over already :(';
+  }
+  let days = Math.floor(distance / _day);
+  let hours = Math.floor((distance % _day) / _hour);
+  let minutes = Math.floor((distance % _hour) / _minute);
+
+  let output = days + 'days ';
+  output += hours + 'hrs ';
+  output += minutes + 'mins ';
+
+  return output;
+};

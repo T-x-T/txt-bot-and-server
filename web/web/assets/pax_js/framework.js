@@ -469,7 +469,7 @@ framework.list.add_element = function(raw_data, div){
 
   //Add raw_data to element
   element.raw_data = raw_data;
-
+  
   //Append element to div
   div.appendChild(element);
 

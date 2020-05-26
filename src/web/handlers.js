@@ -261,7 +261,7 @@ handlers.paxapi.bulletin.put = function(data, callback){
 //Retrieve an existing bulletin
 //Needs to provide that category ID in the path e.g.: api/bulletin/0
 handlers.paxapi.bulletin.get = function(data, callback) {
-  bulletin.getCards({category: data.path.split('/')[data.path.split('/').length - 1]}, false, function(err, docs) {
+  bulletin.getCards({category: data.path.split('/')[data.path.split('/').length - 1]}, {include_author: true}, function(err, docs) {
     console.log(data.path)
     if(docs) callback(200, docs, 'json');
     else callback(404, {err: 'Couldnt get any posts for the filter'}, 'json');
