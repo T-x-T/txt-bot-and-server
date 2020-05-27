@@ -258,6 +258,15 @@ interface.bulletin.init = function(){
       let header = document.createElement('h3');
       header.innerText = category.name;
       parent.appendChild(header);
+
+      //Create and add button to add new card if member has permissions
+      if(cookies.access_level >= category.permission_level){
+        let add_btn = document.createElement('button');
+        add_btn.onclick = function(){interface.bulletin.new(this)};
+        add_btn.innerText = 'Create';
+        add_btn.category = category;
+        parent.appendChild(add_btn);
+      }
       
       let description = document.createElement('h4');
       description.innerText = category.description;
@@ -356,4 +365,15 @@ interface.bulletin.data_mapping = function(a){
 
 interface.bulletin.open_popup = function(card){
 
+};
+
+interface.bulletin.new = function(btn){
+  let template = document.getElementById('bulletin_new_template').cloneNode(true);
+  template.hidden = false;
+
+  framework.popup.create({
+    div: template,
+    confirmClose: true,
+    title: 'new bulletin'
+  }, function(popup){});
 };
