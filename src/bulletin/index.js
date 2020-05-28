@@ -5,7 +5,6 @@
 
 //Dependencies
 const main = require('./main.js');
-const sanitize = require('sanitize-html');
 const auth = require('../auth');
 const user = require('../user');
 
@@ -14,17 +13,14 @@ var index = {};
 
 //Save a entry item (calls new or edit)
 index.save = function(input, options, callback){
-  input.message = typeof input.message == 'string' && input.message.length > 0 && input.message.length <= 1000 ? input.message : false;
-  if(input.message) {
-    //Sanitize message
-    input.message = sanitize(input.message, {allowedTags: [], allowedAttributes: {}});
-    input.message = input.message.replace(/\r?\n|\r/g, " ");
-    input.message = input.message.replace(/@/g, "");
-    input.message = input.message.replace(/&amp;/g, "&");
-    input.message = input.message.trim();
+  main.sanitize(input, function(err){
+    if(err){
+      callback(err, false);
+      return;
+    }
 
     //Check if its a new entry
-    if(!input.hasOwnProperty('_id')) {
+    if(!input.hasOwnProperty('id')) {
       //Create
       main.create(input, function(err, doc) {
         if(!err && doc) {
@@ -36,7 +32,7 @@ index.save = function(input, options, callback){
     } else {
       //Update
       //Get the current version of the bulletin to be edited to find out the author
-      index.get({_id: input._id}, {first: true}, function(err, doc) {
+      index.get({id: input.id}, {first: true}, function(err, doc) {
         if(!err && typeof doc !== 'undefined'){
           if(input.editAuthor === doc.author) {
             //new author same as old one
@@ -55,21 +51,6 @@ index.save = function(input, options, callback){
           callback(err);
         }
       });
-    }
-  } else {
-    callback('There is a problem with your message', input);
-  }
-};
-
-//Retrieve one or multiple entries 
-//Options:
-//first: only return the first object of the result
-index.get = function(filter, options, callback) {
-  main.get(filter, function(err, docs){
-    if(options.first){
-      callback(err, docs[0])
-    }else{
-      callback(err, docs);
     }
   });
 };

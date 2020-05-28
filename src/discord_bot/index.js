@@ -38,7 +38,7 @@ setImmediate(function(){
   
   emitter.on('application_new', (doc) => {
     global.log(0, 'discord_bot', 'event application_new received', {doc: doc});
-    discord_helpers.sendMessage('New application from ' + doc.mc_ign + '\nhttps://paxterya.com/staff/application.html?id=' + doc.id, config.discord_bot.channel.new_application_announcement, function(err){
+    discord_helpers.sendMessage('New application from ' + doc.mc_ign + '\nhttps://paxterya.com/application.html?id=' + doc.id, config.discord_bot.channel.new_application_announcement, function(err){
       if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new application message', {err: err, application: doc});
     });
   });

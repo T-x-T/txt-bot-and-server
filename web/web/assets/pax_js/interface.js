@@ -370,10 +370,32 @@ interface.bulletin.open_popup = function(card){
 interface.bulletin.new = function(btn){
   let template = document.getElementById('bulletin_new_template').cloneNode(true);
   template.hidden = false;
+  template.category = btn.category;
 
   framework.popup.create({
     div: template,
     confirmClose: true,
     title: 'new bulletin'
   }, function(popup){});
+};
+
+interface.bulletin.save = function(popup){
+  let data = {
+    message: popup.querySelector('#message').value,
+    event_date: popup.querySelector('#event_date').value ? new Date(popup.querySelector('#event_date').value + 'T' + popup.querySelector('#event_time').value) : false,
+    category: popup.options.div.category.id
+  };
+
+  _internal.send('bulletin', false, 'POST', false, data, function(status, res){
+    if(status != 200){
+      framework.popup.create_info({title: 'Error', text: status + JSON.stringify(res)});
+      return;
+    }
+
+    //Update list that got the new card
+    document.getElementById(`bulletin_category_${popup.options.div.category.id}`).childNodes[3].update(document.getElementById(`bulletin_category_${popup.options.div.category.id}`).childNodes[3].options);
+  
+    //Close popup
+    framework.popup.close_for_real(popup);
+  });
 };

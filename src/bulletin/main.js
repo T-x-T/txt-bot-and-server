@@ -6,6 +6,7 @@
 //Dependencies
 const user = require('../user');
 const data = require('../data');
+const sanitize = require('sanitize-html');
 
 //Create the container
 var bulletin = {};
@@ -13,15 +14,24 @@ var bulletin = {};
 //Create a new entry in the database; CB: Error, new entry
 bulletin.create = function(input, callback){
   //First get all bulletins from the author. to check if they already have 5
-  bulletin.get({author: input.author}, function(err, docs){
+  bulletin.getCards({owner: input.owner}, false, function(err, docs){
     if(docs.length < config.bulletin.max_per_usr){
       //Everything ok
       let document = {
-        author: input.author,
+        owner: input.owner,
+        category: input.category,
         message: input.message,
-        date: Date.now()
+        date: Date.now(),
+        expiry_date: input.expiry_date ? input.expiry_date : null,
+        event_date: input.event_date ? input.expiry_date : null,
+        location_x: input.location_x,
+        location_y: input.location_y,
+        item_names: input.item_names,
+        item_amounts: input.item_amounts,
+        price_names: input.price_names,
+        price_amounts: input.price_amounts
       };
-      data.new(document, 'bulletin', false, function(err, doc) {
+      data.new(document, 'bulletin_card', false, function(err, doc) {
         if(!err && doc) {
           //Also send message in discord
           let message = `<@${input.author}> posted a new bulletin:\n${input.message}`;
@@ -29,6 +39,7 @@ bulletin.create = function(input, callback){
 
           callback(false, doc);
         } else {
+          global.log(0, 'bulletin', 'Error saving new entry in the database', {input: input, document: document, err: err, doc: doc});
           callback('Error saving new entry in the database', false);
         }
       });
@@ -42,7 +53,7 @@ bulletin.create = function(input, callback){
 //Update an entry in the database; CB: Error, new entry
 bulletin.update = function(input, callback){
   if(typeof input === 'object'){
-    data.edit(input, 'bulletin', false, function(err, doc){
+    data.edit(input, 'bulletin_card', false, function(err, doc){
       if(!err && doc){
         //Emit appropriate event
         let message = `<@${input.author}> edited a bulletin:\n${input.message}`;    //DONT DO THAT HERE
@@ -57,43 +68,10 @@ bulletin.update = function(input, callback){
   }
 };
 
-//Gets entries from the database matching the filter, if no filter is given return all; CB: Error, array of results
-bulletin.get = function(filter, callback){
-  if(typeof filter !== 'object') filter = {};
-  data.get(filter, 'bulletin', false, function(err, docs){
-    if(!err && docs.length > 0){
-      //Fill in the authors name
-      let newDocs = [];
-      for(let i = 0; i < docs.length; i++){
-        user.get({discord: docs[i].author}, {privacy: true, onlyPaxterians: true, first: true}, function(err, memberData){
-          let newDoc = {};
-          newDoc._id = docs[i]._id;
-          newDoc.author = docs[i].author;
-          newDoc.message = docs[i].message;
-          newDoc.date = docs[i].date;
-          newDoc.author_name = memberData.mcName;
-          newDocs.push(newDoc);
-          //Check if this is the last callback, if so, callback
-          if(newDocs.length === docs.length){
-            //Sort after date
-            newDocs.sort(function(a, b) {
-              return new Date(b.date) - new Date(a.date);
-            });
-
-            callback(false, newDocs);
-          }
-        });
-      };
-    }else{
-      callback('No entries received from the database', []);
-    }
-  });
-};
-
 //Removes entries from the database based on a filter, if no filter is given, no entries are removed; CB: Error
 bulletin.delete = function(filter, callback){
   if(typeof filter === 'object'){
-    data.delete(filter, 'bulletin', false, function(err){
+    data.delete(filter, 'bulletin_card', false, function(err){
       if(!err){
         emitter.emit('bulletin_deleted');
         callback(false);
@@ -139,6 +117,64 @@ bulletin.getCategories = function(filter, options, callback){
       callback('Error retrieving documents from database: ' + err, docs);
     }
   });
+};
+
+bulletin.sanitize = function(input, callback){
+  //Check and sanitize standard properties
+  if(typeof input.message !== 'string' || input.message.length > 1000 || input.message.length < 2){
+    callback('The message doesnt make any kind of sense');
+    return;
+  }
+  input.message = sanitize(input.message, {allowedTags: [], allowedAttributes: {}});
+  input.message = input.message.replace(/\r?\n|\r/g, " ");
+  input.message = input.message.replace(/@/g, "");
+  input.message = input.message.replace(/&amp;/g, "&");
+  input.message = input.message.trim();
+
+  input.expiry_date = input.expiry_date && new Date(input.expiry_date) > new Date() ? input.expiry_date : false;
+
+  //Get category data
+  bulletin.getCategories({id: input.category}, {first: true}, function(err, category){
+    if(err || !category){
+      callback('The category doesnt seem to exist');
+      return;
+    }
+  
+    //Check and sanitize coordinates if neccessary
+    if(category.enable_coordinates){
+      if(typeof input.location_x !== 'number' || typeof input.location_y !== 'number'){
+        callback('You are missing valid coordinates');
+        return;
+      }
+    }
+
+    //Check and sanitize trades if neccessary
+    if(category.enable_trading){
+      if(!Array.isArray(input.item_names) || !Array.isArray(input.item_amounts) || !Array.isArray(input.price_names) || !Array.isArray(input.price_amounts)){
+        callback('You are missing valid trading data');
+        return;
+      }
+      if(input.item_names.length === 0 || input.item_amounts.length === 0 || input.price_names.length === 0 || input.price_amounts.length === 0){
+        callback('At least one of your trades doesnt contain an item, price or the amount for one of the them');
+        return;
+      }
+      for(let i = 0; i < item_names.length; i++) input.item_names[i] = sanitize(input.item_names[i], {allowedTags: [], allowedAttributes: {}});
+      for(let i = 0; i < price_names.length; i++) input.item_names[i] = sanitize(input.price_names[i], {allowedTags: [], allowedAttributes: {}});
+    }
+
+    //Check and sanitize event if neccessary
+    if(category.enable_event){
+      if(!input.event_date || new Date(input.event_date) < new Date()){
+        callback('No event date specified');
+        return;
+      }
+    }
+
+    callback(false);
+  });
+
+  
+  
 };
 
 //Export the container

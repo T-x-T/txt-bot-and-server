@@ -223,7 +223,7 @@ handlers.paxapi.bulletin.post = function(data, callback){
   //Get the discord id of the author
   oauth.getDiscordId({token: data.cookies.access_token}, false, function(err, discord_id){
     if(discord_id){
-      data.payload.author = discord_id;
+      data.payload.owner = discord_id;
       bulletin.save(data.payload, false, function(err, doc){
         if(!err && doc){
           callback(200, doc, 'json');
