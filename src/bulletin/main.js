@@ -25,7 +25,7 @@ bulletin.create = function(input, callback){
         expiry_date: input.expiry_date ? input.expiry_date : null,
         event_date: input.event_date ? input.expiry_date : null,
         location_x: input.location_x,
-        location_y: input.location_y,
+        location_z: input.location_z,
         item_names: input.item_names,
         item_amounts: input.item_amounts,
         price_names: input.price_names,
@@ -141,11 +141,9 @@ bulletin.sanitize = function(input, callback){
     }
   
     //Check and sanitize coordinates if neccessary
-    if(category.enable_coordinates){
-      if(typeof input.location_x !== 'number' || typeof input.location_y !== 'number'){
-        callback('You are missing valid coordinates');
-        return;
-      }
+    if(category.enable_coordinates && input.location_x && input.location_z){
+      input.location_x = Math.trunc(input.location_x);
+      input.location_z = Math.trunc(input.location_z);
     }
 
     //Check and sanitize trades if neccessary
@@ -158,8 +156,13 @@ bulletin.sanitize = function(input, callback){
         callback('At least one of your trades doesnt contain an item, price or the amount for one of the them');
         return;
       }
-      for(let i = 0; i < item_names.length; i++) input.item_names[i] = sanitize(input.item_names[i], {allowedTags: [], allowedAttributes: {}});
-      for(let i = 0; i < price_names.length; i++) input.item_names[i] = sanitize(input.price_names[i], {allowedTags: [], allowedAttributes: {}});
+      if(input.item_names.length === input.item_amounts.length === input.price_names.length === input.price_amounts.length){
+        callback('Not all arrays are the same length, you probably missed one field');
+        return;
+      }
+
+      for(let i = 0; i < input.item_names.length; i++) input.item_names[i] = sanitize(input.item_names[i], {allowedTags: [], allowedAttributes: {}});
+      for(let i = 0; i < input.price_names.length; i++) input.item_names[i] = sanitize(input.price_names[i], {allowedTags: [], allowedAttributes: {}});
     }
 
     //Check and sanitize event if neccessary
@@ -170,7 +173,7 @@ bulletin.sanitize = function(input, callback){
       }
     }
 
-    callback(false);
+    callback(false, input);
   });
 
   

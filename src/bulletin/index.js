@@ -13,12 +13,12 @@ var index = {};
 
 //Save a entry item (calls new or edit)
 index.save = function(input, options, callback){
-  main.sanitize(input, function(err){
+  main.sanitize(input, function(err, output){
     if(err){
       callback(err, false);
       return;
     }
-
+    input = output;
     //Check if its a new entry
     if(!input.hasOwnProperty('id')) {
       //Create

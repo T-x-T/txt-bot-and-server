@@ -369,6 +369,11 @@ interface.bulletin.open_popup = function(card){
 
 interface.bulletin.new = function(btn){
   let template = document.getElementById('bulletin_new_template').cloneNode(true);
+  
+  if(btn.category.enable_coordinates) template.querySelector('#new_template_coords').hidden = false;
+  if(btn.category.enable_event) template.querySelector('#new_template_event').hidden = false;
+  if(btn.category.enable_trading) template.querySelector('#new_template_trading').hidden = false;
+  
   template.hidden = false;
   template.category = btn.category;
 
@@ -382,9 +387,34 @@ interface.bulletin.new = function(btn){
 interface.bulletin.save = function(popup){
   let data = {
     message: popup.querySelector('#message').value,
-    event_date: popup.querySelector('#event_date').value ? new Date(popup.querySelector('#event_date').value + 'T' + popup.querySelector('#event_time').value) : false,
-    category: popup.options.div.category.id
+    category: popup.options.div.category.id,
   };
+
+  if(popup.options.div.category.enable_coordinates){
+    data.location_x = popup.querySelector('#location_x').value;
+    data.location_z = popup.querySelector('#location_z').value;
+  }
+
+  if(popup.options.div.category.enable_event){
+    data.event_date = popup.querySelector('#event_date').value ? new Date(popup.querySelector('#event_date').value + 'T' + popup.querySelector('#event_time').value) : false;
+  }
+
+  if(popup.options.div.category.enable_trading){
+    data.item_names = [];
+    data.item_amounts = [];
+    data.price_names = [];
+    data.price_amounts = [];
+    
+    let trading_table = popup.querySelector('#trade_table');
+    for(let i = 1; i < trading_table.rows.length; i++){
+      console.log(trading_table.rows[i].cells[0])
+      if(trading_table.rows[i].cells[0].childNodes[0].value.length > 0) data.item_names.push(trading_table.rows[i].cells[0].childNodes[0].value);
+      if(trading_table.rows[i].cells[1].childNodes[0].value > 0) data.item_amounts.push(trading_table.rows[i].cells[1].childNodes[0].value);
+      if(trading_table.rows[i].cells[2].childNodes[0].value.length > 0) data.price_names.push(trading_table.rows[i].cells[2].childNodes[0].value);
+      if(trading_table.rows[i].cells[3].childNodes[0].value > 0) data.price_amounts.push(trading_table.rows[i].cells[3].childNodes[0].value);
+    }
+  }
+
 
   _internal.send('bulletin', false, 'POST', false, data, function(status, res){
     if(status != 200){
