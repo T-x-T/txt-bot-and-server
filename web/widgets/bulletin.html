@@ -3,7 +3,7 @@
 <div id="bulletin_category_container"></div>
 
 <!--card template-->
-<div id="bulletin_card_template" hidden>
+<div id="bulletin_card_template" onclick="interface.bulletin.open_popup(this); false;" hidden>
 
   <p class="bulletin_event">
     <p id="bulletin_event_countdown"></p>
@@ -24,7 +24,7 @@
     <span id="bulletin_author"></span> / <span id="bulletin_date"></span>
   </p>
 
-  <a class="bulletin_display_more" id="bulletin_display_more_a" href="#">View all</a>
+  <a class="bulletin_display_more" id="bulletin_display_more_a">View all</a>
 
 </div>
 
@@ -91,4 +91,26 @@
     <button onclick="this.parentNode.parentNode.parentNode.parentNode.parentNode.close()">Cancel</button>
     <button onclick="interface.bulletin.save(this.parentNode.parentNode.parentNode.parentNode.parentNode)">Save</button>
   </div>
+</div>
+
+<!--Bulletin card popup template-->
+<div id="bulletin_card_popup_template" hidden>
+  <p id="bulletin_event" class="bulletin_event" hidden>
+    <p id="bulletin_event_countdown"></p>
+    <a target="_blank" id="bulletin_event_coords"></a>
+  </p>
+
+  <p id="bulletin_message"></p>
+
+  <div class="bulletin_trading" id="bulletin_trades" hidden></div>
+
+  <p class="bulletin_event" hidden>
+    This event happens on: <br> <span id="bulletin_event_date"></span>
+  </p>
+
+  <a target="_blank" class="bulletin_coords" id="bulletin_coords" hidden></a>
+
+  <p>
+    <span id="bulletin_author"></span> / <span id="bulletin_date"></span>
+  </p>
 </div>

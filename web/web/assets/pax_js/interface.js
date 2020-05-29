@@ -209,6 +209,11 @@ interface.post.new = function(){
   });
 };
 
+
+
+
+
+
 //All bulletin board functions
 interface.bulletin = {};
 
@@ -304,11 +309,6 @@ interface.bulletin.data_mapping = function(a){
       element_id: 'bulletin_date',
       property: 'innerText',
       value: new Date(a.date).toISOString().substring(0, 10)
-    },
-    {
-      element_id: 'bulletin_display_more_a',
-      property: 'href',
-      value: 'wikipedia.com/duck'
     }
   ];
 
@@ -364,7 +364,45 @@ interface.bulletin.data_mapping = function(a){
 };
 
 interface.bulletin.open_popup = function(card){
+  let template = document.getElementById('bulletin_card_popup_template').cloneNode(true);
+  
+  //Fill the template out
+  //Common
+  template.querySelector('#bulletin_message').innerText = card.raw_data.message;
+  template.querySelector('#bulletin_author').innerText = card.raw_data.author;
+  template.querySelector('#bulletin_date').innerText = new Date(card.raw_data.date).toISOString().substring(0, 10)
 
+  //Event stuff
+  if(interface.bulletin.categories[card.raw_data.category].enable_event){
+    template.querySelector('#bulletin_event').hidden = false;
+    template.querySelector('#bulletin_event_countdown').innerText = `Something happens in ${_internal.countdown(new Date(card.raw_data.event_date))} `
+    template.querySelector('#bulletin_event_date').innerText = `${new Date(card.raw_data.event_date).toISOString().substring(0, 10)} at ${new Date(card.raw_data.event_date).toLocaleTimeString()} (${Intl.DateTimeFormat().resolvedOptions().timeZone})`;
+    if(typeof card.raw_data.location_x === 'number'){
+      template.querySelector('#bulletin_event_coords').innerText = `${card.raw_data.location_x}/${card.raw_data.location_z}`;
+      template.querySelector('#bulletin_event_coords').href = `https://play.paxterya.com/dynmap/?worldname=world2&mapname=flat&zoom=6&x=${card.raw_data.location_x}&z=${card.raw_data.location_z}&nogui=true`;
+    }
+  }
+
+  //Coordinate stuff
+  if(interface.bulletin.categories[card.raw_data.category].enable_coordinates || interface.bulletin.categories[card.raw_data.category].enable_event){
+    template.querySelector('#bulletin_coords').hidden = false;
+    template.querySelector('#bulletin_coords').innerText = `${card.raw_data.location_x}/${card.raw_data.location_z}`
+    template.querySelector('#bulletin_coords').href = `https://play.paxterya.com/dynmap/?worldname=world2&mapname=flat&zoom=6&x=${card.raw_data.location_x}&z=${card.raw_data.location_z}&nogui=true`
+  }
+
+  //Trading stuff
+  if(interface.bulletin.categories[card.raw_data.category].enable_coordinates){
+    
+  }
+  
+    
+  
+  template.hidden = false;
+  framework.popup.create({
+    div: template,
+    confirmClose: false,
+    title: 'Bulletin'
+  }, function(popup){});
 };
 
 interface.bulletin.new = function(btn){
