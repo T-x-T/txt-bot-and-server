@@ -428,14 +428,14 @@ interface.bulletin.update_popup_table = function(input){
 
   if(input.id === 'item'){
     let new_value = input.value / (raw_data.item_amounts[id] / raw_data.price_amounts[id]);
-    if(!Number.isSafeInteger(new_value)) new_value.toFixed(2);
+    if(!Number.isSafeInteger(new_value)) new_value = new_value.toFixed(2);
     input.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.childNodes[0].value = new_value;
   }else{
     let new_value = (raw_data.item_amounts[id] / raw_data.price_amounts[id]) * input.value;
-    if(!Number.isSafeInteger(new_value)) new_value.toFixed(2);
+    if(!Number.isSafeInteger(new_value)) new_value = new_value.toFixed(2);
     input.parentNode.previousSibling.previousSibling.previousSibling.previousSibling.childNodes[0].value = new_value;
   }
-}
+};
 
 interface.bulletin.new = function(btn){
   let template = document.getElementById('bulletin_new_template').cloneNode(true);
