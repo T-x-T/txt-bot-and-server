@@ -347,7 +347,7 @@ interface.bulletin.data_mapping = function(a){
     enable_coordinates = true;
   };
 
-  if(interface.bulletin.categories[a.category].enable_coordinates || enable_coordinates){
+  if((interface.bulletin.categories[a.category].enable_coordinates || enable_coordinates) && ((a.location_x && a.location_z) || (a.location_x === 0 && a.location_z === 0))){
     mappings.push({
       element_id: 'bulletin_coords',
       property: 'href',
@@ -388,22 +388,54 @@ interface.bulletin.open_popup = function(card){
     template.querySelector('#bulletin_coords').hidden = false;
     template.querySelector('#bulletin_coords').innerText = `${card.raw_data.location_x}/${card.raw_data.location_z}`
     template.querySelector('#bulletin_coords').href = `https://play.paxterya.com/dynmap/?worldname=world2&mapname=flat&zoom=6&x=${card.raw_data.location_x}&z=${card.raw_data.location_z}&nogui=true`
+    template.querySelector('#coords_iframe').src = `https://play.paxterya.com/dynmap/?worldname=world2&mapname=flat&zoom=6&x=${card.raw_data.location_x}&z=${card.raw_data.location_z}&nogui=true`;
   }
 
   //Trading stuff
   if(interface.bulletin.categories[card.raw_data.category].enable_coordinates){
-    
+    template.querySelector('#bulletin_trades').hidden = false;
+    let table = template.querySelector('#bulletin_trade_table');
+    for(let i = 0; i < card.raw_data.item_names.length; i++){
+      let row = table.rows[1].cloneNode(true);
+      row.cells[0].childNodes[0].value = card.raw_data.item_names[i];
+      row.cells[1].childNodes[0].value = card.raw_data.item_amounts[i];
+      row.cells[2].childNodes[0].value = card.raw_data.price_names[i];
+      row.cells[3].childNodes[0].value = card.raw_data.price_amounts[i];
+      table.appendChild(row);
+    }
+    table.rows[1].parentNode.removeChild(table.rows[1]);
   }
   
-    
+  //Hide everything with coords when they are falsy
+  if((!card.raw_data.location_x || !card.raw_data.location_z) && (card.raw_data.location_x !== 0 || card.raw_data.location_z !== 0)){
+    template.querySelector('#bulletin_coords').hidden = true;
+    template.querySelector('#coords_iframe').hidden = true;
+    template.querySelector('#bulletin_event_coords').hidden = true;
+  }
   
   template.hidden = false;
   framework.popup.create({
     div: template,
     confirmClose: false,
-    title: 'Bulletin'
+    title: 'Bulletin',
+    raw_data: card.raw_data
   }, function(popup){});
 };
+
+interface.bulletin.update_popup_table = function(input){
+  let raw_data = input.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.options.raw_data;
+  let id = input.parentNode.parentNode.rowIndex - 1;
+
+  if(input.id === 'item'){
+    let new_value = input.value / (raw_data.item_amounts[id] / raw_data.price_amounts[id]);
+    if(!Number.isSafeInteger(new_value)) new_value.toFixed(2);
+    input.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.childNodes[0].value = new_value;
+  }else{
+    let new_value = (raw_data.item_amounts[id] / raw_data.price_amounts[id]) * input.value;
+    if(!Number.isSafeInteger(new_value)) new_value.toFixed(2);
+    input.parentNode.previousSibling.previousSibling.previousSibling.previousSibling.childNodes[0].value = new_value;
+  }
+}
 
 interface.bulletin.new = function(btn){
   let template = document.getElementById('bulletin_new_template').cloneNode(true);
@@ -445,7 +477,6 @@ interface.bulletin.save = function(popup){
     
     let trading_table = popup.querySelector('#trade_table');
     for(let i = 1; i < trading_table.rows.length; i++){
-      console.log(trading_table.rows[i].cells[0])
       if(trading_table.rows[i].cells[0].childNodes[0].value.length > 0) data.item_names.push(trading_table.rows[i].cells[0].childNodes[0].value);
       if(trading_table.rows[i].cells[1].childNodes[0].value > 0) data.item_amounts.push(trading_table.rows[i].cells[1].childNodes[0].value);
       if(trading_table.rows[i].cells[2].childNodes[0].value.length > 0) data.price_names.push(trading_table.rows[i].cells[2].childNodes[0].value);

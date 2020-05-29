@@ -12,8 +12,6 @@
 
   <p id="bulletin_message"></p>
 
-  <div class="bulletin_trading" id="bulletin_trades"></div>
-
   <p class="bulletin_event">
     This event happens on: <br> <span id="bulletin_event_date"></span>
   </p>
@@ -40,8 +38,8 @@
   </div>
   <div id="new_template_coords" hidden>
     <label for="location_x">Coordinates</label>
-    <input type="number" id="location_x" name="location_x" placeholder="x" value="0" min="-15000" max="15000">
-    <input type="number" id="location_z" name="location_z" placeholder="z" value="0" min="-15000" max="15000">
+    <input type="number" id="location_x" name="location_x" placeholder="x" min="-15000" max="15000">
+    <input type="number" id="location_z" name="location_z" placeholder="z" min="-15000" max="15000">
   </div>
   <div id="new_template_trading" hidden>
     <table id="trade_table">
@@ -102,7 +100,26 @@
 
   <p id="bulletin_message"></p>
 
-  <div class="bulletin_trading" id="bulletin_trades" hidden></div>
+  <div class="bulletin_trading" id="bulletin_trades" hidden>
+    <table id="bulletin_trade_table">
+      <thead>
+        <th>
+          <td>Item name</td>
+          <td>Item amount</td>
+          <td>Price name</td>
+          <td>Price amount</td>
+        </th>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="text" placeholder="Cobblestone" readonly></td>
+          <td><input id="item" type="number" placeholder="128" onchange="interface.bulletin.update_popup_table(this)"></td>
+          <td><input type="text" placeholder="Diamond" readonly></td>
+          <td><input id="price" type="number" placeholder="1" onchange="interface.bulletin.update_popup_table(this)"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
   <p class="bulletin_event" hidden>
     This event happens on: <br> <span id="bulletin_event_date"></span>
@@ -113,4 +130,5 @@
   <p>
     <span id="bulletin_author"></span> / <span id="bulletin_date"></span>
   </p>
+  <iframe id="coords_iframe"></iframe>
 </div>
