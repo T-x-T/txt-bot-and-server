@@ -332,6 +332,14 @@ handlers.paxapi.post.get = function(data, callback){
 
 //API functionallity surrounding member stuff
 handlers.paxapi.member = function(data, callback){
+  if (data.path.split('/')[data.path.split('/').length - 1] == 'bulletins'){
+    bulletin.getCards({ owner: data.path.split('/')[data.path.split('/').length - 2]}, false, function(err, docs){
+      if(!err) callback(200, docs, 'json');
+        else callback(500, {err: err}, 'json');
+    });
+    return;
+  }
+
   if(typeof handlers.paxapi.member[data.method] == 'function'){
     handlers.paxapi.member[data.method](data, callback);
   }else{

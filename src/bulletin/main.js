@@ -80,7 +80,7 @@ bulletin.update = function(input, callback){
     data.edit(updateDoc, 'bulletin_card', false, function(err, doc){
       if(!err && doc){
         //Emit appropriate event
-        emitter.emit('bulletin_edit', updateDoc);
+        emitter.emit('bulletin_edit', doc);
         callback(false, doc);
       }else{
         global.log(0, 'bulletin', 'error updating bulletinCard in database', {input: input, err: err, doc: doc, updateDoc: updateDoc});
