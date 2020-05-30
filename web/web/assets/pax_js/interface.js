@@ -649,10 +649,13 @@ interface.bulletin.delete = function(popup){
 
 // set correct 'height'/(width) for rotated bulletin category
 function setRotatedHeight(){
-  let bulletin_height = window.innerWidth + 40;
+  let bulletin_height = window.innerWidth;
   if (bulletin_height < 960) {
-    console.log(bulletin_height);
     let containers = document.getElementsByClassName('horizontal-scroll-container');
-    for (let i = 0; i < containers.length; i++) containers[i].style.height = `${bulletin_height}px`;
+    for (let i = 0; i < containers.length; i++) containers[i].style.height = `${bulletin_height - 40}px`;
+  }
+  if (bulletin_height < 500) {
+    let containers = document.getElementsByClassName('horizontal-scroll-container');
+    for (let i = 0; i < containers.length; i++) containers[i].style.height = `${bulletin_height + 40}px`;
   }
 };
