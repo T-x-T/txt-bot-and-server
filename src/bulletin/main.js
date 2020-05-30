@@ -185,8 +185,20 @@ bulletin.sanitize = function(input, callback){
         return;
       }
 
-      for(let i = 0; i < input.item_names.length; i++) input.item_names[i] = sanitize(input.item_names[i], {allowedTags: [], allowedAttributes: {}});
-      for(let i = 0; i < input.price_names.length; i++) input.price_names[i] = sanitize(input.price_names[i], {allowedTags: [], allowedAttributes: {}});
+      for(let i = 0; i < input.item_names.length; i++){
+        input.item_names[i] = sanitize(input.item_names[i], { allowedTags: [], allowedAttributes: {} });
+        if(input.item_names[i].length > 32){
+          callback('item names are only allowed to be 32 characters long');
+          return;
+        }
+      } 
+      for(let i = 0; i < input.price_names.length; i++){
+        input.price_names[i] = sanitize(input.price_names[i], { allowedTags: [], allowedAttributes: {} });
+        if (input.price_names[i].length > 32) {
+          callback('price names are only allowed to be 32 characters long');
+          return;
+        }
+      } 
     }
 
     //Check and sanitize event if neccessary
