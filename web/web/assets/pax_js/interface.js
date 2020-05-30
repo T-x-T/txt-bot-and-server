@@ -568,3 +568,17 @@ interface.bulletin.delete = function(popup){
     }
   });
 };
+
+
+// set correct 'height'/(width) for rotated bulletin category
+
+  $(window).on('load resize', function() {
+
+    var bulletin_height = window.innerWidth + 80;
+    
+    if(bulletin_height < 960) {
+      console.log(bulletin_height);
+      document.getElementsByClassName('horizontal-scroll-container').style.height = bulletin_height;
+    }
+
+  });
