@@ -392,7 +392,7 @@ interface.bulletin.open_popup = function(card){
   }
 
   //Trading stuff
-  if(interface.bulletin.categories[card.raw_data.category].enable_coordinates){
+  if(interface.bulletin.categories[card.raw_data.category].enable_trading){
     template.querySelector('#bulletin_trades').hidden = false;
     let table = template.querySelector('#bulletin_trade_table');
     for(let i = 0; i < card.raw_data.item_names.length; i++){
@@ -454,6 +454,52 @@ interface.bulletin.new = function(btn){
   }, function(popup){});
 };
 
+interface.bulletin.edit = function(popup){
+  framework.popup.close_for_real(popup);
+
+  let raw_data = popup.options.raw_data;
+  let category = interface.bulletin.categories[raw_data.category];
+  let template = document.getElementById('bulletin_new_template').cloneNode(true);
+
+  if(category.enable_coordinates){
+    template.querySelector('#new_template_coords').hidden = false;
+    template.querySelector('#location_x').value = raw_data.location_x;
+    template.querySelector('#location_z').value = raw_data.location_z;
+  } 
+
+  if(category.enable_event){
+    template.querySelector('#new_template_event').hidden = false;
+    let locale_time = new Date(raw_data.event_date).valueOf() + ((new Date().getTimezoneOffset() * 60 * 1000).valueOf() * -1);
+
+    template.querySelector('#event_time').value = new Date(locale_time).toISOString().substring(11, 16);
+    template.querySelector('#event_date').value = new Date(locale_time).toISOString().substring(0, 10);
+  } 
+
+  if(category.enable_trading){
+    template.querySelector('#new_template_trading').hidden = false;
+    let table = template.querySelector('#trade_table');
+    for (let i = 0; i < raw_data.item_names.length; i++) {
+      let row = table.rows[i + 1]
+      row.cells[0].childNodes[0].value = raw_data.item_names[i];
+      row.cells[1].childNodes[0].value = raw_data.item_amounts[i];
+      row.cells[2].childNodes[0].value = raw_data.price_names[i];
+      row.cells[3].childNodes[0].value = raw_data.price_amounts[i];
+    }
+  } 
+  
+  template.querySelector('#id').value = raw_data.id;
+  template.querySelector('#message').value = raw_data.message;
+  
+  template.hidden = false;
+  template.category = category;
+
+  framework.popup.create({
+    div: template,
+    confirmClose: true,
+    title: 'edit bulletin'
+  }, function(popup){});
+};
+
 interface.bulletin.save = function(popup){
   let data = {
     message: popup.querySelector('#message').value,
@@ -484,6 +530,9 @@ interface.bulletin.save = function(popup){
     }
   }
 
+  if(popup.querySelector('#id').value){
+    data.id = popup.querySelector('#id').value;
+  }
 
   _internal.send('bulletin', false, 'POST', false, data, function(status, res){
     if(status != 200){
@@ -496,5 +545,26 @@ interface.bulletin.save = function(popup){
   
     //Close popup
     framework.popup.close_for_real(popup);
+  });
+};
+
+interface.bulletin.delete = function(popup){
+  framework.popup.close_for_real(popup);
+
+  let raw_data = popup.options.raw_data;
+  
+  framework.popup.create_confirmation({
+    title: 'Delete bulletin',
+    text: 'Do you really want to do this?'
+  }, function(confirmation){
+    if(confirmation){
+      _internal.send('bulletin', false, 'DELETE', false, {id: raw_data.id, deleted: true}, function(status, res){
+        if(status == 200){
+          framework.popup.create_info({title: 'Success', text: 'Popup deleted!'});
+        }else{
+          framework.popup.create_info({title: 'Error', text: status + JSON.stringify(res)});
+        }
+      });
+    }
   });
 };

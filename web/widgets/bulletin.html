@@ -29,6 +29,7 @@
 <!--new bulletin template-->
 <div id="bulletin_new_template" hidden>
   <h1>Create new bulletin card</h1>
+  <input type="hidden" id="id">
   <textarea name="message" id="message" cols="30" rows="10" placeholder="Enter your message"></textarea>
   <div id="new_template_event" hidden>
     <label for="event_date">Event Date: </label>
@@ -113,9 +114,9 @@
       <tbody>
         <tr>
           <td><input type="text" placeholder="Cobblestone" readonly></td>
-          <td><input id="item" type="number" placeholder="128" onchange="interface.bulletin.update_popup_table(this)"></td>
+          <td><input id="item" type="number" placeholder="128" oninput="interface.bulletin.update_popup_table(this)"></td>
           <td><input type="text" placeholder="Diamond" readonly></td>
-          <td><input id="price" type="number" placeholder="1" onchange="interface.bulletin.update_popup_table(this)"></td>
+          <td><input id="price" type="number" placeholder="1" oninput="interface.bulletin.update_popup_table(this)"></td>
         </tr>
       </tbody>
     </table>
@@ -132,7 +133,7 @@
   </p>
   <iframe id="coords_iframe"></iframe>
   <div id="controls">
-    <button id="btn_edit">edit</button>
-    <button id="btn_delete">delete</button>
+    <button id="btn_edit" onclick="interface.bulletin.edit(this.parentNode.parentNode.parentNode.parentNode.parentNode)">edit</button>
+    <button id="btn_delete" onclick="interface.bulletin.delete(this.parentNode.parentNode.parentNode.parentNode.parentNode)">delete</button>
   </div>
 </div>
