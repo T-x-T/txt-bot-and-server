@@ -209,6 +209,11 @@ interface.post.new = function(){
   });
 };
 
+
+
+
+
+
 //All bulletin board functions
 interface.bulletin = {};
 
@@ -304,11 +309,6 @@ interface.bulletin.data_mapping = function(a){
       element_id: 'bulletin_date',
       property: 'innerText',
       value: new Date(a.date).toISOString().substring(0, 10)
-    },
-    {
-      element_id: 'bulletin_display_more_a',
-      property: 'href',
-      value: 'wikipedia.com/duck'
     }
   ];
 
@@ -347,7 +347,7 @@ interface.bulletin.data_mapping = function(a){
     enable_coordinates = true;
   };
 
-  if(interface.bulletin.categories[a.category].enable_coordinates || enable_coordinates){
+  if((interface.bulletin.categories[a.category].enable_coordinates || enable_coordinates) && ((a.location_x && a.location_z) || (a.location_x === 0 && a.location_z === 0))){
     mappings.push({
       element_id: 'bulletin_coords',
       property: 'href',
@@ -364,7 +364,77 @@ interface.bulletin.data_mapping = function(a){
 };
 
 interface.bulletin.open_popup = function(card){
+  let template = document.getElementById('bulletin_card_popup_template').cloneNode(true);
+  
+  //Fill the template out
+  //Common
+  template.querySelector('#bulletin_message').innerText = card.raw_data.message;
+  template.querySelector('#bulletin_author').innerText = card.raw_data.author;
+  template.querySelector('#bulletin_date').innerText = new Date(card.raw_data.date).toISOString().substring(0, 10)
 
+  //Event stuff
+  if(interface.bulletin.categories[card.raw_data.category].enable_event){
+    template.querySelector('#bulletin_event').hidden = false;
+    template.querySelector('#bulletin_event_countdown').innerText = `Something happens in ${_internal.countdown(new Date(card.raw_data.event_date))} `
+    template.querySelector('#bulletin_event_date').innerText = `${new Date(card.raw_data.event_date).toISOString().substring(0, 10)} at ${new Date(card.raw_data.event_date).toLocaleTimeString()} (${Intl.DateTimeFormat().resolvedOptions().timeZone})`;
+    if(typeof card.raw_data.location_x === 'number'){
+      template.querySelector('#bulletin_event_coords').innerText = `${card.raw_data.location_x}/${card.raw_data.location_z}`;
+      template.querySelector('#bulletin_event_coords').href = `https://play.paxterya.com/dynmap/?worldname=world2&mapname=flat&zoom=6&x=${card.raw_data.location_x}&z=${card.raw_data.location_z}&nogui=true`;
+    }
+  }
+
+  //Coordinate stuff
+  if(interface.bulletin.categories[card.raw_data.category].enable_coordinates || interface.bulletin.categories[card.raw_data.category].enable_event){
+    template.querySelector('#bulletin_coords').hidden = false;
+    template.querySelector('#bulletin_coords').innerText = `${card.raw_data.location_x}/${card.raw_data.location_z}`
+    template.querySelector('#bulletin_coords').href = `https://play.paxterya.com/dynmap/?worldname=world2&mapname=flat&zoom=6&x=${card.raw_data.location_x}&z=${card.raw_data.location_z}&nogui=true`
+    template.querySelector('#coords_iframe').src = `https://play.paxterya.com/dynmap/?worldname=world2&mapname=flat&zoom=6&x=${card.raw_data.location_x}&z=${card.raw_data.location_z}&nogui=true`;
+  }
+
+  //Trading stuff
+  if(interface.bulletin.categories[card.raw_data.category].enable_trading){
+    template.querySelector('#bulletin_trades').hidden = false;
+    let table = template.querySelector('#bulletin_trade_table');
+    for(let i = 0; i < card.raw_data.item_names.length; i++){
+      let row = table.rows[1].cloneNode(true);
+      row.cells[0].childNodes[0].value = card.raw_data.item_names[i];
+      row.cells[1].childNodes[0].value = card.raw_data.item_amounts[i];
+      row.cells[2].childNodes[0].value = card.raw_data.price_names[i];
+      row.cells[3].childNodes[0].value = card.raw_data.price_amounts[i];
+      table.appendChild(row);
+    }
+    table.rows[1].parentNode.removeChild(table.rows[1]);
+  }
+  
+  //Hide everything with coords when they are falsy
+  if((!card.raw_data.location_x || !card.raw_data.location_z) && (card.raw_data.location_x !== 0 || card.raw_data.location_z !== 0)){
+    template.querySelector('#bulletin_coords').hidden = true;
+    template.querySelector('#coords_iframe').hidden = true;
+    template.querySelector('#bulletin_event_coords').hidden = true;
+  }
+  
+  template.hidden = false;
+  framework.popup.create({
+    div: template,
+    confirmClose: false,
+    title: 'Bulletin',
+    raw_data: card.raw_data
+  }, function(popup){});
+};
+
+interface.bulletin.update_popup_table = function(input){
+  let raw_data = input.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.options.raw_data;
+  let id = input.parentNode.parentNode.rowIndex - 1;
+
+  if(input.id === 'item'){
+    let new_value = input.value / (raw_data.item_amounts[id] / raw_data.price_amounts[id]);
+    if(!Number.isSafeInteger(new_value)) new_value = new_value.toFixed(2);
+    input.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.childNodes[0].value = new_value;
+  }else{
+    let new_value = (raw_data.item_amounts[id] / raw_data.price_amounts[id]) * input.value;
+    if(!Number.isSafeInteger(new_value)) new_value = new_value.toFixed(2);
+    input.parentNode.previousSibling.previousSibling.previousSibling.previousSibling.childNodes[0].value = new_value;
+  }
 };
 
 interface.bulletin.new = function(btn){
@@ -381,6 +451,52 @@ interface.bulletin.new = function(btn){
     div: template,
     confirmClose: true,
     title: 'new bulletin'
+  }, function(popup){});
+};
+
+interface.bulletin.edit = function(popup){
+  framework.popup.close_for_real(popup);
+
+  let raw_data = popup.options.raw_data;
+  let category = interface.bulletin.categories[raw_data.category];
+  let template = document.getElementById('bulletin_new_template').cloneNode(true);
+
+  if(category.enable_coordinates){
+    template.querySelector('#new_template_coords').hidden = false;
+    template.querySelector('#location_x').value = raw_data.location_x;
+    template.querySelector('#location_z').value = raw_data.location_z;
+  } 
+
+  if(category.enable_event){
+    template.querySelector('#new_template_event').hidden = false;
+    let locale_time = new Date(raw_data.event_date).valueOf() + ((new Date().getTimezoneOffset() * 60 * 1000).valueOf() * -1);
+
+    template.querySelector('#event_time').value = new Date(locale_time).toISOString().substring(11, 16);
+    template.querySelector('#event_date').value = new Date(locale_time).toISOString().substring(0, 10);
+  } 
+
+  if(category.enable_trading){
+    template.querySelector('#new_template_trading').hidden = false;
+    let table = template.querySelector('#trade_table');
+    for (let i = 0; i < raw_data.item_names.length; i++) {
+      let row = table.rows[i + 1]
+      row.cells[0].childNodes[0].value = raw_data.item_names[i];
+      row.cells[1].childNodes[0].value = raw_data.item_amounts[i];
+      row.cells[2].childNodes[0].value = raw_data.price_names[i];
+      row.cells[3].childNodes[0].value = raw_data.price_amounts[i];
+    }
+  } 
+  
+  template.querySelector('#id').value = raw_data.id;
+  template.querySelector('#message').value = raw_data.message;
+  
+  template.hidden = false;
+  template.category = category;
+
+  framework.popup.create({
+    div: template,
+    confirmClose: true,
+    title: 'edit bulletin'
   }, function(popup){});
 };
 
@@ -407,7 +523,6 @@ interface.bulletin.save = function(popup){
     
     let trading_table = popup.querySelector('#trade_table');
     for(let i = 1; i < trading_table.rows.length; i++){
-      console.log(trading_table.rows[i].cells[0])
       if(trading_table.rows[i].cells[0].childNodes[0].value.length > 0) data.item_names.push(trading_table.rows[i].cells[0].childNodes[0].value);
       if(trading_table.rows[i].cells[1].childNodes[0].value > 0) data.item_amounts.push(trading_table.rows[i].cells[1].childNodes[0].value);
       if(trading_table.rows[i].cells[2].childNodes[0].value.length > 0) data.price_names.push(trading_table.rows[i].cells[2].childNodes[0].value);
@@ -415,6 +530,9 @@ interface.bulletin.save = function(popup){
     }
   }
 
+  if(popup.querySelector('#id').value){
+    data.id = popup.querySelector('#id').value;
+  }
 
   _internal.send('bulletin', false, 'POST', false, data, function(status, res){
     if(status != 200){
@@ -427,5 +545,26 @@ interface.bulletin.save = function(popup){
   
     //Close popup
     framework.popup.close_for_real(popup);
+  });
+};
+
+interface.bulletin.delete = function(popup){
+  framework.popup.close_for_real(popup);
+
+  let raw_data = popup.options.raw_data;
+  
+  framework.popup.create_confirmation({
+    title: 'Delete bulletin',
+    text: 'Do you really want to do this?'
+  }, function(confirmation){
+    if(confirmation){
+      _internal.send('bulletin', false, 'DELETE', false, {id: raw_data.id, deleted: true}, function(status, res){
+        if(status == 200){
+          framework.popup.create_info({title: 'Success', text: 'Popup deleted!'});
+        }else{
+          framework.popup.create_info({title: 'Error', text: status + JSON.stringify(res)});
+        }
+      });
+    }
   });
 };

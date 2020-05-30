@@ -19,6 +19,7 @@ index.save = function(input, options, callback){
       return;
     }
     input = output;
+
     //Check if its a new entry
     if(!input.hasOwnProperty('id')) {
       //Create
@@ -32,18 +33,18 @@ index.save = function(input, options, callback){
     } else {
       //Update
       //Get the current version of the bulletin to be edited to find out the author
-      index.get({id: input.id}, {first: true}, function(err, doc) {
+      index.getCards({id: input.id}, {first: true}, function(err, doc) {
         if(!err && typeof doc !== 'undefined'){
           if(input.editAuthor === doc.author) {
             //new author same as old one
             main.update(input, callback);
           } else {
-            //Check if new author is admin
-            if(auth.getAccessLevel({id: input.editAuthor}, false) >= 9) {
-              //New author is admin
+            //Check if new author is mod
+            if(auth.getAccessLevel({id: input.editAuthor}, false) >= 7) {
+              //New author is mod
               main.update(input, callback);
             } else {
-              //New author is no admin
+              //New author is not mod
               callback('You are not authorized to edit this bulletin', input);
             }
           }
@@ -99,19 +100,19 @@ index.getAll = function(discordID, callback){
 
 //Delete all entries matching the filter
 index.delete = function(input, options, callback) {
-  //Get the current version of the bulletin to be deleted to find out the author
-  index.get({_id: input._id}, {first: true}, function(err, doc) {
+  //Get the current version of the bulletin to be deleted to find out the owner
+  index.getCards({id: input.id}, {first: true}, function(err, doc) {
     if(!err && typeof doc !== 'undefined') {
       if(input.deleteAuthor === doc.author) {
         //new author same as old one
         main.delete({_id: input._id}, callback);
       } else {
-        //Check if new author is admin
-        if(auth.getAccessLevel({id: input.deleteAuthor}, false) >= 9) {
-          //New author is admin
-          main.delete({_id: input._id}, callback);
+        //Check if new author is mod
+        if(auth.getAccessLevel({id: input.deleteAuthor}, false) >= 7) {
+          //New author is mod
+          main.delete(input, callback);
         } else {
-          //New author is no admin
+          //New author is no mod
           callback('You are not authorized to delete this bulletin', input);
         }
       }

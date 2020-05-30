@@ -23,7 +23,7 @@ bulletin.create = function(input, callback){
         message: input.message,
         date: Date.now(),
         expiry_date: input.expiry_date ? input.expiry_date : null,
-        event_date: input.event_date ? input.expiry_date : null,
+        event_date: input.event_date ? input.event_date : null,
         location_x: input.location_x,
         location_z: input.location_z,
         item_names: input.item_names,
@@ -53,13 +53,27 @@ bulletin.create = function(input, callback){
 //Update an entry in the database; CB: Error, new entry
 bulletin.update = function(input, callback){
   if(typeof input === 'object'){
-    data.edit(input, 'bulletin_card', false, function(err, doc){
+    let updateDoc = {
+      id: input.id,
+      message: input.message,
+      expiry_date: input.expiry_date ? input.expiry_date : null,
+      event_date: input.event_date ? input.event_date : null,
+      location_x: input.location_x ? input.location_x : null,
+      location_z: input.location_z ? input.location_z : null,
+      item_names: input.item_names && input.item_names.length > 0 ? input.item_names : null,
+      item_amounts: input.item_amounts && input.item_amounts.length > 0 ? input.item_amounts : null,
+      price_names: input.price_names && input.price_names.length > 0 ? input.price_names : null,
+      price_amounts: input.price_amounts && input.price_amounts.length > 0 ? input.price_amounts : null
+    };
+
+    data.edit(updateDoc, 'bulletin_card', false, function(err, doc){
       if(!err && doc){
         //Emit appropriate event
-        let message = `<@${input.author}> edited a bulletin:\n${input.message}`;    //DONT DO THAT HERE
+        let message = `<@${input.editAuthor}> edited a bulletin:\n${input.message}`;    //DONT DO THAT HERE
         emitter.emit('bulletin_edit', message);
         callback(false, doc);
       }else{
+        global.log(0, 'bulletin', 'error updating bulletinCard in database', {input: input, err: err, doc: doc, updateDoc: updateDoc});
         callback('Error updating entry in database', false);
       }
     });
@@ -69,23 +83,23 @@ bulletin.update = function(input, callback){
 };
 
 //Removes entries from the database based on a filter, if no filter is given, no entries are removed; CB: Error
-bulletin.delete = function(filter, callback){
-  if(typeof filter === 'object'){
-    data.delete(filter, 'bulletin_card', false, function(err){
+bulletin.delete = function(input, callback){
+  if(typeof input === 'object'){
+    data.edit({id: input.id, deleted: input.deleted}, 'bulletin_card', false, function(err){
       if(!err){
         emitter.emit('bulletin_deleted');
         callback(false);
       }else{
-        callback('Error removing entries from database');
+        callback('Error updating entry in database');
       }
     });
   }else{
-    callback('Cant remove entries, no filter given');
+    callback('Cant remove entry, no filter given');
   }
 };
 
 bulletin.getCards = function(filter, options, callback){
-  data.get(filter, 'bulletin_card', options, function(err, docs){
+  data.get({$and: [filter, {deleted: false}]}, 'bulletin_card', options, function(err, docs){
     if(!err){
       if(options.include_author && docs.length > 0){
         for(let i = 0; i < docs.length; i++){
@@ -162,7 +176,7 @@ bulletin.sanitize = function(input, callback){
       }
 
       for(let i = 0; i < input.item_names.length; i++) input.item_names[i] = sanitize(input.item_names[i], {allowedTags: [], allowedAttributes: {}});
-      for(let i = 0; i < input.price_names.length; i++) input.item_names[i] = sanitize(input.price_names[i], {allowedTags: [], allowedAttributes: {}});
+      for(let i = 0; i < input.price_names.length; i++) input.price_names[i] = sanitize(input.price_names[i], {allowedTags: [], allowedAttributes: {}});
     }
 
     //Check and sanitize event if neccessary
