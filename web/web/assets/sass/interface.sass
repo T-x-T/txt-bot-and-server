@@ -266,9 +266,6 @@ button#popup-close
     &7 > div > div
         background-image: linear-gradient(45deg, rgba(0,0,0,.3) 30%, transparent 30%, transparent 70%, rgba(0,0,0,.1) 70%) 
 
-    
-
-
     &4, &5, &6
         margin-bottom: 0px!important
         padding-bottom: 50px
@@ -301,7 +298,7 @@ button#popup-close
             top: -7px
 
     &5
-        margin: 0 65px
+        margin: 0 60px
 
     &7
         clear: both
@@ -364,7 +361,7 @@ button#popup-close
     transform-origin: right top
     box-sizing: border-box
 
-p#bulletin_message + p
+p#bulletin_message + p, a.bulletin_coords + p
     background: $pax-darkgray
     color: $pax-lightgray
     width: 100%
@@ -380,6 +377,10 @@ p#bulletin_message + p
 
     span
         color: $pax-white
+
+#bulletin_card_2
+    a.bulletin_coords + p
+        display: none
 
 a.bulletin_display_more
     background: $pax-cyan
