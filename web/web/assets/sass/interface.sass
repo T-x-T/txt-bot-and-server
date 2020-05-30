@@ -266,43 +266,6 @@ button#popup-close
     &7 > div > div
         background-image: linear-gradient(45deg, rgba(0,0,0,.3) 30%, transparent 30%, transparent 70%, rgba(0,0,0,.1) 70%) 
 
-    &4, &5, &6
-        margin-bottom: 0px!important
-        padding-bottom: 50px
-        box-sizing: border-box
-        position: relative
-        display: inline-block
-
-        &::after
-            content: ''
-            position: absolute
-            display: block
-            pointer-events: none
-            bottom: 0
-            width: 100%
-            height: 20px
-            box-shadow: 0 0 20px 10px $pax-white
-
-        > div
-            transform: rotate(0deg) translateY(-25px)!important
-            height: 300px!important
-            position: relative!important
-            padding-top: 0!important
-
-            > div
-                transform: rotate(0deg)!important
-                margin: 25px 0!important
-
-                &:hover
-                    transform: rotate(0deg) scale(.9)!important
-
-
-        button
-            top: -7px
-
-    &5
-        margin: 0 60px
-
     &7
         clear: both
        
@@ -347,7 +310,6 @@ button#popup-close
     z-index: 0
     scrollbar-width: thin
     scrollbar-color: $pax-darkgray $pax-nearlywhite
-
     padding: 0px 10px 0px 0px
     transform: rotate(-90deg) translateY(-300px)
 

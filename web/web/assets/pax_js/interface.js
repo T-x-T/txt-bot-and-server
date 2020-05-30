@@ -19,7 +19,7 @@ interface.init = function(){
     interface.post.load();
   }
   interface.bulletin.init();
-  setRotatedHeight();
+  setTimeout(setRotatedHeight, 1000);
 };
 
 window.onresize = setRotatedHeight;

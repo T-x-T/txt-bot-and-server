@@ -32,7 +32,7 @@
         bottom: 20px
         right: 20px
 
-    /* ############### nav ###############*/
+    // ############### nav ###############*/
 
     nav ul
         width: 1040px
@@ -53,7 +53,7 @@
                 a
                     box-shadow: 0px 0px 0px 3px $pax-darkcyan
 
-    /* --- dropdown menu --- */
+    // dropdown menu 
     nav
         li
             position: relative
@@ -93,7 +93,7 @@
                 &:hover
                     background: $pax-cyan
 
-    /* ############### main ###############*/
+    // ############### main ###############*/
 
     .wrapper
         width: 880px
@@ -106,3 +106,38 @@
     .wrapper.content
         background: $pax-white
         padding: 15px 30px 30px 30px
+
+    // ################### bulletin board ###################*/
+
+    #bulletin_category_
+        &4, &5, &6
+            margin-bottom: 0px!important
+            padding-bottom: 50px
+            box-sizing: border-box
+            position: relative
+            display: inline-block
+
+            &::after
+                bottom: 0!important
+                width: 100%!important
+                height: 20px!important
+                box-shadow: 0 0 20px 10px $pax-white!important
+
+            > div
+                transform: rotate(0deg) translateY(-25px)!important
+                height: 300px!important
+                position: relative!important
+                padding-top: 0!important
+
+                > div
+                    transform: rotate(0deg)!important
+                    margin: 25px 0!important
+
+                    &:hover
+                        transform: rotate(0deg) scale(.9)!important
+
+
+            button
+                top: -7px!important
+        &5
+            margin: 0 60px!important
