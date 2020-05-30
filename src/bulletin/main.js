@@ -7,40 +7,51 @@
 const user = require('../user');
 const data = require('../data');
 const sanitize = require('sanitize-html');
+const auth = require('../auth');
 
 //Create the container
 var bulletin = {};
 
 //Create a new entry in the database; CB: Error, new entry
 bulletin.create = function(input, callback){
-  //First get all bulletins from the author. to check if they already have 5
+  //First get all bulletins from the author. to check if they already have the max count
   bulletin.getCards({owner: input.owner}, false, function(err, docs){
-    if(docs.length < config.bulletin.max_per_usr){
-      //Everything ok
-      let document = {
-        owner: input.owner,
-        category: input.category,
-        message: input.message,
-        date: Date.now(),
-        expiry_date: input.expiry_date ? input.expiry_date : null,
-        event_date: input.event_date ? input.event_date : null,
-        location_x: input.location_x,
-        location_z: input.location_z,
-        item_names: input.item_names,
-        item_amounts: input.item_amounts,
-        price_names: input.price_names,
-        price_amounts: input.price_amounts
-      };
-      data.new(document, 'bulletin_card', false, function(err, doc) {
-        if(!err && doc) {
-          //Also send message in discord
-          let message = `<@${input.author}> posted a new bulletin:\n${input.message}`;
-          emitter.emit('bulletin_new', message);
+    if(docs.length < config.bulletin.max_per_usr || auth.getAccessLevel({id: input.owner}, false, false) >= 7){
+      //Check if the owner has the permission to post in the category
+      bulletin.getCategories({ id: input.category }, { first: true }, function (err, category) {
+        if (category) {
+          if (category.permission_level <= auth.getAccessLevel({ id: input.owner }, false, false)) {
+            //Everything ok
+            let document = {
+              owner: input.owner,
+              category: input.category,
+              message: input.message,
+              date: Date.now(),
+              expiry_date: input.expiry_date ? input.expiry_date : null,
+              event_date: input.event_date ? input.event_date : null,
+              location_x: input.location_x,
+              location_z: input.location_z,
+              item_names: input.item_names,
+              item_amounts: input.item_amounts,
+              price_names: input.price_names,
+              price_amounts: input.price_amounts
+            };
+            data.new(document, 'bulletin_card', false, function (err, doc) {
+              if (!err && doc) {
+                //Also send message in discord
+                emitter.emit('bulletin_new', document);
 
-          callback(false, doc);
-        } else {
-          global.log(0, 'bulletin', 'Error saving new entry in the database', {input: input, document: document, err: err, doc: doc});
-          callback('Error saving new entry in the database', false);
+                callback(false, doc);
+              } else {
+                global.log(0, 'bulletin', 'Error saving new entry in the database', { input: input, document: document, err: err, doc: doc });
+                callback('Error saving new entry in the database', false);
+              }
+            });
+          }else{
+            callback('You dont have permission to post here', false);
+          }
+        }else{
+          callback('Invalid category, or it was not found', false);
         }
       });
     }else{
@@ -69,8 +80,7 @@ bulletin.update = function(input, callback){
     data.edit(updateDoc, 'bulletin_card', false, function(err, doc){
       if(!err && doc){
         //Emit appropriate event
-        let message = `<@${input.editAuthor}> edited a bulletin:\n${input.message}`;    //DONT DO THAT HERE
-        emitter.emit('bulletin_edit', message);
+        emitter.emit('bulletin_edit', doc);
         callback(false, doc);
       }else{
         global.log(0, 'bulletin', 'error updating bulletinCard in database', {input: input, err: err, doc: doc, updateDoc: updateDoc});
@@ -189,9 +199,6 @@ bulletin.sanitize = function(input, callback){
 
     callback(false, input);
   });
-
-  
-  
 };
 
 //Export the container

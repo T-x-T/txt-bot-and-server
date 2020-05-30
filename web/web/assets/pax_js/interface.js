@@ -287,7 +287,68 @@ interface.bulletin.init = function(){
         onclick: interface.bulletin.open_popup,
         display_mode: category.display_mode
       });
+    });
 
+    //Add last container for bulletins of own bulletins
+
+    //Create div and attach it to the container
+    let container = document.getElementById('bulletin_category_container');
+    let parent = document.createElement('div');
+
+    //Clone template and customize it
+    let template = document.getElementById('bulletin_card_template').cloneNode(true);
+
+    while (template.querySelector('.bulletin_coords')) {
+      template.querySelector('.bulletin_coords').parentNode.removeChild(template.querySelector('.bulletin_coords'));
+    }
+    while (template.querySelector('.bulletin_trading')) {
+      template.querySelector('.bulletin_trading').parentNode.removeChild(template.querySelector('.bulletin_trading'));
+    }
+    while (template.querySelector('.bulletin_event')) {
+      template.querySelector('.bulletin_event').parentNode.removeChild(template.querySelector('.bulletin_event'));
+    }
+    template.hidden = false;
+
+    parent.id = 'bulletin_own';
+    container.appendChild(parent);
+
+    //Add header and description to div
+    let header = document.createElement('h3');
+    header.innerText = 'Your bulletins';
+    parent.appendChild(header);
+
+    let description = document.createElement('h4');
+    description.innerText = 'These are all the bulletins you posted!';
+    parent.appendChild(description);
+    
+    //Initialize framework-list
+    framework.list.init({
+      div: parent.appendChild(document.createElement('div')),
+      api_path: 'member/' + cookies.discord_id + '/bulletins',
+      data_mapping: function(a){
+        return mappings =
+          [
+            {
+              element_id: 'bulletin_message',
+              property: 'innerText',
+              value: a.message
+            },
+            {
+              element_id: 'bulletin_author',
+              property: 'innerText',
+              value: cookies.mc_ign
+            },
+            {
+              element_id: 'bulletin_date',
+              property: 'innerText',
+              value: new Date(a.date).toISOString().substring(0, 10)
+            }
+          ];
+      },
+      template: template,
+      default_sort: 'date.desc',
+      onclick: interface.bulletin.open_popup,
+      display_mode: 'horizontal'
     });
   });
 };
@@ -411,6 +472,11 @@ interface.bulletin.open_popup = function(card){
     template.querySelector('#bulletin_coords').hidden = true;
     template.querySelector('#coords_iframe').hidden = true;
     template.querySelector('#bulletin_event_coords').hidden = true;
+  }
+
+  //Hide controls if the user isnt the owner and not at least mod
+  if(cookies.discord_id != card.raw_data.owner && cookies.access_level < 7){
+    template.querySelector('#controls').hidden = true;
   }
   
   template.hidden = false;
@@ -539,10 +605,11 @@ interface.bulletin.save = function(popup){
       framework.popup.create_info({title: 'Error', text: status + JSON.stringify(res)});
       return;
     }
-
-    //Update list that got the new card
+    
+    //Update list that got the new card and the last row too
     document.getElementById(`bulletin_category_${popup.options.div.category.id}`).childNodes[3].update(document.getElementById(`bulletin_category_${popup.options.div.category.id}`).childNodes[3].options);
-  
+    document.getElementById(`bulletin_own`).childNodes[2].update(document.getElementById(`bulletin_own`).childNodes[2].options);
+
     //Close popup
     framework.popup.close_for_real(popup);
   });
@@ -561,6 +628,11 @@ interface.bulletin.delete = function(popup){
       _internal.send('bulletin', false, 'DELETE', false, {id: raw_data.id, deleted: true}, function(status, res){
         if(status == 200){
           framework.popup.create_info({title: 'Success', text: 'Popup deleted!'});
+
+          //Update list that contained card and the last row too
+          document.getElementById(`bulletin_category_${popup.options.raw_data.category}`).childNodes[3].update(document.getElementById(`bulletin_category_${popup.options.raw_data.category}`).childNodes[3].options);
+          document.getElementById(`bulletin_own`).childNodes[2].update(document.getElementById(`bulletin_own`).childNodes[2].options);
+
         }else{
           framework.popup.create_info({title: 'Error', text: status + JSON.stringify(res)});
         }

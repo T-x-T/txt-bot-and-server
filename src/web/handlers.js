@@ -127,7 +127,7 @@ handlers.paxLogin = function(data, callback){
         discord_api.getUserObject({token: access_token}, false, function(err, userData){
           user.get({discord: userData.id}, {privacy: true, onlyPaxterians: true, first: true}, function(err, memberData){
             //Now set the access_token as a cookie and redirect the user to the interface.html, also set access_level and mc_ign cookies THIS SHOULD NEVER BE TRUSTED FOR SECURITY, ONLY FOR MAKING THINGS SMOOTHER!!!
-            callback(302, {Location: `https://${data.headers.host}/interface`, 'Set-Cookie': [`access_token=${access_token};Max-Age=21000};path=/`, `access_level=${access_level};Max-Age=22000};path=/`, `mc_ign=${memberData.mcName};Max-Age=22000};path=/`]}, 'plain');
+            callback(302, {Location: `https://${data.headers.host}/interface`, 'Set-Cookie': [`discord_id=${userData.id};Max-Age=21000};path=/`, `access_token=${access_token};Max-Age=21000};path=/`, `access_level=${access_level};Max-Age=22000};path=/`, `mc_ign=${memberData.mcName};Max-Age=22000};path=/`]}, 'plain');
           });
         });
       }else{
@@ -332,6 +332,14 @@ handlers.paxapi.post.get = function(data, callback){
 
 //API functionallity surrounding member stuff
 handlers.paxapi.member = function(data, callback){
+  if (data.path.split('/')[data.path.split('/').length - 1] == 'bulletins'){
+    bulletin.getCards({ owner: data.path.split('/')[data.path.split('/').length - 2]}, false, function(err, docs){
+      if(!err) callback(200, docs, 'json');
+        else callback(500, {err: err}, 'json');
+    });
+    return;
+  }
+
   if(typeof handlers.paxapi.member[data.method] == 'function'){
     handlers.paxapi.member[data.method](data, callback);
   }else{
