@@ -450,7 +450,7 @@ interface.bulletin.new = function(btn){
   framework.popup.create({
     div: template,
     confirmClose: true,
-    title: 'new bulletin'
+    title: 'Create a new bulletin'
   }, function(popup){});
 };
 

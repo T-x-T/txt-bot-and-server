@@ -420,7 +420,7 @@ a.bulletin_display_more
     min-width: 500px
     max-width: 750px
     min-height: 175px
-    padding-bottom: 75px
+    padding-bottom: 60px
     max-height: 80vh
     overflow-y: scroll
     overflow-x: hidden
@@ -430,6 +430,10 @@ a.bulletin_display_more
         bottom: 10px
         left: 10px
         top: auto
+
+    label
+        top: -10px
+        opacity: 1
 
 a#bulletin_coords
     @extend .pax-regular
@@ -463,3 +467,7 @@ a#bulletin_coords
 
         td
             padding: 0 5px
+
+#new_template_coords, #new_template_event
+    position: relative
+    margin: 20px 0
