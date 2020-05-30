@@ -412,6 +412,11 @@ interface.bulletin.open_popup = function(card){
     template.querySelector('#coords_iframe').hidden = true;
     template.querySelector('#bulletin_event_coords').hidden = true;
   }
+
+  //Hide controls if the user isnt the owner and not at least mod
+  if(cookies.discord_id != card.raw_data.owner && cookies.access_level < 7){
+    template.querySelector('#controls').hidden = true;
+  }
   
   template.hidden = false;
   framework.popup.create({
