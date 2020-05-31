@@ -370,7 +370,8 @@ framework.list = {};
 //Optional: api_method:   api method for querying the api, GET per default
 //          onclick:      function that should get executed when the user clicks on an element
 //          display_mode: horizontal or vertical (default)
-framework.list.init = function(options){
+//Callback gets called when everything is loaded
+framework.list.init = function(options, callback){
   //Set default values for optional options that arent specified
   if(!options.hasOwnProperty('api_method')) options.api_method = 'GET';
   if(!options.hasOwnProperty('onclick')) options.onclick = false;
@@ -384,11 +385,12 @@ framework.list.init = function(options){
   options.div.classList.add('horizontal-scroll-container');
 
   //DOM object is set-up, update
-  options.div.update({});
+  options.div.update({}, callback);
 };
 
 //optional options: filter, sort
-framework.list.update = function(options){
+//Callback is called when update is done
+framework.list.update = function(options, callback){
   let div = this;
   let sort = options.hasOwnProperty('sort') ? options.sort : div.options.default_sort;
   let filter = options.hasOwnProperty('filter') ? options.filter : false;
@@ -399,7 +401,7 @@ framework.list.update = function(options){
       
       div.raw_data = res;
       div.sort(sort)
-
+      if(typeof callback === 'function') callback();
     }else{
       console.log(status, res)
       framework.popup.create_info({title: 'Error', text: `status code: ${status}, response:\n${res}`});

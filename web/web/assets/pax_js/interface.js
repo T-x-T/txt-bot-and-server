@@ -270,7 +270,6 @@ interface.bulletin.init = function(){
       let description = document.createElement('h4');
       description.innerText = category.description;
       parent.appendChild(description);
-
       //Initialize framework-list
       framework.list.init({
         div: parent.appendChild(document.createElement('div')),
@@ -343,6 +342,10 @@ interface.bulletin.init = function(){
       default_sort: 'date.desc',
       onclick: interface.bulletin.open_popup,
       display_mode: 'horizontal'
+    },function(){
+      parent.childNodes[2].childNodes.forEach((node) => {
+        node.id = `bulletin_card_${node.raw_data.category}`;
+      });
     });
   });
 };
