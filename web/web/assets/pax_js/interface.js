@@ -430,6 +430,9 @@ interface.bulletin.open_popup = function(card){
   template.querySelector('#bulletin_author').innerText = card.raw_data.author;
   template.querySelector('#bulletin_date').innerText = new Date(card.raw_data.date).toISOString().substring(0, 10)
 
+  //Fix for author in your bulletin virtual category
+  if (card.parentNode.parentNode.id === 'bulletin_own') template.querySelector('#bulletin_author').innerText = cookies.mc_ign;
+
   //Event stuff
   if(interface.bulletin.categories[card.raw_data.category].enable_event){
     template.querySelector('#bulletin_event').hidden = false;
