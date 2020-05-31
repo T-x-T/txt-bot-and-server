@@ -58,27 +58,31 @@
 
     #bulletin_category_
         &0, &1, &2, &3, &4, &5, &6, &7
-            > div > div
-                background: $pax-darkestcyan
-
             &::after
                 box-shadow: 0 0 20px 20px $pax-darkmodecyan1
 
-        &0 > div > div
-            background-image: linear-gradient(45deg, rgba(rgb(171,26,26),.4) 30%, transparent 30%, transparent 70%, rgba(rgb(217,13,13),.3) 70%) 
-        &1 > div > div
+    #bulletin_own::after
+        box-shadow: 0 0 20px 20px $pax-darkmodecyan1
+
+    #bulletin_card_
+        &0, &1, &2, &3, &4, &5, &6, &7
+            background: $pax-darkestcyan
+
+        &0
+            background-image: linear-gradient(45deg, rgba(rgb(171,26,26),.4) 30%, transparent 30%, transparent 70%, rgba(rgb(217,13,13),.3) 70%)
+        &1
             background-image: linear-gradient(45deg, rgba(88,166,251,.4) 30%, transparent 30%, transparent 70%, rgba(169,199,230,.4) 70%) 
-        &2 > div > div
+        &2
             background-image: linear-gradient(45deg, rgba(168,34,189,.4) 30%, transparent 30%, transparent 70%, rgba(211,43,237,.4) 70%) 
-        &3 > div > div
+        &3
             background-image: linear-gradient(45deg, rgba(255,223,13,.4) 30%, transparent 30%, transparent 70%, rgba(255,247,15,.4) 70%) 
-        &4 > div > div
+        &4
             background-image: linear-gradient(45deg, rgba(85,196,10,.4) 30%, transparent 30%, transparent 70%, rgba(110,255,13,.4) 70%) 
-        &5 > div > div
+        &5
             background-image: linear-gradient(45deg, rgba(40,201,99,.4) 30%, transparent 30%, transparent 70%, rgba(49,245,121,.4) 70%) 
-        &6 > div > div
+        &6
             background-image: linear-gradient(45deg, rgba(42,201,175,.4) 30%, transparent 30%, transparent 70%, rgba(53,255,222,.4) 70%) 
-        &7 > div > div
+        &7
             background-image: linear-gradient(45deg, rgba(0,0,0,.3) 30%, transparent 30%, transparent 70%, rgba(0,0,0,.1) 70%) 
 
     p#bulletin_message + p, a.bulletin_coords + p
