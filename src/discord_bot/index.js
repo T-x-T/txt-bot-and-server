@@ -82,7 +82,7 @@ setImmediate(function(){
         }
         msg += '```';
       }
-      if(category.discord_role) msg += `\n<@${category.discord_role}>`;
+      if(category.discord_role) msg += `\n<@&${category.discord_role}>`;
       discord_helpers.sendMessage(msg, category.discord_channel, function(err) {
         if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new bulletin message', {err: err, message: msg});
       });
