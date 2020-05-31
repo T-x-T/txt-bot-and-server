@@ -279,6 +279,10 @@ interface.bulletin.init = function(){
         default_sort: 'date.desc',
         onclick: interface.bulletin.open_popup,
         display_mode: category.display_mode
+      }, function () {
+        parent.lastChild.childNodes.forEach((node) => {
+          node.classList.add('read');
+        });
       });
     });
 

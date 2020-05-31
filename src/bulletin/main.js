@@ -111,6 +111,28 @@ bulletin.delete = function(input, callback){
 bulletin.getCards = function(filter, options, callback){
   data.get({$and: [filter, {deleted: false}]}, 'bulletin_card', options, function(err, docs){
     if(!err){
+
+      //Do some stuff to mark these cards read when they are already read, and then mark all read for next time
+      if(options.requester){
+        user.get({discord: options.requester}, {first: true}, function(err, requester){
+          if(!err){
+            //Add read state to all cards that requester got served already
+            if (Array.isArray(requester.read_cards)) requester.read_cards.forEach((read_id) => {
+              docs.forEach((card) => {
+                if(card.id == read_id) card.read = true;
+              });
+            });
+
+            //Add all cards to read state of requester
+            if (!Array.isArray(requester.read_cards)) requester.read_cards = [];
+            docs.forEach((card) => { if(!(requester.read_cards.indexOf(card.id) > -1)) requester.read_cards.push(card.id); });
+            
+            user.edit(requester, false, function(err, doc){});
+          }
+        });
+      }
+
+      //Do some magic and call docs back
       if(options.include_author && docs.length > 0){
         for(let i = 0; i < docs.length; i++){
           user.get({discord: docs[i].owner}, {first: true}, function(err, doc){
