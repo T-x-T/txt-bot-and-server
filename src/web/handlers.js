@@ -127,7 +127,7 @@ handlers.paxLogin = function(data, callback){
         discord_api.getUserObject({token: access_token}, false, function(err, userData){
           user.get({discord: userData.id}, {privacy: true, onlyPaxterians: true, first: true}, function(err, memberData){
             //Now set the access_token as a cookie and redirect the user to the interface.html, also set access_level and mc_ign cookies THIS SHOULD NEVER BE TRUSTED FOR SECURITY, ONLY FOR MAKING THINGS SMOOTHER!!!
-            callback(302, {Location: `https://${data.headers.host}/interface`, 'Set-Cookie': [`access_token=${access_token};Max-Age=21000};path=/`, `access_level=${access_level};Max-Age=22000};path=/`, `mc_ign=${memberData.mcName};Max-Age=22000};path=/`]}, 'plain');
+            callback(302, {Location: `https://${data.headers.host}/interface`, 'Set-Cookie': [`discord_id=${userData.id};Max-Age=21000};path=/`, `access_token=${access_token};Max-Age=21000};path=/`, `access_level=${access_level};Max-Age=22000};path=/`, `mc_ign=${memberData.mcName};Max-Age=22000};path=/`]}, 'plain');
           });
         });
       }else{
@@ -160,7 +160,40 @@ handlers.paxapi.roles = function(data, callback){
   });
 };
 
-//API functionality for handling the bulletin board
+//API functionality for handling the bulletin categories
+//Auth: access_level >= 3
+handlers.paxapi.bulletinCategory = function(data, callback){
+  if(typeof handlers.paxapi.bulletinCategory[data.method] == 'function'){
+    //Check if user is authorized to send that request
+    if(data.cookies.access_token){
+      oauth.getAccessLevel({token: data.cookies.access_token}, false, function(err, access_level) {
+        if(access_level >= 3){
+          //Add access_level to data, to allow edits by admins (>=9)
+          data.access_level = access_level;
+
+          //User is authorized
+          handlers.paxapi.bulletinCategory[data.method](data, callback);
+        }else{
+          callback(403, {err: 'You are not authorized to do that!'}, 'json');
+        }
+      });
+    }else{
+      callback(401, {err: 'Your client didnt send an access_token, please log in again'}, 'json');
+    }
+  }else{
+    callback(405, {err: 'Verb not allowed'}, 'json');
+  }
+};
+
+handlers.paxapi.bulletinCategory.get = function(data, callback){
+  bulletin.getCategories(false, false, function(err, docs){
+    if(docs) callback(200, docs, 'json');
+    else callback(404, {err: 'Couldnt get any categories for the filter'}, 'json');
+  });
+};
+
+
+//API functionality for handling the bulletin cards
 //Auth: access_level >= 3
 handlers.paxapi.bulletin = function(data, callback){
   if(typeof handlers.paxapi.bulletin[data.method] == 'function'){
@@ -190,7 +223,7 @@ handlers.paxapi.bulletin.post = function(data, callback){
   //Get the discord id of the author
   oauth.getDiscordId({token: data.cookies.access_token}, false, function(err, discord_id){
     if(discord_id){
-      data.payload.author = discord_id;
+      data.payload.owner = discord_id;
       bulletin.save(data.payload, false, function(err, doc){
         if(!err && doc){
           callback(200, doc, 'json');
@@ -225,11 +258,15 @@ handlers.paxapi.bulletin.put = function(data, callback){
 };
 
 //Get bulletin(s) based on filter
-//Update an existing bulletin
+//Retrieve an existing bulletin
+//Needs to provide that category ID in the path e.g.: api/bulletin/0
 handlers.paxapi.bulletin.get = function(data, callback) {
-  bulletin.get(data.queryStringObject, false, function(err, docs) {
-    if(docs) callback(200, docs, 'json');
-    else callback(404, {err: 'Couldnt get any posts for the filter'}, 'json');
+  oauth.getDiscordId({token: data.cookies.access_token}, false, function(err, discord_id){
+    if(err) global.log(0, 'webserver', 'handlers.paxapi.bulletin.get encountered error while trying to get discord_id', {err: err, discord_id: discord_id, data: data});
+    bulletin.getCards({ category: data.path.split('/')[data.path.split('/').length - 1] }, { include_author: true, requester: discord_id }, function (err, docs) {
+      if (docs) callback(200, docs, 'json');
+      else callback(404, { err: 'Couldnt get any posts for the filter' }, 'json');
+    });
   });
 };
 
@@ -297,6 +334,14 @@ handlers.paxapi.post.get = function(data, callback){
 
 //API functionallity surrounding member stuff
 handlers.paxapi.member = function(data, callback){
+  if (data.path.split('/')[data.path.split('/').length - 1] == 'bulletins'){
+    bulletin.getCards({ owner: data.path.split('/')[data.path.split('/').length - 2]}, false, function(err, docs){
+      if(!err) callback(200, docs, 'json');
+        else callback(500, {err: err}, 'json');
+    });
+    return;
+  }
+
   if(typeof handlers.paxapi.member[data.method] == 'function'){
     handlers.paxapi.member[data.method](data, callback);
   }else{

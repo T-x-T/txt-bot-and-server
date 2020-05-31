@@ -12,6 +12,9 @@ li
 html
     scroll-behavior: smooth
     overflow-x: hidden!important
+    //firefox scrollbar
+    scrollbar-width: thin
+    scrollbar-color: $pax-darkgray $pax-nearlywhite
 
 #index
     overflow-x: visible!important
@@ -20,11 +23,11 @@ html.noscroll
     overflow-y: hidden
 
 ::selection
-    background: $pax-cyan
+    background: rgba(0,0,0,.5)
     color: $pax-white
 
 ::-moz-selection
-    background: $pax-cyan
+    background: rgba(0,0,0,.5)
     color: $pax-white
 
 ::-webkit-scrollbar

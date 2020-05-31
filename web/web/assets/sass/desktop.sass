@@ -32,7 +32,7 @@
         bottom: 20px
         right: 20px
 
-    /* ############### nav ###############*/
+    // ############### nav ###############*/
 
     nav ul
         width: 1040px
@@ -53,7 +53,7 @@
                 a
                     box-shadow: 0px 0px 0px 3px $pax-darkcyan
 
-    /* --- dropdown menu --- */
+    // dropdown menu 
     nav
         li
             position: relative
@@ -93,7 +93,7 @@
                 &:hover
                     background: $pax-cyan
 
-    /* ############### main ###############*/
+    // ############### main ###############*/
 
     .wrapper
         width: 880px
@@ -106,3 +106,79 @@
     .wrapper.content
         background: $pax-white
         padding: 15px 30px 30px 30px
+
+    // ################### bulletin board ###################*/
+
+    #bulletin_own::after
+        right: 0
+        margin-top: 50px
+        width: 0px
+        height: 150px
+        
+    #bulletin_category_
+        &0, &1, &2, &3, &7
+            &::after
+                right: 0
+                margin-top: 50px
+                width: 0px
+                height: 150px
+
+        &4, &5, &6
+            margin-bottom: 0px!important
+            padding-bottom: 50px
+            box-sizing: border-box
+            position: relative
+            display: inline-block
+
+            &::after
+                bottom: 0!important
+                width: 100%!important
+                height: 20px!important
+
+            > div
+                transform: rotate(0deg) translateY(-25px)!important
+                height: 300px!important
+                position: relative!important
+                padding-top: 0!important
+
+                > div
+                    transform: rotate(0deg)!important
+                    margin: 25px 0!important
+
+                    &:hover
+                        transform: rotate(0deg) scale(.9)!important
+
+
+            button
+                top: -7px!important
+        &5
+            margin: 0 60px!important
+
+    #bulletin_category_container > div 
+        margin-bottom: 225px
+
+        > div 
+            width: fit-content
+            height: 960px
+            transform-origin: right top
+            position: absolute
+            top: 55px
+            left: 0
+            transform: rotate(-90deg) translateY(-300px)
+            overflow-y: scroll
+            overflow-x: hidden
+            padding: 0px 10px 0px 0px
+
+            &::-webkit-scrollbar
+                width: 5px
+
+            > div
+                margin: 100px 0px
+                transform: rotate(90deg) translateY(-25px)
+
+                &:hover
+                    transform: rotate(90deg) scale(.9) translateY(-25px)
+
+    #bulletin_card_popup_template, #bulletin_new_template
+        min-width: 500px
+        max-width: 750px

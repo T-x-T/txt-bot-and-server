@@ -176,7 +176,8 @@ var userSchema = new Schema({
   karma: {
     type: Number,
     default: 0
-  }
+  },
+  read_cards: Array
 });
 
 var statsSchema = new Schema({
@@ -211,6 +212,75 @@ var logSchema = new Schema({
   data: Object
 });
 
+var bulletinCardSchema = new Schema({
+  id: {
+    type: Number,
+    index: true,
+    unique: true,
+    default: 0
+  },
+  deleted: {
+    type: Boolean,
+    default: false
+  },
+  owner: {
+    type: String,
+    required: true
+  },
+  category: {
+    type: Number,
+    required: true
+  },
+  message: {
+    type: String,
+    required: true
+  },
+  date: {
+    type: Date,
+    required: true
+  },
+  expiry_date: Date,
+  event_date: Date,
+  location_x: Number,
+  location_z: Number,
+  item_names: Array,
+  item_amounts: Array,
+  price_names: Array,
+  price_amounts: Array
+});
+
+var bulletinCategorySchema = new Schema({
+  id: {
+    type: Number,
+    index: true,
+    unique: true,
+    default: 0
+  },
+  permission_level: {
+    type: Number,
+    default: 3
+  },
+  name: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  },
+  locked: {
+    type: Boolean,
+    default: false
+  },
+  enable_coordinates: Boolean,
+  enable_trading: Boolean,
+  enable_event: Boolean,
+  discord_channel: String,
+  discord_role: String,
+  priority: Number,
+  display_mode: String
+});
+
 //Code from stackoverflow to increment the counter id
 postSchema.pre('save', function(next) {
   // Only increment when the document is new
@@ -237,6 +307,32 @@ applicationSchema.pre('save', function(next) {
   }
 });
 
+//Code from stackoverflow to increment the counter id
+bulletinCardSchema.pre('save', function(next) {
+  // Only increment when the document is new
+  if(this.isNew) {
+    bulletinCardModel.count().then(res => {
+      this.id = res; // Increment count
+      next();
+    });
+  } else {
+    next();
+  }
+});
+
+//Code from stackoverflow to increment the counter id
+bulletinCategorySchema.pre('save', function(next) {
+  // Only increment when the document is new
+  if(this.isNew) {
+    bulletinCategoryModel.count().then(res => {
+      this.id = res; // Increment count
+      next();
+    });
+  } else {
+    next();
+  }
+});
+
 //test Schema
 var testSchema = new Schema({
   id: Number,
@@ -244,23 +340,27 @@ var testSchema = new Schema({
 });
 
 //Set up the models
-var applicationModel = mongoose.model('applications', applicationSchema);
-var bulletinModel    = mongoose.model('bulletin', bulletinSchema);
-var userModel        = mongoose.model('members', userSchema);
-var statsModel       = mongoose.model('mcstats', statsSchema);
-var testModel        = mongoose.model('test', testSchema);
-var postModel        = mongoose.model('posts', postSchema);
-var logModel         = mongoose.model('log', logSchema);
+var applicationModel      = mongoose.model('applications', applicationSchema);
+var bulletinModel         = mongoose.model('bulletin', bulletinSchema);
+var userModel             = mongoose.model('members', userSchema);
+var statsModel            = mongoose.model('mcstats', statsSchema);
+var testModel             = mongoose.model('test', testSchema);
+var postModel             = mongoose.model('posts', postSchema);
+var logModel              = mongoose.model('log', logSchema);
+var bulletinCardModel     = mongoose.model('bulletin_card', bulletinCardSchema);
+var bulletinCategoryModel = mongoose.model('bulletin_category', bulletinCardSchema);
 
 //Container for all database models
 const models = {
-  'application': applicationModel,
-  'bulletin': bulletinModel,
-  'user': userModel,
-  'stats': statsModel,
-  'test': testModel,
-  'post': postModel,
-  'log': logModel
+  'application'      : applicationModel,
+  'bulletin'         : bulletinModel,
+  'user'             : userModel,
+  'stats'            : statsModel,
+  'test'             : testModel,
+  'post'             : postModel,
+  'log'              : logModel,
+  'bulletin_card'    : bulletinCardModel,
+  'bulletin_category': bulletinCategoryModel
 };
 
 /*

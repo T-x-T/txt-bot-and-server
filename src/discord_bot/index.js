@@ -6,7 +6,7 @@
 //Dependencies
 const main = require('./main.js');
 const discord_helpers = require('./helpers');
-
+const _bulletin = require('../bulletin');
 
 //Create the container
 var index = {};
@@ -38,7 +38,7 @@ setImmediate(function(){
   
   emitter.on('application_new', (doc) => {
     global.log(0, 'discord_bot', 'event application_new received', {doc: doc});
-    discord_helpers.sendMessage('New application from ' + doc.mc_ign + '\nhttps://paxterya.com/staff/application.html?id=' + doc.id, config.discord_bot.channel.new_application_announcement, function(err){
+    discord_helpers.sendMessage('New application from ' + doc.mc_ign + '\nhttps://paxterya.com/application.html?id=' + doc.id, config.discord_bot.channel.new_application_announcement, function(err){
       if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new application message', {err: err, application: doc});
     });
   });
@@ -63,17 +63,55 @@ setImmediate(function(){
     });
   });
   
-  emitter.on('bulletin_new', (msg) => {
-    global.log(0, 'discord_bot', 'event bulletin_new received', {msg: msg});
-    discord_helpers.sendMessage(msg, config.discord_bot.channel.new_bulletin_announcement, function(err) {
-      if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new bulletin message', {err: err, message: msg});
+  emitter.on('bulletin_new', (bulletin) => {
+    global.log(0, 'discord_bot', 'event bulletin_new received', {bulletin: bulletin});
+    
+    _bulletin.getCategories({id: bulletin.category}, {first: true}, function(err, category){
+      let msg = '';
+
+      msg += `<@${bulletin.owner}> posted a new bulletin in ${category.name}:\n\n`;
+      msg += bulletin.message + '\n\n';
+      if(bulletin.event_date) msg += `The event happens on ${new Date(bulletin.event_date).toISOString().substring(0, 10)} (in ${countdown(new Date(bulletin.event_date))})\n`;
+      if(bulletin.location_x || bulletin.location_x === 0) msg += `Coordinates: ${bulletin.location_x}/${bulletin.location_z}\n`;
+      if(bulletin.item_names){
+        msg += '```';
+        for(let i = 0; i < bulletin.item_names.length; i++){
+          msg += `item:  ${bulletin.item_amounts[i]} x ${bulletin.item_names[i]}\n`;
+          msg += `price: ${bulletin.price_amounts[i]} x ${bulletin.price_names[i]}\n`;
+          msg += '\n';
+        }
+        msg += '```';
+      }
+      if(category.discord_role) msg += `\n<@${category.discord_role}>`;
+      discord_helpers.sendMessage(msg, category.discord_channel, function(err) {
+        if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new bulletin message', {err: err, message: msg});
+      });
     });
   });
   
-  emitter.on('bulletin_edit', (msg) => {
-    global.log(0, 'discord_bot', 'event bulletin_edit received', {msg: msg});
-    discord_helpers.sendMessage(msg, config.discord_bot.channel.new_bulletin_announcement, function(err) {
-      if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the edited bulletin message', {err: err, message: msg});
+  emitter.on('bulletin_edit', (bulletin) => {
+    global.log(0, 'discord_bot', 'event bulletin_edit received', {bulletin: bulletin});
+    
+    _bulletin.getCategories({id: bulletin.category}, {first: true}, function(err, category){
+      let msg = '';
+
+      msg += `<@${bulletin.owner}> posted a new bulletin in ${category.name}:\n\n`;
+      msg += bulletin.message + '\n\n';
+      if(bulletin.event_date) msg += `The event happens on ${new Date(bulletin.event_date).toISOString().substring(0, 10)} (in ${countdown(new Date(bulletin.event_date))})\n`;
+      if(bulletin.location_x || bulletin.location_x === 0) msg += `Coordinates: ${bulletin.location_x}/${bulletin.location_z}\n`;
+      if(bulletin.item_names){
+        msg += '```';
+        for(let i = 0; i < bulletin.item_names.length; i++){
+          msg += `item:  ${bulletin.item_amounts[i]} x ${bulletin.item_names[i]}\n`;
+          msg += `price: ${bulletin.price_amounts[i]} x ${bulletin.price_names[i]}\n`;
+          msg += '\n';
+        }
+        msg += '```';
+      }
+
+      discord_helpers.sendMessage(msg, config.discord_bot.channel.new_bulletin_announcement, function(err) {
+        if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new bulletin message', {err: err, message: msg});
+      });
     });
   });
   
@@ -94,3 +132,27 @@ setImmediate(function(){
 
 //Export the container
 module.exports = index;
+
+//Modified from https://stackoverflow.com/a/9335296 could still be updated to allow dynamic updates of the timer
+function countdown(end){
+  let _second = 1000;
+  let _minute = _second * 60;
+  let _hour = _minute * 60;
+  let _day = _hour * 24;
+  let timer;
+  let now = new Date();
+  let distance = end - now;
+  if (distance < 0) {
+    clearInterval(timer);
+    return 'Its over already :(';
+  }
+  let days = Math.floor(distance / _day);
+  let hours = Math.floor((distance % _day) / _hour);
+  let minutes = Math.floor((distance % _hour) / _minute);
+
+  let output = days + 'days ';
+  output += hours + 'hrs ';
+  output += minutes + 'mins ';
+
+  return output;
+};
