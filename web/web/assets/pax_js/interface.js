@@ -281,7 +281,7 @@ interface.bulletin.init = function(){
         display_mode: category.display_mode
       }, function () {
         parent.lastChild.childNodes.forEach((node) => {
-          node.classList.add('read');
+          if(node.raw_data.read) node.classList.add('read');
         });
       });
     });
