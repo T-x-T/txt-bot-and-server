@@ -19,14 +19,7 @@ interface.init = function(){
     interface.post.load();
   }
   interface.bulletin.init();
-  setTimeout(setRotatedHeight, 1000);
 };
-
-window.onresize = setRotatedHeight;
-
-
-
-
 
 //All application functions
 interface.application = {};
@@ -640,22 +633,4 @@ interface.bulletin.delete = function(popup){
       });
     }
   });
-};
-
-
-
-
-
-
-// set correct 'height'/(width) for rotated bulletin category
-function setRotatedHeight(){
-  let bulletin_height = window.innerWidth;
-  if (bulletin_height < 960) {
-    let containers = document.getElementsByClassName('horizontal-scroll-container');
-    for (let i = 0; i < containers.length; i++) containers[i].style.height = `${bulletin_height - 40}px`;
-  }
-  if (bulletin_height < 500) {
-    let containers = document.getElementsByClassName('horizontal-scroll-container');
-    for (let i = 0; i < containers.length; i++) containers[i].style.height = `${bulletin_height + 40}px`;
-  }
 };

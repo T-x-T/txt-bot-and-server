@@ -235,10 +235,6 @@ button#popup-close
             position: absolute
             display: block
             pointer-events: none
-            right: 0
-            margin-top: 50px
-            width: 0px
-            height: 150px
             box-shadow: 0 0 20px 20px $pax-white
 
         button
@@ -294,28 +290,12 @@ button#popup-close
 
     > div
         position: relative
-        margin-bottom: 225px
             
 #bulletin_category_container > div > div
-    width: fit-content
-    overflow-y: scroll
-    overflow-x: hidden
-    height: 960px
-    transform-origin: right top
-    position: absolute
-    top: 55px
-    left: 0
-    z-index: 0
     scrollbar-width: thin
-    scrollbar-color: $pax-darkgray $pax-nearlywhite
-    padding: 0px 10px 0px 0px
-    transform: rotate(-90deg) translateY(-300px)
-
-    &::-webkit-scrollbar
-        width: 5px
+    scrollbar-color: $pax-darkgray $pax-nearlywhite    
 
 #bulletin_category_container > div > div > div
-    margin: 100px 0px
     min-width: 225px
     max-width: 225px
     height: 150px
@@ -323,12 +303,8 @@ button#popup-close
     position: relative
     border-radius: 20px
     padding: 20px
-    transform: rotate(90deg) translateY(-25px)
     box-sizing: border-box
     cursor: pointer
-
-    &:hover
-        transform: rotate(90deg) scale(.9) translateY(-25px)
 
 p#bulletin_message + p, a.bulletin_coords + p
     background: $pax-darkgray
@@ -374,12 +350,9 @@ a.bulletin_display_more
         background: $pax-darkcyan
 
 #bulletin_card_popup_template, #bulletin_new_template
-    min-width: 500px
-    max-width: 750px
     min-height: 175px
     padding-bottom: 60px
     max-height: 80vh
-    overflow-y: scroll
     overflow-x: hidden
     clear: both
 

@@ -269,6 +269,47 @@
         label
             margin: 15px 20px
 
+
+    // ################### bulletin board ###################*/
+
+    .horizontal-scroll-container
+        display: flex
+        width: 100%
+        overflow-x: scroll
+        height: fit-content
+        padding-bottom: 10px
+        margin-top: 19px
+        transform: rotateX(180deg)
+
+
+        &::-webkit-scrollbar
+            height: 5px
+
+        > div
+            margin-right: 30px
+            transform: rotateX(180deg)
+
+    #bulletin_category_
+        &0, &1, &2, &3, &4, &5, &6, &7
+            &::after
+                right: 0
+                top: 80px
+                width: 0px
+                height: 150px
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /* ################## adaptions for very small screens #####################*/
 @media screen and ($small-mobile)
 
