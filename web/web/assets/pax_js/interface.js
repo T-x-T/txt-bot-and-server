@@ -221,6 +221,11 @@ interface.bulletin.init = function(){
 
     //Create global categories object to hold all the categories for later use in data_mappings
     interface.bulletin.categories = {};
+    
+    //Sort response
+    res.sort((a, b) => {
+      return a.priority - b.priority;
+    });
 
     //Create a div for each category, customize template and activate framework-list
     res.forEach((category) => {
