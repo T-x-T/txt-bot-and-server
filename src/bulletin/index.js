@@ -105,7 +105,7 @@ index.delete = function(input, options, callback) {
     if(!err && typeof doc !== 'undefined') {
       if(input.deleteAuthor === doc.owner) {
         //new author same as old one
-        main.delete({_id: input._id}, callback);
+        main.delete(input, callback);
       } else {
         //Check if new author is mod
         if(auth.getAccessLevel({id: input.deleteAuthor}, false) >= 7) {
