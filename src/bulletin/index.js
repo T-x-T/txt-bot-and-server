@@ -103,7 +103,7 @@ index.delete = function(input, options, callback) {
   //Get the current version of the bulletin to be deleted to find out the owner
   index.getCards({id: input.id}, {first: true}, function(err, doc) {
     if(!err && typeof doc !== 'undefined') {
-      if(input.deleteAuthor === doc.author) {
+      if(input.deleteAuthor === doc.owner) {
         //new author same as old one
         main.delete({_id: input._id}, callback);
       } else {
