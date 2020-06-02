@@ -95,7 +95,7 @@ setImmediate(function(){
     _bulletin.getCategories({id: bulletin.category}, {first: true}, function(err, category){
       let msg = '';
 
-      msg += `<@${bulletin.owner}> posted a new bulletin in ${category.name}:\n\n`;
+      msg += `<@${bulletin.owner}> edited a bulletin in ${category.name}:\n\n`;
       msg += bulletin.message + '\n\n';
       if(bulletin.event_date) msg += `The event happens on ${new Date(bulletin.event_date).toISOString().substring(0, 10)} (in ${countdown(new Date(bulletin.event_date))})\n`;
       if(bulletin.location_x || bulletin.location_x === 0) msg += `Coordinates: ${bulletin.location_x}/${bulletin.location_z}\n`;
@@ -109,7 +109,7 @@ setImmediate(function(){
         msg += '```';
       }
 
-      discord_helpers.sendMessage(msg, config.discord_bot.channel.new_bulletin_announcement, function(err) {
+      discord_helpers.sendMessage(msg, category.discord_channel, function(err) {
         if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new bulletin message', {err: err, message: msg});
       });
     });
