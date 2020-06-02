@@ -172,7 +172,7 @@ bulletin.sanitize = function(input, callback){
     return;
   }
   input.message = sanitize(input.message, {allowedTags: [], allowedAttributes: {}});
-  input.message = input.message.replace(/\r?\n|\r/g, " ");
+  input.message = input.message.replace(/\n{2,}/g, " ");
   input.message = input.message.replace(/@/g, "");
   input.message = input.message.replace(/&amp;/g, "&");
   input.message = input.message.trim();
