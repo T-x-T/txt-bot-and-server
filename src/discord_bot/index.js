@@ -7,6 +7,7 @@
 const main = require('./main.js');
 const discord_helpers = require('./helpers');
 const _bulletin = require('../bulletin');
+const application = require('../application');
 
 //Create the container
 var index = {};
@@ -27,12 +28,10 @@ index.updateAllNicks      = discord_helpers.updateAllNicks;
 
 //setImmediate because otherwise application wont load correctly
 setImmediate(function(){
-  const application = require('../application');
-
-  emitter.on('application_accepted', (doc) => {
+    emitter.on('application_accepted', (doc) => {
     global.log(0, 'discord_bot', 'event application_accepted received', {doc: doc});
     if(discord_helpers.isGuildMember(doc.discord_id)){
-      application.acceptWorkflow(doc.discord_id, application);
+      application.acceptWorkflow(doc.discord_id, doc);
     }
   });
   

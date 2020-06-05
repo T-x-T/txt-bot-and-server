@@ -179,25 +179,18 @@ application.changeStatus = function(id, newStatus, reason, callback){
 //3. Whitelist the member on the server
 //4. Announce the new member on the discord and if publish_about_me is true, publish that too.
 //Then the member will automatically appear in the member list on the website as well
-application.acceptWorkflow = function(discord_id){
-  application.read({discord_id: discord_id}, false, function(err, app){
-    app = app[0];
-    if(!err){
-      if(!app.mc_ign || !app.discord_nick || app.discord_nick == 'load#ing'){
-        _internal.addNicks(app, false, function(err, doc){
-          if(err || !doc) global.log(2, 'application', 'application.acceptWorkflow couldnt get the ign', {application: app, newDoc: doc, err: err});
-          if(!err) app = doc;
-          global.log(0, 'application', 'emitted application_accepted_joined with having to add nicks', {application: app});
-          emitter.emit('application_accepted_joined', app);
-        });
-      }else{
-        global.log(0, 'application', 'emitted application_accepted_joined without having to add nicks', {application: app});
-        emitter.emit('application_accepted_joined', app);
-      }
-    }else{
-      global.log(2, 'application', 'application.acceptWorkflow couldnt get the application from the database', {err: err, application: app, discord_id: discord_id});
-    } 
-  });
+application.acceptWorkflow = function(discord_id, app){
+  if (!app.mc_ign || !app.discord_nick || app.discord_nick == 'load#ing') {
+    _internal.addNicks(app, false, function (err, doc) {
+      if (err || !doc) global.log(2, 'application', 'application.acceptWorkflow couldnt get the ign', { application: app, newDoc: doc, err: err });
+      if (!err) app = doc;
+      global.log(0, 'application', 'emitted application_accepted_joined with having to add nicks', { application: app });
+      emitter.emit('application_accepted_joined', app);
+    });
+  } else {
+    global.log(0, 'application', 'emitted application_accepted_joined without having to add nicks', { application: app });
+    emitter.emit('application_accepted_joined', app);
+  }
 };
 
 
