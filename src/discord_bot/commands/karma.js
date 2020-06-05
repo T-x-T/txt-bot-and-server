@@ -87,9 +87,10 @@ _internals.generateTopList = function(amount, callback){
 
     //Form the output string
     var count = 0;
-    var output = '```Top Members:\n\n';
-    output += 'Rank  Karma  Name\n';
+    var output = 'Top Members:\n\n';
+    output += '`Rank  Karma  Name`\n';
     entries.forEach((curEntry) => {
+      output += '`';
       count++;
       //Add current rank and amount of karma with correct padding
       output += `${count}.`;
@@ -98,9 +99,9 @@ _internals.generateTopList = function(amount, callback){
 
       //Insert the right amount of spaces
       output += '  ';
-      output += `${curEntry.name}\n`;
+      output += `${curEntry.name}`;
+      output += '`\n';
     });
-    output += '```';
 
     //callback the output string
     callback(output);
