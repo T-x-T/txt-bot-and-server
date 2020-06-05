@@ -35,10 +35,8 @@ module.exports = {
         break;
       case 'list':
         //user wants to see the top all list
-        message.channel.startTyping();
         _internals.generateTopList(false, function(output){
-          message.channel.send(output, { split: true })
-            .then(message.channel.stopTyping(true));
+          message.channel.send(output, { split: true });
         });
         break;
       case 'rank':
