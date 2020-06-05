@@ -28,6 +28,9 @@ emitter.on('discord_bot_ready' ,() => {
   client.on('message', message => {
     //Stop processing the message when it doesnt start with our prefix or if its from another bot
     if (!message.content.startsWith(config.discord_bot.bot_prefix) || message.author.bot || message.channel.type === 'dm') return;
+    
+    //Stop processing the message if its empty or just a number
+    if(message.content.length <= 2 || Number.isInteger(Number.parseInt(message.content[2]))) return;
 
     //Split the message into the command name and its arguments
     var args = message.content.slice(config.discord_bot.bot_prefix.length).split(/ +/);
