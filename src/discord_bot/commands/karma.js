@@ -29,8 +29,14 @@ module.exports = {
     switch(args[0]){
       case 'top':
         //user wants to see the top list
-        _internals.generateTopList(function(output){
+        _internals.generateTopList(10, function(output){
           message.channel.send(output);
+        });
+        break;
+      case 'list':
+        //user wants to see the top all list
+        _internals.generateTopList(false, function(output){
+          message.channel.send(output, { split: true });
         });
         break;
       case 'rank':
@@ -73,24 +79,25 @@ module.exports = {
 
 var _internals = {};
 
-_internals.generateTopList = function(callback){
+_internals.generateTopList = function(amount, callback){
   //Get the sorted array
   _internals.getSortedKarmaArray(true, function(entries){
     //Only use the top 10 users
-    entries = entries.slice(0, 10);
+    if(amount) entries = entries.slice(0, amount);
 
     //Form the output string
     var count = 0;
     var output = '```Top Members:\n\n';
-    output += 'Rank  Karma\tName\n';
+    output += 'Rank  Karma  Name\n';
     entries.forEach((curEntry) => {
       count++;
-      output += count < 10 ? `   ${count}. ${curEntry.karma}` : `  ${count}. ${curEntry.karma}`;
+      //Add current rank and amount of karma with correct padding
+      output += `${count}.`;
+      for(let i = 0; i < 11 - `${count}.${curEntry.karma}`.length; i++) output += ' ';
+      output += curEntry.karma;
+
       //Insert the right amount of spaces
-      var spaces = 9 - curEntry.karma.toString().length;
-      for (var i = 0; i < spaces; i++) {
-        output += ' ';
-      }
+      output += '  ';
       output += `${curEntry.name}\n`;
     });
     output += '```';
@@ -110,9 +117,10 @@ _internals.getSortedKarmaArray = function(includeNames, callback){
         if (data) {
           name = data;
         } else {
-          name = 'Ghost person';
-          }
+          return;
+        }
       });
+      if(name == 'Wumpus') return;
       let finishedObject = false;
       if(includeNames){
         finishedObject = {
