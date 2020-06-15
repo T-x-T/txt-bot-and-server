@@ -1,7 +1,8 @@
 {
   "scripts": {
     "test": "mocha",
-    "prod": "index.js"
+    "prod": "index.js",
+    "babel": "./node_modules/.bin/babel web/web/assets/react_js --out-dir web/web/assets/pax_js"
   },
   "name": "txt-bot-and-server",
   "description": "Combination of all Software related to txt's discord and servers",
@@ -19,6 +20,9 @@
     "sanitize-html": "^1.22.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.10.1",
+    "@babel/core": "^7.10.2",
+    "@babel/preset-react": "^7.10.1",
     "mocha": "^7.1.2"
   },
   "repository": {
