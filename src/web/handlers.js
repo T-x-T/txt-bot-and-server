@@ -299,6 +299,24 @@ handlers.paxapi.post = function(data, callback) {
   }
 };
 
+handlers.paxapi.post.get = function(data, callback){
+  post.get({public: true}, false, function(err, posts){
+    if(err){
+      callback(500, {err_msg: 'Error retrieving blog posts', err: err}, 'json');
+      return;
+    }
+
+    //Check if the post is in the future (here, because we cant really compare the dates directly)
+    let filteredPosts = [];
+    posts.forEach((post) => {
+      if(new Date(post.date).toISOString().substring(0, 10) <= new Date(Date.now()).toISOString().substring(0, 10)) filteredPosts.push(post);
+    });
+    posts = filteredPosts;
+
+    callback(200, posts, 'json');
+  });
+};
+
 //Save a new/modified post to the database (ADMIN ONLY!)
 handlers.paxapi.post.post = function(data, callback){
   //Check if there is an access_token
