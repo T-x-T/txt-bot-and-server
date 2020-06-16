@@ -156,7 +156,10 @@ _statsTemplates.general = function(stats) {
     damageDealt:    _statsTemplates.single.damageDealt(stats),
     damageTaken:    _statsTemplates.single.damageTaken(stats),
     playtime:       _statsTemplates.single.playtime(stats)       + 'h',
-    distanceByFoot: _statsTemplates.single.distanceByFoot(stats) + 'km'
+    distanceByFoot: _statsTemplates.single.distanceByFoot(stats) + 'km',
+    jumps:          _statsTemplates.single.jumps(stats),
+    animals_bred:   _statsTemplates.single.animals_bred(stats),
+    times_slept:    _statsTemplates.single.times_slept(stats)
   };
 };
 
@@ -288,6 +291,9 @@ _statsTemplates.single.total_crafted             = function(stats) {return sumOf
 _statsTemplates.single.total_broken              = function(stats) {return sumOfObject(stats['minecraft:broken'])                                          ? sumOfObject(stats['minecraft:broken'])                                          : 0 };
 _statsTemplates.single.total_dropped             = function(stats) {return sumOfObject(stats['minecraft:dropped'])                                         ? sumOfObject(stats['minecraft:dropped'])                                         : 0 };
 _statsTemplates.single.total_picked_up           = function(stats) {return sumOfObject(stats['minecraft:picked_up'])                                       ? sumOfObject(stats['minecraft:picked_up'])                                       : 0 };
+_statsTemplates.single.times_slept               = function(stats) {return stats['minecraft:custom']['minecraft:sleep_in_bed']                             ? stats['minecraft:mined']['minecraft:sleep_in_bed']                              : 0 };
+_statsTemplates.single.jumps                     = function(stats) {return stats['minecraft:custom']['minecraft:jump']                                     ? stats['minecraft:custom']['minecraft:jump']                                     : 0 };
+_statsTemplates.single.animals_bred              = function(stats) {return stats['minecraft:custom']['minecraft:animals_bred']                             ? stats['minecraft:custom']['minecraft:animals_bred']                             : 0 };
 _statsTemplates.single.distanceByFoot            = function(stats) {return prettiyDistance(stats['minecraft:custom']['minecraft:walk_on_water_one_cm'] + stats['minecraft:custom']['minecraft:crouch_one_cm'] + stats['minecraft:custom']['minecraft:walk_one_cm'] + stats['minecraft:custom']['minecraft:walk_under_water_one_cm'] + stats['minecraft:custom']['minecraft:sprint_one_cm']);};
 _statsTemplates.single.total_travelled           = function(stats) {return prettiyDistance(stats['minecraft:custom']['minecraft:sprint_one_cm'] + stats['minecraft:custom']['minecraft:walk_on_water_one_cm'] + stats['minecraft:custom']['minecraft:crouch_one_cm'] + stats['minecraft:custom']['minecraft:climb_one_cm'] + stats['minecraft:custom']['minecraft:walk_one_cm'] + stats['minecraft:custom']['minecraft:walk_under_water_one_cm'] + stats['minecraft:custom']['minecraft:boat_one_cm'] + stats['minecraft:custom']['minecraft:swim_one_cm'] + stats['minecraft:custom']['minecraft:fly_one_cm'] + stats['minecraft:custom']['minecraft:aviate_one_cm'] + stats['minecraft:custom']['minecraft:fall_one_cm']);};
 _statsTemplates.single.total_per_death_mined     = function(stats) {return Math.round(_statsTemplates.single.total_mined(stats)     / _statsTemplates.single.deaths(stats))};      
@@ -297,7 +303,6 @@ _statsTemplates.single.total_per_death_broken    = function(stats) {return Math.
 _statsTemplates.single.total_per_death_dropped   = function(stats) {return Math.round(_statsTemplates.single.total_dropped(stats)   / _statsTemplates.single.deaths(stats))};
 _statsTemplates.single.total_per_death_picked_up = function(stats) {return Math.round(_statsTemplates.single.total_picked_up(stats) / _statsTemplates.single.deaths(stats))};
 _statsTemplates.single.total_per_death_travelled = function(stats) {return Math.round(_statsTemplates.single.total_travelled(stats) / _statsTemplates.single.deaths(stats))};
-
 
 //Helper functions for formatting stats
 

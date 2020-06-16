@@ -101,6 +101,9 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
           output += `Damage taken: ${stats.damageTaken.rank} of ${stats._totalPlayers} (${stats.damageTaken.stat})\n`;
           output += `Playtime: ${stats.playtime.rank} of ${stats._totalPlayers} (${stats.playtime.stat})\n`;
           output += `Distance by foot: ${stats.distanceByFoot.rank} of ${stats._totalPlayers} (${stats.distanceByFoot.stat})\n`;
+          output += `Jumps: ${stats.jumps.rank} of ${stats._totalPlayers} (${stats.jumps.stat})\n`;
+          output += `Animals bred: ${stats.animals_bred.rank} of ${stats._totalPlayers} (${stats.animals_bred.stat})\n`;
+          output += `Times slept: ${stats.times_slept.rank} of ${stats._totalPlayers} (${stats.times_slept.stat})\n`;
         }else{
           output += `General statistics for ${ign}:\n`;
           output += `Deaths: ${stats.deaths}\n`;
@@ -110,6 +113,9 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
           output += `Damage taken: ${stats.damageTaken}\n`;
           output += `Playtime: ${stats.playtime}\n`;
           output += `Distance by foot: ${stats.distanceByFoot}\n`;
+          output += `Jumps: ${stats.jumps}\n`;
+          output += `Animals bred: ${stats.animals_bred}\n`;
+          output += `Times slept: ${stats.times_slept}\n`;
         }
       }else{
         output += 'Something went wrong and I couldnt get the stats';
