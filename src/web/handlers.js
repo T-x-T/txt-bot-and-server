@@ -299,24 +299,6 @@ handlers.paxapi.post = function(data, callback) {
   }
 };
 
-handlers.paxapi.post.get = function(data, callback){
-  post.get({public: true}, false, function(err, posts){
-    if(err){
-      callback(500, {err_msg: 'Error retrieving blog posts', err: err}, 'json');
-      return;
-    }
-
-    //Check if the post is in the future (here, because we cant really compare the dates directly)
-    let filteredPosts = [];
-    posts.forEach((post) => {
-      if(new Date(post.date).toISOString().substring(0, 10) <= new Date(Date.now()).toISOString().substring(0, 10)) filteredPosts.push(post);
-    });
-    posts = filteredPosts;
-
-    callback(200, posts, 'json');
-  });
-};
-
 //Save a new/modified post to the database (ADMIN ONLY!)
 handlers.paxapi.post.post = function(data, callback){
   //Check if there is an access_token
@@ -344,10 +326,44 @@ handlers.paxapi.post.post = function(data, callback){
 
 //Get posts
 handlers.paxapi.post.get = function(data, callback){
-  post.get(data.queryStringObject, false, function(err, posts){
-    if(posts) callback(200, posts, 'json');
-    else callback(404, {err: 'Couldnt get any posts for the filter'}, 'json');
-  });
+  if(data.queryStringObject.hasOwnProperty('public')){
+    post.get({public: true}, false, function(err, posts){
+      if(err){
+        callback(500, {err_msg: 'Error retrieving blog posts', err: err}, 'json');
+        return;
+      }
+  
+      //Check if the post is in the future (here, because we cant really compare the dates directly)
+      let filteredPosts = [];
+      posts.forEach((post) => {
+        if(new Date(post.date).toISOString().substring(0, 10) <= new Date(Date.now()).toISOString().substring(0, 10)) filteredPosts.push(post);
+      });
+      posts = filteredPosts;
+  
+      callback(200, posts, 'json');
+    });
+  }else{
+    if(data.headers.hasOwnProperty('cookie')) {
+      if(data.headers.cookie.indexOf('access_token'.length > -1)) {
+        //There is an access_token cookie, lets check if it belongs to an admin
+        oauth.getAccessLevel({token: data.cookies.access_token}, false, function(err, access_level) {
+          if(access_level >= 9) {
+            //The requester is allowed to post the records
+            post.get(data.queryStringObject, false, function(err, posts){
+              if(posts) callback(200, posts, 'json');
+              else callback(404, {err: 'Couldnt get any posts for the filter'}, 'json');
+            });
+          } else {
+            callback(403, {err: 'You are not authorized to do that!'}, 'json');
+          }
+        });
+      } else {
+        callback(401, {err: 'Your client didnt send an access_token, please log in again'}, 'json');
+      }
+    } else {
+      callback(401, {err: 'Your client didnt send an access_token, please log in again'}, 'json');
+    }
+  }
 };
 
 //API functionallity surrounding member stuff

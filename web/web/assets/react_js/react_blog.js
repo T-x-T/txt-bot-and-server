@@ -18,12 +18,44 @@ class Article extends React.Component{
 class Blog extends React.Component{
   constructor(props){
     super(props);
+    this.update();
+    this.state = {
+      posts: null
+    };
   };
 
+  update(){
+    _internal.send('post', false, 'GET', {public: true}, false, (status, res) => {
+      if(status != 200){
+        window.alert('Encountered error');
+        console.log(res);
+        return;
+      }
+      if(!Array.isArray(res) || res.length === 0){
+        window.alert('No data received');
+        return;
+      }
+      //Sort the array after the date
+      res.sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+      });
+
+      this.setState({
+        posts: res
+      });
+    });
+  }
+
   render(){
-    return (
-      <Article title="Test title" author="TxT" date={Date.now()} body="<h3>This is a title in the body</h3><p>And this is some more text</p>" />
-    );
+    let output;
+    if(this.state.posts){
+      output = this.state.posts.map((post) => {
+        return <Article title={post.title} author={post.author} date={post.date} body={post.body} />
+      });
+    }else{
+      output = <p>Loading...</p>;
+    }
+    return output;
   };
 };
 
