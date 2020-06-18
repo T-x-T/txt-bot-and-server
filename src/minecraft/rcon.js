@@ -45,18 +45,18 @@ rcon.send = function(cmd, server, callback){
 
       //Establish the connection
       rconCon.on('response', (str) => {
-        global.log(0, 'minecraft', 'rcon.send received message from server that was a response', { message: str });
+        global.log(0, 'minecraft', 'rcon.send received message from server that was a response', {server: _server.rcon_server, message: str });
         if (typeof callback == 'function') callback(str);
       });
       rconCon.on('server', (str) => {
-        global.log(0, 'minecraft', 'rcon.send received message from server that wasnt a response', { message: str });
+        global.log(0, 'minecraft', 'rcon.send received message from server that wasnt a response', {server: _server.rcon_server,  message: str });
       })
       rconCon.on('error', (err) => {
         global.log(0, 'minecraft', 'rcon.send received an error', { err: err });
       })
       rconCon.on('auth', () => {
         //Everything fine, send the command
-        global.log(0, 'minecraft', 'rcon.send successfully authenticated to the rcon server', { cmd: cmd });
+        global.log(0, 'minecraft', 'rcon.send successfully authenticated to the rcon server', {server: _server.rcon_server,  cmd: cmd });
         rconCon.send(cmd);
         //We can disconnect again
         rconCon.disconnect();
