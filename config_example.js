@@ -58,9 +58,20 @@ let conf = {
     },
     minecraft: {
       mc_stats_remote: 'rclone remote name',
-      rcon_server: '',
-      rcon_port: 25575,
-      rcon_password: ''
+      rcon_enabled: true,
+      rcon_main_server: 'server1',
+      rcon_servers: {
+        server1: {
+          rcon_server: '',
+          rcon_port: 25575,
+          rcon_password: ''
+        },
+        server2: {
+          rcon_server: '',
+          rcon_port: 25575,
+          rcon_password: ''
+        }
+      },
     },
     post: {
   
@@ -146,9 +157,20 @@ let conf = {
     },
     minecraft: {
       mc_stats_remote: 'rclone remote name',
-      rcon_server: '',
-      rcon_port: 25575,
-      rcon_password: ''
+      rcon_enabled: true,
+      rcon_main_server: 'server1',
+      rcon_servers: {
+        server1: {
+          rcon_server: '',
+          rcon_port: 25575,
+          rcon_password: ''
+        },
+        server2: {
+          rcon_server: '',
+          rcon_port: 25575,
+          rcon_password: ''
+        }
+      },
     },
     post: {
   
@@ -234,9 +256,20 @@ let conf = {
     },
     minecraft: {
       mc_stats_remote: 'rclone remote name',
-      rcon_server: '',
-      rcon_port: 25575,
-      rcon_password: ''
+      rcon_enabled: true,
+      rcon_main_server: 'server1',
+      rcon_servers: {
+        server1: {
+          rcon_server: '',
+          rcon_port: 25575,
+          rcon_password: ''
+        },
+        server2: {
+          rcon_server: '',
+          rcon_port: 25575,
+          rcon_password: ''
+        }
+      },
     },
     post: {
   

@@ -38,8 +38,8 @@ index.updateOnlinePlayers = function(){
 };
 
 //Sends a command directly to the minecraft server using rcon; Only use in edge cases! Rather use events
-index.sendCmd = function(cmd, callback){
-  rcon.send(cmd, function(res){
+index.sendCmd = function(cmd, server, callback){
+  rcon.send(cmd, server, function(res){
     if(res && typeof callback == 'function') callback(res);
   });
 };
@@ -48,20 +48,20 @@ index.sendCmd = function(cmd, callback){
 //Even listeners
 emitter.on('user_left', (member, user) => {
   global.log(0, 'minecraft', 'event user_left received', {member: member});
-  rcon.send(`whitelist remove ${user.mcName}`, function(res){});
+  rcon.send(`whitelist remove ${user.mcName}`, false, function(res){});
 });
 
 emitter.on('user_banned', (member, user) => {
   global.log(0, 'minecraft', 'event user_banned received', {member: member});
-  rcon.send(`whitelist remove ${user.mcName}`, function(res){});
-  rcon.send(`ban ${user.mcName}`, function(res){});
+  rcon.send(`whitelist remove ${user.mcName}`, false, function(res){});
+  rcon.send(`ban ${user.mcName}`, false, function(res){});
 });
 
 emitter.on('application_accepted_joined', (app) => {
   global.log(0, 'minecraft', 'event application_accepted_joined received', {app: app});
   main.getIGN(app.mc_uuid, function(err, ign){
     if(!err && ign){
-      rcon.send(`whitelist add ${ign}`, function(res){});
+      rcon.send(`whitelist add ${ign}`, false, function(res){});
     }else{
       global.log(2, 'minecraft', 'emitter.on application_accepted_joined couldnt get the ign', {err: err, ign: ign, application: app});
     }

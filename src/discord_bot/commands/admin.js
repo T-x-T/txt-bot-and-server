@@ -225,14 +225,16 @@ module.exports = {
         case 'mc':
           switch(args[1]){
             case 'cmd':
+              let server = args[2];
               let cmd = '';
               args[0] = '';
               args[1] = '';
+              args[2] = '';
               args.forEach((arg) => {
                 cmd += arg;
                 cmd += ' ';
               });
-              mc_helpers.sendCmd(cmd.trim(), (res) => {
+              mc_helpers.sendCmd(cmd.trim(), server, (res) => {
                 message.channel.send(res)
               });
               break;
