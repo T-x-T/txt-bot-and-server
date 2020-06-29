@@ -58,10 +58,10 @@ class MemberList extends React.Component {
         return;
       }
 
-      res = sort(res);
-      this.setState = {
+      res = this.sort(res);
+      this.setState({
         members: res
-      };
+      });
     });
   }
 
