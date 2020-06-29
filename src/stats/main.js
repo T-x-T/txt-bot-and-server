@@ -86,6 +86,7 @@ stats.template.memberOverview = function(options, callback) {
         let output = [];
         for(let i = 0; i < docs.length; i++) {
           stats.template.memberOverview({discord_id: docs[i].discord}, function(err, doc) {
+            output.push(doc);
             if(err) error = true;
             //Check if this is the last callback
             if(output.length == docs.length - 1) {
