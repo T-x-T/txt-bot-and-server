@@ -37,7 +37,6 @@ class Blog extends React.Component {
     }, false, (status, res) => {
       if (status != 200) {
         window.alert('Encountered error');
-        console.log(res);
         return;
       }
 

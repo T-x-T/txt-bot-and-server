@@ -28,7 +28,6 @@ class Blog extends React.Component{
     _internal.send('post', false, 'GET', {public: true}, false, (status, res) => {
       if(status != 200){
         window.alert('Encountered error');
-        console.log(res);
         return;
       }
       if(!Array.isArray(res) || res.length === 0){
