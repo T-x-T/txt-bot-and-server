@@ -175,7 +175,7 @@ class Sort extends React.Component {
 
   render(){
     return (
-      <Select defaultValue="joined_date.asc" onChange={(o) => this.handleChange(o)} options={this.options} />
+      <Select defaultValue="joined_date.asc" onChange={(o) => this.handleChange(o)} options={this.options} placeholder="Sort list" className="custom-select membersorting"/>
     );
   }
 }

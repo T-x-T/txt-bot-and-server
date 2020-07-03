@@ -85,7 +85,6 @@ class MemberList extends React.Component {
   }
 
   sort(arr) {
-    console.log(this.props.sort);
     return _internal.sortArray(arr, this.props.sort.split('.')[0], this.props.sort.split('.')[1]);
   } //Returns element if it matches the current searchTerm, null if not
 
@@ -238,7 +237,9 @@ class Sort extends React.Component {
     return /*#__PURE__*/React.createElement(Select, {
       defaultValue: "joined_date.asc",
       onChange: o => this.handleChange(o),
-      options: this.options
+      options: this.options,
+      placeholder: "Sort list",
+      className: "custom-select membersorting"
     });
   }
 
