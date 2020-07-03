@@ -31,24 +31,26 @@ class MemberCard extends React.Component {
 
   render(){
     return (
-      <div className="member-card-wrapper">
-        <div className="member-card-image">
-          <img src={this.props.render_url} alt="image not available" />
-        </div>
-        <div className="member-card-description">
-          <h2>{this.props.mc_ign}</h2>
-          <h3>{this.props.discord_name}</h3>
+      <div >
+        <div className="member-card-wrapper">
+          <div className="member-card-image">
+            <img src={this.props.render_url} alt="image not available" />
+          </div>
+          <div className="member-card-description">
+            <h2>{this.props.mc_ign}</h2>
+            <h3>{this.props.discord_name}</h3>
 
-          <div className="member-card-infos">
-            
-            <MemberCardCountry country={this.props.country} />
-            <MemberCardAge age={this.props.age} />
+            <div className="member-card-infos">
 
-            <p className="description"><br />Playtime: </p>
-            <p className="value">{this.props.playtime + 'h'}</p>
+              <MemberCardCountry country={this.props.country} />
+              <MemberCardAge age={this.props.age} />
 
-            <p className="description"><br />Date joined: </p>
-            <p className="value">{this.props.joined}</p>
+              <p className="description"><br />Playtime: </p>
+              <p className="value">{this.props.playtime + 'h'}</p>
+
+              <p className="description"><br />Date joined: </p>
+              <p className="value">{this.props.joined}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -109,9 +111,15 @@ class MemberList extends React.Component {
 
     if(this.state.members){
       let members = this.sort(this.state.members);
-      output = members.map((member) => {
-        return this.filter(member);  
-      });
+      output = (
+        <div className="member-list-wrapper horizontal-scroll-container">
+          {
+            output = members.map((member) => {
+              return this.filter(member);
+            })
+          }
+        </div>
+      );
     }else{
       output = (<p>Loading...</p>);
     }

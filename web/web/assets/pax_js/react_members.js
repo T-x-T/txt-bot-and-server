@@ -28,7 +28,7 @@ class MemberCard extends React.Component {
   }
 
   render() {
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
       className: "member-card-wrapper"
     }, /*#__PURE__*/React.createElement("div", {
       className: "member-card-image"
@@ -51,7 +51,7 @@ class MemberCard extends React.Component {
       className: "description"
     }, /*#__PURE__*/React.createElement("br", null), "Date joined: "), /*#__PURE__*/React.createElement("p", {
       className: "value"
-    }, this.props.joined))));
+    }, this.props.joined)))));
   }
 
 }
@@ -140,9 +140,11 @@ class MemberList extends React.Component {
 
     if (this.state.members) {
       let members = this.sort(this.state.members);
-      output = members.map(member => {
+      output = /*#__PURE__*/React.createElement("div", {
+        className: "member-list-wrapper horizontal-scroll-container"
+      }, output = members.map(member => {
         return this.filter(member);
-      });
+      }));
     } else {
       output = /*#__PURE__*/React.createElement("p", null, "Loading...");
     }

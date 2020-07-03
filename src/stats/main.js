@@ -81,7 +81,6 @@ stats.template.memberOverview = function(options, callback) {
   } else {
     //Get stats for all players
     user.get(filter, {privacy: true, onlyPaxterians: true}, function(err, docs) {
-      console.log('bru')
       if(docs) {
         let error = false;
         let output = [];
