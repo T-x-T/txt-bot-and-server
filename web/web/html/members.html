@@ -1,94 +1,26 @@
-<script src="assets/paxterya/js/jquery-1.11.3.min.js"></script>
-<script src="assets/paxterya/js/jquery-ui.min.js"></script>
-<script src="assets/paxterya/js/jquery.select-to-autocomplete.js"></script>
+<script src="assets/js/react.production.min.js"></script>
+<script src="assets/js/emotion.umd.min.js"></script>
+<script src="assets/js/react-dom.production.min.js"></script>
+<script src="assets/js/prop-types.min.js"></script>
+<script src="assets/js/react-input-autosize.min.js"></script>
+<script src="assets/js/react-select.min.js"></script>
+
 <script src="assets/pax_js/members.js"></script>
 <script src="assets/pax_js/framework.js"></script>
 <script src="assets/pax_js/helpers.js"></script>
 
-<script src="assets/js/react.production.min.js"></script>
-<script src="assets/js/react-dom.production.min.js"></script>
 
-<link href="jquery-ui.css">
-<script type="text/javascript">
-    window.addEventListener('DOMContentLoaded', (event) => {
-        members.init();
-    });
-</script>
 
 <h1>
     <div class="wrapper">
         {pax_title}
     </div>
 </h1>
+
 <div class="wrapper content lesspadding">
-
     <p>Here you can see all current members of the Paxterya community.</p>
-
-    <a href="statistics.html"><button class="hover-right">View Statistics <i
-                class="fas fa-chevron-right"></i></button></a>
-    <br><br>
-    <hr>
-    <br>
-
+    <a href="statistics.html"><button class="hover-right">View Statistics <i class="fas fa-chevron-right"></i></button></a>
+    <br><br><hr><br>
     <div id="members_root"></div>
-    <script src="assets/pax_js/react_members.js"></script>
-
-    <div class="search">
-        <div id="search" class="searchicon">
-            <i class="fas fa-search"></i>
-        </div>
-
-        <div id="cancel" class="searchicon">
-            <i class="fas fa-times"></i>
-        </div>
-
-        <input type="text" id="searchInput" onkeyup="members.search()" placeholder="Search member…">
-    </div>
-
-
-    <div class="custom-select membersorting">
-        <select name="sort" id="sort" onchange="members.sort()">
-            <option value="0">Choose sorting criterion</option>
-            <option value="0">Date joined ASC</option>
-            <option value="1">Date joined DESC</option>
-            <option value="2">Playtime ASC</option>
-            <option value="3">Playtime DESC</option>
-            <option value="4">Age ASC</option>
-            <option value="5">Age DESC</option>
-            <option value="6">IGN ASC</option>
-            <option value="7">IGN DESC</option>
-            <option value="8">Discord ASC</option>
-            <option value="9">Discord DESC</option>
-        </select>
-    </div>
-
-    <div id="member-list" class="member-list-wrapper">
-        <!-- Template that gets copie as needed using js -->
-        <div style="display: none;" id="template" class="member-card-wrapper" title="View player stats" onclick="">
-            <div class="member-card-image">
-                <img id="render" src="https://crafatar.com/renders/body/8667ba71-b85a-4004-af54-457a9734eed7"
-                    alt="image not available">
-            </div>
-            <div class="member-card-description">
-                <h2 id="mc_ign">loading</h2>
-                <h3 id="discord_name">loading</h3>
-
-                <div class="member-card-infos">
-                    <p class="description" id="country-desc"><br>Country:</p>
-                    <p class="value" id="country">loading</p>
-
-                    <p class="description" id="age-desc"><br>Age:</p>
-                    <p class="value" id="age">loading</p>
-
-                    <p class="description"><br>Playtime:</p>
-                    <p class="value" id="playtime">loading</p>
-
-                    <p class="description"><br>Date joined:</p>
-                    <p class="value" id="joined">loading</p>
-                </div>
-
-            </div>
-        </div>
-        <!-- End of Template that gets copied as needed using js -->
-    </div>
+    <script src="assets/pax_js/react_members.js" type="module"></script>
 </div>
