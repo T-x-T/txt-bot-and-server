@@ -7,7 +7,7 @@ stages:
 - release
 
 variables:
-  RELEASE_IMAGE: gitlab.com/paxterya/txt-bot-and-server:latest
+  RELEASE_IMAGE: txt-bot-and-server:latest
 
 before_script:
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.com
@@ -15,5 +15,5 @@ before_script:
 build:
   stage: build
   script:
-    - docker build --pull -t $RELEASE_IMAGE .
+    - docker build $RELEASE_IMAGE .
     - docker push $RELEASE_IMAGE
