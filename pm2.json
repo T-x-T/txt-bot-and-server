@@ -1,0 +1,11 @@
+{
+  "name": "txt-bot-and-server",
+  "script": "index.js",
+  "instances": "1",
+  "env": {
+    "NODE_ENV": "prod"
+  },
+  "env_production": {
+    "NODE_ENV": "prod"
+  }
+}
