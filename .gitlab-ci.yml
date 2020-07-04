@@ -15,5 +15,5 @@ before_script:
 build:
   stage: build
   script:
-    - docker build --pull -t txt-bot-and-server:latest https://gitlab.com/paxterya/txt-bot-and-server.git .
+    - docker build --pull -t txt-bot-and-server:latest .
     - docker push $RELEASE_IMAGE
