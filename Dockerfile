@@ -1,5 +1,8 @@
 FROM keymetrics/pm2:latest-alpine
 
+# Set workdir
+WORKDIR /srv/txt_bot_and_server/
+
 # Bundle APP files
 COPY . .
 
@@ -10,6 +13,6 @@ RUN npm install --production
 # expose port
 EXPOSE 4000
 
-WORKDIR /srv/txt_bot_and_server/
+
 
 CMD [ "pm2-runtime", "start", "pm2.json" ]
