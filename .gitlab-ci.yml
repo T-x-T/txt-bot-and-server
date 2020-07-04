@@ -16,4 +16,4 @@ build:
   stage: build
   script:
     - docker build --pull -t txt-bot-and-server:latest .
-    - docker push https://gitlab.com/paxterya.com/txt-bot-and-server
+    - docker push https://gitlab.com/paxterya.com/txt-bot-and-server:latest
