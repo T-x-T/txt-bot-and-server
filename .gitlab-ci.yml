@@ -10,4 +10,4 @@ build:
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build --pull -t txt-bot-and-server:latest .
-    - docker push https://gitlab.com/paxterya.com/txt-bot-and-server
+    - docker push gitlab.com/paxterya.com/txt-bot-and-server:latest
