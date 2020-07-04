@@ -1,8 +1,8 @@
 build:
-  image: docker:latest
+  image: docker:19.03.11
   stage: build
   services:
-    - docker:latest-dind
+    - docker:19.03.11-dind
   variables:
     IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
   script:
