@@ -1,0 +1,19 @@
+image: docker:latest
+services:
+- docker:dind
+
+stages:
+- build
+- release
+
+variables:
+  RELEASE_IMAGE: gitlab.com/paxterya/txt-bot-and-server:latest
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.com
+
+build:
+  stage: build
+  script:
+    - docker build --pull -t $RELEASE_IMAGE .
+    - docker push $RELEASE_IMAGE
