@@ -55,7 +55,7 @@ setImmediate(function(){
     msg += '\n\nThis means you can now join the server! If you have any troubles please ping the admins!\n';
     msg += 'It is also a good time to give our rules a read: https://paxterya.com/rules \n';
     msg += 'Please also take a look at our FAQ: https://paxterya.com/faq \n';
-    msg += 'The server IP is play.paxterya.com\n\n';
+    msg += 'The server IP is paxterya.com\n\n';
     msg += 'If you encounter any issues or have any questions, feel free to contact our mods (TestyMonkey, swabfu or MrSprouse) or the admins (ExxPlore or TxT).'
     discord_helpers.sendMessage(msg, config.discord_bot.channel.new_member_announcement, function(err) {
       if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the welcome message', {err: err, application: doc});
