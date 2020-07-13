@@ -126,6 +126,10 @@ setImmediate(function(){
   emitter.on('contact_new', (subject, text) => {
     discord_helpers.sendMessage(`Someone used the contact form!\nSubject: ${subject}\nBody: ${text}`, config.discord_bot.channel.new_application_announcement, function(err){});
   });
+
+  emitter.on('crash', (err, origin) => {
+    discord_helpers.sendMessage(`HELP I crashed:\n${err.stack}\n\n${origin}`, config.discord_bot.channel.new_application_announcement, function (err) { });
+  });
 });
 
 
