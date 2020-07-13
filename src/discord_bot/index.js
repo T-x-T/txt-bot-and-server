@@ -37,7 +37,7 @@ setImmediate(function(){
   
   emitter.on('application_new', (doc) => {
     global.log(0, 'discord_bot', 'event application_new received', {doc: doc});
-    discord_helpers.sendMessage('New application from ' + doc.mc_ign + '\nhttps://paxterya.com/application.html?id=' + doc.id, config.discord_bot.channel.new_application_announcement, function(err){
+    discord_helpers.sendMessage('New application from ' + doc.mc_ign + '\nYou can find it here: https://paxterya.com/interface', config.discord_bot.channel.new_application_announcement, function(err){
       if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new application message', {err: err, application: doc});
     });
   });
@@ -55,8 +55,8 @@ setImmediate(function(){
     msg += '\n\nThis means you can now join the server! If you have any troubles please ping the admins!\n';
     msg += 'It is also a good time to give our rules a read: https://paxterya.com/rules \n';
     msg += 'Please also take a look at our FAQ: https://paxterya.com/faq \n';
-    msg += 'The server IP is paxterya.com\n\n';
-    msg += 'If you encounter any issues or have any questions, feel free to contact our mods (TestyMonkey, swabfu or MrSprouse) or the admins (ExxPlore or TxT).'
+    msg += 'The IP of the survial server is paxterya.com and the IP for the creative Server is paxterya.com:25566\n\n';
+    msg += 'If you encounter any issues or have any questions, feel free to contact our mods (PrimateAfterMath, swabfu or MrSprouse) or the admins (ExxPlore or TxT).'
     discord_helpers.sendMessage(msg, config.discord_bot.channel.new_member_announcement, function(err) {
       if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the welcome message', {err: err, application: doc});
     });
@@ -126,13 +126,17 @@ setImmediate(function(){
   emitter.on('contact_new', (subject, text) => {
     discord_helpers.sendMessage(`Someone used the contact form!\nSubject: ${subject}\nBody: ${text}`, config.discord_bot.channel.new_application_announcement, function(err){});
   });
+
+  emitter.on('crash', (err, origin) => {
+    discord_helpers.sendMessage(`HELP I crashed:\n${err.stack}\n\n${origin}`, config.discord_bot.channel.new_application_announcement, function (err) { });
+  });
 });
 
 
 //Export the container
 module.exports = index;
 
-//Modified from https://stackoverflow.com/a/9335296 could still be updated to allow dynamic updates of the timer
+//Modified from https://stackoverflow.com/a/9335296
 function countdown(end){
   let _second = 1000;
   let _minute = _second * 60;
