@@ -44,7 +44,7 @@ widgets.init = function(){
     },
     {
       name: 'applications',
-      level: 9
+      level: 7
     }, 
     {
       name: 'posts',
