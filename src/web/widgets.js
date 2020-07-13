@@ -26,7 +26,7 @@ widgets.get = function(access_token, callback){
         callback(finishedHtml);
       });
     }else{
-      callback('There isnt anything to show here for some reason');
+      callback('There isnt anything to show here for some reason and that reason is probably that your session is too old. Please log in again!');
     }
   });
 };
