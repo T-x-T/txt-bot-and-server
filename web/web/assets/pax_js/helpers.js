@@ -68,7 +68,7 @@ _internal.getQueryValue = function(param){
 };
 
 //Sorts an array of objects based on the given key 'asc' or 'desc'
-_internal.sortArray = function(input, property, order = 'asc'){
+_internal.sortArray = function(input = [], property, order = 'asc'){
   if(order === 'asc'){
     return input.sort((a, b) => {
       if (a[property] > b[property]) return 1;

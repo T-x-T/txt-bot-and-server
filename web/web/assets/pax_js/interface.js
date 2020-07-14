@@ -15,8 +15,10 @@ interface.init = function(){
 
   //Only initialize tables that are there
   if(cookies.access_level == 9){
-    interface.application.load();
     interface.post.load();
+  }
+  if (cookies.access_level >= 7) {
+    interface.application.load();
   }
   interface.bulletin.init();
 };

@@ -132,12 +132,12 @@ application.read = function(filter, options, callback){
   });
 };
 
-application.changeStatus = function(id, newStatus, reason, callback){
+application.changeStatus = function(id, newStatus, reason, force, callback){
   //Get the application, so we can update it and save it back
   application.read({id: id}, false, function(err, doc){
     doc = doc[0];
     if(doc){
-      if(doc.status == 1){
+      if(doc.status == 1 || force){
         doc.status = newStatus;
         if(newStatus == 2 && reason) doc.deny_reason = reason;
 
@@ -156,7 +156,12 @@ application.changeStatus = function(id, newStatus, reason, callback){
                 emitter.emit('application_accepted', newDoc);
                 callback(200);
               }else{
-                callback(500, 'If we got here, something went very, very wrong');
+                if(newStatus === 1){
+                  global.log(2, 'application', 'application.changestatus changed a status the pending again, this gets triggered through an admin command or its a terrible bug', { err: err, id: id, newStatus: newStatus, reason: reason, application: doc });
+                  callback(200);
+                }else{
+                  callback(500, 'If we got here, something went very, very wrong');
+                }
               }
             }
           }else{

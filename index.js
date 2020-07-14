@@ -40,5 +40,13 @@ global.log(1, 'index', 'Application started', null);
 //Create the container
 var app = {};
 
+process.on('uncaughtException', (err, origin) => {
+  emitter.emit("crash", err, origin);
+  console.error(err.stack);
+  setTimeout(() => {
+    process.exit(1);
+  }, 200);
+});
+
 //Export the container
 module.exports = app;

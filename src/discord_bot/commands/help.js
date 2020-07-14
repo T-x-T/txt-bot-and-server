@@ -16,8 +16,9 @@ module.exports = {
     //If the user didnt specify any command, list all commands
     if (!args.length) {
       data.push('**Join here:** https://paxterya.com/join-us');
-      data.push('**Server IP:** play.paxterya.com');
-      data.push('**Version:** 1.15.2 java');
+      data.push('**Survival Server IP:** paxterya.com');
+      data.push('**Creative Server IP:** paxterya.com:25566');
+      data.push('**Version:** 1.16.1 java');
       data.push('\nHere is a list of all available commands: ');
       data.push(commands.map(command => command.name).join(', '));
       data.push(`\nYou can send \`${config.discord_bot.bot_prefix}help [command name]\` to get info on a specific command!`);

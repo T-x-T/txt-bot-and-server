@@ -434,9 +434,9 @@ handlers.paxapi.application = function(data, callback){
       //Check if there is an access_token
       if(data.headers.hasOwnProperty('cookie')){
         if(data.headers.cookie.indexOf('access_token'.length > -1)){
-          //There is an access_token cookie, lets check if it belongs to an admin
+          //There is an access_token cookie, lets check if it belongs to at least a mod
           oauth.getAccessLevel({token: data.cookies.access_token}, false, function(err, access_level){
-            if(access_level >= 9){
+            if(access_level >= 7){
               //The requester is allowed to get the records
               handlers.paxapi.application[data.method](data, callback);
             }else{
