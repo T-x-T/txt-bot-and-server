@@ -8,6 +8,7 @@ const mc_helpers = require('../../minecraft');
 const discord_helpers = require('../helpers.js');
 const user = require('../../user');
 const stats = require('../../stats');
+const applications = require('../../application');
 
 module.exports = {
   name: 'admin',
@@ -217,6 +218,9 @@ module.exports = {
             case 'updateallnicks':
               discord_helpers.updateAllNicks();
               break;
+            case 'fixapp':
+              fixapp(message, message.mentions.users.first().id);
+              break;
             default:
               message.reply('I didnt quite understand you moron');
               break;
@@ -249,4 +253,32 @@ module.exports = {
       message.channel.send('Sorry, you are not authorized to do that');
     }
   }
+};
+
+function fixapp(message, discord_id){
+  applications.get({discord_id: discord_id}, {first: true, archieved: true}, (err, doc) => {
+    if(err != 200 && err === true || !doc){
+      message.reply(err);
+      return;
+    }
+
+    doc.status = 1;
+    applications.save(doc, {force: true}, (err) => {
+      if(err != 200 && err === true || !doc){
+        message.reply(err);
+        return;
+      }
+
+      doc.status = 3;
+      applications.save(doc, false, (err) => {
+        if(err != 200 && err === true || !doc){
+          message.reply(err);
+          return;
+        }
+
+        message.reply('I fixed it');
+        return;
+      });
+    });
+  });
 };
