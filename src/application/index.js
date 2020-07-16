@@ -17,7 +17,7 @@ index.save = function(input, options, callback){
     main.write(input, callback);
   }else{
     //Its an edit
-    main.changeStatus(input.id, input.status, input.reason, callback);
+    main.changeStatus(input.id, input.status, input.reason, options.force, callback);
   }
 };
 
