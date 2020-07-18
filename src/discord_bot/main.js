@@ -66,6 +66,7 @@ emitter.on('discord_bot_ready' ,() => {
     } catch (e) {
       global.log(3, 'discord_bot', 'Some Discord command just broke', { error: e, msg: message.content });
       message.reply('There was an oopsie when I tried to do that');
+      emitter.emit('crash', e, 'discord command');
     }
   });
 
