@@ -55,7 +55,7 @@ function read_mc_stats() {
               let final_stat = {
                 uuid: uuid,
                 stats: stats,
-                sub_type: 'mc_stats',
+                sub_type: 's4',
                 timestamp: Date.now()
               };
 
