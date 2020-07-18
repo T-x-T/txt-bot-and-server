@@ -33,11 +33,14 @@
         &:hover
             transform: none
 
-    /* ############### nav ###############*/
+    // ############### nav ###############
 
     #mobile-nav
         display: none
         width: 100%
+
+        > ul
+            padding-bottom: 300px
 
     #mobile-nav.nav-fullscreen
         display: block
@@ -71,12 +74,10 @@
                 border: none
                 padding: 5px 25px
 
-        li#join, nav li#nav-login
-            border: none
-            padding: 20px 0px 5px 30px
-
-        li#nav-login
-            margin-bottom: 100px
+            &#join, &#nav-login
+                border-bottom: none!important
+                padding-top: 15px
+                padding-bottom: 5px
 
     .panel
         max-height: 0
@@ -322,10 +323,10 @@
         h1::before, h1::after, footer::before, footer::after
             border-color: transparent!important
 
-    .member-card-wrapper
+    div .member-card-wrapper
         margin: 0!important
         padding: 15px 0 10px 15px
-        background: linear-gradient(180deg, rgba(240,240,240,0) 15%, rgba(240,240,240,1) 15%, rgba(240,240,240,1) 100%)!important
+        background: linear-gradient(180deg, rgba(240,240,240,0) 15%, rgba(240,240,240,1) 15%, rgba(240,240,240,1) 100%)
 
         h2
             font-size: 14pt
