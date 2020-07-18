@@ -26,7 +26,7 @@ application.write = function(input, callback){
         if(ok){
           input.mc_uuid = uuid;
           //Now we can verify the rest
-          input.discord_id       = typeof input.discord_id       == 'string' && input.discord_id.length == 18 ? input.discord_id : false;
+          input.discord_id       = typeof input.discord_id       == 'string' && input.discord_id.length >= 17 && input.discord_id.length <= 18 ? input.discord_id : false;
           input.email_address    = typeof input.email_address    == 'string' && input.email_address.indexOf('@') > -1 ? input.email_address.trim() : false;
           input.country          = typeof input.country          == 'string' && input.country.length > 0 ? input.country.trim() : false;
           input.birth_month      = Number(input.birth_month)     >= 1 && Number(input.birth_month) <= 12 ? Number(input.birth_month) : false;
