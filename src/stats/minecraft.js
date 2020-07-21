@@ -106,7 +106,7 @@ function sumArray(docs){
 function getLatestStats(uuid, callback){
   let filter = uuid ? {uuid: uuid} : {};
   if(uuid){
-    data.get(filter, 'stats', {sub_type: 'mc_stats', latest: true}, function(err, doc){
+    data.get(filter, 'stats', {sub_type: 's4', latest: true}, function(err, doc){
       if(Array.isArray(doc) && doc.length === 0){
         //No stats for this user
         callback('Couldnt get stats for user: ' + uuid, false);
