@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --exit",
     "prod": "index.js",
     "babel": "./node_modules/.bin/babel web/web/assets/react_js --out-dir web/web/assets/pax_js"
   },
@@ -27,12 +27,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/T-x-T/txt-bot-and-server.git"
+    "url": "git+https://gitlab.com/paxterya/txt-bot-and-server.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/T-x-T/txt-bot-and-server/issues"
+    "url": "https://gitlab.com/paxterya/txt-bot-and-server/issues"
   },
-  "homepage": "https://github.com/T-x-T/txt-bot-and-server#readme"
+  "homepage": "https://gitlab.com/paxterya/txt-bot-and-server#readme"
 }
