@@ -42,6 +42,7 @@ let conf = {
         general: ''
       },
       roles: {
+        owner: '',
         admin: '',
         paxterya: '',
         mod: '',
@@ -141,6 +142,7 @@ let conf = {
         general: '',
       },
       roles: {
+        owner: '',
         admin: '',
         paxterya: '',
         mod: '',
@@ -240,6 +242,7 @@ let conf = {
         general: ''
       },
       roles: {
+        owner: '',
         admin: '',
         paxterya: '',
         mod: '',
