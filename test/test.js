@@ -17,3 +17,9 @@ emitter = new Emitter();
 const log = require('../src/log'); //lgtm [js/unused-local-variable]
 
 global.log(0, 'test', 'Mocha test started', false);
+
+//This makes unhandledPromiseRejections fail tests
+process.on('unhandledRejection', (reason, promise) => { 
+  console.log(reason);
+  throw promise 
+});
