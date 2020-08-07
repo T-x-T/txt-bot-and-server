@@ -1,6 +1,5 @@
 const assert = require("assert");
 const Mongo = require("../src/persistance/mongo.js");
-const { equal } = require("assert");
 
 const schema = {
   id: {
@@ -36,7 +35,7 @@ async function saveMultipleExamples(count){
   for (let i = 0; i < count; i++) await saveExample();
 }
 
-describe("PersistableProvider mongo", function(){
+describe("PersistanceProvider mongo", function(){
   
   after("clean test DB", async function(){
     con = await getConnection();
