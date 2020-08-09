@@ -40,6 +40,7 @@ class Mongo{
       g_model = this.model;
     }catch(e){
       this.model = mongoose.models[this.collection];
+      if(!this.model) throw new Error(e)
     }
   }
 
@@ -64,19 +65,6 @@ class Mongo{
         }
       }
     );
-  }
-
-  /*
-   *  Save
-   */
-
-  save(doc){
-    return new Promise((resolve, reject) => {
-      doc = new this.model(doc);
-      doc.save()
-        .then(() => resolve())
-        .catch((e) => reject(new Error(`Error occured when trying to save document to database: ${e.message}`)));
-    });
   }
 
 
@@ -152,10 +140,10 @@ class Mongo{
 
 
   /*
-   * Replace
+   * Save
    */
 
-  replace(input){
+  save(input){
     return new Promise((resolve, reject) => {
       let filter = false;
       filter = input.hasOwnProperty('_id') ? { _id: input._id } : filter;
@@ -169,8 +157,20 @@ class Mongo{
           .then(resolve())
           .catch(e => reject(e));
       }else{
-        reject(new Error("Input does not contain proper key, so its impossible to find the correct entry to replace"));
+        new this.model(input).save()
+          .then(() => resolve())
+          .catch(e => reject());
       }
+    });
+  }
+
+
+  saveNew(doc) {
+    return new Promise((resolve, reject) => {
+      doc = new this.model(doc);
+      doc.save()
+        .then(() => resolve())
+        .catch((e) => reject(new Error(`Error occured when trying to save document to database: ${e.message}`)));
     });
   }
 

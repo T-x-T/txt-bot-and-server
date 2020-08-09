@@ -269,11 +269,9 @@ describe("PersistanceProvider mongo", function(){
       let new_entry = example_entry;
       new_entry.id = 3;
       new_entry.text = "yeet";
-      await con.replace(new_entry);
+      await con.save(new_entry);
       let res = await con.retrieveFirstFiltered({id: 3});
       assert.equal(res.text, "yeet");
     });
   });
-
-
 });
