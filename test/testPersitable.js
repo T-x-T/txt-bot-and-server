@@ -15,6 +15,7 @@ const schema = {
 class Test extends Persistable{
   text;
   bool;
+  static schema;
 
   constructor(text, bool, persistanceProvider){
     super({ name: "test", schema: schema, persistanceProvider: persistanceProvider});
@@ -24,5 +25,7 @@ class Test extends Persistable{
     }
   }
 }
+
+Test.schema = schema;
 
 module.exports = Test;

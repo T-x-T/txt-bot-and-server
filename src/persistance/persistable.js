@@ -1,4 +1,4 @@
-//This is a base clase that needs to be inherited by all classes to implement persistance
+//This is a base clase that needs to be inherited by all classes that implement persistance
 
 class Persistable{
   persistanceProvider;
