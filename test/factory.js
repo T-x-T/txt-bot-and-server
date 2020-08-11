@@ -36,11 +36,18 @@ describe("factory base class", function(){
       await testPersistable.save();
     });
 
+    it("get entry with id 0 should return instanceof TestPersistable", async function () {
+      let testFactory = new TestFactory({ name: "test", persistanceProvider: "mongo" });
+      await testFactory.connect();
+      let res = await testFactory.getById(0);
+      assert.ok(res instanceof TestPersistable);
+    });
+
     it("get entry with id 0 should return correct instance", async function(){
       let testFactory = new TestFactory({ name: "test", persistanceProvider: "mongo" });
       await testFactory.connect();
       let res = await testFactory.getById(0);
-      assert.equal(res.id, 0);
+      assert.equal(res.data.id, 0);
     });
   });
 });

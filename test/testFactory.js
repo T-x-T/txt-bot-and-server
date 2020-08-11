@@ -14,7 +14,7 @@ class TestFactory extends Factory{
   getById(id){
     return new Promise((resolve, reject) => {
       this.persistanceProvider.retrieveFirstFiltered({ id: id })
-        .then(res => resolve(res))
+        .then(res => resolve(new TestPersistable(res.text, res.bool, this.options.persistanceProvider, id)))
         .catch(e => reject(e));
     });
   }

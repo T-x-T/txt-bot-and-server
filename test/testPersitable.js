@@ -17,12 +17,15 @@ class Test extends Persistable{
   bool;
   static schema;
 
-  constructor(text, bool, persistanceProvider){
+  //Id is optional
+  constructor(text, bool, persistanceProvider, id){
     super({ name: "test", schema: schema, persistanceProvider: persistanceProvider});
     this.data = {
       text: text,
       bool: bool
     }
+    
+    if(Number.isInteger(id)) this.data.id = id;
   }
 }
 
