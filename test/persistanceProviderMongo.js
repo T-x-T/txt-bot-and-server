@@ -68,6 +68,7 @@ describe("PersistanceProvider mongo", function(){
     });
 
     it("saving example_entry 100 times should not reject", async function () {
+      this.timeout(10000)
       await saveMultipleExamples(100);
     });
   });

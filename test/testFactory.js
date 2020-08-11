@@ -10,6 +10,14 @@ class TestFactory extends Factory{
   create(text, bool){
     return new TestPersistable(text, bool, this.options.persistanceProvider);
   }
+
+  getById(id){
+    return new Promise((resolve, reject) => {
+      this.persistanceProvider.retrieveFirstFiltered({ id: id })
+        .then(res => resolve(res))
+        .catch(e => reject(e));
+    });
+  }
 }
 
 module.exports = TestFactory;

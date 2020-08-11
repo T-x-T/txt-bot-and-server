@@ -1,5 +1,6 @@
 const assert = require("assert");
 const TestFactory = require("./testFactory.js");
+const TestPersistable = require("./testPersitable.js");
 
 describe("factory base class", function(){
   describe("init", function(){
@@ -25,6 +26,21 @@ describe("factory base class", function(){
       let testInstance = testFactory.create("test", true);
       assert.equal(testInstance.data.text, "test");
       assert.ok(testInstance.data.bool);
+    });
+  });
+
+  describe("get", function(){
+    before("save new entry to db", async function(){
+      let testPersistable = new TestPersistable("test", true, "mongo");
+      await testPersistable.init();
+      await testPersistable.save();
+    });
+
+    it("get entry with id 0 should return correct instance", async function(){
+      let testFactory = new TestFactory({ name: "test", persistanceProvider: "mongo" });
+      await testFactory.connect();
+      let res = await testFactory.getById(0);
+      assert.equal(res.id, 0);
     });
   });
 });
