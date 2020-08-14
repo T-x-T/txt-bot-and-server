@@ -13,7 +13,7 @@ class Factory{
     if (this.options.hasOwnProperty("persistanceProvider") && this.options.persistanceProvider == "mongo" || this.options.persistanceProvider == "testing") {
       this.persistanceProvider = require(`./${this.options.persistanceProvider}.js`);
     } else {
-      this.persistanceProvider = require(`./${config.data.backend}.js`);
+      this.persistanceProvider = require(`./${config.persitance.backend}.js`);
     }
 
     this.persistanceProvider = new this.persistanceProvider(this.options.name, this.options.schema, {});

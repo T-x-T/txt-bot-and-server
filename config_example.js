@@ -28,6 +28,9 @@ let conf = {
         mc_stats_sub_type: false
       }
     },
+    persistance: {
+      backend: 'mongo',
+    },
     discord_api: {
   
     },
@@ -127,6 +130,9 @@ let conf = {
         mc_stats_sub_type: false
       }
     },
+    persistance: {
+      backend: 'mongo',
+    },
     discord_api: {
   
     },
@@ -225,6 +231,9 @@ let conf = {
       db_upgrades:{
         mc_stats_sub_type: false
       }
+    },
+    persistance: {
+      backend: 'mongo',
     },
     discord_api: {
   
