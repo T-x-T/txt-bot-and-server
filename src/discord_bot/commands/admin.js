@@ -9,6 +9,7 @@ const discord_helpers = require('../helpers.js');
 const user = require('../../user');
 const stats = require('../../stats');
 const applications = require('../../application');
+const auth = require('../../auth');
 
 module.exports = {
   name: 'admin',
@@ -17,7 +18,7 @@ module.exports = {
 
   execute(message, args) {
     //Check if the author is admin
-    if (message.member.roles.has(config.discord_bot.roles.admin)) {
+    if (auth.getAccessLevel({id: message.member.id}) >= 8) {
       //Check the first argument and execute it
       switch (args[0]) {
         case 'log':
