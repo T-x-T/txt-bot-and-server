@@ -3,7 +3,7 @@
 class Persistable{
   persistanceProvider;
   options;
-  data;
+  data = {};
 
   //options:
   //persistanceProvider: "mongo" or "testing", if not set get default from config
@@ -36,11 +36,13 @@ class Persistable{
   save(){
     return new Promise((resolve, reject) => {
       this.persistanceProvider.save(this.data)
-        .then(() => resolve())
+        .then(res => {
+          this.data = res;
+          resolve();
+        })
         .catch(e => reject(e));
     });
   }
-
 }
 
 module.exports = Persistable;

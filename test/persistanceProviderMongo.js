@@ -60,16 +60,16 @@ describe("PersistanceProvider mongo", function(){
 
   describe("save", function(){
     it("saving example_entry once should not reject", async function () {
-      await saveExample();
+      await assert.doesNotReject(() => saveExample());
     });
 
     it("saving example_entry twice should not reject", async function () {
-      await saveMultipleExamples(2);
+      await assert.doesNotReject(() => saveMultipleExamples(2));
     });
 
     it("saving example_entry 100 times should not reject", async function () {
       this.timeout(10000)
-      await saveMultipleExamples(100);
+      await assert.doesNotReject(() => saveMultipleExamples(100));
     });
   });
 

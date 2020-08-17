@@ -133,7 +133,7 @@ class Mongo{
     sort = typeof sort == "object" ? { "sort": sort } : null;
     return new Promise((resolve, reject) => {
       this.model.findOne(filter, null, sort)
-        .then(res => resolve(res._doc))
+        .then(res => resolve(res))
         .catch(e => reject(e));
     });
   }
@@ -154,11 +154,11 @@ class Mongo{
       if(filter){
         delete input._id;
         this.model.findOneAndUpdate(filter, input, { new: true, useFindAndModify: false, upsert: true })
-          .then(resolve())
+          .then(res => resolve(res))
           .catch(e => reject(e));
       }else{
         new this.model(input).save()
-          .then(() => resolve())
+          .then(res => resolve(res))
           .catch(e => reject());
       }
     });

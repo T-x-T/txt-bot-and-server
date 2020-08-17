@@ -1,11 +1,15 @@
 const Persistable = require("../persistance/persistable.js");
 
 class User extends Persistable{
-  constructor(discord_id, discord_nick){
+  constructor(discord_id, discord_nick, raw_data){
     super({name: "members", schema: User.schema});
 
-    this.data.discord_id = discord_id;
-    this.data.discord_nick = discord_nick;
+    if(raw_data){
+      this.data = raw_data;
+    }else{
+      this.data.discord = discord_id;
+      this.data.discord_nick = discord_nick;
+    }
   }
 
   updateDiscord_nick(){
@@ -21,7 +25,7 @@ class User extends Persistable{
   }
 
   getKarma(){
-
+    return this.data.karma;
   }
 
   modifyKarmaBy(modifier){
