@@ -87,6 +87,7 @@ module.exports = {
           let onlinePlayers = res.split(': ')[1].split(', ');
 
           if (onlinePlayerCount === 1) output += `The following player is currently online:\n`;
+          else if (onlinePlayerCount === 0) output += `There are no players online right now. It's on you to change that now!:\n`;
           else output += `The following ${onlinePlayerCount} players are currently online:\n`;
 
           onlinePlayers.forEach(player => output += player + '\n');
