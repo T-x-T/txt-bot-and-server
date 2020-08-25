@@ -1,4 +1,6 @@
 const Persistable = require("../persistance/persistable.js");
+const discord_api = require("../discord_api");
+const discord_helpers = require("../discord_bot/helpers.js");
 
 class User extends Persistable{
   constructor(discord_id, discord_nick, raw_data){
@@ -12,24 +14,41 @@ class User extends Persistable{
     }
   }
 
-  updateDiscord_nick(){
+  setDiscordNick(newDiscordNick){
+    if(typeof newDiscordNick != "string") throw new Error("no input given");
+    if(newDiscordNick.indexOf("#") === -1) throw new Error("no # in new nick");
+    if (!Number.isInteger(Number.parseInt(newDiscordNick.slice(newDiscordNick.length - 4, newDiscordNick.length)))) throw new Error("no discriminator");
 
+    this.data.discord_nick = newDiscordNick;
   }
 
   getDiscordAvatarUrl() {
-
+    return new Promise((resolve, reject) => {
+      discord_api.getAvatarUrl(this.data.discord, (avatarUrl) => {
+        resolve(avatarUrl);
+      });
+    });  
   }
 
   getDiscordUserdata(){
-
+    return new Promise((resolve, reject) => {
+      discord_api.getUserObject({id: this.data.discord}, {fromApi: true}, (err, userObject) => {
+        if(err){
+          reject(err);
+        }else{
+          resolve(userObject);
+        }
+      });
+    });
   }
 
   getKarma(){
     return this.data.karma;
   }
 
-  modifyKarmaBy(modifier){
-    
+  async modifyKarmaBy(modifier){
+    this.data.karma += modifier;
+    await this.save();
   }
 } 
 

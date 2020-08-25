@@ -33,6 +33,19 @@ class Member extends User{
   activate(){
     
   }
+
+  setDiscordNickToMcIgn() {
+    return new Promise((resolve, reject) => {
+      if (this.data.discord == client.guilds.get(config.discord_bot.guild).ownerID) resolve(); //Dont update the owner of the guild, this will fail
+      else {
+        discord_helpers.getMemberObjectByID(this.data.discord, (memberObj) => {
+          memberObj.setNickname(this.data.mcName)
+            .then(() => resolve())
+            .catch(e => global.log(2, 'discord_bot', 'User#setDiscordNickToMcIgn failed to set the users nickname', { user: this.data.discord, err: e }));
+        });
+      }
+    });
+  }
 }
 
 module.exports = Member;

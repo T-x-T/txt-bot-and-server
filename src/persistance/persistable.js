@@ -25,23 +25,12 @@ class Persistable{
     this.persistanceProvider = new this.persistanceProvider(this.options.name, this.options.schema, {});
   }
 
-  init(){
-    return new Promise ((resolve, reject) => {
-      this.persistanceProvider.connect()
-        .then(() => resolve())
-        .catch(e => reject(e));
-    });
+  async init(){
+    await this.persistanceProvider.connect();
   }
 
-  save(){
-    return new Promise((resolve, reject) => {
-      this.persistanceProvider.save(this.data)
-        .then(res => {
-          this.data = res;
-          resolve();
-        })
-        .catch(e => reject(e));
-    });
+  async save(){
+    this.data = await this.persistanceProvider.save(this.data);
   }
 }
 
