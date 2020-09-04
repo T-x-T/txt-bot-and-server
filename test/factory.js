@@ -1,3 +1,4 @@
+require("./test.js");
 const assert = require("assert");
 const TestFactory = require("./testFactory.js");
 const TestPersistable = require("./testPersitable.js");

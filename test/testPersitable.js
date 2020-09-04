@@ -1,3 +1,4 @@
+require("./test.js");
 const Persistable = require("../src/persistance/persistable.js");
 
 const schema = {

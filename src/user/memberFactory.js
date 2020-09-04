@@ -1,17 +1,16 @@
 const Factory = require("../persistance/factory.js");
 const Member = require("./member.js");
-const Factory = require("../persistance/factory.js");
 
 class MemberFactory extends Factory{
   constructor(options) {
     if (typeof options != "object") var options = {};
-    options.schema = User.schema;
+    options.schema = Member.schema;
     options.name = "members";
     super(options);
   }
 
   async create(discord_id, discord_nick, mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country){
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       try{
         let member = new Member(discord_id, discord_nick, mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country);
         await member.init();

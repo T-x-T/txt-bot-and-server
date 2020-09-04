@@ -1,3 +1,4 @@
+require("./test.js");
 const assert = require('assert');
 const { AssertionError } = require('assert');
 

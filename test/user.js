@@ -1,3 +1,4 @@
+require("./test.js");
 const User = require("../src/user/user.js");
 const UserFactory = require("../src/user/userFactory.js");
 const Mongo = require("../src/persistance/mongo.js");

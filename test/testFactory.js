@@ -1,3 +1,4 @@
+require("./test.js");
 const Factory = require("../src/persistance/factory.js");
 const TestPersistable = require("./testPersitable.js");
 
