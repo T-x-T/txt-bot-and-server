@@ -25,6 +25,10 @@ class MemberFactory extends Factory{
   async getByDiscordId(){
 
   }
+
+  async getByMcUuid(){
+    
+  }
 }
 
 module.exports = MemberFactory;
