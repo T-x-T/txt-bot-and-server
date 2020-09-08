@@ -14,41 +14,53 @@ class Member extends User{
     this.data.publish_country = publish_country;
   }
 
-  getmcUUID(){
-
+  getMcUUID(){
+    return this.data.mcUUID
   }
 
   getMcIgn(){
-
+    return this.data.mcName;
   }
 
   getCountry(){
-
+    return this.data.country;
   }
 
   getCountryConsiderPrivacy(){
-
+    return this.data.publish_country ? this.getCountry() : false;
   }
 
   getBirthMonth(){
-
+    return this.data.birth_month;
   }
 
   getBirthYear(){
+    return this.data.birth_year;
+  }
 
+  getAge(){
+    if (this.getBirthMonth() <= new Date().getMonth() + 1){
+      return new Date().getFullYear() - this.getBirthYear();
+    }else{
+      return new Date().getFullYear() - this.getBirthYear() - 1;
+    }
+  }
+
+  getAgeConsiderPrivacy(){
+    return this.data.publish_age ? this.getAge() : false;
   }
 
   getPrivacySettings(){
-
+    return {publish_age: this.data.publish_age, publish_country: this.data.publish_country};
   }
 
   getMcSkinUrl(){
-    return `https://crafatar.com/renders/body/${this.data.mcUUID}?overlay=true`;
+    return `https://crafatar.com/renders/body/${this.getMcUUID()}?overlay=true`;
   }
 
   async updateMcIgn(){
     return new Promise((resolve, reject) => {
-      mc.getIGN(this.data.mcUUID, (err, newIgn) => {
+      mc.getIGN(this.getMcUUID(), (err, newIgn) => {
         if(err || !newIgn){
           reject(new Error(err));
         }else{
