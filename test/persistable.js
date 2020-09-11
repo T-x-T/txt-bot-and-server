@@ -10,11 +10,6 @@ describe("persistable", function(){
       assert.doesNotThrow(() => new TestPersistable("test", true, "mongo"));
     });
 
-    it("instanciation with test values and testing shouldnt throw", function () {
-      this.skip();
-      assert.doesNotThrow(() => new TestPersistable("test", true, "testing"));
-    });
-
     it("calling init with mongo shouldnt throw", async function(){
       let testPersistable = new TestPersistable("test", true, "mongo");
       await assert.doesNotReject(() => testPersistable.init());

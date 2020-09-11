@@ -3,15 +3,12 @@ const discord_api = require("../discord_api");
 const discord_helpers = require("../discord_bot/helpers.js");
 
 class User extends Persistable{
-  constructor(discord_id, discord_nick, raw_data){
+  constructor(discord_id, discord_nick, status){
     super({name: "members", schema: User.schema});
 
-    if(raw_data){
-      this.data = raw_data;
-    }else{
-      this.data.discord = discord_id;
-      this.data.discord_nick = discord_nick;
-    }
+    this.data.discord = discord_id;
+    this.data.discord_nick = discord_nick;
+    this.data.status = User.isValidStatus(status) ? status : 0;
   }
 
   setDiscordNick(newDiscordNick){
@@ -49,6 +46,22 @@ class User extends Persistable{
   async modifyKarmaBy(modifier){
     this.data.karma += modifier;
     await this.save();
+  }
+
+  getStatus(){
+    return this.data.status;
+  }
+
+  setStatus(status){
+    if (User.isValidStatus(status)){
+      this.data.status = status;
+    }else{
+      throw new Error(`value ${status} is not a valid status`);
+    }
+  }
+
+  static isValidStatus(status){
+    return status >= 0 && status <= 2;
   }
 } 
 

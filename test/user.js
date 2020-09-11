@@ -8,7 +8,7 @@ const schema = User.schema;
 async function createAndSaveNewUser(){
   let userFactory = new UserFactory();
   await userFactory.connect();
-  let user = await userFactory.create("293029505457586176", "TxT#0001");
+  let user = await userFactory.create("293029505457586176", "TxT#0001", 1);
   return user;
 }
 
@@ -143,6 +143,67 @@ describe("user", function(){
         user.setDiscordNick("TheTxt1234");
       }catch(e){}
       assert.notEqual(user.data.discord_nick, "TheTxt#1234");
+    });
+  });
+
+  describe("status", function(){
+    async function createAndSaveNewUserWithStatus(status){
+      let userFactory = new UserFactory();
+      await userFactory.connect();
+      let user = await userFactory.create("293029505457586176", "TxT#0001", status);
+      return user;
+    }
+
+    it("createAndSaveNewUser should create user with status 1", async function(){
+      let user = await createAndSaveNewUser();
+      assert.equal(1, user.getStatus());
+    });
+
+    it("creating new user with status 0 should get saved correctly", async function(){
+      let user = await createAndSaveNewUserWithStatus(0);
+      assert.equal(0, user.getStatus());
+    });
+
+    it("creating new user with status 1 should get saved correctly", async function () {
+      let user = await createAndSaveNewUserWithStatus(1);
+      assert.equal(1, user.getStatus());
+    });
+
+    it("creating new user with status 2 should get saved correctly", async function () {
+      let user = await createAndSaveNewUserWithStatus(2);
+      assert.equal(2, user.getStatus());
+    });
+
+    it("creating new user with status -1 should result in user with status 0", async function () {
+      let user = await createAndSaveNewUserWithStatus(-1);
+      assert.equal(0, user.getStatus());
+    });
+
+    it("creating new user with status 3 should result in user with status 0", async function () {
+      let user = await createAndSaveNewUserWithStatus(3);
+      assert.equal(0, user.getStatus());
+    });
+
+    it("setting status to 0 should correctly set status", async function(){
+      let user = await createAndSaveNewUserWithStatus(1);
+      user.setStatus(0);
+      assert.equal(0, user.getStatus());
+    });
+
+    it("setting status to 2 should correctly set status", async function () {
+      let user = await createAndSaveNewUserWithStatus(1);
+      user.setStatus(2);
+      assert.equal(2, user.getStatus());
+    });
+
+    it("setting status to -1 should throw", async function(){
+      let user = await createAndSaveNewUserWithStatus(1);
+      assert.throws(() => user.setStatus(-1), new Error("value -1 is not a valid status"));
+    });
+
+    it("setting status to 3 should throw", async function () {
+      let user = await createAndSaveNewUserWithStatus(1);
+      assert.throws(() => user.setStatus(3), new Error("value 3 is not a valid status"));
     });
   });
 });

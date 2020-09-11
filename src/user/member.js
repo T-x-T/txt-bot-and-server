@@ -75,7 +75,7 @@ class Member extends User{
 
   }
 
-  inactivate(){
+  async inactivate(){
 
   }
 
