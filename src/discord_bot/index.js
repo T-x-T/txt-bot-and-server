@@ -20,7 +20,9 @@ index.getNicknameByID     = discord_helpers.getNicknameByID;
 index.returnRoles         = discord_helpers.returnRoles;
 index.returnRoleId        = discord_helpers.returnRoleId;
 index.addMemberToRole     = discord_helpers.addMemberToRole;
+index.removeMemberFromRole= discord_helpers.removeMemberFromRole;
 index.updateAllNicks      = discord_helpers.updateAllNicks;
+index.hasRole             = discord_helpers.hasRole;
 
 /*
  *  Event listeners

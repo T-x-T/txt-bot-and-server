@@ -49,7 +49,8 @@ let conf = {
         paxterya: '',
         mod: '',
         cool: '',
-        utp: ''
+        utp: '',
+        inactive: ''
       }
     },
     email: {
@@ -151,7 +152,8 @@ let conf = {
         paxterya: '',
         mod: '',
         cool: '',
-        utp: ''
+        utp: '',
+        inactive: ''
       }
     },
     email: {
@@ -253,7 +255,8 @@ let conf = {
         paxterya: '',
         mod: '',
         cool: '',
-        utp: ''
+        utp: '',
+        inactive: ''
       }
     },
     email: {

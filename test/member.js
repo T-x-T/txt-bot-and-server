@@ -4,6 +4,7 @@ const MemberFactory = require("../src/user/memberFactory.js");
 const Mongo = require("../src/persistance/mongo.js");
 const assert = require("assert");
 const schema = Member.schema;
+const discord_helpers = require("../src/discord_bot");
 
 async function createAndSaveNewMember(){
   let memberFactory = new MemberFactory();
@@ -179,6 +180,30 @@ describe("member", function(){
       assert.equal(member.getBirthYear(), 2000);
       assert.equal(member.getPrivacySettings().publish_country, true);
       assert.equal(member.getPrivacySettings().publish_age, true);
+    });
+  });
+
+  describe("giving and taking discord roles", function(){
+    it("calling giveDiscordRole should not reject", async function(){
+      let member = await createAndSaveNewMember();
+      await assert.doesNotReject(async () => await member.giveDiscordRole(config.discord_bot.roles.inactive));
+    });
+
+    it("calling takeDiscordRole should not reject", async function(){
+      let member = await createAndSaveNewMember();
+      await assert.doesNotReject(async () => await member.takeDiscordRole(config.discord_bot.roles.inactive));
+    });
+
+    it("member should have role after calling giveDiscordRole", async function(){
+      let member = await createAndSaveNewMember();
+      await member.giveDiscordRole(config.discord_bot.roles.inactive);
+      assert.ok(discord_helpers.hasRole("293029505457586176", config.discord_bot.roles.inactive));
+    });
+
+    it("member should not have role after calling takeDiscordRole", async function () {
+      let member = await createAndSaveNewMember();
+      await member.takeDiscordRole(config.discord_bot.roles.inactive);
+      assert.ok(!discord_helpers.hasRole("293029505457586176", config.discord_bot.roles.inactive));
     });
   });
 });

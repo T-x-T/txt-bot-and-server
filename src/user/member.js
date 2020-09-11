@@ -1,5 +1,6 @@
 const User = require ("./user.js");
 const mc = require("../minecraft");
+const discord_helpers = require("../discord_bot");
 
 class Member extends User{
   constructor(discord_id, discord_nick, status, mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country){
@@ -71,16 +72,44 @@ class Member extends User{
     });
   }
 
+  giveDiscordRole(role){
+    return new Promise((resolve, reject) => {
+      discord_helpers.addMemberToRole(this.getDiscordId(), role, e => {
+        if(e){
+          reject(e);
+        }else{
+          resolve();
+        }
+      });
+    });
+  }
+
+  takeDiscordRole(role){
+    return new Promise((resolve, reject) => {
+      discord_helpers.removeMemberFromRole(this.getDiscordId(), role, e => {
+        if (e) {
+          reject(e);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
   async ban(){
 
   }
 
   async inactivate(){
-
+    this.setStatus(2);
+    await this.giveDiscordRole(config.discord_bot.roles.inactive);
+    //remove from whitelist
   }
 
   async activate(){
-    
+    this.setStatus(1);
+    await this.giveDiscordRole(config.discord_bot.roles.paxterya);
+    //add to whitelist
   }
 
   setDiscordNickToMcIgn() {

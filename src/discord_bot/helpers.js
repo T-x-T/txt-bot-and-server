@@ -58,8 +58,18 @@ helpers.returnRoleId = function(roleName){
 //Adds the given discord member to the given role
 helpers.addMemberToRole = function(discordID, roleID, callback){
   client.guilds.get(config.discord_bot.guild).members.get(discordID).addRole(roleID)
-  .then(callback(false))
-  .catch(callback(true));
+  .then(() => callback(false))
+  .catch(e => callback(e));
+};
+
+helpers.removeMemberFromRole = function(discordID, roleID, callback){
+  client.guilds.get(config.discord_bot.guild).members.get(discordID).removeRole(roleID)
+    .then(() => callback(false))
+    .catch(e => callback(e));
+};
+
+helpers.hasRole = function(discordID, roleToCheck){
+  return client.guilds.get(config.discord_bot.guild).members.get(discordID).roles.has(roleToCheck);
 };
 
 //Returns true if the given discord id is member of the guild and false if not
