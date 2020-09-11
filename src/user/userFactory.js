@@ -21,19 +21,6 @@ class UserFactory extends Factory{
       }
     });
   }
-
-  async getByDiscordID(discord_id){
-    return new Promise((resolve, reject) => {
-      if(!discord_id) reject(new Error("No discord_id given"));
-      this.persistanceProvider.retrieveFirstFiltered({discord: discord_id})
-        .then(async res => {
-          let user = new User(res.discord, res.discord_nick, res);
-          await user.init();
-          resolve(user);
-        })
-        .catch(e => reject(e));
-    });
-  }
 }
 
 module.exports = UserFactory;

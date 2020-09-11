@@ -29,6 +29,18 @@ describe("user", function(){
     });
   });
 
+  describe("basic getters", function(){
+    it("getDiscordId", async function(){
+      let user = await createAndSaveNewUser();
+      assert.equal(user.getDiscordId(), "293029505457586176");
+    });
+
+    it("getDiscordNick", async function () {
+      let user = await createAndSaveNewUser();
+      assert.equal(user.getDiscordNick(), "TxT#0001");
+    });
+  });
+
   describe("karma", function(){
     it("get karma should return 0 when karma hasnt been modified", async function(){
       let user = await createAndSaveNewUser();

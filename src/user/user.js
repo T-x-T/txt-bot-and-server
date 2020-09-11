@@ -11,12 +11,20 @@ class User extends Persistable{
     this.data.status = User.isValidStatus(status) ? status : 0;
   }
 
+  getDiscordId(){
+    return this.data.discord;
+  }
+
   setDiscordNick(newDiscordNick){
     if(typeof newDiscordNick != "string") throw new Error("no input given");
     if(newDiscordNick.indexOf("#") === -1) throw new Error("no # in new nick");
     if (!Number.isInteger(Number.parseInt(newDiscordNick.slice(newDiscordNick.length - 4, newDiscordNick.length)))) throw new Error("no discriminator");
 
     this.data.discord_nick = newDiscordNick;
+  }
+
+  getDiscordNick(){
+    return this.data.discord_nick;
   }
 
   getDiscordAvatarUrl() {

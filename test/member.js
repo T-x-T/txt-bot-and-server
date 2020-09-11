@@ -67,7 +67,7 @@ describe("member", function(){
 
     it("getMcIgn should return correct IGN", async function(){
       let member = await createAndSaveNewMember();
-      assert.equal(member.getMcUUID(), "dac25e44d1024f3b819978ed62d209a1");
+      assert.equal(member.getMcIgn(), "The__TxT");
     });
 
     it("getCountry should return correct country when publish_country is true", async function(){
@@ -135,6 +135,50 @@ describe("member", function(){
       let privacy = member.getPrivacySettings();
       assert.ok(privacy.publish_country);
       assert.ok(privacy.publish_age);
+    });
+  });
+
+  describe("factory getters", function(){
+    it("getByDiscordId should retrieve correct object", async function () {
+      await createAndSaveNewMember();
+      let member = await new MemberFactory().getByDiscordId("293029505457586176");
+      assert.equal(member.getMcUUID(), "dac25e44d1024f3b819978ed62d209a1");
+    });
+
+    it("getByDiscordId should reject when no discord_id is given", async function () {
+      await assert.rejects(async () => await new MemberFactory().getByDiscordId(), new Error("No discord_id given"));
+    });
+
+    it("getByDiscordId should create a correct object", async function () {
+      await createAndSaveNewMember();
+      let member = await new MemberFactory().getByDiscordId("293029505457586176");
+      assert.equal(member.getDiscordNick(), "TxT#0001");
+      assert.equal(member.getMcUUID(), "dac25e44d1024f3b819978ed62d209a1");
+      assert.equal(member.getMcIgn(), "The__TxT");
+      assert.equal(member.getCountry(), "germany");
+      assert.equal(member.getBirthMonth(), 7);
+      assert.equal(member.getBirthYear(), 2000);
+      assert.equal(member.getPrivacySettings().publish_country, true);
+      assert.equal(member.getPrivacySettings().publish_age, true);
+    });
+
+    it("getByMcUuid should retrieve correct object", async function () {
+      await createAndSaveNewMember();
+      let member = await new MemberFactory().getByMcUuid("dac25e44d1024f3b819978ed62d209a1");
+      assert.equal(member.getDiscordId(), "293029505457586176");
+    });
+
+    it("getByMcUuid should create a correct object", async function () {
+      await createAndSaveNewMember();
+      let member = await new MemberFactory().getByMcUuid("dac25e44d1024f3b819978ed62d209a1");
+      assert.equal(member.getDiscordNick(), "TxT#0001");
+      assert.equal(member.getMcUUID(), "dac25e44d1024f3b819978ed62d209a1");
+      assert.equal(member.getMcIgn(), "The__TxT");
+      assert.equal(member.getCountry(), "germany");
+      assert.equal(member.getBirthMonth(), 7);
+      assert.equal(member.getBirthYear(), 2000);
+      assert.equal(member.getPrivacySettings().publish_country, true);
+      assert.equal(member.getPrivacySettings().publish_age, true);
     });
   });
 });
