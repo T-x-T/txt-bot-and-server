@@ -102,14 +102,16 @@ class Member extends User{
 
   async inactivate(){
     this.setStatus(2);
+    await this.takeDiscordRole(config.discord_bot.roles.paxterya);
     await this.giveDiscordRole(config.discord_bot.roles.inactive);
-    //remove from whitelist
+    mc.sendCmd(`whitelist remove ${this.getMcIgn()}`, false);
   }
 
   async activate(){
     this.setStatus(1);
+    await this.takeDiscordRole(config.discord_bot.roles.inactive);
     await this.giveDiscordRole(config.discord_bot.roles.paxterya);
-    //add to whitelist
+    mc.sendCmd(`whitelist add ${this.getMcIgn()}`, false);
   }
 
   setDiscordNickToMcIgn() {

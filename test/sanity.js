@@ -4,7 +4,7 @@ const { AssertionError } = require('assert');
 
 describe('sanity-checks', function(){
   it('1 equals 1', function(){
-    assert.equal(1, 1);
+    assert.strictEqual(1, 1);
   });
 
   it('false is not true', function(){

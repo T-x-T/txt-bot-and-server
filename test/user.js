@@ -32,12 +32,12 @@ describe("user", function(){
   describe("basic getters", function(){
     it("getDiscordId", async function(){
       let user = await createAndSaveNewUser();
-      assert.equal(user.getDiscordId(), "293029505457586176");
+      assert.strictEqual(user.getDiscordId(), "293029505457586176");
     });
 
     it("getDiscordNick", async function () {
       let user = await createAndSaveNewUser();
-      assert.equal(user.getDiscordNick(), "TxT#0001");
+      assert.strictEqual(user.getDiscordNick(), "TxT#0001");
     });
   });
 
@@ -45,35 +45,35 @@ describe("user", function(){
     it("get karma should return 0 when karma hasnt been modified", async function(){
       let user = await createAndSaveNewUser();
       let karma = await user.getKarma();
-      assert.equal(karma, 0);
+      assert.strictEqual(karma, 0);
     });
 
     it("adding 1 karma shouldnt reject and save correct value", async function () {
       let user = await createAndSaveNewUser();
       await assert.doesNotReject(async () => await user.modifyKarmaBy(1));
       let karma = await user.getKarma();
-      assert.equal(karma, 1);
+      assert.strictEqual(karma, 1);
     });
 
     it("adding 10 karma shouldnt reject", async function () {
       let user = await createAndSaveNewUser();
       await assert.doesNotReject(async () => await user.modifyKarmaBy(10));
       let karma = await user.getKarma();
-      assert.equal(karma, 10);
+      assert.strictEqual(karma, 10);
     });
 
     it("subtracting 1 karma shouldnt reject and save correct value", async function () {
       let user = await createAndSaveNewUser();
       await assert.doesNotReject(async () => await user.modifyKarmaBy(-1));
       let karma = await user.getKarma();
-      assert.equal(karma, -1);
+      assert.strictEqual(karma, -1);
     });
 
     it("adding 0 karma shouldnt reject and save correct value", async function () {
       let user = await createAndSaveNewUser();
       await assert.doesNotReject(async () => await user.modifyKarmaBy(0));
       let karma = await user.getKarma();
-      assert.equal(karma, 0);
+      assert.strictEqual(karma, 0);
     });
   });
 
@@ -86,7 +86,7 @@ describe("user", function(){
     it("calling User#getDiscordAvatarUrl returns a string", async function () {
       let user = await createAndSaveNewUser();
       let avatarUrl = await user.getDiscordAvatarUrl();
-      assert.equal(typeof avatarUrl, "string");
+      assert.strictEqual(typeof avatarUrl, "string");
     });
 
     it("calling User#getDiscordAvatarUrl returns a url", async function () {
@@ -118,7 +118,7 @@ describe("user", function(){
     it("User#getDiscordUserdata should return a user object of the correct user", async function(){
       let user = await createAndSaveNewUser();
       let userData = await user.getDiscordUserdata();
-      assert.equal(userData.id, user.data.discord)
+      assert.strictEqual(userData.id, user.data.discord)
     }); 
   });
 
@@ -131,7 +131,7 @@ describe("user", function(){
     it("passing a correct nickname should save input", async function () {
       let user = await createAndSaveNewUser();
       user.setDiscordNick("TheTxt#1234");
-      assert.equal(user.data.discord_nick, "TheTxt#1234")
+      assert.strictEqual(user.data.discord_nick, "TheTxt#1234")
     });
 
     it("passing nothing should throw", async function () {
@@ -168,44 +168,44 @@ describe("user", function(){
 
     it("createAndSaveNewUser should create user with status 1", async function(){
       let user = await createAndSaveNewUser();
-      assert.equal(1, user.getStatus());
+      assert.strictEqual(1, user.getStatus());
     });
 
     it("creating new user with status 0 should get saved correctly", async function(){
       let user = await createAndSaveNewUserWithStatus(0);
-      assert.equal(0, user.getStatus());
+      assert.strictEqual(0, user.getStatus());
     });
 
     it("creating new user with status 1 should get saved correctly", async function () {
       let user = await createAndSaveNewUserWithStatus(1);
-      assert.equal(1, user.getStatus());
+      assert.strictEqual(1, user.getStatus());
     });
 
     it("creating new user with status 2 should get saved correctly", async function () {
       let user = await createAndSaveNewUserWithStatus(2);
-      assert.equal(2, user.getStatus());
+      assert.strictEqual(2, user.getStatus());
     });
 
     it("creating new user with status -1 should result in user with status 0", async function () {
       let user = await createAndSaveNewUserWithStatus(-1);
-      assert.equal(0, user.getStatus());
+      assert.strictEqual(0, user.getStatus());
     });
 
     it("creating new user with status 3 should result in user with status 0", async function () {
       let user = await createAndSaveNewUserWithStatus(3);
-      assert.equal(0, user.getStatus());
+      assert.strictEqual(0, user.getStatus());
     });
 
     it("setting status to 0 should correctly set status", async function(){
       let user = await createAndSaveNewUserWithStatus(1);
       user.setStatus(0);
-      assert.equal(0, user.getStatus());
+      assert.strictEqual(0, user.getStatus());
     });
 
     it("setting status to 2 should correctly set status", async function () {
       let user = await createAndSaveNewUserWithStatus(1);
       user.setStatus(2);
-      assert.equal(2, user.getStatus());
+      assert.strictEqual(2, user.getStatus());
     });
 
     it("setting status to -1 should throw", async function(){

@@ -106,7 +106,7 @@ describe("PersistanceProvider mongo", function(){
       await saveExample();
       await con.deleteAll();
       let res = await con.retrieveAll();
-      assert.equal(res.length, 0);
+      assert.strictEqual(res.length, 0);
     });
   });
 
@@ -120,12 +120,12 @@ describe("PersistanceProvider mongo", function(){
 
     it("retrieving entry with id 0 should return the correct entry", async function(){
       let res = await con.retrieveFiltered({id: 0});
-      assert.equal(res[0].id, 0);
+      assert.strictEqual(res[0].id, 0);
     });
 
     it("retrieving all entries with an id over 5 should return 4 entries", async function(){
       let res = await con.retrieveFiltered({id: {$gt: 5}});
-      assert.equal(res.length, 4);
+      assert.strictEqual(res.length, 4);
     });
 
     it("passing a string as filter should reject", async function(){
@@ -143,12 +143,12 @@ describe("PersistanceProvider mongo", function(){
 
     it("retrieving with sort value null should return default sort", async function () {
       let res = await con.retrieveFilteredAndSorted({}, null);
-      assert.equal(res[0].id, 0);
+      assert.strictEqual(res[0].id, 0);
     });
 
     it("retrieveing with id sorted desc should sort correctly", async function(){
       let res = await con.retrieveFilteredAndSorted({}, {id: -1});
-      assert.equal(res[0].id, 9);
+      assert.strictEqual(res[0].id, 9);
     });
   });
 
@@ -162,13 +162,13 @@ describe("PersistanceProvider mongo", function(){
 
     it("retrieving should return an object, not an array", async function(){
       let res = await con.retrieveFirst();
-      assert.equal(typeof res, "object");
+      assert.strictEqual(typeof res, "object");
       assert.ok(!Array.isArray(res));
     });
 
     it("retrieving should return the first entry", async function(){
       let res = await con.retrieveFirst();
-      assert.equal(res.id, 0);
+      assert.strictEqual(res.id, 0);
     });
   });
 
@@ -182,13 +182,13 @@ describe("PersistanceProvider mongo", function(){
 
     it("retrieving should return an object, not an array", async function () {
       let res = await con.retrieveFirstFiltered({id: {$gt: 5}});
-      assert.equal(typeof res, "object");
+      assert.strictEqual(typeof res, "object");
       assert.ok(!Array.isArray(res));
     });
 
     it("retrieving should return the first entry", async function () {
       let res = await con.retrieveFirstFiltered({ id: {$gt: 5}});
-      assert.equal(res.id, 6);
+      assert.strictEqual(res.id, 6);
     });
   });
 
@@ -202,13 +202,13 @@ describe("PersistanceProvider mongo", function(){
 
     it("retrieving should return an object, not an array", async function () {
       let res = await con.retrieveNewest();
-      assert.equal(typeof res, "object");
+      assert.strictEqual(typeof res, "object");
       assert.ok(!Array.isArray(res));
     });
 
     it("retrieving should return the last entry", async function () {
       let res = await con.retrieveNewest();
-      assert.equal(res.id, 9);
+      assert.strictEqual(res.id, 9);
     });
   });
 
@@ -222,13 +222,13 @@ describe("PersistanceProvider mongo", function(){
 
     it("retrieving should return an object, not an array", async function () {
       let res = await con.retrieveNewestFiltered({id: {$lt: 5}});
-      assert.equal(typeof res, "object");
+      assert.strictEqual(typeof res, "object");
       assert.ok(!Array.isArray(res));
     });
 
     it("retrieving should return the last entry", async function () {
       let res = await con.retrieveNewestFiltered({id: {$lt: 5}});
-      assert.equal(res.id, 4);
+      assert.strictEqual(res.id, 4);
     });
   });
 
@@ -243,19 +243,19 @@ describe("PersistanceProvider mongo", function(){
     it("deleting one entry should leave 9 behind", async function(){
       await con.deleteByFilter({id: 0});
       let res = await con.retrieveAll();
-      assert.equal(res.length, 9);
+      assert.strictEqual(res.length, 9);
     });
 
     it("deleting entry with id 5 should actually delete entry with id 5", async function(){
       await con.deleteByFilter({id: 5});
       let res = await con.retrieveFiltered({id: 5});
-      assert.equal(res.length, 0);
+      assert.strictEqual(res.length, 0);
     });
 
     it("deleting the first 5 entries should leave 5 behind", async function(){
       await con.deleteByFilter({id: {$lt: 5}});
       let res = await con.retrieveAll();
-      assert.equal(res.length, 5);
+      assert.strictEqual(res.length, 5);
     });
   });
 
@@ -273,7 +273,7 @@ describe("PersistanceProvider mongo", function(){
       new_entry.text = "yeet";
       await con.save(new_entry);
       let res = await con.retrieveFirstFiltered({id: 3});
-      assert.equal(res.text, "yeet");
+      assert.strictEqual(res.text, "yeet");
     });
   });
 });

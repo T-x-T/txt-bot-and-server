@@ -25,7 +25,7 @@ describe("factory base class", function(){
       let testFactory = new TestFactory({ name: "test", persistanceProvider: "mongo" });
       await testFactory.connect();
       let testInstance = testFactory.create("test", true);
-      assert.equal(testInstance.data.text, "test");
+      assert.strictEqual(testInstance.data.text, "test");
       assert.ok(testInstance.data.bool);
     });
   });
@@ -48,7 +48,7 @@ describe("factory base class", function(){
       let testFactory = new TestFactory({ name: "test", persistanceProvider: "mongo" });
       await testFactory.connect();
       let res = await testFactory.getById(0);
-      assert.equal(res.data.id, 0);
+      assert.strictEqual(res.data.id, 0);
     });
   });
 });

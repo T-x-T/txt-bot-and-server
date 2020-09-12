@@ -11,11 +11,17 @@ var rcon = {};
 
 //Initializes the connection to the rcon server, sends a message and terminates the connection again
 rcon.send = function(cmd, server, callback){
+  //Abort if we are in testing mode
+  if(ENVIRONMENT == 'testing') {
+    emitter.emit('testing_minecraft_rcon_send', cmd, server);
+    return;
+  }
+
   if(!global.config.minecraft.rcon_enabled){
     global.log(0, 'minecraft', 'rcon.send received command to send, although its disabled', {});
     return;
   }
-
+  
   //Check if cmd is an array
   if(Array.isArray(cmd)){  
     global.log(0, 'minecraft', 'rcon.send received array', {cmd: cmd});
