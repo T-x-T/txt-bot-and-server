@@ -19,6 +19,7 @@ const log = require('../src/log'); //lgtm [js/unused-local-variable]
 global.log(0, 'test', 'Mocha test started', false);
 
 before("start discord_bot", function(done){
+  this.timeout(10000);
   emitter.on("discord_bot_ready", () => done());
 
   const discord_bot = require("../src/discord_bot");

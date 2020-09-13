@@ -274,4 +274,63 @@ describe("member", function(){
       await member.activate();
     });
   });
+
+  describe("delete", function(){
+    it("delete actually deletes entry from db", async function(){
+      const con = new Mongo("members", schema);
+      await con.connect();
+      
+      let member = await createAndSaveNewMember();
+      
+      let entries = await con.retrieveAll();
+      assert.strictEqual(entries.length, 1);
+      
+      member.delete();
+
+      entries = await con.retrieveAll();
+      assert.strictEqual(entries.length, 0);
+    });
+  });
+
+  describe("ban", function(){
+    it("ban should bans member from discord", async function(){
+      let member = await createAndSaveNewMember();
+      
+      emitter.once("testing_discordhelpers_ban", discordId => {
+        assert.strictEqual(discordId, member.getDiscordId());
+      });
+
+      await member.ban();
+    });
+
+    it("ban should actually delete member from db", async function () {
+      const con = new Mongo("members", schema);
+      await con.connect();
+
+      let member = await createAndSaveNewMember();
+
+      let entries = await con.retrieveAll();
+      assert.strictEqual(entries.length, 1);
+
+      member.ban();
+
+      entries = await con.retrieveAll();
+      assert.strictEqual(entries.length, 0);
+    });
+
+    it("ban should send whitelist remove and ban command per rcon", async function(){
+      let member = await createAndSaveNewMember();
+      let count = 0;
+      emitter.on("testing_minecraft_rcon_send", cmd => {
+        if (count === 0) assert.strictEqual(cmd, "whitelist remove The__TxT");
+        if (count === 1) {
+          assert.strictEqual(cmd, "ban The__TxT");
+          emitter.removeAllListeners("testing_minecraft_rcon_send");
+        }
+        count = 1;
+      });
+
+      await member.ban();
+    });
+  });
 });

@@ -120,6 +120,14 @@ helpers.getMemberObjectByID = function(userID, callback){
   }
 };
 
+helpers.banMember = function(userID){
+  if(ENVIRONMENT == 'testing') {
+    emitter.emit('testing_discordhelpers_ban', userID);
+    return;
+  }
+  client.guilds.get(config.discord_bot.guild).members.get(userID).ban();
+};
+
 //Init script, needs to be called from discord_bot.js, so we can use the client object here
 helpers.init = function (origClient) {
   client = origClient;

@@ -23,6 +23,7 @@ index.addMemberToRole     = discord_helpers.addMemberToRole;
 index.removeMemberFromRole= discord_helpers.removeMemberFromRole;
 index.updateAllNicks      = discord_helpers.updateAllNicks;
 index.hasRole             = discord_helpers.hasRole;
+index.banMember           = discord_helpers.banMember;
 
 /*
  *  Event listeners

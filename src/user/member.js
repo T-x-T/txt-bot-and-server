@@ -97,7 +97,14 @@ class Member extends User{
   }
 
   async ban(){
+    mc.sendCmd(`whitelist remove ${this.getMcIgn()}`, false);
+    mc.sendCmd(`ban ${this.getMcIgn()}`, false);
+    discord_helpers.banMember(this.getDiscordId());
+    this.delete();
+  }
 
+  async delete(){
+    await this.persistanceProvider.deleteByFilter({discord: this.getDiscordId()});
   }
 
   async inactivate(){
