@@ -3,6 +3,7 @@
 class Factory{
   persistanceProvider;
   options;
+  connected = false;
 
   constructor(options){
     this.options = options;
@@ -22,7 +23,10 @@ class Factory{
   connect(){
     return new Promise((resolve, reject) => {
       this.persistanceProvider.connect()
-        .then(() => resolve())
+        .then(() => {
+          this.connected = true;
+          resolve();
+        })
         .catch(e => reject(e));
     });
   }  

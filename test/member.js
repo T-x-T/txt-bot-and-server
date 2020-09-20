@@ -5,7 +5,6 @@ const Mongo = require("../src/persistance/mongo.js");
 const assert = require("assert");
 const schema = Member.schema;
 const discord_helpers = require("../src/discord_bot");
-const { EventEmitter } = require("events");
 
 async function createAndSaveNewMember(){
   let memberFactory = new MemberFactory();
@@ -25,6 +24,7 @@ beforeEach("clear member collection", async function(){
   const con = new Mongo("members", schema);
   await con.connect();
   await con.deleteAll();
+  global.memberFactory.emptyCache();
 });
 
 describe("member", function(){
@@ -331,6 +331,31 @@ describe("member", function(){
       });
 
       await member.ban();
+    });
+  });
+
+  describe("global factory", function(){
+    it("creating a member and then retrieving a member should result in two objects that reference the same cached version", async function(){
+      let member1 = await global.memberFactory.create("293029505457586176", "TxT#0001", "dac25e44d1024f3b819978ed62d209a1", "The__TxT", "germany", 7, 2000, true, true);
+      let member2 = await global.memberFactory.getByDiscordId("293029505457586176");
+
+      member1.data.birth_year = 0;
+      assert.strictEqual(member2.getBirthYear(), 0);
+
+      member2.data.birth_year = -1;
+      assert.strictEqual(member1.getBirthYear(), -1);
+    });
+
+    it("creating a member and then retrieving it twice should result in two objects that reference the same cached version", async function(){
+      await global.memberFactory.create("293029505457586176", "TxT#0001", "dac25e44d1024f3b819978ed62d209a1", "The__TxT", "germany", 7, 2000, true, true);
+      let member1 = await global.memberFactory.getByDiscordId("293029505457586176");
+      let member2 = await global.memberFactory.getByDiscordId("293029505457586176");
+    
+      member1.data.birth_year = 0;
+      assert.strictEqual(member2.getBirthYear(), 0);
+
+      member2.data.birth_year = -1;
+      assert.strictEqual(member1.getBirthYear(), -1);
     });
   });
 });
