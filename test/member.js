@@ -182,6 +182,51 @@ describe("member", function(){
       assert.strictEqual(member.getPrivacySettings().publish_country, true);
       assert.strictEqual(member.getPrivacySettings().publish_age, true);
     });
+
+    it("get all with one member in the db should return an array with a length of one", async function(){
+      await createAndSaveNewMember();
+      let members = await new MemberFactory().getAll();
+      assert.strictEqual(members.length, 1);
+    });
+
+    it("get all with one member in the db should return a valid member object", async function () {
+      await createAndSaveNewMember();
+      let members = await new MemberFactory().getAll();
+      assert.strictEqual(members[0].getDiscordNick(), "TxT#0001");
+      assert.strictEqual(members[0].getMcUUID(), "dac25e44d1024f3b819978ed62d209a1");
+      assert.strictEqual(members[0].getMcIgn(), "The__TxT");
+      assert.strictEqual(members[0].getCountry(), "germany");
+      assert.strictEqual(members[0].getBirthMonth(), 7);
+      assert.strictEqual(members[0].getBirthYear(), 2000);
+      assert.strictEqual(members[0].getPrivacySettings().publish_country, true);
+      assert.strictEqual(members[0].getPrivacySettings().publish_age, true);
+    });
+
+    it("get all with three members in the db should return an array with a length of three", async function () {
+      await createAndSaveNewMember();
+      await memberFactory.create("243874567867596800", "MrSprouse#0001", "4fe6104dec5e4c8db78ebe3fe1ac36f8", "MrSprouse", "germany", 7, 2000, true, true);
+      await memberFactory.create("385133822762811394", "Mufon#7787", "28fc533e641f440fbe3a9bb0f8c5bed6", "Mufon59", "germany", 7, 2000, true, true);
+      let members = await new MemberFactory().getAll();
+      assert.strictEqual(members.length, 3);
+    });
+
+    it("get all with three members in the db should return a valid member object", async function () {
+      await createAndSaveNewMember();
+      await memberFactory.create("243874567867596800", "MrSprouse#0001", "4fe6104dec5e4c8db78ebe3fe1ac36f8", "MrSprouse", "germany", 7, 2000, true, true);
+      await memberFactory.create("385133822762811394", "Mufon#7787", "28fc533e641f440fbe3a9bb0f8c5bed6", "Mufon59", "germany", 7, 2000, true, true);
+
+      let members = await new MemberFactory().getAll();
+      let member = members.find(m => m.getDiscordId() === "385133822762811394");
+      assert.strictEqual(member.getDiscordNick(), "Mufon#7787");
+      assert.strictEqual(member.getMcUUID(), "28fc533e641f440fbe3a9bb0f8c5bed6");
+      assert.strictEqual(member.getMcIgn(), "Mufon59");
+      assert.strictEqual(member.getCountry(), "germany");
+      assert.strictEqual(member.getBirthMonth(), 7);
+      assert.strictEqual(member.getBirthYear(), 2000);
+      assert.strictEqual(member.getPrivacySettings().publish_country, true);
+      assert.strictEqual(member.getPrivacySettings().publish_age, true);
+    });
+
   });
 
   describe("giving and taking discord roles", function(){
