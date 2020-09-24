@@ -24,10 +24,10 @@ beforeEach("clear member collection", async function(){
   const con = new Mongo("members", schema);
   await con.connect();
   await con.deleteAll();
-  global.memberFactory.emptyCache();
 });
 
 describe("member", function(){
+  this.timeout(5000);
   describe("instanciation", function(){
     it("instanciating shouldnt reject", async function(){
       await assert.doesNotReject(async () => await createAndSaveNewMember());
@@ -227,6 +227,29 @@ describe("member", function(){
       assert.strictEqual(member.getPrivacySettings().publish_age, true);
     });
 
+    it("getAllWhitelisted should only return members with status 1", async function(){
+      let m1 = await createAndSaveNewMember();
+      let m2 = await memberFactory.create("243874567867596800", "MrSprouse#0001", "4fe6104dec5e4c8db78ebe3fe1ac36f8", "MrSprouse", "germany", 7, 2000, true, true);
+      await memberFactory.create("385133822762811394", "Mufon#7787", "28fc533e641f440fbe3a9bb0f8c5bed6", "Mufon59", "germany", 7, 2000, true, true);
+      await memberFactory.create("455808529627086848", "PyroChicken#3588", "e31a7dbd39cb42658c751958c6c200d1", "PyroChicken99", "germany", 7, 2000, true, true);
+      m1.setStatus(0);
+      await m1.save();
+      m2.setStatus(0);
+      await m2.save();
+
+      let res = await memberFactory.getAllWhitelisted();
+      assert.strictEqual(res.length, 2);
+
+      let member = res.find(m => m.getDiscordId() === "385133822762811394");
+      assert.strictEqual(member.getDiscordNick(), "Mufon#7787");
+      assert.strictEqual(member.getMcUUID(), "28fc533e641f440fbe3a9bb0f8c5bed6");
+      assert.strictEqual(member.getMcIgn(), "Mufon59");
+      assert.strictEqual(member.getCountry(), "germany");
+      assert.strictEqual(member.getBirthMonth(), 7);
+      assert.strictEqual(member.getBirthYear(), 2000);
+      assert.strictEqual(member.getPrivacySettings().publish_country, true);
+      assert.strictEqual(member.getPrivacySettings().publish_age, true);
+    });
   });
 
   describe("giving and taking discord roles", function(){
@@ -376,31 +399,6 @@ describe("member", function(){
       });
 
       await member.ban();
-    });
-  });
-
-  describe("global factory", function(){
-    it("creating a member and then retrieving a member should result in two objects that reference the same cached version", async function(){
-      let member1 = await global.memberFactory.create("293029505457586176", "TxT#0001", "dac25e44d1024f3b819978ed62d209a1", "The__TxT", "germany", 7, 2000, true, true);
-      let member2 = await global.memberFactory.getByDiscordId("293029505457586176");
-
-      member1.data.birth_year = 0;
-      assert.strictEqual(member2.getBirthYear(), 0);
-
-      member2.data.birth_year = -1;
-      assert.strictEqual(member1.getBirthYear(), -1);
-    });
-
-    it("creating a member and then retrieving it twice should result in two objects that reference the same cached version", async function(){
-      await global.memberFactory.create("293029505457586176", "TxT#0001", "dac25e44d1024f3b819978ed62d209a1", "The__TxT", "germany", 7, 2000, true, true);
-      let member1 = await global.memberFactory.getByDiscordId("293029505457586176");
-      let member2 = await global.memberFactory.getByDiscordId("293029505457586176");
-    
-      member1.data.birth_year = 0;
-      assert.strictEqual(member2.getBirthYear(), 0);
-
-      member2.data.birth_year = -1;
-      assert.strictEqual(member1.getBirthYear(), -1);
     });
   });
 });

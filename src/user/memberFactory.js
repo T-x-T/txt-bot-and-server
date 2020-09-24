@@ -2,7 +2,6 @@ const Factory = require("../persistance/factory.js");
 const Member = require("./member.js");
 
 class MemberFactory extends Factory{
-  cache = [];
   constructor(options) {
     if (typeof options != "object") var options = {};
     options.schema = Member.schema;
@@ -16,7 +15,6 @@ class MemberFactory extends Factory{
         let member = new Member(discord_id, discord_nick, 1, mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country);
         await member.init();
         await member.save();
-        this.cache.push(member);
         resolve(member);
       }catch(e){
         reject(e);
@@ -31,70 +29,55 @@ class MemberFactory extends Factory{
         return;
       }
 
-      this.cache.forEach(member => {
-        if(member.getDiscordId() === discord_id){
-          resolve(member);
-          return;
-        }
-      });
-
-      try{
-        if(!this.connected) await this.connect();
-        let res = await this.persistanceProvider.retrieveFirstFiltered({discord: discord_id});
-        let member = new Member(res.discord, res.discord_nick, res.status, res.mcUUID, res.mcName, res.country, res.birth_month, res.birth_year, res.publish_age, res.publish_country);
-        this.cache.push(member);
-        resolve(member);
-      }catch(e){
-        reject(e);
-      }
+      let res = await this.getFiltered({ discord: discord_id });
+      if (res.length === 0) return null;
+      resolve(res[0]);
     });
   }
 
   getByMcUuid(mc_uuid){
     return new Promise(async (resolve, reject) => {
-      if (!mc_uuid){
+      if (!mc_uuid) {
         reject(new Error("No mc_uuid given"));
         return;
-      } 
-
-      this.cache.forEach(member => {
-        if (member.getMcUUID() === mc_uuid) {
-          resolve(member);
-          return;
-        }
-      });
-
-      try {
-        if (!this.connected) await this.connect();
-        let res = await this.persistanceProvider.retrieveFirstFiltered({mcUUID: mc_uuid});
-        let member = new Member(res.discord, res.discord_nick, res.status, res.mcUUID, res.mcName, res.country, res.birth_month, res.birth_year, res.publish_age, res.publish_country);
-        this.cache.push(member);
-        resolve(member);
-      } catch (e) {
-        reject(e);
       }
+
+      let res = await this.getFiltered({ mcUUID: mc_uuid });
+      if (res.length === 0) return null;
+      resolve(res[0]);
+    });
+  }
+
+  getAllWhitelisted(){
+    return new Promise(async (resolve, reject) => {
+      let res = await this.getFiltered({status: 1});
+      resolve(res);
     });
   }
 
   getAll(){
     return new Promise(async (resolve, reject) => {
-      try {
+      let res = await this.getFiltered({});
+      resolve (res);
+    });
+  }
+
+  getFiltered(filter){
+    return new Promise(async (resolve, reject) => {
+      try{
         if (!this.connected) await this.connect();
-        let res = await this.persistanceProvider.retrieveAll();
+
+        let res = await this.persistanceProvider.retrieveFiltered(filter);
         let members = [];
         res.forEach(member => {
           members.push(new Member(member.discord, member.discord_nick, member.status, member.mcUUID, member.mcName, member.country, member.birth_month, member.birth_year, member.publish_age, member.publish_country));
         });
-        this.cache = members;
+
         resolve(members);
-      } catch (e) {
+      }catch(e){
         reject(e);
       }
     });
-  }
-
-  emptyCache(){
-    this.cache = [];
   }
 }
 
