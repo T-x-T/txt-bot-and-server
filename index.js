@@ -14,6 +14,7 @@ class Emitter extends EventEmitter {}
 emitter = new Emitter(); 
 
 //Require all modules for init
+require('./src/discord_bot/main.js');
 require('./src/data');
 require('./src/discord_api');
 

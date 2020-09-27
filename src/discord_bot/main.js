@@ -21,6 +21,8 @@ client.once('ready', () => {
   client.user.setActivity('your messages',{type: 'LISTENING'});
   //Finally log that we sucessfully started
   global.log(1, 'discord_bot', 'Discord Bot connected sucessfully', null);
+
+  const eventListeners = require('./eventListeners.js');
 });
 
 emitter.on('discord_bot_ready' ,() => {
