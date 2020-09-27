@@ -72,7 +72,7 @@ class MemberFactory extends Factory{
         res.forEach(member => {
           members.push(new Member(member.discord, member.discord_nick, member.status, new Date(member._id.getTimestamp()).valueOf(), member.karma, member.mcUUID, member.mcName, member.country, member.birth_month, member.birth_year, member.publish_age, member.publish_country));
         });
-
+        await Promise.all(members.map(async member => await member.init()));
         resolve(members);
       }catch(e){
         reject(e);

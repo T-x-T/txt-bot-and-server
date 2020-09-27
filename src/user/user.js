@@ -56,9 +56,8 @@ class User extends Persistable{
     return this.data.karma;
   }
 
-  async modifyKarmaBy(modifier){
+  modifyKarmaBy(modifier){
     this.data.karma += modifier;
-    await this.save();
   }
 
   getStatus(){

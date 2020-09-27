@@ -7,9 +7,11 @@
 const fs             = require('fs');
 const Discord        = require('discord.js');
 const client         = new Discord.Client();
-const _user          = require('../user');
 const discordHelpers = require('../discord_bot/helpers.js');
 const application    = require('../application');
+const MemberFactory  = require('../user/memberFactory.js');
+const memberFactory  = new MemberFactory();
+memberFactory.connect();
 
 //Create the container
 var discordBot = {};
@@ -90,7 +92,7 @@ emitter.on('discord_bot_ready' ,() => {
     const emojiKey = (data.emoji.id) ? `${data.emoji.name}:${data.emoji.id}` : data.emoji.name;
     const reaction = message.reactions.get(emojiKey);
     client.emit(events[event.t], reaction, user);
-    //if (message.reactions.size === 1) message.reactions.delete(emojiKey);
+    if (message.reactions.size === 1) message.reactions.delete(emojiKey);
   });
 
   //Gets called when a reaction gets added to some message
@@ -101,10 +103,18 @@ emitter.on('discord_bot_ready' ,() => {
         //Cancel the operation if someones reacts to themself
         if (user.id === reaction.message.author.id) return;
         if (reaction.emoji.name == 'upvote') {
-          _user.modify({ discord: reaction.message.author.id }, 'karma', 1, false, function (err, doc) { });
+          memberFactory.getByDiscordId(reaction.message.author.id)
+          .then(member => {
+            member.modifyKarmaBy(1);
+            member.save();
+          });
         }
         if (reaction.emoji.name == 'downvote') {
-          _user.modify({ discord: reaction.message.author.id }, 'karma', -1, false, function (err, doc) { });
+          memberFactory.getByDiscordId(reaction.message.author.id)
+          .then(member => {
+            member.modifyKarmaBy(-1);
+            member.save();
+          });
         }
       }
     } catch (e) { }
@@ -118,29 +128,37 @@ emitter.on('discord_bot_ready' ,() => {
         //Cancel the operation if someones reacts to themself
         if (user.id === reaction.message.author.id) return;
         if (reaction.emoji.name == 'upvote') {
-          _user.modify({ discord: reaction.message.author.id }, 'karma', -1, false, function (err, doc) { });
+          memberFactory.getByDiscordId(reaction.message.author.id)
+          .then(member => {
+            member.modifyKarmaBy(-1);
+            member.save();
+          });
         }
         if (reaction.emoji.name == 'downvote') {
-          _user.modify({ discord: reaction.message.author.id }, 'karma', 1, false, function (err, doc) { });
+          memberFactory.getByDiscordId(reaction.message.author.id)
+          .then(member => {
+            member.modifyKarmaBy(1);
+            member.save();
+          });
         }
       }
-    } catch (e) { }
+    } catch (e) { console.log(e)}
   });
 
   //Gets called whenever a member leaves the guild; user is a guildMember
   client.on('guildMemberRemove', (user) => {
-    _user.get({discord: user.id}, {onlyPaxterians: false, first: true}, function(err, doc){
-      emitter.emit('user_left', user, doc);
-    });
+    memberFactory.getByDiscordId(user.id)
+    .then(member => member.delete());
     discordHelpers.sendMessage(`${user.displayName} left the server`, config.discord_bot.channel.new_application_announcement, function (e) { });
   });
 
   //Gets called whenever a member gets banned from the guild; user is a guildMember
   client.on('guildBanAdd', (guild, user) => {
-    _user.get({discord: user.id}, {onlyPaxterians: false, first: true}, function(err, doc){
-      if(ENVIRONMENT !== 'testing') emitter.emit('user_banned', user, doc);
+    memberFactory.getByDiscordId(user.id)
+    .then(member => {
+      if(ENVIRONMENT !== 'testing') emitter.emit('user_banned', user, member);
     });
-    discordHelpers.sendMessage(`${user.username} was banned from the server`, config.discord_bot.channel.new_application_announcement, function (e) { });
+    discordHelpers.sendMessage(`${user.username} was banned from the server`, config.discord_bot.channel.new_application_announcement, function (e) {});
   });
 
   //Gets called whenever a new member joins the guild

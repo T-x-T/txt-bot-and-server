@@ -53,8 +53,8 @@ emitter.on('user_left', (member, user) => {
 
 emitter.on('user_banned', (member, user) => {
   global.log(0, 'minecraft', 'event user_banned received', {member: member});
-  rcon.send(`whitelist remove ${user.mcName}`, false, function(res){});
-  rcon.send(`ban ${user.mcName}`, false, function(res){});
+  rcon.send(`whitelist remove ${user.getMcIgn()}`, false, function(res){});
+  rcon.send(`ban ${user.getMcIgn()}`, false, function(res){});
 });
 
 emitter.on('application_accepted_joined', (app) => {
