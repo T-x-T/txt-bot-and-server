@@ -5,7 +5,9 @@
 
 //Dependencies
 const data = require('../data');
-const user = require('../user');
+const MemberFactory = require('../user/memberFactory.js');
+const memberFactory = new MemberFactory();
+memberFactory.connect();
 
 //Create the container
 var mc = {};
@@ -119,26 +121,26 @@ function getLatestStats(uuid, callback){
       }
     });
   }else{
-    user.get({}, {privacy: true, onlyPaxterians: true}, function(err, docs){
-      if(!err && docs){
-        let stats = [];
-        let errors = 0;
-        for(let i = 0; i < docs.length; i++){
-          getLatestStats(docs[i].mcUUID, function(err, doc){
-            stats.push(doc);
-            if(err) errors++;
-            if(stats.length == docs.length){
-              if(errors !== stats.length){
-                callback(false, stats)
-              }else{
-                callback(err, false);
-              }
-            } 
-          });
-        }
-      }else{
-        callback(err, false);
+    memberFactory.getAllWhitelisted()
+    .then(members => {
+      let stats = [];
+      let errors = 0;
+      for(let i = 0; i < members.length; i++) {
+        getLatestStats(members[i].getMcUUID(), function (err, doc) {
+          stats.push(doc);
+          if(err) errors++;
+          if(stats.length == members.length) {
+            if(errors !== stats.length) {
+              callback(false, stats)
+            } else {
+              callback(err, false);
+            }
+          }
+        });
       }
+    })
+    .catch(e => {
+      callback(e, false);
     });
   }
 };

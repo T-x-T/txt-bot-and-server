@@ -4,7 +4,6 @@
 */
 
 const user = require('../../user');
-const stats = require('../../stats');
 
 module.exports = {
   name: 'minecraft',
@@ -87,10 +86,11 @@ module.exports = {
 var _internals = {};
 
 _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
+  const _stats = require('../../stats');
   let output = '';
   switch(collection){
     case 'general':
-      stats.get('mc', {collection: 'general', rank: rankInfo, uuid: userID}, function(err, stats){
+      _stats.get('mc', {collection: 'general', rank: rankInfo, uuid: userID}, function(err, stats){
       if(!err){
         if(rankInfo){
           output += `General statistics for ${ign}:\n`;
@@ -124,7 +124,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     });
     break;
     case 'distance':
-    stats.get('mc', {uuid: userID, collection: 'distances', rank: rankInfo}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'distances', rank: rankInfo}, function(err, stats){
       if(!err){
         if(rankInfo){
           output += `Distance statistics for ${ign}:\n`;
@@ -160,7 +160,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     });
     break;
     case 'ores':
-    stats.get('mc', {uuid: userID, collection: 'minedOres', rank: rankInfo}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'minedOres', rank: rankInfo}, function(err, stats){
       if(!err){
         if(rankInfo){
           output += `Mined ores from ${ign}:\n`;
@@ -188,7 +188,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     });
     break;
     case 'total':
-    stats.get('mc', {uuid: userID, collection: 'total', rank: rankInfo}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'total', rank: rankInfo}, function(err, stats){
       if(!err){
         if(rankInfo){
           output += `Totals from ${ign}:\n`;
@@ -215,7 +215,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_usage':
     if(!rankInfo){
-      stats.get('mc', {uuid: userID, collection: 'topUsageItems'}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'topUsageItems'}, function(err, stats){
         if(!err){
           output += `Top used items from ${ign}:\n`;
           let i = 0;
@@ -234,7 +234,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_picked_up':
     if(!rankInfo){
-      stats.get('mc', {uuid: userID, collection: 'topPickedUpItems'}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'topPickedUpItems'}, function(err, stats){
         if(!err){
           output += `Top picked up items from ${ign}:\n`;
           let i = 0;
@@ -253,7 +253,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_mined':
     if(!rankInfo){
-      stats.get('mc', {uuid: userID, collection: 'topMinedBlocks'}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'topMinedBlocks'}, function(err, stats){
         if(!err){
           output += `Top mined items from ${ign}:\n`;
           let i = 0;
@@ -272,7 +272,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_dropped':
     if(!rankInfo){
-      stats.get('mc', {uuid: userID, collection: 'topDroppedItems'}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'topDroppedItems'}, function(err, stats){
         if(!err){
           output += `Top dropped items from ${ign}:\n`;
           let i = 0;
@@ -291,7 +291,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_crafted':
     if(!rankInfo){
-      stats.get('mc', {uuid: userID, collection: 'topCraftedItems'}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'topCraftedItems'}, function(err, stats){
         if(!err){
           output += `Top crafted items from ${ign}:\n`;
           let i = 0;
@@ -310,7 +310,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_broken':
     if(!rankInfo){
-      stats.get('mc', {uuid: userID, collection: 'topBrokenItems'}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'topBrokenItems'}, function(err, stats){
         if(!err){
           output += `Top broken items from ${ign}:\n`;
           let i = 0;
@@ -329,7 +329,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_killed':
     if(!rankInfo){
-      stats.get('mc', {uuid: userID, collection: 'topKilledMobs'}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'topKilledMobs'}, function(err, stats){
         if(!err){
           output += `Top killed mobs from ${ign}:\n`;
           let i = 0;
@@ -348,7 +348,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_killed_by':
     if(!rankInfo){
-      stats.get('mc', {uuid: userID, collection: 'topKilledByMobs'}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'topKilledByMobs'}, function(err, stats){
         if(!err){
           output += `Top mobs killed by from ${ign}:\n`;
           let i = 0;
@@ -366,7 +366,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     }
     break;
     case 'total_per_death':
-    stats.get('mc', {uuid: userID, collection: 'totalPerDeath', rank: rankInfo}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'totalPerDeath', rank: rankInfo}, function(err, stats){
       if(!err){
         if(rankInfo){
           output += `Totals per death from ${ign}:\n`;
