@@ -22,6 +22,7 @@ index.returnRoleId        = discord_helpers.returnRoleId;
 index.addMemberToRole     = discord_helpers.addMemberToRole;
 index.removeMemberFromRole= discord_helpers.removeMemberFromRole;
 index.updateAllNicks      = discord_helpers.updateAllNicks;
+index.updateNicks         = discord_helpers.updateAllDiscordNicks;
 index.hasRole             = discord_helpers.hasRole;
 index.banMember           = discord_helpers.banMember;
 

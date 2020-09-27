@@ -5,7 +5,6 @@
 
 //Dependencies
 const data = require('../data');
-const discord = require('../discord_api');
 
 //Create the container
 var user = {};
@@ -96,31 +95,6 @@ user.modify = function(filter, key, modifier, options, callback) {
       });
     }else{
       callback('Couldnt find user: ' + err, false);
-    }
-  });
-};
-
-//Triggers the update of all IGNs and Nicks from all users
-user.updateNicks = function(){
-  const mc = require('../minecraft');
-  //Get all users
-  user.get({}, false, function(err, docs){
-    if(!err && docs){
-      docs.forEach((doc) => {
-        //Update discord nick
-        discord.getNicknameByID(doc.discord, function (discord_nick) {
-          if(discord_nick){
-            doc.discord_nick = discord_nick;
-            user.edit(doc, false, function(err, doc) {
-              if(err) global.log(2, 'user', 'user.updateNick couldnt update user', {err: err, doc: doc});
-            });
-          } 
-        });
-      });
-      //Trigger update of minecraft igns
-      mc.updateAllIGNs();
-    }else{
-      global.log(2, 'user', 'user.updateNicks cant get any users', {err: err});
     }
   });
 };

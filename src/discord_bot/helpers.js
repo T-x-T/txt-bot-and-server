@@ -112,6 +112,28 @@ helpers.updateAllNicks = function(){
   });
 };
 
+//This gets the current username of all users and writes them into the db
+helpers.updateAllDiscordNicks = function(){
+  //Get all users
+  user.get({}, false, function (err, docs) {
+    if(!err && docs) {
+      docs.forEach((doc) => {
+        //Update discord nick
+        helpers.getNicknameByID(doc.discord, function (discord_nick) {
+          if(discord_nick) {
+            doc.discord_nick = discord_nick;
+            user.edit(doc, false, function (err, doc) {
+              if(err) global.log(2, 'user', 'user.updateNick couldnt update user', {err: err, doc: doc});
+            });
+          }
+        });
+      });
+    } else {
+      global.log(2, 'user', 'user.updateNicks cant get any users', {err: err});
+    }
+  });
+}
+
 helpers.getMemberObjectByID = function(userID, callback){
   try {
     callback(client.guilds.get(config.discord_bot.guild).members.get(userID));

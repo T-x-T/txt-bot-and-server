@@ -4,7 +4,6 @@
  */
 
 //Dependencies
-const user = require('../user');
 const mc = require('./minecraft.js');
 const MemberFactory = require('../user/memberFactory.js');
 let memberFactory = new MemberFactory();

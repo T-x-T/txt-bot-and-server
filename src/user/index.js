@@ -36,11 +36,6 @@ index.modify = function (filter, key, modifier, options, callback) {
   main.modify(filter, key, modifier, options, callback);
 };
 
-//Triggers the update of all IGNs and Nicks from all users
-index.updateNicks = function () {
-  main.updateNicks();
-};
-
 setImmediate(function () {
   emitter.on('user_left', (member, user) => {
     global.log(0, 'user', 'user_left, deletion triggered', { member: member, user: user });

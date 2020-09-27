@@ -44,11 +44,10 @@ setInterval(function(){
   }
 }, 1000 * 60 * 5);
 
-
-
 //Every hour
 setInterval(function(){
-  user.updateNicks();
+  discord_helpers.updateNicks();
+  mc_helpers.updateAllIGNs();
   discord_helpers.updateAllNicks();
   discord_api.updateCache();
 }, 1000 * 60 * 60);
