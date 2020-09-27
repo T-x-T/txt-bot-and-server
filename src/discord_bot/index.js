@@ -22,6 +22,7 @@ index.updateAllNicks      = discord_helpers.updateAllNicks;
 index.updateNicks         = discord_helpers.updateAllDiscordNicks;
 index.hasRole             = discord_helpers.hasRole;
 index.banMember           = discord_helpers.banMember;
+index.updateUserIdCache   = discord_helpers.updateUserIdCache
 
 //Export the container
 module.exports = index;

@@ -1,6 +1,5 @@
 const Persistable = require("../persistance/persistable.js");
 const discord_api = require("../discord_api");
-const discord_helpers = require("../discord_bot/helpers.js");
 
 class User extends Persistable{
   constructor(discord_id, discord_nick, status, joinedDate, karma){

@@ -28,12 +28,6 @@ index.getMemberObjectByID = function(discord_id, callback){
   main.getMemberObjectByID(discord_id, callback);
 };
 
-//Updates the userobject cache
-index.updateCache = function(){
-  global.log(0, 'discord_api', 'index.updateCache', {});
-  main.updateUserIdCache();
-};
-
 //only works for guildMembers
 index.getNicknameByID = function(userID, callback){
   global.log(0, 'discord_api', 'index.getNicknameByID', {userID: userID});
@@ -43,6 +37,8 @@ index.getNicknameByID = function(userID, callback){
 index.getAvatarUrl = function(discord_id, callback){
   main.getAvatarUrl(discord_id, callback);
 };
+
+index.getUserObjectByIdFromApi = main.getUserObjectByIdFromApi;
 
 //Export the container
 module.exports = index;

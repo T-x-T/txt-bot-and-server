@@ -4,7 +4,8 @@
 */
 
 //Dependencies
-const user = require('../user');;
+const user = require('../user');
+const discord_api = require('../discord_api');
 
 //Global var
 var client;
@@ -148,6 +149,25 @@ helpers.banMember = function(userID){
     return;
   }
   client.guilds.get(config.discord_bot.guild).members.get(userID).ban();
+};
+
+helpers.updateUserIdCache = function () {
+  //Needs to be imported here, otherwise data hasnt initialized or something like that
+  const user = require('../user');
+
+  //Get all discord Ids
+  user.get({}, false, function (err, docs) {
+    //Update the cache for each user
+    i = 0;
+    docs.forEach((doc) => {
+      i = i + 1000;
+      setTimeout(function () {
+        discord_api.getUserObjectByIdFromApi(doc.discord, function (userObject) {
+          global.cache.discordUserObjects[userObject.id] = userObject;
+        });
+      }, i);
+    });
+  });
 };
 
 //Init script, needs to be called from discord_bot.js, so we can use the client object here

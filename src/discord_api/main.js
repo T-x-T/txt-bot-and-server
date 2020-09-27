@@ -68,25 +68,6 @@ main.getUserObjectById = function(id, options, callback) {
   }
 };
 
-main.updateUserIdCache = function() {
-  //Needs to be imported here, otherwise data hasnt initialized or something like that
-  const user = require('../user');
-
-  //Get all discord Ids
-  user.get({}, false, function(err, docs) {
-    //Update the cache for each user
-    i = 0;
-    docs.forEach((doc) => {
-      i = i + 1000;
-      setTimeout(function() {
-        main.getUserObjectByIdFromApi(doc.discord, function(userObject) {
-          global.cache.discordUserObjects[userObject.id] = userObject;
-        });
-      }, i);
-    });
-  });
-};
-
 //Get userObject by ID directly from api WITHOUT caching, NEVER EVER use this, unless you are 100% sure and asked TxT
 main.getUserObjectByIdFromApi = function(id, callback) {
   //Get the users object

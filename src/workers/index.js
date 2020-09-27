@@ -7,10 +7,8 @@
 const youtube         = require('../youtube');
 const log             = require('../log');
 const mc_helpers      = require('../minecraft');
-const discord_api     = require('../discord_api');
 const widgets         = require('../web/widgets.js');
 const discord_helpers = require('../discord_bot');
-const user            = require('../user');
 const stats           = require('../stats');
 
 //Stuff that should run on startup
@@ -24,7 +22,7 @@ widgets.init();
 //Contains discord user objects mapped by the discord id; gets cleared once an hour in workers
 global.cache = {};
 global.cache.discordUserObjects = {};
-discord_api.updateCache();
+discord_helpers.updateUserIdCache();
 
 
 
@@ -49,7 +47,7 @@ setInterval(function(){
   discord_helpers.updateNicks();
   mc_helpers.updateAllIGNs();
   discord_helpers.updateAllNicks();
-  discord_api.updateCache();
+  discord_helpers.updateUserIdCache();
 }, 1000 * 60 * 60);
 
 
