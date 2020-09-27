@@ -13,6 +13,8 @@ const EventEmitter = require('events');
 class Emitter extends EventEmitter {}
 emitter = new Emitter();
 
+require('../src/stats');
+
 //setup global factories
 const MemberFactory = require('../src/user/memberFactory.js');
 global.memberFactory = new MemberFactory();

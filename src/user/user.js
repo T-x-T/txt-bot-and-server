@@ -3,16 +3,22 @@ const discord_api = require("../discord_api");
 const discord_helpers = require("../discord_bot/helpers.js");
 
 class User extends Persistable{
-  constructor(discord_id, discord_nick, status){
+  constructor(discord_id, discord_nick, status, joinedDate, karma){
     super({name: "members", schema: User.schema});
 
     this.data.discord = discord_id;
     this.data.discord_nick = discord_nick;
     this.data.status = User.isValidStatus(status) ? status : 0;
+    this.data.joinedDate = joinedDate ? joinedDate : new Date();
+    this.data.karma = karma;
   }
 
   getDiscordId(){
     return this.data.discord;
+  }
+
+  getJoinedDate(){
+    return this.data.joinedDate;
   }
 
   setDiscordNick(newDiscordNick){

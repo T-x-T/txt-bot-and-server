@@ -8,7 +8,7 @@ const schema = User.schema;
 async function createAndSaveNewUser(){
   let userFactory = new UserFactory();
   await userFactory.connect();
-  let user = await userFactory.create("293029505457586176", "TxT#0001", 1);
+  let user = await userFactory.create("293029505457586176", "TxT#0001", 1, new Date());
   return user;
 }
 
@@ -216,6 +216,13 @@ describe("user", function(){
     it("setting status to 3 should throw", async function () {
       let user = await createAndSaveNewUserWithStatus(1);
       assert.throws(() => user.setStatus(3), new Error("value 3 is not a valid status"));
+    });
+  });
+
+  describe("get joined date", function(){
+    it("calling User#getJoinedDate should return a date", async function(){
+      let user = await createAndSaveNewUser();
+      assert.ok(user.getJoinedDate() instanceof Date);
     });
   });
 });

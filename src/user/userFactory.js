@@ -12,7 +12,7 @@ class UserFactory extends Factory{
   async create(discord_id, discord_nick, status){
     return new Promise(async (resolve, reject) => {
       try{
-        let user = new User(discord_id, discord_nick, status)
+        let user = new User(discord_id, discord_nick, status, new Date(), 0);
         await user.init();
         await user.save();
         resolve(user);

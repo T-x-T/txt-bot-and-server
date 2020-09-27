@@ -12,7 +12,7 @@ class MemberFactory extends Factory{
   create(discord_id, discord_nick, mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country){
     return new Promise(async (resolve, reject) => {
       try{
-        let member = new Member(discord_id, discord_nick, 1, mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country);
+        let member = new Member(discord_id, discord_nick, 1, new Date(), 0, mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country);
         await member.init();
         await member.save();
         resolve(member);
@@ -70,7 +70,7 @@ class MemberFactory extends Factory{
         let res = await this.persistanceProvider.retrieveFiltered(filter);
         let members = [];
         res.forEach(member => {
-          members.push(new Member(member.discord, member.discord_nick, member.status, member.mcUUID, member.mcName, member.country, member.birth_month, member.birth_year, member.publish_age, member.publish_country));
+          members.push(new Member(member.discord, member.discord_nick, member.status, new Date(member._id.getTimestamp()).valueOf(), member.karma, member.mcUUID, member.mcName, member.country, member.birth_month, member.birth_year, member.publish_age, member.publish_country));
         });
 
         resolve(members);

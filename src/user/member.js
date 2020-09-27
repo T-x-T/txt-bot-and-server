@@ -3,8 +3,8 @@ const mc = require("../minecraft");
 const discord_helpers = require("../discord_bot");
 
 class Member extends User{
-  constructor(discord_id, discord_nick, status, mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country){
-    super(discord_id, discord_nick, status);
+  constructor(discord_id, discord_nick, status, joinedDate, karma, mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country){
+    super(discord_id, discord_nick, status, joinedDate, karma);
 
     this.data.mcUUID = mc_uuid;
     this.data.mcName = mc_ign;
