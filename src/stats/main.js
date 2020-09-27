@@ -47,7 +47,7 @@ stats.template.overview = function(options, callback) {
 stats.template.memberOverview = function(options, callback) {
   let discord_id = options.hasOwnProperty('discord_id') ? options.discord_id : false;
   if(discord_id) {
-    
+
     //Get stats only for one member
     memberFactory.getByDiscordId(discord_id)
     .then(member => {
@@ -63,7 +63,6 @@ stats.template.memberOverview = function(options, callback) {
           mc_render_url: member.getMcSkinUrl(),
           joined_date: member.getJoinedDate()
         };
-
         callback(false, obj);
       });
     })
