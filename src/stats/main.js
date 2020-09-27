@@ -46,9 +46,8 @@ stats.template.overview = function(options, callback) {
 //This includes: discord_id, mc_uuid, discord_nick, mc_nick, age, country, playtime, mc_render_url, discord_avatar_url
 stats.template.memberOverview = function(options, callback) {
   let discord_id = options.hasOwnProperty('discord_id') ? options.discord_id : false;
-  let filter = options.hasOwnProperty('filter') ? options.filter : {};
-  
   if(discord_id) {
+    
     //Get stats only for one member
     memberFactory.getByDiscordId(discord_id)
     .then(member => {
