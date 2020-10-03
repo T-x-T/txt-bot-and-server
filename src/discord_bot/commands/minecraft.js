@@ -3,7 +3,9 @@
 *	Command to handle all minecraft related tasks
 */
 
-const user = require('../../user');
+const MemberFactory = require('../../user/memberFactory.js');
+const memberFactory = new MemberFactory();
+memberFactory.connect();
 
 module.exports = {
   name: 'minecraft',
@@ -31,31 +33,28 @@ module.exports = {
         if(userID){
           //If we made it here, the user wants to get the stats for one specific person
           //Find the IGN out as well
-          user.get({discord: userID}, {first: true}, function(err, data){
-            if(!err && data.mcName != null){
-              let ign = data.mcName;
-              let uuid = data.mcUUID;
-
-              if(args[1] == 'rank'){
-                //Get the rank flavored stats
-                let output = '```';
-                _internals.statsSwitch(args[2], uuid, ign, true, function(statsOutput){
-                  output += statsOutput;
-                  output += '```';
-                  message.channel.send(output);
-                });
-              }else{
-                //Normal stats
-                let output = '```';
-                _internals.statsSwitch(args[1], uuid, ign, false, function(statsOutput){
-                  output += statsOutput;
-                  output += '```';
-                  message.channel.send(output);
-                });
-              }
-            }else{
-              message.reply('Couldnt get the IGN for that user');
+          memberFactory.getByDiscordId(userID)
+          .then(member => {
+            if(args[1] == 'rank') {
+              //Get the rank flavored stats
+              let output = '```';
+              _internals.statsSwitch(args[2], member.getMcUUID(), member.getMcIgn(), true, function (statsOutput) {
+                output += statsOutput;
+                output += '```';
+                message.channel.send(output);
+              });
+            } else {
+              //Normal stats
+              let output = '```';
+              _internals.statsSwitch(args[1], member.getMcUUID(), member.getMcIgn(), false, function (statsOutput) {
+                output += statsOutput;
+                output += '```';
+                message.channel.send(output);
+              });
             }
+          })
+          .catch(e => {
+            message.reply('Couldnt get the IGN for that user: ' + e);
           });
         }else{
           //If we made it here, the user wants to get the stats for all players combined
