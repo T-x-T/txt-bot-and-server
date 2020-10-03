@@ -37,13 +37,6 @@ index.modify = function (filter, key, modifier, options, callback) {
 };
 
 setImmediate(function () {
-  emitter.on('user_left', (member, user) => {
-    global.log(0, 'user', 'user_left, deletion triggered', { member: member, user: user });
-    main.delete({ discord: user.discord }, false, function (err) {
-      if (err) global.log(0, 'user', 'Couldnt delete user that left', { discord_id: user.discord });
-    });
-  });
-
   emitter.on('application_accepted_joined', (app) => {
     global.log(0, 'user', 'user component got event application_accepted_joined', { application: app });
     

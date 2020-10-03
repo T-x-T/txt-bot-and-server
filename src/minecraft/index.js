@@ -44,13 +44,6 @@ index.sendCmd = function(cmd, server, callback){
   });
 };
 
-
-//Even listeners
-emitter.on('user_left', (member, user) => {
-  global.log(0, 'minecraft', 'event user_left received', {member: member});
-  rcon.send(`whitelist remove ${user.mcName}`, false, function(res){});
-});
-
 emitter.on('user_banned', (member, user) => {
   global.log(0, 'minecraft', 'event user_banned received', {member: member});
   rcon.send(`whitelist remove ${user.getMcIgn()}`, false, function(res){});

@@ -109,6 +109,7 @@ class Member extends User{
 
   async delete(){
     await this.persistanceProvider.deleteByFilter({discord: this.getDiscordId()});
+    mc.sendCmd(`whitelist remove ${this.getMcIgn()}`, false);
   }
 
   async inactivate(){
