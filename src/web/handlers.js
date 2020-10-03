@@ -13,7 +13,9 @@ const discord_api = require('../discord_api');
 const stats       = require('../stats');
 const post        = require('../post');
 const bulletin    = require('../bulletin');
-const user        = require('../user');
+const MemberFactory = require('../user/memberFactory.js');
+const memberFactory = new MemberFactory();
+memberFactory.connect();
 
 //Create the container
 var handlers = {};
@@ -125,9 +127,21 @@ handlers.paxLogin = function(data, callback){
     oauth.getAccessLevel({code: code}, {redirect: 'staffLogin'}, function(err, access_level, access_token){
       if(access_level >= 3){
         discord_api.getUserObject({token: access_token}, false, function(err, userData){
-          user.get({discord: userData.id}, {privacy: true, onlyPaxterians: true, first: true}, function(err, memberData){
+          memberFactory.getByDiscordId(userData.id)
+          .then(member => {
             //Now set the access_token as a cookie and redirect the user to the interface.html, also set access_level and mc_ign cookies THIS SHOULD NEVER BE TRUSTED FOR SECURITY, ONLY FOR MAKING THINGS SMOOTHER!!!
-            callback(302, {Location: `https://${data.headers.host}/interface`, 'Set-Cookie': [`discord_id=${userData.id};Max-Age=21000};path=/`, `access_token=${access_token};Max-Age=21000};path=/`, `access_level=${access_level};Max-Age=22000};path=/`, `mc_ign=${memberData.mcName};Max-Age=22000};path=/`]}, 'plain');
+            callback(302, 
+              {
+                Location: `https://${data.headers.host}/interface`, 
+                'Set-Cookie': [`discord_id=${userData.id};Max-Age=21000};path=/`, 
+                `access_token=${access_token};Max-Age=21000};path=/`, 
+                `access_level=${access_level};Max-Age=22000};path=/`, 
+                `mc_ign=${member.getMcIgn()};Max-Age=22000};path=/`]
+              }, 
+            'plain');
+          })
+          .catch(e => {
+            callback(500, e, 'plain');
           });
         });
       }else{
@@ -147,16 +161,16 @@ handlers.paxLogin = function(data, callback){
 
 //API endpoint for querying roles of players; Requires one uuid in the querystring
 handlers.paxapi.roles = function(data, callback){
-  user.get({mcUUID: data.queryStringObject.uuid}, {first: true}, function(err, doc){
-    if(!err){
-      if(doc){
-        callback(200, {role: oauth.getAccessLevel({id: doc.discord}, false)}, 'json'); 
-      }else{
-        callback(404, {}, 'json');
-      }
-    }else{
-      callback(500, {err: 'encountered error while trying to execute query: ' + err}, 'json');
+  memberFactory.getByMcUuid(data.queryStringObject.uuid)
+  .then(member => {
+    if(member) {
+      callback(200, {role: oauth.getAccessLevel({id: doc.discord}, false)}, 'json');
+    } else {
+      callback(404, {}, 'json');
     }
+  })
+  .catch(e => {
+    callback(500, {err: 'encountered error while trying to execute query: ' + e}, 'json');
   });
 };
 

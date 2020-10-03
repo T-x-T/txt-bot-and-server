@@ -5,9 +5,6 @@
 
 const log = require('../../log');
 const mc_helpers = require('../../minecraft');
-const discord_helpers = require('../helpers.js');
-const user = require('../../user');
-const stats = require('../../stats');
 const applications = require('../../application');
 
 module.exports = {

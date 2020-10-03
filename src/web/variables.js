@@ -9,9 +9,11 @@ const os              = require('os');
 const post            = require('../post');
 const widgets         = require('./widgets.js');
 const discord_api     = require('../discord_api');
-const user            = require('../user');
 const fs              = require('fs');
 const path            = require('path');
+const MemberFactory   = require('../user/memberFactory.js');
+const memberFactory   = new MemberFactory();
+memberFactory.connect();
 
 //Create internal container
 var _internal = {};
@@ -117,15 +119,13 @@ _getters.index = function(callback){
 _getters.widgets = function(callback){
   discord_api.getUserObject({token: data.access_token}, false, function(err, userObject){
     if(userObject){
-      user.get({discord: userObject.id}, {privacy: true, onlyPaxterians: true, first: true}, function(err, userData){
-        if(!err){
-          callback({
-            IGN: userData.mcName
-          });
-        }else{
-          callback({IGN: 'Error'});
-        }
-      });
+      memberFactory.getByDiscordId(userObject.id)
+      .then(member => {
+        callback({
+          IGN: member.getMcIgn()
+        });
+      })
+      .catch(e => callback({IGN: 'Error'}));
     }else{
       callback({IGN: 'Error'});
     }
