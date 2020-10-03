@@ -21,7 +21,8 @@ emitter.on('application_accepted_joined', (doc) => {
   discord_helpers.addMemberToRole(doc.discord_id, discord_helpers.returnRoleId('paxterya'), function (err) {
     if(err) global.log(2, 'discord_bot', 'discord_bot couldnt add accepted member to role', {application: doc, err: err});
   });
-  discord_helpers.updateNick(doc.discord_id);
+   
+  discord_helpers.setNickname(doc.discord_id, doc.mc_ign);
 
   let msg = '';
   if(doc.publish_about_me) msg = `Welcome <@${doc.discord_id}> to Paxterya!\nHere is the about me text they sent us:\n${doc.about_me}`;
@@ -30,7 +31,7 @@ emitter.on('application_accepted_joined', (doc) => {
   msg += 'It is also a good time to give our rules a read: https://paxterya.com/rules \n';
   msg += 'Please also take a look at our FAQ: https://paxterya.com/faq \n';
   msg += 'The IP of the survival server is paxterya.com and the IP for the creative Server is paxterya.com:25566\n\n';
-  msg += 'If you encounter any issues or have any questions, feel free to contact our mods (PrimateAfterMath, swabfu or MrSprouse) or the admins (ExxPlore or TxT).'
+  msg += 'If you encounter any issues or have any questions, feel free to contact our staff.'
   discord_helpers.sendMessage(msg, config.discord_bot.channel.new_member_announcement, function (err) {
     if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the welcome message', {err: err, application: doc});
   });

@@ -135,7 +135,7 @@ emitter.on('discord_bot_ready' ,() => {
   //Gets called whenever a member gets banned from the guild; user is a guildMember
   client.on('guildBanAdd', (guild, user) => {
     memberFactory.getByDiscordId(user.id)
-    .then(member => member.ban());
+    .then(member => {member.ban(); console.log('ban')});
     discordHelpers.sendMessage(`${user.username} was banned from the server`, config.discord_bot.channel.new_application_announcement, function (e) {});
   });
 
@@ -148,7 +148,7 @@ emitter.on('discord_bot_ready' ,() => {
     //Check if the new member got accepted as a member
     application.get({ discord_id: user.id }, { first: true }, function (err, doc) {
       if(doc){
-        if (doc.status == 3) application.acceptWorkflow(user.id);
+        if (doc.status == 3) application.acceptWorkflow(user.id, doc);
       }
     });
   });

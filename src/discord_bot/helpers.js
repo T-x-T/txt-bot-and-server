@@ -74,7 +74,9 @@ helpers.isGuildMember = function(userID){
   return client.guilds.get(config.discord_bot.guild).members.has(userID);
 };
 
-
+helpers.setNickname = function (discordID, newNick){
+  client.guilds.get(config.discord_bot.guild).members.get(discordID).setNickname(newNick);
+};
 
 helpers.getMemberObjectByID = function(userID, callback){
   try {
