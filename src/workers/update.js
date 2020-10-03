@@ -1,7 +1,8 @@
 
 //Dependencies
 const discord_api = require('../discord_api');
-const helpers = require('./helpers.js');
+const helpers = require('../discord_bot/helpers.js');
+const mc = require('../minecraft');
 const MemberFactory = require('../user/memberFactory.js');
 const memberFactory = new MemberFactory();
 memberFactory.connect();
@@ -12,6 +13,33 @@ emitter.on('discord_bot_ready', (_client) => {
 });
 
 let update = {};
+
+//Updates all IGNs from all members based on their UUID
+update.updateAllIGNs = function () {
+  //Get all members from db
+  memberFactory.getAll()
+    .then(members => {
+      members.forEach(member => {
+        //Check if the user has a ign, if not, then we have nothing to do
+        if(member.getMcUUID() != null) {
+          //Get the ign for the uuid
+          mc.getIGN(member.getMcUUID(), function (err, ign) {
+            if(ign) {
+              //Save ign
+              member.setMcIgn(ign);
+              member.save();
+            } else {
+              global.log(2, 'minecraft', 'mc.updateAllIGNs couldnt get a valid IGN for user', member);
+            }
+          });
+        }
+      });
+    })
+    .catch(e => {
+      global.log(2, 'minecraft', 'mc.updateAllIGNs couldnt get members');
+    });
+};
+
 //Set the nick of a user to their mc_ign
 update.updateNick = function (discord_id) {
   if(discord_id == client.guilds.get(config.discord_bot.guild).ownerID) return; //Dont update the owner of the guild, this will fail

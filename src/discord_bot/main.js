@@ -135,9 +135,7 @@ emitter.on('discord_bot_ready' ,() => {
   //Gets called whenever a member gets banned from the guild; user is a guildMember
   client.on('guildBanAdd', (guild, user) => {
     memberFactory.getByDiscordId(user.id)
-    .then(member => {
-      if(ENVIRONMENT !== 'testing') emitter.emit('user_banned', user, member);
-    });
+    .then(member => member.ban());
     discordHelpers.sendMessage(`${user.username} was banned from the server`, config.discord_bot.channel.new_application_announcement, function (e) {});
   });
 
