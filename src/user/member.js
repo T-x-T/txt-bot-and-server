@@ -59,6 +59,10 @@ class Member extends User{
     return `https://crafatar.com/renders/body/${this.getMcUUID()}?overlay=true`;
   }
 
+  setMcIgn(newIgn){
+    this.data.mcName = newIgn;
+  }
+
   async updateMcIgn(){
     return new Promise((resolve, reject) => {
       mc.getIGN(this.getMcUUID(), (err, newIgn) => {

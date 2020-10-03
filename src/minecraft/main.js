@@ -5,7 +5,9 @@
 
 //Dependencies
 const https = require('https');
-const user = require('../user');
+const MemberFactory = require('../user/memberFactory.js');
+const memberFactory = new MemberFactory();
+memberFactory.connect();
 
 //Create the container
 var mc = {};
@@ -13,22 +15,26 @@ var mc = {};
 //Updates all IGNs from all members based on their UUID
 mc.updateAllIGNs = function(){
   //Get all members from db
-  user.get({}, false, function(err, members){
-    members.forEach((member) => {
+  memberFactory.getAll()
+  .then(members => {
+    members.forEach(member => {
       //Check if the user has a ign, if not, then we have nothing to do
-      if(member.mcUUID != null){
+      if(member.getMcUUID() != null) {
         //Get the ign for the uuid
-        mc.getIGN(member.mcUUID, function(err, ign){
-          if(ign){
+        mc.getIGN(member.getMcUUID(), function (err, ign) {
+          if(ign) {
             //Save ign
-            member.mcName = ign;
-            user.edit(member, false, function(err, docs){});
-          }else{
+            member.setMcIgn(ign);
+            member.save();
+          } else {
             global.log(2, 'minecraft', 'mc_helpers.updateAllIGNs couldnt get a valid IGN for user', member);
           }
         });
       }
     });
+  })
+  .catch(e => {
+    global.log(2, 'minecraft', 'mc_helpers.updateAllIGNs couldnt get members');
   });
 };
 
