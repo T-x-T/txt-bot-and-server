@@ -208,16 +208,6 @@ module.exports = {
         case 'exec':
           //Command to execute manual tasks
           switch(args[1]){
-            case 'updatenicks':
-              //Updates all minecraft IGNs
-              user.updateNicks();
-              break;
-            case 'updatestats':
-              stats.updateMcStats();
-              break;
-            case 'updateallnicks':
-              discord_helpers.updateAllNicks();
-              break;
             case 'fixapp':
               fixapp(message, message.mentions.users.first().id);
               break;
