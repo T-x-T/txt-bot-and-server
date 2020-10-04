@@ -1,3 +1,15 @@
+stages:
+  - test
+  - build
+
+
+test:
+  stage: test
+  image: node:latest
+  script:
+    - npm i
+    - npm test
+
 build:
   image: docker:19.03.11
   stage: build
