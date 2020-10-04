@@ -142,7 +142,7 @@ emitter.on('discord_bot_ready' ,() => {
   //Gets called whenever a new member joins the guild
   client.on('guildMemberAdd', (user) => {
     //Send a welcome message
-    discordHelpers.sendMessage(`Welcome <@${user.id}>! If you are here for joining the Minecraft server, then please apply under https://paxterya.com/join-us, read the rules at https://paxterya.com/rules and consult our FAQ at https://paxterya.com/faq \nIf you have any questions just ping the admins (they like getting pinged, trust me)`, config.discord_bot.channel.general, function (err) {
+    discordHelpers.sendMessage(`Welcome <@${user.id}>! If you are here for joining the Minecraft server, then please apply under https://paxterya.com/join-us, read the rules at https://paxterya.com/rules and consult our FAQ at https://paxterya.com/faq \nIf you have any questions just ask in <#${user.guild.channels.find(channel => channel.name == "support").id}>`, config.discord_bot.channel.general, function (err) {
       if (err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new application message', { err: err, application: doc });
     });
     //Check if the new member got accepted as a member

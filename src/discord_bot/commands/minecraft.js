@@ -69,6 +69,30 @@ module.exports = {
         }
 
         break;
+      case 'online':
+        let output = '```';
+        
+        let server;
+        if(args[1] == 'creative' || args[1] == 'c'){
+          server = 'creative_server';
+        }else{
+          server = 'main_smp'
+        }
+        minecraft.sendCmd('list', server, function (res) {
+          
+          let onlinePlayerCount = parseInt(res.replace('There are ', ''));
+          let onlinePlayers = res.split(': ')[1].split(', ');
+
+          if (onlinePlayerCount === 1) output += `The following player is currently online:\n`;
+          else if (onlinePlayerCount === 0) output += `There are no players online right now. It's on you to change that now!\n`;
+          else output += `The following ${onlinePlayerCount} players are currently online:\n`;
+
+          onlinePlayers.forEach(player => output += player + '\n');
+
+          output += '```';
+          message.channel.send(output);
+        });
+        break;
       default:
         message.reply('you tried to do something that I dont understand');
         break;

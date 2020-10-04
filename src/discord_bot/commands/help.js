@@ -18,7 +18,8 @@ module.exports = {
       data.push('**Join here:** https://paxterya.com/join-us');
       data.push('**Survival Server IP:** paxterya.com');
       data.push('**Creative Server IP:** paxterya.com:25566');
-      data.push('**Version:** 1.16.1 java');
+      data.push('**Version:** 1.16.2 java');
+      data.push(`**Help:** <#${message.guild.channels.find(channel => channel.name == "support").id}>`);
       data.push('\nHere is a list of all available commands: ');
       data.push(commands.map(command => command.name).join(', '));
       data.push(`\nYou can send \`${config.discord_bot.bot_prefix}help [command name]\` to get info on a specific command!`);

@@ -12,6 +12,7 @@
 config.js
 mc_stats
 .*
+bin
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

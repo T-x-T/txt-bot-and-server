@@ -200,7 +200,7 @@ section#newestpost
     box-shadow: 0px 0px 100px #003840
     margin: 70px 0
 
-    p, article.news p:first-of-type::first-letter, article.news h3
+    p, li, article.news p:first-of-type::first-letter, article.news h3
         color: $pax-white
         text-shadow: 0px 1px 0px $pax-darkcyan
 
@@ -216,6 +216,10 @@ section#newestpost
 
         section
             border-left: 5px solid $pax-darkestcyan
+
+
+    li::before
+        color: $pax-white!important
 
 
 /* FOOTER */
