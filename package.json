@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "mocha --exit",
+    "test": "nyc mocha --exit",
     "prod": "index.js",
     "babel": "./node_modules/.bin/babel web/web/assets/react_js --out-dir web/web/assets/pax_js"
   },
@@ -23,7 +23,8 @@
     "@babel/cli": "^7.10.1",
     "@babel/core": "^7.10.2",
     "@babel/preset-react": "^7.10.1",
-    "mocha": "^7.1.2"
+    "mocha": "^7.1.2",
+    "nyc": "^15.1.0"
   },
   "repository": {
     "type": "git",

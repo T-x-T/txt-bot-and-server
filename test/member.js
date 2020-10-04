@@ -5,6 +5,7 @@ const Mongo = require("../src/persistance/mongo.js");
 const assert = require("assert");
 const schema = Member.schema;
 const discord_helpers = require("../src/discord_bot");
+const {assets} = require("../src/web/handlers.js");
 
 async function createAndSaveNewMember(){
   let memberFactory = new MemberFactory();
@@ -34,14 +35,6 @@ describe("member", function(){
     });
   });
 
-  describe("getMcSkinUrl", function(){
-    it("getMcSkinUrl should return a url containing the uuid", async function(){
-      let member = await createAndSaveNewMember();
-      let url = member.getMcSkinUrl();
-      assert.ok(url.includes(member.data.mcUUID));
-    });
-  });
-
   describe("updateMcIgn", function(){
     it("updateMcIgn shouldnt reject", async function(){
       let member = await createAndSaveNewMember();
@@ -62,6 +55,27 @@ describe("member", function(){
   });
 
   describe("basic getters", function(){
+    it("calling User#getJoinedDate should return a date", async function () {
+      let member = await createAndSaveNewMember();
+      assert.ok(member.getJoinedDate() instanceof Date);
+    });
+
+    it("getMcSkinUrl should return a url containing the uuid", async function () {
+      let member = await createAndSaveNewMember();
+      let url = member.getMcSkinUrl();
+      assert.ok(url.includes(member.data.mcUUID));
+    });
+
+    it("getDiscordId", async function () {
+      let member = await createAndSaveNewMember();
+      assert.strictEqual(member.getDiscordId(), "293029505457586176");
+    });
+
+    it("getDiscordNick", async function () {
+      let member = await createAndSaveNewMember();
+      assert.strictEqual(member.getDiscordNick(), "TxT#0001");
+    });
+
     it("getMcUUID should return correct UUID", async function(){
       let member = await createAndSaveNewMember();
       assert.strictEqual(member.getMcUUID(), "dac25e44d1024f3b819978ed62d209a1");
@@ -140,6 +154,192 @@ describe("member", function(){
     });
   });
 
+  describe("basic setters", function(){
+    it("setMcIgn", async function(){
+      let member = await createAndSaveNewMember();
+      member.setMcIgn("testname");
+      assert.strictEqual(member.getMcIgn(), "testname");
+    });
+  });
+
+  describe("karma", function () {
+    it("get karma should return 0 when karma hasnt been modified", async function () {
+      let member = await createAndSaveNewMember();
+      let karma = await member.getKarma();
+      assert.strictEqual(karma, 0);
+    });
+
+    it("adding 1 karma shouldnt reject and save correct value", async function () {
+      let member = await createAndSaveNewMember();
+      await assert.doesNotReject(async () => await member.modifyKarmaBy(1));
+      let karma = await member.getKarma();
+      assert.strictEqual(karma, 1);
+    });
+
+    it("adding 10 karma shouldnt reject", async function () {
+      let member = await createAndSaveNewMember();
+      await assert.doesNotReject(async () => await member.modifyKarmaBy(10));
+      let karma = await member.getKarma();
+      assert.strictEqual(karma, 10);
+    });
+
+    it("subtracting 1 karma shouldnt reject and save correct value", async function () {
+      let member = await createAndSaveNewMember();
+      await assert.doesNotReject(async () => await member.modifyKarmaBy(-1));
+      let karma = await member.getKarma();
+      assert.strictEqual(karma, -1);
+    });
+
+    it("adding 0 karma shouldnt reject and save correct value", async function () {
+      let member = await createAndSaveNewMember();
+      await assert.doesNotReject(async () => await member.modifyKarmaBy(0));
+      let karma = await member.getKarma();
+      assert.strictEqual(karma, 0);
+    });
+  });
+
+  describe("get discord avatar URL", function () {
+    it("calling User#getDiscordAvatarUrl does not reject", async function () {
+      let member = await createAndSaveNewMember();
+      assert.doesNotReject(async () => await member.getDiscordAvatarUrl());
+    });
+
+    it("calling User#getDiscordAvatarUrl returns a string", async function () {
+      let member = await createAndSaveNewMember();
+      let avatarUrl = await member.getDiscordAvatarUrl();
+      assert.strictEqual(typeof avatarUrl, "string");
+    });
+
+    it("calling User#getDiscordAvatarUrl returns a url", async function () {
+      let member = await createAndSaveNewMember();
+      let avatarUrl = await member.getDiscordAvatarUrl();
+      assert.doesNotThrow(() => new URL(avatarUrl));
+    });
+  });
+
+  describe("get user object", function () {
+    if(!global.hasOwnProperty("cache")) global.cache = {};
+    global.cache.discordUserObjects = {};
+
+    it("calling User#getDiscordUserdata shouldnt reject", async function () {
+      let user = await createAndSaveNewMember();
+      await assert.doesNotReject(async () => user.getDiscordUserdata());
+    });
+
+    it("User#getDiscordUserdata should return a valid discord user object", async function () {
+      let member = await createAndSaveNewMember();
+      let userData = await member.getDiscordUserdata();
+
+      assert.ok(userData.hasOwnProperty("id"));
+      assert.ok(userData.hasOwnProperty("username"));
+      assert.ok(userData.hasOwnProperty("discriminator"));
+      assert.ok(userData.hasOwnProperty("public_flags"));
+    });
+
+    it("User#getDiscordUserdata should return a user object of the correct user", async function () {
+      let member = await createAndSaveNewMember();
+      let userData = await member.getDiscordUserdata();
+      assert.strictEqual(userData.id, member.data.discord)
+    });
+  });
+
+  describe("setDiscordNick", function () {
+    it("passing a correct nickname should not throw", async function () {
+      let member = await createAndSaveNewMember();
+      assert.doesNotThrow(() => member.setDiscordNick("TheTxt#1234"));
+    });
+
+    it("passing a correct nickname should save input", async function () {
+      let member = await createAndSaveNewMember();
+      member.setDiscordNick("TheTxt#1234");
+      assert.strictEqual(member.data.discord_nick, "TheTxt#1234")
+    });
+
+    it("passing nothing should throw", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setDiscordNick(), new Error("no input given"));
+    });
+
+    it("passing nick without # should throw", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setDiscordNick("TheTxt1234"), new Error("no # in new nick"));
+    });
+
+    it("passing nick without discriminator should throw", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setDiscordNick("TheTxt#"), new Error("no discriminator"));
+    });
+
+    it("passing an incorrect nickname should not save input", async function () {
+      let member = await createAndSaveNewMember();
+      try {
+        member.setDiscordNick("TheTxt1234");
+      } catch(e) {}
+      assert.notStrictEqual(member.data.discord_nick, "TheTxt#1234");
+    });
+  });
+
+  describe("status", function () {
+    async function createAndSaveNewMemberWithStatus(status) {
+      let memberFactory = new MemberFactory();
+      await memberFactory.connect();
+      let member = await memberFactory.create("293029505457586176", "TxT#0001", "dac25e44d1024f3b819978ed62d209a1", "The__TxT", "germany", 7, 2000, true, true, status);
+      return member;
+    }
+
+    it("createAndSaveNewUser should create user with status 1", async function () {
+      let member = await createAndSaveNewMember();
+      assert.strictEqual(1, member.getStatus());
+    });
+
+    it("creating new user with status 0 should get saved correctly", async function () {
+      let member = await createAndSaveNewMemberWithStatus(0);
+      assert.strictEqual(0, member.getStatus());
+    });
+
+    it("creating new user with status 1 should get saved correctly", async function () {
+      let member = await createAndSaveNewMemberWithStatus(1);
+      assert.strictEqual(1, member.getStatus());
+    });
+
+    it("creating new user with status 2 should get saved correctly", async function () {
+      let member = await createAndSaveNewMemberWithStatus(2);
+      assert.strictEqual(2, member.getStatus());
+    });
+
+    it("creating new user with status -1 should result in user with status 0", async function () {
+      let member = await createAndSaveNewMemberWithStatus(-1);
+      assert.strictEqual(0, member.getStatus());
+    });
+
+    it("creating new user with status 3 should result in user with status 0", async function () {
+      let member = await createAndSaveNewMemberWithStatus(3);
+      assert.strictEqual(0, member.getStatus());
+    });
+
+    it("setting status to 0 should correctly set status", async function () {
+      let member = await createAndSaveNewMemberWithStatus(1);
+      member.setStatus(0);
+      assert.strictEqual(0, member.getStatus());
+    });
+
+    it("setting status to 2 should correctly set status", async function () {
+      let member = await createAndSaveNewMemberWithStatus(1);
+      member.setStatus(2);
+      assert.strictEqual(2, member.getStatus());
+    });
+
+    it("setting status to -1 should throw", async function () {
+      let member = await createAndSaveNewMemberWithStatus(1);
+      assert.throws(() => member.setStatus(-1), new Error("value -1 is not a valid status"));
+    });
+
+    it("setting status to 3 should throw", async function () {
+      let member = await createAndSaveNewMemberWithStatus(1);
+      assert.throws(() => member.setStatus(3), new Error("value 3 is not a valid status"));
+    });
+  });
+
   describe("factory getters", function(){
     it("getByDiscordId should retrieve correct object", async function () {
       await createAndSaveNewMember();
@@ -168,6 +368,10 @@ describe("member", function(){
       await createAndSaveNewMember();
       let member = await new MemberFactory().getByMcUuid("dac25e44d1024f3b819978ed62d209a1");
       assert.strictEqual(member.getDiscordId(), "293029505457586176");
+    });
+
+    it("getByMcUuid should reject when no mc_uuid is given", async function(){
+      await assert.rejects(async () => new MemberFactory().getByMcUuid(), new Error("No mc_uuid given"));
     });
 
     it("getByMcUuid should create a correct object", async function () {

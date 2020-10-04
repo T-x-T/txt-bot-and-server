@@ -1,11 +1,17 @@
-const User = require ("./user.js");
+const Persistable = require("../persistance/persistable.js");
 const mc = require("../minecraft");
 const discord_helpers = require("../discord_bot/helpers.js");
+const discord_api = require("../discord_api");
 
-class Member extends User{
+class Member extends Persistable{
   constructor(discord_id, discord_nick, status, joinedDate, karma, mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country){
-    super(discord_id, discord_nick, status, joinedDate, karma);
+    super({name: "members", schema: Member.schema});
 
+    this.data.discord = discord_id;
+    this.data.discord_nick = discord_nick;
+    this.data.status = Member.isValidStatus(status) ? status : 0;
+    this.data.joinedDate = joinedDate ? joinedDate : new Date();
+    this.data.karma = karma;
     this.data.mcUUID = mc_uuid;
     this.data.mcName = mc_ign;
     this.data.country = country;
@@ -15,16 +21,80 @@ class Member extends User{
     this.data.publish_country = publish_country;
   }
 
+  getDiscordId() {
+    return this.data.discord;
+  }
+
+  getJoinedDate() {
+    return this.data.joinedDate;
+  }
+
+  setDiscordNick(newDiscordNick) {
+    if(typeof newDiscordNick != "string") throw new Error("no input given");
+    if(newDiscordNick.indexOf("#") === -1) throw new Error("no # in new nick");
+    if(!Number.isInteger(Number.parseInt(newDiscordNick.slice(newDiscordNick.length - 4, newDiscordNick.length)))) throw new Error("no discriminator");
+
+    this.data.discord_nick = newDiscordNick;
+  }
+
+  getDiscordNick() {
+    return this.data.discord_nick;
+  }
+
+  getDiscordAvatarUrl() {
+    return new Promise((resolve, reject) => {
+      discord_api.getAvatarUrl(this.data.discord, (avatarUrl) => {
+        resolve(avatarUrl);
+      });
+    });
+  }
+
+  getDiscordUserdata() {
+    return new Promise((resolve, reject) => {
+      discord_api.getUserObject({id: this.data.discord}, {fromApi: true}, (err, userObject) => {
+        if(err) {
+          reject(err);
+        } else {
+          resolve(userObject);
+        }
+      });
+    });
+  }
+
+  getKarma() {
+    return this.data.karma;
+  }
+
+  modifyKarmaBy(modifier) {
+    this.data.karma += modifier;
+  }
+
+  getStatus() {
+    return this.data.status;
+  }
+
+  setStatus(status) {
+    if(Member.isValidStatus(status)) {
+      this.data.status = status;
+    } else {
+      throw new Error(`value ${status} is not a valid status`);
+    }
+  }
+
+  static isValidStatus(status) {
+    return status >= 0 && status <= 2;
+  }
+
   getMcUUID(){
-    return this.data.mcUUID
+    return this.data.mcUUID ? this.data.mcUUID : false;
   }
 
   getMcIgn(){
-    return this.data.mcName;
+    return this.data.mcName ? this.data.mcName : false;
   }
 
   getCountry(){
-    return this.data.country;
+    return this.data.country ? this.data.country : false;
   }
 
   getCountryConsiderPrivacy(){
@@ -32,14 +102,15 @@ class Member extends User{
   }
 
   getBirthMonth(){
-    return this.data.birth_month;
+    return this.data.birth_month ? this.data.birth_month : false;
   }
 
   getBirthYear(){
-    return this.data.birth_year;
+    return this.data.birth_year ? this.data.birth_year : false;
   }
 
   getAge(){
+    if(!this.getBirthMonth()) return false;
     if (this.getBirthMonth() <= new Date().getMonth() + 1){
       return new Date().getFullYear() - this.getBirthYear();
     }else{
@@ -52,7 +123,7 @@ class Member extends User{
   }
 
   getPrivacySettings(){
-    return {publish_age: this.data.publish_age, publish_country: this.data.publish_country};
+    return this.data.publish_age ? {publish_age: this.data.publish_age, publish_country: this.data.publish_country} : false;
   }
 
   getMcSkinUrl(){
@@ -125,19 +196,34 @@ class Member extends User{
     await this.giveDiscordRole(config.discord_bot.roles.paxterya);
     mc.sendCmd(`whitelist add ${this.getMcIgn()}`, false);
   }
-
-  setDiscordNickToMcIgn() {
-    return new Promise((resolve, reject) => {
-      if (this.data.discord == client.guilds.get(config.discord_bot.guild).ownerID) resolve(); //Dont update the owner of the guild, this will fail
-      else {
-        discord_helpers.getMemberObjectByID(this.data.discord, (memberObj) => {
-          memberObj.setNickname(this.data.mcName)
-            .then(() => resolve())
-            .catch(e => global.log(2, 'discord_bot', 'User#setDiscordNickToMcIgn failed to set the users nickname', { user: this.data.discord, err: e }));
-        });
-      }
-    });
-  }
 }
+
+Member.schema = {
+  discord: {
+    type: String,
+    index: true,
+    unique: true
+  },
+  discord_nick: String,
+  mcName: String,
+  mcUUID: {
+    type: String,
+    default: null
+  },
+  status: {
+    type: Number,
+    default: 0
+  }, //0 = regular pleb, 1 = whitelisted paxterya member, 2 = inactive paxterya member
+  birth_year: Number,
+  birth_month: Number,
+  country: String,
+  publish_age: Boolean,
+  publish_country: Boolean,
+  karma: {
+    type: Number,
+    default: 0
+  },
+  read_cards: Array
+};
 
 module.exports = Member;

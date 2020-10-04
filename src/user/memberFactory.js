@@ -9,10 +9,10 @@ class MemberFactory extends Factory{
     super(options);
   }
 
-  create(discord_id, discord_nick, mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country){
+  create(discord_id, discord_nick, mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country, status){
     return new Promise(async (resolve, reject) => {
       try{
-        let member = new Member(discord_id, discord_nick, 1, new Date(), 0, mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country);
+        let member = new Member(discord_id, discord_nick, typeof status == 'number' ? status : 1, new Date(), 0, mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country);
         await member.init();
         await member.save();
         resolve(member);

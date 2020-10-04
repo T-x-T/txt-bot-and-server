@@ -11,6 +11,7 @@
 *.sln.docstates
 config.js
 mc_stats
+.*
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

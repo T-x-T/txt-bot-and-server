@@ -159,18 +159,8 @@ class Mongo{
       }else{
         new this.model(input).save()
           .then(res => resolve(res))
-          .catch(e => reject());
+          .catch(e => reject(e));
       }
-    });
-  }
-
-
-  saveNew(doc) {
-    return new Promise((resolve, reject) => {
-      doc = new this.model(doc);
-      doc.save()
-        .then(() => resolve())
-        .catch((e) => reject(new Error(`Error occured when trying to save document to database: ${e.message}`)));
     });
   }
 

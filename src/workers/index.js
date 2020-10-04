@@ -24,14 +24,18 @@ global.cache = {};
 global.cache.discordUserObjects = {};
 update.updateUserIdCache();
 
-
+//10 seconds after startup
+setTimeout(() => {
+  update.updateAllNicks();
+  update.updateAllIGNs();
+  update.updateAllNicks();
+  update.updateUserIdCache();
+}, 10000);
 
 //Every minute
 setInterval(function () {
   mc_helpers.updateOnlinePlayers();
 }, 1000 * 60);
-
-
 
 //Every 5 minutes
 setInterval(function(){
@@ -41,15 +45,6 @@ setInterval(function(){
     global.log(3, 'workers', 'Workers: Cant execute getNewestVideo', {Error: e});
   }
 }, 1000 * 60 * 5);
-
-setTimeout(() => {
-  update.updateAllNicks();
-  update.updateAllIGNs();
-  update.updateAllNicks();
-  update.updateUserIdCache();
-  console.log("yeeett")
-},2000)
-
 
 //Every hour
 setInterval(function(){
