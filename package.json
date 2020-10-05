@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "nyc mocha --exit -t 100000",
+    "test": "nyc mocha --exit -t 1000000",
     "prod": "index.js",
     "babel": "./node_modules/.bin/babel web/web/assets/react_js --out-dir web/web/assets/pax_js"
   },
