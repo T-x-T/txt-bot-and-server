@@ -6,6 +6,8 @@ stages:
 test:
   stage: test
   image: node:latest
+  services:
+    - mongo:latest
   script:
     - npm i
     - cp $config ./config.js
