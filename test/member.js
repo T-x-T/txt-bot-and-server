@@ -5,7 +5,6 @@ const Mongo = require("../src/persistance/mongo.js");
 const assert = require("assert");
 const schema = Member.schema;
 const discord_helpers = require("../src/discord_bot");
-const {assets} = require("../src/web/handlers.js");
 
 async function createAndSaveNewMember(){
   let memberFactory = new MemberFactory();
@@ -28,7 +27,6 @@ beforeEach("clear member collection", async function(){
 });
 
 describe("member", function(){
-  this.timeout(5000);
   describe("instanciation", function(){
     it("instanciating shouldnt reject", async function(){
       await assert.doesNotReject(async () => await createAndSaveNewMember());
@@ -457,7 +455,6 @@ describe("member", function(){
   });
 
   describe("giving and taking discord roles", function(){
-    this.timeout(10000);
     it("calling giveDiscordRole should not reject", async function(){
       let member = await createAndSaveNewMember();
       await assert.doesNotReject(async () => await member.giveDiscordRole(config.discord_bot.roles.inactive));
@@ -482,7 +479,6 @@ describe("member", function(){
   });
 
   describe("inactivate", function(){
-    this.timeout(10000);
     it("inactivate should set status to 2", async function () {
       let member = await createAndSaveNewMember();
       await member.inactivate();
@@ -515,7 +511,6 @@ describe("member", function(){
   });
 
   describe("activate", function(){
-    this.timeout(20000);
     it("activate should set status to 1", async function () {
       let member = await createAndSaveNewMember();
       await member.activate();

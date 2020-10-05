@@ -54,13 +54,13 @@ helpers.returnRoleId = function(roleName){
 
 //Adds the given discord member to the given role
 helpers.addMemberToRole = function(discordID, roleID, callback){
-  client.guilds.get(config.discord_bot.guild).members.get(discordID).addRole(roleID)
+  client.guilds.get(config.discord_bot.guild).members.get(discordID).addRoles([roleID])
   .then(() => callback(false))
   .catch(e => callback(e));
 };
 
 helpers.removeMemberFromRole = function(discordID, roleID, callback){
-  client.guilds.get(config.discord_bot.guild).members.get(discordID).removeRole(roleID)
+  client.guilds.get(config.discord_bot.guild).members.get(discordID).removeRoles([roleID])
     .then(() => callback(false))
     .catch(e => callback(e));
 };
