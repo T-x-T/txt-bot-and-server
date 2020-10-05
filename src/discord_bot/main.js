@@ -6,7 +6,7 @@
 //Dependencies
 const fs             = require('fs');
 const Discord        = require('discord.js');
-const client         = new Discord.Client();
+const client         = new Discord.Client({restWsBridgeTimeout: 50000, restTimeOffset: 1000});
 const discordHelpers = require('../discord_bot/helpers.js');
 const application    = require('../application');
 const MemberFactory  = require('../user/memberFactory.js');
