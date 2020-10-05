@@ -5,69 +5,77 @@
 
 let conf = {
   prod: {
-
-  },
-  staging: {
-
-  },
-  testing: {
     application: {
 
     },
     auth: {
       discord_client_id: '',
       discord_client_secret: '',
-      discord_redirect_uri_application: 'https://localhost:3001/join-us.html',
-      discord_redirect_uri_staffLogin: 'https://localhost:3001/login.html',
+      discord_redirect_uri_application: '',
+      discord_redirect_uri_staffLogin: '',
       oauth_uris: {
         application: '',
         login: ''
       }
     },
     bulletin: {
-      max_per_usr: 50
+      max_per_usr: 5
     },
     data: {
-      mongodb_url: 'mongodb://localhost/testing',
-      backend: 'testing',
+      mongodb_url: 'mongodb://HOSTNAME/DATABASE',
+      backend: 'mongo',
       db_upgrades: {
         mc_stats_sub_type: false
       }
     },
     persistance: {
-      backend: 'mongo'
+      backend: 'mongo',
     },
     discord_api: {
 
     },
     discord_bot: {
       bot_prefix: '+',
-      bot_token: 'NjA3NTAyNjkzNTE0MDg0MzUy.XXkOJQ.qia1_SdABErJfXWv5xynsBz42Rk',
-      guild: '592303011947216896',
+      bot_token: 'ENTER YOUR TOKEN HERE',
+      guild: 'guild id goes here',
       channel: {
-        new_member_announcement: '607504671543656458',
-        new_application_announcement: '607504671543656458',
-        new_bulletin_announcement: '607504671543656458',
-        general: '607504671543656458',
+        new_member_announcement: '',
+        new_application_announcement: '',
+        new_bulletin_announcement: '',
+        general: ''
       },
       roles: {
-        admin: '592305368831492106',
-        paxterya: '640239004129820723',
-        inactive: '754067705547456522'
+        admin: '',
+        paxterya: '',
+        mod: '',
+        cool: '',
+        utp: '',
+        inactive: ''
       }
     },
     email: {
-      mailUser: 'applications@paxterya.com',
-      mailPass: 'redacted'
+      mailUser: 'test@example.org',
+      mailPass: 'badPW123'
     },
     log: {
-      log_level: 0
+      log_level: 1
     },
     minecraft: {
-      mc_stats_remote: 'txt-game02-m3',
-      rcon_server: 'localhost',
-      rcon_port: 23643,
-      rcon_password: 'beepboop'
+      mc_stats_remote: 'rclone remote name',
+      rcon_enabled: true,
+      rcon_main_server: 'server1',
+      rcon_servers: {
+        server1: {
+          rcon_server: '',
+          rcon_port: 25575,
+          rcon_password: ''
+        },
+        server2: {
+          rcon_server: '',
+          rcon_port: 25575,
+          rcon_password: ''
+        }
+      },
     },
     post: {
 
@@ -81,30 +89,226 @@ let conf = {
     web: {
       http_port: 3000,
       https_port: 3001,
-      https_redirect: false, //enables automatic redirecting from http queries to https
-      use_external_certs: false, //false to use internal certs that are not valid
+      https_redirect: true, //enables automatic redirecting from http queries to https
+      use_external_certs: true, //false to use internal certs that are not valid
       cert_path: '/etc/letsencrypt/live/{Domain}/'
     },
     workers: {
 
     },
     youtube: {
-      google_api_key: 'AIzaSyAYqK26BqHMU7TFBrzkDHmb60tRoQz8LFk',
+      google_api_key: 'google api key here',
       youtube_video_announcements: [
         {
-          youtube_id: 'UC3bXl38E3-KtJdXHBUKg_Dw',
-          channel_id: '594844047655305226',
-          role: '614135191707058187'
+          youtube_id: 'youtube channel id',
+          channel_id: 'discord channel id',
+          role: 'id of the role to ping'
+        }
+      ]
+    }
+  },
+  staging: {
+    application: {
+
+    },
+    auth: {
+      discord_client_id: '',
+      discord_client_secret: '',
+      discord_redirect_uri_application: '',
+      discord_redirect_uri_staffLogin: '',
+      oauth_uris: {
+        application: '',
+        login: ''
+      }
+    },
+    bulletin: {
+      max_per_usr: 5
+    },
+    data: {
+      mongodb_url: 'mongodb://HOSTNAME/DATABASE',
+      backend: 'mongo',
+      db_upgrades: {
+        mc_stats_sub_type: false
+      }
+    },
+    persistance: {
+      backend: 'mongo',
+    },
+    discord_api: {
+
+    },
+    discord_bot: {
+      bot_prefix: '+',
+      bot_token: 'ENTER YOUR TOKEN HERE',
+      guild: 'guild id goes here',
+      channel: {
+        new_member_announcement: '',
+        new_application_announcement: '',
+        new_bulletin_announcement: '',
+        general: '',
+      },
+      roles: {
+        admin: '',
+        paxterya: '',
+        mod: '',
+        cool: '',
+        utp: '',
+        inactive: ''
+      }
+    },
+    email: {
+      mailUser: 'test@example.org',
+      mailPass: 'badPW123'
+    },
+    log: {
+      log_level: 1
+    },
+    minecraft: {
+      mc_stats_remote: 'rclone remote name',
+      rcon_enabled: true,
+      rcon_main_server: 'server1',
+      rcon_servers: {
+        server1: {
+          rcon_server: '',
+          rcon_port: 25575,
+          rcon_password: ''
         },
+        server2: {
+          rcon_server: '',
+          rcon_port: 25575,
+          rcon_password: ''
+        }
+      },
+    },
+    post: {
+
+    },
+    stats: {
+
+    },
+    user: {
+
+    },
+    web: {
+      http_port: 3000,
+      https_port: 3001,
+      https_redirect: true, //enables automatic redirecting from http queries to https
+      use_external_certs: true, //false to use internal certs that are not valid
+      cert_path: '/etc/letsencrypt/live/{Domain}/'
+    },
+    workers: {
+
+    },
+    youtube: {
+      google_api_key: 'google api key here',
+      youtube_video_announcements: [
         {
-          youtube_id: 'UCH-JgwSf8J8tdjemXqihEKw',
-          channel_id: '594844047655305226',
-          role: '614135191707058187'
+          youtube_id: 'youtube channel id',
+          channel_id: 'discord channel id',
+          role: 'id of the role to ping'
+        }
+      ]
+    }
+  },
+  testing: {
+    application: {
+
+    },
+    auth: {
+      discord_client_id: '',
+      discord_client_secret: '',
+      discord_redirect_uri_application: '',
+      discord_redirect_uri_staffLogin: '',
+      oauth_uris: {
+        application: '',
+        login: ''
+      }
+    },
+    bulletin: {
+      max_per_usr: 5
+    },
+    data: {
+      mongodb_url: 'mongodb://HOSTNAME/DATABASE',
+      backend: 'mongo',
+      db_upgrades: {
+        mc_stats_sub_type: false
+      }
+    },
+    persistance: {
+      backend: 'mongo',
+    },
+    discord_api: {
+
+    },
+    discord_bot: {
+      bot_prefix: '+',
+      bot_token: 'ENTER YOUR TOKEN HERE',
+      guild: 'guild id goes here',
+      channel: {
+        new_member_announcement: '',
+        new_application_announcement: '',
+        new_bulletin_announcement: '',
+        general: ''
+      },
+      roles: {
+        admin: '',
+        paxterya: '',
+        mod: '',
+        cool: '',
+        utp: '',
+        inactive: ''
+      }
+    },
+    email: {
+      mailUser: 'test@example.org',
+      mailPass: 'badPW123'
+    },
+    log: {
+      log_level: 1
+    },
+    minecraft: {
+      mc_stats_remote: 'rclone remote name',
+      rcon_enabled: true,
+      rcon_main_server: 'server1',
+      rcon_servers: {
+        server1: {
+          rcon_server: '',
+          rcon_port: 25575,
+          rcon_password: ''
         },
+        server2: {
+          rcon_server: '',
+          rcon_port: 25575,
+          rcon_password: ''
+        }
+      },
+    },
+    post: {
+
+    },
+    stats: {
+
+    },
+    user: {
+
+    },
+    web: {
+      http_port: 3000,
+      https_port: 3001,
+      https_redirect: true, //enables automatic redirecting from http queries to https
+      use_external_certs: true, //false to use internal certs that are not valid
+      cert_path: '/etc/letsencrypt/live/{Domain}/'
+    },
+    workers: {
+
+    },
+    youtube: {
+      google_api_key: 'google api key here',
+      youtube_video_announcements: [
         {
-          youtube_id: 'UCeuVgIjBf-3fKDqiQkwcXFQ',
-          channel_id: '594844047655305226',
-          role: '614135191707058187'
+          youtube_id: 'youtube channel id',
+          channel_id: 'discord channel id',
+          role: 'id of the role to ping'
         }
       ]
     }
@@ -112,6 +316,6 @@ let conf = {
 };
 
 //Export the container
-module.exports = function(){
+module.exports = function () {
   config = conf[ENVIRONMENT];
 };
