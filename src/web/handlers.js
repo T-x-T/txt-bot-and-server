@@ -164,7 +164,7 @@ handlers.paxapi.roles = function(data, callback){
   memberFactory.getByMcUuid(data.queryStringObject.uuid)
   .then(member => {
     if(member) {
-      callback(200, {role: oauth.getAccessLevel({id: doc.discord}, false)}, 'json');
+      callback(200, {role: oauth.getAccessLevel({id: member.getDiscordId()}, false)}, 'json');
     } else {
       callback(404, {}, 'json');
     }
