@@ -12,7 +12,7 @@ class MemberFactory extends Factory{
   create(discord_id, discord_nick, mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country, status){
     return new Promise(async (resolve, reject) => {
       try{
-        let member = new Member(discord_id, discord_nick, typeof status == 'number' ? status : 1, new Date(), 0, mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country);
+        let member = new Member(discord_id, discord_nick, typeof status == 'number' ? status : 0, new Date(), 0, mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country);
         await member.init();
         await member.save();
         resolve(member);
@@ -30,7 +30,10 @@ class MemberFactory extends Factory{
       }
 
       let res = await this.getFiltered({ discord: discord_id });
-      if (res.length === 0) return null;
+      if (res.length === 0) {
+        resolve(null);  
+        return null;
+      }
       resolve(res[0]);
     });
   }
@@ -43,7 +46,10 @@ class MemberFactory extends Factory{
       }
 
       let res = await this.getFiltered({ mcUUID: mc_uuid });
-      if (res.length === 0) return null;
+      if(res.length === 0) {
+        resolve(null);
+        return null;
+      }
       resolve(res[0]);
     });
   }

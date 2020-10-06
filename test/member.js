@@ -9,14 +9,14 @@ const discord_helpers = require("../src/discord_bot");
 async function createAndSaveNewMember(){
   let memberFactory = new MemberFactory();
   await memberFactory.connect();
-  let member = await memberFactory.create("293029505457586176", "TxT#0001", "dac25e44d1024f3b819978ed62d209a1", "The__TxT", "germany", 7, 2000, true, true);
+  let member = await memberFactory.create("293029505457586176", "TxT#0001", "dac25e44d1024f3b819978ed62d209a1", "The__TxT", "germany", 7, 2000, true, true, 1);
   return member;
 }
 
 async function createAndSaveNewPrivateMember() {
   let memberFactory = new MemberFactory();
   await memberFactory.connect();
-  let member = await memberFactory.create("293029505457586176", "TxT#0001", "dac25e44d1024f3b819978ed62d209a1", "The__TxT", "germany", 7, 2000, false, false);
+  let member = await memberFactory.create("293029505457586176", "TxT#0001", "dac25e44d1024f3b819978ed62d209a1", "The__TxT", "germany", 7, 2000, false, false, 1);
   return member;
 }
 
@@ -69,14 +69,14 @@ describe("member", function(){
       assert.strictEqual(member.getDiscordId(), "293029505457586176");
     });
 
-    it("getDiscordNick", async function () {
+    it("getDiscordUserName", async function () {
       let member = await createAndSaveNewMember();
-      assert.strictEqual(member.getDiscordNick(), "TxT#0001");
+      assert.strictEqual(member.getDiscordUserName(), "TxT#0001");
     });
 
-    it("getMcUUID should return correct UUID", async function(){
+    it("getMcUuid should return correct UUID", async function(){
       let member = await createAndSaveNewMember();
-      assert.strictEqual(member.getMcUUID(), "dac25e44d1024f3b819978ed62d209a1");
+      assert.strictEqual(member.getMcUuid(), "dac25e44d1024f3b819978ed62d209a1");
     });
 
     it("getMcIgn should return correct IGN", async function(){
@@ -157,6 +157,141 @@ describe("member", function(){
       let member = await createAndSaveNewMember();
       member.setMcIgn("testname");
       assert.strictEqual(member.getMcIgn(), "testname");
+    });
+
+    it("setMcUuid should not throw with valid input", async function(){
+      let member = await createAndSaveNewMember();
+      assert.doesNotThrow(() => member.setMcUuid("dac25e44d1024f3b819978ed62d209a1"));
+    });
+
+    it("setMcUuid should throw with dashed uuid format as input", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setMcUuid("dac25e44-d102-4f3b-8199-78ed62d209a1"), new Error("newMcUuid must be 32 characters long"));
+    });
+
+    it("setMcUuid should throw with input thats 31 long", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setMcUuid("dac25e44d1024f3b819978ed62d209a"), new Error("newMcUuid must be 32 characters long"));
+    });
+
+    it("setMcUuid should throw with input thats 33 long", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setMcUuid("dac25e44d1024f3b819978ed62d209axx"), new Error("newMcUuid must be 32 characters long"));
+    });
+
+    it("setMcUuid should throw with number as input", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setMcUuid(123), new Error("newMcUuid must be of type string"));
+    });
+
+    it("setMcUuid should throw with 0 as input", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setMcUuid(0), new Error("newMcUuid must be of type string"));
+    });
+
+    it("setMcUuid should throw with no input", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setMcUuid(), new Error("newMcUuid must be of type string"));
+    });
+
+    it("setCountry should not throw with correct input", async function(){
+      let member = await createAndSaveNewMember();
+      assert.doesNotThrow(() => member.setCountry("thisIsAValidCountry"));
+    });
+
+    it("setCountry should throw with number as input", async function(){
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setCountry(123), new Error("newCountry must be of type string"));
+    });
+
+    it("setCountry should throw with 0 as input", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setCountry(0), new Error("newCountry must be of type string"));
+    });
+
+    it("setCountry should throw with no input", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setCountry(), new Error("newCountry must be of type string"));
+    });
+
+    it("setCountry should throw with false as input", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setCountry(false), new Error("newCountry must be of type string"));
+    });
+
+    it("setBirthMonth should not throw with correct input", async function(){
+      let member = await createAndSaveNewMember();
+      assert.doesNotThrow(() => member.setBirthMonth(2));
+    });
+
+    it("setBirthMonth should throw with decimal as input", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setBirthMonth(2.1), new Error("newBirthMonth must be Integer"));
+    });
+
+    it("setBirthMonth should throw with string as input", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setBirthMonth("january"), new Error("newBirthMonth must be Integer"));
+    });
+
+    it("setBirthMonth should throw with no input", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setBirthMonth(), new Error("newBirthMonth must be Integer"));
+    });
+
+    it("setBirthMonth should throw with 0 as input", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setBirthMonth(0), new Error("newBirthMonth must be > 0 and < 13"));
+    });
+
+    it("setBirthMonth should throw with 13 as input", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setBirthMonth(13), new Error("newBirthMonth must be > 0 and < 13"));
+    });
+
+    it("setBirthYear should not throw with correct input", async function(){
+      let member = await createAndSaveNewMember();
+      assert.doesNotThrow(() => member.setBirthYear(2001));
+    });
+
+    it("setBirthYear should throw with decimal as input", async function(){
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setBirthYear(2000.4), new Error("newBirthYear must be Integer"))
+    });
+
+    it("setBirthYear should throw with string as input", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setBirthYear("this is definitely not an Integer"), new Error("newBirthYear must be Integer"))
+    });
+
+    it("setPublishAge should not throw with correct input", async function(){
+      let member = await createAndSaveNewMember();
+      assert.doesNotThrow(() => member.setPublishAge(true));
+    });
+
+    it("setPublishAge should throw with string as input", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setPublishAge("true"), new Error("newPublishAge must be of type boolean"));
+    });
+
+    it("setPublishAge should throw with no input", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setPublishAge(), new Error("newPublishAge must be of type boolean"));
+    });
+
+    it("setPublishCountry should not throw with correct input", async function () {
+      let member = await createAndSaveNewMember();
+      assert.doesNotThrow(() => member.setPublishCountry(true));
+    });
+
+    it("setPublishCountry should throw with string as input", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setPublishCountry("true"), new Error("newPublishCountry must be of type boolean"));
+    });
+
+    it("setPublishCountry should throw with no input", async function () {
+      let member = await createAndSaveNewMember();
+      assert.throws(() => member.setPublishCountry(), new Error("newPublishCountry must be of type boolean"));
     });
   });
 
@@ -241,37 +376,37 @@ describe("member", function(){
     });
   });
 
-  describe("setDiscordNick", function () {
+  describe("setDiscordUserName", function () {
     it("passing a correct nickname should not throw", async function () {
       let member = await createAndSaveNewMember();
-      assert.doesNotThrow(() => member.setDiscordNick("TheTxt#1234"));
+      assert.doesNotThrow(() => member.setDiscordUserName("TheTxt#1234"));
     });
 
     it("passing a correct nickname should save input", async function () {
       let member = await createAndSaveNewMember();
-      member.setDiscordNick("TheTxt#1234");
+      member.setDiscordUserName("TheTxt#1234");
       assert.strictEqual(member.data.discord_nick, "TheTxt#1234")
     });
 
     it("passing nothing should throw", async function () {
       let member = await createAndSaveNewMember();
-      assert.throws(() => member.setDiscordNick(), new Error("no input given"));
+      assert.throws(() => member.setDiscordUserName(), new Error("no input given"));
     });
 
     it("passing nick without # should throw", async function () {
       let member = await createAndSaveNewMember();
-      assert.throws(() => member.setDiscordNick("TheTxt1234"), new Error("no # in new nick"));
+      assert.throws(() => member.setDiscordUserName("TheTxt1234"), new Error("no # in new nick"));
     });
 
     it("passing nick without discriminator should throw", async function () {
       let member = await createAndSaveNewMember();
-      assert.throws(() => member.setDiscordNick("TheTxt#"), new Error("no discriminator"));
+      assert.throws(() => member.setDiscordUserName("TheTxt#"), new Error("no discriminator"));
     });
 
     it("passing an incorrect nickname should not save input", async function () {
       let member = await createAndSaveNewMember();
       try {
-        member.setDiscordNick("TheTxt1234");
+        member.setDiscordUserName("TheTxt1234");
       } catch(e) {}
       assert.notStrictEqual(member.data.discord_nick, "TheTxt#1234");
     });
@@ -342,7 +477,7 @@ describe("member", function(){
     it("getByDiscordId should retrieve correct object", async function () {
       await createAndSaveNewMember();
       let member = await new MemberFactory().getByDiscordId("293029505457586176");
-      assert.strictEqual(member.getMcUUID(), "dac25e44d1024f3b819978ed62d209a1");
+      assert.strictEqual(member.getMcUuid(), "dac25e44d1024f3b819978ed62d209a1");
     });
 
     it("getByDiscordId should reject when no discord_id is given", async function () {
@@ -352,8 +487,8 @@ describe("member", function(){
     it("getByDiscordId should create a correct object", async function () {
       await createAndSaveNewMember();
       let member = await new MemberFactory().getByDiscordId("293029505457586176");
-      assert.strictEqual(member.getDiscordNick(), "TxT#0001");
-      assert.strictEqual(member.getMcUUID(), "dac25e44d1024f3b819978ed62d209a1");
+      assert.strictEqual(member.getDiscordUserName(), "TxT#0001");
+      assert.strictEqual(member.getMcUuid(), "dac25e44d1024f3b819978ed62d209a1");
       assert.strictEqual(member.getMcIgn(), "The__TxT");
       assert.strictEqual(member.getCountry(), "germany");
       assert.strictEqual(member.getBirthMonth(), 7);
@@ -375,8 +510,8 @@ describe("member", function(){
     it("getByMcUuid should create a correct object", async function () {
       await createAndSaveNewMember();
       let member = await new MemberFactory().getByMcUuid("dac25e44d1024f3b819978ed62d209a1");
-      assert.strictEqual(member.getDiscordNick(), "TxT#0001");
-      assert.strictEqual(member.getMcUUID(), "dac25e44d1024f3b819978ed62d209a1");
+      assert.strictEqual(member.getDiscordUserName(), "TxT#0001");
+      assert.strictEqual(member.getMcUuid(), "dac25e44d1024f3b819978ed62d209a1");
       assert.strictEqual(member.getMcIgn(), "The__TxT");
       assert.strictEqual(member.getCountry(), "germany");
       assert.strictEqual(member.getBirthMonth(), 7);
@@ -394,8 +529,8 @@ describe("member", function(){
     it("get all with one member in the db should return a valid member object", async function () {
       await createAndSaveNewMember();
       let members = await new MemberFactory().getAll();
-      assert.strictEqual(members[0].getDiscordNick(), "TxT#0001");
-      assert.strictEqual(members[0].getMcUUID(), "dac25e44d1024f3b819978ed62d209a1");
+      assert.strictEqual(members[0].getDiscordUserName(), "TxT#0001");
+      assert.strictEqual(members[0].getMcUuid(), "dac25e44d1024f3b819978ed62d209a1");
       assert.strictEqual(members[0].getMcIgn(), "The__TxT");
       assert.strictEqual(members[0].getCountry(), "germany");
       assert.strictEqual(members[0].getBirthMonth(), 7);
@@ -419,8 +554,8 @@ describe("member", function(){
 
       let members = await new MemberFactory().getAll();
       let member = members.find(m => m.getDiscordId() === "385133822762811394");
-      assert.strictEqual(member.getDiscordNick(), "Mufon#7787");
-      assert.strictEqual(member.getMcUUID(), "28fc533e641f440fbe3a9bb0f8c5bed6");
+      assert.strictEqual(member.getDiscordUserName(), "Mufon#7787");
+      assert.strictEqual(member.getMcUuid(), "28fc533e641f440fbe3a9bb0f8c5bed6");
       assert.strictEqual(member.getMcIgn(), "Mufon59");
       assert.strictEqual(member.getCountry(), "germany");
       assert.strictEqual(member.getBirthMonth(), 7);
@@ -431,9 +566,9 @@ describe("member", function(){
 
     it("getAllWhitelisted should only return members with status 1", async function(){
       let m1 = await createAndSaveNewMember();
-      let m2 = await memberFactory.create("243874567867596800", "MrSprouse#0001", "4fe6104dec5e4c8db78ebe3fe1ac36f8", "MrSprouse", "germany", 7, 2000, true, true);
-      await memberFactory.create("385133822762811394", "Mufon#7787", "28fc533e641f440fbe3a9bb0f8c5bed6", "Mufon59", "germany", 7, 2000, true, true);
-      await memberFactory.create("455808529627086848", "PyroChicken#3588", "e31a7dbd39cb42658c751958c6c200d1", "PyroChicken99", "germany", 7, 2000, true, true);
+      let m2 = await memberFactory.create("243874567867596800", "MrSprouse#0001", "4fe6104dec5e4c8db78ebe3fe1ac36f8", "MrSprouse", "germany", 7, 2000, true, true, 1);
+      await memberFactory.create("385133822762811394", "Mufon#7787", "28fc533e641f440fbe3a9bb0f8c5bed6", "Mufon59", "germany", 7, 2000, true, true, 1);
+      await memberFactory.create("455808529627086848", "PyroChicken#3588", "e31a7dbd39cb42658c751958c6c200d1", "PyroChicken99", "germany", 7, 2000, true, true, 1);
       m1.setStatus(0);
       await m1.save();
       m2.setStatus(0);
@@ -443,8 +578,8 @@ describe("member", function(){
       assert.strictEqual(res.length, 2);
 
       let member = res.find(m => m.getDiscordId() === "385133822762811394");
-      assert.strictEqual(member.getDiscordNick(), "Mufon#7787");
-      assert.strictEqual(member.getMcUUID(), "28fc533e641f440fbe3a9bb0f8c5bed6");
+      assert.strictEqual(member.getDiscordUserName(), "Mufon#7787");
+      assert.strictEqual(member.getMcUuid(), "28fc533e641f440fbe3a9bb0f8c5bed6");
       assert.strictEqual(member.getMcIgn(), "Mufon59");
       assert.strictEqual(member.getCountry(), "germany");
       assert.strictEqual(member.getBirthMonth(), 7);

@@ -126,7 +126,7 @@ function getLatestStats(uuid, callback){
       let stats = [];
       let errors = 0;
       for(let i = 0; i < members.length; i++) {
-        getLatestStats(members[i].getMcUUID(), function (err, doc) {
+        getLatestStats(members[i].getMcUuid(), function (err, doc) {
           stats.push(doc);
           if(err) errors++;
           if(stats.length == members.length) {

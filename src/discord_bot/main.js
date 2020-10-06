@@ -151,6 +151,7 @@ emitter.on('discord_bot_ready' ,() => {
         if (doc.status == 3) application.acceptWorkflow(user.id, doc);
       }
     });
+    memberFactory.create(user.id);
   });
 });
 

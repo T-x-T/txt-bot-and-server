@@ -21,9 +21,9 @@ update.updateAllIGNs = function () {
     .then(members => {
       members.forEach(member => {
         //Check if the user has a ign, if not, then we have nothing to do
-        if(member.getMcUUID() != null) {
+        if(member.getMcUuid() != null) {
           //Get the ign for the uuid
-          mc.getIGN(member.getMcUUID(), function (err, ign) {
+          mc.getIGN(member.getMcUuid(), function (err, ign) {
             if(ign) {
               //Save ign
               member.setMcIgn(ign);
@@ -82,7 +82,7 @@ update.updateAllDiscordNicks = function () {
       //Update discord nick
       helpers.getNicknameByID(member.getDiscordId(), function (discord_nick) {
         if(discord_nick) {
-          member.setDiscordNick(discord_nick);
+          member.setDiscordUserName(discord_nick);
           member.save()
           .catch(e => global.log(2, 'user', 'user.updateNick couldnt update user', {err: e, member: member}));
         }

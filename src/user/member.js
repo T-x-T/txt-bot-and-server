@@ -21,24 +21,24 @@ class Member extends Persistable{
     this.data.publish_country = publish_country;
   }
 
+  /*
+   *  BASIC GETTER/SETTER
+   */
+
   getDiscordId() {
     return this.data.discord;
   }
 
-  getJoinedDate() {
-    return this.data.joinedDate;
-  }
-
-  setDiscordNick(newDiscordNick) {
-    if(typeof newDiscordNick != "string") throw new Error("no input given");
-    if(newDiscordNick.indexOf("#") === -1) throw new Error("no # in new nick");
-    if(!Number.isInteger(Number.parseInt(newDiscordNick.slice(newDiscordNick.length - 4, newDiscordNick.length)))) throw new Error("no discriminator");
-
-    this.data.discord_nick = newDiscordNick;
-  }
-
-  getDiscordNick() {
+  getDiscordUserName() {
     return this.data.discord_nick;
+  }
+
+  setDiscordUserName(newDiscordUserName) {
+    if(typeof newDiscordUserName != "string") throw new Error("no input given");
+    if(newDiscordUserName.indexOf("#") === -1) throw new Error("no # in new nick");
+    if(!Number.isInteger(Number.parseInt(newDiscordUserName.slice(newDiscordUserName.length - 4, newDiscordUserName.length)))) throw new Error("no discriminator");
+
+    this.data.discord_nick = newDiscordUserName;
   }
 
   getDiscordAvatarUrl() {
@@ -59,6 +59,10 @@ class Member extends Persistable{
         }
       });
     });
+  }
+
+  getJoinedDate() {
+    return this.data.joinedDate;
   }
 
   getKarma() {
@@ -85,12 +89,37 @@ class Member extends Persistable{
     return status >= 0 && status <= 2;
   }
 
-  getMcUUID(){
+  getMcUuid(){
     return this.data.mcUUID ? this.data.mcUUID : false;
+  }
+
+  setMcUuid(newMcUuid){
+    if(typeof newMcUuid !== "string") throw new Error("newMcUuid must be of type string");
+    if(newMcUuid.length !== 32) throw new Error("newMcUuid must be 32 characters long");
+    this.data.mcUUID = newMcUuid;
   }
 
   getMcIgn(){
     return this.data.mcName ? this.data.mcName : false;
+  }
+
+  setMcIgn(newIgn) {
+    if(typeof newIgn !== "string") throw new Error("newIgn must be of type string");
+    if(newIgn.length < 3 || newIgn.length > 16) throw new Error("newIgn has to be be >= 3 and <= 16");
+    this.data.mcName = newIgn;
+  }
+
+  updateMcIgn() {
+    return new Promise((resolve, reject) => {
+      mc.getIGN(this.getMcUuid(), (err, newIgn) => {
+        if(err || !newIgn) {
+          reject(err);
+        } else {
+          this.data.mc_ign = newIgn;
+          resolve(newIgn);
+        }
+      });
+    });
   }
 
   getCountry(){
@@ -101,12 +130,28 @@ class Member extends Persistable{
     return this.data.publish_country ? this.getCountry() : false;
   }
 
+  setCountry(newCountry){
+    if(typeof newCountry !== "string") throw new Error("newCountry must be of type string");
+    this.data.country = newCountry;
+  }
+
   getBirthMonth(){
     return this.data.birth_month ? this.data.birth_month : false;
   }
 
+  setBirthMonth(newBirthMonth){
+    if(!Number.isInteger(newBirthMonth)) throw new Error("newBirthMonth must be Integer");
+    if(newBirthMonth < 1 || newBirthMonth > 12) throw new Error("newBirthMonth must be > 0 and < 13");
+    this.data.birth_month = newBirthMonth;
+  }
+
   getBirthYear(){
     return this.data.birth_year ? this.data.birth_year : false;
+  }
+
+  setBirthYear(newBirthYear){
+    if(!Number.isInteger(newBirthYear)) throw new Error("newBirthYear must be Integer");
+    this.data.birth_year = newBirthYear;
   }
 
   getAge(){
@@ -126,26 +171,23 @@ class Member extends Persistable{
     return this.data.publish_age ? {publish_age: this.data.publish_age, publish_country: this.data.publish_country} : false;
   }
 
+  setPublishAge(newPublishAge){
+    if(typeof newPublishAge !== "boolean") throw new Error("newPublishAge must be of type boolean");
+    this.data.publish_age = newPublishAge;
+  }
+
+  setPublishCountry(newPublishCountry) {
+    if(typeof newPublishCountry !== "boolean") throw new Error("newPublishCountry must be of type boolean");
+    this.data.publish_country = newPublishCountry;
+  }
+
   getMcSkinUrl(){
-    return `https://crafatar.com/renders/body/${this.getMcUUID()}?overlay=true`;
+    return `https://crafatar.com/renders/body/${this.getMcUuid()}?overlay=true`;
   }
 
-  setMcIgn(newIgn){
-    this.data.mcName = newIgn;
-  }
-
-  async updateMcIgn(){
-    return new Promise((resolve, reject) => {
-      mc.getIGN(this.getMcUUID(), (err, newIgn) => {
-        if(err || !newIgn){
-          reject(new Error(err));
-        }else{
-          this.data.mc_ign = newIgn;
-          resolve(newIgn);
-        }
-      });
-    });
-  }
+  /*
+   *  LIFECYCLE
+   */
 
   giveDiscordRole(role){
     return new Promise((resolve, reject) => {

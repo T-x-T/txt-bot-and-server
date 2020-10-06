@@ -112,7 +112,7 @@ _internals.getSortedKarmaArray = function(includeNames, callback){
       let finishedObject = false;
       if(includeNames) {
         finishedObject = {
-          name: member.getMcIgn() ? member.getMcIgn() : member.getDiscordNick(),
+          name: member.getMcIgn() ? member.getMcIgn() : member.getDiscordUserName(),
           karma: member.getKarma()
         };
       } else {

@@ -38,7 +38,7 @@ module.exports = {
             if(args[1] == 'rank') {
               //Get the rank flavored stats
               let output = '```';
-              _internals.statsSwitch(args[2], member.getMcUUID(), member.getMcIgn(), true, function (statsOutput) {
+              _internals.statsSwitch(args[2], member.getMcUuid(), member.getMcIgn(), true, function (statsOutput) {
                 output += statsOutput;
                 output += '```';
                 message.channel.send(output);
@@ -46,7 +46,7 @@ module.exports = {
             } else {
               //Normal stats
               let output = '```';
-              _internals.statsSwitch(args[1], member.getMcUUID(), member.getMcIgn(), false, function (statsOutput) {
+              _internals.statsSwitch(args[1], member.getMcUuid(), member.getMcIgn(), false, function (statsOutput) {
                 output += statsOutput;
                 output += '```';
                 message.channel.send(output);

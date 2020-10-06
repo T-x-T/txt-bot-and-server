@@ -50,11 +50,11 @@ stats.template.memberOverview = function(options, callback) {
     //Get stats only for one member
     memberFactory.getByDiscordId(discord_id)
     .then(member => {
-      stats.template.mc({uuid: member.getMcUUID(), collection: 'playtime'}, function (err, playtime) {
+      stats.template.mc({uuid: member.getMcUuid(), collection: 'playtime'}, function (err, playtime) {
         if(err || !playtime) playtime = 0;
         //Build the object to send back
         let obj = {
-          discord_nick: member.getDiscordNick(),
+          discord_nick: member.getDiscordUserName(),
           mc_nick: member.getMcIgn(),
           age: member.getAgeConsiderPrivacy(),
           country: member.getCountryConsiderPrivacy(),

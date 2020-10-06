@@ -8,6 +8,9 @@ const mc_helpers = require('../minecraft');
 const discord_api= require('../discord_api');
 const sanitize   = require('sanitize-html');
 const data       = require('../data');
+const MemberFactory = require('../user/memberFactory.js');
+const memberFactory = new MemberFactory();
+memberFactory.connect();
 
 //Create the container
 var application = {};
@@ -191,15 +194,45 @@ application.acceptWorkflow = function(discord_id, app){
       if (!err) app = doc;
       global.log(0, 'application', 'emitted application_accepted_joined with having to add nicks', { application: app });
       emitter.emit('application_accepted_joined', app);
+      _internal.createMember(app);
     });
   } else {
     global.log(0, 'application', 'emitted application_accepted_joined without having to add nicks', { application: app });
     emitter.emit('application_accepted_joined', app);
+    _internal.createMember(app);
   }
 };
 
 
 var _internal = {};
+
+_internal.createMember = function(a){
+  memberFactory.getByDiscordId(a.discord_id)
+  .then(member => {
+    if(member){
+      try{
+        member.setDiscordUsername(a.discord_nick);
+        member.setMcUuid(a.mc_uuid);
+        member.setMcIgn(a.mc_ign);
+        member.setCountry(a.country);
+        member.setBirthMonth(a.birth_month);
+        member.setBirthYear(a.birth_year);
+        member.setPublishAge(a.publish_age);
+        member.setPublishCountry(a.publish_country);
+        member.setStatus(1);
+        member.save();
+      }catch(e){
+        global.log(2, 'application', 'failed to configure existing member object', {application: a, member: member, err: e});
+        throw e;
+      }
+    }else{
+      memberFactory.create(a.discord_id, a.discord_nick, a.mc_uuid, a.mc_ign, a.country, a.birth_month, a.birth_year, a.publish_age, a.publish_country, 1);
+    }
+  })
+  .catch(e => {
+    global.log(2, 'application', 'failed to get user object of accepted member', {application: a, err: e});
+  });
+};
 
 //Adds the current discord nick and mc ign to an application object
 _internal.addNicks = function (doc, options, callback) {

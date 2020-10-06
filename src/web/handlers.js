@@ -141,7 +141,7 @@ handlers.paxLogin = function(data, callback){
             'plain');
           })
           .catch(e => {
-            callback(500, e, 'plain');
+            callback(500, e.message, 'plain');
           });
         });
       }else{
