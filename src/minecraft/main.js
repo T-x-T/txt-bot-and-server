@@ -5,32 +5,9 @@
 
 //Dependencies
 const https = require('https');
-const user = require('../user');
 
 //Create the container
 var mc = {};
-
-//Updates all IGNs from all members based on their UUID
-mc.updateAllIGNs = function(){
-  //Get all members from db
-  user.get({}, false, function(err, members){
-    members.forEach((member) => {
-      //Check if the user has a ign, if not, then we have nothing to do
-      if(member.mcUUID != null){
-        //Get the ign for the uuid
-        mc.getIGN(member.mcUUID, function(err, ign){
-          if(ign){
-            //Save ign
-            member.mcName = ign;
-            user.edit(member, false, function(err, docs){});
-          }else{
-            global.log(2, 'minecraft', 'mc_helpers.updateAllIGNs couldnt get a valid IGN for user', member);
-          }
-        });
-      }
-    });
-  });
-};
 
 //Takes an IGN and returns the UUID
 mc.getUUID = function(ign, callback){

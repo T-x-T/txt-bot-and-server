@@ -8,19 +8,18 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 //Connect to the db
-mongoose.connect(config.data.mongodb_url, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
-var con = mongoose.connection;
+if(!typeof con === "undefined"){
+  mongoose.connect(config.data.mongodb_url, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+  con.on('error', function () {
+    console.log('Error connecting to database');
+  });
 
-//Gets called when there is an error connecting to the db
-con.on('error', function() {
-  console.log('Error connecting to database');
-});
-
-//Gets called when the connection to the db succeeds
-con.on('open', function() {
-  console.log('Sucessfully connected to database');
-  db = con;
-});
+  con.on('open', function () {
+    console.log('Sucessfully connected to database');
+    db = con;
+  });
+}
+con = typeof con !== "undefined" ? con : mongoose.connection;
 
 //Create the container
 const main = {};

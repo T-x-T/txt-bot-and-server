@@ -1,3 +1,18 @@
+stages:
+  - test
+  - build
+
+
+test:
+  stage: test
+  image: node:latest
+  services:
+    - mongo:latest
+  script:
+    - npm i
+    - cp $config ./config.js
+    - npm test
+
 build:
   image: docker:19.03.11
   stage: build

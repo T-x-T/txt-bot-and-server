@@ -6,7 +6,7 @@
 let conf = {
   prod: {
     application: {
-  
+
     },
     auth: {
       discord_client_id: '',
@@ -24,12 +24,15 @@ let conf = {
     data: {
       mongodb_url: 'mongodb://HOSTNAME/DATABASE',
       backend: 'mongo',
-      db_upgrades:{
+      db_upgrades: {
         mc_stats_sub_type: false
       }
     },
+    persistance: {
+      backend: 'mongo',
+    },
     discord_api: {
-  
+
     },
     discord_bot: {
       bot_prefix: '+',
@@ -42,12 +45,12 @@ let conf = {
         general: ''
       },
       roles: {
-        owner: '',
         admin: '',
         paxterya: '',
         mod: '',
         cool: '',
-        utp: ''
+        utp: '',
+        inactive: ''
       }
     },
     email: {
@@ -75,13 +78,13 @@ let conf = {
       },
     },
     post: {
-  
+
     },
     stats: {
-  
+
     },
     user: {
-  
+
     },
     web: {
       http_port: 3000,
@@ -91,7 +94,7 @@ let conf = {
       cert_path: '/etc/letsencrypt/live/{Domain}/'
     },
     workers: {
-  
+
     },
     youtube: {
       google_api_key: 'google api key here',
@@ -106,7 +109,7 @@ let conf = {
   },
   staging: {
     application: {
-  
+
     },
     auth: {
       discord_client_id: '',
@@ -124,12 +127,15 @@ let conf = {
     data: {
       mongodb_url: 'mongodb://HOSTNAME/DATABASE',
       backend: 'mongo',
-      db_upgrades:{
+      db_upgrades: {
         mc_stats_sub_type: false
       }
     },
+    persistance: {
+      backend: 'mongo',
+    },
     discord_api: {
-  
+
     },
     discord_bot: {
       bot_prefix: '+',
@@ -142,12 +148,12 @@ let conf = {
         general: '',
       },
       roles: {
-        owner: '',
         admin: '',
         paxterya: '',
         mod: '',
         cool: '',
-        utp: ''
+        utp: '',
+        inactive: ''
       }
     },
     email: {
@@ -175,13 +181,13 @@ let conf = {
       },
     },
     post: {
-  
+
     },
     stats: {
-  
+
     },
     user: {
-  
+
     },
     web: {
       http_port: 3000,
@@ -191,7 +197,7 @@ let conf = {
       cert_path: '/etc/letsencrypt/live/{Domain}/'
     },
     workers: {
-  
+
     },
     youtube: {
       google_api_key: 'google api key here',
@@ -206,7 +212,7 @@ let conf = {
   },
   testing: {
     application: {
-  
+
     },
     auth: {
       discord_client_id: '',
@@ -224,12 +230,15 @@ let conf = {
     data: {
       mongodb_url: 'mongodb://HOSTNAME/DATABASE',
       backend: 'mongo',
-      db_upgrades:{
+      db_upgrades: {
         mc_stats_sub_type: false
       }
     },
+    persistance: {
+      backend: 'mongo',
+    },
     discord_api: {
-  
+
     },
     discord_bot: {
       bot_prefix: '+',
@@ -242,12 +251,12 @@ let conf = {
         general: ''
       },
       roles: {
-        owner: '',
         admin: '',
         paxterya: '',
         mod: '',
         cool: '',
-        utp: ''
+        utp: '',
+        inactive: ''
       }
     },
     email: {
@@ -275,13 +284,13 @@ let conf = {
       },
     },
     post: {
-  
+
     },
     stats: {
-  
+
     },
     user: {
-  
+
     },
     web: {
       http_port: 3000,
@@ -291,7 +300,7 @@ let conf = {
       cert_path: '/etc/letsencrypt/live/{Domain}/'
     },
     workers: {
-  
+
     },
     youtube: {
       google_api_key: 'google api key here',
@@ -307,6 +316,6 @@ let conf = {
 };
 
 //Export the container
-module.exports = function(){
+module.exports = function () {
   config = conf[ENVIRONMENT];
 };

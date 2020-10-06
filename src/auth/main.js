@@ -29,7 +29,6 @@ oauth.returnAccessLevel = function(userID){
     if(client.guilds.get(config.discord_bot.guild).members.get(userID).roles.has(config.discord_bot.roles.admin)) access_level = 8;
     if(client.guilds.get(config.discord_bot.guild).members.get(userID).roles.has(config.discord_bot.roles.owner)) access_level = 9;
   }catch(e){}
-
   global.log(0, 'auth', 'main.returnAcessLevel returned', {userID: userID, access_level: access_level});
   return access_level;
 };

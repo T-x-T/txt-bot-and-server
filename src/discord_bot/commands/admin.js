@@ -5,9 +5,6 @@
 
 const log = require('../../log');
 const mc_helpers = require('../../minecraft');
-const discord_helpers = require('../helpers.js');
-const user = require('../../user');
-const stats = require('../../stats');
 const applications = require('../../application');
 const auth = require('../../auth');
 
@@ -209,16 +206,6 @@ module.exports = {
         case 'exec':
           //Command to execute manual tasks
           switch(args[1]){
-            case 'updatenicks':
-              //Updates all minecraft IGNs
-              user.updateNicks();
-              break;
-            case 'updatestats':
-              stats.updateMcStats();
-              break;
-            case 'updateallnicks':
-              discord_helpers.updateAllNicks();
-              break;
             case 'fixapp':
               fixapp(message, message.mentions.users.first().id);
               break;

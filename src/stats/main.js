@@ -4,9 +4,10 @@
  */
 
 //Dependencies
-const user = require('../user');
 const mc = require('./minecraft.js');
-const mc_helpers = require('../minecraft');
+const MemberFactory = require('../user/memberFactory.js');
+let memberFactory = new MemberFactory();
+memberFactory.connect();
 
 //Create the container
 var stats = {};
@@ -16,35 +17,27 @@ stats.template = {};
 
 //Gets the basic stats for the statistics.html overview
 stats.template.overview = function(options, callback) {
-  user.get({}, {onlyPaxterians: true}, function(err, memberData) {
-    if(!err) {
-      stats.template.mc({collection: 'playtime'}, function(err, playtime) {
-        if(!err && playtime) {
-          //Get an array with only whitelisted players for paxterya and calculate average age
-          let paxterians = [];
-          let averageAge = 0;
-          memberData.forEach((member) => {
-            if(member.status == 1) {
-              paxterians.push(member);
-              averageAge += member.birth_month > new Date(Date.now()).getMonth() + 1 ? parseInt((new Date().getFullYear() - new Date(member.birth_year, member.birth_month).getFullYear()).toString()) - 1 : parseInt((new Date().getFullYear() - new Date(member.birth_year, member.birth_month).getFullYear()).toString());
-            }
-          });
-          averageAge = Math.round(averageAge / paxterians.length);
+  memberFactory.getAllWhitelisted()
+  .then(members => {
+    stats.template.mc({collection: 'playtime'}, function (err, playtime) {
+      if(!err && playtime) {
+        let averageAge = 0;
+        members.forEach(member => averageAge += member.getAge());
+        averageAge = Math.round(averageAge / members.length);
 
-          //Constuct and callback the final object
-          callback(false, {
-            'total_members': paxterians.length,
-            'average_age': averageAge,
-            'total_playtime': playtime + 'h'
-          });
-
-        } else {
-          callback('Couldnt get mc stats', false);
-        }
-      });
-    } else {
-      callback('Couldnt get players', false);
-    }
+        //Constuct and callback the final object
+        callback(false, {
+          'total_members': members.length,
+          'average_age': averageAge,
+          'total_playtime': playtime + 'h'
+        });
+      } else {
+        callback('Couldnt get mc stats: ' + err, false);
+      }
+    });
+  })
+  .catch(e => {
+    callback('Got error trying to get all whitelisted players: ' + e, false);
   });
 };
 
@@ -52,89 +45,83 @@ stats.template.overview = function(options, callback) {
 //This includes: discord_id, mc_uuid, discord_nick, mc_nick, age, country, playtime, mc_render_url, discord_avatar_url
 stats.template.memberOverview = function(options, callback) {
   let discord_id = options.hasOwnProperty('discord_id') ? options.discord_id : false;
-  let filter = options.hasOwnProperty('filter') ? options.filter : {};
   if(discord_id) {
-    //Get stats only for one member
-    user.get({ discord: discord_id }, { privacy: true, onlyPaxterians: true, first: true }, function (err, member) {
-      if (member) {
-        let mc_render_url = mc_helpers.returnRenderUrl(member.mcUUID);
-        stats.template.mc({uuid: member.mcUUID, collection: 'playtime'}, function (err, playtime) {
-          if (err || !playtime) playtime = 0;
-          //Build the object to send back
-          let obj = {
-            discord_nick: member.discord_nick,
-            mc_nick: member.mcName,
-            age: member.birth_month >= 1 ? member.birth_month > new Date(Date.now()).getMonth() + 1 ? parseInt(new Date().getFullYear() - member.birth_year) - 1 : parseInt(new Date().getFullYear() - member.birth_year) : false,
-            country: member.country,
-            playtime: playtime,
-            mc_render_url: mc_render_url,
-            joined_date: new Date(member._id.getTimestamp()).valueOf()
-          };
 
-          callback(false, obj);
-        });
-      } else {
-        global.log(2, 'stats', 'stats.memberOverview couldnt get the member object', {id: discord_id});
-        callback('Couldnt get the member object', false);
-      }
+    //Get stats only for one member
+    memberFactory.getByDiscordId(discord_id)
+    .then(member => {
+      stats.template.mc({uuid: member.getMcUuid(), collection: 'playtime'}, function (err, playtime) {
+        if(err || !playtime) playtime = 0;
+        //Build the object to send back
+        let obj = {
+          discord_nick: member.getDiscordUserName(),
+          mc_nick: member.getMcIgn(),
+          age: member.getAgeConsiderPrivacy(),
+          country: member.getCountryConsiderPrivacy(),
+          playtime: playtime,
+          mc_render_url: member.getMcSkinUrl(),
+          joined_date: member.getJoinedDate()
+        };
+        callback(false, obj);
+      });
+    })
+    .catch(e => {
+      callback('Got error while trying to get member: ' + e, false);
     });
   } else {
     //Get stats for all players
-    user.get(filter, {privacy: true, onlyPaxterians: true}, function(err, docs) {
-      if(docs) {
-        let error = false;
-        let output = [];
-        for(let i = 0; i < docs.length; i++) {
-          stats.template.memberOverview({discord_id: docs[i].discord}, function(err, doc) {
-            
-            output.push(doc);
-            if(err) error = true;
-            //Check if this is the last callback
-            if(output.length == docs.length) {
-              if(!error) callback(false, output);
-              else callback('There was some error, idk I cant read my own code, no idea what it is', false);
-            }
-          });
-        }
-      } else {
-        global.log(2, 'stats', 'stats.memberOverview couldnt get any member objects', {});
-        callback('Couldnt get any member objects bru', false);
+    memberFactory.getAllWhitelisted()
+    .then(members => {
+      let error = false;
+      let output = [];
+      for(let i = 0; i < members.length; i++) {
+        stats.template.memberOverview({discord_id: members[i].getDiscordId()}, function (err, doc) {
+          output.push(doc);
+          if(err) error = true;
+          //Check if this is the last callback
+          if(output.length == members.length) {
+            if(!error) callback(false, output);
+            else callback('There was some error, idk I cant read my own code, no idea what it is', false);
+          }
+        });
       }
+    })
+    .catch(e => {
+      callback('got error while trying to get all members: ' + e, false);
     });
   }
 };
 
 //callsback a list of all countries with their respective member count and coloring for the map-view in statistics.html
 stats.template.countryList = function(options, callback) {
-  user.get({}, {privacy: false, onlyPaxterians: true}, function(err, docs) {
-    if(docs) {
-      //Get the country list
-      let countries = _internal.getCountries();
+  memberFactory.getAllWhitelisted()
+  .then(members => {
+    //Get the country list
+    let countries = _internal.getCountries();
 
-      //Add the members countries to the list
-      docs.forEach((doc) => {
-        //Get the ISO representation of the country
-        let iso = _internal.getCountryIsoByName(countries, doc.country);
-        if(iso){
-          countries[iso].numberOfThings++;
-        }else{
-          global.log(0, 'stats', 'stats.countryList doesnt contain a country', {country: doc.country})
-        }
-      });
+    //Add the members countries to the list
+    members.forEach((member) => {
+      //Get the ISO representation of the country
+      let iso = _internal.getCountryIsoByName(countries, member.getCountry());
+      if(iso) {
+        countries[iso].numberOfThings++;
+      } else {
+        global.log(2, 'stats', 'stats.countryList doesnt contain a country', {country: member.getCountry()})
+      }
+    });
 
-      //Add the colorcoding
-      //Get the maximum amount
-      let max = 0;
-      for(let key in countries) if(countries[key].numberOfThings > max) max = countries[key].numberOfThings;
+    //Add the colorcoding
+    //Get the maximum amount
+    let max = 0;
+    for(let key in countries) if(countries[key].numberOfThings > max) max = countries[key].numberOfThings;
 
-      //Do the actual colorcoding
-      for(let key in countries) if(countries[key].numberOfThings > 0) countries[key].fillKey = ((countries[key].numberOfThings / max).toFixed(1) * 100) + '%';
+    //Do the actual colorcoding
+    for(let key in countries) if(countries[key].numberOfThings > 0) countries[key].fillKey = ((countries[key].numberOfThings / max).toFixed(1) * 100) + '%';
 
-      callback(false, countries);
-    } else {
-      global.log(0, 'stats', 'stats.countryList couldnt get the data from the db', {});
-      callback('Couldnt get the important data from the database', false);
-    }
+    callback(false, countries);
+  })
+  .catch(e => {
+    callback('got error trying to get countryList data: ' + e, false);
   });
 };
 

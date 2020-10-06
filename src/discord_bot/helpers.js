@@ -3,9 +3,6 @@
 *  Some helper functions for discord stuff
 */
 
-//Dependencies
-const user = require('../user');;
-
 //Global var
 var client;
 emitter.on('discord_bot_ready', (_client) => {
@@ -57,9 +54,19 @@ helpers.returnRoleId = function(roleName){
 
 //Adds the given discord member to the given role
 helpers.addMemberToRole = function(discordID, roleID, callback){
-  client.guilds.get(config.discord_bot.guild).members.get(discordID).addRole(roleID)
-  .then(callback(false))
-  .catch(callback(true));
+  client.guilds.get(config.discord_bot.guild).members.get(discordID).addRoles([roleID])
+  .then(() => callback(false))
+  .catch(e => callback(e));
+};
+
+helpers.removeMemberFromRole = function(discordID, roleID, callback){
+  client.guilds.get(config.discord_bot.guild).members.get(discordID).removeRoles([roleID])
+    .then(() => callback(false))
+    .catch(e => callback(e));
+};
+
+helpers.hasRole = function(discordID, roleToCheck){
+  return client.guilds.get(config.discord_bot.guild).members.get(discordID).roles.has(roleToCheck);
 };
 
 //Returns true if the given discord id is member of the guild and false if not
@@ -67,39 +74,8 @@ helpers.isGuildMember = function(userID){
   return client.guilds.get(config.discord_bot.guild).members.has(userID);
 };
 
-//Set the nick of a user to their mc_ign
-helpers.updateNick = function(discord_id) {
-  if(discord_id == client.guilds.get(config.discord_bot.guild).ownerID) return; //Dont update the owner of the guild, this will fail
-  user.get({discord: discord_id}, {privacy: true, onlyPaxterians: true, first: true}, function(err, doc) {
-    if(doc) {
-      let ign = typeof doc.mcName == 'string' ? doc.mcName : '';
-      //Get the members object
-      helpers.getMemberObjectByID(discord_id, function(member) {
-        if(member) {
-          //Now its time to change the users nick
-          member.setNickname(ign)
-            .catch((e) => {global.log(2, 'discord_bot', 'discord_helpers.updateNick failed to set the members nickname', {user: member.id, err: e});});
-        } else {
-          global.log(2, 'discord_bot', 'discord_helpers.updateNick couldnt get the member object', {user: discord_id, member: member});
-        }
-      });
-    } else {
-      global.log(2, 'discord_bot', 'discord_helpers.updateNick couldnt get the member document', {user: discord_id});
-    }
-  });
-};
-
-//Set the nick of all users to their mc_ign
-helpers.updateAllNicks = function(){
-  user.get({}, {onlyPaxterians: true, privacy: true}, function(err, docs){
-    if(docs){
-      docs.forEach((doc) => {
-        helpers.updateNick(doc.discord)
-      });
-    }else{
-      global.log(2, 'discord_bot', 'discord_helpers.updateAllNicks couldnt get the member database entries', {});
-    }
-  });
+helpers.setNickname = function (discordID, newNick){
+  client.guilds.get(config.discord_bot.guild).members.get(discordID).setNickname(newNick);
 };
 
 helpers.getMemberObjectByID = function(userID, callback){
@@ -108,6 +84,14 @@ helpers.getMemberObjectByID = function(userID, callback){
   } catch (e) {
     callback(false);
   }
+};
+
+helpers.banMember = function(userID){
+  if(ENVIRONMENT == 'testing') {
+    emitter.emit('testing_discordhelpers_ban', userID);
+    return;
+  }
+  client.guilds.get(config.discord_bot.guild).members.get(userID).ban();
 };
 
 //Init script, needs to be called from discord_bot.js, so we can use the client object here

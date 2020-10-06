@@ -6,7 +6,9 @@
 //Dependencies
 const main = require('./main.js');
 const auth = require('../auth');
-const user = require('../user');
+const MemberFactory = require('../user/memberFactory.js');
+const memberFactory = new MemberFactory();
+memberFactory.connect();
 
 //Create the container
 var index = {};
@@ -74,16 +76,16 @@ index.getAll = function(discordID, callback){
     index.getCategories(false, false, function(err2, docs2){
       if(!err1 && !err2){
         if(discordID){
-          user.get({discord: discordID}, {first: true}, function(err, doc){
-            if(!err && doc){
-              callback(false, {
-                cards: docs1,
-                categories: docs2,
-                read_states: doc.read_cards
-              });
-            }else{
-              callback('Coulnt get the user object ' + err, false);
-            }
+          memberFactory.getByDiscordId(discordID)
+          .then(member => {
+            callback(false, {
+              cards: docs1,
+              categories: docs2,
+              read_states: member.read_cards
+            });
+          })
+          .catch(e => {
+            callback('Coulnt get the user object: ' + e, false);
           });
         }else{
           callback(false, {
