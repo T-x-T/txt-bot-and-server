@@ -49,7 +49,7 @@ setInterval(function(){
 //Every hour
 setInterval(function(){
   update.updateAllNicks();
-  mc_helpers.updateAllIGNs();
+  update.updateAllIGNs();
   update.updateAllNicks();
   update.updateUserIdCache();
 }, 1000 * 60 * 60);
