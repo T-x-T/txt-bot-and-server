@@ -3,6 +3,7 @@
 *	Command to handle all minecraft related tasks
 */
 
+const minecraft = require('../../minecraft');
 const MemberFactory = require('../../user/memberFactory.js');
 const memberFactory = new MemberFactory();
 memberFactory.connect();
