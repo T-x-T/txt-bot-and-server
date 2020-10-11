@@ -29,14 +29,14 @@ update.updateAllIGNs = function () {
               member.setMcIgn(ign);
               member.save();
             } else {
-              global.log(2, 'minecraft', 'mc.updateAllIGNs couldnt get a valid IGN for user', member);
+              global.log(2, 'workers', 'mc.updateAllIGNs couldnt get a valid IGN for user', member);
             }
           });
         }
       });
     })
     .catch(e => {
-      global.log(2, 'minecraft', 'mc.updateAllIGNs couldnt get members');
+      global.log(2, 'workers', 'mc.updateAllIGNs couldnt get members');
     });
 };
 
@@ -45,20 +45,21 @@ update.updateNick = function (discord_id) {
   if(discord_id == client.guilds.get(config.discord_bot.guild).ownerID) return; //Dont update the owner of the guild, this will fail
   memberFactory.getByDiscordId(discord_id)
   .then(member => {
+    global.log(0, 'workers', 'discord_helpers.updateNick got member object', {member: member.data});
     let ign = typeof doc.mcName == 'string' ? member.getMcIgn() : '';
     //Get the members object
     helpers.getMemberObjectByID(discord_id, function (discordMember) {
       if(discordMember) {
         //Now its time to change the users nick
         discordMember.setNickname(ign)
-          .catch(e => {global.log(2, 'discord_bot', 'discord_helpers.updateNick failed to set the members nickname', {user: discord_id, err: e});});
+          .catch(e => {global.log(2, 'workers', 'discord_helpers.updateNick failed to set the members nickname', {user: discord_id, err: e.message});});
       } else {
-        global.log(2, 'discord_bot', 'discord_helpers.updateNick couldnt get the member object', {user: discord_id, discordMember: discordMember});
+        global.log(2, 'workers', 'discord_helpers.updateNick couldnt get the member object', {user: discord_id, discordMember: discordMember});
       }
     });
   })
   .catch(e => {
-    global.log(2, 'discord_bot', 'discord_helpers.updateNick couldnt get the member document', {user: discord_id, error: e});
+    global.log(2, 'workers', 'discord_helpers.updateNick couldnt get the member document', {user: discord_id, error: e.message});
   });
 };
 
@@ -69,7 +70,7 @@ update.updateAllNicks = function () {
     members.forEach(doc => update.updateNick(doc.getDiscordId()));
   })
   .catch(e => {
-    global.log(2, 'discord_bot', 'discord_helpers.updateAllNicks couldnt get the member database entries', {error: e});
+    global.log(2, 'workers', 'discord_helpers.updateAllNicks couldnt get the member database entries', {error: e});
   });
 };
 
@@ -84,13 +85,13 @@ update.updateAllDiscordNicks = function () {
         if(discord_nick) {
           member.setDiscordUserName(discord_nick);
           member.save()
-          .catch(e => global.log(2, 'user', 'user.updateNick couldnt update user', {err: e, member: member}));
+            .catch(e => global.log(2, 'workers', 'user.updateNick couldnt update user', {err: e, member: member}));
         }
       });
     });
   })
   .catch(e => {
-    global.log(2, 'user', 'user.updateNicks cant get any users', {err: e});
+    global.log(2, 'workers', 'user.updateNicks cant get any users', {err: e});
   });
 };
 
@@ -110,7 +111,7 @@ update.updateUserIdCache = function () {
     });
   })
   .catch(e => {
-    global.log(2, 'user', 'user.updateUserIdCache cant get any users', {err: e});
+    global.log(2, 'workers', 'user.updateUserIdCache cant get any users', {err: e});
   });
 };
 
