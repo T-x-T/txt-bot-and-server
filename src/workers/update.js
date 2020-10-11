@@ -46,7 +46,7 @@ update.updateNick = function (discord_id) {
   memberFactory.getByDiscordId(discord_id)
   .then(member => {
     global.log(0, 'workers', 'discord_helpers.updateNick got member object', {member: member.data});
-    let ign = typeof doc.mcName == 'string' ? member.getMcIgn() : '';
+    let ign = typeof member.mcName == 'string' ? member.getMcIgn() : '';
     //Get the members object
     helpers.getMemberObjectByID(discord_id, function (discordMember) {
       if(discordMember) {
