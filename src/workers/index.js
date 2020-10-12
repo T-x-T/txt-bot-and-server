@@ -10,6 +10,7 @@ const mc_helpers      = require('../minecraft');
 const widgets         = require('../web/widgets.js');
 const stats           = require('../stats');
 const update  = require('./update.js');
+const rcon = require('../minecraft/rcon');
 
 //Stuff that should run on startup
 mc_helpers.updateOnlinePlayers();
@@ -23,6 +24,9 @@ widgets.init();
 global.cache = {};
 global.cache.discordUserObjects = {};
 update.updateUserIdCache();
+
+global.cache.minecraftServerVersion = "";
+rcon.getServerVersion(res => global.cache.minecraftServerVersion = res);
 
 //10 seconds after startup
 setTimeout(() => {
@@ -52,6 +56,7 @@ setInterval(function(){
   update.updateAllIGNs();
   update.updateAllNicks();
   update.updateUserIdCache();
+  rcon.getServerVersion(res => global.cache.minecraftServerVersion = res);
 }, 1000 * 60 * 60);
 
 

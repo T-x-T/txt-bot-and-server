@@ -56,10 +56,10 @@ rcon.send = function(cmd, server, callback){
       });
       rconCon.on('server', (str) => {
         global.log(0, 'minecraft', 'rcon.send received message from server that wasnt a response', {server: _server.rcon_server,  message: str });
-      })
+      });
       rconCon.on('error', (err) => {
         global.log(0, 'minecraft', 'rcon.send received an error', { err: err });
-      })
+      });
       rconCon.on('auth', () => {
         //Everything fine, send the command
         global.log(0, 'minecraft', 'rcon.send successfully authenticated to the rcon server', {server: _server.rcon_server,  cmd: cmd });
@@ -87,6 +87,22 @@ rcon.getOnlinePlayers = function(callback){
 rcon.updateOnlinePlayers = function(){
   rcon.getOnlinePlayers(function(count){
     global.mcPlayerCount = count;
+  });
+};
+
+rcon.getServerVersion = function(callback){
+  rcon.send("version", global.config.minecraft.rcon_main_server, res => {
+    let version = "";
+    let inVersion = false;
+
+    res.split("\n")[0].split("").forEach(char => {
+      if(char === ":") inVersion = true;
+      if(char === ")") inVersion = false;
+      if(inVersion) version += char;
+    });
+    version = version.replace(": ", "");
+
+    callback(version);
   });
 };
 

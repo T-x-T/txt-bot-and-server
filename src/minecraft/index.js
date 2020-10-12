@@ -37,6 +37,11 @@ index.updateOnlinePlayers = function(){
   rcon.updateOnlinePlayers();
 };
 
+//Always checks the survival server
+index.getServerVersion = function(callback){
+  rcon.getServerVersion(res => callback(res));
+};
+
 //Sends a command directly to the minecraft server using rcon; Only use in edge cases! Rather use events
 index.sendCmd = function(cmd, server, callback){
   rcon.send(cmd, server, function(res){

@@ -189,12 +189,14 @@ module.exports = function(local_data, callback) {
   if(typeof templateData == 'object'){
     templateData['online_players'] = global.mcPlayerCount;
     templateData['oauth_staff'] = config.auth.oauth_uris.login;
+    templateData['mc_version'] = global.cache.minecraftServerVersion
     callback(templateData);
   }else{
     if(typeof templateData == 'function'){
       templateData(function(variables){
         variables['online_players'] = global.mcPlayerCount;
         variables['oauth_staff'] = config.auth.oauth_uris.login;
+        variables['mc_version'] = global.cache.minecraftServerVersion
         callback(variables);
       });
     }else{
