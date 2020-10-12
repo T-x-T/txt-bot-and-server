@@ -94,14 +94,11 @@ rcon.getServerVersion = function(callback){
   rcon.send("version", global.config.minecraft.rcon_main_server, res => {
     let version = "";
     let inVersion = false;
-
     res.split("\n")[0].split("").forEach(char => {
-      if(char === ":") inVersion = true;
-      if(char === ")") inVersion = false;
-      if(inVersion) version += char;
+      if(char === "(") inVersion = true;
+      if(inVersion && (char === "." || Number.isInteger(Number.parseInt(char)))) version += char;
     });
-    version = version.replace(": ", "");
-
+    version = version.substring(0, 6);
     callback(version);
   });
 };
