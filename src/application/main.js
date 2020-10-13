@@ -211,7 +211,7 @@ _internal.createMember = function(a){
   .then(member => {
     if(member){
       try{
-        member.setDiscordUsername(a.discord_nick);
+        member.setDiscordUserName(a.discord_nick);
         member.setMcUuid(a.mc_uuid);
         member.setMcIgn(a.mc_ign);
         member.setCountry(a.country);
