@@ -222,7 +222,7 @@ _internal.createMember = function(a){
         member.setStatus(1);
         member.save();
       }catch(e){
-        global.log(2, 'application', 'failed to configure existing member object', {application: a, member: member, err: e});
+        global.log(2, 'application', 'failed to configure existing member object', {application: a, member: member, err: e.message});
         throw e;
       }
     }else{
@@ -230,7 +230,7 @@ _internal.createMember = function(a){
     }
   })
   .catch(e => {
-    global.log(2, 'application', 'failed to get user object of accepted member', {application: a, err: e});
+    global.log(2, 'application', 'failed to get user object of accepted member', {application: a, err: e.message});
   });
 };
 
