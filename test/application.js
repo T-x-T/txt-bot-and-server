@@ -8,7 +8,7 @@ const Mongo = require("../src/persistance/mongo.js");
 async function createAndSaveApplication(){
   let applicationFactory = new ApplicationFactory();
   await applicationFactory.connect();
-  let application = await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", true, true, true);
+  let application = await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", true, true, true, "TxT#0001", "The__TxT");
   return application;
 }
 
@@ -113,13 +113,11 @@ describe("application", function(){
     });
 
     it("getDiscordUserName should return correct value", async function(){
-      this.skip();
       let application = await createAndSaveApplication();
       assert.strictEqual(application.getDiscordUserName(), "TxT#0001");
     });
 
     it("getMcIgn should return correct value", async function () {
-      this.skip();
       let application = await createAndSaveApplication();
       assert.strictEqual(application.getMcIgn(), "The__TxT");
     });
@@ -130,5 +128,19 @@ describe("application", function(){
     });
 
     it("getDenyReason should return correct value after application has been denied");
+  });
+
+  describe("setters", function(){
+    it("setDiscordUserName should correctly set value", async function(){
+      let application = await createAndSaveApplication();
+      application.setDiscordUserName("testUser");
+      assert.strictEqual(application.getDiscordUserName(), "testUser");
+    });
+
+    it("setMcIgn should correctly set value", async function () {
+      let application = await createAndSaveApplication();
+      application.setMcIgn("testUser");
+      assert.strictEqual(application.getMcIgn(), "testUser");
+    });
   });
 });

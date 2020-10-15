@@ -3,7 +3,7 @@ const sanitize = require("sanitize-html");
 
 class Application extends Persistable{
   id;
-  constructor(id, discordId, mcUuid, emailAddress, country, birth_month, birth_year, about_me, motivation, buildImages, publishAboutMe, publishAge, publishCountry){
+  constructor(id, discordId, mcUuid, emailAddress, country, birth_month, birth_year, about_me, motivation, buildImages, publishAboutMe, publishAge, publishCountry, discordUserName, mcIgn){
     
     if(!discordId || !mcUuid || !emailAddress || !country || !birth_month || !birth_year || !about_me || !motivation || !buildImages ||!publishAboutMe || !publishAge || !publishCountry){
       throw new Error("Missing parameter");
@@ -26,7 +26,13 @@ class Application extends Persistable{
     this.data.publish_country = publishCountry;
     this.data.status = 1;
     this.id = id ? id : null;
+    this.data.discord_nick = discordUserName ? discordUserName : null;
+    this.data.mc_ign = mcIgn ? mcIgn : null;
   }
+
+  /*
+   *  LIFECYCLE
+   */
 
   accept(){
 
@@ -35,6 +41,22 @@ class Application extends Persistable{
   deny(){
 
   }
+
+  /*
+   *  SETTERS
+   */
+
+  setDiscordUserName(newDiscordUserName) {
+    this.data.discord_nick = newDiscordUserName;
+  }
+
+  setMcIgn(newMcIgn) {
+    this.data.mc_ign = newMcIgn;
+  }
+
+  /*
+   *  GETTERS
+   */
 
   getId(){
     return this.id;
