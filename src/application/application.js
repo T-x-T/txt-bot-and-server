@@ -1,8 +1,10 @@
 const Persistable = require("../persistance/persistable.js");
-const sanitize = require('sanitize-html');
+const sanitize = require("sanitize-html");
 
 class Application extends Persistable{
-  constructor(discordId, mcUuid, emailAddress, country, birth_month, birth_year, about_me, motivation, buildImages, publishAboutMe, publishAge, publishCountry){
+  id;
+  constructor(id, discordId, mcUuid, emailAddress, country, birth_month, birth_year, about_me, motivation, buildImages, publishAboutMe, publishAge, publishCountry){
+    
     if(!discordId || !mcUuid || !emailAddress || !country || !birth_month || !birth_year || !about_me || !motivation || !buildImages ||!publishAboutMe || !publishAge || !publishCountry){
       throw new Error("Missing parameter");
     }
@@ -23,6 +25,7 @@ class Application extends Persistable{
     this.data.publish_age = publishAge;
     this.data.publish_country = publishCountry;
     this.data.status = 1;
+    this.id = id ? id : null;
   }
 
   accept(){
@@ -34,19 +37,19 @@ class Application extends Persistable{
   }
 
   getId(){
-    
+    return this.id;
   }
 
   getTimestamp(){
-    return this.data.timestamp;
-  }
-
-  getMcUuid(){
-    return this.data.mc_uuid;
+    return new Date(this.data.timestamp);
   }
 
   getDiscordId(){
     return this.data.discord_id;
+  }
+
+  getMcUuid() {
+    return this.data.mc_uuid;
   }
 
   getEmailAddress(){

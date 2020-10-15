@@ -30,7 +30,7 @@ class Persistable{
   }
 
   async save(){
-    await this.persistanceProvider.save(this.data);
+    return await this.persistanceProvider.save(this.data);
   }
 }
 
