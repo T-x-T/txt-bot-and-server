@@ -12,6 +12,26 @@ emitter.on('discord_bot_ready', (_client) => {
 //Create the container
 var helpers = {};
 
+helpers.sendNewApplicationMessage = function(application){
+  helpers.sendMessage('New application from ' + application.getMcIgn() + '\nYou can find it here: https://paxterya.com/interface', config.discord_bot.channel.new_application_announcement, function (err) {
+    if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new application message', {err: err, application: application});
+  });
+};
+
+helpers.sendAcceptedMemberWelcomeMessage = function (application) {
+  let msg = '';
+  if(application.getPublishAboutMe()) msg = `Welcome <@${application.getDiscordId()}> to Paxterya!\nHere is the about me text they sent us:\n${application.getAboutMe()}`;
+  else msg = `Welcome <@${application.getDiscordId()}> to Paxterya!`;
+  msg += '\n\nThis means you can now join the server! If you have any troubles please ping the admins!\n';
+  msg += 'It is also a good time to give our rules a read: https://paxterya.com/rules \n';
+  msg += 'Please also take a look at our FAQ: https://paxterya.com/faq \n';
+  msg += 'The IP of the survival server is paxterya.com and the IP for the creative Server is paxterya.com:25566\n\n';
+  msg += 'If you encounter any issues or have any questions, feel free to contact our staff.'
+  helpers.sendMessage(msg, config.discord_bot.channel.new_member_announcement, function (err) {
+    if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the welcome message', {err: err, application: application});
+  });
+};
+
 //Get the nickname of user by their id
 helpers.getNicknameByID = function (userID, callback) {
   try {
@@ -23,6 +43,12 @@ helpers.getNicknameByID = function (userID, callback) {
 
 //Sends a given message in a given channel
 helpers.sendMessage = function (message, channelID, callback) {
+  if(ENVIRONMENT === "testing"){
+    emitter.emit("testing_discordHelpers_sendMessage", message, channelID);
+    callback(false);
+    return;
+  }
+
   let curChannel = client.guilds.get(config.discord_bot.guild).channels.get(channelID);
   curChannel.send(message)
     .then(message => {
@@ -54,12 +80,22 @@ helpers.returnRoleId = function(roleName){
 
 //Adds the given discord member to the given role
 helpers.addMemberToRole = function(discordID, roleID, callback){
+  if(ENVIRONMENT === "testing"){
+    emitter.emit("testing_discordHelpers_addMemberToRole", discordID, roleID);
+    callback(false);
+    return;
+  }
   client.guilds.get(config.discord_bot.guild).members.get(discordID).addRoles([roleID])
   .then(() => callback(false))
   .catch(e => callback(e));
 };
 
 helpers.removeMemberFromRole = function(discordID, roleID, callback){
+  if(ENVIRONMENT === "testing") {
+    emitter.emit("testing_discordHelpers_removeMemberFromRole", discordID, roleID);
+    callback(false);
+    return;
+  }
   client.guilds.get(config.discord_bot.guild).members.get(discordID).removeRoles([roleID])
     .then(() => callback(false))
     .catch(e => callback(e));

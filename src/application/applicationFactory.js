@@ -36,6 +36,10 @@ class ApplicationFactory extends Factory{
 
   }
 
+  getAcceptedByDiscordId(){
+
+  }
+
   getFiltered(){
     
   }

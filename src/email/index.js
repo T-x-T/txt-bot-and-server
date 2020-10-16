@@ -9,6 +9,34 @@ const main = require('./email.js');
 //Create the container
 var index = {};
 
+index.sendNewApplicationMail = function(application){
+  if(ENVIRONMENT === "testing") {
+    emitter.emit("testing_email_sendNewApplicationMail", application); 
+    return;
+  }
+  global.log(0, 'email', 'event application_new received', {application: application});
+  main.application.confirmation(application);
+};
+
+index.sendApplicationDeniedMail = function (application) {
+  if(ENVIRONMENT === "testing") {
+    emitter.emit("testing_email_sendApplicationDeniedMail", application);
+    return;
+  }
+  global.log(0, 'email', 'event application_denied received', {application: application});
+  main.application.denied(application);
+};
+
+
+index.sendApplicationAcceptedMail = function (application) {
+  if(ENVIRONMENT === "testing") {
+    emitter.emit("testing_email_sendApplicationAcceptedMail", application);
+    return;
+  }
+  global.log(0, 'email', 'event application_accepted received', {application: application});
+  main.application.accepted(application);
+};
+
 emitter.on('application_new', (application) => {
   global.log(0, 'email', 'event application_new received', {application: application});
   main.application.confirmation(application);

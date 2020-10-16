@@ -49,18 +49,15 @@ index.sendCmd = function(cmd, server, callback){
   });
 };
 
-emitter.on('application_accepted_joined', (app) => {
-  global.log(0, 'minecraft', 'event application_accepted_joined received', {app: app});
-  main.getIGN(app.mc_uuid, function(err, ign){
-    if(!err && ign){
-      rcon.send(`whitelist add ${ign}`, false, function(res){});
-    }else{
-      global.log(2, 'minecraft', 'emitter.on application_accepted_joined couldnt get the ign', {err: err, ign: ign, application: app});
+index.whitelist = function(mcUuid){
+  main.getIGN(mcUuid, function (err, ign) {
+    if(!err && ign) {
+      rcon.send(`whitelist add ${ign}`, false, function (res) {});
+    } else {
+      global.log(2, 'minecraft', 'emitter.on application_accepted_joined couldnt get the ign', {err: err, ign: ign, mcUuid: mcUuid});
     }
   });
-});
-
-
+}
 
 //Export the container
 module.exports = index;
