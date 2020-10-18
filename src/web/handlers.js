@@ -16,6 +16,10 @@ const bulletin    = require('../bulletin');
 const MemberFactory = require('../user/memberFactory.js');
 const memberFactory = new MemberFactory();
 memberFactory.connect();
+const ApplicationFactory = require("../application/applicationFactory.js");
+const applicationFactory = new ApplicationFactory();
+const mc_helpers = require("../minecraft");
+const sanitize = require('sanitize-html');
 
 //Create the container
 var handlers = {};
@@ -473,11 +477,47 @@ handlers.paxapi.application = function(data, callback){
 
 //To send a new application
 handlers.paxapi.application.post = function(data, callback){
-  application.save(data.payload, false, function(status, err){
-    if(!err){
-      callback(status, {}, 'json');
+  if(!data.payload || !data.payload.accept_rules || !data.payload.accept_privacy_policy){
+    callback(400, {err: "Missing or malformed payload", payload: data.payload}, "json");
+    return;
+  }
+
+  let discordId = data.payload.discord_id.length >= 17 && data.payload.discord_id.length <= 18 ? data.payload.discord_id : false;
+  let mcIgn = data.payload.mc_ign.length >= 3 && data.payload.mc_ign.length <= 16 ? data.payload.mc_ign : false;
+  let emailAddress = data.payload.email_address.indexOf("@") > -1 && data.payload.email_address.length > 5 ? data.payload.email_address.trim() : false;
+  let country = data.payload.country ? sanitize(data.payload.country, {allowedTags: [], allowedAttributes: []}) : false;
+  let birthMonth = Number.parseInt(data.payload.birth_month) >= 1 && Number.parseInt(data.payload.birth_month) <= 12 ? Number.parseInt(data.payload.birth_month) : false;
+  let birthYear = Number.parseInt(data.payload.birth_year) >= 1900 && Number.parseInt(data.payload.birth_year) < new Date().getFullYear() - 13 && Number.isInteger(Number.parseInt(data.payload.birth_year)) ? Number.parseInt(data.payload.birth_year) : false;
+  let aboutMe = data.payload.about_me.length > 1 && data.payload.about_me.length <= 1500 ? sanitize(data.payload.about_me, {allowedTags: [], allowedAttributes: {}}) : false;
+  let motivation = data.payload.motivation.length > 1 && data.payload.motivation.length <= 1500 ? sanitize(data.payload.motivation, {allowedTags: [], allowedAttributes: {}}) : false;
+  let buildImages = data.payload.build_images.length > 1 && data.payload.build_images.length <= 1500 ? sanitize(data.payload.build_images, {allowedTags: [], allowedAttributes: {}}) : false;
+  let publishAboutMe = data.payload.publish_about_me;
+  let publishAge = data.payload.publish_age;
+  let publishCountry = data.payload.publish_country;
+  
+  if(!discordId || !mcIgn || !emailAddress || !country || !birthMonth || !birthYear || !aboutMe || !motivation || !buildImages){
+    callback(400, {err: "Incorrect input", payload: data.payload}, "json");
+    return;
+  }
+
+  mc_helpers.getUUID(mcIgn, (err, mcUuid) => {
+    if(!err && mcUuid){
+      discord_api.getUserObjectByIdFromApi(data.payload.discord_id, userData => {
+        if(userData){
+          let discordUserName = `${userData.username}#${userData.discriminator}`;
+          applicationFactory.create(discordId, mcUuid, emailAddress, country, birthMonth, birthYear, aboutMe, motivation, buildImages, publishAboutMe, publishAge, publishCountry, discordUserName, mcIgn)
+          .then(() => {
+            callback(201, {}, "json")
+          })
+          .catch(e => {
+            callback(500, {err: e.message}, "json");
+          });
+        }else{
+          callback(500, {err: "Couldnt get your nickname from Discord :( Please contact TxT#0001 on Discord if you read this", payload: data.payload}, "json");
+        }
+      });
     }else{
-      callback(status, {err: err}, 'json');
+      callback(400, {err: "No Minecraft Account for given Minecraft In-Game-Name found", payload: data.payload}, "json");
     }
   });
 };

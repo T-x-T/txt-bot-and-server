@@ -12,12 +12,15 @@ class ApplicationFactory extends Factory{
 
   //discordUserName and mcIgn are optional
   async create(discordId, mcUuid, emailAddress, country, birth_month, birth_year, about_me, motivation, buildImages, publishAboutMe, publishAge, publishCountry, discordUserName, mcIgn){
+    if(!this.connected) await this.connect();
     if(await this.applicantHasOpenApplication(discordId, mcUuid)) throw new Error("Applicant still has open application or got accepted already");
 
     let application = new Application(null, discordId, mcUuid, emailAddress, country, birth_month, birth_year, about_me, motivation, buildImages, publishAboutMe, publishAge, publishCountry, discordUserName, mcIgn);
     await application.init();
     let raw_result = await application.create();
     application.setId(raw_result.id);
+    this.announceNewApplication(application);
+    this.sendNewApplicationEmail(application);
     return application;
   }
 
@@ -25,6 +28,14 @@ class ApplicationFactory extends Factory{
     let byDiscordId = await this.getFiltered({$and: [{discord_id: discordId}, {$or: [{status: 1}, {status: 3}]}]});
     let byMcUuid = await this.getFiltered({$and: [{mc_uuid: mcUuid}, {$or: [{status: 1}, {status: 3}]}]});
     return byDiscordId.length > 0 || byMcUuid.length > 0;
+  }
+
+  announceNewApplication(application){
+    console.log("announce new application")
+  }
+
+  sendNewApplicationEmail(application){
+    console.log("send new application email")
   }
 
   async getById(id){
