@@ -2,6 +2,7 @@ require("./test.js");
 const assert = require("assert");
 const Application = require("../src/application/application.js");
 const ApplicationFactory = require("../src/application/applicationFactory.js");
+const applicationFactory = new ApplicationFactory();
 const Mongo = require("../src/persistance/mongo.js");
 const Member = require("../src/user/member.js");
 const MemberFactory = require("../src/user/memberFactory.js");
@@ -9,10 +10,7 @@ const memberFactory = new MemberFactory();
 const discord_helpers = require("../src/discord_bot");
 
 async function createAndSaveApplication(){
-  let applicationFactory = new ApplicationFactory();
-  await applicationFactory.connect();
-  let application = await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", true, true, true, "TxT#0001", "The__TxT");
-  return application;
+  return await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
 }
 
 describe("application", function(){
@@ -21,7 +19,6 @@ describe("application", function(){
     await con.connect();
     await con.deleteAll();
   });
-
 
   describe("initialize", function(){
     it("using factory to create new object should not reject", async function(){
@@ -38,6 +35,12 @@ describe("application", function(){
     it("getId should return 0", async function(){
       let application = await createAndSaveApplication();
       assert.strictEqual(application.getId(), 0);
+    });
+
+    it("getId should return on the second created application", async function(){
+      await createAndSaveApplication();
+      let application = await createAndSaveApplication();
+      assert.strictEqual(application.getId(), 1);
     });
 
     it("getTimestamp should return an instanceof Date", async function(){
@@ -102,7 +105,7 @@ describe("application", function(){
 
     it("getPublishAboutMe should return correct value", async function(){
       let application = await createAndSaveApplication();
-      assert.strictEqual(application.getPublishAboutMe(), true);
+      assert.strictEqual(application.getPublishAboutMe(), false);
     });
 
     it("getPublishAge should return correct value", async function () {
@@ -187,18 +190,21 @@ describe("application", function(){
     });
 
     it("send denied mail", async function(){
-      emitter.once("testing_email_sendApplicationDeniedMail", application => {
-        assert.strictEqual(application.getId(), 0);
+      return new Promise(async (resolve, reject) => {
+        emitter.once("testing_email_sendApplicationDeniedMail", application => {
+          assert.strictEqual(application.getId(), 0);
+          resolve();
+        });
+
+        let application = await createAndSaveApplication();
+        await application.deny("reason");
       });
-      
-      let application = await createAndSaveApplication();
-      await application.deny("reason");
     });
   });
 
   describe("accept", function(){
     afterEach("clear member collection", async function () {
-      const con = new Mongo("member", Member.schema);
+      const con = new Mongo("members", Member.schema);
       await con.connect();
       await con.deleteAll();
     });
@@ -209,13 +215,16 @@ describe("application", function(){
       assert.strictEqual(application.getStatus(), 3);
     });
 
-    it("send accepted mail", async function(){
-      emitter.once("testing_email_sendApplicationAcceptedMail", application => {
-        assert.strictEqual(application.getId(), 0);
-      });
+    it("send accepted mail", function(){
+      return new Promise(async (resolve, reject) => {
+        emitter.once("testing_email_sendApplicationAcceptedMail", application => {
+          assert.strictEqual(application.getId(), 0);
+          resolve();
+        });
 
-      let application = await createAndSaveApplication();
-      await application.accept();
+        let application = await createAndSaveApplication();
+        await application.accept();
+      });
     });
 
     it("create a member from the application", async function(){
@@ -227,8 +236,6 @@ describe("application", function(){
     });
 
     it("dont create a member from the application if the discord user is not in the guild", async function(){
-      let applicationFactory = new ApplicationFactory();
-      await applicationFactory.connect();
       let application = await applicationFactory.create("214884802749399041", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", true, true, true, "NotTxT#0001", "The__TxT");
       await application.accept();
       let member = await memberFactory.getByDiscordId("214884802749399041");
@@ -283,45 +290,167 @@ describe("application", function(){
       assert.strictEqual(member.getStatus(), 1);
     });
 
-    it("send welcome message", async function(){
-      emitter.once("testing_discordHelpers_sendMessage", (message, channelId) => {
-        assert.ok(message.includes("293029505457586176"));
-        assert.strictEqual(channelId, config.discord_bot.channel.new_member_announcement);
-      });
+    it("send welcome message", function(){
+      return new Promise(async (resolve, reject) => {
+        emitter.once("testing_discordHelpers_sendMessage", (message, channelId) => {
+          assert.ok(message.includes("293029505457586176"));
+          assert.strictEqual(channelId, config.discord_bot.channel.new_member_announcement);
+          resolve();
+        });
 
-      let application = await createAndSaveApplication();
-      await application.save();
-    });
-
-    it("add member to whitelist", async function(){
-      emitter.once("testing_minecraft_rcon_send", cmd => {
-        assert.strictEqual(cmd, "whitelist add The__TxT");
-      });
-
-      let application = await createAndSaveApplication();
-      await application.accept();
-    });
-
-    it("add member to paxterya role", async function(){
-      let application = await createAndSaveApplication();
-      
-      emitter.once("testing_discordHelpers_addMemberToRole", (discordId, roleId) => {
-        assert.strictEqual(discordId, application.getDiscordId());
-        assert.strictEqual(roleId, config.discord_bot.roles.paxterya);
-      });
-
-      await application.accept();
-    });
-
-    it("set correct nickname in discord", async function(){
-      discord_helpers.getMemberObjectById("293029505457586176", async discordMember => {
-        discordMember.setNickname("test");
         let application = await createAndSaveApplication();
         await application.accept();
-        discord_helpers.getMemberObjectById("293029505457586176", discordMember => {
-          assert.strictEqual(discordMember.nickname, "The__TxT");
+      });
+    });
+
+    it("add member to whitelist", function(){
+      return new Promise(async (resolve, reject) => {
+        emitter.once("testing_minecraft_rcon_send", cmd => {
+          assert.strictEqual(cmd, "whitelist add The__TxT");
+          resolve();
+        });
+
+        let application = await createAndSaveApplication();
+        await application.accept();
+      });
+    });
+
+    it("add member to paxterya role", function(){
+      return new Promise(async (resolve, reject) => {
+        let application = await createAndSaveApplication();
+
+        emitter.once("testing_discordHelpers_addMemberToRole", (discordId, roleId) => {
+          assert.strictEqual(discordId, application.getDiscordId());
+          assert.strictEqual(roleId, config.discord_bot.roles.paxterya);
+          resolve();
+        });
+
+        await application.accept();
+      });
+    });
+
+    it("set correct nickname in discord", function(){
+      return new Promise(async (resolve, reject) => {
+        discord_helpers.getMemberObjectById("293029505457586176", async discordMember => {
+          discordMember.setNickname("test");
+          let application = await createAndSaveApplication();
+          await application.accept();
+          discord_helpers.getMemberObjectById("293029505457586176", discordMember => {
+            assert.strictEqual(discordMember.nickname, "The__TxT");
+            resolve();
+          });
         });
       });
+    });
+  });
+
+  describe("factory getters", async function(){
+    it("getById should return a single correct application with 1 application in db", async function(){
+      await createAndSaveApplication();
+
+      let application = await applicationFactory.getById(0);
+      assert.strictEqual(application.getId(), 0);
+    });
+
+    it("getById should return a single correct application with 3 application in db", async function () {
+      await createAndSaveApplication();
+      await createAndSaveApplication();
+      await createAndSaveApplication();
+
+      let application = await applicationFactory.getById(2);
+      assert.strictEqual(application.getId(), 2);
+    });
+
+    it("getById should return null when there is no application with the given id in the db", async function(){
+      await createAndSaveApplication();
+      await createAndSaveApplication();
+
+      let res = await applicationFactory.getById(5);
+      assert.strictEqual(null, res);
+    });
+
+    it("getByDiscordId should return an array of correct results with one correct one in the db", async function(){
+      await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586172", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+
+      let res = await applicationFactory.getByDiscordId("293029505457586176");
+      assert.strictEqual(res.length, 1);
+      assert.strictEqual(res[0].getDiscordId(), "293029505457586176");
+    });
+
+    it("getByDiscordId should return an array of correct results with two correct ones in the db", async function () {
+      await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586172", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+
+      let res = await applicationFactory.getByDiscordId("293029505457586176");
+      assert.strictEqual(res.length, 2);
+      assert.strictEqual(res[0].getDiscordId(), "293029505457586176");
+      assert.strictEqual(res[1].getDiscordId(), "293029505457586176");
+    });
+
+    it("getByDiscordId should return an empty array no correct ones in the db", async function () {
+      await applicationFactory.create("293029505457586170", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586172", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+
+      let res = await applicationFactory.getByDiscordId("293029505457586176");
+      assert.strictEqual(res.length, 0);
+    });
+
+    it("getByMcUuid should return an array of correct results with one correct one in the db", async function () {
+      await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586172", "dac25e44d1024f3b819978ed62d209a2", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+
+      let res = await applicationFactory.getByMcUuid("dac25e44d1024f3b819978ed62d209a1");
+      assert.strictEqual(res.length, 1);
+      assert.strictEqual(res[0].getMcUuid(), "dac25e44d1024f3b819978ed62d209a1");
+    });
+
+    it("getByMcUuid should return an array of correct results with two correct ones in the db", async function () {
+      await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586172", "dac25e44d1024f3b819978ed62d209a2", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+
+      let res = await applicationFactory.getByMcUuid("dac25e44d1024f3b819978ed62d209a1");
+      assert.strictEqual(res.length, 2);
+      assert.strictEqual(res[0].getMcUuid(), "dac25e44d1024f3b819978ed62d209a1");
+      assert.strictEqual(res[1].getMcUuid(), "dac25e44d1024f3b819978ed62d209a1");
+    });
+
+    it("getByMcUuid should return an empty array no correct ones in the db", async function () {
+      await applicationFactory.create("293029505457586170", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586172", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+
+      let res = await applicationFactory.getByMcUuid("dac25e44d1024f3b819978ed62d209a1");
+      assert.strictEqual(res.length, 0);
+    });
+
+    it("getAcceptedByDiscordId should return the correct result with one accepted and one denied application in db", async function(){
+      await (await createAndSaveApplication()).deny();
+      await (await createAndSaveApplication()).accept();
+
+      let res = await applicationFactory.getAcceptedByDiscordId("293029505457586176");
+      assert.strictEqual(res.getDiscordId(), "293029505457586176");
+    });
+
+    it("getAcceptedByDiscordId should return null with no accepted applications in db", async function () {
+      await (await createAndSaveApplication()).deny();
+
+      let res = await applicationFactory.getAcceptedByDiscordId("293029505457586176");
+      assert.strictEqual(res, null);
+    });
+
+    it("getAcceptedByDiscordId should return null with no accepted applications in db for given discordId", async function () {
+      await (await createAndSaveApplication()).deny();
+      await (await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT")).accept();
+      let res = await applicationFactory.getAcceptedByDiscordId("293029505457586176");
+      assert.strictEqual(res, null);
     });
   });
 });

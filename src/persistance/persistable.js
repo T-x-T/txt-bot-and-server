@@ -32,6 +32,10 @@ class Persistable{
   async save(){
     return await this.persistanceProvider.save(this.data);
   }
+
+  async create(){
+    return await this.persistanceProvider.create(this.data);
+  }
 }
 
 module.exports = Persistable;

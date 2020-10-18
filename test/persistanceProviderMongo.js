@@ -28,7 +28,7 @@ async function getConnection(){
 async function saveExample(){
   await assert.doesNotReject(async () => {
     const con = await getConnection();
-    await con.save(example_entry);
+    await con.create(example_entry);
   });
 }
 
@@ -59,7 +59,7 @@ describe("PersistanceProvider mongo", function(){
     });
   });
 
-  describe("save", function(){
+  describe("create", function(){
     it("saving example_entry once should not reject", async function () {
       await assert.doesNotReject(() => saveExample());
     });
@@ -69,7 +69,6 @@ describe("PersistanceProvider mongo", function(){
     });
 
     it("saving example_entry 100 times should not reject", async function () {
-      this.timeout(10000)
       await assert.doesNotReject(() => saveMultipleExamples(100));
     });
   });

@@ -16,12 +16,12 @@ describe("persistable", function(){
     });
   });
 
-  describe("saving", function(){
+  describe("creating", function(){
 
-    it("saving shouldnt reject", async function(){
+    it("creating shouldnt reject", async function(){
       let testPersistable = new TestPersistable("test", true, "mongo");
       await testPersistable.init();
-      await assert.doesNotReject(() => testPersistable.save());
+      await assert.doesNotReject(() => testPersistable.create());
     });
   });
 });

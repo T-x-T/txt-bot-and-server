@@ -7,10 +7,8 @@ const MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory();
 
 class Application extends Persistable{
-  id;
   constructor(id, discordId, mcUuid, emailAddress, country, birth_month, birth_year, about_me, motivation, buildImages, publishAboutMe, publishAge, publishCountry, discordUserName, mcIgn){
-    
-    if(!discordId || !mcUuid || !emailAddress || !country || !birth_month || !birth_year || !about_me || !motivation || !buildImages ||!publishAboutMe || !publishAge || !publishCountry){
+    if(!discordId || !mcUuid || !emailAddress || !country || !birth_month || !birth_year || !about_me || !motivation || !buildImages){
       throw new Error("Missing parameter");
     }
     
@@ -30,7 +28,7 @@ class Application extends Persistable{
     this.data.publish_age = publishAge;
     this.data.publish_country = publishCountry;
     this.data.status = 1;
-    this.id = id ? id : null;
+    this.data.id = Number.isInteger(id) ? id : null;
     this.data.discord_nick = discordUserName ? discordUserName : null;
     this.data.mc_ign = mcIgn ? mcIgn : null;
   }
@@ -125,12 +123,17 @@ class Application extends Persistable{
     this.data.deny_reason = newDenyReason;
   }
 
+  setId(newId){
+    if(!Number.isInteger(newId)) console.log("invalid newId: " + newId)
+    else this.data.id = newId;
+  }
+
   /*
    *  GETTERS
    */
 
   getId(){
-    return this.id;
+    return this.data.id;
   }
 
   getTimestamp(){
