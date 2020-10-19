@@ -530,14 +530,73 @@ handlers.paxapi.application.get = function(data, callback){
   //Retrieve all records
   //Clear the 0 status code, as 0 means get all data
   if(data.queryStringObject.status == 0) data.queryStringObject = undefined;
-  application.get(data.queryStringObject, false, function(err, docs){
-    if(!err){
-      callback(200, docs, 'json');
-    }else{
-      callback(500, {err: 'Couldnt get any records from the database'}, 'json');
-    }
-  });
+  switch(Object.keys(data.queryStringObject)[0]){
+    case "id":
+      console.log("id")
+      applicationFactory.getById(data.queryStringObject.id)
+        .then(application => {
+          if(application) {
+            callback(200, turnApplicationInstanceIntoJson(application), "json");
+          } else {
+            callback(404, {err: "no application found with the given id", id: data.queryStringObject.id}, "json");
+          }
+        })
+        .catch(e => callback(500, {err: e.message}, 'json'));
+      break;
+    case "discord_id":
+      applicationFactory.getByDiscordId(data.queryStringObject.discord_id)
+        .then(applications => {
+          if(applications.length > 0){
+            callback(200, applications.map(application => turnApplicationInstanceIntoJson(application)), "json");
+          }else{
+            callback(404, {err: "no application found with the given discord_id", id: data.queryStringObject.discord_id}, "json");
+          }
+        });
+        break;
+    case "mc_uuid":
+      applicationFactory.getByMcUuid(data.queryStringObject.mc_uuid)
+        .then(applications => {
+          if(applications.length > 0) {
+            callback(200, applications.map(application => turnApplicationInstanceIntoJson(application)), "json");
+          } else {
+            callback(404, {err: "no application found with the given mc_uuid", id: data.queryStringObject.mc_uuid}, "json");
+          }
+        });
+      break;
+    default:
+      console.log("default")
+      applicationFactory.getFiltered({})
+        .then(applications => {
+          if(applications.length > 0) {
+            callback(200, applications.map(application => turnApplicationInstanceIntoJson(application)), "json");
+          } else {
+            callback(404, {err: "no applications found"}, "json");
+          }
+        });
+      break;
+  }
 };
+
+function turnApplicationInstanceIntoJson(application) {
+  return {
+    id: application.getId(),
+    timestamp: application.getTimestamp().valueOf(),
+    mc_uuid: application.getMcUuid(),
+    discord_id: application.getDiscordId(),
+    country: application.getCountry(),
+    birth_month: application.getBirthMonth(),
+    birth_year: application.getBirthYear(),
+    about_me: application.getAboutMe(),
+    motivation: application.getMotivation(),
+    build_images: application.getBuildImages(),
+    publish_about_me: application.getPublishAboutMe(),
+    publish_age: application.getPublishAge(),
+    publish_country: application.getPublishCountry(),
+    discord_nick: application.getDiscordUserName(),
+    mc_ign: application.getMcIgn(),
+    status: application.getStatus()
+  }
+}
 
 //To change the status of a single application
 //REQUIRES AUTHORIZATION!
