@@ -2,6 +2,7 @@ const Persistable = require("../persistance/persistable.js");
 const sanitize = require("sanitize-html");
 const email = require("../email");
 const discord_helpers = require("../discord_bot");
+const discord_api = require("../discord_api");
 const mc_helpers = require("../minecraft");
 const MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory();
@@ -210,6 +211,18 @@ class Application extends Persistable{
 
   getDenyReason(){
     return this.data.deny_reason;
+  }
+
+  getMcSkinUrl() {
+    return `https://crafatar.com/renders/body/${this.getMcUuid()}?overlay=true`;
+  }
+
+  getDiscordAvatarUrl() {
+    return new Promise((resolve, reject) => {
+      discord_api.getAvatarUrl(this.getDiscordId(), (avatarUrl) => {
+        resolve(avatarUrl);
+      });
+    });
   }
 }
 

@@ -530,54 +530,58 @@ handlers.paxapi.application.get = function(data, callback){
   //Retrieve all records
   //Clear the 0 status code, as 0 means get all data
   if(data.queryStringObject.status == 0) data.queryStringObject = undefined;
-  switch(Object.keys(data.queryStringObject)[0]){
+  turnFilterIntoApplicationAndCallbackResult(data.queryStringObject, callback)
+};
+
+async function turnFilterIntoApplicationAndCallbackResult(filter, callback){
+  switch(Object.keys(filter)[0]) {
     case "id":
       console.log("id")
-      applicationFactory.getById(data.queryStringObject.id)
-        .then(application => {
+      applicationFactory.getById(filter.id)
+        .then(async application => {
           if(application) {
-            callback(200, turnApplicationInstanceIntoJson(application), "json");
+            callback(200, await turnApplicationInstanceIntoJson(application), "json");
           } else {
-            callback(404, {err: "no application found with the given id", id: data.queryStringObject.id}, "json");
+            callback(404, {err: "no application found with the given id", id: filter.id}, "json");
           }
         })
         .catch(e => callback(500, {err: e.message}, 'json'));
       break;
     case "discord_id":
-      applicationFactory.getByDiscordId(data.queryStringObject.discord_id)
-        .then(applications => {
-          if(applications.length > 0){
-            callback(200, applications.map(application => turnApplicationInstanceIntoJson(application)), "json");
-          }else{
-            callback(404, {err: "no application found with the given discord_id", id: data.queryStringObject.discord_id}, "json");
+      applicationFactory.getByDiscordId(filter.discord_id)
+        .then(async applications => {
+          if(applications.length > 0) {
+            callback(200, await Promise.all(applications.map(async application => await turnApplicationInstanceIntoJson(application))), "json");
+          } else {
+            callback(404, {err: "no application found with the given discord_id", discord_id: filter.discord_id}, "json");
           }
         });
-        break;
+      break;
     case "mc_uuid":
-      applicationFactory.getByMcUuid(data.queryStringObject.mc_uuid)
-        .then(applications => {
+      applicationFactory.getByMcUuid(filter.mc_uuid)
+        .then(async applications => {
           if(applications.length > 0) {
-            callback(200, applications.map(application => turnApplicationInstanceIntoJson(application)), "json");
+            callback(200, await Promise.all(applications.map(async application => await turnApplicationInstanceIntoJson(application))), "json");
           } else {
-            callback(404, {err: "no application found with the given mc_uuid", id: data.queryStringObject.mc_uuid}, "json");
+            callback(404, {err: "no application found with the given mc_uuid", mc_uuid: filter.mc_uuid}, "json");
           }
         });
       break;
     default:
-      console.log("default")
       applicationFactory.getFiltered({})
-        .then(applications => {
+        .then(async applications => {
           if(applications.length > 0) {
-            callback(200, applications.map(application => turnApplicationInstanceIntoJson(application)), "json");
+            callback(200, await Promise.all(applications.map(async application => await turnApplicationInstanceIntoJson(application))), "json");
           } else {
             callback(404, {err: "no applications found"}, "json");
           }
         });
       break;
   }
-};
+}
 
-function turnApplicationInstanceIntoJson(application) {
+async function turnApplicationInstanceIntoJson(application) {
+  let discordAvatarUrl = await application.getDiscordAvatarUrl();
   return {
     id: application.getId(),
     timestamp: application.getTimestamp().valueOf(),
@@ -594,7 +598,9 @@ function turnApplicationInstanceIntoJson(application) {
     publish_country: application.getPublishCountry(),
     discord_nick: application.getDiscordUserName(),
     mc_ign: application.getMcIgn(),
-    status: application.getStatus()
+    status: application.getStatus(),
+    mc_skin_url: application.getMcSkinUrl(),
+    discord_avatar_url: discordAvatarUrl
   }
 }
 
@@ -607,13 +613,18 @@ handlers.paxapi.application.patch = function(data, callback){
   let status = typeof data.payload.status == 'number' && data.payload.status >= 2 && data.payload.status <= 3 ? data.payload.status : false;
 
   if(typeof id == 'number' && status){
-    //Hand it over to the correct function
-    application.save(data.payload, false, function(status, err){
-      if(!err){
-        callback(200, {}, 'json');
+    applicationFactory.getById(id)
+    .then(async application => {
+      if(application){
+        application.setStatus(status);
+        await application.save();
+        callback(200, {}, "json");
       }else{
-        callback(500, {err: err}, 'json');
+        callback(404, {err: "No application with given id found", id: id}, "json");
       }
+    })
+    .catch(e => {
+      callback(500, {err: e}, "json");
     });
   }else{
     callback(401, {err: 'One of the inputs is not quite right'}, 'json');
