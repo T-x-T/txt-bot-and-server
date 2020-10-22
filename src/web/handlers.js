@@ -481,9 +481,8 @@ handlers.paxapi.application.post = function(data, callback){
     callback(400, {err: "Missing or malformed payload", payload: data.payload}, "json");
     return;
   }
-
+  
   let discordId = data.payload.discord_id.length >= 17 && data.payload.discord_id.length <= 18 ? data.payload.discord_id : false;
-  let mcIgn = data.payload.mc_ign.length >= 3 && data.payload.mc_ign.length <= 16 ? data.payload.mc_ign : false;
   let emailAddress = data.payload.email_address.indexOf("@") > -1 && data.payload.email_address.length > 5 ? data.payload.email_address.trim() : false;
   let country = data.payload.country ? sanitize(data.payload.country, {allowedTags: [], allowedAttributes: []}) : false;
   let birthMonth = Number.parseInt(data.payload.birth_month) >= 1 && Number.parseInt(data.payload.birth_month) <= 12 ? Number.parseInt(data.payload.birth_month) : false;
@@ -495,25 +494,30 @@ handlers.paxapi.application.post = function(data, callback){
   let publishAge = data.payload.publish_age;
   let publishCountry = data.payload.publish_country;
   
-  if(!discordId || !mcIgn || !emailAddress || !country || !birthMonth || !birthYear || !aboutMe || !motivation || !buildImages){
+  if(!discordId || !data.payload.mc_ign || !emailAddress || !country || !birthMonth || !birthYear || !aboutMe || !motivation || !buildImages){
     callback(400, {err: "Incorrect input", payload: data.payload}, "json");
     return;
   }
-
-  mc_helpers.getUUID(mcIgn, (err, mcUuid) => {
+  mc_helpers.getUUID(data.payload.mc_ign, (err, mcUuid) => {
     if(!err && mcUuid){
-      discord_api.getUserObjectByIdFromApi(data.payload.discord_id, userData => {
-        if(userData){
-          let discordUserName = `${userData.username}#${userData.discriminator}`;
-          applicationFactory.create(discordId, mcUuid, emailAddress, country, birthMonth, birthYear, aboutMe, motivation, buildImages, publishAboutMe, publishAge, publishCountry, discordUserName, mcIgn)
-          .then(() => {
-            callback(201, {}, "json")
-          })
-          .catch(e => {
-            callback(500, {err: e.message}, "json");
+      mc_helpers.getIGN(mcUuid, (err, mcIgn) => {
+        if(!err && mcIgn){
+          discord_api.getUserObjectByIdFromApi(data.payload.discord_id, userData => {
+            if(userData) {
+              let discordUserName = `${userData.username}#${userData.discriminator}`;
+              applicationFactory.create(discordId, mcUuid, emailAddress, country, birthMonth, birthYear, aboutMe, motivation, buildImages, publishAboutMe, publishAge, publishCountry, 1, discordUserName, mcIgn)
+                .then(() => {
+                  callback(201, {}, "json");
+                })
+                .catch(e => {
+                  callback(500, {err: e.message}, "json");
+                });
+            } else {
+              callback(500, {err: "Couldnt get your nickname from Discord :( Please contact TxT#0001 on Discord if you read this", payload: data.payload}, "json");
+            }
           });
         }else{
-          callback(500, {err: "Couldnt get your nickname from Discord :( Please contact TxT#0001 on Discord if you read this", payload: data.payload}, "json");
+          callback(500, {err: err}, "json");
         }
       });
     }else{
@@ -616,15 +620,23 @@ handlers.paxapi.application.patch = function(data, callback){
     applicationFactory.getById(id)
     .then(async application => {
       if(application){
-        application.setStatus(status);
-        await application.save();
-        callback(200, {}, "json");
+        if(application.getStatus() === 1){
+          if(status === 3){
+            await application.accept();
+            callback(200, {}, "json");
+          } else {
+            await application.deny(data.payload.reason);
+            callback(200, {}, "json");
+          }
+        }else{
+          callback(401, {err: "The application got already decided upon. Please refresh your browser!"}, "json");
+        }
       }else{
         callback(404, {err: "No application with given id found", id: id}, "json");
       }
     })
     .catch(e => {
-      callback(500, {err: e}, "json");
+      callback(500, {err: e.message}, "json");
     });
   }else{
     callback(401, {err: 'One of the inputs is not quite right'}, 'json');

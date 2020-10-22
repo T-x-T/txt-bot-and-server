@@ -8,7 +8,7 @@ const MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory();
 
 class Application extends Persistable{
-  constructor(id, discordId, mcUuid, emailAddress, country, birth_month, birth_year, about_me, motivation, buildImages, publishAboutMe, publishAge, publishCountry, discordUserName, mcIgn){
+  constructor(id, discordId, mcUuid, emailAddress, country, birth_month, birth_year, about_me, motivation, buildImages, publishAboutMe, publishAge, publishCountry, status, discordUserName, mcIgn){
     if(!discordId || !mcUuid || !emailAddress || !country || !birth_month || !birth_year || !about_me || !motivation || !buildImages){
       throw new Error("Missing parameter");
     }
@@ -28,7 +28,7 @@ class Application extends Persistable{
     this.data.publish_about_me = publishAboutMe;
     this.data.publish_age = publishAge;
     this.data.publish_country = publishCountry;
-    this.data.status = 1;
+    this.data.status = Number.isInteger(status) ? status : 1;
     this.data.id = Number.isInteger(id) ? id : null;
     this.data.discord_nick = discordUserName ? discordUserName : null;
     this.data.mc_ign = mcIgn ? mcIgn : null;
@@ -98,7 +98,7 @@ class Application extends Persistable{
 
   async deny(reason){
     this.setStatus(2);
-    this.setDenyReason(reason);
+    if(reason) this.setDenyReason(reason);
     await this.save();
     email.sendApplicationDeniedMail(this);
   }

@@ -86,8 +86,8 @@ server.uniserver = function(req, res){
         server.processHandlerResponse(res, data.method, data.path, statusCode, payload, contentType);
       });
     } catch(e) {
-      global.log(3, 'web', 'web request encountered a fatal error', {err: e, data: data});
-      server.processHandlerResponse(res, data.method, data.path, 500, 'Internal server error :(\n(Please notify TxT#0001 on Discord if you see this!)', 'html');
+      global.log(3, 'web', 'web request encountered a fatal error', {err: e.message, data: data});
+      server.processHandlerResponse(res, data.method, data.path, 500, {err: e.message}, 'json');
     }
   });
 };

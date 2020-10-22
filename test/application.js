@@ -10,7 +10,7 @@ const memberFactory = new MemberFactory();
 const discord_helpers = require("../src/discord_bot");
 
 async function createAndSaveApplication(){
-  return await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+  return await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
 }
 
 describe("application", function(){
@@ -36,33 +36,33 @@ describe("application", function(){
     });
 
     it("trying to create two applications with the same discordId should fail", async function(){
-      await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
-      await assert.rejects(async () => await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT"), new Error("Applicant still has open application or got accepted already"));
+      await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
+      await assert.rejects(async () => await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT"), new Error("Applicant still has open application or got accepted already"));
     });
 
     it("trying to create two applications with the same mcUuid should fail", async function () {
-      await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
-      await assert.rejects(async () => await applicationFactory.create("293029505457586175", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT"), new Error("Applicant still has open application or got accepted already"));
+      await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
+      await assert.rejects(async () => await applicationFactory.create("293029505457586175", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT"), new Error("Applicant still has open application or got accepted already"));
     });
 
     it("trying to create a new application when the same discordId has an accepted application should fail", async function(){
-      (await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT")).accept();
-      await assert.rejects(async () => await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT"), new Error("Applicant still has open application or got accepted already"));
+      (await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT")).accept();
+      await assert.rejects(async () => await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT"), new Error("Applicant still has open application or got accepted already"));
     });
 
     it("trying to create a new application when the same mcUuid has an accepted application should fail", async function () {
-      (await applicationFactory.create("293029505457586175", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT")).accept();
-      await assert.rejects(async () => await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT"), new Error("Applicant still has open application or got accepted already"));
+      (await applicationFactory.create("293029505457586175", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT")).accept();
+      await assert.rejects(async () => await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT"), new Error("Applicant still has open application or got accepted already"));
     });
 
     it("trying to create a new application when the same discordId has a denied application should work", async function () {
-      (await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT")).deny();
-      await assert.doesNotReject(async () => await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT"));
+      (await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT")).deny();
+      await assert.doesNotReject(async () => await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT"));
     });
 
     it("trying to create a new application when the same mcUuid has a denied application should work", async function () {
-      (await applicationFactory.create("293029505457586175", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT")).deny();
-      await assert.doesNotReject(async () => await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT"));
+      (await applicationFactory.create("293029505457586175", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT")).deny();
+      await assert.doesNotReject(async () => await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT"));
     });
   });
 
@@ -209,6 +209,15 @@ describe("application", function(){
       let application = await createAndSaveApplication();
       assert.throws(() => application.setStatus(4), new Error("status must be between 1 and 3"));
     });
+
+    it("setStatus and save should save the new status correctly", async function () {
+      let application = await createAndSaveApplication();
+      application.setStatus(3);
+      await application.save();
+
+      let loadedApplication = await applicationFactory.getById(0);
+      assert.strictEqual(loadedApplication.getStatus(), 3);
+    });
   });
 
   describe("deny", function(){
@@ -271,7 +280,7 @@ describe("application", function(){
     });
 
     it("dont create a member from the application if the discord user is not in the guild", async function(){
-      let application = await applicationFactory.create("214884802749399041", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", true, true, true, "NotTxT#0001", "The__TxT");
+      let application = await applicationFactory.create("214884802749399041", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", true, true, true, null, "NotTxT#0001", "The__TxT");
       await application.accept();
       let member = await memberFactory.getByDiscordId("214884802749399041");
       assert.ok(!member);
@@ -389,8 +398,8 @@ describe("application", function(){
 
     it("getById should return a single correct application with 3 application in db", async function () {
       await createAndSaveApplication();
-      await applicationFactory.create("293029505457586175", "dac25e44d1024f3b819978ed62d209a2", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
-      await applicationFactory.create("293029505457586174", "dac25e44d1024f3b819978ed62d209a3", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586175", "dac25e44d1024f3b819978ed62d209a2", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586174", "dac25e44d1024f3b819978ed62d209a3", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
 
       let application = await applicationFactory.getById(2);
       assert.strictEqual(application.getId(), 2);
@@ -398,16 +407,16 @@ describe("application", function(){
 
     it("getById should return null when there is no application with the given id in the db", async function(){
       await createAndSaveApplication();
-      await applicationFactory.create("293029505457586175", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586175", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
 
       let res = await applicationFactory.getById(5);
       assert.strictEqual(null, res);
     });
 
     it("getByDiscordId should return an array of correct results with one correct one in the db", async function(){
-      await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
-      await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a2", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
-      await applicationFactory.create("293029505457586172", "dac25e44d1024f3b819978ed62d209a3", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a2", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586172", "dac25e44d1024f3b819978ed62d209a3", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
 
       let res = await applicationFactory.getByDiscordId("293029505457586176");
       assert.strictEqual(res.length, 1);
@@ -415,10 +424,10 @@ describe("application", function(){
     });
 
     it("getByDiscordId should return an array of correct results with two correct ones in the db", async function () {
-      (await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT")).deny();
-      await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
-      await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a2", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
-      await applicationFactory.create("293029505457586172", "dac25e44d1024f3b819978ed62d209a3", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      (await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT")).deny();
+      await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a2", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586172", "dac25e44d1024f3b819978ed62d209a3", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
 
       let res = await applicationFactory.getByDiscordId("293029505457586176");
       assert.strictEqual(res.length, 2);
@@ -427,18 +436,18 @@ describe("application", function(){
     });
 
     it("getByDiscordId should return an empty array no correct ones in the db", async function () {
-      await applicationFactory.create("293029505457586170", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
-      await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a2", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
-      await applicationFactory.create("293029505457586172", "dac25e44d1024f3b819978ed62d209a3", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586170", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a2", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586172", "dac25e44d1024f3b819978ed62d209a3", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
 
       let res = await applicationFactory.getByDiscordId("293029505457586176");
       assert.strictEqual(res.length, 0);
     });
 
     it("getByMcUuid should return an array of correct results with one correct one in the db", async function () {
-      await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
-      await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
-      await applicationFactory.create("293029505457586172", "dac25e44d1024f3b819978ed62d209a2", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586172", "dac25e44d1024f3b819978ed62d209a2", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null,"TxT#0001", "The__TxT");
 
       let res = await applicationFactory.getByMcUuid("dac25e44d1024f3b819978ed62d209a1");
       assert.strictEqual(res.length, 1);
@@ -446,10 +455,10 @@ describe("application", function(){
     });
 
     it("getByMcUuid should return an array of correct results with two correct ones in the db", async function () {
-      (await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT")).deny();
-      await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
-      await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
-      await applicationFactory.create("293029505457586172", "dac25e44d1024f3b819978ed62d209a2", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      (await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT")).deny();
+      await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586172", "dac25e44d1024f3b819978ed62d209a2", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
 
       let res = await applicationFactory.getByMcUuid("dac25e44d1024f3b819978ed62d209a1");
       assert.strictEqual(res.length, 2);
@@ -458,9 +467,9 @@ describe("application", function(){
     });
 
     it("getByMcUuid should return an empty array no correct ones in the db", async function () {
-      await applicationFactory.create("293029505457586170", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
-      await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a5", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
-      await applicationFactory.create("293029505457586172", "dac25e44d1024f3b819978ed62d209a2", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586170", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a5", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
+      await applicationFactory.create("293029505457586172", "dac25e44d1024f3b819978ed62d209a2", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
 
       let res = await applicationFactory.getByMcUuid("dac25e44d1024f3b819978ed62d209a1");
       assert.strictEqual(res.length, 0);
@@ -483,7 +492,7 @@ describe("application", function(){
 
     it("getAcceptedByDiscordId should return null with no accepted applications in db for given discordId", async function () {
       await (await createAndSaveApplication()).deny();
-      await (await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT")).accept();
+      await (await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT")).accept();
       let res = await applicationFactory.getAcceptedByDiscordId("293029505457586176");
       assert.strictEqual(res, null);
     });
