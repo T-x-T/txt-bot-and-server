@@ -125,7 +125,7 @@ class Application extends Persistable{
   }
 
   setId(newId){
-    else this.data.id = newId;
+    this.data.id = newId;
   }
 
   /*
