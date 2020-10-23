@@ -5,7 +5,6 @@
 
 const log = require('../../log');
 const mc_helpers = require('../../minecraft');
-const applications = require('../../application');
 const auth = require('../../auth');
 
 module.exports = {
@@ -207,7 +206,7 @@ module.exports = {
           //Command to execute manual tasks
           switch(args[1]){
             case 'fixapp':
-              fixapp(message, message.mentions.users.first().id);
+              message.reply("Uuuh I dont think you still need that?");
               break;
             default:
               message.reply('I didnt quite understand you moron');
@@ -241,32 +240,4 @@ module.exports = {
       message.channel.send('Sorry, you are not authorized to do that');
     }
   }
-};
-
-function fixapp(message, discord_id){
-  applications.get({discord_id: discord_id}, {first: true, archieved: true}, (err, doc) => {
-    if(err != 200 && err === true || !doc){
-      message.reply(err);
-      return;
-    }
-
-    doc.status = 1;
-    applications.save(doc, {force: true}, (err) => {
-      if(err != 200 && err === true || !doc){
-        message.reply(err);
-        return;
-      }
-
-      doc.status = 3;
-      applications.save(doc, false, (err) => {
-        if(err != 200 && err === true || !doc){
-          message.reply(err);
-          return;
-        }
-
-        message.reply('I fixed it');
-        return;
-      });
-    });
-  });
 };

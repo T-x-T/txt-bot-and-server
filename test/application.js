@@ -338,7 +338,6 @@ describe("application", function(){
       return new Promise(async (resolve, reject) => {
         emitter.once("testing_discordHelpers_sendMessage", (message, channelId) => {
           emitter.once("testing_discordHelpers_sendMessage", (message, channelId) => {
-            console.log(message)
             assert.ok(message.includes("293029505457586176"));
             assert.strictEqual(channelId, config.discord_bot.channel.new_member_announcement);
             resolve();
