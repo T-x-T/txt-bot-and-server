@@ -1,41 +1,5 @@
 const _bulletin = require('../bulletin');
-const application = require('../application');
 const discord_helpers = require('./helpers');
-
-emitter.on('application_accepted', (doc) => {
-  global.log(0, 'discord_bot', 'event application_accepted received', {doc: doc});
-  if(discord_helpers.isGuildMember(doc.discord_id)) {
-    application.acceptWorkflow(doc.discord_id, doc);
-  }
-});
-
-emitter.on('application_new', (doc) => {
-  global.log(0, 'discord_bot', 'event application_new received', {doc: doc});
-  discord_helpers.sendMessage('New application from ' + doc.mc_ign + '\nYou can find it here: https://paxterya.com/interface', config.discord_bot.channel.new_application_announcement, function (err) {
-    if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new application message', {err: err, application: doc});
-  });
-});
-
-emitter.on('application_accepted_joined', (doc) => {
-  global.log(0, 'discord_bot', 'event application_accepted_joined received', {doc: doc});
-  discord_helpers.addMemberToRole(doc.discord_id, discord_helpers.returnRoleId('paxterya'), function (err) {
-    if(err) global.log(2, 'discord_bot', 'discord_bot couldnt add accepted member to role', {application: doc, err: err});
-  });
-   
-  discord_helpers.setNickname(doc.discord_id, doc.mc_ign);
-
-  let msg = '';
-  if(doc.publish_about_me) msg = `Welcome <@${doc.discord_id}> to Paxterya!\nHere is the about me text they sent us:\n${doc.about_me}`;
-  else msg = `Welcome <@${doc.discord_id}> to Paxterya!`;
-  msg += '\n\nThis means you can now join the server! If you have any troubles please ping the admins!\n';
-  msg += 'It is also a good time to give our rules a read: https://paxterya.com/rules \n';
-  msg += 'Please also take a look at our FAQ: https://paxterya.com/faq \n';
-  msg += 'The IP of the survival server is paxterya.com and the IP for the creative Server is paxterya.com:25566\n\n';
-  msg += 'If you encounter any issues or have any questions, feel free to contact our staff.'
-  discord_helpers.sendMessage(msg, config.discord_bot.channel.new_member_announcement, function (err) {
-    if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the welcome message', {err: err, application: doc});
-  });
-});
 
 emitter.on('bulletin_new', (bulletin) => {
   global.log(0, 'discord_bot', 'event bulletin_new received', {bulletin: bulletin});

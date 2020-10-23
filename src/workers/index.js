@@ -32,7 +32,6 @@ rcon.getServerVersion(res => global.cache.minecraftServerVersion = res);
 setTimeout(() => {
   update.updateAllNicks();
   update.updateAllIGNs();
-  update.updateAllNicks();
   update.updateUserIdCache();
 }, 10000);
 

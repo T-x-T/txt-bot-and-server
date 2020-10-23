@@ -67,7 +67,6 @@ class Mongo{
     );
   }
 
-
   /*
    *  Retrieve
    */
@@ -150,17 +149,23 @@ class Mongo{
       filter = input.hasOwnProperty('discord') ? { discord: input.discord } : filter;
       filter = input.hasOwnProperty('discord_id') ? { discord_id: input.discord_id } : filter;
       filter = input.hasOwnProperty('id') ? { id: input.id } : filter;
-
+      
       if(filter){
-        delete input._id;
+        //delete input._id; Needed that in the past, prolly not anymore?
         this.model.findOneAndUpdate(filter, input, { new: true, useFindAndModify: false, upsert: true })
           .then(res => resolve(res))
           .catch(e => reject(e));
       }else{
-        new this.model(input).save()
-          .then(res => resolve(res))
-          .catch(e => reject(e));
+        reject(new Error("Unable to find key to filter on"));
       }
+    });
+  }
+
+  create(input){
+    return new Promise((resolve, reject) => {
+      new this.model(input).save()
+        .then(res => resolve(res))
+        .catch(e => reject(e));
     });
   }
 

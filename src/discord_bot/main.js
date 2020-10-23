@@ -8,10 +8,12 @@ const fs             = require('fs');
 const Discord        = require('discord.js');
 const client         = new Discord.Client({restWsBridgeTimeout: 50000, restTimeOffset: 1000});
 const discordHelpers = require('../discord_bot/helpers.js');
-const application    = require('../application');
 const MemberFactory  = require('../user/memberFactory.js');
 const memberFactory  = new MemberFactory();
 memberFactory.connect();
+const ApplicationFactory = require("../application/applicationFactory.js");
+const applicationFactory = new ApplicationFactory();
+applicationFactory.connect();
 
 //Create the container
 var discordBot = {};
@@ -146,10 +148,14 @@ emitter.on('discord_bot_ready' ,() => {
       if (err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new application message', { err: err, application: doc });
     });
     //Check if the new member got accepted as a member
-    application.get({ discord_id: user.id }, { first: true }, function (err, doc) {
-      if(doc){
-        if (doc.status == 3) application.acceptWorkflow(user.id, doc);
+    applicationFactory.getAcceptedByDiscordId(user.id)
+    .then(application => {
+      if(application){
+        application.acceptGuildMember();
       }
+    })
+    .catch(e => {
+      global.log(2, "discord_bot", "guildMemberAdd event handler couldnt get accepted application for user", {err: e.message, user: user.id});
     });
     memberFactory.create(user.id);
   });

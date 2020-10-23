@@ -34,7 +34,7 @@ describe("factory base class", function(){
     before("save new entry to db", async function(){
       let testPersistable = new TestPersistable("test", true, "mongo");
       await testPersistable.init();
-      await testPersistable.save();
+      await testPersistable.create();
     });
 
     it("get entry with id 0 should return instanceof TestPersistable", async function () {

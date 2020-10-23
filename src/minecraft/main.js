@@ -5,6 +5,7 @@
 
 //Dependencies
 const https = require('https');
+const {ConnectionStates} = require('mongoose');
 
 //Create the container
 var mc = {};
@@ -94,7 +95,7 @@ mc.getIGN = function(uuid, callback){
               callback('Data from API doesnt contain valid ign: ' + data, false);
             }
           }else{
-            callback('Data from API doesnt is undefined', false);
+            callback('Data from API is undefined', false);
           }
           
         }else{

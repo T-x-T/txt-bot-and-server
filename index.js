@@ -21,7 +21,6 @@ require('./src/discord_api');
 require('./src/auth');
 require('./src/log');
 
-require('./src/application');
 require('./src/bulletin');
 require('./src/stats');
 require('./src/post');

@@ -599,18 +599,6 @@ describe("member", function(){
       let member = await createAndSaveNewMember();
       await assert.doesNotReject(async () => await member.takeDiscordRole(config.discord_bot.roles.inactive));
     });
-
-    it("member should have role after calling giveDiscordRole", async function(){
-      let member = await createAndSaveNewMember();
-      await member.giveDiscordRole(config.discord_bot.roles.inactive);
-      assert.ok(discord_helpers.hasRole("293029505457586176", config.discord_bot.roles.inactive));
-    });
-
-    it("member should not have role after calling takeDiscordRole", async function () {
-      let member = await createAndSaveNewMember();
-      await member.takeDiscordRole(config.discord_bot.roles.inactive);
-      assert.ok(!discord_helpers.hasRole("293029505457586176", config.discord_bot.roles.inactive));
-    });
   });
 
   describe("inactivate", function(){
@@ -621,17 +609,23 @@ describe("member", function(){
     });
 
     it("inactivate should take paxterya role away", async function () {
+      emitter.once("testing_discordHelpers_removeMemberFromRole", (discordId, roleId) => {
+        assert.strictEqual(discordId, member.getDiscordId());
+        assert.strictEqual(roleId, config.discord_bot.roles.paxterya);
+      });
+
       let member = await createAndSaveNewMember();
-      await member.giveDiscordRole(config.discord_bot.roles.paxterya);
       await member.inactivate();
-      assert.ok(!discord_helpers.hasRole("293029505457586176", config.discord_bot.roles.paxterya));
     });
 
     it("inactivate should give inactive role", async function () {
+      emitter.once("testing_discordHelpers_addMemberToRole", (discordId, roleId) => {
+        assert.strictEqual(discordId, member.getDiscordId());
+        assert.strictEqual(roleId, config.discord_bot.roles.inactive);
+      });
+
       let member = await createAndSaveNewMember();
-      await member.takeDiscordRole(config.discord_bot.roles.inactive);
       await member.inactivate();
-      assert.ok(discord_helpers.hasRole("293029505457586176", config.discord_bot.roles.inactive));
     });
 
     it("inactivate should send whitelist remove command per rcon", async function(){
@@ -653,17 +647,23 @@ describe("member", function(){
     });
 
     it("activate should take inactive role away", async function () {
+      emitter.once("testing_discordHelpers_removeMemberFromRole", (discordId, roleId) => {
+        assert.strictEqual(discordId, member.getDiscordId());
+        assert.strictEqual(roleId, config.discord_bot.roles.inactive);
+      });
+
       let member = await createAndSaveNewMember();
-      await member.giveDiscordRole(config.discord_bot.roles.inactive);
       await member.activate();
-      assert.ok(!discord_helpers.hasRole("293029505457586176", config.discord_bot.roles.inactive));
     });
 
     it("activate should give paxterya role", async function () {
+      emitter.once("testing_discordHelpers_addMemberToRole", (discordId, roleId) => {
+        assert.strictEqual(discordId, member.getDiscordId());
+        assert.strictEqual(roleId, config.discord_bot.roles.paxterya);
+      });
+
       let member = await createAndSaveNewMember();
-      await member.takeDiscordRole(config.discord_bot.roles.paxterya);
       await member.activate();
-      assert.ok(discord_helpers.hasRole("293029505457586176", config.discord_bot.roles.paxterya));
     });
 
     it("activate should send whitelist add command per rcon", async function () {

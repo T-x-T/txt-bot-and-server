@@ -7,7 +7,6 @@
 const fs          = require('fs');
 const path        = require('path');
 const webHelpers  = require('./web-helpers.js');
-const application = require('../application');
 const oauth       = require('../auth');
 const discord_api = require('../discord_api');
 const stats       = require('../stats');
@@ -16,6 +15,10 @@ const bulletin    = require('../bulletin');
 const MemberFactory = require('../user/memberFactory.js');
 const memberFactory = new MemberFactory();
 memberFactory.connect();
+const ApplicationFactory = require("../application/applicationFactory.js");
+const applicationFactory = new ApplicationFactory();
+const mc_helpers = require("../minecraft");
+const sanitize = require('sanitize-html');
 
 //Create the container
 var handlers = {};
@@ -473,11 +476,51 @@ handlers.paxapi.application = function(data, callback){
 
 //To send a new application
 handlers.paxapi.application.post = function(data, callback){
-  application.save(data.payload, false, function(status, err){
-    if(!err){
-      callback(status, {}, 'json');
+  if(!data.payload || !data.payload.accept_rules || !data.payload.accept_privacy_policy){
+    callback(400, {err: "Missing or malformed payload", payload: data.payload}, "json");
+    return;
+  }
+  
+  let discordId = data.payload.discord_id.length >= 17 && data.payload.discord_id.length <= 18 ? data.payload.discord_id : false;
+  let emailAddress = data.payload.email_address.indexOf("@") > -1 && data.payload.email_address.length > 5 ? data.payload.email_address.trim() : false;
+  let country = data.payload.country ? sanitize(data.payload.country, {allowedTags: [], allowedAttributes: []}) : false;
+  let birthMonth = Number.parseInt(data.payload.birth_month) >= 1 && Number.parseInt(data.payload.birth_month) <= 12 ? Number.parseInt(data.payload.birth_month) : false;
+  let birthYear = Number.parseInt(data.payload.birth_year) >= 1900 && Number.parseInt(data.payload.birth_year) < new Date().getFullYear() - 13 && Number.isInteger(Number.parseInt(data.payload.birth_year)) ? Number.parseInt(data.payload.birth_year) : false;
+  let aboutMe = data.payload.about_me.length > 1 && data.payload.about_me.length <= 1500 ? sanitize(data.payload.about_me, {allowedTags: [], allowedAttributes: {}}) : false;
+  let motivation = data.payload.motivation.length > 1 && data.payload.motivation.length <= 1500 ? sanitize(data.payload.motivation, {allowedTags: [], allowedAttributes: {}}) : false;
+  let buildImages = data.payload.build_images.length > 1 && data.payload.build_images.length <= 1500 ? sanitize(data.payload.build_images, {allowedTags: [], allowedAttributes: {}}) : false;
+  let publishAboutMe = data.payload.publish_about_me;
+  let publishAge = data.payload.publish_age;
+  let publishCountry = data.payload.publish_country;
+  
+  if(!discordId || !data.payload.mc_ign || !emailAddress || !country || !birthMonth || !birthYear || !aboutMe || !motivation || !buildImages){
+    callback(400, {err: "Incorrect input", payload: data.payload}, "json");
+    return;
+  }
+  mc_helpers.getUUID(data.payload.mc_ign, (err, mcUuid) => {
+    if(!err && mcUuid){
+      mc_helpers.getIGN(mcUuid, (err, mcIgn) => {
+        if(!err && mcIgn){
+          discord_api.getUserObjectByIdFromApi(data.payload.discord_id, userData => {
+            if(userData) {
+              let discordUserName = `${userData.username}#${userData.discriminator}`;
+              applicationFactory.create(discordId, mcUuid, emailAddress, country, birthMonth, birthYear, aboutMe, motivation, buildImages, publishAboutMe, publishAge, publishCountry, 1, discordUserName, mcIgn)
+                .then(() => {
+                  callback(201, {}, "json");
+                })
+                .catch(e => {
+                  callback(500, {err: e.message}, "json");
+                });
+            } else {
+              callback(500, {err: "Couldnt get your nickname from Discord :( Please contact TxT#0001 on Discord if you read this", payload: data.payload}, "json");
+            }
+          });
+        }else{
+          callback(500, {err: err}, "json");
+        }
+      });
     }else{
-      callback(status, {err: err}, 'json');
+      callback(400, {err: "No Minecraft Account for given Minecraft In-Game-Name found", payload: data.payload}, "json");
     }
   });
 };
@@ -490,14 +533,103 @@ handlers.paxapi.application.get = function(data, callback){
   //Retrieve all records
   //Clear the 0 status code, as 0 means get all data
   if(data.queryStringObject.status == 0) data.queryStringObject = undefined;
-  application.get(data.queryStringObject, false, function(err, docs){
-    if(!err){
-      callback(200, docs, 'json');
-    }else{
-      callback(500, {err: 'Couldnt get any records from the database'}, 'json');
-    }
-  });
+  turnFilterIntoApplicationAndCallbackResult(data.queryStringObject, callback)
 };
+
+async function turnFilterIntoApplicationAndCallbackResult(filter, callback){
+  switch(Object.keys(filter)[0]) {
+    case "id":
+      console.log("id")
+      applicationFactory.getById(filter.id)
+        .then(async application => {
+          if(application) {
+            callback(200, await turnApplicationsIntoJson(applications), "json");
+          } else {
+            callback(404, {err: "no application found with the given id", id: filter.id}, "json");
+          }
+        })
+        .catch(e => {
+          callback(500, {err: e.message}, "json");
+        })
+        .catch(e => callback(500, {err: e.message}, 'json'));
+      break;
+    case "discord_id":
+      applicationFactory.getByDiscordId(filter.discord_id)
+        .then(async applications => {
+          if(applications.length > 0) {
+            callback(200, await turnApplicationsIntoJson(applications), "json");
+          } else {
+            callback(404, {err: "no application found with the given discord_id", discord_id: filter.discord_id}, "json");
+          }
+        })
+        .catch(e => {
+          callback(500, {err: e.message}, "json");
+        })
+      break;
+    case "mc_uuid":
+      applicationFactory.getByMcUuid(filter.mc_uuid)
+        .then(async applications => {
+          if(applications.length > 0) {
+            callback(200, await turnApplicationsIntoJson(applications), "json");
+          } else {
+            callback(404, {err: "no application found with the given mc_uuid", mc_uuid: filter.mc_uuid}, "json");
+          }
+        })
+        .catch(e => {
+          callback(500, {err: e.message}, "json");
+        })
+      break;
+    default:
+      applicationFactory.getFiltered({})
+        .then(async applications => {
+          if(applications.length > 0) {
+            callback(200, await turnApplicationsIntoJson(applications), "json");
+          } else {
+            callback(404, {err: "no applications found"}, "json");
+          }
+        })
+        .catch(e => {
+          callback(500, {err: e.message}, "json");
+        })
+      break;
+  }
+}
+
+async function turnApplicationsIntoJson(applications) {
+  let applicationObjects = [];
+  (await Promise.all(applications.map(async application => await turnApplicationIntoJson(application)))).forEach(application => {
+    if(application) applicationObjects.push(application);
+  });
+  return applicationObjects;
+}
+
+async function turnApplicationIntoJson(application){
+  if(application.getTimestamp().valueOf() < (Date.now() - (1000 * 60 * 60 * 24 * 14))) return null;
+  let time1 = Date.now();
+  let discordAvatarUrl = await application.getDiscordAvatarUrl();
+  let time2 = Date.now();
+  console.log(time2 - time1)
+  return {
+    id: application.getId(),
+    timestamp: application.getTimestamp().valueOf(),
+    mc_uuid: application.getMcUuid(),
+    discord_id: application.getDiscordId(),
+    country: application.getCountry(),
+    birth_month: application.getBirthMonth(),
+    birth_year: application.getBirthYear(),
+    about_me: application.getAboutMe(),
+    motivation: application.getMotivation(),
+    build_images: application.getBuildImages(),
+    publish_about_me: application.getPublishAboutMe(),
+    publish_age: application.getPublishAge(),
+    publish_country: application.getPublishCountry(),
+    discord_nick: application.getDiscordUserName(),
+    mc_ign: application.getMcIgn(),
+    status: application.getStatus(),
+    mc_skin_url: application.getMcSkinUrl(),
+    discord_avatar_url: discordAvatarUrl
+  };
+}
 
 //To change the status of a single application
 //REQUIRES AUTHORIZATION!
@@ -508,13 +640,26 @@ handlers.paxapi.application.patch = function(data, callback){
   let status = typeof data.payload.status == 'number' && data.payload.status >= 2 && data.payload.status <= 3 ? data.payload.status : false;
 
   if(typeof id == 'number' && status){
-    //Hand it over to the correct function
-    application.save(data.payload, false, function(status, err){
-      if(!err){
-        callback(200, {}, 'json');
+    applicationFactory.getById(id)
+    .then(async application => {
+      if(application){
+        if(application.getStatus() === 1){
+          if(status === 3){
+            await application.accept();
+            callback(200, {}, "json");
+          } else {
+            await application.deny(data.payload.reason);
+            callback(200, {}, "json");
+          }
+        }else{
+          callback(401, {err: "The application got already decided upon. Please refresh your browser!"}, "json");
+        }
       }else{
-        callback(500, {err: err}, 'json');
+        callback(404, {err: "No application with given id found", id: id}, "json");
       }
+    })
+    .catch(e => {
+      callback(500, {err: e.message}, "json");
     });
   }else{
     callback(401, {err: 'One of the inputs is not quite right'}, 'json');

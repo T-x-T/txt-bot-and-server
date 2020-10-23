@@ -59,7 +59,6 @@ interface.application.filter = function(select, table){
 
 interface.application.open_popup = function(row){
   let element = document.getElementById('application-popup').cloneNode(true);
-  
   element.querySelector('#' + 'application_mc_ign').innerText = row.raw_data.mc_ign;
   element.querySelector('#' + 'application_discord_nick').innerText = row.raw_data.discord_nick;
   element.querySelector('#' + 'application_country').innerText = row.raw_data.country;
@@ -67,7 +66,6 @@ interface.application.open_popup = function(row){
   element.querySelector('#' + 'application_about_me').innerText = row.raw_data.about_me;
   element.querySelector('#' + 'application_motivation').innerText = row.raw_data.motivation;
   element.querySelector('#' + 'application_buildings').innerText = row.raw_data.build_images;
-  element.querySelector('#' + 'application_discord_nick').innerText = row.raw_data.mc_ign;
   element.querySelector('#' + 'application_publish_about_me').innerText = row.raw_data.publish_about_me ? 'Yes' : 'No';
   element.querySelector('#' + 'application_publish_age').innerText = row.raw_data.publish_age ? 'Yes' : 'No';
   element.querySelector('#' + 'application_publish_country').innerText = row.raw_data.publish_country ? 'Yes' : 'No';
