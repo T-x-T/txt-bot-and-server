@@ -173,6 +173,18 @@ describe("application", function(){
       application.deny("deny reason");
       assert.strictEqual(application.getDenyReason(), "deny reason");
     });
+
+    it("getMcSkinUrl should return a url containing the uuid", async function () {
+      let application = await createAndSaveApplication();
+      let url = application.getMcSkinUrl();
+      assert.ok(url.includes(application.getMcUuid()));
+    });
+
+    it("getDiscordAvatarUrl returns a url", async function () {
+      let application = await createAndSaveApplication();
+      let avatarUrl = await application.getDiscordAvatarUrl();
+      assert.doesNotThrow(() => new URL(avatarUrl));
+    });
   });
 
   describe("setters", function(){
