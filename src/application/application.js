@@ -8,14 +8,14 @@ const MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory();
 
 class Application extends Persistable{
-  constructor(id, discordId, mcUuid, emailAddress, country, birth_month, birth_year, about_me, motivation, buildImages, publishAboutMe, publishAge, publishCountry, status, discordUserName, mcIgn){
+  constructor(id, discordId, mcUuid, emailAddress, country, birth_month, birth_year, about_me, motivation, buildImages, publishAboutMe, publishAge, publishCountry, status, timestamp, discordUserName, mcIgn){
     if(!discordId || !mcUuid || !emailAddress || !country || !birth_month || !birth_year || !about_me || !motivation || !buildImages){
       throw new Error("Missing parameter");
     }
     
     super({name: "applications", schema: Application.schema});
 
-    this.data.timestamp = Date.now();
+    this.data.timestamp = timestamp ? timestamp : Date.now();
     this.data.discord_id = discordId;
     this.data.mc_uuid = mcUuid;
     this.data.email_address = sanitize(emailAddress, {allowedTags: [], allowedAttributes: {}});

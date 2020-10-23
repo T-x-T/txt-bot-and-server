@@ -543,10 +543,13 @@ async function turnFilterIntoApplicationAndCallbackResult(filter, callback){
       applicationFactory.getById(filter.id)
         .then(async application => {
           if(application) {
-            callback(200, await turnApplicationInstanceIntoJson(application), "json");
+            callback(200, await turnApplicationsIntoJson(applications), "json");
           } else {
             callback(404, {err: "no application found with the given id", id: filter.id}, "json");
           }
+        })
+        .catch(e => {
+          callback(500, {err: e.message}, "json");
         })
         .catch(e => callback(500, {err: e.message}, 'json'));
       break;
@@ -554,37 +557,58 @@ async function turnFilterIntoApplicationAndCallbackResult(filter, callback){
       applicationFactory.getByDiscordId(filter.discord_id)
         .then(async applications => {
           if(applications.length > 0) {
-            callback(200, await Promise.all(applications.map(async application => await turnApplicationInstanceIntoJson(application))), "json");
+            callback(200, await turnApplicationsIntoJson(applications), "json");
           } else {
             callback(404, {err: "no application found with the given discord_id", discord_id: filter.discord_id}, "json");
           }
-        });
+        })
+        .catch(e => {
+          callback(500, {err: e.message}, "json");
+        })
       break;
     case "mc_uuid":
       applicationFactory.getByMcUuid(filter.mc_uuid)
         .then(async applications => {
           if(applications.length > 0) {
-            callback(200, await Promise.all(applications.map(async application => await turnApplicationInstanceIntoJson(application))), "json");
+            callback(200, await turnApplicationsIntoJson(applications), "json");
           } else {
             callback(404, {err: "no application found with the given mc_uuid", mc_uuid: filter.mc_uuid}, "json");
           }
-        });
+        })
+        .catch(e => {
+          callback(500, {err: e.message}, "json");
+        })
       break;
     default:
       applicationFactory.getFiltered({})
         .then(async applications => {
           if(applications.length > 0) {
-            callback(200, await Promise.all(applications.map(async application => await turnApplicationInstanceIntoJson(application))), "json");
+            callback(200, await turnApplicationsIntoJson(applications), "json");
           } else {
             callback(404, {err: "no applications found"}, "json");
           }
-        });
+        })
+        .catch(e => {
+          callback(500, {err: e.message}, "json");
+        })
       break;
   }
 }
 
-async function turnApplicationInstanceIntoJson(application) {
+async function turnApplicationsIntoJson(applications) {
+  let applicationObjects = [];
+  (await Promise.all(applications.map(async application => await turnApplicationIntoJson(application)))).forEach(application => {
+    if(application) applicationObjects.push(application);
+  });
+  return applicationObjects;
+}
+
+async function turnApplicationIntoJson(application){
+  if(application.getTimestamp().valueOf() < (Date.now() - (1000 * 60 * 60 * 24 * 14))) return null;
+  let time1 = Date.now();
   let discordAvatarUrl = await application.getDiscordAvatarUrl();
+  let time2 = Date.now();
+  console.log(time2 - time1)
   return {
     id: application.getId(),
     timestamp: application.getTimestamp().valueOf(),
@@ -604,7 +628,7 @@ async function turnApplicationInstanceIntoJson(application) {
     status: application.getStatus(),
     mc_skin_url: application.getMcSkinUrl(),
     discord_avatar_url: discordAvatarUrl
-  }
+  };
 }
 
 //To change the status of a single application
