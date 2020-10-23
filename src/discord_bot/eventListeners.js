@@ -9,13 +9,6 @@ emitter.on('application_accepted', (doc) => {
   }
 });
 
-emitter.on('application_new', (doc) => {
-  global.log(0, 'discord_bot', 'event application_new received', {doc: doc});
-  discord_helpers.sendMessage('New application from ' + doc.mc_ign + '\nYou can find it here: https://paxterya.com/interface', config.discord_bot.channel.new_application_announcement, function (err) {
-    if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new application message', {err: err, application: doc});
-  });
-});
-
 emitter.on('application_accepted_joined', (doc) => {
   global.log(0, 'discord_bot', 'event application_accepted_joined received', {doc: doc});
   discord_helpers.addMemberToRole(doc.discord_id, discord_helpers.returnRoleId('paxterya'), function (err) {

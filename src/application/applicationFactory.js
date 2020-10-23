@@ -1,6 +1,7 @@
 const Factory = require("../persistance/factory.js");
 const Application = require("./application.js");
 const discord_helpers = require("../discord_bot/helpers.js");
+const email = require("../email");
 
 class ApplicationFactory extends Factory{
   constructor(options) {
@@ -31,11 +32,13 @@ class ApplicationFactory extends Factory{
   }
 
   announceNewApplication(application){
-    //console.log("announce new application")
+    discord_helpers.sendMessage('New application from ' + application.getDiscordUserName() + '\nYou can find it here: https://paxterya.com/interface', config.discord_bot.channel.new_application_announcement, function (err) {
+      if(err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new application message', {err: err, application: application});
+    });
   }
 
   sendNewApplicationEmail(application){
-    //console.log("send new application email")
+    email.sendNewApplicationMail(application);
   }
 
   async getById(id){

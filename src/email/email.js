@@ -31,9 +31,9 @@ email.application.confirmation = function(application){
   text += `Publish about me: ${application.getPublishAboutMe()}\n`;
   text += `Publish age: ${application.getPublishAge()}\n`;
   text += `Publish country: ${application.getPublishCountry()}\n\n`;
-  text += 'You will hear back from us within a few days tops.\n';
+  text += 'You will hear back from us within less than a day.\n';
   text += 'We wish you the best of luck,\nExxPlore and TxT';
-
+  
   email.send(application.getEmailAddress(), 'We have received your application', text);
 };
 
@@ -42,8 +42,11 @@ email.application.denied = function(application){
   let text = '';
   text += `Hi ${application.getMcIgn()},\n`;
   text += 'we read your application and decided it was not good enough and didnt meet our standards.\n';
-  text += 'We came to this conclusion for the following reason:\n';
-  text += application.getDenyReason();
+  if(application.getDenyReason()){
+    text += 'We came to this conclusion for the following reason:\n';
+    text += application.getDenyReason();
+    text += '\n';
+  }
   text += '\nYou have two options now:\n';
   text += 'If you believe you can write a better application, then we welcome you to write us another one!\n';
   text += 'Alternatively, you can search for another server that better suits your needs and preferences.\n';
@@ -90,7 +93,10 @@ email.send = function(recipient, subject, text){
       pass: config.email.mailPass
     }
   });
-
+  console.log({
+    user: config.email.mailUser,
+    pass: config.email.mailPass
+  })
   let mailOptions = {
     from: config.email.mailUser,
     to: recipient,
@@ -98,7 +104,7 @@ email.send = function(recipient, subject, text){
     text: sanitize(text,{allowedTags: [], allowedAttributes: {}}),
   };
   mailTransporter.sendMail(mailOptions, function(err, info){
-    global.log(0, 'mail', 'email.send sent email', {recipient: recipient, subject: subject, text: text, err: err, info: info});
+    global.log(0, 'email', 'email.send sent email', {recipient: recipient, subject: subject, text: text, err: err, info: info});
     if(err){
       global.log(2, 'email', 'email.send couldnt sent the email out', {mail: mailOptions});
     }

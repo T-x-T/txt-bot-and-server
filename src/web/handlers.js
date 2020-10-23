@@ -7,7 +7,6 @@
 const fs          = require('fs');
 const path        = require('path');
 const webHelpers  = require('./web-helpers.js');
-const application = require('../application');
 const oauth       = require('../auth');
 const discord_api = require('../discord_api');
 const stats       = require('../stats');
