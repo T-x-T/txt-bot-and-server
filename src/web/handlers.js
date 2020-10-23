@@ -539,7 +539,6 @@ handlers.paxapi.application.get = function(data, callback){
 async function turnFilterIntoApplicationAndCallbackResult(filter, callback){
   switch(Object.keys(filter)[0]) {
     case "id":
-      console.log("id")
       applicationFactory.getById(filter.id)
         .then(async application => {
           if(application) {
@@ -605,10 +604,7 @@ async function turnApplicationsIntoJson(applications) {
 
 async function turnApplicationIntoJson(application){
   if(application.getTimestamp().valueOf() < (Date.now() - (1000 * 60 * 60 * 24 * 14))) return null;
-  let time1 = Date.now();
   let discordAvatarUrl = await application.getDiscordAvatarUrl();
-  let time2 = Date.now();
-  console.log(time2 - time1)
   return {
     id: application.getId(),
     timestamp: application.getTimestamp().valueOf(),

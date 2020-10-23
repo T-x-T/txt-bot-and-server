@@ -93,10 +93,7 @@ email.send = function(recipient, subject, text){
       pass: config.email.mailPass
     }
   });
-  console.log({
-    user: config.email.mailUser,
-    pass: config.email.mailPass
-  })
+  
   let mailOptions = {
     from: config.email.mailUser,
     to: recipient,

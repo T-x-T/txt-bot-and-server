@@ -135,7 +135,6 @@ _internals.getSortedKarmaArray = function(includeNames, callback){
     callback(entries);
   })
   .catch(e => {
-    console.log(e)
     callback(false);
   });
 };

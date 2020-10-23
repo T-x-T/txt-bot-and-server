@@ -125,7 +125,6 @@ class Application extends Persistable{
   }
 
   setId(newId){
-    if(!Number.isInteger(newId)) console.log("invalid newId: " + newId)
     else this.data.id = newId;
   }
 
