@@ -54,7 +54,7 @@ index.whitelist = function(mcUuid){
     if(!err && ign) {
       rcon.send(`whitelist add ${ign}`, false, function (res) {});
     } else {
-      global.log(2, 'minecraft', 'emitter.on application_accepted_joined couldnt get the ign', {err: err, ign: ign, mcUuid: mcUuid});
+      global.log(2, 'minecraft', 'index.whitelist couldnt get the ign', {err: err, ign: ign, mcUuid: mcUuid});
     }
   });
 }
