@@ -137,14 +137,14 @@ emitter.on('discord_bot_ready' ,() => {
   client.on('guildMemberRemove', (user) => {
     memberFactory.getByDiscordId(user.id)
     .then(member => member.delete());
-    discordHelpers.sendMessage(`${user.displayName} left the server`, config.discord_bot.channel.new_application_announcement, function (e) { });
+    discordHelpers.sendMessage(`${user.displayName} left the server`, config.discord_bot.channel.mod_notifications, function (e) { });
   });
 
   //Gets called whenever a member gets banned from the guild; user is a guildMember
   client.on('guildBanAdd', (guild, user) => {
     memberFactory.getByDiscordId(user.id)
     .then(member => {member.ban(); console.log('ban')});
-    discordHelpers.sendMessage(`${user.username} was banned from the server`, config.discord_bot.channel.new_application_announcement, function (e) {});
+    discordHelpers.sendMessage(`${user.username} was banned from the server`, config.discord_bot.channel.mod_notifications, function (e) {});
   });
 
   //Gets called whenever a new member joins the guild

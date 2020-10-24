@@ -67,7 +67,7 @@ emitter.on('contact_new', (subject, text) => {
 });
 
 emitter.on('crash', (err, origin) => {
-  discord_helpers.sendMessage(`HELP I crashed:\n${err.stack}\n\n${origin}`, config.discord_bot.channel.new_application_announcement, function (err) {});
+  discord_helpers.sendMessage(`HELP I crashed:\n${err.stack}\n\n${origin}`, config.discord_bot.channel.logs, function (err) {});
 });
 
 //Modified from https://stackoverflow.com/a/9335296

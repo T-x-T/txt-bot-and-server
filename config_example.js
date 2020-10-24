@@ -42,6 +42,8 @@ let conf = {
         new_member_announcement: '',
         new_application_announcement: '',
         new_bulletin_announcement: '',
+        mod_notifications: '',
+        logs: '',
         general: ''
       },
       roles: {
@@ -145,6 +147,8 @@ let conf = {
         new_member_announcement: '',
         new_application_announcement: '',
         new_bulletin_announcement: '',
+        mod_notifications: '',
+        logs: '',
         general: '',
       },
       roles: {
@@ -248,6 +252,8 @@ let conf = {
         new_member_announcement: '',
         new_application_announcement: '',
         new_bulletin_announcement: '',
+        mod_notifications: '',
+        logs: '',
         general: ''
       },
       roles: {
