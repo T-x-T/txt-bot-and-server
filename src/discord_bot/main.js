@@ -86,14 +86,20 @@ emitter.on('discord_bot_ready' ,() => {
         if (user.id === reaction.message.author.id) return;
         if (reaction.emoji.name == 'upvote') {
           memberFactory.getByDiscordId(reaction.message.author.id)
-          .then(member => {
+          .then(async member => {
+            if(!member){
+              member = await memberFactory.create(reaction.message.author.id);
+            }
             member.modifyKarmaBy(1);
             member.save();
           });
         }
         if (reaction.emoji.name == 'downvote') {
           memberFactory.getByDiscordId(reaction.message.author.id)
-          .then(member => {
+          .then(async member => {
+            if(!member) {
+              member = await memberFactory.create(reaction.message.author.id);
+            }
             member.modifyKarmaBy(-1);
             member.save();
           });
