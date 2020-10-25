@@ -185,13 +185,16 @@ _statsTemplates.distances = function(stats) {
 //Contains mined ores (Diamond, Iron, Gold, Emerald, Coal, Lapis Lazuli, Redstone)
 _statsTemplates.minedOres = function(stats) {
   return {
-    mined_diamond_ore:  _statsTemplates.single.mined_diamond_ore(stats),
-    mined_iron_ore:     _statsTemplates.single.mined_iron_ore(stats),
-    mined_gold_ore:     _statsTemplates.single.mined_gold_ore(stats),
-    mined_emerald_ore:  _statsTemplates.single.mined_emerald_ore(stats),
-    mined_coal_ore:     _statsTemplates.single.mined_coal_ore(stats),
-    mined_lapis_ore:    _statsTemplates.single.mined_lapis_ore(stats),
-    mined_redstone_ore: _statsTemplates.single.mined_redstone_ore(stats)
+    mined_diamond_ore:     _statsTemplates.single.mined_diamond_ore(stats),
+    mined_iron_ore:        _statsTemplates.single.mined_iron_ore(stats),
+    mined_gold_ore:        _statsTemplates.single.mined_gold_ore(stats),
+    mined_emerald_ore:     _statsTemplates.single.mined_emerald_ore(stats),
+    mined_coal_ore:        _statsTemplates.single.mined_coal_ore(stats),
+    mined_lapis_ore:       _statsTemplates.single.mined_lapis_ore(stats),
+    mined_redstone_ore:    _statsTemplates.single.mined_redstone_ore(stats),
+    mined_quartz_ore:      _statsTemplates.single.mined_quartz_ore(stats),
+    mined_nether_gold_ore: _statsTemplates.single.mined_nether_gold_ore(stats),
+    mined_ancient_debris:  _statsTemplates.single.mined_ancient_debris(stats)
   };
 };
 
@@ -287,6 +290,9 @@ _statsTemplates.single.mined_emerald_ore         = function(stats) {return stats
 _statsTemplates.single.mined_coal_ore            = function(stats) {return stats['minecraft:mined']['minecraft:coal_ore']                                  ? stats['minecraft:mined']['minecraft:coal_ore']                                  : 0 };
 _statsTemplates.single.mined_lapis_ore           = function(stats) {return stats['minecraft:mined']['minecraft:lapis_ore']                                 ? stats['minecraft:mined']['minecraft:lapis_ore']                                 : 0 };
 _statsTemplates.single.mined_redstone_ore        = function(stats) {return stats['minecraft:mined']['minecraft:redstone_ore']                              ? stats['minecraft:mined']['minecraft:redstone_ore']                              : 0 };
+_statsTemplates.single.mined_quartz_ore          = function(stats) {return stats['minecraft:mined']['minecraft:nether_quartz_ore']                         ? stats['minecraft:mined']['minecraft:nether_quartz_ore']                         : 0 };
+_statsTemplates.single.mined_nether_gold_ore     = function(stats) {return stats['minecraft:mined']['minecraft:nether_gold_ore']                           ? stats['minecraft:mined']['minecraft:nether_gold_ore']                           : 0 };
+_statsTemplates.single.mined_ancient_debris      = function(stats) {return stats['minecraft:mined']['minecraft:ancient_debris']                            ? stats['minecraft:mined']['minecraft:ancient_debris']                            : 0 };
 _statsTemplates.single.total_mined               = function(stats) {return sumOfObject(stats['minecraft:mined'])                                           ? sumOfObject(stats['minecraft:mined'])                                           : 0 };
 _statsTemplates.single.total_used                = function(stats) {return sumOfObject(stats['minecraft:used'])                                            ? sumOfObject(stats['minecraft:used'])                                            : 0 };
 _statsTemplates.single.total_crafted             = function(stats) {return sumOfObject(stats['minecraft:crafted'])                                         ? sumOfObject(stats['minecraft:crafted'])                                         : 0 };

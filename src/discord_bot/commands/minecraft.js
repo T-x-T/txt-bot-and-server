@@ -195,6 +195,9 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
           output += `Coal: ${stats.mined_coal_ore.rank} of ${stats._totalPlayers} (${stats.mined_coal_ore.stat})\n`;
           output += `Lapis Lazuli: ${stats.mined_lapis_ore.rank} of ${stats._totalPlayers} (${stats.mined_lapis_ore.stat})\n`;
           output += `Redstone: ${stats.mined_redstone_ore.rank} of ${stats._totalPlayers} (${stats.mined_redstone_ore.stat})\n`;
+          output += `Quartz: ${stats.mined_quartz_ore.rank} of ${stats._totalPlayers} (${stats.mined_quartz_ore.stat})\n`
+          output += `Nether Gold: ${stats.mined_nether_gold_ore.rank} of ${stats._totalPlayers} (${stats.mined_nether_gold_ore.stat})\n`
+          output += `Ancient Debris: ${stats.mined_ancient_debris.rank} of ${stats._totalPlayers} (${stats.mined_ancient_debris.stat})\n`
         }else{
           output += `Mined ores from ${ign}:\n`;
           output += `Diamond: ${stats.mined_diamond_ore}\n`;
@@ -204,6 +207,9 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
           output += `Coal: ${stats.mined_coal_ore}\n`;
           output += `Lapis Lazuli: ${stats.mined_lapis_ore}\n`;
           output += `Redstone: ${stats.mined_redstone_ore}\n`;
+          output += `Quartz: ${stats.mined_quartz_ore}\n`;
+          output += `Nether Gold: ${stats.mined_nether_gold_ore}\n`;
+          output += `Ancient Debris: ${stats.mined_ancient_debris}\n`;
         }
       }else{
         output += 'Something went wrong and I couldnt get the stats';
