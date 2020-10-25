@@ -25,10 +25,14 @@ stats.template.overview = function(options, callback) {
         members.forEach(member => averageAge += member.getAge());
         averageAge = Math.round(averageAge / members.length);
 
+        members = members.sort((a, b) => a.getAge() - b.getAge());
+        let medianAge = members[members.length / 2].getAge();
+
         //Constuct and callback the final object
         callback(false, {
           'total_members': members.length,
           'average_age': averageAge,
+          'median_age': medianAge,
           'total_playtime': playtime + 'h'
         });
       } else {

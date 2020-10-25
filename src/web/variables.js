@@ -50,6 +50,7 @@ _getters.statistics = function(callback){
         'pax_title': 'Statistics',
         'total_members': obj.total_members,
         'average_age': obj.average_age,
+        'median_age': obj.median_age,
         'total_playtime': obj.total_playtime,
         'map_data': JSON.stringify(map_data)
       });
