@@ -4,69 +4,81 @@
 */
 
 //Dependencies
-const data = require('../data');
+const Persistable = require("../persistance/persistable.js");
+const Factory = require("../persistance/factory.js");
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+const Mixed = Schema.Types.Mixed;
 
 //Create the container
 var log = {};
 
 //Write a log entry
-log.write = function (level, component, name, payload, callback) {
-  data.new({
-    timestamp: Date.now(),
+log.write = async function (level, component, name, payload, timestamp) {
+  let entry = new Persistable({name: "log", schema: log.schema});
+  await entry.init();
+  entry.data = {
+    timestamp: timestamp ? timestamp : Date.now(),
     level: level,
     component: component,
     name: name,
     data: payload
-  }, 'log', false, function (err, doc) {
-    if(typeof callback === 'function'){
-      callback(err, doc);
-    }
-  });
+  };
+  return await entry.create();
 };
 
 //Get log entries
 //Input: level: the loglevel to query, timestamp: Date after which we give log entries back
-log.read = function (level, timestamp, callback) {
-  let filter = { timestamp: { $gt: timestamp } };
-  if (level) filter = { $and: [{ level: level }, { timestamp: { $gt: timestamp } }] };
+log.read = async function (level, timestamp) {
+  let factory = new Factory({name: "log", schema: log.schema});
+  await factory.connect();
 
-  data.get(filter, 'log', false, function (err, docs) {
-    if (!err) {
-      callback(false, docs);
-    } else {
-      callback(err, false);
-    }
-  });
+  let filter;
+  if(typeof level !== "number") {
+    filter = {timestamp: {$gt: timestamp}};
+  }else{
+    filter = {$and: [{level: level}, {timestamp: {$gt: timestamp}}]};
+  }
+  
+  return await factory.persistanceProvider.retrieveFiltered(filter);
 };
 
 //Get log entries by a given id
-log.readById = function (id, callback) {
-  data.get({_id: id}, 'log', {first: true}, function(err, doc){
-    if (!err) {
-      callback(false, doc);
-    } else {
-      callback(err, false);
-    }
-  })
+log.readById = async function (id) {
+  let factory = new Factory({name: "log", schema: log.schema});
+  await factory.connect();
+
+  return await factory.persistanceProvider.retrieveNewestFiltered({_id: id});
 };
 
 //This will delete older than the given amount of days
-log.prune = function(days, callback){
-  data.delete({timestamp: {$lte: new Date(Date.now() - 1000 * 60 * 60 * 24 * days)}}, 'log', false, function(err){
-    if(err) log.write(2, 'log.prune failed to prune old logs', {err: err, days: days});
-    if(typeof callback === 'function') callback(err);
-  });
+log.prune = async function(days){
+  let factory = new Factory({name: "log", schema: log.schema});
+  await factory.connect();
+
+  await factory.persistanceProvider.deleteByFilter({timestamp: {$lte: new Date(Date.now() - 1000 * 60 * 60 * 24 * days)}});
 };
 
 //This will delete older than the given amount of days of given log level
-log.pruneLevel = function(days, level){
-  data.delete({$and: [
-    {timestamp: {$lte: new Date(Date.now() - 1000 * 60 * 60 * 24 * days)}},
-    {level: level}
-  ]}, 'log', false, function(err){
-    if(err) log.write(2, 'log.prune failed to prune old logs', {err: err, days: days});
+log.pruneLevel = async function(days, level){
+  let factory = new Factory({name: "log", schema: log.schema});
+  await factory.connect();
+
+  await factory.persistanceProvider.deleteByFilter({
+    $and: [
+      {timestamp: {$lte: new Date(Date.now() - 1000 * 60 * 60 * 24 * days)}},
+      {level: level}
+    ]
   });
 };
+
+log.schema = {
+  timestamp: Date,
+  level: Number, //0 = debug, 1 = info, 2 = warn, 3 = error
+  component: String,
+  name: String,
+  data: Mixed
+}
 
 //Make log.write global
 global.log = log.write;

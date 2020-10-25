@@ -15,8 +15,8 @@ const rcon = require('../minecraft/rcon');
 //Stuff that should run on startup
 mc_helpers.updateOnlinePlayers();
 
-log.prune(30);
-log.pruneLevel(1, 0);
+log.prune(30).catch(e => console.log("failed to prune logs:", e));
+log.pruneLevel(1, 0).catch(e => console.log("failed to prune logs:", e));
 
 widgets.init();
 
@@ -69,6 +69,6 @@ setInterval(function(){
 
 //Every day
 setInterval(function(){
-  log.prune(30);
-  log.pruneLevel(1, 0);
+  log.prune(30).catch(e => console.log("failed to prune logs:", e));
+  log.pruneLevel(1, 0).catch(e => console.log("failed to prune logs:", e));
 }, 1000 * 60 * 60 * 24);

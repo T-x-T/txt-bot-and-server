@@ -29,7 +29,7 @@ update.updateAllIGNs = function () {
               member.setMcIgn(ign);
               member.save();
             } else {
-              global.log(2, 'workers', 'mc.updateAllIGNs couldnt get a valid IGN for user', member);
+              global.log(2, 'workers', 'mc.updateAllIGNs couldnt get a valid IGN for user', member.data);
             }
           });
         }
@@ -85,7 +85,7 @@ update.updateAllDiscordNicks = function () {
         if(discord_nick) {
           member.setDiscordUserName(discord_nick);
           member.save()
-            .catch(e => global.log(2, 'workers', 'user.updateNick couldnt update user', {err: e, member: member}));
+            .catch(e => global.log(2, 'workers', 'user.updateNick couldnt update user', {err: e, member: member.data}));
         }
       });
     });
