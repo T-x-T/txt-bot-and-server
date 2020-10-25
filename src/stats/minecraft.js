@@ -31,7 +31,7 @@ mc.getRanked = function(options, callback){
             //Put the each item of allRawStats through the singe template and into allStats
             let allStats = [];
             allRawStats.forEach((rawStat) => {
-              if(rawStat) {
+              if(rawStat['minecraft:mined']) {
                 let stat = _statsTemplates.single[key](rawStat);
                 if(!Number.isNaN(stat)) allStats.push(stat);
               }
