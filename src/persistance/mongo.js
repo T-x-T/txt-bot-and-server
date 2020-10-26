@@ -21,15 +21,8 @@ class Mongo{
   }
 
   async connect(){
-    return new Promise(async(resolve, reject) => {
-      try{
-        await mongoose.connect(this.mongodb_url, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
-        await this._createModel();
-        resolve();
-      }catch(e) {
-        reject(new Error(`Error occured when trying to connect to database: ${e.message}`));
-      }
-    });
+    await mongoose.connect(this.mongodb_url, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+    await this._createModel();
   }
 
   async _createModel(){
@@ -71,70 +64,38 @@ class Mongo{
    *  Retrieve
    */
 
-  retrieveFirst() {
-    return new Promise((resolve, reject) => {
-      this.retrieveOneFilteredAndSorted({}, null)
-        .then(res => resolve(res))
-        .catch(e => reject(e));
-    });
+  async retrieveFirst() {
+    return await this.retrieveOneFilteredAndSorted({}, null);
   }
 
-  retrieveAll(){
-    return new Promise((resolve, reject) => {
-      this.retrieveFiltered({})
-        .then(res => resolve(res))
-        .catch(e => reject(e));
-    });
+  async retrieveAll(){
+    return await this.retrieveFiltered({});
   }
 
-  retrieveFirstFiltered(filter){
-    return new Promise((resolve, reject) => {
-      this.retrieveOneFilteredAndSorted(filter, null)
-        .then(res => resolve(res))
-        .catch(e => reject(e));
-    });
+  async retrieveFirstFiltered(filter){
+    return await this.retrieveOneFilteredAndSorted(filter, null);
   }
 
-  retrieveFiltered(filter){
-    return new Promise((resolve, reject) => {
-      this.retrieveFilteredAndSorted(filter, null)
-        .then(res => resolve(res))
-        .catch(e => reject(e));
-    });
+  async retrieveFiltered(filter){
+    return await this.retrieveFilteredAndSorted(filter, null);
   }
 
-  retrieveNewest() {
-    return new Promise((resolve, reject) => {
-      this.retrieveNewestFiltered({})
-        .then(res => resolve(res))
-        .catch(e => reject(e));
-    });
+  async retrieveNewest() {
+    return await this.retrieveNewestFiltered({});
   }
 
-  retrieveNewestFiltered(filter){
-    return new Promise((resolve, reject) => {
-      this.retrieveOneFilteredAndSorted(filter, { _id: -1 })
-        .then(res => resolve(res))
-        .catch(e => reject(e));
-    });
+  async retrieveNewestFiltered(filter){
+    return await this.retrieveOneFilteredAndSorted(filter, {_id: -1});
   }
 
-  retrieveFilteredAndSorted(filter, sort){
+  async retrieveFilteredAndSorted(filter, sort){
     sort = typeof sort == "object" ? { "sort": sort, lean: true } : null;
-    return new Promise((resolve, reject) => {
-      this.model.find(filter, null, sort)
-        .then(res => resolve(res))
-        .catch(e => reject(e));
-    });
+    return await this.model.find(filter, null, sort);
   }
 
-  retrieveOneFilteredAndSorted(filter, sort) {
+  async retrieveOneFilteredAndSorted(filter, sort) {
     sort = typeof sort == "object" ? { "sort": sort } : null;
-    return new Promise((resolve, reject) => {
-      this.model.findOne(filter, null, sort)
-        .then(res => resolve(res))
-        .catch(e => reject(e));
-    });
+    return await this.model.findOne(filter, null, sort);
   }
 
 
@@ -142,51 +103,34 @@ class Mongo{
    * Save
    */
 
-  save(input){
-    return new Promise((resolve, reject) => {
-      let filter = false;
-      filter = input.hasOwnProperty('_id') ? { _id: input._id } : filter;
-      filter = input.hasOwnProperty('discord') ? { discord: input.discord } : filter;
-      filter = input.hasOwnProperty('discord_id') ? { discord_id: input.discord_id } : filter;
-      filter = input.hasOwnProperty('id') ? { id: input.id } : filter;
-      
-      if(filter){
-        //delete input._id; Needed that in the past, prolly not anymore?
-        this.model.findOneAndUpdate(filter, input, { new: true, useFindAndModify: false, upsert: true })
-          .then(res => resolve(res))
-          .catch(e => reject(e));
-      }else{
-        reject(new Error("Unable to find key to filter on"));
-      }
-    });
+  async save(input){
+    let filter = false;
+    filter = input.hasOwnProperty('_id') ? {_id: input._id} : filter;
+    filter = input.hasOwnProperty('discord') ? {discord: input.discord} : filter;
+    filter = input.hasOwnProperty('discord_id') ? {discord_id: input.discord_id} : filter;
+    filter = input.hasOwnProperty('id') ? {id: input.id} : filter;
+
+    if(filter) {
+      return await this.model.findOneAndUpdate(filter, input, {new: true, useFindAndModify: false, upsert: true});
+    } else {
+      throw new Error("Unable to find key to filter on");
+    }
   }
 
-  create(input){
-    return new Promise((resolve, reject) => {
-      new this.model(input).save()
-        .then(res => resolve(res))
-        .catch(e => reject(e));
-    });
+  async create(input){
+    return await new this.model(input).save();
   }
 
   /*
    * Delete
    */
 
-  deleteAll(){
-    return new Promise((resolve, reject) => {
-      this.deleteByFilter({})
-        .then(() => resolve())
-        .catch((e) => reject(e));
-    });
+  async deleteAll(){
+    await this.deleteByFilter({});
   }
 
-  deleteByFilter(filter){
-    return new Promise((resolve, reject) => {
-      this.model.deleteMany(filter)
-        .then(() => resolve())
-        .catch((e) => reject(e));
-    });
+  async deleteByFilter(filter){
+    await this.model.deleteMany(filter);
   }
 }
 
