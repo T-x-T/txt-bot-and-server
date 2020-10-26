@@ -18,9 +18,6 @@ let conf = {
         login: ''
       }
     },
-    bulletin: {
-      max_per_usr: 5
-    },
     data: {
       mongodb_url: 'mongodb://HOSTNAME/DATABASE',
       backend: 'mongo',
@@ -41,7 +38,6 @@ let conf = {
       channel: {
         new_member_announcement: '',
         new_application_announcement: '',
-        new_bulletin_announcement: '',
         mod_notifications: '',
         logs: '',
         general: ''
@@ -123,9 +119,6 @@ let conf = {
         login: ''
       }
     },
-    bulletin: {
-      max_per_usr: 5
-    },
     data: {
       mongodb_url: 'mongodb://HOSTNAME/DATABASE',
       backend: 'mongo',
@@ -146,7 +139,6 @@ let conf = {
       channel: {
         new_member_announcement: '',
         new_application_announcement: '',
-        new_bulletin_announcement: '',
         mod_notifications: '',
         logs: '',
         general: '',
@@ -228,9 +220,6 @@ let conf = {
         login: ''
       }
     },
-    bulletin: {
-      max_per_usr: 5
-    },
     data: {
       mongodb_url: 'mongodb://HOSTNAME/DATABASE',
       backend: 'mongo',
@@ -251,7 +240,6 @@ let conf = {
       channel: {
         new_member_announcement: '',
         new_application_announcement: '',
-        new_bulletin_announcement: '',
         mod_notifications: '',
         logs: '',
         general: ''
