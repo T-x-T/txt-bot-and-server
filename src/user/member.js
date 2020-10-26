@@ -264,8 +264,7 @@ Member.schema = {
   karma: {
     type: Number,
     default: 0
-  },
-  read_cards: Array
+  }
 };
 
 module.exports = Member;
