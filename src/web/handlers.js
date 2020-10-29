@@ -4,19 +4,19 @@
 */
 
 //Dependencies
-const fs          = require('fs');
-const path        = require('path');
-const webHelpers  = require('./web-helpers.js');
-const oauth       = require('../auth');
-const discord_api = require('../discord_api');
-const stats       = require('../stats');
-const post        = require('../post');
+const fs            = require('fs');
+const path          = require('path');
+const webHelpers    = require('./web-helpers.js');
+const oauth         = require('../auth');
+const discord_api   = require('../discord_api');
+const stats         = require('../stats');
+const blog          = require('../blog');
 const MemberFactory = require('../user/memberFactory.js');
 const memberFactory = new MemberFactory();
 memberFactory.connect();
-const ApplicationFactory = require("../application/applicationFactory.js");
+const ApplicationFactory = require('../application/applicationFactory.js');
 const applicationFactory = new ApplicationFactory();
-const mc_helpers = require("../minecraft");
+const mc_helpers = require('../minecraft');
 const sanitize = require('sanitize-html');
 
 //Create the container
@@ -181,79 +181,47 @@ handlers.paxapi.roles = function(data, callback){
 };
 
 //API functionality for handling blog posts
-handlers.paxapi.post = function(data, callback) {
-  if(typeof handlers.paxapi.post[data.method] == 'function') {
-    handlers.paxapi.post[data.method](data, callback);
+handlers.paxapi.blog = function(data, callback) {
+  if(typeof handlers.paxapi.blog[data.method] == 'function') {
+    if(data.method === 'get' && data.queryStringObject.hasOwnProperty('public')) {
+      //Only this case is allowed without auth
+      handlers.paxapi.blog.getPublic(data, callback);
+    } else {
+      getRequestAuthorizationError(data, 9, err => {
+        if(!err) {
+          handlers.paxapi.blog[data.method](data, callback);
+        } else {
+          callback(401, {err: err}, 'json');
+        }
+      });
+    }
   } else {
     callback(405, {err: 'Verb not allowed'}, 'json');
   }
 };
 
-//Save a new/modified post to the database (ADMIN ONLY!)
-handlers.paxapi.post.post = function(data, callback){
-  //Check if there is an access_token
-  if(data.headers.hasOwnProperty('cookie')) {
-    if(data.headers.cookie.indexOf('access_token'.length > -1)) {
-      //There is an access_token cookie, lets check if it belongs to an admin
-      oauth.getAccessLevel({token: data.cookies.access_token}, false, function(err, access_level) {
-        if(access_level >= 9) {
-          //The requester is allowed to post the records
-          post.save(data.payload, false, function(err, doc){
-            if(err) callback(500, {err: err}, 'json');
-              else callback(200, {doc: doc}, 'json');
-          });
-        } else {
-          callback(403, {err: 'You are not authorized to do that!'}, 'json');
-        }
-      });
-    } else {
-      callback(401, {err: 'Your client didnt send an access_token, please log in again'}, 'json');
-    }
-  } else {
-    callback(401, {err: 'Your client didnt send an access_token, please log in again'}, 'json');
-  }
+handlers.paxapi.blog.post = function(data, callback) {
+  blog.create(data.payload)
+    .then(res => callback(200, {doc: res}, 'json'))
+    .catch(e => callback(500, {err: e.message}, 'json'));
 };
 
-//Get posts
-handlers.paxapi.post.get = function(data, callback){
-  if(data.queryStringObject.hasOwnProperty('public')){
-    post.get({public: true}, false, function(err, posts){
-      if(err){
-        callback(500, {err_msg: 'Error retrieving blog posts', err: err}, 'json');
-        return;
-      }
-  
-      //Check if the post is in the future (here, because we cant really compare the dates directly)
-      let filteredPosts = [];
-      posts.forEach((post) => {
-        if(new Date(post.date).toISOString().substring(0, 10) <= new Date(Date.now()).toISOString().substring(0, 10)) filteredPosts.push(post);
-      });
-      posts = filteredPosts;
-  
-      callback(200, posts, 'json');
-    });
-  }else{
-    if(data.headers.hasOwnProperty('cookie')) {
-      if(data.headers.cookie.indexOf('access_token'.length > -1)) {
-        //There is an access_token cookie, lets check if it belongs to an admin
-        oauth.getAccessLevel({token: data.cookies.access_token}, false, function(err, access_level) {
-          if(access_level >= 9) {
-            //The requester is allowed to post the records
-            post.get(data.queryStringObject, false, function(err, posts){
-              if(posts) callback(200, posts, 'json');
-              else callback(404, {err: 'Couldnt get any posts for the filter'}, 'json');
-            });
-          } else {
-            callback(403, {err: 'You are not authorized to do that!'}, 'json');
-          }
-        });
-      } else {
-        callback(401, {err: 'Your client didnt send an access_token, please log in again'}, 'json');
-      }
-    } else {
-      callback(401, {err: 'Your client didnt send an access_token, please log in again'}, 'json');
-    }
-  }
+handlers.paxapi.blog.put = function(data, callback) {
+  blog.replace(data.payload)
+    .then(res => callback(200, {doc: res}, 'json'))
+    .catch(e => callback(500, {err: e.message}, 'json'));
+}
+
+handlers.paxapi.blog.get = function(data, callback) {
+  blog.getAll()
+    .then(res => callback(200, res, 'json'))
+    .catch(e => callback(500, {err: e.message}, 'json'));
+};
+
+handlers.paxapi.blog.getPublic = function(data, callback) {
+  blog.getPublic()
+    .then(res => callback(200, res, 'json'))
+    .catch(e => callback(500, {err: e.message}, 'json'));
 };
 
 //API functionallity surrounding member stuff
@@ -541,6 +509,25 @@ _internal.redirectToDiscordId = function(data, callback){
     }
   });
 };
+
+function getRequestAuthorizationError(data, minAccessLevel, callback) {
+  if(data.headers.hasOwnProperty('cookie')) {
+    if(data.headers.cookie.indexOf('access_token'.length > -1)) {
+      //There is an access_token cookie, lets check if it belongs to an admin
+      oauth.getAccessLevel({token: data.cookies.access_token}, false, function(err, accessLevel) {
+        if(accessLevel >= minAccessLevel) {
+          callback(false)
+        } else {
+          callback('You are not authorized to access this resource');
+        }
+      });
+    } else {
+      callback('Your client didnt send an access_token, please log in again');
+    }
+  } else {
+    callback('Your client didnt send an access_token, please log in again');
+  }
+}
 
 //Export the container
 module.exports = handlers;

@@ -7,6 +7,7 @@
 const stats           = require('../stats');
 const os              = require('os');
 const post            = require('../post');
+const blog            = require('../blog');
 const widgets         = require('./widgets.js');
 const discord_api     = require('../discord_api');
 const fs              = require('fs');
@@ -58,34 +59,6 @@ _getters.statistics = function(callback){
   });
 };
 
-//Calls back an object for the blog.html
-_getters.blog = function(callback){
-  post.get({public: true}, false, function(err, posts){
-    //Check if the post is in the future (here, because we cant really compare the dates directly)
-    let filteredPosts = [];
-    posts.forEach((post) => {
-      if(new Date(post.date).toISOString().substring(0, 10) <= new Date(Date.now()).toISOString().substring(0, 10)) filteredPosts.push(post);
-    });
-    posts = filteredPosts;
-
-    //Sort the array after the date
-    posts.sort((a, b) => {
-      return new Date(b.date) - new Date(a.date);
-    });
-    //Build the final html
-    let body = '';
-    posts.forEach((post) => {
-      body += `<article class="news"><h2>${post.title}</h2><img class="author" src="assets/paxterya/img/avatar-${post.author.toLowerCase()}.png"><span class="subtitle">${new Date(post.date).toISOString().substring(0, 10)}. Author: ${post.author}</span><section>`;
-      body += post.body;
-      body += `</section></article>`;
-    });
-    callback({
-      'pax_title': 'Blog',
-      'posts': body
-    });
-  });
-};
-
 _getters.town_of_paxterya = function(callback){
   fs.readFile(path.join(__dirname, '../../web/web/assets/img/town_of_paxterya_roads.svg'), function(err, data){
     let output = {
@@ -101,19 +74,24 @@ _getters.town_of_paxterya = function(callback){
 };
 
 _getters.index = function(callback){
-  post.get({}, {last: true}, function(err, doc){
-    let body = '';
-    if(!err && doc){
-      body += `<article class="news"><h2>${doc.title}</h2><img class="author" src="assets/paxterya/img/avatar-${doc.author.toLowerCase()}.png"><span class="subtitle">${new Date(doc.date).toISOString().substring(0, 10)}. Author: ${doc.author}</span><section>`;
-      body += doc.body;
+  blog.getNewest()
+    .then(blogPost => {
+      let body = '';
+      body += `<article class="news"><h2>${blogPost.title}</h2><img class="author" src="assets/paxterya/img/avatar-${blogPost.author.toLowerCase()}.png"><span class="subtitle">${new Date(blogPost.date).toISOString().substring(0, 10)}. Author: ${blogPost.author}</span><section>`;
+      body += blogPost.body;
       body += `</section></article>`;
 
-    }
-    callback({
-      'newest_post': body,
-      'pax_title': 'Paxterya Minecraft Community'
-    });
-  });
+      callback({
+        'newest_post': body,
+        'pax_title': 'Paxterya Minecraft Community'
+      });
+    })
+    .catch(e => {
+      callback({
+        'newest_post': 'Something went horribly wrong :( Thats why you only get an error message instead of a spicy blog post: ' + e.message,
+        'pax_title': 'Paxterya Minecraft Community'
+      });
+    })
 };
 
 //Callsback an object for all widgets on the interface
@@ -137,7 +115,9 @@ const template = {
   'interface.html': _getters.interface,
   'index.html': _getters.index,
   'statistics.html': _getters.statistics,
-  'blog.html': _getters.blog,
+  'blog.html': {
+    'pax_title': 'Blog'
+  },
   'town-of-paxterya.html': _getters.town_of_paxterya,
   'contact-us.html': {
     'pax_title': 'Contact us!'

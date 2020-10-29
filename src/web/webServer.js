@@ -97,7 +97,7 @@ const router = {
   '/html/api/application': handlers.paxapi.application,
   '/html/api/contact': handlers.paxapi.contact,
   '/html/api/member': handlers.paxapi.member,
-  '/html/api/post': handlers.paxapi.post,
+  '/html/api/blog': handlers.paxapi.blog,
   '/html/api/roles': handlers.paxapi.roles,
   '/html/login': handlers.paxLogin,
   '/html/staff': handlers.paxStaff

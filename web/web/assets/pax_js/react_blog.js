@@ -32,11 +32,11 @@ class Blog extends React.Component {
   }
 
   update() {
-    _internal.send('post', false, 'GET', {
+    _internal.send('blog', false, 'GET', {
       public: true
     }, false, (status, res) => {
       if (status != 200) {
-        window.alert('Encountered error');
+        window.alert('Encountered error: ' + res.err);
         return;
       }
 

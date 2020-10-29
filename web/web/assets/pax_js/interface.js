@@ -112,7 +112,7 @@ interface.post = {};
 
 //Loads the posts from the api and puts them into the table; bs is just some random variable because we get some shit from the onload
 interface.post.load = function(filter) {
-  framework.table.init(document.getElementById('post-table'), {api_path: 'post', data_mapping: function(input){
+  framework.table.init(document.getElementById('post-table'), {api_path: 'blog', data_mapping: function(input){
     let visiblity;
     if(input.public) visiblity = 'Public';
       else visiblity = 'Private';
@@ -172,9 +172,13 @@ interface.post.send = function(form){
     public: form.querySelector('#' + 'edit-public').checked
   };
 
-  if(form.parentNode.parentNode.parentNode.hasOwnProperty('raw_data')) postData.id = form.parentNode.parentNode.parentNode.raw_data.id;
+  let method = 'POST';
+  if(form.parentNode.parentNode.parentNode.hasOwnProperty('raw_data')){
+    postData.id = form.parentNode.parentNode.parentNode.raw_data.id;
+    method = 'PUT';
+  }
 
-  _internal.send('post', false, 'POST', false, postData, function(status, res){
+  _internal.send('blog', false, method, false, postData, function(status, res){
     if(status != 200){
       framework.popup.create_info({title: 'An error occured', text: res});
     }

@@ -22,7 +22,6 @@ require('../src/auth');
 require('../src/log');
 
 require('../src/stats');
-require('../src/post');
 require('../src/youtube');
 
 require('../src/discord_bot');
