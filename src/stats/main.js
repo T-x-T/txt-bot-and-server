@@ -19,6 +19,11 @@ stats.template = {};
 stats.template.overview = function(options, callback) {
   memberFactory.getAllWhitelisted()
   .then(members => {
+    if(members.length === 0){
+      callback('Didnt receive members');
+      return;
+    }
+
     stats.template.mc({collection: 'playtime'}, function (err, playtime) {
       if(!err && playtime) {
         let averageAge = 0;
