@@ -6,7 +6,6 @@
 //Dependencies
 const stats           = require('../stats');
 const os              = require('os');
-const post            = require('../post');
 const blog            = require('../blog');
 const widgets         = require('./widgets.js');
 const discord_api     = require('../discord_api');
