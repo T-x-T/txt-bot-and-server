@@ -210,8 +210,9 @@ module.exports = {
             .then(member => {
               member.inactivate()
                 .then(() => message.reply("success"))
-                .catch(e => message.reply(e));
-            });
+                .catch(e => message.reply(e.message));
+            })
+            .catch(e => message.reply(e.message));
           break;
         case 'exec':
           //Command to execute manual tasks
