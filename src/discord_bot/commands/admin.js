@@ -209,7 +209,10 @@ module.exports = {
           memberFactory.getByDiscordId(message.mentions.users.first().id)
             .then(member => {
               member.inactivate()
-                .then(() => message.reply("success"))
+                .then(() => {
+                  member.save();
+                  message.reply("success");
+                })
                 .catch(e => message.reply(e.message));
             })
             .catch(e => message.reply(e.message));
