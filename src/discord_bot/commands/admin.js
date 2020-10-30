@@ -6,6 +6,9 @@
 const log = require('../../log');
 const mc_helpers = require('../../minecraft');
 const auth = require('../../auth');
+const MemberFactory = require('../../user/memberFactory.js');
+const memberFactory = new MemberFactory();
+memberFactory.connect();
 
 module.exports = {
   name: 'admin',
@@ -201,6 +204,14 @@ module.exports = {
               }
             }
           }
+          break;
+        case 'inactivate':
+          memberFactory.getByDiscordId(message.mentions.users.first().id)
+            .then(member => {
+              member.inactivate()
+                .then(() => message.reply("success"))
+                .catch(e => message.reply(e));
+            });
           break;
         case 'exec':
           //Command to execute manual tasks
