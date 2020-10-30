@@ -19,10 +19,11 @@ stats.template = {};
 stats.template.overview = function(options, callback) {
   memberFactory.getAllWhitelisted()
   .then(members => {
-    if(members.length === 0){
+    if(!members || members.length === 0){
       callback('Didnt receive members');
       return;
     }
+    global.log(0, "stats", "stats.template.overview received members", {memberCount: members.length});
 
     stats.template.mc({collection: 'playtime'}, function (err, playtime) {
       if(!err && playtime) {
