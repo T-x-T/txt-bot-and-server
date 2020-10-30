@@ -32,7 +32,7 @@ stats.template.overview = function(options, callback) {
         averageAge = Math.round(averageAge / members.length);
 
         members = members.sort((a, b) => a.getAge() - b.getAge());
-        let medianAge = members[members.length / 2].getAge();
+        let medianAge = members[Number.parseInt(members.length / 2)].getAge();
 
         //Constuct and callback the final object
         callback(false, {
