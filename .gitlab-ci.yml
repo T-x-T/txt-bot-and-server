@@ -5,7 +5,7 @@
 stages:
 - test
 - build
-- security
+- sast
 test:
   stage: test
   image: node:latest
@@ -26,7 +26,7 @@ build:
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   - docker build -t $IMAGE_TAG .
   - docker push $IMAGE_TAG
-security:
+sast:
   variables:
     SAST_EXCLUDED_PATHS: test, web/web/assets/js
     SAST_DEFAULT_ANALYZERS: brakeman, bandit, eslint, flawfinder, kubesec, nodejs-scan,
