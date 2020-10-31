@@ -6,7 +6,17 @@
 //Dependencies
 const fs = require('fs');
 const path = require('path');
-const data = require('../data');
+const Persistable = require('../persistance/persistable.js');
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+const Mixed = Schema.Types.Mixed;
+
+let schema = {
+  timestamp: Date,
+  sub_type: String,
+  uuid: String,
+  stats: Mixed
+};
 
 //Create the container
 var updater = {};
@@ -27,7 +37,7 @@ function read_mc_stats() {
         let uuid = file.replace('.json', '').replace('-', '').replace('-', '').replace('-', '').replace('-', '');
 
         //Read the stats file for the current member
-        fs.readFile(path.join(__dirname, './../../mc_stats/' + file), 'utf8', function (err, fileData) {
+        fs.readFile(path.join(__dirname, './../../mc_stats/' + file), 'utf8', async function (err, fileData) {
           if (!err && fileData.length > 0) {
             //Read in some file which seems valid, try to parse it to an object
             let stats = false;
@@ -44,9 +54,12 @@ function read_mc_stats() {
                 timestamp: Date.now()
               };
 
-              data.new(final_stat, 'stats', false, function (err, doc) {
-                if (err || !doc) global.log(2, 'stats', 'read_mc_stats couldnt parse the data read from disk', { err: e, data: fileData });
-              });
+              let persistable = new Persistable({name: 'mcstats', schema: schema});
+              await persistable.init();
+              persistable.data = final_stat;
+
+              persistable.create()
+                .catch(e => global.log(2, 'stats', 'read_mc_stats encountered error while trying to save', {err: e.message, file: file}));
             }
           } else {
             global.log(2, 'stats', 'read_mc_stats couldnt read the stats from disk', { err: err, file: file });

@@ -143,6 +143,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
         }
       }else{
         output += 'Something went wrong and I couldnt get the stats';
+        output += err;
       }
       callback(output);
     });
@@ -179,6 +180,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
         }
       }else{
         output += 'Something went wrong and I couldnt get the stats';
+        output += err;
       }
       callback(output);
     });
@@ -213,6 +215,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
         }
       }else{
         output += 'Something went wrong and I couldnt get the stats';
+        output += err;
       }
       callback(output);
     });
@@ -239,6 +242,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
         }
       }else{
         output += 'Something went wrong and I couldnt get the stats';
+        output += err;
       }
       callback(output);
     });
@@ -255,6 +259,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
           });
         }else{
           output += 'Something went wrong and I couldnt get the stats';
+          output += err;
         }
         callback(output);
       });
@@ -274,6 +279,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
           });
         }else{
           output += 'Something went wrong and I couldnt get the stats';
+          output += err;
         }
         callback(output);
       });
@@ -293,6 +299,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
           });
         }else{
           output += 'Something went wrong and I couldnt get the stats';
+          output += err;
         }
         callback(output);
       });
@@ -312,6 +319,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
           });
         }else{
           output += 'Something went wrong and I couldnt get the stats';
+          output += err;
         }
         callback(output);
       });
@@ -331,6 +339,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
           });
         }else{
           output += 'Something went wrong and I couldnt get the stats';
+          output += err;
         }
         callback(output);
       });
@@ -350,6 +359,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
           });
         }else{
           output += 'Something went wrong and I couldnt get the stats';
+          output += err;
         }
         callback(output);
       });
@@ -369,6 +379,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
           });
         }else{
           output += 'Something went wrong and I couldnt get the stats';
+          output += err;
         }
         callback(output);
       });
@@ -388,6 +399,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
           });
         }else{
           output += 'Something went wrong and I couldnt get the stats';
+          output += err;
         }
         callback(output);
       });
@@ -417,6 +429,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
         }
       }else{
         output += 'Something went wrong and I couldnt get the stats';
+        output += err;
       }
       callback(output);
     });

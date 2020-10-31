@@ -4,10 +4,23 @@
  */
 
 //Dependencies
-const data = require('../data');
 const MemberFactory = require('../user/memberFactory.js');
 const memberFactory = new MemberFactory();
 memberFactory.connect();
+const Factory = require("../persistance/factory.js");
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+const Mixed = Schema.Types.Mixed;
+
+let schema = {
+  timestamp: Date,
+  sub_type: String,
+  uuid: String,
+  stats: Mixed
+};
+
+const statsFactory = new Factory({name: "mcstats", schema: schema});
+statsFactory.connect();
 
 //Create the container
 var mc = {};
@@ -20,14 +33,13 @@ mc.getRanked = function(options, callback){
     if(!err && stats){
       
       //Get stats from all players to create the ranking
-      getLatestStats(false, function(err, allRawStats) {
-        if(!err && allRawStats) {
-          
+      getAllLatestStats()
+        .then(allRawStats => {
           //Create the object that will hold the final ranked data
           let finalStats = {};
-          
+
           //Iterate over all single stats
-          for(let key in stats){
+          for(let key in stats) {
             //Put the each item of allRawStats through the singe template and into allStats
             let allStats = [];
             allRawStats.forEach((rawStat) => {
@@ -47,17 +59,14 @@ mc.getRanked = function(options, callback){
               stat: stats[key],
               rank: allStats.indexOf(parseInt(stats[key])) + 1
             };
-            
           }
-
           //Finish the object and call it back
           finalStats._totalPlayers = allRawStats.length;
           callback(false, finalStats);
-        } else {
-          callback('Couldnt get stats for all users: ' + err, false);
-        }
-      });
-
+        })
+        .catch(e => {
+          callback('Couldnt get stats for all users: ' + e, false);
+        });
     }else{
       callback('Couldnt get stats for user: ' + options.uuid + err, false);
     }
@@ -67,29 +76,29 @@ mc.getRanked = function(options, callback){
 
 //Gets stats for single player
 mc.getSingle = function(options, callback){
-  getLatestStats(options.uuid, function(err, doc){
-    if(!err && doc){
-      if(typeof _statsTemplates[options.collection] === 'function'){
+  getLatestStatsByUuid(options.uuid)
+    .then(doc => {
+      if(typeof _statsTemplates[options.collection] === 'function') {
         callback(false, _statsTemplates[options.collection](doc));
-      }else{
+      } else {
         callback(false, _statsTemplates.single[options.collection](doc));
       }
-    }else{
-      callback(err, false);
-    }
-  });
+    })
+    .catch(e => {
+      callback(e, false);
+    });
 };
 
 //Gets stats for all players combined
 mc.getAll = function(options, callback){
-  getLatestStats(false, function(err, docs){
-    if(!err && docs){
+  getAllLatestStats()
+    .then(docs => {
       let data = typeof _statsTemplates[options.collection] === 'function' ? _statsTemplates[options.collection](sumArray(docs)) : _statsTemplates.single[options.collection](sumArray(docs));
       callback(false, data);
-    }else{
-      callback(err, false);
-    }
-  });
+    })
+    .catch(e => {
+      callback(e, false);
+    });
 };
 
 function sumArray(docs){
@@ -105,46 +114,21 @@ function sumArray(docs){
   return finishedObject;
 }
 
-function getLatestStats(uuid, callback){
-  let filter = uuid ? {uuid: uuid} : {};
-  if(uuid){
-    data.get(filter, 'stats', {sub_type: 's4', latest: true}, function(err, doc){
-      if(Array.isArray(doc) && doc.length === 0){
-        //No stats for this user
-        callback('Couldnt get stats for user: ' + uuid, false);
-      }else{
-        if(!err && doc) {
-          callback(false, doc.stats.stats);
-        } else {
-          callback(err, false);
-        }
-      }
-    });
-  }else{
-    memberFactory.getAllWhitelisted()
-    .then(members => {
-      let stats = [];
-      let errors = 0;
-      for(let i = 0; i < members.length; i++) {
-        getLatestStats(members[i].getMcUuid(), function (err, doc) {
-          stats.push(doc);
-          if(err) errors++;
-          if(stats.length == members.length) {
-            if(errors !== stats.length) {
-              callback(false, stats)
-            } else {
-              callback(err, false);
-            }
-          }
-        });
-      }
-    })
-    .catch(e => {
-      callback(e, false);
-    });
-  }
-};
+async function getAllLatestStats() {
+  let members = await memberFactory.getAllWhitelisted();
+  let results = await Promise.allSettled(members.map(async member => await getLatestStatsByUuid(member.getMcUuid())));
+  let stats = [];
+  results.forEach(res => {
+    if(res.status === "fulfilled") stats.push(res.value);
+  });
+  return stats;
+}
 
+async function getLatestStatsByUuid(uuid){
+  let stats = await statsFactory.persistanceProvider.retrieveNewestFiltered({uuid: uuid});
+  if(!stats) throw new Error("No stats received for " + uuid);
+  return stats.stats.stats;
+}
 
 //Collections
 var _statsTemplates = {};
