@@ -32,7 +32,7 @@ sast:
     SAST_DEFAULT_ANALYZERS: brakeman, bandit, eslint, flawfinder, kubesec, nodejs-scan,
       gosec, phpcs-security-audit, pmd-apex, security-code-scan, sobelow, spotbugs
   stage: sast
-  include:
-    - template: Security/SAST.gitlab-ci.yml
-    - template: Dependency-Scanning.gitlab-ci.yml
-    - template: Security/Secret-Detection.gitlab-ci.yml
+include:
+- template: Security/SAST.gitlab-ci.yml
+- template: Dependency-Scanning.gitlab-ci.yml
+- template: Security/Secret-Detection.gitlab-ci.yml
