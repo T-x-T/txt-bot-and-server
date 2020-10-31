@@ -33,3 +33,4 @@ sast:
   stage: sast
 include:
 - template: Security/SAST.gitlab-ci.yml
+- template: Dependency-Scanning.gitlab-ci.yml
