@@ -28,6 +28,7 @@ build:
   - docker push $IMAGE_TAG
 sast:
   variables:
+    SAST_EXCLUDED_PATHS: test, web/web/assets/js
     SAST_DEFAULT_ANALYZERS: brakeman, bandit, eslint, flawfinder, kubesec, nodejs-scan,
       gosec, phpcs-security-audit, pmd-apex, security-code-scan, sobelow, spotbugs
   stage: sast
