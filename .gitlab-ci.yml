@@ -1,26 +1,35 @@
+# You can override the included template(s) by including variable overrides
+# See https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
+# Note that environment variables can be set in several places
+# See https://docs.gitlab.com/ee/ci/variables/#priority-of-environment-variables
 stages:
-  - test
-  - build
-
-
+- test
+- build
+- sast
 test:
   stage: test
   image: node:latest
   services:
-    - mongo:latest
+  - mongo:latest
   script:
-    - npm i
-    - cp $config ./config.js
-    - npm test
-
+  - npm i
+  - cp $config ./config.js
+  - npm test
 build:
   image: docker:19.03.11
   stage: build
   services:
-    - docker:19.03.11-dind
+  - docker:19.03.11-dind
   variables:
-    IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+    IMAGE_TAG: "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
   script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build -t $IMAGE_TAG .
-    - docker push $IMAGE_TAG
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  - docker build -t $IMAGE_TAG .
+  - docker push $IMAGE_TAG
+sast:
+  variables:
+    SAST_DEFAULT_ANALYZERS: brakeman, bandit, eslint, flawfinder, kubesec, nodejs-scan,
+      gosec, phpcs-security-audit, pmd-apex, security-code-scan, sobelow, spotbugs
+  stage: sast
+include:
+- template: Security/SAST.gitlab-ci.yml
