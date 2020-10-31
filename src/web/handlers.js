@@ -328,6 +328,17 @@ handlers.paxapi.application.post = function(data, callback){
   
   if(!discordId || !data.payload.mc_ign || !emailAddress || !country || !birthMonth || !birthYear || !aboutMe || !motivation || !buildImages){
     callback(400, {err: "Incorrect input", payload: data.payload}, "json");
+    global.log(0, "web", "handlers.paxapi.application.post received incorrect input", {
+      discordId: discordId,
+      mc_ign: mc_ign,
+      emailAddress: emailAddress,
+      country: country,
+      birthMonth: birthMonth,
+      birthYear: birthYear,
+      aboutMe: aboutMe,
+      motivation: motivation,
+      buildImages: buildImages
+    });
     return;
   }
   mc_helpers.getUUID(data.payload.mc_ign, (err, mcUuid) => {
