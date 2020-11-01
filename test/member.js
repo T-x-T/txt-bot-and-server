@@ -687,7 +687,7 @@ describe("member", function(){
       let entries = await con.retrieveAll();
       assert.strictEqual(entries.length, 1);
       
-      member.delete();
+      await member.delete();
 
       entries = await con.retrieveAll();
       assert.strictEqual(entries.length, 0);
@@ -714,7 +714,7 @@ describe("member", function(){
       let entries = await con.retrieveAll();
       assert.strictEqual(entries.length, 1);
 
-      member.ban();
+      await member.ban();
 
       entries = await con.retrieveAll();
       assert.strictEqual(entries.length, 0);

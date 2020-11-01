@@ -217,7 +217,7 @@ class Member extends Persistable{
     mc.sendCmd(`whitelist remove ${this.getMcIgn()}`, false);
     mc.sendCmd(`ban ${this.getMcIgn()}`, false);
     discord_helpers.banMember(this.getDiscordId());
-    this.delete();
+    await this.delete();
   }
 
   async delete(){

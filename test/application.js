@@ -438,7 +438,7 @@ describe("application", function(){
     });
 
     it("getByDiscordId should return an array of correct results with two correct ones in the db", async function () {
-      (await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT")).deny();
+      await (await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT")).deny();
       await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
       await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a2", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
       await applicationFactory.create("293029505457586172", "dac25e44d1024f3b819978ed62d209a3", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
@@ -469,7 +469,7 @@ describe("application", function(){
     });
 
     it("getByMcUuid should return an array of correct results with two correct ones in the db", async function () {
-      (await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT")).deny();
+      await (await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT")).deny();
       await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
       await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
       await applicationFactory.create("293029505457586172", "dac25e44d1024f3b819978ed62d209a2", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");

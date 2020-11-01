@@ -52,11 +52,6 @@ describe("PersistanceProvider mongo", function(){
       const con = new Mongo("test", schema);
       await assert.doesNotReject(() => con.connect());
     });
-
-    it("calling Mongo#connect with a faulty mongodb_url should reject", async function () {
-      const con = new Mongo("test", schema, { mongodb_url: "this_is_invalid_af" });
-      await assert.rejects(() => con.connect(), {name: "MongoParseError", message: "Invalid connection string"});
-    });
   });
 
   describe("create", function(){
