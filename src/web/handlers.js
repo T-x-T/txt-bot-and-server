@@ -326,7 +326,7 @@ handlers.paxapi.application.post = function(data, callback){
   let publishAge = data.payload.publish_age;
   let publishCountry = data.payload.publish_country;
   
-  if(birthYear < new Date().getFullYear() - 13 && new Date().getMonth() < birthMonth){
+  if(birthYear > new Date().getFullYear() - 13 || (birthYear > new Date().getFullYear() - 12 && new Date().getMonth() < birthMonth)){
     callback(401, {err: "you need to be at least 13 years old to apply. If you believe this is an error contact TxT#0001 in Discord"}, "json");
     return;
   }
