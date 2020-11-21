@@ -35,7 +35,7 @@ youtube.checkIfNewVideos = function(channel){
       //Parse the data object
       data = JSON.parse(data);
       //Check if the response from youtube is valid
-      if(data['items']) {
+      if(data.hasOwnProperty("items") && data.items[0]) {
         if(data.items[0].hasOwnProperty('contentDetails')) {
           //Data object seems valid
           let latestVideo = {
