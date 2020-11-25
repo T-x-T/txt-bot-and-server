@@ -34,6 +34,7 @@ emitter.on('discord_bot_ready' ,() => {
   client.on('message', message => {
     //Stop processing the message when it doesnt start with our prefix or if its from another bot
     if (!message.content.startsWith(config.discord_bot.bot_prefix) || message.author.bot || message.channel.type === 'dm') return;
+    if(message.content.startsWith(config.discord_bot.bot_prefix + "karma")) return;
     
     //Stop processing the message if its empty or just a number
     if(message.content.length <= 2 || Number.isInteger(Number.parseInt(message.content[2]))) return;
