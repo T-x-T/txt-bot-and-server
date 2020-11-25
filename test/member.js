@@ -295,42 +295,6 @@ describe("member", function(){
     });
   });
 
-  describe("karma", function () {
-    it("get karma should return 0 when karma hasnt been modified", async function () {
-      let member = await createAndSaveNewMember();
-      let karma = await member.getKarma();
-      assert.strictEqual(karma, 0);
-    });
-
-    it("adding 1 karma shouldnt reject and save correct value", async function () {
-      let member = await createAndSaveNewMember();
-      await assert.doesNotReject(async () => await member.modifyKarmaBy(1));
-      let karma = await member.getKarma();
-      assert.strictEqual(karma, 1);
-    });
-
-    it("adding 10 karma shouldnt reject", async function () {
-      let member = await createAndSaveNewMember();
-      await assert.doesNotReject(async () => await member.modifyKarmaBy(10));
-      let karma = await member.getKarma();
-      assert.strictEqual(karma, 10);
-    });
-
-    it("subtracting 1 karma shouldnt reject and save correct value", async function () {
-      let member = await createAndSaveNewMember();
-      await assert.doesNotReject(async () => await member.modifyKarmaBy(-1));
-      let karma = await member.getKarma();
-      assert.strictEqual(karma, -1);
-    });
-
-    it("adding 0 karma shouldnt reject and save correct value", async function () {
-      let member = await createAndSaveNewMember();
-      await assert.doesNotReject(async () => await member.modifyKarmaBy(0));
-      let karma = await member.getKarma();
-      assert.strictEqual(karma, 0);
-    });
-  });
-
   describe("get discord avatar URL", function () {
     it("calling User#getDiscordAvatarUrl does not reject", async function () {
       let member = await createAndSaveNewMember();

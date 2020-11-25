@@ -76,63 +76,6 @@ emitter.on('discord_bot_ready' ,() => {
     }
   });
 
-
-  //Gets called when a reaction gets added to some message
-  client.on('messageReactionAdd', (reaction, user) => {
-    //The check if the emoji is the emoji from our server will throw an exception if its from another server
-    try {
-      if (reaction.emoji.guild.id == config.discord_bot.guild) {
-        //Cancel the operation if someones reacts to themself
-        if (user.id === reaction.message.author.id) return;
-        if (reaction.emoji.name == 'upvote') {
-          memberFactory.getByDiscordId(reaction.message.author.id)
-          .then(async member => {
-            if(!member){
-              member = await memberFactory.create(reaction.message.author.id);
-            }
-            member.modifyKarmaBy(1);
-            member.save();
-          });
-        }
-        if (reaction.emoji.name == 'downvote') {
-          memberFactory.getByDiscordId(reaction.message.author.id)
-          .then(async member => {
-            if(!member) {
-              member = await memberFactory.create(reaction.message.author.id);
-            }
-            member.modifyKarmaBy(-1);
-            member.save();
-          });
-        }
-      }
-    } catch (e) { }
-  });
-
-  //Gets called when a reaction gets removed from some message
-  client.on('messageReactionRemove', (reaction, user) => {
-    //The check if the emoji is the emoji from our server will throw an exception if its from another server
-    try {
-      if (reaction.emoji.guild.id == config.discord_bot.guild) {
-        //Cancel the operation if someones reacts to themself
-        if (user.id === reaction.message.author.id) return;
-        if (reaction.emoji.name == 'upvote') {
-          memberFactory.getByDiscordId(reaction.message.author.id)
-          .then(member => {
-            member.modifyKarmaBy(-1);
-            member.save();
-          });
-        }
-        if (reaction.emoji.name == 'downvote') {
-          memberFactory.getByDiscordId(reaction.message.author.id)
-          .then(member => {
-            member.modifyKarmaBy(1);
-            member.save();
-          });
-        }
-      }
-    } catch (e) { console.log(e)}
-  });
-
   //Gets called whenever a member leaves the guild; user is a guildMember
   client.on('guildMemberRemove', (user) => {
     memberFactory.getByDiscordId(user.id)
