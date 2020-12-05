@@ -318,7 +318,7 @@ handlers.paxapi.application.post = function(data, callback){
   let emailAddress = data.payload.email_address.indexOf("@") > -1 && data.payload.email_address.length > 5 ? data.payload.email_address.trim() : false;
   let country = data.payload.country ? sanitize(data.payload.country, {allowedTags: [], allowedAttributes: []}) : false;
   let birthMonth = Number.parseInt(data.payload.birth_month) >= 1 && Number.parseInt(data.payload.birth_month) <= 12 ? Number.parseInt(data.payload.birth_month) : false;
-  let birthYear = Number.parseInt(data.payload.birth_year) >= 1900 && Number.parseInt(data.payload.birth_year) <= new Date().getFullYear() - 13 && Number.isInteger(Number.parseInt(data.payload.birth_year)) ? Number.parseInt(data.payload.birth_year) : false;
+  let birthYear = Number.parseInt(data.payload.birth_year) >= 1900 && Number.isInteger(Number.parseInt(data.payload.birth_year)) ? Number.parseInt(data.payload.birth_year) : false;
   let aboutMe = data.payload.about_me.length > 1 && data.payload.about_me.length <= 1500 ? sanitize(data.payload.about_me, {allowedTags: [], allowedAttributes: {}}) : false;
   let motivation = data.payload.motivation.length > 1 && data.payload.motivation.length <= 1500 ? sanitize(data.payload.motivation, {allowedTags: [], allowedAttributes: {}}) : false;
   let buildImages = data.payload.build_images.length > 1 && data.payload.build_images.length <= 1500 ? sanitize(data.payload.build_images, {allowedTags: [], allowedAttributes: {}}) : false;
@@ -330,7 +330,7 @@ handlers.paxapi.application.post = function(data, callback){
     callback(401, {err: "you need to be at least 13 years old to apply. If you believe this is an error contact TxT#0001 in Discord"}, "json");
     return;
   }
-
+  
   if(!discordId || !data.payload.mc_ign || !emailAddress || !country || !birthMonth || !birthYear || !aboutMe || !motivation || !buildImages){
     callback(400, {err: "Incorrect input"}, "json");
     global.log(0, "web", "handlers.paxapi.application.post received incorrect input", {
