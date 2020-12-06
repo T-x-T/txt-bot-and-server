@@ -488,7 +488,7 @@ handlers.paxapi.application.patch = function(data, callback){
     applicationFactory.getById(id)
     .then(async application => {
       if(application){
-        if(application.getStatus() === 1){
+        if(application.getStatus() !== 2){
           if(status === 3){
             await application.accept();
             callback(200, {}, "json");
