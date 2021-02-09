@@ -1,0 +1,17 @@
+{
+  "name": "nuxt_frontend",
+  "version": "1.0.0",
+  "description": "front end written in nuxt.js for txt-bot-and-server",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "start": "nuxt start"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nuxt": "^2.14.12"
+  }
+}
