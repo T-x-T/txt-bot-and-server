@@ -22,7 +22,7 @@ build:
   - docker:19.03.11-dind
   variables:
     IMAGE_TAG: "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
-    FRONTEND_IMAGE_TAG: "$CI_REGISTRY_IMAGE_nuxt_frontend:$CI_COMMIT_REF_SLUG"
+    FRONTEND_IMAGE_TAG: "$CI_REGISTRY_IMAGE/nuxt_frontend:$CI_COMMIT_REF_SLUG"
   script:
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   - docker build -t $IMAGE_TAG .
