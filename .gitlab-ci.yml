@@ -26,6 +26,8 @@ build:
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   - docker build -t $IMAGE_TAG .
   - docker push $IMAGE_TAG
+  - docker build -t nuxt_frontend:$CI_COMMIT_REF_SLUG ./nuxt_frontend
+  - docker push nuxt_frontend:$CI_COMMIT_REF_SLUG
 sast:
   variables:
     SAST_EXCLUDED_PATHS: test, web/web/assets/js

@@ -1,6 +1,7 @@
 FROM node:alpine
 
 WORKDIR /frontend
+ARG NODE_ENV=prod
 
 COPY . .
 
