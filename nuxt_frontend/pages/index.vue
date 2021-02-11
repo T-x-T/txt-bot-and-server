@@ -5,6 +5,7 @@
     <Features />
     <Videos />
     <Dynmaps />
+    <Slideshow />
     <p>AAAAA</p>
     <p>AAAAA</p>
     <p>AAAAA</p>
