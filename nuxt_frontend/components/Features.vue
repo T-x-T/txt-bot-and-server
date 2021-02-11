@@ -1,17 +1,6 @@
 <template>
   <div id="wrapper">
     <div>
-      <p class="headline">Features</p>
-      <ul class="text">
-        <li>Minecraft {mc_version} (Java Edition)</li>
-        <li>Vanilla Gameplay</li>
-        <li>Whitelist <a href="join-us.html">(Apply here!)</a></li>
-        <li>YouTube Channel <a href="https://www.youtube.com/channel/UCH-JgwSf8J8tdjemXqihEKw" target="_blank">(visit)</a></li>
-        <li>Current season since July 18, 2020</li>
-      </ul>
-    </div>
-
-    <div>
       <p class="headline">Plugins</p>
       <ul class="text">
         <li>Self-made PaxteryaPlugin</li>
@@ -20,6 +9,17 @@
         <li>DiscordSRV</li>
         <li>WorldBorder</li>
         <li>DrSleep</li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="headline">Features</p>
+      <ul class="text">
+        <li>Minecraft {mc_version} (Java Edition)</li>
+        <li>Vanilla Gameplay</li>
+        <li>Whitelist <a href="join-us.html">(Apply here!)</a></li>
+        <li>YouTube Channel <a href="https://www.youtube.com/channel/UCH-JgwSf8J8tdjemXqihEKw" target="_blank">(visit)</a></li>
+        <li>Current season since July 18, 2020</li>
       </ul>
     </div>
   
