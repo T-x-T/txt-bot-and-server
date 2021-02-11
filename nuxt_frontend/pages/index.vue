@@ -3,6 +3,7 @@
     <Header />
     <Introduction />
     <Features />
+    <Videos />
     <p>AAAAA</p>
     <p>AAAAA</p>
     <p>AAAAA</p>
