@@ -52,7 +52,7 @@
 div
   background: $pax-darkcyan
   margin-top: -4px
-  margin-bottom: 1%
+  padding-bottom: 1%
 div#wrapper
   display: grid
   grid-template-columns: 50vw 50vw
