@@ -4,6 +4,7 @@
     <Introduction />
     <Features />
     <Videos />
+    <Dynmaps />
     <p>AAAAA</p>
     <p>AAAAA</p>
     <p>AAAAA</p>
