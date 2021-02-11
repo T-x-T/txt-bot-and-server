@@ -9,6 +9,9 @@
     <div id="fullscreenVideo" v-if="fullscreenVideo" v-on:click="fullscreenVideo = null">
       <iframe id="video" :src="fullscreenVideo" frameborder="0" allow="autoplay" allowfullscreen></iframe>
     </div>
+    <svg v-if="fullscreenVideo" v-on:click="fullscreenVideo = null" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
   </div>
 </template>
 
@@ -41,6 +44,7 @@ div#thumbnailContainer
     &:hover
       filter: opacity(1)
       box-shadow: 0px 0px 2vw #102f36
+      cursor: pointer
 
 div#fullscreenVideo
   width: 100%
@@ -50,6 +54,17 @@ div#fullscreenVideo
   top: 0px
   left: 0px
   background-color: rgba(0, 0, 0, 0.75)
+svg
+  z-index: 102
+  width: 5%
+  height: auto
+  position: fixed
+  top: 0px
+  left: 0px
+  color: white
+  &:hover
+    color: $pax-lightcyan
+    cursor: pointer
 iframe#video
   width: 90%
   height: 90%
