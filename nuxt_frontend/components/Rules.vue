@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p id="header">Rules</p>
+    <h1>Rules</h1>
     <div id="wrapper">
       <div>
         <p class="headline">Community</p>
@@ -60,14 +60,6 @@ div#wrapper
     padding: 2%
     padding-left: 15%
     padding-right: 15%
-
-p#header
-  @extend .pax-semibold
-  text-align: center
-  color: white
-  font-size: 30pt
-  text-shadow: 0px 0px 5px #102f36
-  padding: 1%
 
 .headline
   @extend .pax-semibold

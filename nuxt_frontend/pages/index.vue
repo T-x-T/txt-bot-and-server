@@ -8,6 +8,7 @@
     <Slideshow />
     <Rules />
     <HowToJoin />
+    <Blog />
     <br><br><br><br><br><br><br><br><br><br>
     <p>AAAAA</p>
     <p>AAAAA</p>

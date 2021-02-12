@@ -1,6 +1,6 @@
 <template>
   <div id="wrapper">
-    <p>Videos</p>
+    <h1>Videos</h1>
     <div id="thumbnailContainer">
       <img v-on:click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/imthf1D5BTs?autoplay=1'" src="https://i.ytimg.com/vi/imthf1D5BTs/maxresdefault.jpg" />
       <img v-on:click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/y8yxh_VYIrc?autoplay=1'" src="https://i.ytimg.com/vi/y8yxh_VYIrc/maxresdefault.jpg" />
@@ -20,14 +20,6 @@
 
 div#wrapper
   background-color: $pax-cyan
-
-p
-  @extend .pax-semibold
-  text-align: center
-  color: white
-  font-size: 30pt
-  text-shadow: 0px 0px 5px #102f36
-  padding: 1%
 
 div#thumbnailContainer
   display: flex
