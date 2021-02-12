@@ -1,0 +1,81 @@
+<template>
+  <div>
+    <h4>{{post.title}}</h4>
+    <img class="author" :src="require(`../assets/avatar-${post.author.toLowerCase()}.png`)">
+    <span class="subtitle">{{new Date(post.date).toISOString().substring(0, 10)}} Author: {{post.author}} </span>
+    <section v-html="post.body"></section>
+  </div>
+</template>
+
+<style lang="sass" scoped>
+@import ~/assets/_vars.sass
+
+h4
+  color: white
+  font-size: 18pt
+
+img.author
+  width: 80px
+  height: auto
+  float: right
+  margin: -40px 50px 10px 0
+  border: 3px solid black
+  box-shadow: 0px 0px 20px rgba(255, 255, 255, .5)
+  &:hover
+    box-shadow: 0px 0px 30px rgba(255, 255, 255, .75)
+
+span.subtitle
+  @extend .pax-regular
+  background: $pax-darkestcyan
+  display: block
+  background: $pax-darkgray
+  color: $pax-white
+  font-size: 10pt
+  padding: 3px 10px
+
+::v-deep h3
+  color: white
+
+::v-deep span.subtitle
+  @extend .pax-regular
+  background: $pax-darkestcyan
+  display: block
+  background: $pax-darkgray
+  color: $pax-white
+  font-size: 10pt
+  padding: 3px 10px
+
+::v-deep .article-img
+  float: right
+  box-shadow: 0px 0px 15px #102f36
+  margin: 10px 0 10px 10px
+  img
+    width: 250px
+    max-width: 100%
+    vertical-align: bottom
+    &.big
+      width: 500px
+      max-width: 100%
+  &:hover
+    box-shadow: 0px 0px 35px #102f36
+
+::v-deep p
+  @extend .pax-p
+  line-height: 1.3
+  width: 80%
+
+::v-deep a
+  color: $pax-white
+  @extend .pax-semibold
+  &:hover
+    color: $pax-lightcyan
+
+</style>
+
+<script>
+export default {
+  props: {
+    post: Object
+  }
+}
+</script>

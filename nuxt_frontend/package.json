@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@nuxtjs/axios": "^5.13.1",
     "nuxt": "^2.14.12",
     "sass": "^1.32.6",
     "sass-loader": "^7.3.1"
