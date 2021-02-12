@@ -3,15 +3,28 @@
     <h1>Blog</h1>
 
     <article>
-      <BlogSinglePost :post="posts[posts.length - 1]" />
-      
-      <button>
-        All posts
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-        </svg>
-      </button>
+      <div id="controls">
+        <button id="prevPost" @click="prevPost()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          Previous post
+        </button>
+        <button id="allPosts">
+          All posts
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
+          </svg>
+        </button>
+        <button id="nextPost" @click="nextPost()">
+          Next post
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
 
+      <BlogSinglePost :post="posts[currentId]" />
     </article>
   </div>
 </template>
@@ -54,7 +67,7 @@ button
   font-size: 20pt
   box-shadow: 0px 0px 15px #102f36
   padding: 5px 20px 5px 20px
-  float: right
+  width: max-content
   &:hover
     box-shadow: 0px 0px 5px #102f36 inset
   svg
@@ -62,16 +75,32 @@ button
     width: auto
     margin-bottom: -10px
 
+div#controls
+  display: flex
+  justify-content: space-around
+  margin-bottom: 2%
+
 </style>
 
 <script>
 export default {
   data: () => ({
-    posts: null
+    posts: null,
+    currentId: 0
   }),
 
   async fetch(){
     this.posts = await this.$axios.$get("/api/blog?public");
+    this.currentId = this.posts.length - 1;
+  },
+
+  methods: {
+    prevPost: function() {
+      if(this.currentId > 0) this.currentId--;
+    },
+    nextPost: function() {
+      if(this.currentId < this.posts.length - 1) this.currentId++;
+    }
   }
 }
 </script>
