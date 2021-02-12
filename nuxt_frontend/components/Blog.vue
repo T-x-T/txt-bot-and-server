@@ -58,9 +58,14 @@ article
   margin: 2%
   padding: 20px
   padding-bottom: 80px
-  box-shadow: 0px 0px 15px #102f36
   left: 20%
   position: relative
+  box-shadow: 0px 0px 15px #102f36
+  filter: opacity(0.9)
+  &:hover
+    box-shadow: 0px 0px 50px #102f36
+    filter: opacity(1)
+
 
 section
   border-left: 5px solid $pax-darkgray
@@ -86,8 +91,10 @@ img.author
   height: auto
   float: right
   margin: -40px 50px 10px 0
-  box-shadow: 0px 0px 20px rgba(255, 255, 255, .5)
   border: 3px solid black
+  box-shadow: 0px 0px 20px rgba(255, 255, 255, .5)
+  &:hover
+    box-shadow: 0px 0px 30px rgba(255, 255, 255, .75)
 
 span.subtitle
   @extend .pax-regular
@@ -109,6 +116,8 @@ span.subtitle
     &.big
       width: 500px
       max-width: 100%
+  &:hover
+    box-shadow: 0px 0px 35px #102f36
 
 p
   @extend .pax-p
