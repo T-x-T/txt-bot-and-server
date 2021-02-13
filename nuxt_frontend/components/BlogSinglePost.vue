@@ -3,7 +3,9 @@
     <h4>{{post.title}}</h4>
     <img class="author" :src="require(`../assets/avatar-${post.author.toLowerCase()}.png`)">
     <span class="subtitle">{{new Date(post.date).toISOString().substring(0, 10)}} Author: {{post.author}} </span>
-    <section v-html="post.body"></section>
+    <div>
+      <section v-html="post.body"></section>
+    </div>
   </div>
 </template>
 
@@ -32,6 +34,9 @@ span.subtitle
   color: $pax-white
   font-size: 10pt
   padding: 3px 10px
+
+section
+  padding: 10px 10px 0 10px
 
 ::v-deep h3
   color: white
@@ -69,6 +74,26 @@ span.subtitle
   @extend .pax-semibold
   &:hover
     color: $pax-lightcyan
+
+::v-deep ul
+  @extend .pax-p
+  margin: 10px 0
+  list-style-type: none
+  li:before
+    content: "▪"
+    color: $pax-cyan
+    padding-right: 5px
+
+::v-deep summary
+  @extend .pax-semibold
+  color: $pax-lightcyan
+  margin-top: 10px
+  &:hover
+    cursor: pointer
+
+::v-deep b
+  @extend .pax-semibold
+  color: $pax-lightcyan
 
 </style>
 

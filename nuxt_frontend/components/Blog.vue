@@ -5,7 +5,7 @@
     <article v-if="!showAllPosts">
       <div id="controls">
         <button id="prevPost" @click="prevPost()">
-          <svg v-if="currentId > 0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg v-if="currentId < posts.length - 1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
           Previous post
@@ -18,12 +18,12 @@
         </button>
         <button id="nextPost" @click="nextPost()">
           Next post
-          <svg v-if="currentId < posts.length - 1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg v-if="currentId > 0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
           </svg>
         </button>
       </div>
-
+      
       <BlogSinglePost :post="posts[currentId]" />
     </article>
 
@@ -160,10 +160,10 @@ export default {
 
   methods: {
     prevPost: function() {
-      if(this.currentId > 0) this.currentId--;
+      if(this.currentId < this.posts.length - 1) this.currentId++;
     },
     nextPost: function() {
-      if(this.currentId < this.posts.length - 1) this.currentId++;
+      if(this.currentId > 0) this.currentId--;
     }
   }
 }
