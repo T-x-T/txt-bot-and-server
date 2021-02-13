@@ -23,7 +23,7 @@
           </svg>
         </button>
       </div>
-      
+
       <BlogSinglePost :post="posts[currentId]" />
     </article>
 
@@ -60,7 +60,7 @@ article
   width: 60%
   margin: 2%
   padding: 20px
-  padding-bottom: 80px
+  overflow: hidden
   left: 20%
   position: relative
   box-shadow: 0px 0px 15px #102f36
@@ -155,7 +155,7 @@ export default {
   async fetch(){
     this.posts = await this.$axios.$get("/api/blog?public");
     this.postsRevSort = this.posts.sort((a, b) => b.id - a.id);
-    this.currentId = this.posts.length - 1;
+    this.currentId = 0;
   },
 
   methods: {

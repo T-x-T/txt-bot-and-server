@@ -54,15 +54,22 @@ section
   float: right
   box-shadow: 0px 0px 15px #102f36
   margin: 10px 0 10px 10px
+  clear: both
   img
     width: 250px
+    min-width: 15vw
     max-width: 100%
     vertical-align: bottom
-    &.big
-      width: 500px
-      max-width: 100%
   &:hover
     box-shadow: 0px 0px 35px #102f36
+::v-deep .big
+  img
+    width: 500px
+    min-width: 30vw
+    max-width: 100%
+    box-shadow: 0px 0px 35px #102f36
+    &:hover
+      box-shadow: 0px 0px 50px #102f36
 
 ::v-deep p
   @extend .pax-p
@@ -90,10 +97,17 @@ section
   margin-top: 10px
   &:hover
     cursor: pointer
+  &:focus
+    outline: none
 
 ::v-deep b
   @extend .pax-semibold
   color: $pax-lightcyan
+
+::v-deep button
+  &:hover
+    background: $pax-cyan
+    box-shadow: 0px 0px 25px #102f36
 
 </style>
 
