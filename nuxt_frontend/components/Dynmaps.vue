@@ -10,7 +10,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
           </svg></h1>
         </a>
-
+        <div class="overlay"></div>
         <iframe src="https://paxterya.com/dynmap/survival/?nocompass=true"></iframe>
       </div>    
 
@@ -21,7 +21,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
           </svg></h1>
         </a>
-        
+        <div class="overlay"></div>
         <iframe src="https://paxterya.com/dynmap/creative/?nocompass=true&mapname=surface"></iframe>
       </div>   
 
@@ -61,4 +61,10 @@ div#container
         filter: opacity(1)
         box-shadow: 0px 0px 2vw #102f36
         cursor: pointer
+
+div.overlay
+  width: 45vw
+  height: 50vh
+  position: absolute
+  z-index: 102
 </style>

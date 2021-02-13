@@ -2,11 +2,11 @@
   <div id="wrapper">
     <h1>Videos</h1>
     <div id="thumbnailContainer">
-      <img v-on:click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/imthf1D5BTs?autoplay=1'" src="https://i.ytimg.com/vi/imthf1D5BTs/maxresdefault.jpg" />
-      <img v-on:click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/y8yxh_VYIrc?autoplay=1'" src="https://i.ytimg.com/vi/y8yxh_VYIrc/maxresdefault.jpg" />
-      <img v-on:click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/enqxc0qD61E?autoplay=1'" src="https://i.ytimg.com/vi/enqxc0qD61E/maxresdefault.jpg" />
+      <img @click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/imthf1D5BTs?autoplay=1'" src="https://i.ytimg.com/vi/imthf1D5BTs/maxresdefault.jpg" />
+      <img @click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/y8yxh_VYIrc?autoplay=1'" src="https://i.ytimg.com/vi/y8yxh_VYIrc/maxresdefault.jpg" />
+      <img @click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/enqxc0qD61E?autoplay=1'" src="https://i.ytimg.com/vi/enqxc0qD61E/maxresdefault.jpg" />
     </div>
-    <div id="fullscreenVideo" v-if="fullscreenVideo" v-on:click="fullscreenVideo = null">
+    <div id="fullscreenVideo" v-if="fullscreenVideo" @click="fullscreenVideo = null">
       <iframe id="video" :src="fullscreenVideo" frameborder="0" allow="autoplay" allowfullscreen></iframe>
     </div>
     <svg v-if="fullscreenVideo" v-on:click="fullscreenVideo = null" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
