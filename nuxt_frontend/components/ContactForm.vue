@@ -28,6 +28,7 @@
         
         <button type="submit">Send</button>
       </form>
+      <p v-if="error">That didn't work: {{error}}</p>
     </div>
   </div>
 </template>
@@ -153,7 +154,8 @@ export default {
     name: "",
     email: "",
     subject: "",
-    text: ""
+    text: "",
+    error: null
   }),
 
   methods: {
@@ -163,6 +165,17 @@ export default {
         email: this.email,
         subject: this.subject,
         text: this.text
+      })
+      .then(function(res) {
+        console.log(res)
+        this.name = "";
+        this.email = "";
+        this.subject = "";
+        this.text = "";
+      })
+      .catch(function(e) {
+        console.error("Encountered error trying to post contact form" + e.message)
+        this.error = e; 
       });
     }
   }
