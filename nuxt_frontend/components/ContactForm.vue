@@ -65,6 +65,7 @@ input
   background: transparent
   &:focus
     outline: none
+    box-shadow: 0px 0px 15px #102f36
 
 textarea
   width: 100%
@@ -76,6 +77,7 @@ textarea
   border: 2px solid white
   &:focus
     border: 2px solid $pax-darkcyan
+    box-shadow: 0px 0px 15px #102f36
 
 label
   position: absolute
@@ -101,6 +103,8 @@ label
   background-color: $pax-gray
   border: 1px solid #bebebe
   border-radius: 7px
+  &:hover
+    box-shadow: 0px 0px 15px #102f36
   &:after
     content: ""
     position: absolute
@@ -140,6 +144,10 @@ label
     width: 0
     &:checked ~ .checkmark:after
       display: block
+
+button:hover
+  background-color: $pax-cyan
+  box-shadow: 0px 0px 15px #102f36
 
 a
   color: $pax-white
