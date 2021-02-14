@@ -3,24 +3,26 @@
 
     <h1>Members</h1>
 
-    <div id="searchBox">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-      </svg>
-      <input type="text" v-model="searchString">
-    </div>
+    <div id="controls">
+      <div id="searchBox">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+        </svg>
+        <input type="text" v-model="searchString">
+      </div>
 
-    <div id="sortBox">
-      <button id="sort" @click="sortDropdownOpen = true">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-        </svg>  
-        {{sort[currentSort].label}}
-      </button>
+      <div id="sortBox">
+        <button id="sort" @click="sortDropdownOpen = true">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+          </svg>  
+          {{sort[currentSort].label}}
+        </button>
 
-      <div id="sortDropdown" v-if="sortDropdownOpen">
-        <div v-for="(item, index) in sort" :key="index">
-          <button class="dropdownBtn" @click="sortDropdownOpen = false; currentSort = item.value">{{item.label}}</button>
+        <div id="sortDropdown" v-if="sortDropdownOpen">
+          <div v-for="(item, index) in sort" :key="index">
+            <button class="dropdownBtn" @click="sortDropdownOpen = false; currentSort = item.value">{{item.label}}</button>
+          </div>
         </div>
       </div>
     </div>
@@ -61,6 +63,11 @@ div#background
   background: $pax-cyan
   padding: 1%
 
+div#controls
+  display: flex
+  justify-content: center
+  align-items: center
+
 div#searchBox
   box-shadow: 0px 0px 15px #102f36
   margin: 1%
@@ -87,15 +94,23 @@ div#searchBox
       outline: none
 
 button#sort
-  width: max-content
+  margin: 0
+  padding: 0
+  width: 250px
+  height: 52px
   svg
     height: 32px
     color: white
     margin-bottom: -8px
 
+div#sortDropdown
+  position: absolute
+  z-index: 2
+
 .dropdownBtn
   margin: 0
   box-shadow: none
+  width: 250px
   &:hover
     box-shadow: none
     background-color: $pax-darkcyan
@@ -135,6 +150,7 @@ h4
   text-shadow: 1px 2px 0px $pax-darkcyan
   border-right: 4px solid rgba(0,0,0,0.15)
   overflow-x: hidden
+  font-size: 18pt
 
 h5
   @extend .pax-semibold
