@@ -91,11 +91,11 @@ div.overlay
     cursor: pointer
   svg.pointer
     color: white
-    width: 8vw
-    height: 8vw
+    width: 4vw
+    height: 4vw
     position: absolute
-    top: 30vh
-    left: 37vw
+    top: 35vh
+    left: 40vw
 
 p
   @extend .pax-p

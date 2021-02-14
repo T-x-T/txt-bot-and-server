@@ -11,6 +11,7 @@
     <Blog />
     <ContactForm />
     <Downloads />
+    <MemberList />
     <br><br><br><br><br><br><br><br><br><br>
     <p>AAAAA</p>
     <p>AAAAA</p>
