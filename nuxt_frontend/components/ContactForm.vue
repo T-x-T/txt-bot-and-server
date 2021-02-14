@@ -60,12 +60,14 @@ input
   border-bottom: 1px solid #bebebe
   width: 100%
   font-size: 12pt
-  color: white
   margin: 1% 0 1% 0
   background: transparent
   &:focus
     outline: none
     box-shadow: 0px 0px 15px #102f36
+  &::placeholder
+    color: white
+    opacity: 1
 
 textarea
   width: 100%

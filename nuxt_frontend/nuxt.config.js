@@ -11,7 +11,7 @@ export default {
   head: {
     titleTemplate: "%s | Paxterya",
     link: [
-      {rel: "icon", type: "image/png", href: "logo-icon.svg"}
+      {rel: "icon", type: "image/png", href: "/logo-icon.svg"}
     ]
   },
   axios: {

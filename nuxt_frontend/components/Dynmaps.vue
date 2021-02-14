@@ -15,7 +15,9 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
           </svg>
         </div>
-        <iframe @mouseleave="survivalActive = false" src="https://paxterya.com/dynmap/survival/?nocompass=true"></iframe>
+        <div class="iframeContainer">
+          <iframe @mouseleave="survivalActive = false" src="https://paxterya.com/dynmap/survival/?nocompass=true"></iframe>
+        </div>
         <p @click="survivalActive = true" v-if="!survivalActive">To look around, click into the Map</p>
       </div>    
 
@@ -31,7 +33,9 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
           </svg>
         </div>
-        <iframe @mouseleave="creativeActive = false" src="https://paxterya.com/dynmap/creative/?nocompass=true&mapname=surface"></iframe>
+        <div class="iframeContainer">
+          <iframe @mouseleave="creativeActive = false" src="https://paxterya.com/dynmap/creative/?nocompass=true&mapname=surface"></iframe>
+        </div>
         <p @click="creativeActive = true" v-if="!creativeActive">To look around, click into the Map</p>
       </div>   
 
@@ -71,6 +75,10 @@ div#container
         filter: opacity(1)
         box-shadow: 0px 0px 2vw #102f36
         cursor: pointer
+
+.iframeContainer
+  height: 100%
+  margin-bottom: -4%
 
 div.overlay
   width: 45vw

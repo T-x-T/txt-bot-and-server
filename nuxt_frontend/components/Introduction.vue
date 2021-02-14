@@ -2,7 +2,7 @@
   <div>
     <div id="bgImg">
       <div id="bgFilter">
-        <div id="bgLogo"></div>
+        <img id="logo" src="~/assets/logo-icon.svg">
       </div>
     </div>
     <p>
@@ -30,16 +30,13 @@ div#bgImg
 div#bgFilter
   height: 75vh
   background-image: radial-gradient(transparent 50%, rgba(0,0,0,.3) 70%), linear-gradient(0deg, rgba(0,0,0,.3) 0%, transparent 5%, transparent 80%, rgba(0,0,0,.3) 100%), linear-gradient(rgba(0,81,92,.6) 0%, rgba(0,81,92,.6) 100%)
-div#bgLogo
-  height: 40vh
-  width: 40vw
-  background-size: contain
-  background-repeat: no-repeat
-  background-position: center
-  background-attachment: fixed
-  background-image: url("/logo-icon.svg")
+  display: flex
+  align-items: center
+  justify-content: center
+#logo
+  height: 60vh
+  width: auto
   filter: opacity(0.5)
-  transform: translate(75%, 50%) scale(1.5)
 
 p
   @extend .pax-regular
