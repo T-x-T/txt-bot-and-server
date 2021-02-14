@@ -1,7 +1,7 @@
 <template>
   <div id="background">
     <h1>Downloads</h1>
-    <section>
+    <section ref="0">
       <h1 @click="activeElement = 0">Worldsaves</h1>
       <div v-if="activeElement === 0">
         <div class="item">
@@ -45,7 +45,7 @@
       </div>
     </section>
 
-    <section>
+    <section ref="1">
       <h1 @click="activeElement = 1">Wallpapers</h1>
         <div v-if="activeElement === 1">
           <div class="item">
@@ -59,7 +59,7 @@
         </div>
     </section>
 
-    <section>
+    <section ref="2">
       <h1 @click="activeElement = 2">YouTube Thumbnail Templates</h1>
       <div v-if="activeElement === 2">
         <div class="item">
@@ -73,7 +73,7 @@
       </div>
     </section>
 
-    <section>
+    <section ref="3">
       <h1 @click="activeElement = 3">And more...</h1>
       <div v-if="activeElement === 3">
         <div class="item">
@@ -148,6 +148,12 @@ h1
 export default {
   data: () => ({
     activeElement: 0
-  })
+  }),
+
+  watch: {
+    activeElement(newElement, oldElement){
+      this.$nextTick(() => this.$refs[newElement].scrollIntoView({behavior: "smooth", block: "center"}));
+    }
+  }
 }
 </script>
