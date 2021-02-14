@@ -511,6 +511,16 @@ handlers.paxapi.application.patch = function(data, callback){
   }
 };
 
+handlers.paxapi.mcversion = function(data, callback){
+  mc_helpers.getServerVersion((version) => {
+    if(version){
+      callback(200, version, "plain");
+    }else{
+      callback(500, {err: "Couldnt get version"}, "json");
+    }
+  });
+}
+
 //Internal helper functions to make code cleaner
 var _internal = {};
 

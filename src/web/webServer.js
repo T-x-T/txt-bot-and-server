@@ -99,6 +99,7 @@ const router = {
   '/html/api/member': handlers.paxapi.member,
   '/html/api/blog': handlers.paxapi.blog,
   '/html/api/roles': handlers.paxapi.roles,
+  '/html/api/mcversion': handlers.paxapi.mcversion,
   '/html/login': handlers.paxLogin,
   '/html/staff': handlers.paxStaff
 };

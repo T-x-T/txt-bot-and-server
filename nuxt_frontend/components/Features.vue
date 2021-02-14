@@ -15,7 +15,7 @@
     <div>
       <p class="headline">Features</p>
       <ul class="text">
-        <li>Minecraft {mc_version} (Java Edition)</li>
+        <li>Minecraft {{mcVersion}} (Java Edition)</li>
         <li>Vanilla Gameplay</li>
         <li>Whitelist <a href="join-us.html">(Apply here!)</a></li>
         <li>YouTube Channel <a href="https://www.youtube.com/channel/UCH-JgwSf8J8tdjemXqihEKw" target="_blank">(visit)</a></li>
@@ -91,3 +91,15 @@ div#wrapper
       color: $pax-white
       opacity: 0.8
 </style>
+
+<script>
+export default {
+  data: () => ({
+    mcVersion: null
+  }),
+
+  async fetch(){
+    this.mcVersion = await this.$axios.$get("/api/mcversion");
+  }
+}
+</script>
