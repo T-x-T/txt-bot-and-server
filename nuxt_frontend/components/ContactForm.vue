@@ -167,24 +167,24 @@ export default {
   }),
 
   methods: {
-    submit: function (){
-      this.$axios.post("/api/contact", {
+    submit: async function (){
+      try {
+        const res = await this.$axios.post("/api/contact", {
         name: this.name,
         email: this.email,
         subject: this.subject,
         text: this.text
-      })
-      .then(function(res) {
-        console.log(res)
+        });
+
+        console.log(res);
         this.name = "";
         this.email = "";
         this.subject = "";
         this.text = "";
-      })
-      .catch(function(e) {
-        console.error("Encountered error trying to post contact form" + e.message)
-        this.error = e; 
-      });
+
+      }catch(e){
+        this.error = e.response.data.err; 
+      }
     }
   }
 }
