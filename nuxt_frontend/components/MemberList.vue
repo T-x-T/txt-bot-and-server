@@ -1,13 +1,28 @@
 <template>
   <div id="background">
 
-  <h1>Members</h1>
+    <h1>Members</h1>
 
     <div id="searchBox">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
       </svg>
       <input type="text" v-model="searchString">
+    </div>
+
+    <div id="sortBox">
+      <button id="sort" @click="sortDropdownOpen = true">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+        </svg>  
+        {{sort[currentSort].label}}
+      </button>
+
+      <div id="sortDropdown" v-if="sortDropdownOpen">
+        <div v-for="(item, index) in sort" :key="index">
+          <button class="dropdownBtn" @click="sortDropdownOpen = false; currentSort = item.value">{{item.label}}</button>
+        </div>
+      </div>
     </div>
 
     <div id="wrapper" v-if="members">
@@ -35,7 +50,7 @@
       </div>
     </div>
     <button @click="showAll = true" v-if="!showAll">Show all</button>
-    <button @click="showAll = false" v-if="showAll">Show less</button>
+    <button id="showLess" @click="showAll = false" v-if="showAll">Show less</button>
   </div>
 </template>
 
@@ -70,6 +85,20 @@ div#searchBox
     font-size: 21px
     &:focus
       outline: none
+
+button#sort
+  width: max-content
+  svg
+    height: 32px
+    color: white
+    margin-bottom: -8px
+
+.dropdownBtn
+  margin: 0
+  box-shadow: none
+  &:hover
+    box-shadow: none
+    background-color: $pax-darkcyan
 
 div#wrapper
   display: flex
@@ -140,7 +169,12 @@ button
   &:hover
     box-shadow: 0px 0px 35px #102f36
     background: $pax-cyan
-
+div#background
+  &:hover
+    button#showLess
+      position: fixed
+      z-index: 4
+      top: 90%  
 </style>
 
 <script>
@@ -149,7 +183,23 @@ export default {
     members: null,
     processedMembers: null,
     searchString: "",
-    showAll: false
+    showAll: false,
+    sort: {
+      'joined_date.asc': { value: 'joined_date.asc', label: 'Date joined ASC' },
+      'joined_date.desc': { value: 'joined_date.desc', label: 'Date joined DESC' },
+      'playtime.asc': { value: 'playtime.asc', label: 'Playtime ASC' },
+      'playtime.desc': { value: 'playtime.desc', label: 'Playtime DESC' },
+      'age.asc': { value: 'age.asc', label: 'Age ASC'},
+      'age.desc': { value: 'age.desc', label: 'Age DESC'},
+      'country.asc': { value: 'country.asc', label: 'Country ASC'},
+      'country.desc': { value: 'country.desc', label: 'Country DESC'},
+      'mc_nick.asc': { value: 'mc_nick.asc', label: 'IGN ASC' },
+      'mc_nick.desc': { value: 'mc_nick.desc', label: 'IGN DESC' },
+      'discord_nick.asc': { value: 'discord_nick.asc', label: 'Discord ASC' },
+      'discord_nick.desc': { value: 'discord_nick.desc', label: 'Discord DESC' },
+    },
+    currentSort: "joined_date.asc",
+    sortDropdownOpen: false
   }),
 
   async fetch(){
@@ -163,6 +213,9 @@ export default {
     },
     showAll(){
       this.processMembers();
+    },
+    currentSort(){
+      this.processMembers();
     }
   },
 
@@ -170,8 +223,34 @@ export default {
     processMembers: function() {
       let searchString = this.searchString.toLowerCase();
       let processedMembers = this.members.filter(elem => elem.mc_nick.toLowerCase().includes(searchString) || elem.discord_nick.toLowerCase().includes(searchString) || (elem.country && elem.country.toLowerCase().includes(searchString)));
+      
+      if(this.currentSort.includes("age")){
+        processedMembers = processedMembers.filter(elem => elem.age);
+      } else if(this.currentSort.includes("country")){
+        processedMembers = processedMembers.filter(elem => elem.country);
+      }
+
+
+      processedMembers = this.sortArray(processedMembers, this.currentSort.split(".")[0], this.currentSort.split(".")[1]);
+      
       if(!this.showAll) processedMembers = processedMembers.slice(0, 12);
       this.processedMembers = processedMembers;
+    },
+
+    sortArray: function(input = [], property, order = 'asc'){
+      if(order === 'asc'){
+        return input.sort((a, b) => {
+          if (a[property] > b[property]) return 1;
+          if (a[property] < b[property]) return -1;
+          return 0;
+        });
+      }else{
+        return input.sort((a, b) => {
+          if (a[property] < b[property]) return 1;
+          if (a[property] > b[property]) return -1;
+          return 0;
+        });
+      }
     }
   }
 }
