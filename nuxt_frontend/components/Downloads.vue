@@ -2,6 +2,14 @@
   <div id="background">
     <h1>Downloads</h1>
     <section ref="0">
+
+      <svg v-if="activeElement !== 0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+      </svg>
+      <svg v-if="activeElement === 0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
+      </svg>
+
       <h1 @click="activeElement = 0">Worldsaves</h1>
       <div v-if="activeElement === 0">
         <div class="item">
@@ -46,6 +54,14 @@
     </section>
 
     <section ref="1">
+
+      <svg v-if="activeElement !== 1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+      </svg>
+      <svg v-if="activeElement === 1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
+      </svg>
+
       <h1 @click="activeElement = 1">Wallpapers</h1>
         <div v-if="activeElement === 1">
           <div class="item">
@@ -60,6 +76,14 @@
     </section>
 
     <section ref="2">
+
+      <svg v-if="activeElement !== 2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+      </svg>
+      <svg v-if="activeElement === 2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
+      </svg>
+    
       <h1 @click="activeElement = 2">YouTube Thumbnail Templates</h1>
       <div v-if="activeElement === 2">
         <div class="item">
@@ -74,6 +98,14 @@
     </section>
 
     <section ref="3">
+
+      <svg v-if="activeElement !== 3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+      </svg>
+      <svg v-if="activeElement === 3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
+      </svg>
+
       <h1 @click="activeElement = 3">And more...</h1>
       <div v-if="activeElement === 3">
         <div class="item">
@@ -142,6 +174,13 @@ img
 
 h1
   cursor: pointer
+
+svg
+  color: white
+  height: 86px
+  width: auto
+  z-index: -1
+  position: absolute
 </style>
 
 <script>
