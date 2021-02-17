@@ -521,6 +521,16 @@ handlers.paxapi.mcversion = function(data, callback){
   });
 }
 
+handlers.paxapi.memberworldmapdata = function(data, callback) {
+  stats.get("countryList", false, function(err, map_data){
+    if(!err){
+      callback(200, map_data, "json");
+    }else{
+      callback(500, {err: "Couldnt get map data", details: err}, "json");
+    }
+  });
+}
+
 //Internal helper functions to make code cleaner
 var _internal = {};
 
