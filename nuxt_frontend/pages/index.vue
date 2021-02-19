@@ -5,6 +5,7 @@
     <Features />
     <Videos />
     <Dynmaps />
+    <Stats />
     <Slideshow />
     <Rules />
     <HowToJoin />

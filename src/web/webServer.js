@@ -101,6 +101,7 @@ const router = {
   '/html/api/roles': handlers.paxapi.roles,
   '/html/api/mcversion': handlers.paxapi.mcversion,
   '/html/api/memberworldmapdata': handlers.paxapi.memberworldmapdata,
+  '/html/api/statsoverview': handlers.paxapi.statsoverview,
   '/html/login': handlers.paxLogin,
   '/html/staff': handlers.paxStaff
 };

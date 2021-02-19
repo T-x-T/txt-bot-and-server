@@ -25,21 +25,22 @@ stats.template.overview = function(options, callback) {
     }
     global.log(0, "stats", "stats.template.overview received members", {memberCount: members.length});
 
-    stats.template.mc({collection: 'playtime'}, function (err, playtime) {
-      if(!err && playtime) {
+    stats.template.mc({collection: 'overview'}, function (err, overview) {
+      if(!err && overview) {
         let averageAge = 0;
         members.forEach(member => averageAge += member.getAge());
         averageAge = Math.round(averageAge / members.length);
-
+        
         members = members.sort((a, b) => a.getAge() - b.getAge());
         let medianAge = members[Number.parseInt(members.length / 2)].getAge();
-
+        
         //Constuct and callback the final object
         callback(false, {
           'total_members': members.length,
           'average_age': averageAge,
           'median_age': medianAge,
-          'total_playtime': playtime + 'h'
+          'total_playtime': overview.playtime,
+          'silly': Math.round(overview.cobblestone_mined_per_death_by_zombie)
         });
       } else {
         callback('Couldnt get mc stats: ' + err, false);

@@ -531,6 +531,16 @@ handlers.paxapi.memberworldmapdata = function(data, callback) {
   });
 }
 
+handlers.paxapi.statsoverview = function(data, callback){
+  stats.get("overview", false, function(err, stats){
+    if(!err && stats){
+      callback(200, stats, "json");
+    }else{
+      callback(500, {err: "failed to get stats overview", stats: stats, details: err}, "json");
+    }
+  });
+}
+
 //Internal helper functions to make code cleaner
 var _internal = {};
 
