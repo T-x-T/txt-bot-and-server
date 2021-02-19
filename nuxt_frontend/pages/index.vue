@@ -14,33 +14,7 @@
     <Downloads />
     <MemberList />
     <MemberWorldmap />
-    <br><br><br><br><br><br><br><br><br><br>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
-    <p>AAAAA</p>
+    <Footer />
   </div>
 </template>
 
