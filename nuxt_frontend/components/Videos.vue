@@ -25,7 +25,7 @@ div#thumbnailContainer
   justify-content: center
   img
     border-radius: 8px
-    max-width: 25%
+    width: 25%
     height: auto
     margin: 0.5% 2% 5% 2%
     &:hover
