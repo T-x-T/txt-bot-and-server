@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <main>
     <Header />
     <Introduction />
     <Features />
@@ -15,7 +15,7 @@
     <MemberList />
     <MemberWorldmap />
     <Footer />
-  </div>
+  </main>
 </template>
 
 <style lang="sass" scoped>
