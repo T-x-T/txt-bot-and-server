@@ -16,7 +16,7 @@
 @import ~/assets/_vars.sass
 
 div
-  padding: 1%
+  padding: 1% 0 1% 0
   display: flex
   justify-content: center
   align-items: center
@@ -24,7 +24,7 @@ div
 
 ol
   padding: 25px 25px 25px 35px
-  margin: 1%
+  margin: 25px
   background-color: $pax-cyan
   width: 450px
   @media screen and ($mobile)
@@ -36,6 +36,8 @@ li
   color: white
   font-size: 14pt
   list-style-type: decimal
+  @media screen and ($mobile)
+    margin-left: 35px
 
 p
   @extend .pax-semibold

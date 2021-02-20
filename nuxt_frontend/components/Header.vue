@@ -17,7 +17,6 @@ div
   justify-content: center
   position: sticky
   top: 0px
-  min-width: -webkit-fill-available
   z-index: 100
   box-shadow: 0px 0px 5px #102f36 inset
   a

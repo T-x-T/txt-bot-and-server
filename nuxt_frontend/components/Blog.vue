@@ -77,9 +77,9 @@ article
   left: 20%
   position: relative
   @media screen and ($mobile)
-    width: 100%
-    left: 0
+    width: 100vw
     margin: 0
+    left: 0
 
 section
   border-left: 5px solid $pax-darkgray
@@ -129,9 +129,9 @@ table
     box-shadow: 0px 0px 50px #102f36
     filter: opacity(1)
   @media screen and ($mobile)
-    width: 100%
+    width: 100vw
     left: 0
-    margin: 0
+
 th
   background: $pax-cyan
   color: $pax-white

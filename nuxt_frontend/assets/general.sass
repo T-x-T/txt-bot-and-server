@@ -16,6 +16,7 @@ html
   scrollbar-color: $pax-darkgray $pax-nearlywhite
   background: $pax-darkcyan
 
+
 ::selection
   background: rgba(0,0,0,.5)
   color: $pax-white
@@ -118,7 +119,9 @@ a
 div.background
   background: $pax-cyan
   box-shadow: 0px 0px 25px #102f36
-  width: 100vw
+  width: 100%
+  @media screen and ($mobile)
+    width: 90vw
 
 .hover
   filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))

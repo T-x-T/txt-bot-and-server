@@ -17,10 +17,14 @@
 
 div
   position: relative
+  @media screen and ($mobile)
+    width: 90vw
 
 img
   width: 100%
   height: auto
+  @media screen and ($mobile)
+    width: 90vw
 
 svg
   width: 20vh
@@ -30,14 +34,23 @@ svg
   position: absolute
   &:hover
     filter: drop-shadow( 0px 0px 12px rgba(0, 0, 0, 1))
+  @media screen and ($mobile)
+    width: 15vw
+    height: 15vw
+
 svg#back
   top: 50%
   margin-top: -10vh
+  @media screen and ($mobile)
+    top: 75%
 svg#next
   top: 50%
   left: 100%
   margin-top: -10vh
   margin-left: -20vh
+  @media screen and ($mobile)
+    top: 75%
+    left: 90%
 </style>
 
 <script>

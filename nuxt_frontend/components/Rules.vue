@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="background">
     <h1>Rules</h1>
     <div id="wrapper">
       <div class="hover paxItem">
@@ -49,9 +49,14 @@
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
 
+div#background
+  @media screen and ($mobile)
+    width: 90vw
+
 div
   margin-top: -4px
   padding-bottom: 1%
+
 div#wrapper
   display: grid
   grid-template-columns: 50vw 50vw

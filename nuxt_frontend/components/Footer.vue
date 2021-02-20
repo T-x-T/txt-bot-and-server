@@ -54,7 +54,6 @@ footer
   opacity: 0.5
   position: absolute
   z-index: -1
-  
 
 #backgroundImage
   background: url("https://stor.paxterya.com/website/screenshots/top_06.webp")

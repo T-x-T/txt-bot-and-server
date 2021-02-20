@@ -46,14 +46,19 @@
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
 
+div#wrapper
+  margin-bottom: 50px
+  @media screen and ($mobile)
+    width: 95vw
+
 div#container
   display: flex
   align-content: center
   justify-content: center
   div.item
     margin: 0px 2% 2% 2%
-    height: 50vh
-    width: 45vw
+    height: 750px
+    width: 45%
     h1.link:hover
       color: $pax-lightcyan
     svg.icon
@@ -80,8 +85,8 @@ div#container
   margin-bottom: -4%
 
 div.overlay
-  width: 45vw
-  height: 45vh
+  width: 45%
+  height: 750px * 0.9
   position: absolute
   z-index: 102
   border-radius: 1vw
@@ -90,15 +95,24 @@ div.overlay
     cursor: pointer
   svg.pointer
     color: white
-    width: 4vw
-    height: 4vw
+    width: 75px
+    height: 75px
     position: absolute
-    top: 35vh
-    left: 40vw
+    bottom: 10px
+    right: 10px
+  @media screen and ($mobile)
+    width: 100%
+    margin: 0 2.5vw 75px 2.5vw
+    left: -3px
+    svg.pointer
+      right: 50px
 
 p
   text-align: center
   cursor: pointer
+  @media screen and ($mobile)
+    font-size: 18pt
+    margin-top: -75px
 
 </style>
 

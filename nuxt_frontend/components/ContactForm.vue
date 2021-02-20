@@ -40,6 +40,8 @@ div.background
   display: flex
   justify-content: center
   align-content: center
+  @media screen and ($mobile)
+    display: inherit
 
 div#wrapper
   background: $pax-cyan
@@ -47,7 +49,7 @@ div#wrapper
   margin: 2%
   padding: 1%
   @media screen and ($mobile)
-    width: 100%
+    width: 100vw
     margin: 50px 0 50px 0
     button
       font-size: 20pt

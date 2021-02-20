@@ -33,8 +33,7 @@ div#thumbnailContainer
   @media screen and ($mobile)
     flex-direction: column
     img
-      max-width: 95vw
-      width: 95vw
+      width: 90vw
 
 div#fullscreenVideo
   width: 100%

@@ -60,7 +60,7 @@
 @import ~/assets/_vars.sass
 
 div.background
-  padding: 1%
+  padding: 1% 0 1% 0
 
 div#controls
   display: flex
@@ -133,7 +133,7 @@ div.card
   display: flex
   width: 380px
   max-width: 100%
-  padding: 10px 0 10px 10px
+  padding: 10px 0 75px 10px
   background: linear-gradient(180deg, rgba(240,240,240,0) 15%, $pax-darkmodecyan1 15%, $pax-darkmodecyan1 85%, rgba(240,240,240,0) 85%)
   margin: 0 40px 20px 0
   cursor: pointer
@@ -142,8 +142,7 @@ div.card
     @media screen and ($desktop)
       scale: 1.1
   @media screen and ($mobile)
-    width: 90vw
-    margin: 5vw
+    width: 75vw
 
 div.infos
   width: 70%
@@ -158,6 +157,8 @@ h4
   border-right: 4px solid rgba(0,0,0,0.15)
   overflow-x: hidden
   font-size: 18pt
+  @media screen and ($mobile)
+    font-size: 36pt
 
 h5
   @extend .pax-semibold
@@ -167,6 +168,8 @@ h5
   border-right: 4px solid rgba(0,0,0,0.15)
   font-size: 12pt
   word-break: break-all
+  @media screen and ($mobile)
+    font-size: 24pt
 
 div.details
   margin-left: 5px
@@ -175,12 +178,19 @@ div.details
 .description, .value
   color: white
   display: inline
+  @media screen and ($mobile)
+    font-size: 22pt
 
 .value
   @extend .pax-p
 
 .description
   @extend .pax-semibold
+
+.avatar
+  @media screen and ($mobile)
+    width: 20vw
+    object-fit: contain
 
 button
   @extend .pax-semibold
