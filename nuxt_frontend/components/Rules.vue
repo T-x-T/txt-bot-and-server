@@ -2,7 +2,7 @@
   <div>
     <h1>Rules</h1>
     <div id="wrapper">
-      <div>
+      <div class="hover paxItem">
         <p class="headline">Community</p>
         <ul>
           <li>Do not treat others in ways that you would not like to be treated. Any kind of insult, discrimination or harassment is unwished.</li>
@@ -12,7 +12,7 @@
         </ul>
       </div>
 
-      <div>
+      <div class="hover paxItem">
         <p class="headline">In-Game</p>
         <ul>
           <li>It is forbidden to attack, harm or kill other players against their will.</li>
@@ -26,7 +26,7 @@
         </ul>
       </div>
 
-      <div>
+      <div class="hover paxItem">
         <p class="headline">Shopping District</p>
         <ul>
           <li>A 16x16 plot can be purchased for the price of 1 diamond block from staff.</li>
@@ -34,7 +34,7 @@
         </ul>
       </div>
 
-      <div>
+      <div class="hover paxItem">
         <p class="headline">Public farms</p>
         <ul>
           <li>Only XP, villager trading, iron, (cobble)stone, wool and manual farms can be made public.</li>
@@ -59,39 +59,4 @@ div#wrapper
     padding: 2%
     padding-left: 15%
     padding-right: 15%
-
-.headline
-  @extend .pax-semibold
-  background: $pax-white
-  color: $pax-cyan
-  margin-left: -30px
-  font-size: 20pt
-  padding: 0px 0px 15px 25px
-  height: 32px
-  position: relative
-  white-space: nowrap
-  width: 20vw
-  &:before
-    content: ""
-    border-style: solid
-    border-width: 0 30px 30px 0
-    border-color: transparent #b8b8b8 transparent transparent
-    position: absolute
-    left: 0px
-    top: 47px
-
-ul
-  @extend .pax-regular
-  background: #007787
-  color: white
-  padding: 10px 15px
-  font-size: 14pt
-  text-shadow: 0px 1px 0px #00515c
-  line-height: 1.5
-  width: 100%
-  box-shadow: 0px 0px 5px #102f36 inset
-  li:before
-    content: "▪"
-    color: $pax-darkcyan
-    padding-right: 5px
 </style>

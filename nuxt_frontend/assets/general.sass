@@ -126,3 +126,36 @@ div.background
   &:hover
     filter: drop-shadow( 0px 0px 16px rgba(0, 0, 0, .9))
     opacity: 1
+
+.paxItem
+  .headline
+    @extend .pax-semibold
+    background: $pax-white
+    color: $pax-cyan
+    margin-left: -30px
+    font-size: 20pt
+    padding: 0px 0px 15px 25px
+    height: 32px
+    position: relative
+    white-space: nowrap
+    width: 20vw
+    &:before
+      content: ""
+      border-style: solid
+      border-width: 0 30px 30px 0
+      border-color: transparent #b8b8b8 transparent transparent
+      position: absolute
+      left: 0px
+      top: 47px
+  ul
+    @extend .pax-regular
+    background: #007787
+    color: white
+    padding: 10px 15px
+    font-size: 14pt
+    line-height: 1.5
+    width: 100%
+    li:before
+      content: "▪"
+      color: $pax-darkcyan
+      padding-right: 5px

@@ -1,7 +1,7 @@
 <template>
   <div class="background">
     <h1>How to join</h1>
-    <ol>
+    <ol class="hover">
       <li>(Optional) Join our <a href="https://discord.gg/mAjZCTG" target="blank">Discord server</a></li>
       <li>Authenticate with Discord below</li>
       <li>Fill out the form</li>
@@ -26,8 +26,6 @@ ol
   padding: 25px 25px 25px 35px
   margin: 1%
   background-color: $pax-cyan
-  display: inline-block
-  box-shadow: 0px 0px 15px #102f36
   width: 450px
 li
   @extend .pax-regular
