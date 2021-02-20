@@ -131,9 +131,11 @@ tr
   &:nth-child(even) td
     background: $pax-cyan
   &:nth-child(odd) td
-    background: transparent
-  &:hover > td
+    background: $pax-darkcyan
+  &:hover
     cursor: pointer
+    scale: 1.02
+    transition-duration: 0.05s
 td
   padding: 3px 10px
   background: #e9e9e9
