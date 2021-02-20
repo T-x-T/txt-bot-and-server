@@ -56,7 +56,7 @@ div#wrapper
   align-items: center
   flex-wrap: wrap
   padding-bottom: 50px
-  width: 100vw
+  width: 100%
 
 div.item
   width: 380px

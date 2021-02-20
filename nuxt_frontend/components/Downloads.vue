@@ -133,7 +133,7 @@ section
   width: 50%
   margin: 2%
   @media screen and ($mobile)
-    width: 100vw
+    width: 100%
 
 div.item
   margin: 2%

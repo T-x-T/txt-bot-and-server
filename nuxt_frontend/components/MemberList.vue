@@ -73,7 +73,7 @@ div#searchBox
   box-shadow: 0px 0px 15px #102f36
   margin: 1%
   width: 558px
-  max-width: 100vw
+  max-width: 100%
   svg
     height: 32px
     max-width: 5vw

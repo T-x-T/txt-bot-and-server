@@ -77,7 +77,7 @@ article
   left: 20%
   position: relative
   @media screen and ($mobile)
-    width: 100vw
+    width: 100%
     left: 0
     margin: 0
 
@@ -129,7 +129,7 @@ table
     box-shadow: 0px 0px 50px #102f36
     filter: opacity(1)
   @media screen and ($mobile)
-    width: 100vw
+    width: 100%
     left: 0
     margin: 0
 th

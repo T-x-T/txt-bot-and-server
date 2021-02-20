@@ -50,7 +50,7 @@ footer
 #backgroundColor
   background-image: radial-gradient(transparent 50%, rgba(0,0,0,.3) 70%), linear-gradient(0deg, rgba(0,0,0,.1) 0%, black 5%, transparent 80%, rgba(0,0,0,.7) 100%), linear-gradient(rgba(0,81,92,.3) 0%, rgba(0,81,92,.6) 100%)
   height: 250px
-  width: 100vw
+  width: 100%
   opacity: 0.5
   position: absolute
   z-index: -1
@@ -62,7 +62,7 @@ footer
   background-size: cover
   position: absolute
   z-index: -2
-  width: 100vw
+  width: 100%
   height: 250px
 
 p

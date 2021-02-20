@@ -47,7 +47,7 @@ div#wrapper
   margin: 2%
   padding: 1%
   @media screen and ($mobile)
-    width: 100vw
+    width: 100%
     margin: 50px 0 50px 0
     button
       font-size: 20pt
@@ -71,7 +71,7 @@ input
     color: white
     opacity: 1
   @media screen and ($mobile)
-    width: 100vw
+    width: 100%
 
 textarea
   width: 100%
@@ -85,7 +85,7 @@ textarea
     border: 2px solid $pax-darkcyan
     box-shadow: 0px 0px 15px #102f36
   @media screen and ($mobile)
-    width: 100vw
+    width: 100%
 
 label
   position: absolute

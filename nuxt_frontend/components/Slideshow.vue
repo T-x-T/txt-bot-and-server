@@ -19,7 +19,7 @@ div
   position: relative
 
 img
-  width: 100vw
+  width: 100%
   height: auto
 
 svg
