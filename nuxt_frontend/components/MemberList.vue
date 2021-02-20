@@ -1,5 +1,5 @@
 <template>
-  <div id="background">
+  <div class="background">
 
     <h1>Members</h1>
 
@@ -29,7 +29,7 @@
 
     <div id="wrapper" v-if="members">
       <div v-for="(item, index) in processedMembers" :key="index">
-        <div class="card">
+        <div class="card hover">
           <img class="avatar" :src="item.mc_render_url">
           <div class="infos">
             <h4>{{item.mc_nick}}</h4>
@@ -59,8 +59,7 @@
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
 
-div#background
-  background: $pax-cyan
+div.background
   padding: 1%
 
 div#controls
@@ -131,11 +130,7 @@ div.card
   margin: 0 40px 20px 0
   cursor: pointer
   flex-shrink: 0
-  filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
-  opacity: 0.9
   &:hover
-    filter: drop-shadow( 0px 0px 16px rgba(0, 0, 0, .9))
-    opacity: 1
     scale: 1.1
 
 div.infos

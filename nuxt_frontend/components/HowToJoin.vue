@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="background">
+    <h1>How to join</h1>
     <ol>
-    <p>How to join:</p>
       <li>(Optional) Join our <a href="https://discord.gg/mAjZCTG" target="blank">Discord server</a></li>
       <li>Authenticate with Discord below</li>
       <li>Fill out the form</li>
@@ -17,20 +17,21 @@
 
 div
   padding: 1%
-  background-color: $pax-cyan
-  color: white
   display: flex
   justify-content: center
-  align-content: center
+  align-items: center
+  flex-direction: column
 
 ol
   padding: 25px 25px 25px 35px
   margin: 1%
-  background-color: $pax-darkcyan
+  background-color: $pax-cyan
   display: inline-block
-  box-shadow: 0px 0px 15px #102f36 inset
+  box-shadow: 0px 0px 15px #102f36
+  width: 450px
 li
   @extend .pax-regular
+  color: white
   font-size: 14pt
   list-style-type: decimal
 
@@ -38,15 +39,15 @@ p
   @extend .pax-semibold
   font-size: 20pt
 
-a
-  color: $pax-white
-  @extend .pax-semibold
-  &:hover
-    color: $pax-lightcyan
+a:hover
+  color: $pax-darkcyan
 
 button
   @extend .pax-semibold
+  background: $pax-darkcyan
   font-size: 20pt
-  box-shadow: 0px 0px 5px #102f36 inset
   width: 100%
+  box-shadow: 0px 0px 5px #102f36 inset
+  &:hover
+    box-shadow: 0px 0px 15px #102f36 inset
 </style>

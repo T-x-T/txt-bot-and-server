@@ -16,7 +16,7 @@
           </svg>
         </div>
         <div class="iframeContainer">
-          <iframe @mouseleave="survivalActive = false" src="https://paxterya.com/dynmap/survival/?nocompass=true"></iframe>
+          <iframe class="hover" @mouseleave="survivalActive = false" src="https://paxterya.com/dynmap/survival/?nocompass=true"></iframe>
         </div>
         <p @click="survivalActive = true" v-if="!survivalActive">To look around, click into the Map</p>
       </div>    
@@ -34,7 +34,7 @@
           </svg>
         </div>
         <div class="iframeContainer">
-          <iframe @mouseleave="creativeActive = false" src="https://paxterya.com/dynmap/creative/?nocompass=true&mapname=surface"></iframe>
+          <iframe class="hover" @mouseleave="creativeActive = false" src="https://paxterya.com/dynmap/creative/?nocompass=true&mapname=surface"></iframe>
         </div>
         <p @click="creativeActive = true" v-if="!creativeActive">To look around, click into the Map</p>
       </div>   
@@ -47,7 +47,6 @@
 @import ~/assets/_vars.sass
 
 div#wrapper
-  background-color: $pax-darkcyan
   height: 70vh
 
 div#container
@@ -67,13 +66,9 @@ div#container
     iframe
       border-radius: 1vw
       border: 0px
-      filter: opacity(0.85)
-      box-shadow: 0px 0px 15px #102f36
       width: 100%
       height: 90%
       &:hover
-        filter: opacity(1)
-        box-shadow: 0px 0px 2vw #102f36
         cursor: pointer
 
 .iframeContainer
@@ -98,8 +93,6 @@ div.overlay
     left: 40vw
 
 p
-  @extend .pax-p
-  color: white
   text-align: center
   cursor: pointer
 

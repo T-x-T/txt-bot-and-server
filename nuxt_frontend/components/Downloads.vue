@@ -1,7 +1,7 @@
 <template>
   <div id="background">
     <h1>Downloads</h1>
-    <section ref="0">
+    <section ref="0" class="hover">
 
       <svg v-if="activeElement !== 0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
@@ -53,7 +53,7 @@
       </div>
     </section>
 
-    <section ref="1">
+    <section ref="1" class="hover">
 
       <svg v-if="activeElement !== 1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
@@ -75,7 +75,7 @@
         </div>
     </section>
 
-    <section ref="2">
+    <section ref="2" class="hover">
 
       <svg v-if="activeElement !== 2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
@@ -97,7 +97,7 @@
       </div>
     </section>
 
-    <section ref="3">
+    <section ref="3" class="hover">
 
       <svg v-if="activeElement !== 3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
@@ -121,29 +121,20 @@
 @import ~/assets/_vars.sass
 
 div#background
-  background: $pax-darkcyan
   display: flex
   flex-direction: column
   justify-content: center
   align-items: center
 
 section
+  background: $pax-darkcyan
   width: 50%
   margin: 2%
-  box-shadow: 0px 0px 15px #102f36
-  filter: opacity(0.9)
-  &:hover
-    box-shadow: 0px 0px 50px #102f36
-    filter: opacity(1)
 
 div.item
   margin: 2%
 
 h3
-  color: white
-
-p
-  @extend .pax-p
   color: white
 
 a

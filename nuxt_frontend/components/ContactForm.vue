@@ -1,6 +1,6 @@
 <template>
-  <div id="background">
-    <div id="wrapper">
+  <div class="background">
+    <div id="wrapper" class="hover">
       <p>For inquiries of any kind, please use the contact form below or send an e-mail to <a href="mailto:contact@paxterya.com">contact@paxterya.com</a>.<br>If you want to become a member of the Paxterya community, please use the <a href="join-us.html">application form</a>.</p>
       <form method="POST" @submit.prevent="submit()">
         <label for="name">Your Name</label>
@@ -36,22 +36,16 @@
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
 
-p
-  @extend .pax-p
-  color: white
-
-div#background
-  width: 100%
-  background: $pax-cyan
+div.background
   display: flex
   justify-content: center
   align-content: center
 
 div#wrapper
+  background: $pax-cyan
   width: 50%
   margin: 2%
   padding: 1%
-  box-shadow: 0px 0px 50px #102f36
 
 input
   @extend .pax-regular

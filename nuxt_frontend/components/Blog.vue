@@ -3,7 +3,7 @@
     <h1>Blog</h1>
 
     <div v-if="posts">
-      <article v-if="!showAllPosts">
+      <article class="hover" v-if="!showAllPosts">
         <div id="controls">
           <button id="prevPost" @click="prevPost()">
             <svg v-if="currentId < posts.length - 1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -65,23 +65,17 @@
 @import ~/assets/_vars.sass
 
 div#wrapper
-  background-color: $pax-darkcyan
   padding-bottom: 4%
 
 article
   color: $pax-white
+  background: $pax-darkcyan
   width: 60%
   margin: 2%
   padding: 20px
   overflow: hidden
   left: 20%
   position: relative
-  box-shadow: 0px 0px 15px #102f36
-  filter: opacity(0.9)
-  &:hover
-    box-shadow: 0px 0px 50px #102f36
-    filter: opacity(1)
-
 
 section
   border-left: 5px solid $pax-darkgray
@@ -153,9 +147,7 @@ td
   color: white
 
 p
-  @extend .pax-p
   text-align: center
-  color: white
   font-size: 16pt
   svg
     height: 24pt

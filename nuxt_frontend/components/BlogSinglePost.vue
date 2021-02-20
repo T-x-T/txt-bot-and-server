@@ -72,7 +72,6 @@ section
       box-shadow: 0px 0px 50px #102f36
 
 ::v-deep p
-  @extend .pax-p
   line-height: 1.3
   width: 80%
 

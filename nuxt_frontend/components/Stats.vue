@@ -1,5 +1,5 @@
 <template>
-  <div id="background">
+  <div class="background">
     <h1>Paxterya in numbers</h1>
     <div id="wrapper">
       
@@ -50,9 +50,6 @@
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
 
-div#background
-  background: $pax-cyan
-
 div#wrapper
   display: flex
   justify-content: space-evenly
@@ -86,9 +83,7 @@ svg
 div.textWrapper
   width: 225px
   h1
-    @extend .pax-semibold
     background: $pax-cyan
-    color: $pax-white
     padding: 3px 15px 3px 15px
     text-shadow: 1px 2px 0px $pax-darkcyan
     border-right: 4px solid rgba(0,0,0,0.15)
@@ -96,12 +91,9 @@ div.textWrapper
     font-size: 24pt
     text-align: right
   p
-    @extend .pax-semibold
     background: $pax-darkcyan
-    color: $pax-white
     padding: 3px 0px 3px 15px
     border-right: 4px solid rgba(0,0,0,0.15)
-    font-size: 12pt
 </style>
 
 <script>

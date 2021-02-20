@@ -66,8 +66,6 @@ footer
   height: 250px
 
 p
-  @extend .pax-p
-  color: white
   font-size: 14pt
 
 a

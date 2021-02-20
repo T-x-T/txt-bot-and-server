@@ -13,18 +13,13 @@
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
 
-div#background
-  background: $pax-darkcyan
-
 div#mapContainer
   padding-bottom: 70% !important
   box-shadow: 0px 0px 1500px #102f36 inset
 
 .subtitle
-  @extend .pax-p
   text-align: center
   margin: -10px 0 10px 0
-  color: white
 </style>
 
 <script>

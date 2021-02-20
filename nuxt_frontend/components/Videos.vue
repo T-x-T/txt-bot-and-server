@@ -1,10 +1,10 @@
 <template>
-  <div id="wrapper">
+  <div class="background">
     <h1>Videos</h1>
     <div id="thumbnailContainer">
-      <img @click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/imthf1D5BTs?autoplay=1'" src="https://i.ytimg.com/vi/imthf1D5BTs/maxresdefault.jpg" />
-      <img @click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/y8yxh_VYIrc?autoplay=1'" src="https://i.ytimg.com/vi/y8yxh_VYIrc/maxresdefault.jpg" />
-      <img @click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/enqxc0qD61E?autoplay=1'" src="https://i.ytimg.com/vi/enqxc0qD61E/maxresdefault.jpg" />
+      <img class="hover" @click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/imthf1D5BTs?autoplay=1'" src="https://i.ytimg.com/vi/imthf1D5BTs/maxresdefault.jpg" />
+      <img class="hover" @click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/y8yxh_VYIrc?autoplay=1'" src="https://i.ytimg.com/vi/y8yxh_VYIrc/maxresdefault.jpg" />
+      <img class="hover" @click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/enqxc0qD61E?autoplay=1'" src="https://i.ytimg.com/vi/enqxc0qD61E/maxresdefault.jpg" />
     </div>
     <div id="fullscreenVideo" v-if="fullscreenVideo" @click="fullscreenVideo = null">
       <iframe id="video" :src="fullscreenVideo" frameborder="0" allow="autoplay" allowfullscreen></iframe>
@@ -18,9 +18,6 @@
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
 
-div#wrapper
-  background-color: $pax-cyan
-
 div#thumbnailContainer
   display: flex
   flex-wrap: nowrap
@@ -31,11 +28,7 @@ div#thumbnailContainer
     max-width: 25%
     height: auto
     margin: 0.5% 2% 5% 2%
-    filter: opacity(0.85)
-    box-shadow: 0px 0px 15px #102f36
     &:hover
-      filter: opacity(1)
-      box-shadow: 0px 0px 2vw #102f36
       cursor: pointer
 
 div#fullscreenVideo

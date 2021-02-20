@@ -39,11 +39,9 @@ div#bgFilter
   filter: opacity(0.5)
 
 p
-  @extend .pax-regular
   text-align: justify
   width: 600px
   font-size: 14pt
-  color: white
   max-width: 90%
   position: absolute
   left: 50%

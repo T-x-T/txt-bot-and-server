@@ -50,7 +50,6 @@
 @import ~/assets/_vars.sass
 
 div
-  background: $pax-darkcyan
   margin-top: -4px
   padding-bottom: 1%
 div#wrapper

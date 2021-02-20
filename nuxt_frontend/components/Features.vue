@@ -44,7 +44,6 @@ div#wrapper
   flex-wrap: nowrap
   align-items: stretch
   justify-content: center
-  background: $pax-darkcyan
   div
     padding: 2%
     padding-left: 5%
