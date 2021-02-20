@@ -66,13 +66,17 @@ div#controls
   display: flex
   justify-content: center
   align-items: center
+  @media screen and ($mobile)
+    flex-direction: column
 
 div#searchBox
   box-shadow: 0px 0px 15px #102f36
   margin: 1%
   width: 558px
+  max-width: 100vw
   svg
     height: 32px
+    max-width: 5vw
     width: auto
     color: white
     margin-bottom: -12px
@@ -81,6 +85,7 @@ div#searchBox
     float: left
   input
     width: 500px
+    max-width: 87vw
     margin: 0
     border-width: 1px 1px 1px 0px
     border-color: #bebebe
@@ -91,6 +96,9 @@ div#searchBox
     font-size: 21px
     &:focus
       outline: none
+  @media screen and ($mobile)
+    margin: 0
+    margin-bottom: 25px
 
 button#sort
   margin: 0
@@ -131,7 +139,11 @@ div.card
   cursor: pointer
   flex-shrink: 0
   &:hover
-    scale: 1.1
+    @media screen and ($desktop)
+      scale: 1.1
+  @media screen and ($mobile)
+    width: 90vw
+    margin: 5vw
 
 div.infos
   width: 70%

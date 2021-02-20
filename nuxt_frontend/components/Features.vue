@@ -48,6 +48,11 @@ div#wrapper
     padding: 2%
     padding-left: 5%
     padding-right: 5%
+  @media screen and ($mobile)
+    flex-direction: column
+    div
+      width: 80vw
+      margin: 25px 10vw 25px 5vw
 
 .paxItem
   width: 500px

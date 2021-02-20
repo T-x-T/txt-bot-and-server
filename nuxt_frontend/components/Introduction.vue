@@ -9,10 +9,7 @@
       Paxterya is a close-knit and dedicated Minecraft community. What we enjoy most is the freedom Minecraft has to offer. 
       You can do anything on Paxterya: start big projects with others, construct a town, or go far away to found your very own empire. 
       <br>Let's be creative together!
-      <a href="https://discord.gg/mAjZCTG">
-        <button><img id="discordLogo" src="~/assets/Discord-Logo-White.svg" /> Join our Discord!</button>
-      </a>
-      <br><br><br><br><br>
+      <button><img id="discordLogo" src="~/assets/Discord-Logo-White.svg" /> Join our Discord!</button>
       We use Discord as our communication platform where we also talk about Minecraft, gaming, technology and everything else.
     </p>
   </div>
@@ -54,15 +51,17 @@ p
     position: absolute
     left: 50%
     transform: translateX(-50%)
-    top: 190px
+    top: 190px    
 
 button
+  width: 325px
   display: flex
   align-items: center
   border-radius: 100px
   font-size: 24pt
   text-shadow: 1px 2px 0px $pax-darkcyan
   padding: 4px 24px
+  margin: 25px 137.5px 25px 137.5px
   box-shadow: 0px 0px 20px $pax-cyan
   filter: opacity(85%)
   &:hover
@@ -71,4 +70,8 @@ button
   img
     height: 28pt
     margin-right: 5px
+  @media screen and ($mobile)
+    width: 80%
+    margin: 20px 10% 20px 10%
+    font-size: 22pt
 </style>

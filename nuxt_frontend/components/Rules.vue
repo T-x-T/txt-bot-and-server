@@ -59,4 +59,11 @@ div#wrapper
     padding: 2%
     padding-left: 15%
     padding-right: 15%
+  @media screen and ($mobile)
+    display: flex
+    flex-direction: column
+    .paxItem
+      margin-bottom: 50px
+    .headline
+      width: 70vw
 </style>

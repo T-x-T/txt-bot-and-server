@@ -27,6 +27,10 @@ ol
   margin: 1%
   background-color: $pax-cyan
   width: 450px
+  @media screen and ($mobile)
+    width: 70vw
+    margin-bottom: 25px
+
 li
   @extend .pax-regular
   color: white

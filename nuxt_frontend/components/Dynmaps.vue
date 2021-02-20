@@ -46,9 +46,6 @@
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
 
-div#wrapper
-  height: 70vh
-
 div#container
   display: flex
   align-content: center
@@ -70,6 +67,13 @@ div#container
       height: 90%
       &:hover
         cursor: pointer
+  @media screen and ($mobile)
+    flex-direction: column
+    padding-bottom: 50px
+    div.item
+      width: 95vw
+      margin: 0 2.5vw 75px 2.5vw
+      
 
 .iframeContainer
   height: 100%

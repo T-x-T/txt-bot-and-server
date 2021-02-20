@@ -30,6 +30,11 @@ div#thumbnailContainer
     margin: 0.5% 2% 5% 2%
     &:hover
       cursor: pointer
+  @media screen and ($mobile)
+    flex-direction: column
+    img
+      max-width: 95vw
+      width: 95vw
 
 div#fullscreenVideo
   width: 100%

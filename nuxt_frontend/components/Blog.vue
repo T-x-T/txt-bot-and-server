@@ -76,6 +76,10 @@ article
   overflow: hidden
   left: 20%
   position: relative
+  @media screen and ($mobile)
+    width: 100vw
+    left: 0
+    margin: 0
 
 section
   border-left: 5px solid $pax-darkgray
@@ -105,6 +109,11 @@ div#controls
   display: flex
   justify-content: space-around
   margin-bottom: 2%
+  @media screen and ($mobile)
+    flex-direction: column
+    margin-bottom: 20px
+    button
+      width: 90vw
 
 table
   @extend .pax-regular
@@ -119,6 +128,10 @@ table
   &:hover
     box-shadow: 0px 0px 50px #102f36
     filter: opacity(1)
+  @media screen and ($mobile)
+    width: 100vw
+    left: 0
+    margin: 0
 th
   background: $pax-cyan
   color: $pax-white
@@ -134,8 +147,9 @@ tr
     background: $pax-darkcyan
   &:hover
     cursor: pointer
-    scale: 1.02
-    transition-duration: 0.05s
+    @media screen and ($desktop)
+      scale: 1.02
+      transition-duration: 0.05s
 td
   padding: 3px 10px
   background: #e9e9e9

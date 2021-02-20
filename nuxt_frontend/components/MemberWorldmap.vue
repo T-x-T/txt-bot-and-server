@@ -16,6 +16,8 @@
 div#mapContainer
   padding-bottom: 70% !important
   box-shadow: 0px 0px 1500px #102f36 inset
+  @media screen and ($mobile)
+    box-shadow: 0px 0px 150px #102f36 inset
 
 .subtitle
   text-align: center

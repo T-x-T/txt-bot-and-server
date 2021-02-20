@@ -125,11 +125,15 @@ div#background
   flex-direction: column
   justify-content: center
   align-items: center
+  @media screen and ($mobile)
+    margin-bottom: 50px
 
 section
   background: $pax-darkcyan
   width: 50%
   margin: 2%
+  @media screen and ($mobile)
+    width: 100vw
 
 div.item
   margin: 2%
@@ -165,6 +169,7 @@ img
 
 h1
   cursor: pointer
+  max-width: 80vw
 
 svg
   color: white
@@ -172,6 +177,8 @@ svg
   width: auto
   z-index: -1
   position: absolute
+  @media screen and ($mobile)
+    height: 70px
 </style>
 
 <script>

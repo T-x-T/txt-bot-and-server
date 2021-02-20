@@ -53,12 +53,12 @@ section
 ::v-deep .article-img
   float: right
   box-shadow: 0px 0px 15px #102f36
-  margin: 10px 0 10px 10px
+  margin: 10px 35px 10px 10px
   clear: both
+  max-width: 90vw
   img
     width: 250px
     min-width: 15vw
-    max-width: 100%
     vertical-align: bottom
   &:hover
     box-shadow: 0px 0px 35px #102f36
@@ -85,6 +85,7 @@ section
   @extend .pax-p
   margin: 10px 0
   list-style-type: none
+  max-width: 80%
   li:before
     content: "▪"
     color: $pax-cyan

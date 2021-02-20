@@ -3,7 +3,7 @@
     <h1>Paxterya in numbers</h1>
     <div id="wrapper">
       
-      <div class="item">
+      <div class="item hover">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
         </svg>
@@ -13,7 +13,7 @@
         </div>
       </div>
 
-      <div class="item">
+      <div class="item hover">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
@@ -23,7 +23,7 @@
         </div>
       </div>
 
-      <div class="item">
+      <div class="item hover">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
         </svg>
@@ -33,7 +33,7 @@
         </div>
       </div>
 
-      <div class="item">
+      <div class="item hover">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
@@ -67,12 +67,11 @@ div.item
   margin: 0 40px 20px 0
   cursor: pointer
   flex-shrink: 0
-  filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
-  opacity: 0.9
   &:hover
-    filter: drop-shadow( 0px 0px 16px rgba(0, 0, 0, .9))
-    opacity: 1
-    scale: 1.1
+    @media screen and ($desktop)
+      scale: 1.1
+  @media screen and ($mobile)
+    margin: 5px
 
 svg
   width: 125px
