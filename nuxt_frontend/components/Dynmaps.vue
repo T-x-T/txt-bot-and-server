@@ -1,5 +1,6 @@
 <template>
   <div id="wrapper">
+    <div id="section_dynmaps" class="scrollTarget"></div>
     <h1>Worlds</h1>
     <div id="container">
 
@@ -88,7 +89,7 @@ div.overlay
   width: 45%
   height: 750px * 0.9
   position: absolute
-  z-index: 102
+  z-index: 10
   border-radius: 1vw
   &:hover
     box-shadow: 0px 0px 2vw #102f36

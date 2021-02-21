@@ -1,5 +1,6 @@
 <template>
   <div id="background">
+    <div id="section_memberWorldmap" class="scrollTarget"></div>
     <h1>Worldmap</h1>
     <p class="subtitle">Where our Members live IRL</p>
     <client-only>

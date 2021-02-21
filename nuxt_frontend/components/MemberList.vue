@@ -1,5 +1,6 @@
 <template>
   <div class="background">
+    <div id="section_memberList" class="scrollTarget"></div>
 
     <h1>Members</h1>
 

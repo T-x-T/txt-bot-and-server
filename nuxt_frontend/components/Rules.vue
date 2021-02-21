@@ -1,5 +1,6 @@
 <template>
   <div id="background">
+    <div id="section_rules" class="scrollTarget"></div>
     <h1>Rules</h1>
     <div id="wrapper">
       <div class="hover paxItem">

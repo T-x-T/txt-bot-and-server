@@ -1,5 +1,6 @@
 <template>
   <div id="wrapper">
+    <div id="section_blog" class="scrollTarget"></div>
     <h1>Blog</h1>
 
     <div v-if="posts">

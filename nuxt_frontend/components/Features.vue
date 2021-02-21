@@ -1,5 +1,6 @@
 <template>
   <div id="wrapper">
+    <div id="section_features" class="scrollTarget"></div>
     <div class="hover paxItem">
       <p class="headline">Plugins</p>
       <ul class="text">

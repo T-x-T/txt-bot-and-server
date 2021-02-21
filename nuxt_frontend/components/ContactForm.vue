@@ -1,5 +1,6 @@
 <template>
   <div class="background">
+    <div id="section_contactForm" class="scrollTarget"></div>
     <h1>Contact us</h1>
     <div id="wrapper" class="hover">
       <p>For inquiries of any kind, please use the contact form below or send an e-mail to <a href="mailto:contact@paxterya.com">contact@paxterya.com</a>.<br>If you want to become a member of the Paxterya community, please use the <a href="join-us.html">application form</a>.</p>

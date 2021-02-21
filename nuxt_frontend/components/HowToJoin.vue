@@ -1,5 +1,6 @@
 <template>
   <div class="background">
+    <div id="section_howToJoin" class="scrollTarget"></div>
     <h1>How to join</h1>
     <ol class="hover">
       <li>(Optional) Join our <a href="https://discord.gg/mAjZCTG" target="blank">Discord server</a></li>
@@ -16,7 +17,7 @@
 @import ~/assets/_vars.sass
 
 div
-  padding: 1% 0 1% 0
+  padding: 0 0 1% 0
   display: flex
   justify-content: center
   align-items: center

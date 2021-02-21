@@ -20,6 +20,7 @@ div
   z-index: 100
   box-shadow: 0px 0px 5px #102f36 inset
   width: 100vw
+  height: 60px
   a
     color: white
     text-decoration: none

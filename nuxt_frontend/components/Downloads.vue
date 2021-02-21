@@ -1,5 +1,6 @@
 <template>
   <div id="background">
+    <div id="section_downloads" class="scrollTarget"></div>
     <div id="container">
       <h1>Downloads</h1>
       <section ref="0" class="hover">

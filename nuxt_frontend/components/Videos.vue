@@ -1,5 +1,6 @@
 <template>
   <div class="background">
+    <div id="section_videos" class="scrollTarget"></div>
     <h1>Videos</h1>
     <div id="thumbnailContainer">
       <img class="hover" @click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/imthf1D5BTs?autoplay=1'" src="https://i.ytimg.com/vi/imthf1D5BTs/maxresdefault.jpg" loading="lazy"/>

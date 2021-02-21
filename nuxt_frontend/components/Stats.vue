@@ -1,5 +1,6 @@
 <template>
   <div class="background">
+    <div id="section_stats" class="scrollTarget"></div>
     <h1>Paxterya in numbers</h1>
     <div id="wrapper">
       

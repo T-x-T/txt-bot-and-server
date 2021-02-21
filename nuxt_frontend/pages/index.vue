@@ -1,5 +1,6 @@
 <template>
   <main>
+    <FloatingNav />
     <Header />
     <Introduction />
     <Features />
