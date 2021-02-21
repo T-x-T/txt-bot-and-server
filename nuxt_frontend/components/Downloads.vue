@@ -1,5 +1,5 @@
 <template>
-  <div id="background">
+  <div id="background" class="background">
     <div id="section_downloads" class="scrollTarget"></div>
     <div id="container">
       <h1>Downloads</h1>
@@ -132,7 +132,7 @@ div#container
     margin-bottom: 50px
 
 section
-  background: $pax-darkcyan
+  background: $pax-cyan
   width: 50%
   margin: 2%
   @media screen and ($mobile)

@@ -11,10 +11,10 @@
     <Rules />
     <HowToJoin />
     <Blog />
-    <ContactForm />
     <Downloads />
     <MemberList />
     <MemberWorldmap />
+    <ContactForm />
     <Footer />
   </main>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div id="background">
+  <div id="background" class="background">
     <div id="section_memberWorldmap" class="scrollTarget"></div>
     <h1>Worldmap</h1>
     <p class="subtitle">Where our Members live IRL</p>
@@ -21,6 +21,7 @@ div#background
 div#mapContainer
   padding-bottom: 70% !important
   box-shadow: 0px 0px 1500px #102f36 inset
+  background: $pax-darkcyan
   @media screen and ($mobile)
     box-shadow: 0px 0px 150px #102f36 inset
     width: 100vw
