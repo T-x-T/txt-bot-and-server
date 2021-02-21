@@ -30,7 +30,7 @@
     <div id="wrapper" v-if="members">
       <div v-for="(item, index) in processedMembers" :key="index">
         <div class="card hover">
-          <img class="avatar" :src="item.mc_render_url">
+          <img class="avatar" :src="item.mc_render_url" loading="lazy"/>
           <div class="infos">
             <h4>{{item.mc_nick}}</h4>
             <h5>{{item.discord_nick}}</h5>

@@ -1,7 +1,7 @@
 <template>
   <div id="wrapper">
     <h4>{{post.title}}</h4>
-    <img class="author" :src="require(`../assets/avatar-${post.author.toLowerCase()}.png`)">
+    <img class="author" :src="require(`../assets/avatar-${post.author.toLowerCase()}.png`)" loading="lazy"/>
     <span class="subtitle">{{new Date(post.date).toISOString().substring(0, 10)}} Author: {{post.author}} </span>
     <div>
       <section v-html="post.body"></section>

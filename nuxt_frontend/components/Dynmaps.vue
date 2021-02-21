@@ -16,7 +16,7 @@
           </svg>
         </div>
         <div class="iframeContainer">
-          <iframe class="hover" @mouseleave="survivalActive = false" src="https://paxterya.com/dynmap/survival/?nocompass=true"></iframe>
+          <iframe class="hover" @mouseleave="survivalActive = false" src="https://paxterya.com/dynmap/survival/?nocompass=true" loading="lazy"></iframe>
         </div>
         <p @click="survivalActive = true" v-if="!survivalActive">To look around, click into the Map</p>
       </div>    
@@ -34,7 +34,7 @@
           </svg>
         </div>
         <div class="iframeContainer">
-          <iframe class="hover" @mouseleave="creativeActive = false" src="https://paxterya.com/dynmap/creative/?nocompass=true&mapname=surface"></iframe>
+          <iframe class="hover" @mouseleave="creativeActive = false" src="https://paxterya.com/dynmap/creative/?nocompass=true&mapname=surface" loading="lazy"></iframe>
         </div>
         <p @click="creativeActive = true" v-if="!creativeActive">To look around, click into the Map</p>
       </div>   

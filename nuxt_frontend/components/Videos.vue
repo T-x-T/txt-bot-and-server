@@ -2,9 +2,9 @@
   <div class="background">
     <h1>Videos</h1>
     <div id="thumbnailContainer">
-      <img class="hover" @click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/imthf1D5BTs?autoplay=1'" src="https://i.ytimg.com/vi/imthf1D5BTs/maxresdefault.jpg" />
-      <img class="hover" @click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/y8yxh_VYIrc?autoplay=1'" src="https://i.ytimg.com/vi/y8yxh_VYIrc/maxresdefault.jpg" />
-      <img class="hover" @click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/enqxc0qD61E?autoplay=1'" src="https://i.ytimg.com/vi/enqxc0qD61E/maxresdefault.jpg" />
+      <img class="hover" @click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/imthf1D5BTs?autoplay=1'" src="https://i.ytimg.com/vi/imthf1D5BTs/maxresdefault.jpg" loading="lazy"/>
+      <img class="hover" @click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/y8yxh_VYIrc?autoplay=1'" src="https://i.ytimg.com/vi/y8yxh_VYIrc/maxresdefault.jpg" loading="lazy"/>
+      <img class="hover" @click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/enqxc0qD61E?autoplay=1'" src="https://i.ytimg.com/vi/enqxc0qD61E/maxresdefault.jpg" loading="lazy"/>
     </div>
     <div id="fullscreenVideo" v-if="fullscreenVideo" @click="fullscreenVideo = null">
       <iframe id="video" :src="fullscreenVideo" frameborder="0" allow="autoplay" allowfullscreen></iframe>
