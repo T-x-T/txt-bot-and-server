@@ -128,12 +128,15 @@ div#wrapper
   flex-direction: row
   justify-content: space-evenly
   padding: 2% 10% 2% 10%
+  @media screen and ($mobile)
+    flex-flow: column
+    align-content: center
 
 div.card
   display: flex
   width: 380px
   max-width: 100%
-  padding: 10px 0 75px 10px
+  padding: 10px 0 10px 10px
   background: linear-gradient(180deg, rgba(240,240,240,0) 15%, $pax-darkmodecyan1 15%, $pax-darkmodecyan1 85%, rgba(240,240,240,0) 85%)
   margin: 0 40px 20px 0
   cursor: pointer
@@ -143,6 +146,7 @@ div.card
       scale: 1.1
   @media screen and ($mobile)
     width: 75vw
+    margin-bottom: -20px
 
 div.infos
   width: 70%
@@ -157,8 +161,6 @@ h4
   border-right: 4px solid rgba(0,0,0,0.15)
   overflow-x: hidden
   font-size: 18pt
-  @media screen and ($mobile)
-    font-size: 36pt
 
 h5
   @extend .pax-semibold
@@ -168,8 +170,6 @@ h5
   border-right: 4px solid rgba(0,0,0,0.15)
   font-size: 12pt
   word-break: break-all
-  @media screen and ($mobile)
-    font-size: 24pt
 
 div.details
   margin-left: 5px
@@ -178,8 +178,6 @@ div.details
 .description, .value
   color: white
   display: inline
-  @media screen and ($mobile)
-    font-size: 22pt
 
 .value
   @extend .pax-p

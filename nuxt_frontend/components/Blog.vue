@@ -68,7 +68,6 @@ div#wrapper
   padding-bottom: 4%
 
 article
-  color: $pax-white
   background: $pax-darkcyan
   width: 60%
   margin: 2%
@@ -77,21 +76,11 @@ article
   left: 20%
   position: relative
   @media screen and ($mobile)
-    width: 100vw
+    width: 98vw
     margin: 0
     left: 0
-
-section
-  border-left: 5px solid $pax-darkgray
-  padding: 10px
-  & p:first-of-type::first-letter, p.initial-letter:first-of-type::first-letter
-    color: $pax-cyan
-    font-weight: bold
-    font-size: 270%
-    float: left
-    line-height: 40px
-    padding-right: 3px
-    text-shadow: 0px 0px 5px rgba(0, 0, 0, .4)
+    padding: 1vw
+    filter: none
 
 button
   font-size: 20pt

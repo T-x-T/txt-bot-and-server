@@ -15,14 +15,14 @@
 
 div#background
   @media screen and ($mobile)
-    width: 90vw
+    width: 100vw
 
 div#mapContainer
   padding-bottom: 70% !important
   box-shadow: 0px 0px 1500px #102f36 inset
   @media screen and ($mobile)
     box-shadow: 0px 0px 150px #102f36 inset
-    width: 90vw
+    width: 100vw
 
 .subtitle
   text-align: center
@@ -58,7 +58,7 @@ export default {
         element: this.$refs["mapContainer"],
         projection: 'mercator',
         height: screen.width * 0.7,
-        width: screen.width - 100,
+        width: screen.width,
         aspectRatio: 0.5625,
         responsive: true,
         fills: {

@@ -135,10 +135,15 @@ section
   width: 50%
   margin: 2%
   @media screen and ($mobile)
-    width: 100vw
+    width: 90vw
+    margin-left: 0
+    margin-right: 0
+    padding: 1vw
 
 div.item
   margin: 2%
+  @media screen and ($mobile)
+    margin: 0
 
 h3
   color: white

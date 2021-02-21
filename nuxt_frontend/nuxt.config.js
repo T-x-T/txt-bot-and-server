@@ -12,6 +12,9 @@ export default {
     titleTemplate: "%s | Paxterya",
     link: [
       {rel: "icon", type: "image/png", href: "/logo-icon.svg"}
+    ],
+    meta: [
+      {name: "viewport", content:"width=device-width, initial-scale=1.0"}
     ]
   },
   axios: {

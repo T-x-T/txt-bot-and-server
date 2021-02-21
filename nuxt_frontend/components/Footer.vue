@@ -2,7 +2,7 @@
   <footer>
     <div id="backgroundColor"></div>
     <div id="backgroundImage"></div>
-    <p id="legal"><a href="privacy-policy">Privacy Policy</a> | <b>©</b> Paxterya 2021</p>
+    <p id="legal"><NuxtLink to="privacy-policy">Privacy Policy</NuxtLink> | <b>©</b> Paxterya 2021</p>
 
     <div id="links">
       <a href="https://youtube.com/paxterya" target="blank">

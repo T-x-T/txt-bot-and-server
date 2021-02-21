@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="wrapper">
     <h4>{{post.title}}</h4>
     <img class="author" :src="require(`../assets/avatar-${post.author.toLowerCase()}.png`)">
     <span class="subtitle">{{new Date(post.date).toISOString().substring(0, 10)}} Author: {{post.author}} </span>
@@ -12,9 +12,15 @@
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
 
+div#wrapper
+  @media screen and ($mobile)
+    width: 90vw 
+
 h4
   color: white
   font-size: 18pt
+  @media screen and ($mobile)
+    max-width: 60vw
 
 img.author
   width: 80px
@@ -36,7 +42,19 @@ span.subtitle
   padding: 3px 10px
 
 section
-  padding: 10px 10px 0 10px
+  padding: 10px 10px 0 10px 
+
+::v-deep section
+  border-left: 5px solid $pax-darkgray
+  padding: 10px
+  & p:first-of-type::first-letter, p.initial-letter:first-of-type::first-letter
+    color: $pax-cyan
+    font-weight: bold
+    font-size: 270%
+    float: left
+    line-height: 40px
+    padding-right: 3px
+    text-shadow: 0px 0px 5px rgba(0, 0, 0, .4)
 
 ::v-deep h3
   color: white
@@ -74,6 +92,8 @@ section
 ::v-deep p
   line-height: 1.3
   width: 80%
+  @media screen and ($mobile)
+    width: 80vw
 
 ::v-deep a
   color: $pax-white

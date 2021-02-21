@@ -51,7 +51,7 @@
 
 div#background
   @media screen and ($mobile)
-    width: 90vw
+    width: 100vw
 
 div
   margin-top: -4px

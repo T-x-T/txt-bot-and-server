@@ -1,5 +1,6 @@
 <template>
   <div class="background">
+    <h1>Contact us</h1>
     <div id="wrapper" class="hover">
       <p>For inquiries of any kind, please use the contact form below or send an e-mail to <a href="mailto:contact@paxterya.com">contact@paxterya.com</a>.<br>If you want to become a member of the Paxterya community, please use the <a href="join-us.html">application form</a>.</p>
       <form method="POST" @submit.prevent="submit()">
@@ -39,9 +40,10 @@
 div.background
   display: flex
   justify-content: center
-  align-content: center
+  align-items: center
+  flex-direction: column
   @media screen and ($mobile)
-    display: inherit
+    width: 100vw
 
 div#wrapper
   background: $pax-cyan
@@ -49,7 +51,7 @@ div#wrapper
   margin: 2%
   padding: 1%
   @media screen and ($mobile)
-    width: 100vw
+    width: 90vw
     margin: 50px 0 50px 0
     button
       font-size: 20pt
@@ -73,7 +75,9 @@ input
     color: white
     opacity: 1
   @media screen and ($mobile)
-    width: 100%
+    width: 90vw
+    padding-left: 0
+    padding-right: 0
 
 textarea
   width: 100%
@@ -87,7 +91,7 @@ textarea
     border: 2px solid $pax-darkcyan
     box-shadow: 0px 0px 15px #102f36
   @media screen and ($mobile)
-    width: 100%
+    width: 85vw
 
 label
   position: absolute

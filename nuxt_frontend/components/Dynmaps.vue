@@ -101,7 +101,7 @@ div.overlay
     bottom: 10px
     right: 10px
   @media screen and ($mobile)
-    width: 100%
+    width: 95vw
     margin: 0 2.5vw 75px 2.5vw
     left: -3px
     svg.pointer

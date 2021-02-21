@@ -1,6 +1,6 @@
 <template>
   <div id="wrapper">
-    <div id="bgImg">
+    <div id="bgImg" ref="bgImg">
       <div id="bgFilter">
         <img id="logo" src="~/assets/logo-icon.svg">
         <div id="container">
@@ -26,7 +26,7 @@ div#bgImg
   background-size: cover
   background-position: center
   @media screen and ($mobile)
-    height: 1250px
+    height: 100vh
     width: 100vw
 
 div#bgFilter
@@ -59,7 +59,6 @@ p
   box-shadow: 0px 0px 5px #102f36 inset
   @media screen and ($mobile)
     width: 80%
-    font-size: 24pt
 
 button
   width: 400px
@@ -80,7 +79,14 @@ button
   @media screen and ($mobile)
     width: 80%
     margin: 20px 10% 20px 10%
-    font-size: 42pt
-    img
-      height: 50pt
 </style>
+
+<script>
+export default {
+  mounted: function(){
+    this.$nextTick(function() {
+      this.$refs.bgImg.style = `height: ${this.$refs.bgImg.clientHeight}px;`
+    });
+  }
+}
+</script>

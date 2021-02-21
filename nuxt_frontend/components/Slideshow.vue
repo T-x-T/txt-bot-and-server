@@ -18,13 +18,13 @@
 div
   position: relative
   @media screen and ($mobile)
-    width: 90vw
+    width: 100vw
 
 img
   width: 100%
   height: auto
   @media screen and ($mobile)
-    width: 90vw
+    width: 100vw
 
 svg
   width: 20vh
@@ -50,7 +50,7 @@ svg#next
   margin-left: -20vh
   @media screen and ($mobile)
     top: 75%
-    left: 90%
+    left: 125%
 </style>
 
 <script>
