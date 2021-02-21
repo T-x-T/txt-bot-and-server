@@ -79,6 +79,8 @@ div#wrapper
   backdrop-filter: blur(20px)
   -webkit-backdrop-filter: blur(20px)
   transition-duration: 2s
+  padding-top: 1vw
+  padding-bottom: 1vw
   &:hover
     background: rgba(0, 0, 0, 0.25)
     svg

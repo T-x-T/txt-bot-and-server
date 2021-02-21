@@ -36,6 +36,10 @@ div#thumbnailContainer
     img
       width: 95vw
 
+.hover
+  &:hover
+    scale: 1.1
+
 div#fullscreenVideo
   width: 100%
   height: 100%
