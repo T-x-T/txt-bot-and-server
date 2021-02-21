@@ -100,7 +100,7 @@ div.overlay
     height: 75px
     position: absolute
     bottom: 10px
-    right: 10px
+    right: 120px
   @media screen and ($mobile)
     width: 95vw
     margin: 0 2.5vw 75px 2.5vw

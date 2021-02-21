@@ -64,6 +64,8 @@ div#wrapper
   width: 4vw
   border-radius: 0.5vw
   background: rgba(0, 0, 0, 0.05)
+  backdrop-filter: blur(20px)
+  -webkit-backdrop-filter: blur(20px)
   &:hover
     background: rgba(0, 0, 0, 0.25)
     svg
