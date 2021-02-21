@@ -52,7 +52,7 @@ export default {
   async mounted() {
     const map_data = await this.$axios.$get("/api/memberworldmapdata");
 
-    setTimeout(() => {
+    this.$nextTick(function(){
       this.map = new Datamap({
         scope: 'world',
         element: this.$refs["mapContainer"],
@@ -83,7 +83,7 @@ export default {
         },
         data: map_data
       });
-    }, 100);
+    });
   }
 }
 </script>
