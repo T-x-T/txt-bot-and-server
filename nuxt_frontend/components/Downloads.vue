@@ -3,7 +3,7 @@
     <div id="section_downloads" class="scrollTarget"></div>
     <div id="container">
       <h1>Downloads</h1>
-      <section ref="0" class="hover">
+      <section ref="0" class="hover scrollTarget">
 
         <svg v-if="activeElement !== 0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
@@ -55,7 +55,7 @@
         </div>
       </section>
 
-      <section ref="1" class="hover">
+      <section ref="1" class="hover scrollTarget">
 
         <svg v-if="activeElement !== 1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
@@ -77,7 +77,7 @@
           </div>
       </section>
 
-      <section ref="2" class="hover">
+      <section ref="2" class="hover scrollTarget">
 
         <svg v-if="activeElement !== 2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
@@ -99,7 +99,7 @@
         </div>
       </section>
 
-      <section ref="3" class="hover">
+      <section ref="3" class="hover scrollTarget">
 
         <svg v-if="activeElement !== 3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
@@ -140,6 +140,9 @@ section
     margin-left: 0
     margin-right: 0
     padding: 1vw
+
+section.scrollTarget
+  scroll-margin-top: 100px
 
 div.item
   margin: 2%
@@ -197,7 +200,7 @@ export default {
 
   watch: {
     activeElement(newElement, oldElement){
-      this.$nextTick(() => this.$refs[newElement].scrollIntoView({behavior: "smooth", block: "center"}));
+      this.$nextTick(() => this.$refs[newElement].scrollIntoView({behavior: "smooth", block: "start"}));
     }
   }
 }
