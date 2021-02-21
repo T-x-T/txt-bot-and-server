@@ -1,12 +1,12 @@
 <template>
   <div>
-    <svg id="back" @click="back()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg ref="back" id="back" @click="back()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
     </svg>
 
     <img :src="images[index]" />
 
-    <svg id="next" @click="next()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg ref="next" id="next" @click="next()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
     </svg>
   </div>
@@ -42,15 +42,17 @@ svg#back
   top: 50%
   margin-top: -10vh
   @media screen and ($mobile)
-    top: 75%
+    top: 25vw
+    margin: 0
 svg#next
   top: 50%
   left: 100%
   margin-top: -10vh
   margin-left: -20vh
   @media screen and ($mobile)
-    top: 75%
-    left: 125%
+    top: 25vw
+    left: 85vw
+    margin: 0
 </style>
 
 <script>
