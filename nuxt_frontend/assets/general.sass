@@ -167,3 +167,103 @@ div.background
 
 .scrollTarget
   scroll-margin-top: 60px
+
+input
+  @extend .pax-regular
+  padding: 10px 5px 5px 5px
+  border: none
+  border-bottom: 1px solid #bebebe
+  width: 100%
+  font-size: 12pt
+  margin: 1% 0 1% 0
+  background: transparent
+  &:focus
+    outline: none
+    box-shadow: 0px 0px 15px #102f36
+  &::placeholder
+    color: white
+    opacity: 1
+  @media screen and ($mobile)
+    width: 90vw
+    padding-left: 0
+    padding-right: 0
+
+textarea
+  width: 100%
+  height: 250px
+  margin-bottom: 1%
+  resize: vertical
+  padding: 5px
+  outline: none
+  border: 2px solid white
+  &:focus
+    border: 2px solid $pax-darkcyan
+    box-shadow: 0px 0px 15px #102f36
+  @media screen and ($mobile)
+    width: 85vw
+
+label
+  position: absolute
+  top: -5px
+  left: 0
+  font-size: 14px
+  opacity: 0
+  &.container
+    position: relative
+    opacity: 1
+    font-size: 12pt
+    color: #1a1a1a
+    font-weight: normal
+    @extend .pax-regular
+    color: white
+
+.checkmark
+  position: absolute
+  top: -2px
+  left: 0
+  height: 25px
+  width: 25px
+  background-color: $pax-gray
+  border: 1px solid #bebebe
+  border-radius: 7px
+  &:hover
+    box-shadow: 0px 0px 15px #102f36
+  &:after
+    content: ""
+    position: absolute
+    display: none
+    left: 9px
+    top: 5px
+    width: 5px
+    height: 10px
+    border: solid $pax-white
+    border-width: 0 3px 3px 0
+    -webkit-transform: rotate(45deg)
+    -ms-transform: rotate(45deg)
+    transform: rotate(45deg)
+
+.checkmarkContainer
+  display: block
+  padding-left: 35px
+  cursor: pointer
+  font-size: 22px
+  -webkit-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
+  margin: 20px 0 10px 0
+  &:hover input ~ .checkmark
+    background-color: #bebebe
+  input:checked ~ .checkmark
+    background-color: $pax-cyan
+    border-color: $pax-darkcyan
+  .label
+    @extend .pax-regular
+  input
+    position: absolute
+    opacity: 0
+    cursor: pointer
+    height: 0
+    width: 0
+    &:checked ~ .checkmark:after
+      display: block

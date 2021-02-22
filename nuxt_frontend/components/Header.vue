@@ -1,7 +1,7 @@
 <template>
   <div>
     <NuxtLink to="/">Home</NuxtLink>
-    <NuxtLink to="/">Somewhere</NuxtLink>
+    <NuxtLink to="/join-us">Apply</NuxtLink>
     <NuxtLink to="/">Still Home</NuxtLink>
   </div>
 </template>
