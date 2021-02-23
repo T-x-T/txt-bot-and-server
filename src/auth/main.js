@@ -91,6 +91,7 @@ oauth.getAccess_token = function(code, redirect, callback){
   let redirect_uri = '';
   redirect_uri = redirect == 'application' ? config.auth.discord_redirect_uri_application: redirect_uri;
   redirect_uri = redirect == 'staffLogin'  ? config.auth.discord_redirect_uri_staffLogin : redirect_uri;
+  redirect_uri = redirect == 'applicationNew'  ? config.auth.discord_redirect_uri_applicationNew : redirect_uri;
 
   //Now lets get the access_token from that code
   let payload = qs.stringify({

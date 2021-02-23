@@ -102,6 +102,7 @@ const router = {
   '/html/api/mcversion': handlers.paxapi.mcversion,
   '/html/api/memberworldmapdata': handlers.paxapi.memberworldmapdata,
   '/html/api/statsoverview': handlers.paxapi.statsoverview,
+  '/html/api/discorduserfromcode': handlers.paxapi.discorduserfromcode,
   '/html/login': handlers.paxLogin,
   '/html/staff': handlers.paxStaff
 };

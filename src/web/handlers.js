@@ -541,6 +541,23 @@ handlers.paxapi.statsoverview = function(data, callback){
   });
 }
 
+handlers.paxapi.discorduserfromcode = function(data, callback){
+  const code = data.queryStringObject.code;
+  oauth.getDiscordId({code: code}, {redirect: "applicationNew"}, function(err, discordId){
+    if(!err && discordId){
+      discord_api.getNicknameByID(discordId, function(discordNick){
+        if(discordNick){
+          callback(200, {discordNick: discordNick, discordId: discordId}, "json");
+        }else{
+          callback(500, {err: `Couldnt turn discord id ${discordId} into username`});
+        }
+      });
+    }else{
+      callback(500, {err}, "json");
+    }
+  });
+}
+
 //Internal helper functions to make code cleaner
 var _internal = {};
 

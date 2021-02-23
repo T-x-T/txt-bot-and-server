@@ -6,14 +6,14 @@
       <form method="POST" @submit.prevent="submit()">
         <h4>General Information</h4>
         <div class="formInput">
-          <label for="dicordNick">Your Discord Username</label>
-          <input v-model="dicordNick" type="text" name="discordNick" placeholder="Your Discord Username" required />
+          <label for="discordNick">Your Discord Username</label>
+          <input v-model="discordNick" @blur="validateDiscordNick" type="text" name="discordNick" placeholder="Your Discord Username" required />
           <span class="hoverInfo">
             Our bot will automatically whitelist you and give you roles on our Discord Server as soon as you joined it and got accepted.
             <br>
             Format like this: Txt#0001 or ExxPlore#3705
             <br><br>
-            <button>Get Username automatically</button><br>
+            <button><a href="https://discord.com/api/oauth2/authorize?client_id=624980994889613312&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fjoin-us&response_type=code&scope=identify">Get Username automatically</a></button><br>
             This will redirect you to Discord. Login and follow the instructions. Once you're back here the Username will be entered for you.
           </span>
         </div>
@@ -209,6 +209,8 @@ div.formInput
     button:hover
       background: $pax-cyan
       filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
+    a:hover
+      color: white
   span.hoverInfoTextarea
     margin-top: -25px
   &:hover
@@ -221,7 +223,8 @@ div.formInput
 import countries from "~/assets/countries.json";
 export default {
   data: () => ({
-    dicordNick: null,
+    discordId: null,
+    discordNick: null,
     mcIgn: null,
     email: null,
     country: null,
@@ -242,6 +245,7 @@ export default {
 
   mounted(){
     this.generateValidBirthYears();
+    this.turnCodeintoDiscordNick();
   },
 
   methods: {
@@ -277,6 +281,34 @@ export default {
     generateValidBirthYears(){
       const curYear = new Date().getFullYear();
       for(let i = curYear - 12; i > curYear - 113; i--) this.validBirthYears.push(i);
+    },
+
+    async turnCodeintoDiscordNick(){
+      if(this.$route.query.code){
+        const res = (await this.$axios.$get("/api/discorduserfromcode?code=" + this.$route.query.code)).discordNick;
+        this.discordNick = res.discordNick;
+        this.discordId = res.discordId;
+      }
+    },
+
+    validateDiscordNick(){
+      if(typeof this.discordNick === "string"){
+        //Insert # if it was forgotten
+        if(!this.discordNick.includes("#")){
+          if(Number.isInteger(Number(this.discordNick.slice(-4)))){
+            this.discordNick = `${this.discordNick.slice(0, -4)}#${this.discordNick.slice(-4)}`;
+          }
+        }
+
+        //Now check if the discordNick looks ok
+        if(!this.discordNick.slice(-5, -4) == "#" || !Number.isInteger(Number(this.discordNick.slice(-4)))){
+          this.discordNick = null;
+          return;
+        }
+
+        //Everything fine, lets get the id from the api
+        
+      }
     }
   },
 }
