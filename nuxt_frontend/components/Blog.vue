@@ -74,7 +74,7 @@ article
   margin: 2%
   padding: 20px
   overflow: hidden
-  left: 20%
+  left: 18%
   position: relative
   @media screen and ($mobile)
     width: 98vw
