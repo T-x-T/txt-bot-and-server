@@ -6,7 +6,7 @@
       <form method="POST" @submit.prevent="submit()">
         <h4 v-if="!discordId">Step 1:</h4>
         <div v-if="!discordId">
-          <button type="button" :onclick="`window.location.href = '${$config.discordOauthJoinUs}'`">Authenticate with Discord</button>
+          <button id="discordLogin" type="button" :onclick="`window.location.href = '${$config.discordOauthJoinUs}'`">Authenticate with Discord</button>
           <p>
             Authenticate with Discord to start your application. We will just get your visible data, like your nickname, discriminator and ID. We need this data so we can give you the appropriate roles on our server automatically.
           </p>
@@ -21,7 +21,7 @@
             <label for="mcIgn">Your Minecraft Username</label>
             <input v-model="mcIgn" @blur="validateMcIgn" type="text" name="mcIgn" placeholder="Your Minecraft Username" required />
             <span class="hoverInfo" v-if="!ignIsWrong">You need a legit version bought from mojang. Cracked Accounts won't work.</span>
-            <span class="hoverInfo" v-if="ignIsWrong">The entered Minecraft Username seems to be invalid. You need a legit version bought from mojang. Cracked Accounts won't work.</span>
+            <p id="ignWrong" v-if="ignIsWrong">The entered Minecraft Username seems to be invalid. You need a legit version bought from mojang. Cracked Accounts won't work.</p>
           </div>
 
           <div class="formInput">
@@ -162,6 +162,10 @@ h4
   color: white
   font-size: 22pt
 
+button#discordLogin:hover
+  background: $pax-cyan
+  filter: drop-shadow( 0px 0px 4px rgba(0, 0, 0, .4))
+
 form
   width: 50vw
   padding: 1vw
@@ -170,6 +174,9 @@ form
   box-shadow: 0px 0px 25px #102f36
   @media screen and ($mobile)
     width: 90vw
+
+p#ignWrong
+  color: #fff000
 
 input
   color: white
@@ -245,6 +252,9 @@ div.formInput
   &:hover
     span.hoverInfo
       display: initial
+    
+textarea:focus
+  filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
 
 svg.status
   color: white

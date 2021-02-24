@@ -8,7 +8,7 @@
       <li>Fill out the form</li>
       <li>Wait less than a day</li>
       <li>Check your E-Mails to see if you have been accepted</li>
-      <a href="https://discord.com/oauth2/authorize?client_id=624980994889613312&redirect_uri=https%3A%2F%2Fpaxterya.com%2Fjoin-us.html&response_type=code&scope=identify" target="blank"><button>Authenticate with Discord</button></a>
+      <a :href="$config.discordOauthJoinUs" target="blank"><button>Authenticate with Discord</button></a>
     </ol>
   </div>
 </template>
