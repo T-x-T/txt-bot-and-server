@@ -19,19 +19,19 @@
         <div v-if="discordId">
           <div class="formInput">
             <label for="mcIgn">Your Minecraft Username</label>
-            <input v-model="mcIgn" @blur="validateMcIgn" type="text" name="mcIgn" placeholder="Your Minecraft Username" required />
+            <input v-model="mcIgn" @blur="validateMcIgn" @focus="makeActive" type="text" name="mcIgn" placeholder="Your Minecraft Username" required />
             <span class="hoverInfo" v-if="!ignIsWrong">You need a legit version bought from mojang. Cracked Accounts won't work.</span>
             <p id="ignWrong" v-if="ignIsWrong">The entered Minecraft Username seems to be invalid. You need a legit version bought from mojang. Cracked Accounts won't work.</p>
           </div>
 
           <div class="formInput">
             <label for="email">Your E-Mail</label>
-            <input v-model="email" type="email" name="email" placeholder="Your E-Mail" required />
+            <input v-model="email" @focus="makeActive" @blur="makeInactive" type="email" name="email" placeholder="Your E-Mail" required />
             <span class="hoverInfo">We will contact you via E-Mail. Staff can't see your E-Mail and we don't give it to any third parties. We will only contact you twice regarding your application.</span>
           </div>
 
           <div class="formInput">
-            <input v-model="country" type="text" @blur="closeCountryDropdown" @input="countryDropdownOpen = true" placeholder="Your Home Country" required />
+            <input v-model="country" @focus="makeActive" @blur="closeCountryDropdown" @input="countryDropdownOpen = true" type="text" placeholder="Your Home Country" required />
             <div id="countryList" ref="countryList" v-if="countryDropdownOpen">
               <div v-for="(item, index) in countryList" :key="index">
                 <div v-if="countryFitsInput(item)">
@@ -43,8 +43,8 @@
           </div>
 
           <div class="formInput">
-            <p>Birthy Month and Year</p>
-            <select v-model="birthMonth" required>
+            <p>Birth Month and Year</p>
+            <select v-model="birthMonth" @focus="makeActive" @blur="makeInactive" required>
               <option value="01" label="January">January</option>
               <option value="02" label="February">February</option>
               <option value="03" label="March">March</option>
@@ -59,28 +59,28 @@
               <option value="12" label="December">December</option>
             </select>
 
-            <select v-model="birthYear" required>
+            <select v-model="birthYear" @focus="makeActive" @blur="makeInactive" required>
               <option v-for="(item, index) in validBirthYears" :key="index" :value="item" :label="item">{{item}}</option>
             </select>
             <br>
             <span class="hoverInfo">We'd like to know your approximate age for statistical purposes. Your age is not a crucial factor in your application. You can tell us to not share your age publically further down.</span>
           </div>
           <br><br>
-          <div class="formInput">
+          <div class="formInput active">
             <h4>About me</h4>
             <span class="hoverInfo hoverInfoTextarea">Tell us something about yourself so we get to know you. What you're doing with your life, what you love about Minecraft, what pizza flavor is your favorite, anything you'd like to share with us.</span>
             <textarea v-model="aboutMe" placeholder="Type text..." maxlength="1500" required></textarea>
             <p class="characterCount">{{1500 - aboutMe.length}} characters remaining</p>
           </div>
           <br><br>
-          <div class="formInput">
+          <div class="formInput active">
             <h4>Why do you want to join Paxterya?</h4>
             <span class="hoverInfo hoverInfoTextarea">What is your first goal on our server, what project do you want to realize, what do you think you can contribute to our community?</span>
             <textarea v-model="motivation" placeholder="Type text..." maxlength="1500" required></textarea>
             <p class="characterCount">{{1500 - motivation.length}} characters remaining</p>
           </div>
           <br><br>
-          <div class="formInput">
+          <div class="formInput active">
             <h4>Your previous buildings</h4>
             <span class="hoverInfo hoverInfoTextarea">
               Please show us some screenshots of your previous Minecraft buildings, the ones you're most proud of! Don't worry, it doesn't have to be anything big.
@@ -157,6 +157,7 @@ div#wrapper
   display: flex
   flex-direction: column
   align-items: center
+  overflow-x: hidden
 
 h4
   color: white
@@ -173,13 +174,25 @@ form
   margin-bottom: 100px
   box-shadow: 0px 0px 25px #102f36
   @media screen and ($mobile)
-    width: 90vw
+    width: 98vw
+    box-shadow: none
 
 p#ignWrong
   color: #fff000
 
 input
   color: white
+  &::placeholder
+    opacity: 0.8
+  @media screen and ($mobile)
+    width: 100%
+
+textarea
+  @media screen and ($mobile)
+    width: 98%
+
+textarea:focus
+  filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
 
 select#country
   display: none
@@ -211,6 +224,8 @@ p.entry
 
 .checkmarkContainer
   margin: 0
+  input
+    width: 0
 
 hr
   margin-bottom: 20px
@@ -229,6 +244,8 @@ button#submit
     height: 32pt
     transform: rotate(45deg)
     margin-bottom: -4pt
+  @media screen and ($mobile)
+    width: 90%
 
 div.formInput
   span.hoverInfo
@@ -247,14 +264,21 @@ div.formInput
       filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
     a:hover
       color: white
+    @media screen and ($mobile)
+      margin: 0
+      padding: 0
+      position: relative
+      opacity: 0.8
   span.hoverInfoTextarea
     margin-top: -25px
   &:hover
+    @media screen and ($desktop)
+      span.hoverInfo
+        display: initial
+div.active
+  @media screen and ($mobile)
     span.hoverInfo
       display: initial
-    
-textarea:focus
-  filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
 
 svg.status
   color: white
@@ -341,7 +365,9 @@ export default {
 
       return fits;
     },
-    closeCountryDropdown(){
+    closeCountryDropdown(e){
+      this.makeInactive(e);
+
       setTimeout(() => {
         this.countryDropdownOpen = false
       
@@ -370,7 +396,9 @@ export default {
       }
     },
 
-    async validateMcIgn(){
+    async validateMcIgn(e){
+      this.makeInactive(e);
+
       if(!this.mcIgn) return;
       const res = await this.$axios.$get(`/users/profiles/minecraft/${encodeURIComponent(this.mcIgn)}?at=${Date.now()}`)
       if(!res){
@@ -380,6 +408,14 @@ export default {
         this.mcIgn = res.name;
         this.ignIsWrong = false;
       }
+    },
+
+    makeActive(e){
+      e.target.parentNode.classList.add("active");
+    },
+
+    makeInactive(e){
+      e.target.parentNode.classList.remove("active");
     }
   },
 }
