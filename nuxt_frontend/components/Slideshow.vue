@@ -1,59 +1,67 @@
 <template>
-  <div>
+  <div id="wrapper">
     <div id="section_slideshow" class="scrollTarget"></div>
-    <svg ref="back" id="back" @click="back()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-    </svg>
 
-    <img :src="images[index]" />
+    <div id="controlsWrapper">
+      <div id="controls">
+        <svg ref="back" id="back" @click="back()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+        <p>{{index + 1}} / {{images.length}}</p>
+        <svg ref="next" id="next" @click="next()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+      </div>
+    </div>
 
-    <svg ref="next" id="next" @click="next()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-    </svg>
+    <img :src="images[index]"/>
+
   </div>
 </template>
 
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
 
-div
+div#wrapper
   position: relative
   @media screen and ($mobile)
     width: 100vw
 
 img
-  width: 100%
+  width: 90vw
   height: auto
+  border-radius: 25px
+  margin-top: 25px
+  margin-left: 5vw
+  filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
   @media screen and ($mobile)
     width: 100vw
 
-svg
-  width: 20vh
-  height: 20vh
-  color: white
-  filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
-  position: absolute
-  &:hover
-    filter: drop-shadow( 0px 0px 12px rgba(0, 0, 0, 1))
-  @media screen and ($mobile)
-    width: 15vw
-    height: 15vw
+div#controlsWrapper
+  display: flex
+  justify-content: center
+  height: 100%
 
-svg#back
-  top: 50%
-  margin-top: -10vh
-  @media screen and ($mobile)
-    top: 25vw
-    margin: 0
-svg#next
-  top: 50%
-  left: 100%
-  margin-top: -10vh
-  margin-left: -20vh
-  @media screen and ($mobile)
-    top: 25vw
-    left: 85vw
-    margin: 0
+div#controls
+  width: 500px
+  height: 100px
+  display: flex
+  flex-wrap: nowrap
+  justify-content: space-between
+  align-items: center
+  background: rgba(0, 0, 0, 0.25)
+  border-radius: 25px
+  backdrop-filter: blur(20px)
+  position: absolute
+  z-index: 2
+  bottom: 25px
+  svg
+    height: 80px
+    width: 80px
+    color: white
+    filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
+    &:hover
+      filter: drop-shadow( 0px 0px 12px rgba(0, 0, 0, 1))
+  p
+    @extend .pax-semibold
+    font-size: 60px
+
 </style>
 
 <script>
