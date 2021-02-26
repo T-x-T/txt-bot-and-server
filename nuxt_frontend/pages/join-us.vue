@@ -158,6 +158,7 @@ div#wrapper
   flex-direction: column
   align-items: center
   overflow-x: hidden
+  margin-top: 100px
 
 h4
   color: white

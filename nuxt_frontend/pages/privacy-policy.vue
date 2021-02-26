@@ -49,6 +49,9 @@
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
 
+main
+  margin-top: 100px
+
 article
   margin: 3vw
   padding: 2vw
