@@ -88,6 +88,8 @@ div#wrapper
       &:hover
         opacity: 1
         scale: 1.1
+  @media screen and ($mobile)
+    display: none
 
 .title
   display: none

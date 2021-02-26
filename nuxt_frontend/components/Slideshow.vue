@@ -22,6 +22,7 @@ div#wrapper
   position: relative
   @media screen and ($mobile)
     width: 100vw
+    margin-bottom: 125px
 
 img
   width: 90vw
@@ -32,6 +33,9 @@ img
   filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
   @media screen and ($mobile)
     width: 100vw
+    margin: 0
+    filter: none
+    border-radius: 0
 
 div#controlsWrapper
   display: flex
@@ -51,6 +55,10 @@ div#controls
   position: absolute
   z-index: 2
   bottom: 25px
+  @media screen and ($mobile)
+    bottom: -100px
+    border-radius: 25px
+    width: 90vw
   svg
     height: 80px
     width: 80px

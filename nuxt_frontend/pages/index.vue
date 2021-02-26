@@ -20,7 +20,8 @@
 </template>
 
 <style lang="sass" scoped>
-
+main
+  overflow-x: hidden
 </style>
 
 <script>
