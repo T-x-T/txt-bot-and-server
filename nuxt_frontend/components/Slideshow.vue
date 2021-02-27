@@ -46,7 +46,7 @@ div#controlsWrapper
   height: 100%
 
 div#controls
-  width: 750px
+  width: max-content
   height: 100px
   display: flex
   flex-wrap: nowrap
