@@ -7,7 +7,7 @@
         <svg ref="back" id="back" @click="back()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
         <div id="textContainer">
           <p id="index">{{index + 1}} / {{images[towns[townIndex]].length}}</p>
-          <span v-for="(item, index) in towns" :key="index" :ref="`town${index}`" @click="townIndex = index" class="town">{{item}}</span>
+          <span v-for="(item, i) in towns" :key="i" :ref="`town${i}`" @click="townIndex = i; index = 0" class="town">{{item}}</span>
         </div>
         <svg ref="next" id="next" @click="next()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
       </div>
