@@ -319,6 +319,10 @@ export default {
     await this.turnCodeintoDiscordNick();
   },
 
+  mounted(){
+    window.history.replaceState({}, null, "/join-us");
+  },
+
   methods: {
     async submit(){
       const application = {
@@ -392,7 +396,7 @@ export default {
           this.discordNick = res.discordNick;
           this.discordId = res.discordId;
         }catch(e){
-          console.error("Received error trying to turn code into discordId: ", e);
+          console.error("Received error trying to turn code into discordId: ", e.response.data.err);
         }
       }
     },

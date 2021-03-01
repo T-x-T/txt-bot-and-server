@@ -558,6 +558,17 @@ handlers.paxapi.discorduserfromcode = function(data, callback){
   });
 }
 
+handlers.paxapi.tokenfromcode = function(data, callback){
+  const code = data.queryStringObject.code;
+  oauth.getAccessLevel({code: code}, {redirect: 'interface'}, function(err, access_level, access_token) {
+    if(access_token && !err){
+      callback(200, {access_token}, "json");
+    }else{
+      callback(500, {err}, "json");
+    }
+  });
+}
+
 //Internal helper functions to make code cleaner
 var _internal = {};
 
