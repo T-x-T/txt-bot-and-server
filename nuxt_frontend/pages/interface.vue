@@ -1,7 +1,18 @@
 <template>
   <main>
     <h1>Staff Interface</h1>
-    <p>{{token}}</p>
+    <div v-if="accessLevel < 7">
+      <p>You're not cool enough to see anything here. Besides this message of course</p>
+      <NuxtLink to="/">Go home</NuxtLink>
+    </div>
+
+    <div v-if="accessLevel >= 7">
+      <InterfaceApplicants :token="token" />
+    </div>
+    
+    <div v-if="accessLevel >= 9">
+
+    </div>
   </main>
 </template>
 
@@ -13,6 +24,7 @@
 export default {
   data: () => ({
     token: null,
+    accessLevel: null,
   }),
 
   async fetch(){
@@ -36,7 +48,9 @@ export default {
   methods: {
     async turnCodeIntoToken(){
       try{
-        this.token = (await this.$axios.$get("/api/tokenfromcode?code=" + this.$route.query.code)).access_token;
+        const res = await this.$axios.$get("/api/tokenfromcode?code=" + this.$route.query.code);
+        this.token = res.access_token;
+        this.accessLevel = res.access_level;
       }catch(e){
         console.error("Failed to get token from code: ", e.response.data.err);
       }

@@ -111,6 +111,9 @@ section
     color: $pax-cyan
     padding-right: 5px
 
+::v-deep li
+  color: white
+
 ::v-deep summary
   @extend .pax-semibold
   color: $pax-lightcyan
