@@ -1,7 +1,7 @@
 <template>
   <div id="wrapper">
     <h1>Applications</h1>
-    <table v-if="!openApplication">
+    <table class="hover" v-if="!openApplication">
       <thead>
         <th>ID</th>
         <th>Timestamp</th>
@@ -22,8 +22,11 @@
       </tbody>
     </table>
 
-    <div id="popup" v-if="openApplication">
-      <button @click="openApplication = null">back</button>
+    <div id="popup" class="hover" v-if="openApplication">
+      <button id="back" @click="openApplication = null; denyReason = null; customDenyReason = false">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+        back
+      </button>
 
       <div id="grid">
         <div id="basicInfo">
@@ -75,6 +78,18 @@
             <h3>Current Status</h3><p>{{openApplication.status == 1 ? "Pending review" : openApplication.status == 2 ? "Denied" : "Accepted"}}</p>
           </div>
         </div>
+
+        <div id="controls">
+          <input v-if="customDenyReason" v-model="denyReason" type="text">
+          <select v-if="!customDenyReason" v-model="denyReason" @change="customDenyReason = true">
+            <option value="">Deny reason</option>
+            <option value="">Custom</option>
+            <option value="Your application was a bit too short, so try adding some more depth and detail.">Your application was a bit too short, so try adding some more depth and detail.</option>
+            <option value="Your application didn't contain any pictures of your previous builds. If you have trouble with adding them, then please let us help you by joining our Discord server.">Your application didn't contain any pictures of your previous builds. If you have trouble with adding them, then please let us help you by joining our Discord server.</option>
+          </select>
+          <button id="accept" @click="accept">Accept</button>
+          <button id="deny" @click="deny">Deny</button>
+        </div>
       </div>
     </div>
   </div>
@@ -98,14 +113,53 @@
 #popup
   width: 50vw
   margin-left: 25vw
+  background: $pax-darkcyan
+  padding: 25px
+  button#back
+    font-size: 14pt
+    svg
+      height: 28px
+      margin-bottom: -7px
+    &:hover
+      background: $pax-cyan
+      filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
   #grid
     display: grid
     grid-template-columns: 50% 50%
     grid-template-rows: 10% 30% 10%
     #texts, #status
       grid-column: span 2
-  img
-    height: 200px
+  #avatars
+    justify-self: end
+    img
+      height: 200px
+      margin-left: 25px
+  #texts
+    margin: 20px 0 25px 0
+    h4
+      color: white
+      font-size: 16pt
+    .text
+      margin: 10px 0 10px 0
+  #status
+    .value
+      display: inline
+  #controls
+    margin-top: 20px
+    input
+      color: white
+    select
+      width: 90%
+    button
+      padding: 5px 20px 5px 20px
+      margin: 10px 20px 10px 0
+      width: 100px
+      &:hover
+        filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
+    button#accept
+      background: #2a9e75
+    button#deny
+      background: #841717 !important
 </style>
 
 <script>
@@ -113,6 +167,8 @@ export default {
   data: () => ({
     applications: [],
     openApplication: null,
+    denyReason: "",
+    customDenyReason: false,
   }),
 
   props: {
@@ -126,6 +182,14 @@ export default {
   methods: {
     async refresh(){
       this.applications = await this.$axios.$get("/api/applications");
+    },
+
+    async accept(){
+
+    },
+
+    async deny(){
+
     }
   }
 }

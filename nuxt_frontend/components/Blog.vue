@@ -30,7 +30,7 @@
       </article>
 
       <div id="postList" v-if="showAllPosts">
-        <table>
+        <table class="hover">
           <thead>
             <tr>
               <th>Date</th>
