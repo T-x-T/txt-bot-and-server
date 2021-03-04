@@ -2,40 +2,42 @@
   <div id="wrapper">
     <h1>Applications</h1>
     
-    <table class="hover" v-if="!openApplication">
-      <colgroup>
-        <col style="width: 100px;">
-        <col style="width: 200px;">
-        <col style="width: 320px;">
-        <col style="width: 200px;">
-        <col>
-        <col style="width: 200px;">
-      </colgroup>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Timestamp</th>
-          <th>Discord</th>
-          <th>IGN</th>
-          <th>About me</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in applications.slice(0, limit)" :key="index" @click="openPopup(item)">
-          <td>{{item.id}}</td>
-          <td>{{new Date(item.timestamp).toLocaleString("de")}}</td>
-          <td>{{item.discord_nick}}</td>
-          <td>{{item.mc_ign}}</td>
-          <td>{{item.about_me}}</td>
-          <td>{{item.status == 1 ? "Pending review" : item.status == 2 ? "Denied": "Accepted"}}</td>
-        </tr>
-      </tbody>
-    </table>
-    <div id="tableControls" v-if="!openApplication">
-      <button @click="refresh">refresh</button>
-      <button @click="limit+=20">show more</button>
-      <button @click="limit-=20">show less</button>
+    <div v-if="!openApplication">
+      <table class="hover">
+        <colgroup>
+          <col style="width: 100px;">
+          <col style="width: 200px;">
+          <col style="width: 320px;">
+          <col style="width: 200px;">
+          <col>
+          <col style="width: 200px;">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Timestamp</th>
+            <th>Discord</th>
+            <th>IGN</th>
+            <th>About me</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in applications.slice(0, limit)" :key="index" @click="openPopup(item)">
+            <td>{{item.id}}</td>
+            <td>{{new Date(item.timestamp).toLocaleString("de")}}</td>
+            <td>{{item.discord_nick}}</td>
+            <td>{{item.mc_ign}}</td>
+            <td>{{item.about_me}}</td>
+            <td>{{item.status == 1 ? "Pending review" : item.status == 2 ? "Denied": "Accepted"}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="tableControls" >
+        <button @click="refresh">refresh</button>
+        <button @click="limit+=20">show more</button>
+        <button @click="limit-=20">show less</button>
+      </div>
     </div>
 
     <div id="popup" class="hover" v-if="openApplication">
