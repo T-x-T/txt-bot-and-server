@@ -1,7 +1,7 @@
 <template>
   <div id="wrapper">
     <h1>Applications</h1>
-
+    
     <table class="hover" v-if="!openApplication">
       <colgroup>
         <col style="width: 100px;">
@@ -12,12 +12,14 @@
         <col style="width: 200px;">
       </colgroup>
       <thead>
-        <th>ID</th>
-        <th>Timestamp</th>
-        <th>Discord</th>
-        <th>IGN</th>
-        <th>About me</th>
-        <th>Status</th>
+        <tr>
+          <th>ID</th>
+          <th>Timestamp</th>
+          <th>Discord</th>
+          <th>IGN</th>
+          <th>About me</th>
+          <th>Status</th>
+        </tr>
       </thead>
       <tbody>
         <tr v-for="(item, index) in applications.slice(0, limit)" :key="index" @click="openPopup(item)">
@@ -29,19 +31,18 @@
           <td>{{item.status == 1 ? "Pending review" : item.status == 2 ? "Denied": "Accepted"}}</td>
         </tr>
       </tbody>
-      <tfoot>
-        <button @click="refresh">refresh</button>
-        <button @click="limit+=20">show more</button>
-        <button @click="limit-=20">show less</button>
-      </tfoot>
     </table>
+    <div id="tableControls">
+      <button @click="refresh">refresh</button>
+      <button @click="limit+=20">show more</button>
+      <button @click="limit-=20">show less</button>
+    </div>
 
     <div id="popup" class="hover" v-if="openApplication">
       <button id="back" @click="closePopup">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
         back
       </button>
-
       <div id="grid">
         <div id="basicInfo">
           <div class="value">
@@ -120,6 +121,10 @@ table
   table-layout: fixed
   width: 80%
   left: 10%
+
+#tableControls
+  margin-top: 25px
+  margin-left: 10%
 
 .value
   margin: 20px 30px 0 0
