@@ -389,9 +389,9 @@ async function turnFilterIntoApplicationAndCallbackResult(filter, callback){
   switch(Object.keys(filter)[0]) {
     case "id":
       applicationFactory.getById(filter.id)
-        .then(async application => {
-          if(application) {
-            callback(200, await turnApplicationsIntoJson(applications), "json");
+        .then(async applications => {
+          if(applications) {
+            callback(200, await turnApplicationIntoJson(applications, true), "json");
           } else {
             callback(404, {err: "no application found with the given id", id: filter.id}, "json");
           }
@@ -451,9 +451,9 @@ async function turnApplicationsIntoJson(applications) {
   return applicationObjects;
 }
 
-async function turnApplicationIntoJson(application){
-  if(application.getTimestamp().valueOf() < (Date.now() - (1000 * 60 * 60 * 24 * 14))) return null;
-  let discordAvatarUrl = await application.getDiscordAvatarUrl();
+async function turnApplicationIntoJson(application, getExpensiveData){
+  let discordAvatarUrl = null;
+  if(getExpensiveData) discordAvatarUrl = await application.getDiscordAvatarUrl();
   return {
     id: application.getId(),
     timestamp: application.getTimestamp().valueOf(),

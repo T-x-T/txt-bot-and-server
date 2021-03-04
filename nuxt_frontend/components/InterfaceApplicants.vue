@@ -1,7 +1,16 @@
 <template>
   <div id="wrapper">
     <h1>Applications</h1>
+
     <table class="hover" v-if="!openApplication">
+      <colgroup>
+        <col style="width: 100px;">
+        <col style="width: 200px;">
+        <col style="width: 320px;">
+        <col style="width: 200px;">
+        <col>
+        <col style="width: 200px;">
+      </colgroup>
       <thead>
         <th>ID</th>
         <th>Timestamp</th>
@@ -11,7 +20,7 @@
         <th>Status</th>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in applications" :key="index" @click="openApplication=item">
+        <tr v-for="(item, index) in applications.slice(0, limit)" :key="index" @click="openPopup(item)">
           <td>{{item.id}}</td>
           <td>{{new Date(item.timestamp).toLocaleString("de")}}</td>
           <td>{{item.discord_nick}}</td>
@@ -20,10 +29,15 @@
           <td>{{item.status == 1 ? "Pending review" : item.status == 2 ? "Denied": "Accepted"}}</td>
         </tr>
       </tbody>
+      <tfoot>
+        <button @click="refresh">refresh</button>
+        <button @click="limit+=20">show more</button>
+        <button @click="limit-=20">show less</button>
+      </tfoot>
     </table>
 
     <div id="popup" class="hover" v-if="openApplication">
-      <button id="back" @click="openApplication = null; denyReason = null; customDenyReason = false">
+      <button id="back" @click="closePopup">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
         back
       </button>
@@ -89,6 +103,7 @@
           </select>
           <button id="accept" @click="accept">Accept</button>
           <button id="deny" @click="deny">Deny</button>
+          <p v-if="errorMessage">{{errorMessage}}</p>
         </div>
       </div>
     </div>
@@ -97,6 +112,14 @@
 
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
+
+#wrapper
+  margin-bottom: 50px
+
+table
+  table-layout: fixed
+  width: 80%
+  left: 10%
 
 .value
   margin: 20px 30px 0 0
@@ -166,9 +189,11 @@
 export default {
   data: () => ({
     applications: [],
+    limit: 20,
     openApplication: null,
     denyReason: "",
     customDenyReason: false,
+    errorMessage: "",
   }),
 
   props: {
@@ -179,17 +204,48 @@ export default {
     await this.refresh();
   },
 
+  mounted(){
+    setInterval(this.refresh, 1000 * 60);
+  },
+
   methods: {
     async refresh(){
-      this.applications = await this.$axios.$get("/api/applications");
+      this.applications = (await this.$axios.$get("/api/applications")).sort((a, b) => b.id - a.id);
+    },
+
+    async openPopup(application){
+      try{
+        this.openApplication = application;
+        this.openApplication = await this.$axios.$get("/api/applications?id=" + application.id);
+      }catch(e){
+        window.alert(e.response.data.err);
+      }
+    },
+
+    closePopup(){
+      this.openApplication = null;
+      this.denyReason = null;
+      this.customDenyReason = false;
+
+      this.refresh();
     },
 
     async accept(){
-
+      try{
+        await this.$axios.patch("/api/applications", {id: this.openApplication.id, status: 3});
+        this.closePopup();
+      }catch(e){
+        this.errorMessage = e.response.data.err;
+      }
     },
 
     async deny(){
-
+      try{
+        await this.$axios.patch("/api/applications", {id: this.openApplication.id, status: 2, reason: this.denyReason});
+        this.closePopup();
+      }catch(e){
+        this.errorMessage = e.response.data.err;
+      }
     }
   }
 }
