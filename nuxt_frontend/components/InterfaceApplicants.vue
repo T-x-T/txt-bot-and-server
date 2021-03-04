@@ -32,7 +32,7 @@
         </tr>
       </tbody>
     </table>
-    <div id="tableControls">
+    <div id="tableControls" v-if="!openApplication">
       <button @click="refresh">refresh</button>
       <button @click="limit+=20">show more</button>
       <button @click="limit-=20">show less</button>
