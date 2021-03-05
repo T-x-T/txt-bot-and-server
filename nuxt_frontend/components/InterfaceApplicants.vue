@@ -23,20 +23,27 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in applications.slice(0, limit)" :key="index" @click="openPopup(item)">
+          <tr v-for="(item, index) in applications.slice(0, limit)" :key="index" @click="openPopup(item)" :class="rowClasses[index]">
             <td class="desktopOnly">{{item.id}}</td>
             <td>{{new Date(item.timestamp).toLocaleString("de")}}</td>
             <td>{{item.discord_nick}}</td>
             <td>{{item.mc_ign}}</td>
             <td class="desktopOnly">{{item.about_me}}</td>
-            <td>{{item.status == 1 ? "Pending review" : item.status == 2 ? "Denied": "Accepted"}}</td>
+            <td>
+              <div style="display: none;">
+                {{item.status == 1 ? rowClasses[index] = "" : ""}}
+                {{item.status == 2 ? rowClasses[index] = "red" : ""}}
+                {{item.status == 3 ? rowClasses[index] = "green" : ""}}
+              </div>
+              {{item.status == 1 ? "Pending review" : item.status == 2 ? "Denied": "Accepted"}}
+            </td>
           </tr>
         </tbody>
       </table>
       <div id="tableControls" >
         <button @click="refresh">refresh</button>
-        <button @click="limit+=20">show more</button>
-        <button @click="limit-=20">show less</button>
+        <button @click="showMore">show more</button>
+        <button @click="showLess">show less</button>
       </div>
     </div>
 
@@ -123,6 +130,12 @@ table
   table-layout: fixed
   width: 80%
   left: 10%
+  border-collapse: collapse
+  tr.green td:last-child
+    color: $pax-green
+  tr.red td:last-child
+    color: $pax-red
+    font-weight: 900
   @media screen and ($mobile)
     width: 100vw
     left: 0
@@ -132,6 +145,9 @@ table
 #tableControls
   margin-top: 25px
   margin-left: 10%
+  button:hover
+    background: $pax-cyan
+    filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
 
 .value
   margin: 20px 30px 0 0
@@ -201,9 +217,9 @@ table
       &:hover
         filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
     button#accept
-      background: #2a9e75
+      background: $pax-green
     button#deny
-      background: #841717 !important
+      background: $pax-red !important
 </style>
 
 <script>
@@ -211,6 +227,7 @@ export default {
   data: () => ({
     applications: [],
     limit: 20,
+    rowClasses: [],
     openApplication: null,
     denyReason: "",
     customDenyReason: false,
@@ -232,6 +249,16 @@ export default {
   methods: {
     async refresh(){
       this.applications = (await this.$axios.$get("/api/applications")).sort((a, b) => b.id - a.id);
+    },
+
+    showMore(){
+      this.limit < this.applications.length ? this.limit += 20 : this.limit = this.applications.length;
+      this.refresh();
+    },
+
+    showLess(){
+      this.limit > 20 ? this.limit -= 20 : this.limit = 20;
+      this.refresh();
     },
 
     async openPopup(application){
