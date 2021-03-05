@@ -5,30 +5,30 @@
     <div v-if="!openApplication">
       <table class="hover">
         <colgroup>
-          <col style="width: 100px;">
+          <col class="desktopOnly" style="width: 100px;">
           <col style="width: 200px;">
           <col style="width: 320px;">
-          <col style="width: 200px;">
-          <col>
+          <col class="desktopOnly" style="width: 200px;">
+          <col class="desktopOnly">
           <col style="width: 200px;">
         </colgroup>
         <thead>
           <tr>
-            <th>ID</th>
+            <th class="desktopOnly">ID</th>
             <th>Timestamp</th>
-            <th>Discord</th>
-            <th>IGN</th>
-            <th>About me</th>
+            <th >Discord</th>
+            <th >IGN</th>
+            <th class="desktopOnly">About me</th>
             <th>Status</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in applications.slice(0, limit)" :key="index" @click="openPopup(item)">
-            <td>{{item.id}}</td>
+            <td class="desktopOnly">{{item.id}}</td>
             <td>{{new Date(item.timestamp).toLocaleString("de")}}</td>
             <td>{{item.discord_nick}}</td>
             <td>{{item.mc_ign}}</td>
-            <td>{{item.about_me}}</td>
+            <td class="desktopOnly">{{item.about_me}}</td>
             <td>{{item.status == 1 ? "Pending review" : item.status == 2 ? "Denied": "Accepted"}}</td>
           </tr>
         </tbody>
@@ -123,6 +123,11 @@ table
   table-layout: fixed
   width: 80%
   left: 10%
+  @media screen and ($mobile)
+    width: 100vw
+    left: 0
+    col
+      width: auto !important
 
 #tableControls
   margin-top: 25px
@@ -145,6 +150,10 @@ table
   margin-left: 25vw
   background: $pax-darkcyan
   padding: 25px
+  @media screen and ($mobile)
+    width: 90vw
+    padding: 5vw
+    margin: 0
   button#back
     font-size: 14pt
     svg
@@ -156,16 +165,20 @@ table
   #grid
     display: grid
     grid-template-columns: 50% 50%
-    grid-template-rows: 10% 30% 10%
+    grid-template-rows: 200px "*" 100px 100px
+    @media screen and ($mobile)
+      grid-template-columns: 100%
+      grid-template-rows: repeat(5, max-content)
     #texts, #status
-      grid-column: span 2
+      @media screen and ($desktop)
+        grid-column: span
   #avatars
     justify-self: end
     img
       height: 200px
       margin-left: 25px
   #texts
-    margin: 20px 0 25px 0
+    margin: 20px 0 50px 0
     h4
       color: white
       font-size: 16pt
@@ -173,7 +186,8 @@ table
       margin: 10px 0 10px 0
   #status
     .value
-      display: inline
+      @media screen and ($desktop)
+        display: inline
   #controls
     margin-top: 20px
     input
