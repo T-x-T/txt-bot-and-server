@@ -19,24 +19,25 @@
             <th >Discord</th>
             <th >IGN</th>
             <th class="desktopOnly">About me</th>
-            <th>Status</th>
+            <th>
+              <select v-model="statusFilter">
+                <option value="null" disabled>Status</option>
+                <option value="">All</option>
+                <option value="1">Pending review</option>
+                <option value="2">Denied</option>
+                <option value="3">Accepted</option>
+              </select>
+            </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in applications.slice(0, limit)" :key="index" @click="openPopup(item)" :class="rowClasses[index]">
+          <tr v-for="(item, index) in filteredApplications.slice(0, limit)" :key="index" @click="openPopup(item)" :class="rowClasses[index]">
             <td class="desktopOnly">{{item.id}}</td>
             <td>{{new Date(item.timestamp).toLocaleString("de")}}</td>
             <td>{{item.discord_nick}}</td>
             <td>{{item.mc_ign}}</td>
             <td class="desktopOnly">{{item.about_me}}</td>
-            <td>
-              <div style="display: none;">
-                {{item.status == 1 ? rowClasses[index] = "" : ""}}
-                {{item.status == 2 ? rowClasses[index] = "red" : ""}}
-                {{item.status == 3 ? rowClasses[index] = "green" : ""}}
-              </div>
-              {{item.status == 1 ? "Pending review" : item.status == 2 ? "Denied": "Accepted"}}
-            </td>
+            <td>{{item.status == 1 ? "Pending review" : item.status == 2 ? "Denied": "Accepted"}}</td>
           </tr>
         </tbody>
       </table>
@@ -132,9 +133,9 @@ table
   left: 10%
   border-collapse: collapse
   tr.green td:last-child
-    color: $pax-green
+    color: lightgreen
   tr.red td:last-child
-    color: $pax-red
+    color: red
     font-weight: 900
   @media screen and ($mobile)
     width: 100vw
@@ -187,7 +188,7 @@ table
       grid-template-rows: repeat(5, max-content)
     #texts, #status
       @media screen and ($desktop)
-        grid-column: span
+        grid-column: 1 / span 2
   #avatars
     justify-self: end
     img
@@ -226,29 +227,45 @@ table
 export default {
   data: () => ({
     applications: [],
+    filteredApplications: [],
     limit: 20,
     rowClasses: [],
     openApplication: null,
     denyReason: "",
     customDenyReason: false,
     errorMessage: "",
+    statusFilter: null,
   }),
 
   props: {
     token: String
   },
 
-  async fetch(){
+  async mounted(){
     await this.refresh();
+    setInterval(this.refresh, 1000 * 60);
   },
 
-  mounted(){
-    setInterval(this.refresh, 1000 * 60);
+  watch: {
+    statusFilter(newStatus, oldStatus){
+      this.filter("status", newStatus);
+    }
   },
 
   methods: {
     async refresh(){
       this.applications = (await this.$axios.$get("/api/applications")).sort((a, b) => b.id - a.id);
+      this.filter("status", this.statusFilter);
+    },
+
+    filter(property, value){
+      if(property && value){
+        this.filteredApplications = this.applications.filter(x => x[property] == value);
+      }else{
+        this.filteredApplications = this.applications;
+      }
+
+      this.rowClasses = this.filteredApplications.map(x => x.status == 1 ? "" : x.status == 2 ? "red" : "green");
     },
 
     showMore(){
