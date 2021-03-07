@@ -11,7 +11,7 @@
     </div>
     
     <div v-if="accessLevel >= 9">
-
+      <InterfaceBlog :token="token" />
     </div>
   </main>
 </template>
