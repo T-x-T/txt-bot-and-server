@@ -24,7 +24,7 @@ helpers.sendAcceptedMemberWelcomeMessage = function (application) {
   else msg = `Welcome <@${application.getDiscordId()}> to Paxterya!`;
   msg += '\n\nThis means you can now join the server! If you have any troubles please ping the admins!\n';
   msg += 'It is also a good time to give our rules a read: https://paxterya.com/rules\n';
-  msg += 'Please also take a look at our FAQ: <#${user.guild.channels.find(channel => channel.name == "faq").id}>\n';
+  msg += `Please also take a look at our FAQ: <#${user.guild.channels.find(channel => channel.name == "faq").id}>\n`;
   msg += 'The IP of the survival server is paxterya.com and the IP for the creative Server is paxterya.com:25566\n\n';
   msg += 'If you encounter any issues or have any questions, feel free to contact our staff.'
   helpers.sendMessage(msg, config.discord_bot.channel.new_member_announcement, function (err) {
