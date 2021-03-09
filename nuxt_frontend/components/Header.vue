@@ -1,10 +1,10 @@
 <template>
   <div id="outer">
-    <div id="inner">
-      <NuxtLink to="/">Home</NuxtLink>
-      <NuxtLink to="/join-us">Apply</NuxtLink>
-      <NuxtLink to="/">Sumthin</NuxtLink>
-    </div>
+      <NuxtLink to="/">
+        <div id="bg">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+        </div>
+      </NuxtLink>
   </div>
 </template>
 
@@ -18,33 +18,23 @@ div#outer
   position: fixed
   top: 15px
   z-index: 100
-  @media screen and ($mobile)
-    top: 0px
 
-div#inner
+div#bg 
   background: rgba(0, 0, 0, 0.25)
-  display: flex
-  flex-wrap: nowrap
-  align-items: stretch
-  justify-content: center
-  width: max-content
-  backdrop-filter: blur(20px)
-  border-radius: 20px
-  padding-left: 40px
-  padding-right: 40px
-  a
-    color: white
-    text-decoration: none
-    @extend .pax-semibold
-    font-size: 20pt
-    padding: 20px 40px 20px 40px
-    text-shadow: 0px 0px 5px #102f36
-    &:hover
-      text-shadow: 0px 0px 15px #102f36
-      @media screen and ($desktop)
-        transform: scale(1.2)
-  @media screen and ($mobile)
-    padding: 0
-    width: 100vw
-    border-radius: 0px
+  backdrop-filter: blur(10px)
+  border-radius: 100%
+  padding: 15px
+  height: 75px
+  width: 75px
+  &:hover
+    transform: scale(1.1)
+
+svg
+  color: white
+  height: 100%
+  width: 100%
+  opacity: 0.5
+  margin-top: -2px
+  &:hover
+    opacity: 1
 </style>

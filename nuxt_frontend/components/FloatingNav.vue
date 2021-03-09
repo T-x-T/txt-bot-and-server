@@ -1,5 +1,14 @@
 <template>
   <div id="wrapper">
+    <div class="item" @click="scrollTo('section_features')">
+      <NuxtLink to="/join-us">
+        <h1 class="title">Apply</h1>
+        <svg id="apply" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+      </NuxtLink>
+    </div>
+
+    <hr>
+
     <div class="item" id="icon_features" @click="scrollTo('section_features')">
       <h1 class="title">Features</h1>
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
@@ -27,12 +36,12 @@
 
     <div class="item" @click="scrollTo('section_rules')">
       <h1 class="title">Rules</h1>
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
     </div>
 
     <div class="item" @click="scrollTo('section_howToJoin')">
       <h1 class="title">How to join</h1>
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" /></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
     </div>
 
     <div class="item" @click="scrollTo('section_blog')">
@@ -79,24 +88,40 @@ div#wrapper
   backdrop-filter: blur(20px)
   -webkit-backdrop-filter: blur(20px)
   transition-duration: 2s
-  padding-top: 1vw
-  padding-bottom: 1vw
+  padding-top: 1vh
+  padding-bottom: 1vh
   &:hover
     background: rgba(0, 0, 0, 0.25)
     svg
       opacity: 0.2
       &:hover
         opacity: 1
-        scale: 1.1
+        transform: scale(1.1)
+    svg#apply
+      opacity: 0.5
+      &:hover
+        opacity: 1
+        transform: scale(1.1)
+    hr
+      opacity: 0.2
   @media screen and ($mobile)
     display: none
+
+hr
+  width: 100%
+  height: 0.5vh
+  background: white
+  border-width: 0
+  opacity: 0.05
+  margin: 1vh 0 1vh 0
 
 .title
   display: none
   position: absolute
   right: 5vw
+  margin-top: -2vh
   text-align: right
-  font-size: 40pt
+  font-size: 6vh
   width: max-content
   filter: drop-shadow( 0px 0px 16px rgba(0, 0, 0, .9))
 
@@ -106,11 +131,14 @@ div#wrapper
       display: inherit
 
 svg
-  width: 3vw
+  width: 6vh
   height: auto
   color: white
   opacity: 0.05
-  margin: 0.1vw
+  margin: 0.2vh
+
+svg#apply
+  opacity: 0.2
 </style>
 
 <script>
