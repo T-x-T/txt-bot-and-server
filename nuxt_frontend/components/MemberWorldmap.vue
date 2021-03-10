@@ -5,9 +5,9 @@
     <p class="subtitle">Where our Members live IRL</p>
     <client-only>
       <div v-if="inView">
-        <script src="https://d3js.org/d3.v3.min.js" @load="loadedScripts += 1" async="false"></script>
-        <script src="https://d3js.org/topojson.v2.min.js" @load="loadedScripts += 1" async="false"></script>
-        <script src="/datamaps.js" @load="loadedScripts += 1" async="false"></script>
+        <script type="application/javascript" src="https://d3js.org/d3.v3.min.js" @load="loadedScripts += 1" async="false"></script>
+        <script type="application/javascript" src="https://d3js.org/topojson.v2.min.js" @load="loadedScripts += 1" async="false"></script>
+        <script type="application/javascript" src="/datamaps.js" @load="loadedScripts += 1" async="false"></script>
       </div>
 
       <div id="map">
