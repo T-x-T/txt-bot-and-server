@@ -1,5 +1,5 @@
 <template>
-  <div id="wrapper">
+  <div id="wrapper" ref="dynmapsWrapper">
     <div id="section_dynmaps" class="scrollTarget"></div>
     <h1>Worlds</h1>
     <div id="container">
@@ -17,7 +17,7 @@
           </svg>
         </div>
         <div class="iframeContainer">
-          <iframe class="hover" @mouseleave="survivalActive = false" src="https://paxterya.com/dynmap/survival/?nocompass=true" loading="lazy"></iframe>
+          <iframe v-if="inView" class="hover" @mouseleave="survivalActive = false" src="https://paxterya.com/dynmap/survival/?nocompass=true" loading="lazy"></iframe>
         </div>
         <p @click="survivalActive = true" v-if="!survivalActive">To look around, click into the Map</p>
       </div>    
@@ -35,7 +35,7 @@
           </svg>
         </div>
         <div class="iframeContainer">
-          <iframe class="hover" @mouseleave="creativeActive = false" src="https://paxterya.com/dynmap/creative/?nocompass=true&mapname=surface" loading="lazy"></iframe>
+          <iframe v-if="inView" class="hover" @mouseleave="creativeActive = false" src="https://paxterya.com/dynmap/creative/?nocompass=true&mapname=surface" loading="lazy"></iframe>
         </div>
         <p @click="creativeActive = true" v-if="!creativeActive">To look around, click into the Map</p>
       </div>   
@@ -122,6 +122,34 @@ export default {
   data: () => ({
     survivalActive: false,
     creativeActive: false,
-  })
+    inView: false,
+  }),
+
+  mounted(){
+    this.$nextTick(this.setupOberserver());
+  },
+
+  methods: {
+    intersect(entries){
+      if(entries[0].isIntersecting){
+        this.inView = true;
+      }else{
+        this.inView = false;
+      }
+    },
+
+    setupOberserver(){
+      this.$nextTick(function(){
+        const options = {
+          root: null,
+          rootMargin: "100px",
+          threshold: 0.0
+        }
+
+        const observer = new IntersectionObserver(this.intersect, options);
+        observer.observe(this.$refs["dynmapsWrapper"]);
+      });
+    }
+  }
 }
 </script>
