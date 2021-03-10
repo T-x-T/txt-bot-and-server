@@ -234,7 +234,7 @@ export default {
     sortDropdownOpen: false
   }),
 
-  async fetch(){
+  async mounted(){
     this.members = await this.$axios.$get("/api/member");
     this.processMembers();
   },

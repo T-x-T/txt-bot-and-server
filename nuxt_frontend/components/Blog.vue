@@ -124,7 +124,7 @@ export default {
     showAllPosts: false
   }),
 
-  async fetch(){
+  async mounted(){
     await this.reload();
   },
 
