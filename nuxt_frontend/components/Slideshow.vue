@@ -1,5 +1,5 @@
 <template>
-  <div id="wrapper">
+  <div id="wrapper" ref="slideshowWrapper">
     <div id="section_slideshow" class="scrollTarget"></div>
 
     <div id="controlsWrapper">
@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <img :src="images[towns[townIndex]][index]"/>
+    <img v-if="inView" :src="images[towns[townIndex]][index]"/>
 
   </div>
 </template>
@@ -97,6 +97,7 @@ export default {
     index: 0,
     towns: [],
     townIndex: 0,
+    inView: false,
     images: {
       "Town of Paxterya": [
         "https://stor.paxterya.com/website/screenshots/top_01.webp",
@@ -131,6 +132,7 @@ export default {
   },
   async mounted(){
     this.$refs["town" + this.townIndex][0].classList.add("activeTown");
+    this.setupOberserver();
   },
   methods: {
     back: function(){
@@ -148,6 +150,24 @@ export default {
         this.townIndex = this.townIndex < this.towns.length - 1 ? this.townIndex + 1 : 0;
         this.index = 0;
       }
+    },
+    intersect(entries){
+      if(entries[0].isIntersecting){
+        this.$nextTick(function(){this.inView = true});
+      }
+    },
+
+    setupOberserver(){
+      this.$nextTick(function(){
+        const options = {
+          root: null,
+          rootMargin: "500px",
+          threshold: 0.0
+        }
+
+        const observer = new IntersectionObserver(this.intersect, options);
+        observer.observe(this.$refs["slideshowWrapper"]);
+      });
     }
   },
   watch: {
