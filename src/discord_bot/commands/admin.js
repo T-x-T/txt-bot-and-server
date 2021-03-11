@@ -10,6 +10,10 @@ const MemberFactory = require('../../user/memberFactory.js');
 const memberFactory = new MemberFactory();
 memberFactory.connect();
 
+const ApplicationFactory = require('../../application/applicationFactory.js');
+const applicationFactory = new ApplicationFactory();
+applicationFactory.connect(); 
+
 module.exports = {
   name: 'admin',
   description: 'Commands only for admins',
@@ -220,8 +224,14 @@ module.exports = {
         case 'exec':
           //Command to execute manual tasks
           switch(args[1]){
-            case 'fixapp':
-              message.reply("Uuuh I dont think you still need that?");
+            case 'forceaccept':
+              applicationFactory.getByDiscordId(message.mentions.users.first().id)
+              .then(application => {
+                application.acceptGuildMember()
+                .then(() => message.reply("success"))
+                .catch(e => message.reply(e.message));
+              })
+              .catch(e => message.reply(e.message));
               break;
             default:
               message.reply('I didnt quite understand you moron');
