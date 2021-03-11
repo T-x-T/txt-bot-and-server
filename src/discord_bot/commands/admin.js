@@ -227,9 +227,10 @@ module.exports = {
             case 'forceaccept':
               applicationFactory.getByDiscordId(message.mentions.users.first().id)
               .then(application => {
-                application.acceptGuildMember()
+                if(application) application.acceptGuildMember()
                 .then(() => message.reply("success"))
                 .catch(e => message.reply(e.message));
+                else message.reply("couldnt get application")
               })
               .catch(e => message.reply(e.message));
               break;
