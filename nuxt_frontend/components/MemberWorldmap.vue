@@ -107,7 +107,6 @@ export default {
               metric: this.currentMetric,
               highlightOnHover: false,
               popupTemplate: function (geo, data) {
-                console.log(this)
                 return `<div class='hoverinfo'>${geo.properties.name}: ${data.numberOfThings} ${this.metric == "count" ? "Member(s)" : "hours"}</div>`;
               },
             },
