@@ -3,6 +3,8 @@
     <div id="section_memberWorldmap" class="scrollTarget"></div>
     <h1>Worldmap</h1>
     <p class="subtitle">Where our Members live IRL</p>
+    <button @click="currentMetric = 'count'">Count</button>
+    <button @click="currentMetric = 'playtime'">Playtime</button>
     <client-only>
       <div v-if="inView">
         <script type="application/javascript" src="https://d3js.org/d3.v3.min.js" @load="loadedScripts += 1" async="false"></script>
@@ -44,7 +46,8 @@ export default {
     map: null,
     loadedScripts: 0,
     inView: false,
-    mapData: null
+    mapData: null,
+    currentMetric: "count",
   }),
 
   beforeMount() {
@@ -56,10 +59,19 @@ export default {
 
   watch: {
     loadedScripts(newVal, oldVal){
-      console.log(newVal)
       if(newVal === 3){
         this.run();
       }
+    },
+
+    currentMetric(newVal, oldVal){
+      for(let key in this.mapData){
+        this.mapData[key].numberOfThings = this.mapData[key][newVal];
+      }
+      this.map = null;
+      const parent = this.$refs["mapContainer"];
+      while(parent.children.length != 0) parent.removeChild(parent.children[0]);
+      this.run();
     }
   },
 
@@ -68,7 +80,6 @@ export default {
       if (!this.mapData) this.mapData = await this.$axios.$get("/api/memberworldmapdata");
 
       this.$nextTick(function(){
-        console.log(typeof window.d3, typeof window.topojson)
         if(window.d3 && window.topojson){
           this.map = new Datamap({
             scope: 'world',
@@ -93,9 +104,11 @@ export default {
               '100%': '#00616f',
             },
             geographyConfig: {
+              metric: this.currentMetric,
               highlightOnHover: false,
               popupTemplate: function (geo, data) {
-                return `<div class='hoverinfo'>${geo.properties.name}: ${data.numberOfThings} Member(s)</div>`;
+                console.log(this)
+                return `<div class='hoverinfo'>${geo.properties.name}: ${data.numberOfThings} ${this.metric == "count" ? "Member(s)" : "hours"}</div>`;
               },
             },
             data: this.mapData
