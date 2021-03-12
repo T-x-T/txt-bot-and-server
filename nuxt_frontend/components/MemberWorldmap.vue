@@ -3,8 +3,10 @@
     <div id="section_memberWorldmap" class="scrollTarget"></div>
     <h1>Worldmap</h1>
     <p class="subtitle">Where our Members live IRL</p>
-    <button @click="currentMetric = 'count'">Count</button>
+    <button @click="currentMetric = 'count'">Number</button>
     <button @click="currentMetric = 'playtime'">Playtime</button>
+    <button @click="currentScale = 'count'">Count</button>
+    <button @click="currentScale = 'percent'">Percent</button>
     <client-only>
       <div v-if="inView">
         <script type="application/javascript" src="https://d3js.org/d3.v3.min.js" @load="loadedScripts += 1" async="false"></script>
@@ -48,6 +50,8 @@ export default {
     inView: false,
     mapData: null,
     currentMetric: "count",
+    currentScale: "count",
+    totals: {"count": 0, "playtime": 0}
   }),
 
   beforeMount() {
@@ -68,16 +72,41 @@ export default {
       for(let key in this.mapData){
         this.mapData[key].numberOfThings = this.mapData[key][newVal];
       }
-      this.map = null;
-      const parent = this.$refs["mapContainer"];
-      while(parent.children.length != 0) parent.removeChild(parent.children[0]);
-      this.run();
+      this.reloadMap();
+    },
+
+    currentScale(newVal, oldVal){
+      this.reloadMap();
     }
   },
 
   methods: {
+    async getMapData(){
+      this.mapData = await this.$axios.$get("/api/memberworldmapdata");
+      
+      for(let metric in this.totals){
+        for(let country in this.mapData){
+          this.totals[metric] += this.mapData[country][metric];
+        }
+      }
+    },
+
+    reloadMap(){
+      this.map = null;
+      const parent = this.$refs["mapContainer"];
+      while(parent.children.length != 0) parent.removeChild(parent.children[0]);
+      this.run();
+    },
+
+    updateColorCoding(){
+      let max = 0;
+      for(let key in this.mapData) if(this.mapData[key].numberOfThings > max) max = this.mapData[key].numberOfThings;
+      for(let key in this.mapData) if(this.mapData[key].numberOfThings > 0) this.mapData[key].fillKey = ((this.mapData[key].numberOfThings / max).toFixed(1) * 100) + '%';
+    },
+
     async run(){
-      if (!this.mapData) this.mapData = await this.$axios.$get("/api/memberworldmapdata");
+      if (!this.mapData) await this.getMapData();
+      this.updateColorCoding();
 
       this.$nextTick(function(){
         if(window.d3 && window.topojson){
@@ -105,9 +134,11 @@ export default {
             },
             geographyConfig: {
               metric: this.currentMetric,
+              scale: this.currentScale,
+              total: this.totals[this.currentMetric],
               highlightOnHover: false,
               popupTemplate: function (geo, data) {
-                return `<div class='hoverinfo'>${geo.properties.name}: ${data.numberOfThings} ${this.metric == "count" ? "Member(s)" : "hours"}</div>`;
+                return `<div class='hoverinfo'>${geo.properties.name}: ${this.scale == "count" ? data.numberOfThings : Math.round((data.numberOfThings / this.total) * 100)} ${this.scale == "count" ? this.metric == "count" ? "Member(s)" : "hours" : "%"}</div>`;
               },
             },
             data: this.mapData
