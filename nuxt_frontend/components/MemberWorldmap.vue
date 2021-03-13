@@ -2,11 +2,19 @@
   <div id="background" class="background" ref="memberWorldmapBackground">
     <div id="section_memberWorldmap" class="scrollTarget"></div>
     <h1>Worldmap</h1>
-    <p class="subtitle">Where our Members live IRL</p>
-    <button @click="currentMetric = 'count'">Number</button>
-    <button @click="currentMetric = 'playtime'">Playtime</button>
-    <button @click="currentScale = 'count'">Count</button>
-    <button @click="currentScale = 'percent'">Percent</button>
+    <p class="subtitle">We are a global community</p>
+
+    <div id="controls">
+      <div class="buttonContainer">
+        <button ref="metric_count" class="active" @click="currentMetric = 'count'">Members</button>
+        <button ref="metric_playtime" @click="currentMetric = 'playtime'">Playtime</button>
+      </div>
+      <div class="buttonContainer">
+        <button ref="scale_count" class="active" @click="currentScale = 'count'">Total</button>
+        <button ref="scale_percent" @click="currentScale = 'percent'">Percent</button>
+      </div>
+    </div>
+
     <client-only>
       <div v-if="inView">
         <script type="application/javascript" src="https://d3js.org/d3.v3.min.js" @load="loadedScripts += 1" async="false"></script>
@@ -39,6 +47,28 @@ div#mapContainer
 .subtitle
   text-align: center
   margin: -10px 0 10px 0
+
+#controls
+  width: 100vw
+  display: flex
+  justify-content: center
+
+.buttonContainer
+  border: 2px solid $pax-darkestcyan
+  width: max-content
+  margin: 25px
+  border-radius: 25px
+  flex-shrink: 0
+  button
+    background: transparent
+    border: 0px
+    margin: 0
+    transition-duration: 0s
+    &:hover
+      background: transparent
+  button.active
+    background: $pax-darkcyan
+    border-radius: 25px
 </style>
 
 <script>
@@ -73,10 +103,16 @@ export default {
         this.mapData[key].numberOfThings = this.mapData[key][newVal];
       }
       this.reloadMap();
+
+      this.$refs[`metric_${oldVal}`].classList.remove("active");
+      this.$refs[`metric_${newVal}`].classList.add("active");
     },
 
     currentScale(newVal, oldVal){
       this.reloadMap();
+
+      this.$refs[`scale_${oldVal}`].classList.remove("active");
+      this.$refs[`scale_${newVal}`].classList.add("active");
     }
   },
 
