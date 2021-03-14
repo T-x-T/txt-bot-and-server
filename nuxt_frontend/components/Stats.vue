@@ -69,7 +69,7 @@ div.item
   flex-shrink: 0
   &:hover
     @media screen and ($desktop)
-      scale: 1.1
+      transform: scale(1.1)
   @media screen and ($mobile)
     margin: 5px
 
