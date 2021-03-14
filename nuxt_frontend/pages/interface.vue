@@ -22,6 +22,10 @@
 
 <script>
 export default {
+  head: {
+    title: "Super duper Staff interface"
+  },
+
   data: () => ({
     token: null,
     accessLevel: null,

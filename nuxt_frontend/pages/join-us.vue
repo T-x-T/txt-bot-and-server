@@ -290,6 +290,10 @@ svg.status
 <script>
 import countries from "~/assets/countries.json";
 export default {
+  head: {
+    title: "Apply"
+  },
+
   data: () => ({
     discordId: null,
     discordNick: null,

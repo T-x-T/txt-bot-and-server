@@ -1,6 +1,5 @@
 <template>
-  <div id="wrapper">
-    <div id="section_features" class="scrollTarget" style="display: none;"></div>
+  <div id="section_features" class="scrollTarget">
     <div class="hover paxItem">
       <p class="headline">Plugins</p>
       <ul class="text">
@@ -40,7 +39,7 @@
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
 
-div#wrapper
+div#section_features
   display: flex
   flex-wrap: nowrap
   align-items: stretch

@@ -65,3 +65,11 @@ article
 h3
   color: white
 </style>
+
+<script>
+export default {
+  head: {
+    title: "Privacy Policy"
+  }
+}
+</script>
