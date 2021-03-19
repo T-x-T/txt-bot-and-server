@@ -1,5 +1,5 @@
 <template>
-  <div id="wrapper">
+  <div class="background-bright">
     <div id="section_howToJoin" class="scrollTarget"></div>
 
     <div class="grid">
@@ -31,6 +31,7 @@ div.grid
   grid-template-areas: "join1 ." "join2 join3" ". join4"
   width: fit-content
   margin: 0 auto
+  padding-bottom: 40px
   h1
     background: $pax-lightcyan
     width: fit-content

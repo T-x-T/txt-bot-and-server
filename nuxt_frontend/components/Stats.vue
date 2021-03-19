@@ -1,5 +1,5 @@
 <template>
-  <div class="background">
+  <div class="background-bright">
     <div id="section_stats" class="scrollTarget"></div>
     <h1>Paxterya in numbers</h1>
     <div id="wrapper">
@@ -64,8 +64,7 @@ div#wrapper
   justify-content: space-evenly
   align-items: top
   flex-wrap: wrap
-  padding-bottom: 50px
-  padding-top: 80px
+  padding-top: 110px
   height: 150px
 
 div.item
@@ -75,8 +74,6 @@ div.item
   &:hover
     > .svg-container
       top: -35px
-    > .svg-container svg
-      transform: rotate(-360deg)
 
 .svg-container
   background: $pax-lightcyan

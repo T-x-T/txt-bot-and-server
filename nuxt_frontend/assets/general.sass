@@ -4,7 +4,7 @@
   margin: 0
   padding: 0
   text-decoration: none
-  transition-duration: .3s
+  transition-duration: .1s
 
 li
   list-style-type: none
@@ -91,7 +91,6 @@ h1
   font-size: 20pt
   text-transform: uppercase
   padding: 8px 0
-  margin: 50px 0 20px 0
 
 h2
   background: $pax-cyan
@@ -128,12 +127,16 @@ a
   &:hover
     color: $pax-cyan
 
-div.background
+div.background-bright
   background: $pax-cyan
-  box-shadow: 0px 0px 25px #102f36
-  width: 100%
-  @media screen and ($mobile)
-    width: 100vw
+  h1
+    background: rgba(255, 255, 255, 0.1)
+
+div.background-dark
+  background: $pax-darkestcyan
+  h1
+    background: rgba(0, 0, 0, 0.2)
+    color: $pax-lightcyan
 
 .paxItem
   .headline

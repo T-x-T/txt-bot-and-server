@@ -1,5 +1,5 @@
 <template>
-  <div id="background" class="background" ref="memberWorldmapBackground">
+  <div class="background-bright" ref="memberWorldmapBackground">
     <div id="section_memberWorldmap" class="scrollTarget"></div>
     <h1>Worldmap</h1>
     <p class="subtitle">We are a global community</p>

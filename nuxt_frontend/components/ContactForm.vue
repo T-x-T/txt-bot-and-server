@@ -1,5 +1,5 @@
 <template>
-  <div class="background">
+  <div class="background-dark">
     <div id="section_contactForm" class="scrollTarget"></div>
     <h1>Contact us</h1>
     <div id="wrapper" class="hover">

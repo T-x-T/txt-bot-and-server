@@ -1,5 +1,5 @@
 <template>
-  <div id="wrapper">
+  <div class="background-dark">
     <div id="section_blog" class="scrollTarget"></div>
     <h1>Blog</h1>
 

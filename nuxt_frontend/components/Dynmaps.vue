@@ -1,5 +1,5 @@
 <template>
-  <div id="wrapper" ref="dynmapsWrapper">
+  <div class="background-dark" ref="dynmapsWrapper">
     <div id="section_dynmaps" class="scrollTarget"></div>
     <h1>Worlds</h1>
     <div id="container">
@@ -43,17 +43,11 @@
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
 
-
-
-div#wrapper
-  margin-bottom: 50px
-  @media screen and ($mobile)
-    width: 95vw
-
 div#container
   display: flex
   align-content: center
   justify-content: center
+  padding: 30px 0 50px 0
   div.item
     margin: 0px 2% 2% 2%
     height: 500px

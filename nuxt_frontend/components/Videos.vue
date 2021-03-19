@@ -1,5 +1,5 @@
 <template>
-  <div class="background">
+  <div class="background-bright">
     <div id="section_videos" class="scrollTarget"></div>
     <h1>Videos</h1>
     <div id="thumbnailContainer">

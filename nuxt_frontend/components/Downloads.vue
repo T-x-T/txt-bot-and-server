@@ -1,5 +1,5 @@
 <template>
-  <div id="background" class="background">
+  <div class="background-bright">
     <div id="section_downloads" class="scrollTarget"></div>
     <div id="container">
       <h1>Downloads</h1>
