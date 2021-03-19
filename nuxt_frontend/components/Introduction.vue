@@ -12,7 +12,7 @@
           </div>
           <p>
             Paxterya is a close-knit and dedicated Minecraft community. What we enjoy most is the freedom Minecraft has to offer. 
-            You can do anything on Paxterya: start big projects with others, construct a town, or go far away to found your very own empire. 
+            You can do anything on Paxterya: start big projects with others, construct a town, or go far away to found your very own empire.
             <br>Let's be creative together!
           </p>
           <button><img id="discordLogo" src="~/assets/Discord-Logo-Black.svg"> Join our Discord</button>

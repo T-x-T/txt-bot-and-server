@@ -25,7 +25,7 @@
     </div>
   
     <div class="hover paxItem"> 
-      <p class="headline">Datapacks</p>
+      <p class="headline">Data packs</p>
       <ul class="text">
         <li>Coordinates HUD</li>
         <li>Custom Armor Stands</li>

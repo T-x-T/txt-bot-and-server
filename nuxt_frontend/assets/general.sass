@@ -79,16 +79,19 @@ button.hover-right:hover > i
 button.hover-left:hover > i
   margin-right: 10px
 
-h1, h2, h3, h4
+h2, h3, h4
   @extend .pax-semibold
 
 h1
-  @extend .pax-semibold
+  @extend .pax-bold
   text-align: center
-  color: white
-  font-size: 30pt
-  text-shadow: 0px 0px 5px #102f36
-  padding: 1%
+  color: $pax-darkmodecyan1
+  background: $pax-cyan
+  width: 100%
+  font-size: 20pt
+  text-transform: uppercase
+  padding: 8px 0
+  margin: 50px 0 20px 0
 
 h2
   background: $pax-cyan
@@ -133,46 +136,54 @@ div.background
   @media screen and ($mobile)
     width: 100vw
 
-.hover
-  filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
-  @media screen and ($desktop)
-    opacity: 0.9
-    &:hover
-      filter: drop-shadow( 0px 0px 16px rgba(0, 0, 0, .9))
-      opacity: 1
-
 .paxItem
   .headline
     @extend .pax-semibold
-    background: $pax-white
-    color: $pax-cyan
-    margin-left: -30px
-    font-size: 20pt
-    padding: 0px 0px 15px 25px
+    background: $pax-darkmodecyan1
+    color: $pax-white
+    font-size: 16pt
+    padding: 8px 0px 8px 20px
     height: 32px
     position: relative
     white-space: nowrap
     width: 20vw
-    &:before
-      content: ""
-      border-style: solid
-      border-width: 0 30px 30px 0
-      border-color: transparent #b8b8b8 transparent transparent
-      position: absolute
-      left: 0px
-      top: 47px
+    text-transform: uppercase
   ul
     @extend .pax-regular
-    background: #007787
+    background: $pax-darkestcyan
     color: white
     padding: 10px 15px
-    font-size: 14pt
+    font-size: 12pt
     line-height: 1.5
     width: 100%
+    border-left: 5px solid $pax-darkmodecyan1
     li:before
       content: "▪"
       color: $pax-darkcyan
       padding-right: 5px
+  ol
+    @extend .pax-regular
+    background: $pax-darkestcyan
+    color: white
+    padding: 10px 15px
+    font-size: 12pt
+    line-height: 1.5
+    width: 100%
+    border-left: 5px solid $pax-darkmodecyan1
+    list-style-type: none
+    li
+      counter-increment: step-counter
+      margin: 0 0 10px 15px
+      position: relative
+      &::before
+        content: counter(step-counter)
+        position: absolute
+        margin-left: -32px
+        font-size: 80%
+        background-color: $pax-darkmodecyan1
+        color: white
+        font-weight: bold
+        padding: 3px 8px
 
 .scrollTarget
   scroll-margin-top: 60px
