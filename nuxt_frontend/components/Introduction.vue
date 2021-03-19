@@ -2,15 +2,20 @@
   <div id="wrapper">
     <div id="bgImg" ref="bgImg">
       <div id="bgFilter">
-        <img id="logo" src="~/assets/logo-icon.svg">
+        
         <div id="container">
+          <img id="logo" src="~/assets/logo-vertical-white.svg">
+
+          <div class="titlebar">
+            <span class="left">Minecraft SMP</span>
+            <span class="right">Since 2019</span>
+          </div>
           <p>
             Paxterya is a close-knit and dedicated Minecraft community. What we enjoy most is the freedom Minecraft has to offer. 
             You can do anything on Paxterya: start big projects with others, construct a town, or go far away to found your very own empire. 
             <br>Let's be creative together!
-            <button><img id="discordLogo" src="~/assets/Discord-Logo-White.svg" /> Join our Discord!</button>
-            We use Discord as our communication platform where we also talk about Minecraft, gaming, technology and everything else.
           </p>
+          <button><img id="discordLogo" src="~/assets/Discord-Logo-Black.svg"> Join our Discord</button>
         </div>
       </div>
     </div>
@@ -21,8 +26,8 @@
 @import ~/assets/_vars.sass
 
 div#bgImg
-  height: 75vh
-  background-image: url("https://stor.paxterya.com/website/screenshots/top_04.webp")
+  height: 100vh
+  background-image: url("https://stor.paxterya.com/website/backgrounds/intro_bg.webp")
   background-size: cover
   background-position: center
   @media screen and ($mobile)
@@ -31,54 +36,57 @@ div#bgImg
 
 div#bgFilter
   height: 100%
-  background-image: radial-gradient(transparent 50%, rgba(0,0,0,.3) 70%), linear-gradient(0deg, rgba(0,0,0,.3) 0%, transparent 5%, transparent 80%, rgba(0,0,0,.3) 100%), linear-gradient(rgba(0,81,92,.6) 0%, rgba(0,81,92,.6) 100%)
+  background-image: radial-gradient(transparent 30%, rgba(0,0,0,.2) 90%), radial-gradient(rgba(255,255,255,.1) 30%, transparent 70%)
   display: flex
   align-items: center
   justify-content: center
   @media screen and ($mobile)
     width: 100vw
-img#logo
-  height: 60%
-  width: auto
-  filter: opacity(0.5)
 
 div#container
-  display: flex
-  align-content: center
-  justify-content: center
-  position: absolute
-  z-index: 1
-  @media screen and ($mobile)
-    width: 100vw
-p
-  width: 600px
-  font-size: 14pt
   max-width: 90%
-  padding: 1%
-  background-color: rgba(16, 47, 54, 0.5)
-  box-shadow: 0px 0px 5px #102f36 inset
-  @media screen and ($mobile)
-    width: 80%
-
-button
-  width: 400px
-  border-radius: 20px
-  font-size: 24pt
-  text-shadow: 1px 2px 0px $pax-darkcyan
-  padding: 4px 24px
-  margin: 25px 75px 25px 75px
-  box-shadow: 0px 0px 20px $pax-cyan
-  filter: opacity(85%)
-  &:hover
-    box-shadow: 0px 0px 10px #102f36 inset
-    filter: opacity(100%)
-  img
-    height: 28pt
-    margin-right: 5px
-    margin-bottom: -10px
-  @media screen and ($mobile)
-    width: 80%
-    margin: 20px 10% 20px 10%
+  img#logo
+    height: auto
+    width: 200px
+    margin: 0 auto
+    display: block
+  div.titlebar
+    display: flex
+    margin-top: 30px
+    text-transform: uppercase
+    text-align: center
+    font-size: 16pt
+    span.left
+      background: $pax-lightcyan
+      color: $pax-darkestcyan
+      box-shadow: none
+      width: 50%
+      margin: 0
+      font-family: "bold"
+      padding: 5px 0
+    span.right
+      background: $pax-darkestcyan
+      color: $pax-lightcyan
+      box-shadow: none
+      width: 50%
+      margin: 0
+      font-family: "bold"
+      padding: 5px 0
+  p
+    width: 500px
+    padding: 10px 15px
+    font-size: 13pt
+    background: $pax-darkestcyan
+    margin: 0 auto
+    margin-bottom: 20px
+  button
+    margin: 0 auto
+    display: block
+    text-transform: uppercase
+    img#discordLogo
+      height: 20pt
+      margin-bottom: -8px
+      margin-left: -5px
 </style>
 
 <script>

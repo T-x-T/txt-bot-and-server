@@ -68,7 +68,7 @@ export default {
   }),
 
   async fetch(){
-    this.mcVersion = await this.$axios.$get("/api/mcversion");
+//    this.mcVersion = await this.$axios.$get("/api/mcversion");
   }
 }
 </script>

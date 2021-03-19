@@ -36,6 +36,11 @@ html
     background: #030303
 
 @font-face
+  font-family: "bold"
+  font-display: swap
+  src: url("./TitilliumWeb-Bold.ttf")
+
+@font-face
   font-family: "semibold"
   font-display: swap
   src: url("./TitilliumWeb-SemiBold.ttf")
@@ -46,16 +51,18 @@ html
   src: url("./TitilliumWeb-Regular.ttf")
 
 button
-  background: $pax-cyan
-  border: 1px solid $pax-darkcyan
-  color: $pax-white
-  font-family: "semibold", sans-serif
+  background: $pax-yellow
+  box-shadow: 0px 5px 0px $pax-darkmodecyan1
+  color: $pax-black
+  font-family: "bold", sans-serif
   font-size: 13pt
   cursor: pointer
-  padding: 2px 15px
-  margin-top: 10px
+  padding: 3px 15px
+  border-style: none
+  border-radius: 100px
   &:hover
-    background: $pax-darkcyan
+    transform: scale(1.1)
+    
   &:focus
     outline: none
 
