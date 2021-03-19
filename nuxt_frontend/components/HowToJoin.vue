@@ -1,58 +1,74 @@
 <template>
-  <div class="background">
+  <div id="wrapper">
     <div id="section_howToJoin" class="scrollTarget"></div>
-    <h1>How to join</h1>
-    <ol class="hover">
-      <li>(Optional) Join our <a href="https://discord.gg/mAjZCTG" target="blank">Discord server</a></li>
-      <li>Authenticate with Discord below</li>
-      <li>Fill out the form</li>
-      <li>Wait less than a day</li>
-      <li>Check your E-Mails to see if you have been accepted</li>
-      <a :href="$config.discordOauthJoinUs" target="blank"><button>Authenticate with Discord</button></a>
-    </ol>
+
+    <div class="grid">
+      
+      <h1 class="join1">How to join</h1>
+
+      <p class="join2">To gain access to our Minecraft server, you will need to write an application. We're looking forward to hearing from you!</p>
+      
+      <ol class="join3">
+        <li>Authenticate with Discord</li>
+        <li>Write your application</li>
+        <li>Wait for the response mail</li>
+      </ol>
+        
+      <a class="join4" :href="$config.discordOauthJoinUs" target="blank"><button>Apply Now</button></a>
+    </div>
+    
   </div>
 </template>
 
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
 
-div
-  padding: 0 0 1% 0
-  display: flex
-  justify-content: center
-  align-items: center
-  flex-direction: column
+div.grid
+  display: grid
+  grid-template-columns: 1fr 1fr
+  grid-template-rows: 100px 140px
+  gap: 0px 0px
+  grid-template-areas: "join1 ." "join2 join3" ". join4"
+  width: fit-content
+  margin: 0 auto
+  h1
+    background: $pax-lightcyan
+    width: fit-content
+    padding-left: 20px
+    padding-right: 20px
+    margin: 0
+  p
+    background: $pax-darkestcyan
+    width: 250px
+    padding: 10px 20px
+  ol
+    border: none
+    background: none
+    padding: 0
+    li
+      background: $pax-darkestcyan
+      padding: 5px 15px
+      margin-bottom: 7px
+      &::before
+        margin: -5px 0 0 -45px
+        font-size: 100%
+        padding: 5px 12px
+  button
+    font-size: 16pt
+    text-transform: uppercase
+    padding: 8px 20px
+    margin: 0 auto
+    display: block
+    margin-top: -10px
+.join1
+  grid-area: join1
+  align-self: end
+.join2
+  grid-area: join2
+.join3
+  grid-area: join3
+  align-self: start
+.join4
+  grid-area: join4
 
-ol
-  padding: 25px 25px 25px 35px
-  margin: 25px
-  background-color: $pax-cyan
-  width: 450px
-  @media screen and ($mobile)
-    width: 70vw
-    margin-bottom: 25px
-
-li
-  @extend .pax-regular
-  color: white
-  font-size: 14pt
-  list-style-type: decimal
-  @media screen and ($mobile)
-    margin-left: 35px
-
-p
-  @extend .pax-semibold
-  font-size: 20pt
-
-a:hover
-  color: $pax-darkcyan
-
-button
-  @extend .pax-semibold
-  background: $pax-darkcyan
-  font-size: 20pt
-  width: 100%
-  box-shadow: 0px 0px 5px #102f36 inset
-  &:hover
-    box-shadow: 0px 0px 15px #102f36 inset
 </style>

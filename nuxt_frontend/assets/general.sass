@@ -161,29 +161,30 @@ div.background
       content: "▪"
       color: $pax-darkcyan
       padding-right: 5px
-  ol
-    @extend .pax-regular
-    background: $pax-darkestcyan
-    color: white
-    padding: 10px 15px
-    font-size: 12pt
-    line-height: 1.5
-    width: 100%
-    border-left: 5px solid $pax-darkmodecyan1
-    list-style-type: none
-    li
-      counter-increment: step-counter
-      margin: 0 0 10px 15px
-      position: relative
-      &::before
-        content: counter(step-counter)
-        position: absolute
-        margin-left: -32px
-        font-size: 80%
-        background-color: $pax-darkmodecyan1
-        color: white
-        font-weight: bold
-        padding: 3px 8px
+      
+ol
+  @extend .pax-regular
+  background: $pax-darkestcyan
+  color: white
+  padding: 10px 15px
+  font-size: 12pt
+  line-height: 1.5
+  width: 100%
+  border-left: 5px solid $pax-darkmodecyan1
+  list-style-type: none
+  li
+    counter-increment: step-counter
+    margin: 0 0 10px 15px
+    position: relative
+    &::before
+      content: counter(step-counter)
+      position: absolute
+      margin-left: -32px
+      font-size: 80%
+      background-color: $pax-darkmodecyan1
+      color: white
+      font-weight: bold
+      padding: 3px 8px
 
 .scrollTarget
   scroll-margin-top: 60px
