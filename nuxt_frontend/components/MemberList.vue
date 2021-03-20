@@ -13,7 +13,7 @@
       </div>
 
       <div id="sortBox">
-        <button id="sort" @click="sortDropdownOpen = true">
+        <button class="secondary" id="sort" @click="sortDropdownOpen = true">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
           </svg>  
@@ -22,7 +22,7 @@
 
         <div id="sortDropdown" v-if="sortDropdownOpen">
           <div v-for="(item, index) in sort" :key="index">
-            <button class="dropdownBtn" @click="sortDropdownOpen = false; currentSort = item.value">{{item.label}}</button>
+            <button class="dropdownBtn secondary" @click="sortDropdownOpen = false; currentSort = item.value">{{item.label}}</button>
           </div>
         </div>
       </div>
@@ -36,17 +36,14 @@
             <h4>{{item.mc_nick}}</h4>
             <h5>{{item.discord_nick}}</h5>
             <div class="details">
-              <p class="description" v-if="item.country">Country:</p>
-              <p class="value" v-if="item.country">{{item.country}}</p>
+              <p class="value">
+                <span v-if="item.country">From {{item.country}}.</span>
+                <span v-if="item.age">{{item.age}} y/o.</span>
+              </p>
               <br>
-              <p class="description" v-if="item.age">Age:</p>
-              <p class="value" v-if="item.age">{{item.age}}</p>
+              <p class="value">Played {{item.playtime}}h this season.</p>
               <br>
-              <p class="description">Playtime:</p>
-              <p class="value">{{item.playtime}}h</p>
-              <br>
-              <p class="description">Date joined:</p>
-              <p class="value">{{new Date(item.joined_date).toISOString().substring(0, 10)}}</p>
+              <p class="value">Paxteryan since {{new Date(item.joined_date).toISOString().substring(0, 10)}}.</p>
             </div>
           </div>
         </div>
@@ -60,56 +57,53 @@
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
 
-div.background
-  padding: 1% 0 1% 0
+.background-dark
+  padding-bottom: 30px
 
 div#controls
   display: flex
   justify-content: center
-  align-items: center
+  align-items: top
+  margin: 20px 0
   @media screen and ($mobile)
     flex-direction: column
 
 div#searchBox
-  box-shadow: 0px 0px 15px #102f36
-  margin: 1%
-  width: 558px
+  width: 545px
   max-width: 100%
   svg
-    height: 32px
-    max-width: 5vw
+    height: 45px
     width: auto
     color: white
     margin-bottom: -12px
     background: $pax-cyan
     padding: 10px
     float: left
+    box-sizing: border-box
   input
     width: 500px
     max-width: 87vw
-    margin: 0
-    border-width: 1px 1px 1px 0px
-    border-color: #bebebe
-    border-style: solid
-    padding: 5px 0px 5px 5px
-    height: 42px
-    border: none
-    font-size: 21px
-    &:focus
-      outline: none
+    padding: 5px
+    height: 45px
+    box-sizing: border-box
+    
   @media screen and ($mobile)
     margin: 0
     margin-bottom: 25px
 
 button#sort
+  width: 200px
+  max-width: 100%
+  height: 45px
+  box-sizing: border-box
   margin: 0
-  padding: 0
-  width: 250px
-  height: 52px
+  &:hover > svg
+    color: $pax-darkcyan
   svg
-    height: 32px
-    color: white
-    margin-bottom: -8px
+    height: 25px
+    color: $pax-white
+    margin-bottom: -7px
+    margin-right: 3px
 
 div#sortDropdown
   position: absolute
@@ -117,41 +111,43 @@ div#sortDropdown
 
 .dropdownBtn
   margin: 0
-  box-shadow: none
-  width: 250px
+  width: 200px
   &:hover
-    box-shadow: none
-    background-color: $pax-darkcyan
+    background-color: $pax-white
 
 div#wrapper
+  max-width: 90vw
+  margin: 0 auto
   display: flex
   flex-flow: wrap
   flex-direction: row
   justify-content: space-evenly
-  padding: 2% 10% 2% 10%
   @media screen and ($mobile)
     flex-flow: column
     align-content: center
 
 div.card
   display: flex
-  width: 380px
+  width: 300px
   max-width: 100%
   padding: 10px 0 10px 10px
   background: linear-gradient(180deg, rgba(240,240,240,0) 15%, $pax-darkmodecyan1 15%, $pax-darkmodecyan1 85%, rgba(240,240,240,0) 85%)
-  margin: 0 40px 20px 0
+  margin: 0 20px 10px 0
   cursor: pointer
   flex-shrink: 0
+  img
+    height: 180px
+    width: auto
   &:hover
     @media screen and ($desktop)
-      transform: scale(1.1)
+      transform: scale(1.05)
   @media screen and ($mobile)
     width: 75vw
     margin-bottom: -20px
 
 div.infos
   width: 70%
-  padding: 38px 0 0 30px
+  padding: 28px 0 0 20px
 
 h4
   @extend .pax-semibold
@@ -161,7 +157,7 @@ h4
   text-shadow: 1px 2px 0px $pax-darkcyan
   border-right: 4px solid rgba(0,0,0,0.15)
   overflow-x: hidden
-  font-size: 18pt
+  font-size: 14pt
 
 h5
   @extend .pax-semibold
@@ -169,22 +165,18 @@ h5
   color: $pax-white
   padding: 3px 0px 3px 15px
   border-right: 4px solid rgba(0,0,0,0.15)
-  font-size: 12pt
+  font-size: 10pt
   word-break: break-all
 
 div.details
   margin-left: 5px
   margin-top: 5px
 
-.description, .value
+.value
   color: white
   display: inline
-
-.value
+  font-size: 10pt
   @extend .pax-regular
-
-.description
-  @extend .pax-semibold
 
 .avatar
   @media screen and ($mobile)
@@ -194,13 +186,9 @@ div.details
 button
   @extend .pax-semibold
   width: 50%
-  margin: 0 25% 2% 25%
-  padding: 0.5%
-  font-size: 20pt
-  box-shadow: 0px 0px 15px #102f36
-  &:hover
-    box-shadow: 0px 0px 35px #102f36
-    background: $pax-cyan
+  font-size: 14pt
+  margin: 20px auto
+  display: block
 div#background
   &:hover
     button#showLess
