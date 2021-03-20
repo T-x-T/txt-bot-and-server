@@ -6,19 +6,19 @@
     <div v-if="posts">
       <article class="hover" v-if="!showAllPosts">
         <div id="controls">
-          <button id="prevPost" @click="prevPost()">
+          <button class="secondary" id="prevPost" @click="prevPost()">
             <svg v-if="currentId < posts.length - 1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
             Previous post
           </button>
-          <button id="allPosts" @click="showAllPosts = true">
+          <button class="secondary" id="allPosts" @click="showAllPosts = true">
             All posts
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
             </svg>
           </button>
-          <button id="nextPost" @click="nextPost()">
+          <button class="secondary" id="nextPost" @click="nextPost()">
             Next post
             <svg v-if="currentId > 0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -69,9 +69,7 @@ div#wrapper
   padding-bottom: 4%
 
 article
-  background: $pax-darkcyan
   width: 60%
-  margin: 2%
   padding: 20px
   overflow: hidden
   left: 18%
@@ -84,21 +82,21 @@ article
     filter: none
 
 button
-  font-size: 20pt
-  box-shadow: 0px 0px 15px #102f36
-  padding: 5px 20px 5px 20px
-  width: max-content
+  background: $pax-darkcyan
+  color: $pax-lightcyan
   &:hover
-    box-shadow: 0px 0px 5px #102f36 inset
+    color: $pax-darkestcyan
   svg
-    height: 28pt
+    height: 18pt
     width: auto
-    margin-bottom: -10px
+    margin-bottom: -7px
 
 div#controls
   display: flex
-  justify-content: space-around
-  margin-bottom: 2%
+  width: 100%
+  background: $pax-darkcyan
+  justify-content: center
+  margin-bottom: 20px
   @media screen and ($mobile)
     flex-direction: column
     margin-bottom: 20px

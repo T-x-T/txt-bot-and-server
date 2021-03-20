@@ -27,28 +27,16 @@ img.author
   height: auto
   float: right
   margin: -40px 50px 10px 0
-  border: 3px solid black
-  box-shadow: 0px 0px 20px rgba(255, 255, 255, .5)
-  &:hover
-    box-shadow: 0px 0px 30px rgba(255, 255, 255, .75)
-
-span.subtitle
-  @extend .pax-regular
-  background: $pax-darkestcyan
-  display: block
-  background: $pax-darkgray
-  color: $pax-white
-  font-size: 10pt
-  padding: 3px 10px
+  filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, .3))
 
 section
   padding: 10px 10px 0 10px 
 
 ::v-deep section
-  border-left: 5px solid $pax-darkgray
+  border-left: 5px solid $pax-darkcyan
   padding: 10px
   & p:first-of-type::first-letter, p.initial-letter:first-of-type::first-letter
-    color: $pax-cyan
+    color: $pax-lightcyan
     font-weight: bold
     font-size: 270%
     float: left
@@ -61,9 +49,8 @@ section
 
 ::v-deep span.subtitle
   @extend .pax-regular
-  background: $pax-darkestcyan
+  background: $pax-darkcyan
   display: block
-  background: $pax-darkgray
   color: $pax-white
   font-size: 10pt
   padding: 3px 10px

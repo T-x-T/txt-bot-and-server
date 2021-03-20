@@ -24,6 +24,7 @@ div#thumbnailContainer
   flex-wrap: nowrap
   align-items: stretch
   justify-content: center
+  margin-top: 50px
   img
     border-radius: 8px
     width: 25%
