@@ -1,8 +1,7 @@
 <template>
   <div class="background-bright" ref="memberWorldmapBackground">
     <div id="section_memberWorldmap" class="scrollTarget"></div>
-    <h1>Worldmap</h1>
-    <p class="subtitle">We are a global community</p>
+    <h1>World map<span class="subtitle">We are a global community</span></h1>
 
     <div id="controls">
       <div class="buttonContainer">
@@ -38,15 +37,18 @@ div#background
 
 div#mapContainer
   padding-bottom: 70% !important
-  box-shadow: 0px 0px 1500px #102f36 inset
   background: $pax-darkcyan
-  @media screen and ($mobile)
-    box-shadow: 0px 0px 150px #102f36 inset
-    width: 100vw
+  width: 100vw
+  svg
+    width: 90%
+    margin: 0 auto
 
 .subtitle
   text-align: center
-  margin: -10px 0 10px 0
+  margin: -7px 0 7px 0
+  display: block
+  color: $pax-white
+  font-size: 12pt
 
 #controls
   width: 100vw
@@ -61,13 +63,13 @@ div#mapContainer
   flex-shrink: 0
   button
     background: transparent
-    border: 0px
-    margin: 0
-    transition-duration: 0s
+    box-shadow: none
     &:hover
-      background: transparent
+      background: $pax-lightcyan
+      transform: none
   button.active
     background: $pax-darkcyan
+    color: $pax-white
     border-radius: 25px
 </style>
 
