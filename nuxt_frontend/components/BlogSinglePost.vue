@@ -89,7 +89,7 @@ section
     color: $pax-lightcyan
 
 ::v-deep ul
-  @extend .pax-p
+  @extend .pax-regular
   margin: 10px 0
   list-style-type: none
   max-width: 80%

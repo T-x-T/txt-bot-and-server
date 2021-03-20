@@ -1,18 +1,17 @@
 <template>
   <div class="background-bright">
     <div id="section_downloads" class="scrollTarget"></div>
+    <h1>Downloads</h1>
     <div id="container">
-      <h1>Downloads</h1>
       <section ref="0" class="hover scrollTarget">
-
-        <svg v-if="activeElement !== 0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-        </svg>
-        <svg v-if="activeElement === 0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
-        </svg>
-
-        <h1 @click="activeElement = 0">Worldsaves</h1>
+        <h2 @click="activeElement = 0">
+          <svg v-if="activeElement !== 0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+          </svg>
+          <svg v-if="activeElement === 0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
+          </svg>
+          Worldsaves</h2>
         <div v-if="activeElement === 0">
           <div class="item">
             <h3>Paxterya Season 3</h3>
@@ -36,19 +35,19 @@
           </div>
 
           <div class="item">
-            <h3>Paxterya modded S1 (All the Mods 5)</h3>
+            <h3>Paxterya Modded S1 (All the Mods 5)</h3>
             <p>Our first try playing modded together in November 2020.</p>
             <a href="https://stor.paxterya.com/minecraft_maps/modded_s1_singleplayer.zip"><button class="secondary">Download ZIP (2.5 GB)</button></a>
           </div>
 
           <div class="item">
-            <h3>Paxterya modded S2 (Skyfactory 4)</h3>
+            <h3>Paxterya Modded S2 (Skyfactory 4)</h3>
             <p>After playing in the beautiful world of All the Mods 5, we had to do something simpler in December 2020.</p>
             <a href="https://stor.paxterya.com/minecraft_maps/modded_s2.zip"><button class="secondary">Download ZIP (70 MB)</button></a>
           </div>
 
           <div class="item">
-            <h3>Paxterya modded S3 (RLCraft)</h3>
+            <h3>Paxterya Modded S3 (RLCraft)</h3>
             <p>In January 2021 we came back down to earth to get ourselves killed way too often.</p>
             <a href="https://stor.paxterya.com/minecraft_maps/modded_s3_rlcraft.zip"><button class="secondary">Download ZIP (1.2 GB)</button></a>
           </div>
@@ -56,15 +55,14 @@
       </section>
 
       <section ref="1" class="hover scrollTarget">
-
-        <svg v-if="activeElement !== 1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-        </svg>
-        <svg v-if="activeElement === 1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
-        </svg>
-
-        <h1 @click="activeElement = 1">Wallpapers</h1>
+        <h2 @click="activeElement = 1">Wallpapers
+          <svg v-if="activeElement !== 1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+          </svg>
+          <svg v-if="activeElement === 1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
+          </svg>
+        </h2>
           <div v-if="activeElement === 1">
             <div class="item">
               <p class="margin-left">Good looking Wallpapers to make your Computer look 100% better! All of them come in a crisp resolution of 2560x1440 pixels.</p>
@@ -78,15 +76,14 @@
       </section>
 
       <section ref="2" class="hover scrollTarget">
-
-        <svg v-if="activeElement !== 2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-        </svg>
-        <svg v-if="activeElement === 2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
-        </svg>
-      
-        <h1 @click="activeElement = 2">YouTube Thumbnail Templates</h1>
+        <h2 @click="activeElement = 2">Thumbnails
+          <svg v-if="activeElement !== 2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+          </svg>
+          <svg v-if="activeElement === 2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
+          </svg>
+        </h2>
         <div v-if="activeElement === 2">
           <div class="item">
             <p class="margin-left">It is recommended to use Adobe Photoshop to edit the thumbnail template. If you don't have Photoshop, there are two transparent PNGs with the Paxterya overlay for you to combine with your individual thumbnail.</p>
@@ -100,18 +97,17 @@
       </section>
 
       <section ref="3" class="hover scrollTarget">
-
-        <svg v-if="activeElement !== 3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-        </svg>
-        <svg v-if="activeElement === 3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
-        </svg>
-
-        <h1 @click="activeElement = 3">And more...</h1>
+        <h2 @click="activeElement = 3">And more...
+          <svg v-if="activeElement !== 3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+          </svg>
+          <svg v-if="activeElement === 3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
+          </svg>
+        </h2>
         <div v-if="activeElement === 3">
           <div class="item">
-            <p>You can find much more like special maps, tons of screenshots and Factorio Saves directly on our Download Server</p>
+            <p>You can find much more like special maps, tons of screenshots and Factorio Saves directly on our Download Server.</p>
             <a href="https://stor.paxterya.com" target="blank"><button class="secondary">Take a look</button></a>
           </div>
         </div>
@@ -124,10 +120,11 @@
 @import ~/assets/_vars.sass
 
 div#container
+  max-width: 90vw
   display: flex
-  flex-direction: column
-  justify-content: center
-  align-items: center
+  flex-direction: row
+  align-items: top
+  margin: 0 auto
   @media screen and ($mobile)
     margin-bottom: 50px
 
@@ -135,6 +132,8 @@ section
   background: $pax-cyan
   width: 50%
   margin: 2%
+  max-height: 70vh
+  overflow-y: auto
   @media screen and ($mobile)
     width: 90vw
     margin-left: 0
@@ -145,9 +144,34 @@ section.scrollTarget
   scroll-margin-top: 100px
 
 div.item
-  margin: 2%
-  @media screen and ($mobile)
-    margin: 0
+  background: $pax-darkcyan
+  margin: 0 0 10px 0
+  padding: 10px
+  button
+    margin: 5px 0
+
+h2
+  background: $pax-lightcyan
+  text-transform: uppercase
+  color: $pax-darkcyan
+  text-align: center
+  padding: 5px 0
+  position: relative
+  cursor: pointer
+  &:hover
+    background: $pax-white
+  svg
+    color: white
+    height: 30px
+    width: auto
+    left: 5px
+    top: 50%
+    transform: translate(0,-50%)
+    z-index: 1
+    position: absolute
+    background: $pax-darkcyan
+    padding: 5px
+    border-radius: 50%
 
 h3
   color: white
@@ -170,24 +194,8 @@ button
   margin-left: 2%
 
 img
-  width: 96%
-  margin: 2%
-  box-shadow: 0px 0px 15px #102f36
-  &:hover
-    box-shadow: 0px 0px 35px #102f36
-
-h1
-  cursor: pointer
-  max-width: 80vw
-
-svg
-  color: white
-  height: 86px
-  width: auto
-  z-index: -1
-  position: absolute
-  @media screen and ($mobile)
-    height: 70px
+  width: 100%
+  
 </style>
 
 <script>

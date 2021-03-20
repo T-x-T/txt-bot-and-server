@@ -103,7 +103,7 @@ button#newPost
       opacity: 1
       font-size: 14pt
       color: white
-      @extend .pax-p
+      @extend .pax-regular
     input
       position: inline
       width: 25vw

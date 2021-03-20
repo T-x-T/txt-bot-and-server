@@ -251,7 +251,7 @@ button#submit
 div.formInput
   span.hoverInfo
     display: none
-    @extend .pax-p
+    @extend .pax-regular
     color: white
     position: absolute
     z-index: 10

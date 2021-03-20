@@ -74,7 +74,7 @@ div#controls
     @extend .pax-semibold
     font-size: 25pt
   span.town
-    @extend .pax-p
+    @extend .pax-regular
     color: white
     font-size: 12pt
     margin: 0 20px 0 20px

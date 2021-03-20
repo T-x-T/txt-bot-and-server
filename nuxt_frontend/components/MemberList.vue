@@ -181,7 +181,7 @@ div.details
   display: inline
 
 .value
-  @extend .pax-p
+  @extend .pax-regular
 
 .description
   @extend .pax-semibold
