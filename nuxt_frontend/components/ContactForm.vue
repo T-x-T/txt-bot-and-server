@@ -38,37 +38,38 @@
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
 
-div.background
+div.background-dark
   display: flex
   justify-content: center
   align-items: center
   flex-direction: column
   @media screen and ($mobile)
     width: 100vw
-
 div#wrapper
-  background: $pax-cyan
   width: 50%
-  margin: 2%
-  padding: 1%
+  margin: 20px 0 40px 0
   @media screen and ($mobile)
     width: 90vw
     margin: 50px 0 50px 0
-    button
-      font-size: 20pt
-      background: $pax-darkcyan
-      padding: 10px 20px 10px 20px
-      margin: 1vw 5vw 5vw 5vw
-
-button:hover
-  background-color: $pax-cyan
-  box-shadow: 0px 0px 15px #102f36
-
+p
+  margin-bottom: 10px
 a
   color: $pax-white
   @extend .pax-semibold
   &:hover
     color: $pax-lightcyan
+h3
+  color: $pax-white
+  margin-bottom: 5px
+input, textarea
+  background: $pax-lightcyan
+  color: $pax-darkestcyan
+  @extend .pax-semibold
+::placeholder
+  color: $pax-darkestcyan
+  @extend .pax-semibold
+button
+  width: 100%
 </style>
 
 <script>

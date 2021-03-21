@@ -180,10 +180,12 @@ ol
 
 input
   @extend .pax-regular
-  padding: 10px 5px 5px 5px
+  padding: 7px 10px
   border: none
   width: 100%
   font-size: 12pt
+  margin: 5px 0
+  box-sizing: border-box
   &:focus
     outline: none
   @media screen and ($mobile)
@@ -192,13 +194,15 @@ input
     padding-right: 0
 
 textarea
+  @extend .pax-regular
+  padding: 7px 10px
+  font-size: 12pt
   width: 100%
   height: 250px
-  margin-bottom: 1%
   resize: vertical
-  padding: 5px
   outline: none
-  border: 2px solid white
+  border: none
+  box-sizing: border-box
   @media screen and ($mobile)
     width: 85vw
 
@@ -226,7 +230,8 @@ label:not(.checkmarkContainer)
   -moz-user-select: none
   -ms-user-select: none
   user-select: none
-  margin: 20px 0 10px 0
+  margin: 10px 0
+  position: relative
   &:hover input ~ .checkmark
     background-color: #bebebe
   input:checked ~ .checkmark
@@ -246,7 +251,8 @@ label:not(.checkmarkContainer)
       display: block
   .checkmark
     position: absolute
-    left: 25px
+    left: 0
+    top: 7px
     height: 25px
     width: 25px
     background-color: $pax-gray
