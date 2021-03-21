@@ -56,10 +56,9 @@ div.grid
   @media screen and ($mobile)
     display: flex
     flex-direction: column
+    width: 90%
     .paxItem
-      margin-bottom: 50px
-    .headline
-      width: 70vw
+      margin-bottom: 20px
 
 .rules1
   grid-area: rules1

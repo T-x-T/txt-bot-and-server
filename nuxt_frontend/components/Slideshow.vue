@@ -2,18 +2,18 @@
   <div class="background-dark" ref="slideshowWrapper">
     <div id="section_slideshow" class="scrollTarget"></div>
 
+    <img v-if="inView" :src="images[towns[townIndex]][index]"/>
+
     <div id="controlsWrapper">
       <div id="controls">
         <svg ref="back" id="back" @click="back()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" /></svg>
+        <svg ref="next" id="next" @click="next()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" /></svg>
+        <p id="index">{{index + 1}} / {{images[towns[townIndex]].length}}</p>
         <div id="textContainer">
-          <p id="index">{{index + 1}} / {{images[towns[townIndex]].length}}</p>
           <span v-for="(item, i) in towns" :key="i" :ref="`town${i}`" @click="townIndex = i; index = 0" class="town">{{item}}</span>
         </div>
-        <svg ref="next" id="next" @click="next()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" /></svg>
-      </div>
+              </div>
     </div>
-
-    <img v-if="inView" :src="images[towns[townIndex]][index]"/>
 
   </div>
 </template>
@@ -24,6 +24,8 @@
 div.background-dark
   position: relative
   padding: 50px 0
+  @media screen and ($mobile)
+    padding: 50px 0 0 0
 
 img
   width: auto
@@ -34,6 +36,7 @@ img
   box-shadow: 0px 7px 0px $pax-darkmodecyan1
   @media screen and ($mobile)
     width: 100vw
+    height: auto
     margin: 0
     border-radius: 0
 div#controlsWrapper
@@ -43,7 +46,6 @@ div#controlsWrapper
 div#controls
   width: max-content
   height: 90px
-  display: flex
   flex-wrap: nowrap
   justify-content: space-between
   align-items: center
@@ -52,22 +54,33 @@ div#controls
   bottom: 50px
   z-index: 2
   border-radius: 25px 25px 0 0
-  padding: 0 5px
+  padding: 10px 30px 0 30px
   user-select: none
   @media screen and ($mobile)
-    bottom: -150px
-    border-radius: 25px
-    width: 95vw
-    height: 150px
+    position: relative
+    top: 100%
+    width: 100%
+    border-radius: 0
+    height: 70px
+    padding: 10px 30px 20px 30px
   svg
     height: 50px
     width: 50px
     color: white
+    position: absolute
+    top: 50%
+    transform: translateY(-50%)
+    &#back
+      left: 0
+    &#next
+      right: 0
     &:hover
       color: $pax-lightcyan
       cursor: pointer
   div#textContainer
-    margin-top: -5px
+    margin: 0 auto
+    width: fit-content
+    display: flex
   p
     text-align: center
   p#index
@@ -78,6 +91,7 @@ div#controls
     color: white
     font-size: 12pt
     margin: 0 20px 0 20px
+    display: block
     &:hover
       color: $pax-lightcyan
       cursor: pointer

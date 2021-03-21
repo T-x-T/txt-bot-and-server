@@ -34,8 +34,12 @@ div#thumbnailContainer
       cursor: pointer
   @media screen and ($mobile)
     flex-direction: column
+    margin: 0
+    padding: 20px 0
     img
-      width: 95vw
+      width: 90%
+      max-width: 300px
+      margin: 10px auto
 
 .hover
   &:hover

@@ -33,7 +33,7 @@
 
         <div class="paxItem" v-if="discordId">
           <p class="headline" v-if="discordId">Hi {{discordNick}}!</p>
-          <div class="ItemContainer">
+          <div class="ItemContainer personalInfo">
             <div v-if="discordId">
               <div class="formInput">
                 <label for="mcIgn">Your Minecraft Username</label>
@@ -186,10 +186,19 @@ div.grid
   margin: 0 auto
   margin-top: 20px
   padding-bottom: 10px
+  @media screen and ($mobile)
+    grid-template-columns: 1fr
+    grid-template-rows: 1fr 1fr
+    grid-template-areas: "join2" "join3"
+    width: 90%
   p
     background: $pax-darkestcyan
-    width: 250px
+    width: 275px
     padding: 10px 20px
+    box-sizing: border-box
+    @media screen and ($mobile)
+      width: 100%
+      margin-bottom: 20px
   ol
     border: none
     background: none
@@ -198,6 +207,8 @@ div.grid
       background: $pax-darkestcyan
       padding: 5px 15px
       margin-bottom: 7px
+      @media screen and ($mobile)
+        padding: 5px 20px 5px 30px
       &::before
         margin: -5px 0 0 -45px
         font-size: 100%
@@ -253,8 +264,7 @@ form
   width: 50vw
   margin-bottom: 100px
   @media screen and ($mobile)
-    width: 90vw
-    box-shadow: none
+    width: 90%
 
 p#ignWrong
   background: $pax-red
@@ -286,7 +296,6 @@ p.entry
   &:hover
     cursor: pointer
     background: $pax-darkcyan
-
 
 hr
   margin: 10px 0
@@ -327,7 +336,14 @@ div.formInput
       width: 100%
       right: 0
       transform: none
+      z-index: 10
+      padding: 5px 15px
+      display: block
       border-radius: 0px
+      box-sizing: border-box
+      .personalInfo &
+        display: none
+  
   &:hover
     @media screen and ($desktop)
       span.hoverInfo

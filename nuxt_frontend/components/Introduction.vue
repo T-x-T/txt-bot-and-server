@@ -50,6 +50,9 @@ div#container
     width: 200px
     margin: 0 auto
     display: block
+    @media screen and ($mobile)
+      width: 25vw
+      min-width: 125px
   div.titlebar
     display: flex
     margin-top: 30px
@@ -79,6 +82,9 @@ div#container
     background: $pax-darkestcyan
     margin: 0 auto
     margin-bottom: 20px
+    box-sizing: border-box
+    @media screen and ($mobile)
+      width: 100%
   button
     margin: 0 auto
     display: block

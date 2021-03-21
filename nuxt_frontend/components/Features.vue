@@ -44,20 +44,15 @@ div#section_features
   flex-wrap: nowrap
   align-items: stretch
   justify-content: center
-  div
-    padding: 2%
-    padding-left: 5%
-    padding-right: 5%
   @media screen and ($mobile)
     flex-direction: column
-    div
-      width: 80vw
-      margin: 25px 10vw 25px 5vw
-
 .paxItem
-  width: 500px
+  width: 400px
+  max-width: 90%
+  padding: 5%
   @media screen and ($mobile)
-    width: 90vw
+    box-sizing: border-box
+    padding: 3% 30px
 
 </style>
 

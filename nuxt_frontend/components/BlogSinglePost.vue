@@ -12,15 +12,10 @@
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
 
-div#wrapper
-  @media screen and ($mobile)
-    width: 90vw 
-
 h4
   color: white
   font-size: 18pt
-  @media screen and ($mobile)
-    max-width: 60vw
+  max-width: 80%
 
 img.author
   width: 80px
@@ -28,6 +23,8 @@ img.author
   float: right
   margin: -40px 50px 10px 0
   filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, .3))
+  @media screen and ($mobile)
+    margin: -40px 0 10px 0
 
 section
   padding: 10px 10px 0 10px 

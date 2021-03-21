@@ -70,16 +70,12 @@ div#wrapper
 
 article
   width: 60%
+  margin: 0 auto
   padding: 20px
   overflow: hidden
-  left: 18%
   position: relative
   @media screen and ($mobile)
-    width: 98vw
-    margin: 0
-    left: 0
-    padding: 1vw
-    filter: none
+    width: 90%
 
 button
   background: $pax-darkcyan
@@ -97,11 +93,10 @@ div#controls
   background: $pax-darkcyan
   justify-content: center
   margin-bottom: 20px
-  @media screen and ($mobile)
-    flex-direction: column
-    margin-bottom: 20px
-    button
-      width: 90vw
+  button
+    white-space: nowrap
+    @media screen and ($mobile)
+      padding: 3px 10px
 
 p
   text-align: center

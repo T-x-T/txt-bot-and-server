@@ -3,7 +3,7 @@
     <div id="section_downloads" class="scrollTarget"></div>
     <h1>Downloads</h1>
     <div id="container">
-      <section ref="0" class="hover scrollTarget">
+      <section ref="0" class="scrollTarget">
         <h2 @click="activeElement = 0">
           <svg v-if="activeElement !== 0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
@@ -48,13 +48,13 @@
 
           <div class="item">
             <h3>Paxterya Modded S3 (RLCraft)</h3>
-            <p>In January 2021 we came back down to earth to get ourselves killed way too often.</p>
+            <p>In January 2021 we came back down to Earth to get ourselves killed way too often.</p>
             <a href="https://stor.paxterya.com/minecraft_maps/modded_s3_rlcraft.zip"><button class="secondary">Download ZIP (1.2 GB)</button></a>
           </div>
         </div>
       </section>
 
-      <section ref="1" class="hover scrollTarget">
+      <section ref="1" class="scrollTarget">
         <h2 @click="activeElement = 1">Wallpapers
           <svg v-if="activeElement !== 1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
@@ -65,7 +65,7 @@
         </h2>
           <div v-if="activeElement === 1">
             <div class="item">
-              <p class="margin-left">Good looking Wallpapers to make your Computer look 100% better! All of them come in a crisp resolution of 2560x1440 pixels.</p>
+              <p class="margin-left">Good looking wallpapers to make your computer look 100% better! All of them come in a crisp resolution of 2560x1440 pixels.</p>
 
               <a href="https://stor.paxterya.com/paxterya_art/paxterya_art.zip">
                 <img src="https://stor.paxterya.com/paxterya_art/mix_wallpaper.png">
@@ -75,7 +75,7 @@
           </div>
       </section>
 
-      <section ref="2" class="hover scrollTarget">
+      <section ref="2" class="scrollTarget">
         <h2 @click="activeElement = 2">Thumbnails
           <svg v-if="activeElement !== 2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
@@ -96,7 +96,7 @@
         </div>
       </section>
 
-      <section ref="3" class="hover scrollTarget">
+      <section ref="3" class="scrollTarget">
         <h2 @click="activeElement = 3">And more...
           <svg v-if="activeElement !== 3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
@@ -120,25 +120,24 @@
 @import ~/assets/_vars.sass
 
 div#container
-  max-width: 90vw
+  max-width: 90%
   display: flex
   flex-direction: row
-  align-items: top
+  align-items: flex-start
   margin: 0 auto
   @media screen and ($mobile)
-    margin-bottom: 50px
+    flex-direction: column
 
 section
   background: $pax-cyan
-  width: 50%
-  margin: 2%
+  width: 25%
+  margin: 20px 10px
   max-height: 70vh
   overflow-y: auto
   @media screen and ($mobile)
-    width: 90vw
-    margin-left: 0
-    margin-right: 0
-    padding: 1vw
+    max-height: 50vh
+    width: 100%
+    margin: 20px 0
 
 section.scrollTarget
   scroll-margin-top: 100px
@@ -195,6 +194,7 @@ button
 
 img
   width: 100%
+  margin-top: 10px
   
 </style>
 

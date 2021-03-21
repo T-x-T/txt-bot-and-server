@@ -75,8 +75,8 @@ div#container
     flex-direction: column
     padding-bottom: 50px
     div.item
-      width: 95vw
-      margin: 0 2.5vw 75px 2.5vw
+      width: 90%
+      margin: 20px auto
       
 .iframeContainer
   height: 100%
@@ -90,40 +90,20 @@ div.overlay
   border-radius: 0 0 20px 20px
   background: rgba(0,0,0,0.5)
   .activateDynmap
-      position: absolute
-      text-transform: uppercase
-      z-index: 11
-      @extend .pax-semibold
-      left: 50%
-      top: 50%
-      transform: translate(-50%, -50%)
-      background: rgba(0,0,0,0.9)
-      font-size: 14pt
-      padding: 5px 10px
+    position: absolute
+    text-transform: uppercase
+    z-index: 11
+    @extend .pax-semibold
+    left: 50%
+    top: 50%
+    transform: translate(-50%, -50%)
+    background: rgba(0,0,0,0.9)
+    font-size: 14pt
+    padding: 5px 10px
   &:hover
     cursor: pointer
     > .activateDynmap
           padding: 10px 20px
-  svg.pointer
-    color: white
-    width: 75px
-    height: 75px
-    position: absolute
-    bottom: 10px
-    right: 120px
-  @media screen and ($mobile)
-    width: 95vw
-    margin: 0 2.5vw 75px 2.5vw
-    left: -3px
-    svg.pointer
-      right: 50px
-
-p
-  text-align: center
-  cursor: pointer
-  @media screen and ($mobile)
-    font-size: 18pt
-    margin-top: -75px
 
 </style>
 

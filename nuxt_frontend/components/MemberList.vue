@@ -63,14 +63,15 @@
 div#controls
   display: flex
   justify-content: center
-  align-items: top
-  margin: 20px 0
+  margin: 20px auto
+  width: 90%
   @media screen and ($mobile)
     flex-direction: column
 
 div#searchBox
   width: 545px
-  max-width: 100%
+  @media screen and ($mobile)
+    width: 100%
   svg
     height: 45px
     width: auto
@@ -82,19 +83,15 @@ div#searchBox
     box-sizing: border-box
   input
     width: 500px
-    max-width: 87vw
     padding: 5px
     height: 45px
     box-sizing: border-box
     margin: 0
-    
-  @media screen and ($mobile)
-    margin: 0
-    margin-bottom: 25px
+    @media screen and ($mobile)
+      width: calc(100% - 45px)
 
 button#sort
   width: 200px
-  max-width: 100%
   height: 45px
   box-sizing: border-box
   margin: 0
@@ -105,6 +102,8 @@ button#sort
     color: $pax-white
     margin-bottom: -7px
     margin-right: 3px
+  @media screen and ($mobile)
+    float: right
 
 div#sortDropdown
   position: absolute
@@ -123,9 +122,6 @@ div#wrapper
   flex-flow: wrap
   flex-direction: row
   justify-content: space-evenly
-  @media screen and ($mobile)
-    flex-flow: column
-    align-content: center
 
 div.card
   display: flex
@@ -143,7 +139,7 @@ div.card
     @media screen and ($desktop)
       transform: scale(1.05)
   @media screen and ($mobile)
-    width: 75vw
+    max-width: 75vw
     margin-bottom: -20px
 
 div.infos
