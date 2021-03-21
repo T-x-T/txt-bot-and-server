@@ -23,7 +23,7 @@
 
 div.background-dark
   position: relative
-  padding: 30px 0
+  padding: 50px 0
 
 img
   width: auto
@@ -49,7 +49,7 @@ div#controls
   align-items: center
   background: $pax-darkmodecyan1
   position: absolute
-  bottom: 30px
+  bottom: 50px
   z-index: 2
   border-radius: 25px 25px 0 0
   padding: 0 5px

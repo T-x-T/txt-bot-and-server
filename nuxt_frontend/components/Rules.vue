@@ -33,7 +33,7 @@
             <li>It is forbidden to kill, free or steal other player's animals or villagers.</li>
             <li>It is forbidden to use game modifications that give you an unfair advantage. Allowed modifications are optimization, minimap, inventory management and schematic mods.</li>
             <li>It is forbidden to exploit game bugs that give you an unfair advantage, such as item duping.</li>
-            <li>It is permitted to use tnt dupers.</li>
+            <li>It is permitted to use TNT dupers.</li>
           </ol>
         </div>
       </div>
@@ -44,14 +44,6 @@
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
 
-div#background
-  @media screen and ($mobile)
-    width: 100vw
-
-div
-  margin-top: -4px
-  padding-bottom: 1%
-
 div.grid
   width: 75%
   display: grid
@@ -59,8 +51,7 @@ div.grid
   grid-template-rows: 1fr
   gap: 0px 100px
   grid-template-areas: "rules1 rules3" "rules2 rules3"
-  margin: 0 auto
-  margin-top: 30px
+  margin: 50px auto
 
   @media screen and ($mobile)
     display: flex

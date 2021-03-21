@@ -17,7 +17,7 @@
       <form method="POST" @submit.prevent="submit()">
 
         <div class="paxItem">
-          <p class="headline" v-if="!discordId">Step 1:</h4>
+          <p class="headline" v-if="!discordId">Step 1:</p>
           <div class="ItemContainer">
             <div v-if="!discordId">
               <p>
