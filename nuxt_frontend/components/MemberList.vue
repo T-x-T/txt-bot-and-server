@@ -86,6 +86,7 @@ div#searchBox
     padding: 5px
     height: 45px
     box-sizing: border-box
+    margin: 0
     
   @media screen and ($mobile)
     margin: 0
