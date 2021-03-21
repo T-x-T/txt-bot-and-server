@@ -2,16 +2,16 @@
   <main>
     <Header />
     <div id="wrapper">
-      <h1>Apply now!</h1>
+      <h1>Apply now!<span class="subtitle">Become a Paxteryan</span></h1>
       <form method="POST" @submit.prevent="submit()">
         <h4 v-if="!discordId">Step 1:</h4>
         <div v-if="!discordId">
           <button id="discordLogin" type="button" :onclick="`window.location.href = '${$config.discordOauthJoinUs}'`">Authenticate with Discord</button>
           <p>
-            Authenticate with Discord to start your application. We will just get your visible data, like your nickname, discriminator and ID. We need this data so we can give you the appropriate roles on our server automatically.
+            Authenticate with Discord to start your application. We will just get your visible data (nickname, discriminator, ID). We need this data to give you roles automatically.
           </p>
           <p>
-            <b>You have to login with the Discord account that you will be using to join the Discord server! If you use a different account, then we will not be able to whitelist you.</b>
+            <b>Please log in with the Discord account you'll join our server with! If you use a different account, we won't be able to whitelist you.</b>
           </p>
         </div>
 
@@ -20,14 +20,14 @@
           <div class="formInput">
             <label for="mcIgn">Your Minecraft Username</label>
             <input v-model="mcIgn" @blur="validateMcIgn" @focus="makeActive" type="text" name="mcIgn" placeholder="Your Minecraft Username" required />
-            <span class="hoverInfo" v-if="!ignIsWrong">You need a legit version bought from mojang. Cracked Accounts won't work.</span>
-            <p id="ignWrong" v-if="ignIsWrong">The entered Minecraft Username seems to be invalid. You need a legit version bought from mojang. Cracked Accounts won't work.</p>
+            <span class="hoverInfo" v-if="!ignIsWrong">You need a legit version bought from Mojang. Cracked accounts won't work.</span>
+            <p id="ignWrong" v-if="ignIsWrong">The entered Minecraft username seems to be invalid. You need a legit version bought from Mojang. Cracked accounts won't work.</p>
           </div>
 
           <div class="formInput">
             <label for="email">Your E-Mail</label>
             <input v-model="email" @focus="makeActive" @blur="makeInactive" type="email" name="email" placeholder="Your E-Mail" required />
-            <span class="hoverInfo">We will contact you via E-Mail. Staff can't see your E-Mail and we don't give it to any third parties. We will only contact you twice regarding your application.</span>
+            <span class="hoverInfo">We will contact you via e-mail. Staff can't see your e-mail and we don't give it to any third parties. We will only contact you twice regarding your application.</span>
           </div>
 
           <div class="formInput">
@@ -39,7 +39,7 @@
                 </div>
               </div>
             </div>
-            <span class="hoverInfo">We'd like to know where you're from for statistical purposes. Your home country does not influence the outcome of your application. You can tell us to not share your home country publically further down.</span>
+            <span class="hoverInfo">We'd like to know where you're from for our statistics. Your home country does not influence the outcome of your application. You can choose not to publish your home country further down.</span>
           </div>
 
           <div class="formInput">
@@ -63,12 +63,12 @@
               <option v-for="(item, index) in validBirthYears" :key="index" :value="item" :label="item">{{item}}</option>
             </select>
             <br>
-            <span class="hoverInfo">We'd like to know your approximate age for statistical purposes. Your age is not a crucial factor in your application. You can tell us to not share your age publically further down.</span>
+            <span class="hoverInfo">We'd like to know your approximate age for our statistics. Your age is not a crucial factor in your application. You can choose not to publish your age further down.</span>
           </div>
           <br><br>
           <div class="formInput active">
             <h4>About me</h4>
-            <span class="hoverInfo hoverInfoTextarea">Tell us something about yourself so we get to know you. What you're doing with your life, what you love about Minecraft, what pizza flavor is your favorite, anything you'd like to share with us.</span>
+            <span class="hoverInfo hoverInfoTextarea">Tell us something about yourself so we get to know you. What you're doing with your life, what you love about Minecraft, what pizza flavor is your favorite, anything you'd like to share with us!</span>
             <textarea v-model="aboutMe" placeholder="Type text..." maxlength="1500" required></textarea>
             <p class="characterCount">{{1500 - aboutMe.length}} characters remaining</p>
           </div>
@@ -85,7 +85,7 @@
             <span class="hoverInfo hoverInfoTextarea">
               Please show us some screenshots of your previous Minecraft buildings, the ones you're most proud of! Don't worry, it doesn't have to be anything big.
               <br>
-              If you dont know where to upload your images, just use <a href="https://imgur.com/upload" target="blank">imgur</a> and paste the link here.
+              If you don't know where to upload your images, use <a href="https://imgur.com/upload" target="blank">imgur</a> and paste the link here.
             </span>
             <textarea v-model="buildImages" placeholder="Type text..." maxlength="1500" required></textarea>
             <p class="characterCount">{{1500 - buildImages.length}} characters remaining</p>
@@ -98,12 +98,12 @@
             <span class="checkmark"></span>
           </label>
           <label class="checkmarkContainer">
-            <span class="label">Show my home country publically in places like the member list.</span>
+            <span class="label">Publish my home country in the member list.</span>
             <input type="checkbox" name="accept" v-model="publishCountry" />
             <span class="checkmark"></span>
           </label>
           <label class="checkmarkContainer">
-            <span class="label">Show my age publically in places like the member list.</span>
+            <span class="label">Publish my age in the member list.</span>
             <input type="checkbox" name="accept" v-model="publishAge" />
             <span class="checkmark"></span>
           </label>
@@ -138,7 +138,7 @@
             <p>
               <svg class="status" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               <br>
-              That didn't work and heres why: <br>
+              That didn't work and here's why: <br>
               {{errorMessage}} <br>
               You should tell us about that on our <a href="https://discord.gg/mAjZCTG" target="blank"><b>Discord Server</b></a>.
             </p>
@@ -160,13 +160,16 @@ div#wrapper
   overflow-x: hidden
   margin-top: 100px
 
+.subtitle
+  text-align: center
+  margin: -7px 0 7px 0
+  display: block
+  color: $pax-white
+  font-size: 12pt
+
 h4
   color: white
   font-size: 22pt
-
-button#discordLogin:hover
-  background: $pax-cyan
-  filter: drop-shadow( 0px 0px 4px rgba(0, 0, 0, .4))
 
 form
   width: 50vw
@@ -179,10 +182,10 @@ form
     box-shadow: none
 
 p#ignWrong
-  color: #fff000
+  color: $pax-red
 
 input
-  color: white
+  color: $pax-white
   &::placeholder
     opacity: 0.8
   @media screen and ($mobile)
@@ -191,9 +194,6 @@ input
 textarea
   @media screen and ($mobile)
     width: 98%
-
-textarea:focus
-  filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
 
 select#country
   display: none
@@ -237,10 +237,6 @@ button#submit
   margin-left: 5vw
   margin-right: 5vw
   height: 75px
-  filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
-  &:hover
-    filter: drop-shadow( 0px 0px 16px rgba(0, 0, 0, .9))
-    background: $pax-cyan
   svg
     height: 32pt
     transform: rotate(45deg)
@@ -252,7 +248,7 @@ div.formInput
   span.hoverInfo
     display: none
     @extend .pax-regular
-    color: white
+    color: $pax-white
     position: absolute
     z-index: 10
     margin-top: -70px
@@ -260,11 +256,8 @@ div.formInput
     padding: 25px
     padding-right: 2.5vw
     width: 20vw
-    button:hover
-      background: $pax-cyan
-      filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
     a:hover
-      color: white
+      color: $pax-white
     @media screen and ($mobile)
       margin: 0
       padding: 0
@@ -282,7 +275,7 @@ div.active
       display: initial
 
 svg.status
-  color: white
+  color: $pax-white
   height: 48px
 
 </style>
