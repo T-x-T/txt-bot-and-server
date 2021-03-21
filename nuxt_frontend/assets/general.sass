@@ -128,12 +128,15 @@ div.background-dark
     background: $pax-darkmodecyan1
     color: $pax-white
     font-size: 16pt
-    padding: 8px 0px 8px 20px
+    padding: 8px 25px 8px 20px
     height: 32px
     position: relative
     white-space: nowrap
-    width: 20vw
+    width: fit-content
     text-transform: uppercase
+    &.small
+      font-size: 14pt
+      padding: 5px 15px
   ul
     @extend .pax-regular
     background: $pax-darkestcyan
@@ -252,7 +255,7 @@ label:not(.checkmarkContainer)
   .checkmark
     position: absolute
     left: 0
-    top: 7px
+    top: 5px
     height: 25px
     width: 25px
     background-color: $pax-gray
@@ -274,7 +277,19 @@ label:not(.checkmarkContainer)
       -ms-transform: rotate(45deg)
       transform: rotate(45deg)
 
-
+select
+  @extend .pax-regular
+  font-size: 12pt
+  outline: none
+  border: none
+  cursor: pointer
+  color: $pax-black
+  padding: 5px 10px
+  width: 200px
+  margin-right: 10px
+  box-sizing: border-box
+select:required:invalid
+  color: $pax-black
 
 table
   @extend .pax-regular

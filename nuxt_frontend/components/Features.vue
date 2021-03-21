@@ -56,8 +56,8 @@ div#section_features
 
 .paxItem
   width: 500px
-  .headline
-    width: 250px
+  @media screen and ($mobile)
+    width: 90vw
 
 </style>
 

@@ -61,13 +61,6 @@ a
 h3
   color: $pax-white
   margin-bottom: 5px
-input, textarea
-  background: $pax-lightcyan
-  color: $pax-darkestcyan
-  @extend .pax-semibold
-::placeholder
-  color: $pax-darkestcyan
-  @extend .pax-semibold
 button
   width: 100%
 </style>
