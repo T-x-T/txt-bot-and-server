@@ -17,8 +17,8 @@
       <ul class="text">
         <li>Minecraft {{mcVersion}} (Java Edition)</li>
         <li>Vanilla Gameplay</li>
-        <li>Whitelist <a href="join-us.html">(Apply here!)</a></li>
-        <li>YouTube Channel <a href="https://www.youtube.com/channel/UCH-JgwSf8J8tdjemXqihEKw" target="_blank">(visit)</a></li>
+        <li>Whitelist <NuxtLink to="/join-us">(Apply here!)</NuxtLink></li>
+        <li>YouTube Channel <a href="https://www.youtube.com/Paxterya" target="_blank">(visit)</a></li>
         <li>Current season since July 18, 2020</li>
         <li>Dedicated Server with Ryzen 3900x, 128GB RAM and NVME Storage</li>
       </ul>

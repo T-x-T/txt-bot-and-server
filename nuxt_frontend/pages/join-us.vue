@@ -3,16 +3,32 @@
     <Header />
     <div id="wrapper">
       <h1>Apply now!<span class="subtitle">Become a Paxteryan</span></h1>
+
+      <div class="grid">
+        <p class="join2">To gain access to our Minecraft server, you will need to write an application. We're looking forward to hearing from you!</p>
+        
+        <ol class="join3">
+          <li>Authenticate with Discord</li>
+          <li>Write your application</li>
+          <li>Wait for the response mail</li>
+        </ol>
+      </div>
+
       <form method="POST" @submit.prevent="submit()">
-        <h4 v-if="!discordId">Step 1:</h4>
-        <div v-if="!discordId">
-          <button id="discordLogin" type="button" :onclick="`window.location.href = '${$config.discordOauthJoinUs}'`">Authenticate with Discord</button>
-          <p>
-            Authenticate with Discord to start your application. We will just get your visible data (nickname, discriminator, ID). We need this data to give you roles automatically.
-          </p>
-          <p>
-            <b>Please log in with the Discord account you'll join our server with! If you use a different account, we won't be able to whitelist you.</b>
-          </p>
+
+        <div class="paxItem">
+          <p class="headline" v-if="!discordId">Step 1:</h4>
+          <div class="ItemContainer">
+            <div v-if="!discordId">
+              <p>
+                Authenticate with Discord to start your application. We will just get your visible data (nickname, discriminator, ID). We need this data to give you roles automatically.
+              </p>
+              <p>
+                <b>Please log in with the Discord account you'll join our server with! If you use a different account, we won't be able to whitelist you.</b>
+              </p>
+              <button id="discordLogin" type="button" :onclick="`window.location.href = '${$config.discordOauthJoinUs}'`">Authenticate with Discord</button>
+            </div>
+          </div>
         </div>
 
         <h4 v-if="discordId">Hi {{discordNick}}</h4>
@@ -153,6 +169,65 @@
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
 
+main
+  margin-top: 120px
+
+div.grid
+  display: grid
+  grid-template-columns: 1fr 1fr
+  grid-template-rows: 140px
+  gap: 0px 0px
+  grid-template-areas: "join2 join3"
+  width: fit-content
+  margin: 0 auto
+  margin-top: 20px
+  padding-bottom: 40px
+  p
+    background: $pax-darkestcyan
+    width: 250px
+    padding: 10px 20px
+  ol
+    border: none
+    background: none
+    padding: 0
+    li
+      background: $pax-darkestcyan
+      padding: 5px 15px
+      margin-bottom: 7px
+      &::before
+        margin: -5px 0 0 -45px
+        font-size: 100%
+        padding: 5px 12px
+.join2
+  grid-area: join2
+.join3
+  grid-area: join3
+  align-self: start
+
+.ItemContainer
+  @extend .pax-regular
+  background: $pax-darkestcyan
+  color: white
+  padding: 10px 15px
+  font-size: 12pt
+  line-height: 1.5
+  width: 100%
+  border-left: 5px solid $pax-darkmodecyan1
+  list-style-type: none
+
+  p
+    width: 75%
+    @media screen and ($mobile)
+      width: 100%
+
+button#discordLogin
+  width: 75%
+  margin: 20px 0
+  &:hover
+    transform: scale(.95)
+  @media screen and ($mobile)
+    width: 100%
+
 div#wrapper
   display: flex
   flex-direction: column
@@ -167,16 +242,9 @@ div#wrapper
   color: $pax-white
   font-size: 12pt
 
-h4
-  color: white
-  font-size: 22pt
-
 form
   width: 50vw
-  padding: 1vw
-  margin-top: 25px
   margin-bottom: 100px
-  box-shadow: 0px 0px 25px #102f36
   @media screen and ($mobile)
     width: 98vw
     box-shadow: none
