@@ -5,20 +5,20 @@
     <div v-if="!openApplication">
       <table>
         <colgroup>
-          <col class="desktopOnly" style="width: 100px;">
+          <col style="width: 100px;">
           <col style="width: 200px;">
           <col style="width: 320px;">
-          <col class="desktopOnly" style="width: 200px;">
-          <col class="desktopOnly">
+          <col style="width: 200px;">
+          <col>
           <col style="width: 200px;">
         </colgroup>
         <thead>
           <tr>
-            <th class="desktopOnly">ID</th>
+            <th>ID</th>
             <th>Timestamp</th>
-            <th >Discord</th>
-            <th >IGN</th>
-            <th class="desktopOnly">About me</th>
+            <th>Discord</th>
+            <th>IGN</th>
+            <th>About me</th>
             <th>
               <select v-model="statusFilter">
                 <option value="null" disabled>Status</option>
@@ -32,11 +32,11 @@
         </thead>
         <tbody>
           <tr v-for="(item, index) in filteredApplications.slice(0, limit)" :key="index" @click="openPopup(item)" :class="rowClasses[index]">
-            <td class="desktopOnly">{{item.id}}</td>
+            <td >{{item.id}}</td>
             <td>{{new Date(item.timestamp).toLocaleString("de")}}</td>
             <td>{{item.discord_nick}}</td>
             <td>{{item.mc_ign}}</td>
-            <td class="desktopOnly">{{item.about_me}}</td>
+            <td>{{item.about_me}}</td>
             <td>{{item.status == 1 ? "Pending review" : item.status == 2 ? "Denied": "Accepted"}}</td>
           </tr>
         </tbody>
@@ -140,6 +140,8 @@ table
   @media screen and ($mobile)
     col
       width: auto !important
+    th:nth-child(1), td:nth-child(1), th:nth-child(2), td:nth-child(2), th:nth-child(3), td:nth-child(3), th:nth-child(5), td:nth-child(5)
+      display: none
 
 #tableControls
   margin-top: 30px

@@ -299,8 +299,6 @@ table
   margin-right: auto
   margin-left: auto
   display: block
-  @media screen and ($mobile)
-    width: 90%
   select
     height: 100%
     right: 0
@@ -329,7 +327,7 @@ tr
       background: $pax-lightcyan
       font-weight: bold
 td
-  padding: 3px 10px
+  padding: 7px 30px
   font-size: 12pt
   text-overflow: ellipsis
   white-space: inherit
@@ -337,6 +335,8 @@ td
   max-width: 150px
   text-align: center
   color: $pax-white
+  @media screen and ($mobile)
+    padding: 15px 15px
 
 .desktopOnly
   @media screen and ($mobile)

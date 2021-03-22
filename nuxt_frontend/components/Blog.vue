@@ -4,7 +4,7 @@
     <h1>Blog</h1>
 
     <div v-if="posts">
-      <article class="hover" v-if="!showAllPosts">
+      <article v-if="!showAllPosts">
         <div id="controls">
           <button class="secondary" id="prevPost" @click="prevPost()">
             <svg v-if="currentId < posts.length - 1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -30,7 +30,7 @@
       </article>
 
       <div id="postList" v-if="showAllPosts">
-        <table class="hover">
+        <table>
           <thead>
             <tr>
               <th>Date</th>
@@ -105,6 +105,18 @@ p
     height: 24pt
     width: auto
     margin-bottom: -6pt
+
+#postList
+  padding: 30px 0
+  table
+    td
+      max-width: none
+      text-align: left
+    @media screen and ($mobile)
+      th:nth-child(1), td:nth-child(1), th:nth-child(2), td:nth-child(2)
+        display: none
+      td
+        white-space: pre-wrap
 
 </style>
 

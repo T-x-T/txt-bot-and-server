@@ -93,6 +93,11 @@ h1
 table
   td
     max-width: none
+  @media screen and ($mobile)
+    td
+      white-space: pre-wrap
+    th:nth-child(1), td:nth-child(1), th:nth-child(2), td:nth-child(2), th:nth-child(3), td:nth-child(3)
+      display: none
 button#newPost
   width: 300px
   max-width: 90%
@@ -110,6 +115,8 @@ button
   #edit
     width: 50%
     box-sizing: border-box
+    @media screen and ($mobile)
+      width: 100%
     .input
       display: flex
       margin-bottom: 10px
@@ -129,8 +136,9 @@ button
       padding: 6px 7px
       box-sizing: border-box
     input
-      position: inline
       width: 25vw
+      @media screen and ($mobile)
+        width: 75vw
     textarea
       height: 50vh
       margin-top: 20px
@@ -140,6 +148,8 @@ button
     width: 50%
     padding: 2%
     box-sizing: border-box
+    @media screen and ($mobile)
+      display: none
 </style>
 
 <script>
