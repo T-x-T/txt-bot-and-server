@@ -126,7 +126,7 @@
                 <input type="checkbox" name="accept" v-model="publishAge" />
                 <span class="checkmark"></span>
               </label>
-              <hr>
+              <span class="divider"></span>
               <label class="checkmarkContainer">
                 <span class="label">I accept the <a target="_blank" href="/privacy-policy">privacy policy</a> of Paxterya. None of my entered data will be published or transmitted to third parties without my consent.</span>
                 <input type="checkbox" name="accept" v-model="acceptPrivacyPolicy" required />
@@ -297,9 +297,11 @@ p.entry
     cursor: pointer
     background: $pax-darkcyan
 
-hr
-  margin: 10px 0
-  border: 1px solid $pax-lightcyan
+span.divider
+  margin-top: 15px
+  border-bottom: 3px solid $pax-lightcyan
+  display: block
+  width: 100%
 
 button#submit
   font-size: 16pt
