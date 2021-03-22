@@ -1,9 +1,10 @@
 <template>
   <main>
+    <Header />
     <h1>Staff Interface</h1>
     <div v-if="accessLevel < 7">
-      <p>You're not cool enough to see anything here. Besides this message of course</p>
-      <NuxtLink to="/">Go home</NuxtLink>
+      <p class="noPerms">You're not cool enough to see anything here. But still pretty cool!</p>
+      <p class="goHome"><NuxtLink to="/">Go home</NuxtLink></p>
     </div>
 
     <div v-if="accessLevel >= 7">
@@ -17,7 +18,26 @@
 </template>
 
 <style lang="sass" scoped>
+@import ~/assets/_vars.sass
 
+main
+  margin-top: 120px
+
+p.noPerms
+  width: 30%
+  margin: 0 auto
+  background: $pax-red
+  color: $pax-white
+  padding: 10px 20px
+  @extend .pax-semibold
+
+p.goHome
+  width: 30%
+  margin: 20px auto
+  background: $pax-lightcyan
+  color: $pax-white
+  padding: 10px 20px
+  @extend .pax-semibold
 </style>
 
 <script>

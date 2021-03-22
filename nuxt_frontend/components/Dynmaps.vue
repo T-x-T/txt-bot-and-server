@@ -100,6 +100,7 @@ div.overlay
     background: rgba(0,0,0,0.9)
     font-size: 14pt
     padding: 5px 10px
+    text-align: center
   &:hover
     cursor: pointer
     > .activateDynmap

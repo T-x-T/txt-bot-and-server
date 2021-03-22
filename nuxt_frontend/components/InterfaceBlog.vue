@@ -3,7 +3,7 @@
     <h1>Blog post editor</h1>
 
     <button id="newPost" v-if="!openPost" @click="newPost">New Post</button>
-    <table class="hover" v-if="!openPost">
+    <table v-if="!openPost">
       <thead>
         <tr>
           <th>ID</th>
@@ -12,7 +12,7 @@
           <th>Title</th>
           <th>
             <select v-model="visibilityFilter">
-              <option value="null" disabled>Visibilty</option>
+              <option value="null" disabled>Visibility</option>
               <option value="0">All</option>
               <option value="1">Public</option>
               <option value="2">Private</option>
@@ -31,39 +31,39 @@
       </tbody>
     </table>
 
-    <div id="popup" class="hover" v-if="openPost">
+    <div id="popup" v-if="openPost">
       <button @click="openPost = null">Cancel</button>
       <button @click="save">Save</button>
       <div id="blogWrapper">
         <div id="edit">
           <div class="input">
-            <label for="author">Author:</label>
+            <label for="author">Author</label>
             <select id="author" v-model="openPost.author">
               <option value="ExxPlore">ExxPlore</option>
               <option value="TxT">TxT</option>
             </select>
           </div>
           <div class="input">
-            <label for="title">Title:</label>
+            <label for="title">Title</label>
             <input id="title" type="text" v-model="openPost.title">
           </div>
           <div class="input">
-            <label for="date">Date:</label>
+            <label for="date">Date</label>
             <input type="date" v-model="openPost.date">
           </div>
           <div class="input">
-            <label for="public">Visibilty:</label>
+            <label for="public">Visibility</label>
             <select v-model="openPost.public">
               <option :value="true">Public</option>
               <option :value="false">Private</option>
             </select>
           </div>
           <div id="editBody">
-            <button @click="openPost.body += '<h3></h3>'">Append heading</button>
-            <button @click="openPost.body += '<p></p>'">Append p</button>
-            <button @click="openPost.body += '<ul class=\'rules\'>\n  <li>XP farms of any kind</li>\n</ul>'">Append list</button>
-            <button @click="openPost.body += '<div class=\'article-img big\'><img src=\'link\'><span class=\'subtitle\'>Subtitle</span></div>'">Append big img</button>
-            <button @click="openPost.body += '<div class=\'article-img\'><img src=\'link\'><span class=\'subtitle\'>Subtitle</span></div>'">Append small img</button>
+            <button class="secondary" @click="openPost.body += '<h3></h3>'">Append heading</button>
+            <button class="secondary" @click="openPost.body += '<p></p>'">Append p</button>
+            <button class="secondary" @click="openPost.body += '<ul class=\'rules\'>\n  <li>XP farms of any kind</li>\n</ul>'">Append list</button>
+            <button class="secondary" @click="openPost.body += '<div class=\'article-img big\'><img src=\'link\'><span class=\'subtitle\'>Subtitle</span></div>'">Append big img</button>
+            <button class="secondary" @click="openPost.body += '<div class=\'article-img\'><img src=\'link\'><span class=\'subtitle\'>Subtitle</span></div>'">Append small img</button>
             <textarea v-model="openPost.body"></textarea>
           </div>
         </div>
@@ -83,38 +83,63 @@
 
 #popup
   background: $pax-darkcyan
-  padding: 1vw
-  width: 100vw
-  padding-bottom: 150px
+  width: 90%
+  margin: 0 auto
+  padding-bottom: 30px
 
+h1
+  margin-bottom: 20px
+
+table
+  td
+    max-width: none
 button#newPost
-  margin-left: 20vw
-  margin-bottom: 25px
+  width: 300px
+  max-width: 90%
+  margin: 20px auto
+  display: block
+
+button
+  margin-bottom: 10px
 
 #blogWrapper
   display: flex
+  margin-top: 20px
+  width: 100%
+
   #edit
-    width: 50vw
+    width: 50%
+    box-sizing: border-box
+    .input
+      display: flex
+      margin-bottom: 10px
+      select, input
+        margin: 0
     label
       position: initial
-      display: inline
       top: 0
       left: 0
       opacity: 1
-      font-size: 14pt
-      color: white
-      @extend .pax-regular
+      font-size: 12pt
+      color: $pax-white
+      @extend .pax-semibold
+      background: $pax-darkestcyan
+      text-transform: uppercase
+      width: 100px
+      padding: 6px 7px
+      box-sizing: border-box
     input
       position: inline
       width: 25vw
-      color: white
     textarea
-      height: 1000px
+      height: 50vh
+      margin-top: 20px
     #editBody
       margin-top: 25px
   #post
-    width: 48vw
-    padding: 1vw
+    width: 50%
+    padding: 2%
+    box-sizing: border-box
 </style>
 
 <script>

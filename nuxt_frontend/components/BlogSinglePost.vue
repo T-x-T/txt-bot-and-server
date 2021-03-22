@@ -54,7 +54,6 @@ section
 
 ::v-deep .article-img
   float: right
-  box-shadow: 0px 0px 15px #102f36
   margin: 10px 35px 10px 10px
   clear: both
   max-width: 90vw
@@ -62,16 +61,11 @@ section
     width: 250px
     min-width: 15vw
     vertical-align: bottom
-  &:hover
-    box-shadow: 0px 0px 35px #102f36
 ::v-deep .big
   img
     width: 500px
     min-width: 30vw
     max-width: 100%
-    box-shadow: 0px 0px 35px #102f36
-    &:hover
-      box-shadow: 0px 0px 50px #102f36
 
 ::v-deep p
   line-height: 1.3
@@ -114,7 +108,6 @@ section
 ::v-deep button
   &:hover
     background: $pax-cyan
-    box-shadow: 0px 0px 25px #102f36
 
 </style>
 
