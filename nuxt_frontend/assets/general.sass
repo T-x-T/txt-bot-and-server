@@ -4,7 +4,7 @@
   margin: 0
   padding: 0
   text-decoration: none
-  transition-duration: .3s
+  transition-duration: .1s
 
 li
   list-style-type: none
@@ -36,6 +36,11 @@ html
     background: #030303
 
 @font-face
+  font-family: "bold"
+  font-display: swap
+  src: url("./TitilliumWeb-Bold.ttf")
+
+@font-face
   font-family: "semibold"
   font-display: swap
   src: url("./TitilliumWeb-SemiBold.ttf")
@@ -46,25 +51,29 @@ html
   src: url("./TitilliumWeb-Regular.ttf")
 
 button
-  background: $pax-cyan
-  border: 1px solid $pax-darkcyan
-  color: $pax-white
-  font-family: "semibold", sans-serif
+  background: $pax-yellow
+  box-shadow: 0px 5px 0px $pax-darkmodecyan1
+  color: $pax-darkmodecyan2
+  font-family: "bold", sans-serif
   font-size: 13pt
   cursor: pointer
-  padding: 2px 15px
-  margin-top: 10px
+  padding: 3px 15px
+  border-style: none
+  border-radius: 100px
   &:hover
-    background: $pax-darkcyan
+    transform: scale(1.1)
+    
   &:focus
     outline: none
 
 button.secondary
-  background: $pax-white
-  color: $pax-darkgray
-  border: 1px solid #bebebe
+  background: $pax-lightcyan
+  color: $pax-darkestcyan
+  border-radius: 0
+  box-shadow: 0px 3px 0px $pax-darkestcyan
   &:hover
-    background: #bebebe
+    background: $pax-white
+    transform: none
 
 button.hover-right:hover > i
   margin-left: 10px
@@ -72,44 +81,27 @@ button.hover-right:hover > i
 button.hover-left:hover > i
   margin-right: 10px
 
-h1, h2, h3, h4
+h2, h3, h4
   @extend .pax-semibold
 
 h1
-  @extend .pax-semibold
+  @extend .pax-bold
   text-align: center
-  color: white
-  font-size: 30pt
-  text-shadow: 0px 0px 5px #102f36
-  padding: 1%
+  color: $pax-darkmodecyan1
+  background: $pax-cyan
+  width: 100%
+  font-size: 20pt
+  text-transform: uppercase
+  padding: 8px 0
 
 h2
-  background: $pax-cyan
-  color: $pax-white
-  text-shadow: 1px 2px 0px #00515c
-  padding: 5px 0
   font-size: 18pt
-  position: relative
-  &::before, &::after
-    content: ""
-    border-style: solid
-    position: absolute
-    top: 100%
-  &::before
-    border-width: 0 30px 20px 0
-    border-color: transparent $pax-darkcyan transparent transparent
-    left: 0px
-  &::after
-    border-width: 20px 30px 0px 0
-    border-color: $pax-darkcyan transparent transparent transparent
-    right: 0px
 
 h3
-  color: $pax-cyan
   font-size: 14pt
 
 p
-  @extend .pax-p
+  @extend .pax-regular
   color: white
   font-size: 12pt
 
@@ -119,90 +111,101 @@ a
   &:hover
     color: $pax-cyan
 
-div.background
+div.background-bright
   background: $pax-cyan
-  box-shadow: 0px 0px 25px #102f36
-  width: 100%
-  @media screen and ($mobile)
-    width: 100vw
+  h1
+    background: rgba(255, 255, 255, 0.1)
 
-.hover
-  filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
-  @media screen and ($desktop)
-    opacity: 0.9
-    &:hover
-      filter: drop-shadow( 0px 0px 16px rgba(0, 0, 0, .9))
-      opacity: 1
+div.background-dark
+  background: $pax-darkestcyan
+  h1
+    background: rgba(0, 0, 0, 0.2)
+    color: $pax-lightcyan
 
 .paxItem
+  @media screen and ($mobile)
+    box-sizing: border-box
+    padding: 0
   .headline
     @extend .pax-semibold
-    background: $pax-white
-    color: $pax-cyan
-    margin-left: -30px
-    font-size: 20pt
-    padding: 0px 0px 15px 25px
+    background: $pax-darkmodecyan1
+    color: $pax-white
+    font-size: 16pt
+    padding: 8px 25px 8px 20px
     height: 32px
     position: relative
     white-space: nowrap
-    width: 20vw
-    &:before
-      content: ""
-      border-style: solid
-      border-width: 0 30px 30px 0
-      border-color: transparent #b8b8b8 transparent transparent
-      position: absolute
-      left: 0px
-      top: 47px
+    width: fit-content
+    text-transform: uppercase
+    &.small
+      font-size: 14pt
+      padding: 5px 15px
   ul
     @extend .pax-regular
-    background: #007787
+    background: $pax-darkestcyan
     color: white
     padding: 10px 15px
-    font-size: 14pt
+    font-size: 12pt
     line-height: 1.5
     width: 100%
+    border-left: 5px solid $pax-darkmodecyan1
+    li
+      padding-left: 10px
     li:before
       content: "▪"
-      color: $pax-darkcyan
-      padding-right: 5px
+      color: $pax-cyan
+      padding-right: 7px
+      margin-left: -12px
+      
+ol
+  @extend .pax-regular
+  background: $pax-darkestcyan
+  color: white
+  padding: 10px 15px
+  font-size: 12pt
+  line-height: 1.5
+  width: 100%
+  border-left: 5px solid $pax-darkmodecyan1
+  list-style-type: none
+  box-sizing: border-box
+  li
+    counter-increment: step-counter
+    margin: 0 0 10px 15px
+    position: relative
+    &::before
+      content: counter(step-counter)
+      position: absolute
+      margin-left: -32px
+      font-size: 80%
+      background-color: $pax-darkmodecyan1
+      color: white
+      font-weight: bold
+      padding: 3px 8px
 
 .scrollTarget
   scroll-margin-top: 60px
 
 input
   @extend .pax-regular
-  padding: 10px 5px 5px 5px
+  padding: 7px 10px
   border: none
-  border-bottom: 1px solid #bebebe
   width: 100%
   font-size: 12pt
-  margin: 1% 0 1% 0
-  background: transparent
+  margin: 5px 0
+  box-sizing: border-box
   &:focus
     outline: none
-    box-shadow: 0px 0px 15px #102f36
-  &::placeholder
-    color: white
-    opacity: 1
-  @media screen and ($mobile)
-    width: 90vw
-    padding-left: 0
-    padding-right: 0
 
 textarea
+  @extend .pax-regular
+  padding: 7px 10px
+  font-size: 12pt
   width: 100%
   height: 250px
-  margin-bottom: 1%
   resize: vertical
-  padding: 5px
   outline: none
-  border: 2px solid white
-  &:focus
-    border: 2px solid $pax-darkcyan
-    box-shadow: 0px 0px 15px #102f36
-  @media screen and ($mobile)
-    width: 85vw
+  border: none
+  box-sizing: border-box
 
 label:not(.checkmarkContainer)
   position: absolute
@@ -228,14 +231,15 @@ label:not(.checkmarkContainer)
   -moz-user-select: none
   -ms-user-select: none
   user-select: none
-  margin: 20px 0 10px 0
+  margin: 10px 0
+  position: relative
   &:hover input ~ .checkmark
     background-color: #bebebe
   input:checked ~ .checkmark
     background-color: $pax-cyan
     border-color: $pax-darkcyan
   .label
-    @extend .pax-p
+    @extend .pax-regular
     color: white
     font-size: 12pt
   input
@@ -248,7 +252,8 @@ label:not(.checkmarkContainer)
       display: block
   .checkmark
     position: absolute
-    left: 25px
+    left: 0
+    top: 5px
     height: 25px
     width: 25px
     background-color: $pax-gray
@@ -270,19 +275,37 @@ label:not(.checkmarkContainer)
       -ms-transform: rotate(45deg)
       transform: rotate(45deg)
 
-
+select
+  @extend .pax-regular
+  font-size: 12pt
+  outline: none
+  border: none
+  cursor: pointer
+  color: $pax-black
+  padding: 5px 10px
+  width: 200px
+  margin-right: 10px
+  margin-bottom: 10px
+  box-sizing: border-box
+select:required:invalid
+  color: $pax-black
 
 table
   @extend .pax-regular
   border-collapse: separate
   border-spacing: 0px
-  width: 60%
+  width: fit-content
   white-space: nowrap
-  left: 20%
-  position: relative
+  margin-right: auto
+  margin-left: auto
+  display: block
   @media screen and ($mobile)
-    width: 100vw
-    left: 0
+    width: 90%
+  select
+    height: 100%
+    right: 0
+    margin: 0
+    width: 100%
 
 th
   background: $pax-cyan
@@ -291,28 +314,29 @@ th
   border-bottom: 2px solid $pax-darkcyan
   text-shadow: 1px 1px 0px $pax-darkcyan
   text-align: center
-  font-size: 16pt
+  font-size: 12pt
+  text-transform: uppercase
+
 tr
   &:nth-child(even) td
-    background: $pax-cyan
-  &:nth-child(odd) td
     background: $pax-darkcyan
+  &:nth-child(odd) td
+    background: $pax-darkestcyan
   &:hover
     cursor: pointer
-    @media screen and ($desktop)
-      scale: 1.02
-      transition-duration: 0.05s
+    > td
+      color: $pax-darkestcyan
+      background: $pax-lightcyan
+      font-weight: bold
 td
   padding: 3px 10px
-  background: #e9e9e9
   font-size: 12pt
   text-overflow: ellipsis
   white-space: inherit
   overflow: hidden
-  color: $pax-black
   max-width: 150px
   text-align: center
-  color: white
+  color: $pax-white
 
 .desktopOnly
   @media screen and ($mobile)

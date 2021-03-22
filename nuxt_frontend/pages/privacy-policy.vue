@@ -4,7 +4,7 @@
     
     <h1>Privacy Policy</h1> 
     
-    <article class="hover">
+    <article>
       <p>This privacy policy (&quot;Policy&quot;) describes how Paxterya (&quot;Paxterya&quot;, &quot;we&quot;, &quot;us&quot; or &quot;our&quot;) collects, protects and uses the personally identifiable information (&quot;Personal Information&quot;) you (&quot;User&quot;, &quot;you&quot; or &quot;your&quot;) may provide on the <a target="_blank" rel="nofollow" href="https://www.paxterya.com">paxterya.com</a> website and any of its products or services (collectively, &quot;Website&quot; or &quot;Services&quot;). It also describes the choices available to you regarding our use of your Personal Information and how you can access and update this information. This Policy does not apply to the practices of companies that we do not own or control, or to individuals that we do not employ or manage.</p>
       <h3>Automatic collection of information</h3>
       <p>When you visit the Website our servers automatically record information that your browser sends. This data may include information such as your device's IP address, browser type and version, operating system type and version, language preferences or the webpage you were visiting before you came to our Website, pages of our Website that you visit, the time spent on those pages, information you search for on our Website, access times and dates, and other statistics.</p>
@@ -39,7 +39,7 @@
       <p>You acknowledge that you have read this Policy and agree to all its terms and conditions. By using the Website or its Services you agree to be bound by this Policy. If you do not agree to abide by the terms of this Policy, you are not authorized to use or access the Website and its Services.</p>
       <h3>Contacting us</h3>
       <p>If you would like to contact us to understand more about this Policy or wish to contact us concerning any matter relating to individual rights and your Personal Information, you may do so via the <a target="_blank" rel="nofollow" href="https://www.paxterya.com/contact-us">contact form</a> or send an email to co&#110;&#116;a&#99;t&#64;p&#97;xte&#114;&#121;a.c&#111;&#109;</p><br>
-      <p><b>This document was last updated on September 3, 2019.</b></p>
+      <p class="update">This document was last updated on September 3, 2019.</p>
     </article>
  
     <Footer />
@@ -50,20 +50,20 @@
 @import ~/assets/_vars.sass
 
 main
-  margin-top: 100px
-
+  margin-top: 120px
 article
-  margin: 3vw
-  padding: 2vw
+  margin: 2vw
   @media screen and ($desktop)
     width: 50vw
     background: $pax-darkcyan
     margin-left: 22.5vw
     margin-right: 22.5vw
-
-
 h3
-  color: white
+  margin-top: 10px
+p.update
+  background: $pax-darkestcyan
+  text-align: center
+  @extend .pax-semibold
 </style>
 
 <script>

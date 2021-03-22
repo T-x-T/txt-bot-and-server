@@ -12,43 +12,28 @@
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
 
-div#wrapper
-  @media screen and ($mobile)
-    width: 90vw 
-
 h4
   color: white
   font-size: 18pt
-  @media screen and ($mobile)
-    max-width: 60vw
+  max-width: 80%
 
 img.author
   width: 80px
   height: auto
   float: right
   margin: -40px 50px 10px 0
-  border: 3px solid black
-  box-shadow: 0px 0px 20px rgba(255, 255, 255, .5)
-  &:hover
-    box-shadow: 0px 0px 30px rgba(255, 255, 255, .75)
-
-span.subtitle
-  @extend .pax-regular
-  background: $pax-darkestcyan
-  display: block
-  background: $pax-darkgray
-  color: $pax-white
-  font-size: 10pt
-  padding: 3px 10px
+  filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, .3))
+  @media screen and ($mobile)
+    margin: -40px 0 10px 0
 
 section
   padding: 10px 10px 0 10px 
 
 ::v-deep section
-  border-left: 5px solid $pax-darkgray
+  border-left: 5px solid $pax-darkcyan
   padding: 10px
   & p:first-of-type::first-letter, p.initial-letter:first-of-type::first-letter
-    color: $pax-cyan
+    color: $pax-lightcyan
     font-weight: bold
     font-size: 270%
     float: left
@@ -61,16 +46,14 @@ section
 
 ::v-deep span.subtitle
   @extend .pax-regular
-  background: $pax-darkestcyan
+  background: $pax-darkcyan
   display: block
-  background: $pax-darkgray
   color: $pax-white
   font-size: 10pt
   padding: 3px 10px
 
 ::v-deep .article-img
   float: right
-  box-shadow: 0px 0px 15px #102f36
   margin: 10px 35px 10px 10px
   clear: both
   max-width: 90vw
@@ -78,16 +61,11 @@ section
     width: 250px
     min-width: 15vw
     vertical-align: bottom
-  &:hover
-    box-shadow: 0px 0px 35px #102f36
 ::v-deep .big
   img
     width: 500px
     min-width: 30vw
     max-width: 100%
-    box-shadow: 0px 0px 35px #102f36
-    &:hover
-      box-shadow: 0px 0px 50px #102f36
 
 ::v-deep p
   line-height: 1.3
@@ -102,7 +80,7 @@ section
     color: $pax-lightcyan
 
 ::v-deep ul
-  @extend .pax-p
+  @extend .pax-regular
   margin: 10px 0
   list-style-type: none
   max-width: 80%
@@ -130,7 +108,6 @@ section
 ::v-deep button
   &:hover
     background: $pax-cyan
-    box-shadow: 0px 0px 25px #102f36
 
 </style>
 

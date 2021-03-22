@@ -2,7 +2,7 @@
   <footer>
     <div id="backgroundColor"></div>
     <div id="backgroundImage"></div>
-    <p id="legal"><NuxtLink to="privacy-policy">Privacy Policy</NuxtLink> | <b>©</b> Paxterya 2021</p>
+    <p id="legal"><NuxtLink to="privacy-policy">Privacy Policy</NuxtLink> | <span>©</span> Paxterya 2021</p>
 
     <div id="links">
       <a href="https://youtube.com/paxterya" target="blank">
@@ -45,13 +45,13 @@
 
 footer
   height: 250px
-  box-shadow: 0px 0px 50px #000 inset
+  box-shadow: 0px 0px 50px rgba(0, 0, 0, .5) inset
+  position: relative
 
 #backgroundColor
-  background-image: radial-gradient(transparent 50%, rgba(0,0,0,.3) 70%), linear-gradient(0deg, rgba(0,0,0,.1) 0%, black 5%, transparent 80%, rgba(0,0,0,.7) 100%), linear-gradient(rgba(0,81,92,.3) 0%, rgba(0,81,92,.6) 100%)
+  background-image: radial-gradient(transparent 50%, rgba(0,0,0,.3) 70%), linear-gradient(0deg, rgba(0,0,0,.2) 0%, transparent 20%, transparent 80%, rgba(0,0,0,.2) 100%), linear-gradient(rgba(0,81,92,.3) 0%, rgba(0,81,92,.6) 100%), linear-gradient(to right, rgba(0,57,65,.5) 10%, transparent 30%, transparent 70%, rgba(0,57,65,.5) 90%)
   height: 250px
   width: 100%
-  opacity: 0.5
   position: absolute
   z-index: -1
 
@@ -64,43 +64,44 @@ footer
   width: 100%
   height: 250px
 
-p
-  font-size: 14pt
-
-a
-  text-decoration: none
-  color: white
-  p
-    font-size: 16pt
-
 #links
-  margin-top: -20px
-  margin-left: 10px
   width: max-content
+  position: absolute
+  top: 50%
+  transform: translateY(-50%)
+  left: 20px
   p
     &:hover
-      color: $pax-cyan 
+      color: $pax-lightcyan 
+      > .logo
+        transform: scale(.9)
 
 .logo
   height: auto
-  width: 32px
   margin: 8px 8px -8px 8px
 
 #youtube
   .logo
     margin-bottom: -4px
-
+    width: 30px
 #discord
   .logo
-    margin-bottom: -10px
+    margin-bottom: -13px
+    margin-left: 5px
+    width: 34px
+#reddit
+  .logo
+    width: 28px
 
 #legal
-  position: relative
-  bottom: -220px
-  right: 5px
-  text-align: right
+  position: absolute
+  bottom: 10px
+  right: 30px
   a
     &:hover
-      color: $pax-cyan
+      color: $pax-lightcyan
+  span
+    font-size: 18pt
+    vertical-align: -5px
 
 </style>

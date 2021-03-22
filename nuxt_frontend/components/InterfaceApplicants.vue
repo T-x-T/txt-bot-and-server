@@ -3,7 +3,7 @@
     <h1>Applications</h1>
     
     <div v-if="!openApplication">
-      <table class="hover">
+      <table>
         <colgroup>
           <col class="desktopOnly" style="width: 100px;">
           <col style="width: 200px;">
@@ -42,15 +42,15 @@
         </tbody>
       </table>
       <div id="tableControls" >
-        <button @click="refresh">refresh</button>
-        <button @click="showMore">show more</button>
-        <button @click="showLess">show less</button>
+        <button class="secondary" @click="refresh">refresh</button>
+        <button class="secondary" @click="showMore">show more</button>
+        <button class="secondary" @click="showLess">show less</button>
       </div>
     </div>
 
-    <div id="popup" class="hover" v-if="openApplication">
+    <div id="popup" v-if="openApplication">
       <button id="back" @click="closePopup">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" /></svg>
         back
       </button>
       <div id="grid">
@@ -112,8 +112,10 @@
             <option value="Your application was a bit too short, so try adding some more depth and detail.">Your application was a bit too short, so try adding some more depth and detail.</option>
             <option value="Your application didn't contain any pictures of your previous builds. If you have trouble with adding them, then please let us help you by joining our Discord server.">Your application didn't contain any pictures of your previous builds. If you have trouble with adding them, then please let us help you by joining our Discord server.</option>
           </select>
-          <button id="accept" @click="accept">Accept</button>
-          <button id="deny" @click="deny">Deny</button>
+          <div class="buttons">
+            <button id="accept" @click="accept">Accept</button>
+            <button id="deny" @click="deny">Deny</button>
+          </div>
           <p v-if="errorMessage">{{errorMessage}}</p>
         </div>
       </div>
@@ -127,58 +129,56 @@
 #wrapper
   margin-bottom: 50px
 
+h1
+  margin: 20px 0
+
 table
-  table-layout: fixed
-  width: 80%
-  left: 10%
-  border-collapse: collapse
   tr.green td:last-child
-    color: lightgreen
+    background: $pax-green
   tr.red td:last-child
-    color: red
-    font-weight: 900
+    background: $pax-red
   @media screen and ($mobile)
-    width: 100vw
-    left: 0
     col
       width: auto !important
 
 #tableControls
-  margin-top: 25px
-  margin-left: 10%
-  button:hover
-    background: $pax-cyan
-    filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
+  margin-top: 30px
+  width: 80%
+  margin: 10px auto
+  display: flex
+  justify-content: center
+  button.secondary
+    width: 25%
+    margin: 0 10px
 
+#status
+  display: flex
+  flex-wrap: wrap
 .value
   margin: 20px 30px 0 0
+  display: block
   h3, p
     color: white
     display: inline
     padding: 3px 10px 5px 10px
-    font-size: 14pt
+    font-size: 12pt
+    white-space: nowrap
   p
     background: $pax-cyan
   h3
     background: $pax-darkestcyan
 
 #popup
-  width: 50vw
-  margin-left: 25vw
-  background: $pax-darkcyan
-  padding: 25px
+  width: 50%
+  margin: 0 auto
   @media screen and ($mobile)
-    width: 90vw
+    width: 90%
     padding: 5vw
     margin: 0
   button#back
-    font-size: 14pt
     svg
-      height: 28px
-      margin-bottom: -7px
-    &:hover
-      background: $pax-cyan
-      filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
+      height: 18px
+      margin-bottom: -4px
   #grid
     display: grid
     grid-template-columns: 50% 50%
@@ -186,7 +186,7 @@ table
     @media screen and ($mobile)
       grid-template-columns: 100%
       grid-template-rows: repeat(5, max-content)
-    #texts, #status
+    #texts, #status, #controls
       @media screen and ($desktop)
         grid-column: 1 / span 2
   #avatars
@@ -201,26 +201,21 @@ table
       font-size: 16pt
     .text
       margin: 10px 0 10px 0
-  #status
-    .value
-      @media screen and ($desktop)
-        display: inline
   #controls
     margin-top: 20px
-    input
-      color: white
+    width: 100%
     select
-      width: 90%
+      width: 100%
+    .buttons
+      display: flex
+      justify-content: space-between
     button
-      padding: 5px 20px 5px 20px
-      margin: 10px 20px 10px 0
-      width: 100px
-      &:hover
-        filter: drop-shadow( 0px 0px 8px rgba(0, 0, 0, .7))
+      width: 45%
+      color: $pax-white
     button#accept
       background: $pax-green
     button#deny
-      background: $pax-red !important
+      background: $pax-red
 </style>
 
 <script>
