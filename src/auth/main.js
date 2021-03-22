@@ -31,7 +31,6 @@ oauth.returnAccessLevel = function(userID){
   }catch(e){}
   global.log(0, 'auth', 'main.returnAcessLevel returned', {userID: userID, access_level: access_level});
   return access_level;
-  console.log(access_level);
 };
 
 //Returns true if the given discord id is member of the guild and false if not
