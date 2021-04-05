@@ -11,6 +11,7 @@
             <li>Everyone is playing Minecraft to have a good time. To ensure a good time on Paxterya, be tolerant and understanding towards other players and respect their wishes.</li>
             <li>Spamming is unwished.</li>
             <li>Do not send links to websites with malicious or pornographic content.</li>
+            <li>Be at least 13 years old.</li>
           </ol>
         </div>
 

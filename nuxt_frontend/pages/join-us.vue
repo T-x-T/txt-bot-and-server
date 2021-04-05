@@ -81,7 +81,7 @@
                   <option v-for="(item, index) in validBirthYears" :key="index" :value="item" :label="item">{{item}}</option>
                 </select>
                 <br>
-                <span class="hoverInfo">We'd like to know your approximate age for our statistics. Your age is not a crucial factor in your application. You can choose not to publish your age further down.</span>
+                <span class="hoverInfo">We'd like to know your approximate age for our statistics. Your age is not a crucial factor in your application. <b>However, you need to be at least 13 years old!</b> You can choose not to publish your age further down.</span>
               </div>
             </div>
           </div>
