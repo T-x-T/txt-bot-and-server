@@ -28,8 +28,8 @@ div.background-dark
     padding: 50px 0 0 0
 
 img
-  width: auto
-  height: 600px
+  width: 75vw
+  height: auto
   border-radius: 25px
   display: block
   margin: 0 auto
@@ -109,6 +109,16 @@ export default {
     townIndex: 0,
     inView: false,
     images: {
+      "Pearlshire": [
+        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_04.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_07.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_08.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_09.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_10.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_11.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_12.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_13.png_1080.webp",
+      ],
       "Town of Paxterya": [
         "https://stor.paxterya.com/website/screenshots/top_01.webp",
         "https://stor.paxterya.com/website/screenshots/top_02.webp",
