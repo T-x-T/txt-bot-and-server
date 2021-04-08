@@ -152,9 +152,9 @@ export default {
             scope: 'world',
             element: this.$refs["mapContainer"],
             projection: 'mercator',
-            height: screen.width * 0.7,
-            width: screen.width,
-            aspectRatio: 0.5625,
+            height: window.innerHeight,
+            width: window.innerWidth,
+            aspectRatio: 1,
             responsive: true,
             fills: {
               defaultFill: '#e9e9e9',
