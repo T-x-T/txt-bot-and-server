@@ -12,7 +12,7 @@
         <div id="textContainer">
           <span v-for="(item, i) in towns" :key="i" :ref="`town${i}`" @click="townIndex = i; index = 0" class="town">{{item}}</span>
         </div>
-              </div>
+      </div>
     </div>
 
   </div>

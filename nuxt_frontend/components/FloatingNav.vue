@@ -85,7 +85,7 @@ div#wrapper
   width: fit-content
   height: 100%
   border-right: 10px solid $pax-darkestcyan
-
+  pointer-events: none
 
 .item
   background: $pax-darkmodecyan1
@@ -95,6 +95,7 @@ div#wrapper
   height: 50px
   margin-right: -200px
   cursor: pointer
+  pointer-events: initial
   &#apply
     background: $pax-yellow
     svg
@@ -130,6 +131,7 @@ export default {
   methods: {
     scrollTo(section){
       document.getElementById(section).scrollIntoView({behavior: "smooth", block: "start"});
+      setTimeout(() => document.getElementById(section).scrollIntoView({behavior: "smooth", block: "start"}), 200);
     }
   }
 }

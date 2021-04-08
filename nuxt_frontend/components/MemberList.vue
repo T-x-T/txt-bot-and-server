@@ -186,14 +186,6 @@ button
   font-size: 14pt
   margin: 20px auto
   display: block
-div.background-dark
-  &:hover
-    button#showLess
-      position: fixed
-      z-index: 4
-      bottom: 30px
-      left: 50%
-      transform: translate(-50%,0)
 </style>
 
 <script>

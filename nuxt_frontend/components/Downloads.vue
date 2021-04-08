@@ -8,11 +8,11 @@
           <svg v-if="activeElement !== 0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
           </svg>
-          <svg v-if="activeElement === 0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg v-if="desktop || activeElement === 0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
           </svg>
           Worldsaves</h2>
-        <div v-if="activeElement === 0">
+        <div v-if="desktop || activeElement === 0">
           <div class="item">
             <h3>Paxterya Season 3</h3>
             <p>The map we've been playing on from December 1, 2019 to July 17, 2020. Check the museum for coordinates of important locations.</p>
@@ -55,36 +55,15 @@
       </section>
 
       <section ref="1" class="scrollTarget">
-        <h2 @click="activeElement = 1">Wallpapers
-          <svg v-if="activeElement !== 1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-          </svg>
-          <svg v-if="activeElement === 1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
-          </svg>
-        </h2>
-          <div v-if="activeElement === 1">
-            <div class="item">
-              <p class="margin-left">Good looking wallpapers to make your computer look 100% better! All of them come in a crisp resolution of 2560x1440 pixels.</p>
-
-              <a href="https://stor.paxterya.com/paxterya_art/paxterya_art.zip">
-                <img src="https://stor.paxterya.com/paxterya_art/mix_wallpaper.png">
-                <button class="margin-left secondary">Download ZIP (18.6 MB)</button>
-              </a>
-            </div>
-          </div>
-      </section>
-
-      <section ref="2" class="scrollTarget">
         <h2 @click="activeElement = 2">Thumbnails
           <svg v-if="activeElement !== 2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
           </svg>
-          <svg v-if="activeElement === 2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg v-if="desktop || activeElement === 2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
           </svg>
         </h2>
-        <div v-if="activeElement === 2">
+        <div v-if="desktop || activeElement === 2">
           <div class="item">
             <p class="margin-left">It is recommended to use Adobe Photoshop to edit the thumbnail template. If you don't have Photoshop, there are two transparent PNGs with the Paxterya overlay for you to combine with your individual thumbnail.</p>
 
@@ -96,16 +75,37 @@
         </div>
       </section>
 
+      <section ref="2" class="scrollTarget">
+        <h2 @click="activeElement = 1">Wallpapers
+          <svg v-if="activeElement !== 1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+          </svg>
+          <svg v-if="desktop || activeElement === 1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
+          </svg>
+        </h2>
+          <div v-if="desktop || activeElement === 1">
+            <div class="item">
+              <p class="margin-left">Good looking wallpapers to make your computer look 100% better! All of them come in a crisp resolution of 2560x1440 pixels.</p>
+
+              <a href="https://stor.paxterya.com/paxterya_art/paxterya_art.zip">
+                <img src="https://stor.paxterya.com/paxterya_art/mix_wallpaper.png">
+                <button class="margin-left secondary">Download ZIP (18.6 MB)</button>
+              </a>
+            </div>
+          </div>
+      </section>
+
       <section ref="3" class="scrollTarget">
         <h2 @click="activeElement = 3">And more...
           <svg v-if="activeElement !== 3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
           </svg>
-          <svg v-if="activeElement === 3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg v-if="desktop || activeElement === 3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
           </svg>
         </h2>
-        <div v-if="activeElement === 3">
+        <div v-if="desktop || activeElement === 3">
           <div class="item">
             <p>You can find much more like special maps, tons of screenshots and Factorio Saves directly on our Download Server.</p>
             <a href="https://stor.paxterya.com" target="blank"><button class="secondary">Take a look</button></a>
@@ -132,7 +132,7 @@ section
   background: $pax-cyan
   width: 25%
   margin: 20px 10px
-  max-height: 70vh
+  max-height: 50vh
   overflow-y: auto
   @media screen and ($mobile)
     max-height: 50vh
@@ -201,13 +201,18 @@ img
 <script>
 export default {
   data: () => ({
-    activeElement: 0
+    activeElement: 0,
+    desktop: false,
   }),
 
   watch: {
     activeElement(newElement, oldElement){
       this.$nextTick(() => this.$refs[newElement].scrollIntoView({behavior: "smooth", block: "start"}));
     }
+  },
+
+  mounted(){
+    this.desktop = window.innerWidth >= 1000;
   }
 }
 </script>
