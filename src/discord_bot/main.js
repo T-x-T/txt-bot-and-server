@@ -95,7 +95,7 @@ emitter.on('discord_bot_ready' ,() => {
   client.on('guildMemberAdd', (user) => {
 
     //Add unverified role
-    discordHelpers.addMemberToRole(user.id, "829611102274322493");
+    discordHelpers.addMemberToRole(user.id, "829611102274322493", function(err) { if(err) console.log(err) });
 
     //Send a welcome message
     discordHelpers.sendMessage(`Welcome <@${user.id}>! If you are here for joining the Minecraft server, then please read the <#${user.guild.channels.find(channel => channel.name == "faq").id}> and read the rules at https://paxterya.com/rules. You can then apply under https://paxterya.com/join-us\nIf you have any questions just ask in <#${user.guild.channels.find(channel => channel.name == "support").id}>\nWe are looking forward to see you ingame :)`, config.discord_bot.channel.general, function (err) {
