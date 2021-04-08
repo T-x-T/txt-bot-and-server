@@ -25,7 +25,7 @@ export default {
     "/users": "https://api.mojang.com/"
   },
   publicRuntimeConfig: {
-    discordOauthJoinUs: process.env.NODE_ENV === "prod" ? "https://discord.com/api/oauth2/authorize?client_id=624980994889613312&redirect_uri=https%3A%2F%2Fbeta.paxterya.com%2Fjoin-us&response_type=code&scope=identify" : "https://discord.com/api/oauth2/authorize?client_id=624980994889613312&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fjoin-us&response_type=code&scope=identify",
-    discordOauthInterface: process.env.NODE_ENV === "prod" ? "https://discord.com/api/oauth2/authorize?client_id=624980994889613312&redirect_uri=https%3A%2F%2Fbeta.paxterya.com%2Finterface&response_type=code&scope=identify" : "https://discord.com/api/oauth2/authorize?client_id=624980994889613312&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Finterface&response_type=code&scope=identify",
+    discordOauthJoinUs: process.env.NODE_ENV === "prod" ? "https://discord.com/api/oauth2/authorize?client_id=624980994889613312&redirect_uri=https%3A%2F%2Fpaxterya.com%2Fjoin-us&response_type=code&scope=identify" : "https://discord.com/api/oauth2/authorize?client_id=624980994889613312&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fjoin-us&response_type=code&scope=identify",
+    discordOauthInterface: process.env.NODE_ENV === "prod" ? "https://discord.com/api/oauth2/authorize?client_id=624980994889613312&redirect_uri=https%3A%2F%2Fpaxterya.com%2Finterface&response_type=code&scope=identify" : "https://discord.com/api/oauth2/authorize?client_id=624980994889613312&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Finterface&response_type=code&scope=identify",
   }
 }
