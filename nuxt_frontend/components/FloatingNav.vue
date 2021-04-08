@@ -85,8 +85,7 @@ div#wrapper
   width: fit-content
   height: 100%
   border-right: 10px solid $pax-darkestcyan
-  @media screen and ($mobile)
-    display: none
+
 
 .item
   background: $pax-darkmodecyan1
