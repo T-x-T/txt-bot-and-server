@@ -80,7 +80,9 @@ emitter.on('discord_bot_ready' ,() => {
   //Gets called whenever a member leaves the guild; user is a guildMember
   client.on('guildMemberRemove', (user) => {
     memberFactory.getByDiscordId(user.id)
-    .then(member => member.delete());
+    .then(member => {
+      if(member) member.delete()
+    });
     discordHelpers.sendMessage(`${user.displayName} left the server`, config.discord_bot.channel.mod_notifications, function (e) { });
   });
 
@@ -93,10 +95,6 @@ emitter.on('discord_bot_ready' ,() => {
 
   //Gets called whenever a new member joins the guild
   client.on('guildMemberAdd', (user) => {
-
-    //Add unverified role
-    discordHelpers.addMemberToRole(user.id, "829611102274322493", function(err) { if(err) console.log(err) });
-
     //Send a welcome message
     discordHelpers.sendMessage(`Welcome <@${user.id}>! If you are here for joining the Minecraft server, then please read the <#${user.guild.channels.find(channel => channel.name == "faq").id}> and read the rules at https://paxterya.com/rules. You can then apply under https://paxterya.com/join-us\nIf you have any questions just ask in <#${user.guild.channels.find(channel => channel.name == "support").id}>\nWe are looking forward to see you ingame :)`, config.discord_bot.channel.general, function (err) {
       if (err) global.log(2, 'discord_bot', 'discord_bot couldnt send the new application message', { err: err, application: doc });
@@ -106,6 +104,9 @@ emitter.on('discord_bot_ready' ,() => {
     .then(application => {
       if(application){
         application.acceptGuildMember();
+      } else {
+        //Add unverified role
+        discordHelpers.addMemberToRole(user.id, "829611102274322493", function(err) {if(err) console.log(err)});
       }
     })
     .catch(e => {
