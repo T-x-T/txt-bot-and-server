@@ -136,7 +136,11 @@ server.processHandlerResponse = function (res, method, path, statusCode, payload
   }else{
     if (contentType == 'json') {
       res.setHeader('Content-Type', 'application/json');
-      payloadStr = typeof (payload) == 'object' ? JSON.stringify(payload) : payload;
+      payloadStr = typeof payload == 'object' ? JSON.stringify(payload) : payload;
+    }
+    if (contentType == "plain") {
+      res.setHeader("Content-Type", "application/plain");
+      payloadStr = payload;
     }
     res.writeHead(statusCode);
   }
