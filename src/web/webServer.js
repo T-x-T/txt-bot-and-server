@@ -5,10 +5,7 @@
 
 //Dependencies
 const http = require('http');
-const https = require('https');
 const StringDecoder = require('string_decoder').StringDecoder;
-const fs = require('fs');
-const path = require('path');
 const url = require('url');
 const handlers = require('./handlers');
 const santize_path = require('sanitize-filename');
@@ -26,24 +23,6 @@ server.httpServer = http.createServer(function (req, res) {
   }else{
     server.uniserver(req, res);
   }
-});
-
-//https stuff
-if(config.web.use_external_certs){
-  server.httpsConfig = {
-    'key': fs.readFileSync(path.join(config.web.cert_path, 'privkey.pem')),
-    'cert': fs.readFileSync(path.join(config.web.cert_path, 'fullchain.pem'))
-  };
-}else{
-  server.httpsConfig = {
-    'key': fs.readFileSync(path.join(__dirname, '../../web/certs/localhost.key')),
-    'cert': fs.readFileSync(path.join(__dirname, '../../web/certs/localhost.crt'))
-  };
-}
-
-//Instanciate the https server
-server.httpsServer = https.createServer(server.httpsConfig, function (req, res) {
-  server.uniserver(req, res);
 });
 
 server.uniserver = function(req, res){
@@ -75,7 +54,7 @@ server.uniserver = function(req, res){
     }
 
     //Check the path and choose a handler
-    var chosenHandler = handlers.assets;
+    var chosenHandler = handlers.notFound;
     for(let key in router) {
       chosenHandler = data.path.startsWith(key) ? router[key] : chosenHandler;
     }
@@ -93,7 +72,6 @@ server.uniserver = function(req, res){
 };
 
 const router = {
-  '/html': handlers.paxterya,
   '/html/api/application': handlers.paxapi.application,
   '/html/api/contact': handlers.paxapi.contact,
   '/html/api/member': handlers.paxapi.member,
@@ -104,8 +82,6 @@ const router = {
   '/html/api/statsoverview': handlers.paxapi.statsoverview,
   '/html/api/discorduserfromcode': handlers.paxapi.discorduserfromcode,
   '/html/api/tokenfromcode': handlers.paxapi.tokenfromcode,
-  '/html/login': handlers.paxLogin,
-  '/html/staff': handlers.paxStaff
 };
 
 //Take a request and return a nice data object w/o payload
@@ -158,45 +134,9 @@ server.processHandlerResponse = function (res, method, path, statusCode, payload
   if(statusCode == 301 || statusCode == 302){
     res.writeHead(statusCode, payload);
   }else{
-    if (contentType == 'html') {
-      res.setHeader('Content-Type', 'text/html');
-      payloadStr = typeof (payload) == 'string' ? payload : '';
-    }
     if (contentType == 'json') {
       res.setHeader('Content-Type', 'application/json');
       payloadStr = typeof (payload) == 'object' ? JSON.stringify(payload) : payload;
-    }
-    if (contentType == 'favicon') {
-      res.setHeader('Content-Type', 'image/x-icon');
-      payloadStr = typeof (payload) !== 'undefined' ? payload : '';
-    }
-    if (contentType == 'css') {
-      res.setHeader('Content-Type', 'text/css');
-      payloadStr = typeof (payload) !== 'undefined' ? payload : '';
-    }
-    if (contentType == 'png') {
-      res.setHeader('Content-Type', 'image/png');
-      payloadStr = typeof (payload) !== 'undefined' ? payload : '';
-    }
-    if (contentType == 'jpg') {
-      res.setHeader('Content-Type', 'image/jpeg');
-      payloadStr = typeof (payload) !== 'undefined' ? payload : '';
-    }
-    if (contentType == 'font') {
-      res.setHeader('Content-Type', 'application/octet-stream');
-      payloadStr = typeof (payload) !== 'undefined' ? payload : '';
-    }
-    if (contentType == 'svg') {
-      res.setHeader('Content-Type', 'image/svg+xml');
-      payloadStr = typeof (payload) !== 'undefined' ? payload : '';
-    }
-    if (contentType == 'js') {
-      res.setHeader('Content-Type', 'application/javascript');
-      payloadStr = typeof (payload) !== 'undefined' ? payload : '';
-    }
-    if (contentType == 'plain') {
-      res.setHeader('Content-Type', 'text/plain');
-      payloadStr = typeof (payload) !== 'undefined' ? payload : '';
     }
     res.writeHead(statusCode);
   }
@@ -209,11 +149,6 @@ server.httpServer.listen(config.web.http_port, function () {
   console.log('HTTP server online on port ' + config.web.http_port);
   global.log(1, 'web', 'HTTP server is online', { 'port': config.web.http_port });
 });
-server.httpsServer.listen(config.web.https_port, function () {
-  console.log('HTTPS server online on port ' + config.web.https_port);
-  global.log(1, 'web', 'HTTPS server is online', { 'port': config.web.https_port });
-});
-
 
 //Export the container
 module.exports = server;

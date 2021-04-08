@@ -4,9 +4,6 @@
 */
 
 //Dependencies
-const fs            = require('fs');
-const path          = require('path');
-const webHelpers    = require('./web-helpers.js');
 const oauth         = require('../auth');
 const discord_api   = require('../discord_api');
 const stats         = require('../stats');
@@ -25,138 +22,7 @@ handlers.paxapi = {};
 
 //Not found handler
 handlers.notFound = function (data, callback) {
-  callback(404, 'The page you requested is not available', 'html');
-};
-
-//Handler for all paxterya html sites
-handlers.paxterya = function (data, callback) {
-  let origPath = data.path;
-  if(Object.hasOwnProperty.bind(data.queryStringObject)('code')){
-    //There is a access_code in the querystring, lets convert that to a discord_id and redirect to the same site, just with the id as a parameter
-    _internal.redirectToDiscordId(data, function(status, file, type){ callback(status, file, type); });
-  }else{
-    //Its a normal website
-    data.path = path.join(__dirname, '../../web/web/' + data.path);
-    let site = 'paxterya';
-    if(data.path.indexOf('index') > 0) site = 'paxteryaIndex';
-    webHelpers.finishHtml(data, site, function (err, fileData) {
-      if(!err && fileData.length > 0){
-        callback(200, fileData, 'html');
-      }else{
-        //Nothing found, maybe its the index.html site?
-        data.path = path.join(__dirname, '../../web/web/' + origPath + '/index.html');
-        webHelpers.finishHtml(data, 'paxteryaIndex', function(err, fileData){
-          if(!err && fileData.length > 0){
-            callback(200, fileData, 'html');
-          }else{
-            //maybe that is without the .html?
-            data.path = path.join(__dirname, '../../web/web/' + origPath + '.html');
-            webHelpers.finishHtml(data, 'paxterya', function(err, fileData){
-              if(!err && fileData.length > 0){
-                callback(200, fileData, 'html');
-              }else{
-                //Nope someone wants to go somewhere, but that somewhere doesnt exist!
-                callback(404, 'You tried to go somewhere that does not exist!', 'html');
-              }
-            });
-          }
-        });
-      }
-    });
-  }
-};
-
-//Handlers for assets
-handlers.assets = function (data, callback) {
-  if (data.path.length > 0) {
-    //Read in the asset
-    fs.readFile(path.join(__dirname, '../../web/web/' + data.path), function (err, fileData) {
-      if (!err && fileData) {
-        //Choose the contentType and default to plain
-        var contentType = 'plain';
-        if (data.path.indexOf('.css') > -1) contentType = 'css';
-        if (data.path.indexOf('.png') > -1) contentType = 'png';
-        if (data.path.indexOf('.jpg') > -1) contentType = 'jpg';
-        if (data.path.indexOf('.ico') > -1) contentType = 'favicon';
-        if (data.path.indexOf('.ttf') > -1) contentType = 'font';
-        if (data.path.indexOf('.svg') > -1) contentType = 'svg';
-        if (data.path.indexOf('.js' ) > -1) contentType = 'js';
-
-        callback(200, fileData, contentType);
-      } else {
-        callback(404);
-      }
-    });
-  }
-};
-
-//Special handler for staff and member only sites
-handlers.paxStaff = function(data, callback) {
-  //Check if the user provided an access_token cookie
-  if(data.cookies.access_token) {
-    oauth.getAccessLevel({token: data.cookies.access_token}, false, function(err, access_level) {
-      if(access_level >= 3) {
-        //Everything is fine, serve the website
-        data.path = path.join(__dirname, '../../web/web/' + data.path);
-        webHelpers.finishHtml(data, 'paxterya', function(err, fileData) {
-          if(!err && fileData.length > 0) {
-            callback(200, fileData, 'html');
-          } else {
-            data.path = data.path + '.html';
-            webHelpers.finishHtml(data, 'paxterya', function(err, fileData) {
-              if(!err && fileData.length > 0) {
-                callback(200, fileData, 'html');
-              } else {
-                callback(500, 'Something bad happend. Not like a nuclear war, but still bad. Please contact TxT#0001 on Discord if you see this', 'html');
-              }
-            });
-          }
-        });
-      } else {
-        callback(302, {Location: config.auth.oauth_uris.login}, 'plain');
-      }
-    });
-  } else {
-    callback(302, {Location: config.auth.oauth_uris.login}, 'plain');
-  }
-};
-
-//Special sauce for the login site to get the the token from the request string
-handlers.paxLogin = function(data, callback){
-  //Get the the code from the querystring
-  let code = typeof data.queryStringObject.code == 'string' && data.queryStringObject.code.length == 30 ? data.queryStringObject.code : false;
-  if(code){
-    oauth.getAccessLevel({code: code}, {redirect: 'staffLogin'}, function(err, access_level, access_token){
-      if(access_level >= 3){
-        discord_api.getUserObject({token: access_token}, false, function(err, userData){
-          memberFactory.getByDiscordId(userData.id)
-          .then(member => {
-            if(member){
-              //Now set the access_token as a cookie and redirect the user to the interface.html, also set access_level and mc_ign cookies THIS SHOULD NEVER BE TRUSTED FOR SECURITY, ONLY FOR MAKING THINGS SMOOTHER!!!
-              callback(302,
-                {
-                  Location: `https://${data.headers.host}/interface`,
-                  'Set-Cookie': [`discord_id=${userData.id};Max-Age=21000};path=/`,
-                  `access_token=${access_token};Max-Age=21000};path=/`,
-                  `access_level=${access_level};Max-Age=22000};path=/`,
-                  `mc_ign=${member.getMcIgn()};Max-Age=22000};path=/`]
-                },
-                'plain');
-            }else{
-              callback(401, 'Couldnt get your member object :/<br><a href="../">go back to safety</a>', 'html');
-            }
-          })
-          .catch(e => {
-            callback(500, e.message, 'plain');
-          });
-        });
-      }else{
-        callback(401, 'You are not authorized to view the member interface. Please login with the Discord account you are using on our server, if you are a member<br><a href="../">go back to safety</a>', 'html');
-      }
-    });
-  }else{
-    callback(500, 'the code obtained from discords oauth api is pretty weird, Im sorry :(', 'html');
-  }
+  callback(404, {err: 'The page you requested is not available'}, 'json');
 };
 
 /*

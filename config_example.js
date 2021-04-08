@@ -86,10 +86,6 @@ let conf = {
     },
     web: {
       http_port: 3000,
-      https_port: 3001,
-      https_redirect: true, //enables automatic redirecting from http queries to https
-      use_external_certs: true, //false to use internal certs that are not valid
-      cert_path: '/etc/letsencrypt/live/{Domain}/'
     },
     workers: {
 
@@ -187,10 +183,6 @@ let conf = {
     },
     web: {
       http_port: 3000,
-      https_port: 3001,
-      https_redirect: true, //enables automatic redirecting from http queries to https
-      use_external_certs: true, //false to use internal certs that are not valid
-      cert_path: '/etc/letsencrypt/live/{Domain}/'
     },
     workers: {
 
@@ -288,10 +280,6 @@ let conf = {
     },
     web: {
       http_port: 3000,
-      https_port: 3001,
-      https_redirect: true, //enables automatic redirecting from http queries to https
-      use_external_certs: true, //false to use internal certs that are not valid
-      cert_path: '/etc/letsencrypt/live/{Domain}/'
     },
     workers: {
 
