@@ -114,6 +114,13 @@ emitter.on('discord_bot_ready' ,() => {
     });
     memberFactory.create(user.id);
   });
+
+  client.on("messageReactionAdd", (reaction, user) => {
+    if(reaction.message.channel.name == "verification"){
+      discordHelpers.removeMemberFromRole(user.id, "829611102274322493", function(err) {if(err) console.log(err)});
+      discordHelpers.addMemberToRole(user.id, "829611628151570442", function(err) {if(err) console.log(err)});
+    }
+  });
 });
 
 //Read in and require all command files dynamically
