@@ -104,24 +104,12 @@ emitter.on('discord_bot_ready' ,() => {
     .then(application => {
       if(application){
         application.acceptGuildMember();
-      } else {
-        //Add unverified role
-        discordHelpers.addMemberToRole(user.id, "829611102274322493", function(err) {if(err) console.log(err)});
-      } 
+      }
     })
     .catch(e => {
       global.log(2, "discord_bot", "guildMemberAdd event handler couldnt get accepted application for user", {err: e.message, user: user.id});
     });
     memberFactory.create(user.id);
-  });
-
-  client.on("messageReactionAdd", (reaction, user) => {
-    console.log(reaction)
-    if(reaction.message.channel.id == "829609188896276531"){
-      console.log(`Verify user ${user.id}`)
-      discordHelpers.removeMemberFromRole(user.id, "829611102274322493", function(err) {if(err) console.log(err)});
-      discordHelpers.addMemberToRole(user.id, "829611628151570442", function(err) {if(err) console.log(err)});
-    }
   });
 });
 
