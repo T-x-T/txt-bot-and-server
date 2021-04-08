@@ -221,6 +221,18 @@ module.exports = {
             })
             .catch(e => message.reply(e.message));
           break;
+        case 'activate':
+          memberFactory.getByDiscordId(message.mentions.users.first().id)
+            .then(member => {
+              member.activate()
+              .then(() => {
+                member.save();
+                message.reply("success");
+              })
+              .catch(e => message.reply(e.message));
+            })
+            .catch(e => message.reply(e.message));
+          break;
         case 'exec':
           //Command to execute manual tasks
           switch(args[1]){

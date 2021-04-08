@@ -7,7 +7,6 @@
 const youtube         = require('../youtube');
 const log             = require('../log');
 const mc_helpers      = require('../minecraft');
-const widgets         = require('../web/widgets.js');
 const stats           = require('../stats');
 const update  = require('./update.js');
 const rcon = require('../minecraft/rcon');
@@ -17,8 +16,6 @@ mc_helpers.updateOnlinePlayers();
 
 log.prune(30).catch(e => console.log("failed to prune logs:", e));
 log.pruneLevel(1, 0).catch(e => console.log("failed to prune logs:", e));
-
-widgets.init();
 
 //Contains discord user objects mapped by the discord id; gets cleared once an hour in workers
 global.cache = {};

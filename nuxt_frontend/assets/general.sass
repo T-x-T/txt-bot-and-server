@@ -1,0 +1,343 @@
+@import '_vars'
+
+*
+  margin: 0
+  padding: 0
+  text-decoration: none
+  transition-duration: .1s
+
+li
+  list-style-type: none
+
+html
+  scroll-behavior: smooth
+  overflow-x: hidden !important
+  scrollbar-width: thin
+  scrollbar-color: $pax-darkgray $pax-nearlywhite
+  background: $pax-darkcyan
+  position: relative
+
+
+::selection
+  background: rgba(0,0,0,.5)
+  color: $pax-white
+
+::-moz-selection
+  background: rgba(0,0,0,.5)
+  color: $pax-white
+
+::-webkit-scrollbar
+  width: 10px
+  background-color: #e9e9e9
+
+::-webkit-scrollbar-thumb
+  background: #333
+  &:hover
+    background: #030303
+
+@font-face
+  font-family: "bold"
+  font-display: swap
+  src: url("./TitilliumWeb-Bold.ttf")
+
+@font-face
+  font-family: "semibold"
+  font-display: swap
+  src: url("./TitilliumWeb-SemiBold.ttf")
+
+@font-face
+  font-family: "regular"
+  font-display: swap
+  src: url("./TitilliumWeb-Regular.ttf")
+
+button
+  background: $pax-yellow
+  box-shadow: 0px 5px 0px $pax-darkmodecyan1
+  color: $pax-darkmodecyan2
+  font-family: "bold", sans-serif
+  font-size: 13pt
+  cursor: pointer
+  padding: 3px 15px
+  border-style: none
+  border-radius: 100px
+  &:hover
+    transform: scale(1.1)
+    
+  &:focus
+    outline: none
+
+button.secondary
+  background: $pax-lightcyan
+  color: $pax-darkestcyan
+  border-radius: 0
+  box-shadow: 0px 3px 0px $pax-darkestcyan
+  &:hover
+    background: $pax-white
+    transform: none
+
+button.hover-right:hover > i
+  margin-left: 10px
+
+button.hover-left:hover > i
+  margin-right: 10px
+
+h2, h3, h4
+  @extend .pax-semibold
+
+h1
+  @extend .pax-bold
+  text-align: center
+  color: $pax-darkmodecyan1
+  background: $pax-cyan
+  width: 100%
+  font-size: 20pt
+  text-transform: uppercase
+  padding: 8px 0
+
+h2
+  font-size: 18pt
+
+h3
+  font-size: 14pt
+
+p
+  @extend .pax-regular
+  color: white
+  font-size: 12pt
+
+a
+  color: white
+  @extend .pax-semibold
+  &:hover
+    color: $pax-cyan
+
+div.background-bright
+  background: $pax-cyan
+  h1
+    background: rgba(255, 255, 255, 0.1)
+
+div.background-dark
+  background: $pax-darkestcyan
+  h1
+    background: rgba(0, 0, 0, 0.2)
+    color: $pax-lightcyan
+
+.paxItem
+  @media screen and ($mobile)
+    box-sizing: border-box
+    padding: 0
+  .headline
+    @extend .pax-semibold
+    background: $pax-darkmodecyan1
+    color: $pax-white
+    font-size: 16pt
+    padding: 8px 25px 8px 20px
+    height: 32px
+    position: relative
+    white-space: nowrap
+    width: fit-content
+    text-transform: uppercase
+    &.small
+      font-size: 14pt
+      padding: 5px 15px
+  ul
+    @extend .pax-regular
+    background: $pax-darkestcyan
+    color: white
+    padding: 10px 15px
+    font-size: 12pt
+    line-height: 1.5
+    width: 100%
+    border-left: 5px solid $pax-darkmodecyan1
+    li
+      padding-left: 10px
+    li:before
+      content: "▪"
+      color: $pax-cyan
+      padding-right: 7px
+      margin-left: -12px
+      
+ol
+  @extend .pax-regular
+  background: $pax-darkestcyan
+  color: white
+  padding: 10px 15px
+  font-size: 12pt
+  line-height: 1.5
+  width: 100%
+  border-left: 5px solid $pax-darkmodecyan1
+  list-style-type: none
+  box-sizing: border-box
+  li
+    counter-increment: step-counter
+    margin: 0 0 10px 15px
+    position: relative
+    &::before
+      content: counter(step-counter)
+      position: absolute
+      margin-left: -32px
+      font-size: 80%
+      background-color: $pax-darkmodecyan1
+      color: white
+      font-weight: bold
+      padding: 3px 8px
+
+.scrollTarget
+  scroll-margin-top: 60px
+
+input
+  @extend .pax-regular
+  padding: 7px 10px
+  border: none
+  width: 100%
+  font-size: 12pt
+  margin: 5px 0
+  box-sizing: border-box
+  &:focus
+    outline: none
+
+textarea
+  @extend .pax-regular
+  padding: 7px 10px
+  font-size: 12pt
+  width: 100%
+  height: 250px
+  resize: vertical
+  outline: none
+  border: none
+  box-sizing: border-box
+
+label:not(.checkmarkContainer)
+  position: absolute
+  top: -5px
+  left: 0
+  font-size: 14px
+  opacity: 0
+  &.container
+    position: relative
+    opacity: 1
+    font-size: 12pt
+    color: #1a1a1a
+    font-weight: normal
+    @extend .pax-regular
+    color: white
+
+.checkmarkContainer
+  display: block
+  padding-left: 35px
+  cursor: pointer
+  font-size: 22px
+  -webkit-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
+  margin: 10px 0
+  position: relative
+  &:hover input ~ .checkmark
+    background-color: #bebebe
+  input:checked ~ .checkmark
+    background-color: $pax-cyan
+    border-color: $pax-darkcyan
+  .label
+    @extend .pax-regular
+    color: white
+    font-size: 12pt
+  input
+    position: absolute
+    opacity: 0
+    cursor: pointer
+    height: 0
+    width: 0
+    &:checked ~ .checkmark:after
+      display: block
+  .checkmark
+    position: absolute
+    left: 0
+    top: 5px
+    height: 25px
+    width: 25px
+    background-color: $pax-gray
+    border: 1px solid #bebebe
+    border-radius: 7px
+    &:hover
+      box-shadow: 0px 0px 15px #102f36
+    &:after
+      content: ""
+      position: absolute
+      display: none
+      left: 9px
+      top: 5px
+      width: 5px
+      height: 10px
+      border: solid $pax-white
+      border-width: 0 3px 3px 0
+      -webkit-transform: rotate(45deg)
+      -ms-transform: rotate(45deg)
+      transform: rotate(45deg)
+
+select
+  @extend .pax-regular
+  font-size: 12pt
+  outline: none
+  border: none
+  cursor: pointer
+  color: $pax-black
+  padding: 5px 10px
+  width: 200px
+  margin-right: 10px
+  margin-bottom: 10px
+  box-sizing: border-box
+select:required:invalid
+  color: $pax-black
+
+table
+  @extend .pax-regular
+  border-collapse: separate
+  border-spacing: 0px
+  width: fit-content
+  white-space: nowrap
+  margin-right: auto
+  margin-left: auto
+  display: block
+  select
+    height: 100%
+    right: 0
+    margin: 0
+    width: 100%
+
+th
+  background: $pax-cyan
+  color: $pax-white
+  @extend .pax-semibold
+  border-bottom: 2px solid $pax-darkcyan
+  text-shadow: 1px 1px 0px $pax-darkcyan
+  text-align: center
+  font-size: 12pt
+  text-transform: uppercase
+
+tr
+  &:nth-child(even) td
+    background: $pax-darkcyan
+  &:nth-child(odd) td
+    background: $pax-darkestcyan
+  &:hover
+    cursor: pointer
+    > td
+      color: $pax-darkestcyan
+      background: $pax-lightcyan
+      font-weight: bold
+td
+  padding: 7px 30px
+  font-size: 12pt
+  text-overflow: ellipsis
+  white-space: inherit
+  overflow: hidden
+  max-width: 150px
+  text-align: center
+  color: $pax-white
+  @media screen and ($mobile)
+    padding: 15px 15px
+
+.desktopOnly
+  @media screen and ($mobile)
+    display: none
