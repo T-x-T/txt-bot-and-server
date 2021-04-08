@@ -86,14 +86,8 @@ helpers.addMemberToRole = function(discordID, roleID, callback){
     return;
   }
   client.guilds.get(config.discord_bot.guild).members.get(discordID).addRoles([roleID])
-  .then(() => {
-    console.log(`Gave ${userID} the role ${roleID}`)
-    callback(false)
-  })
-  .catch(e => {
-    console.log(`Couldnt give ${userID} the role ${roleID}`, e)  
-    callback(e)
-  });
+  .then(() => callback(false))
+  .catch(e => callback(e));
 };
 
 helpers.removeMemberFromRole = function(discordID, roleID, callback){

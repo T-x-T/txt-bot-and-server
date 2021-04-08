@@ -104,9 +104,6 @@ emitter.on('discord_bot_ready' ,() => {
     .then(application => {
       if(application){
         application.acceptGuildMember();
-      } else {
-        //Add unverified role
-        discordHelpers.addMemberToRole(user.id, "829611102274322493", function(err) {if(err) console.log(err)});
       }
     })
     .catch(e => {
