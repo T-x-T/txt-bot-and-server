@@ -116,7 +116,7 @@ emitter.on('discord_bot_ready' ,() => {
   });
 
   client.on("messageReactionAdd", (reaction, user) => {
-    if(reaction.message.channel.name == "verification"){
+    if(reaction.message.channel.id == "829609188896276531"){
       console.log(`Verify user ${user.id}`)
       discordHelpers.removeMemberFromRole(user.id, "829611102274322493", function(err) {if(err) console.log(err)});
       discordHelpers.addMemberToRole(user.id, "829611628151570442", function(err) {if(err) console.log(err)});
