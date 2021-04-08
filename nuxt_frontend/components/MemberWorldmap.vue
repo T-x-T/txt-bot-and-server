@@ -120,7 +120,7 @@ export default {
 
   methods: {
     async getMapData(){
-      this.mapData = await this.$axios.$get("/api/memberworldmapdata");
+      this.mapData = await this.$axios.$get("/api/worldmapdata");
       
       for(let metric in this.totals){
         for(let country in this.mapData){

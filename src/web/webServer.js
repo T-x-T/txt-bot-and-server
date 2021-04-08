@@ -78,7 +78,7 @@ const router = {
   '/html/api/blog': handlers.paxapi.blog,
   '/html/api/roles': handlers.paxapi.roles,
   '/html/api/mcversion': handlers.paxapi.mcversion,
-  '/html/api/memberworldmapdata': handlers.paxapi.memberworldmapdata,
+  '/html/api/worldmapdata': handlers.paxapi.memberworldmapdata,
   '/html/api/statsoverview': handlers.paxapi.statsoverview,
   '/html/api/discorduserfromcode': handlers.paxapi.discorduserfromcode,
   '/html/api/tokenfromcode': handlers.paxapi.tokenfromcode,
