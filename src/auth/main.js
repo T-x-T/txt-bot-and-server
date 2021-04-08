@@ -117,6 +117,7 @@ oauth.getAccess_token = function(code, redirect, callback){
     res.on('data', function(chunk){
       data += chunk;
     }).on('end', function(){
+      console.log(data)
       try{
         data = JSON.parse(data);
       }catch(e){
