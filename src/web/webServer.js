@@ -138,6 +138,10 @@ server.processHandlerResponse = function (res, method, path, statusCode, payload
       res.setHeader('Content-Type', 'application/json');
       payloadStr = typeof (payload) == 'object' ? JSON.stringify(payload) : payload;
     }
+    if(contentType == 'plain') {
+      res.setHeader('Content-Type', 'text/plain');
+      payloadStr = typeof (payload) !== 'undefined' ? payload : '';
+    }
     res.writeHead(statusCode);
   }
   //Finish the response with the rest which is common
