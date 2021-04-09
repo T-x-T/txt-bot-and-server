@@ -227,15 +227,15 @@ class Member extends Persistable{
 
   async inactivate(){
     this.setStatus(2);
-    this.takeDiscordRole(config.discord_bot.roles.paxterya);
-    this.giveDiscordRole(config.discord_bot.roles.inactive);
+    await this.takeDiscordRole(config.discord_bot.roles.paxterya);
+    await this.giveDiscordRole(config.discord_bot.roles.inactive);
     mc.sendCmd(`whitelist remove ${this.getMcIgn()}`, false);
   }
 
   async activate(){
     this.setStatus(1);
-    this.takeDiscordRole(config.discord_bot.roles.inactive);
-    this.giveDiscordRole(config.discord_bot.roles.paxterya);
+    await this.takeDiscordRole(config.discord_bot.roles.inactive);
+    await this.giveDiscordRole(config.discord_bot.roles.paxterya);
     mc.sendCmd(`whitelist add ${this.getMcIgn()}`, false);
   }
 }

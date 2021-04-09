@@ -1,0 +1,79 @@
+<template>
+  <div class="background-bright">
+    <div id="section_videos" class="scrollTarget"></div>
+    <h1>Videos</h1>
+    <div id="thumbnailContainer">
+      <img class="hover" @click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/q1u7uBNrk34?autoplay=1'" src="https://stor.paxterya.com/website/thumbnails/1.webp" loading="lazy"/>
+      <img class="hover" @click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/lqvVvIRxDMk?autoplay=1'" src="https://stor.paxterya.com/website/thumbnails/2.webp" loading="lazy"/>
+      <img class="hover" @click="fullscreenVideo = 'https://www.youtube-nocookie.com/embed/y8yxh_VYIrc?autoplay=1'" src="https://stor.paxterya.com/website/thumbnails/3.webp" loading="lazy"/>
+    </div>
+    <div id="fullscreenVideo" v-if="fullscreenVideo" @click="fullscreenVideo = null">
+      <iframe id="video" :src="fullscreenVideo" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+    </div>
+    <svg v-if="fullscreenVideo" v-on:click="fullscreenVideo = null" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </div>
+</template>
+
+<style lang="sass" scoped>
+@import ~/assets/_vars.sass
+
+div#thumbnailContainer
+  display: flex
+  flex-wrap: nowrap
+  align-items: stretch
+  justify-content: center
+  margin-top: 50px
+  img
+    border-radius: 8px
+    width: 25%
+    height: auto
+    margin: 0.5% 2% 5% 2%
+    &:hover
+      cursor: pointer
+  @media screen and ($mobile)
+    flex-direction: column
+    margin: 0
+    padding: 20px 0
+    img
+      width: 90%
+      max-width: 300px
+      margin: 10px auto
+
+.hover
+  &:hover
+    transform: scale(1.1)
+
+div#fullscreenVideo
+  width: 100%
+  height: 100%
+  z-index: 101
+  position: fixed
+  top: 0px
+  left: 0px
+  background-color: rgba(0, 0, 0, 0.75)
+svg
+  z-index: 102
+  width: 5%
+  height: auto
+  position: fixed
+  top: 0px
+  left: 0px
+  color: white
+  &:hover
+    color: $pax-lightcyan
+    cursor: pointer
+iframe#video
+  width: 90%
+  height: 90%
+  margin: 5vh 5vw
+</style>
+
+<script>
+export default {
+  data: () => ({
+    fullscreenVideo: null
+  })
+}
+</script>

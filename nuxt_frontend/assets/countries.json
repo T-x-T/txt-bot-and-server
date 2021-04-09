@@ -1,0 +1,1219 @@
+{
+  "Afghanistan": {"alternatives": [
+      "AF",
+      "افغانستان"
+    ]
+  },
+  "Åland Islands": {"alternatives": [
+      "AX",
+      "Aaland",
+      "Aland"
+    ]
+  },
+  "Albania": {"alternatives": [
+      "AL"
+    ]
+  },
+  "Algeria": {"alternatives": [
+      "DZ",
+      "الجزائر"
+    ]
+  },
+  "American Samoa": {"alternatives": [
+      "AS"
+    ]
+  },
+  "Andorra": {"alternatives": [
+      "AD"
+    ]
+  },
+  "Angola": {"alternatives": [
+      "AO"
+    ]
+  },
+  "Anguilla": {"alternatives": [
+      "AI"
+    ]
+  },
+  "Antarctica": {"alternatives": [
+      "AQ"
+    ]
+  },
+  "Antigua And Barbuda": {"alternatives": [
+      "AG"
+    ]
+  },
+  "Argentina": {"alternatives": [
+      "AR"
+    ]
+  },
+  "Armenia": {"alternatives": [
+      "AM",
+      "Հայաստան"
+    ]
+  },
+  "Aruba": {"alternatives": [
+      "AW"
+    ]
+  },
+  "Australia": {"alternatives": [
+      "AU"
+    ]
+  },
+  "Austria": {"alternatives": [
+      "AT",
+      "Österreich",
+      "Osterreich",
+      "Oesterreich",
+      ""
+    ]
+  },
+  "Azerbaijan": {"alternatives": [
+      "AZ"
+    ]
+  },
+  "Bahamas": {"alternatives": [
+      "BS"
+    ]
+  },
+  "Bahrain": {"alternatives": [
+      "BH",
+      "البحرين"
+    ]
+  },
+  "Bangladesh": {"alternatives": [
+      "BD",
+      "বাংলাদেশ"
+    ]
+  },
+  "Barbados": {"alternatives": [
+      "BB"
+    ]
+  },
+  "Belarus": {"alternatives": [
+      "BY",
+      "Беларусь"
+    ]
+  },
+  "Belgium": {"alternatives": [
+      "BE",
+      "België",
+      "Belgie",
+      "Belgien",
+      "Belgique"
+    ]
+  },
+  "Belize": {"alternatives": [
+      "BZ"
+    ]
+  },
+  "Benin": {"alternatives": [
+      "BJ"
+    ]
+  },
+  "Bermuda": {"alternatives": [
+      "BM"
+    ]
+  },
+  "Bhutan": {"alternatives": [
+      "BT",
+      "भूटान"
+    ]
+  },
+  "Bolivia": {"alternatives": [
+      "BO"
+    ]
+  },
+  "Bonaire, Sint Eustatius and Saba": {"alternatives": [
+      "BQ"
+    ]
+  },
+  "Bosnia and Herzegovina": {"alternatives": [
+      "BA",
+      "BiH",
+      "Bosna",
+      "i",
+      "Hercegovina",
+      "Босна",
+      "и",
+      "Херцеговина"
+    ]
+  },
+  "Botswana": {"alternatives": [
+      "BW"
+    ]
+  },
+  "Bouvet Island": {"alternatives": [
+      "BV"
+    ]
+  },
+  "Brazil": {"alternatives": [
+      "BR",
+      "Brasil"
+    ]
+  },
+  "British Indian Ocean Territory": {"alternatives": [
+      "IO"
+    ]
+  },
+  "Brunei Darussalam": {"alternatives": [
+      "BN"
+    ]
+  },
+  "Bulgaria": {"alternatives": [
+      "BG",
+      "България"
+    ]
+  },
+  "Burkina Faso": {"alternatives": [
+      "BF"
+    ]
+  },
+  "Burundi": {"alternatives": [
+      "BI"
+    ]
+  },
+  "Cambodia": {"alternatives": [
+      "KH",
+      "កម្ពុជា"
+    ]
+  },
+  "Cameroon": {"alternatives": [
+      "CM"
+    ]
+  },
+  "Canada": {"alternatives": [
+      "CA"
+    ]
+  },
+  "Cape Verde": {"alternatives": [
+      "CV",
+      "Cabo"
+    ]
+  },
+  "Cayman Islands": {"alternatives": [
+      "KY"
+    ]
+  },
+  "Central African Republic": {"alternatives": [
+      "CF"
+    ]
+  },
+  "Chad": {"alternatives": [
+      "TD",
+      "تشاد‎",
+      "Tchad"
+    ]
+  },
+  "Chile": {"alternatives": [
+      "CL"
+    ]
+  },
+  "China": {"alternatives": [
+      "CN",
+      "Zhongguo",
+      "Zhonghua",
+      "Peoples",
+      "Republic",
+      "中国/中华"
+    ]
+  },
+  "Christmas Island": {"alternatives": [
+      "CX"
+    ]
+  },
+  "Cocos (Keeling) Islands": {"alternatives": [
+      "CC"
+    ]
+  },
+  "Colombia": {"alternatives": [
+      "CO"
+    ]
+  },
+  "Comoros": {"alternatives": [
+      "KM",
+      "جزر",
+      "القمر"
+    ]
+  },
+  "Congo": {"alternatives": [
+      "CG"
+    ]
+  },
+  "Congo, the Democratic Republic of the": {"alternatives": [
+      "CD",
+      "Congo-Brazzaville",
+      "Repubilika",
+      "ya",
+      "Kongo"
+    ]
+  },
+  "Cook Islands": {"alternatives": [
+      "CK"
+    ]
+  },
+  "Costa Rica": {"alternatives": [
+      "CR"
+    ]
+  },
+  "Côte d'Ivoire": {"alternatives": [
+      "CI",
+      "Cote",
+      "dIvoire"
+    ]
+  },
+  "Croatia": {"alternatives": [
+      "HR",
+      "Hrvatska"
+    ]
+  },
+  "Cuba": {"alternatives": [
+      "CU"
+    ]
+  },
+  "Curaçao": {"alternatives": [
+      "CW",
+      "Curacao"
+    ]
+  },
+  "Cyprus": {"alternatives": [
+      "CY",
+      "Κύπρος",
+      "Kýpros",
+      "Kıbrıs"
+    ]
+  },
+  "Czech Republic": {"alternatives": [
+      "CZ",
+      "Česká",
+      "Ceska"
+    ]
+  },
+  "Denmark": {"alternatives": [
+      "DK",
+      "Danmark"
+    ]
+  },
+  "Djibouti": {"alternatives": [
+      "DJ",
+      "جيبوتي‎",
+      "Jabuuti",
+      "Gabuuti"
+    ]
+  },
+  "Dominica": {"alternatives": [
+      "DM",
+      "Dominique"
+    ]
+  },
+  "Dominican Republic": {"alternatives": [
+      "DO"
+    ]
+  },
+  "Ecuador": {"alternatives": [
+      "EC"
+    ]
+  },
+  "Egypt": {"alternatives": [
+      "EG"
+    ]
+  },
+  "El Salvador": {"alternatives": [
+      "SV"
+    ]
+  },
+  "Equatorial Guinea": {"alternatives": [
+      "GQ"
+    ]
+  },
+  "Eritrea": {"alternatives": [
+      "ER",
+      "إرتريا",
+      "ኤርትራ"
+    ]
+  },
+  "Estonia": {"alternatives": [
+      "EE",
+      "Eesti"
+    ]
+  },
+  "Ethiopia": {"alternatives": [
+      "ET",
+      "ኢትዮጵያ"
+    ]
+  },
+  "Falkland Islands (Malvinas)": {"alternatives": [
+      "FK"
+    ]
+  },
+  "Faroe Islands": {"alternatives": [
+      "FO",
+      "Føroyar",
+      "Færøerne"
+    ]
+  },
+  "Fiji": {"alternatives": [
+      "FJ",
+      "Viti",
+      "फ़िजी"
+    ]
+  },
+  "Finland": {"alternatives": [
+      "FI",
+      "Suomi"
+    ]
+  },
+  "France": {"alternatives": [
+      "FR",
+      "République",
+      "française"
+    ]
+  },
+  "French Guiana": {"alternatives": [
+      "GF"
+    ]
+  },
+  "French Polynesia": {"alternatives": [
+      "PF",
+      "Polynésie",
+      "française"
+    ]
+  },
+  "French Southern Territories": {"alternatives": [
+      "TF"
+    ]
+  },
+  "Gabon": {"alternatives": [
+      "GA",
+      "République",
+      "Gabonaise"
+    ]
+  },
+  "Gambia": {"alternatives": [
+      "GM"
+    ]
+  },
+  "Georgia": {"alternatives": [
+      "GE",
+      "საქართველო"
+    ]
+  },
+  "Germany": {"alternatives": [
+      "DE",
+      "Bundesrepublik",
+      "Deutschland"
+    ]
+  },
+  "Ghana": {"alternatives": [
+      "GH"
+    ]
+  },
+  "Gibraltar": {"alternatives": [
+      "GI"
+    ]
+  },
+  "Greece": {"alternatives": [
+      "GR",
+      "Ελλάδα"
+    ]
+  },
+  "Greenland": {"alternatives": [
+      "GL",
+      "grønland"
+    ]
+  },
+  "Grenada": {"alternatives": [
+      "GD"
+    ]
+  },
+  "Guadeloupe": {"alternatives": [
+      "GP"
+    ]
+  },
+  "Guam": {"alternatives": [
+      "GU"
+    ]
+  },
+  "Guatemala": {"alternatives": [
+      "GT"
+    ]
+  },
+  "Guernsey": {"alternatives": [
+      "GG"
+    ]
+  },
+  "Guinea": {"alternatives": [
+      "GN"
+    ]
+  },
+  "Guinea-Bissau": {"alternatives": [
+      "GW"
+    ]
+  },
+  "Guyana": {"alternatives": [
+      "GY"
+    ]
+  },
+  "Haiti": {"alternatives": [
+      "HT"
+    ]
+  },
+  "Heard Island and McDonald Islands": {"alternatives": [
+      "HM"
+    ]
+  },
+  "Holy See (Vatican City State)": {"alternatives": [
+      "VA"
+    ]
+  },
+  "Honduras": {"alternatives": [
+      "HN"
+    ]
+  },
+  "Hong Kong": {"alternatives": [
+      "HK",
+      "香港"
+    ]
+  },
+  "Hungary": {"alternatives": [
+      "HU",
+      "Magyarország"
+    ]
+  },
+  "Iceland": {"alternatives": [
+      "IS",
+      "Island"
+    ]
+  },
+  "India": {"alternatives": [
+      "IN",
+      "भारत",
+      "गणराज्य",
+      "Hindustan"
+    ]
+  },
+  "Indonesia": {"alternatives": [
+      "ID"
+    ]
+  },
+  "Iran, Islamic Republic of": {"alternatives": [
+      "IR",
+      "ایران"
+    ]
+  },
+  "Iraq": {"alternatives": [
+      "IQ",
+      "العراق‎"
+    ]
+  },
+  "Ireland": {"alternatives": [
+      "IE",
+      "Éire"
+    ]
+  },
+  "Isle of Man": {"alternatives": [
+      "IM"
+    ]
+  },
+  "Israel": {"alternatives": [
+      "IL",
+      "إسرائيل",
+      "ישראל"
+    ]
+  },
+  "Italy": {"alternatives": [
+      "IT",
+      "Italia"
+    ]
+  },
+  "Jamaica": {"alternatives": [
+      "JM"
+    ]
+  },
+  "Japan": {"alternatives": [
+      "JP",
+      "Nippon",
+      "Nihon",
+      "日本"
+    ]
+  },
+  "Jersey": {"alternatives": [
+      "JE"
+    ]
+  },
+  "Jordan": {"alternatives": [
+      "JO",
+      "الأردن"
+    ]
+  },
+  "Kazakhstan": {"alternatives": [
+      "KZ",
+      "Қазақстан",
+      "Казахстан"
+    ]
+  },
+  "Kenya": {"alternatives": [
+      "KE"
+    ]
+  },
+  "Kiribati": {"alternatives": [
+      "KI"
+    ]
+  },
+  "Korea, Democratic People's Republic of": {"alternatives": [
+      "KP",
+      "North",
+      "Korea"
+    ]
+  },
+  "Korea, Republic of": {"alternatives": [
+      "KR",
+      "South",
+      "Korea"
+    ]
+  },
+  "Kuwait": {"alternatives": [
+      "KW",
+      "الكويت"
+    ]
+  },
+  "Kyrgyzstan": {"alternatives": [
+      "KG",
+      "Кыргызстан"
+    ]
+  },
+  "Lao People's Democratic Republic": {"alternatives": [
+      "LA"
+    ]
+  },
+  "Latvia": {"alternatives": [
+      "LV",
+      "Latvija"
+    ]
+  },
+  "Lebanon": {"alternatives": [
+      "LB",
+      "لبنان"
+    ]
+  },
+  "Lesotho": {"alternatives": [
+      "LS"
+    ]
+  },
+  "Liberia": {"alternatives": [
+      "LR"
+    ]
+  },
+  "Libyan Arab Jamahiriya": {"alternatives": [
+      "LY",
+      "ليبيا"
+    ]
+  },
+  "Liechtenstein": {"alternatives": [
+      "LI"
+    ]
+  },
+  "Lithuania": {"alternatives": [
+      "LT",
+      "Lietuva"
+    ]
+  },
+  "Luxembourg": {"alternatives": [
+      "LU"
+    ]
+  },
+  "Macao": {"alternatives": [
+      "MO"
+    ]
+  },
+  "Macedonia, The Former Yugoslav Republic Of": {"alternatives": [
+      "MK",
+      "Македонија"
+    ]
+  },
+  "Madagascar": {"alternatives": [
+      "MG",
+      "Madagasikara"
+    ]
+  },
+  "Malawi": {"alternatives": [
+      "MW"
+    ]
+  },
+  "Malaysia": {"alternatives": [
+      "MY"
+    ]
+  },
+  "Maldives": {"alternatives": [
+      "MV"
+    ]
+  },
+  "Mali": {"alternatives": [
+      "ML"
+    ]
+  },
+  "Malta": {"alternatives": [
+      "MT"
+    ]
+  },
+  "Marshall Islands": {"alternatives": [
+      "MH"
+    ]
+  },
+  "Martinique": {"alternatives": [
+      "MQ"
+    ]
+  },
+  "Mauritania": {"alternatives": [
+      "MR",
+      "الموريتانية"
+    ]
+  },
+  "Mauritius": {"alternatives": [
+      "MU"
+    ]
+  },
+  "Mayotte": {"alternatives": [
+      "YT"
+    ]
+  },
+  "Mexico": {"alternatives": [
+      "MX",
+      "Mexicanos"
+    ]
+  },
+  "Micronesia, Federated States of": {"alternatives": [
+      "FM"
+    ]
+  },
+  "Moldova, Republic of": {"alternatives": [
+      "MD"
+    ]
+  },
+  "Monaco": {"alternatives": [
+      "MC"
+    ]
+  },
+  "Mongolia": {"alternatives": [
+      "MN",
+      "Mongγol",
+      "ulus",
+      "Монгол",
+      "улс"
+    ]
+  },
+  "Montenegro": {"alternatives": [
+      "ME"
+    ]
+  },
+  "Montserrat": {"alternatives": [
+      "MS"
+    ]
+  },
+  "Morocco": {"alternatives": [
+      "MA",
+      "المغرب"
+    ]
+  },
+  "Mozambique": {"alternatives": [
+      "MZ",
+      "Moçambique"
+    ]
+  },
+  "Myanmar": {"alternatives": [
+      "MM"
+    ]
+  },
+  "Namibia": {"alternatives": [
+      "NA",
+      "Namibië"
+    ]
+  },
+  "Nauru": {"alternatives": [
+      "NR",
+      "Naoero"
+    ]
+  },
+  "Nepal": {"alternatives": [
+      "NP",
+      "नेपाल"
+    ]
+  },
+  "Netherlands": {"alternatives": [
+      "NL",
+      "Holland",
+      "Nederland"
+    ]
+  },
+  "New Caledonia": {"alternatives": [
+      "NC"
+    ]
+  },
+  "New Zealand": {"alternatives": [
+      "NZ",
+      "Aotearoa"
+    ]
+  },
+  "Nicaragua": {"alternatives": [
+      "NI"
+    ]
+  },
+  "Niger": {"alternatives": [
+      "NE",
+      "Nijar"
+    ]
+  },
+  "Nigeria": {"alternatives": [
+      "NG",
+      "Nijeriya",
+      "Naíjíríà"
+    ]
+  },
+  "Niue": {"alternatives": [
+      "NU"
+    ]
+  },
+  "Norfolk Island": {"alternatives": [
+      "NF"
+    ]
+  },
+  "Northern Mariana Islands": {"alternatives": [
+      "MP"
+    ]
+  },
+  "Norway": {"alternatives": [
+      "NO",
+      "Norge",
+      "Noreg"
+    ]
+  },
+  "Oman": {"alternatives": [
+      "OM",
+      "عمان"
+    ]
+  },
+  "Pakistan": {"alternatives": [
+      "PK",
+      "پاکستان"
+    ]
+  },
+  "Palau": {"alternatives": [
+      "PW"
+    ]
+  },
+  "Palestinian Territory, Occupied": {"alternatives": [
+      "PS",
+      "فلسطين"
+    ]
+  },
+  "Panama": {"alternatives": [
+      "PA"
+    ]
+  },
+  "Papua New Guinea": {"alternatives": [
+      "PG"
+    ]
+  },
+  "Paraguay": {"alternatives": [
+      "PY"
+    ]
+  },
+  "Peru": {"alternatives": [
+      "PE"
+    ]
+  },
+  "Philippines": {"alternatives": [
+      "PH",
+      "Pilipinas"
+    ]
+  },
+  "Pitcairn": {"alternatives": [
+      "PN"
+    ]
+  },
+  "Poland": {"alternatives": [
+      "PL",
+      "Polska"
+    ]
+  },
+  "Portugal": {"alternatives": [
+      "PT",
+      "Portuguesa"
+    ]
+  },
+  "Puerto Rico": {"alternatives": [
+      "PR"
+    ]
+  },
+  "Qatar": {"alternatives": [
+      "QA",
+      "قطر"
+    ]
+  },
+  "Réunion": {"alternatives": [
+      "RE",
+      "Reunion"
+    ]
+  },
+  "Romania": {"alternatives": [
+      "RO",
+      "Rumania",
+      "Roumania",
+      "România"
+    ]
+  },
+  "Russian Federation": {"alternatives": [
+      "RU",
+      "Rossiya",
+      "Российская",
+      "Россия"
+    ]
+  },
+  "Rwanda": {"alternatives": [
+      "RW"
+    ]
+  },
+  "Saint Barthélemy": {"alternatives": [
+      "BL",
+      "St.",
+      "Barthelemy"
+    ]
+  },
+  "Saint Helena": {"alternatives": [
+      "SH",
+      "St."
+    ]
+  },
+  "Saint Kitts and Nevis": {"alternatives": [
+      "KN",
+      "St."
+    ]
+  },
+  "Saint Lucia": {"alternatives": [
+      "LC",
+      "St."
+    ]
+  },
+  "Saint Martin (French Part)": {"alternatives": [
+      "MF",
+      "St."
+    ]
+  },
+  "Saint Pierre and Miquelon": {"alternatives": [
+      "PM",
+      "St."
+    ]
+  },
+  "Saint Vincent and the Grenadines": {"alternatives": [
+      "VC",
+      "St."
+    ]
+  },
+  "Samoa": {"alternatives": [
+      "WS"
+    ]
+  },
+  "San Marino": {"alternatives": [
+      "SM",
+      "RSM",
+      "Repubblica"
+    ]
+  },
+  "Sao Tome and Principe": {"alternatives": [
+      "ST"
+    ]
+  },
+  "Saudi Arabia": {"alternatives": [
+      "SA",
+      "السعودية"
+    ]
+  },
+  "Senegal": {"alternatives": [
+      "SN",
+      "Sénégal"
+    ]
+  },
+  "Serbia": {"alternatives": [
+      "RS",
+      "Србија",
+      "Srbija"
+    ]
+  },
+  "Seychelles": {"alternatives": [
+      "SC"
+    ]
+  },
+  "Sierra Leone": {"alternatives": [
+      "SL"
+    ]
+  },
+  "Singapore": {"alternatives": [
+      "SG",
+      "Singapura",
+      "",
+      "சிங்கப்பூர்",
+      "குடியரசு",
+      "新加坡共和国"
+    ]
+  },
+  "Sint Maarten (Dutch Part)": {"alternatives": [
+      "SX"
+    ]
+  },
+  "Slovakia": {"alternatives": [
+      "SK",
+      "Slovenská",
+      "Slovensko"
+    ]
+  },
+  "Slovenia": {"alternatives": [
+      "SI",
+      "Slovenija"
+    ]
+  },
+  "Solomon Islands": {"alternatives": [
+      "SB"
+    ]
+  },
+  "Somalia": {"alternatives": [
+      "SO",
+      "الصومال"
+    ]
+  },
+  "South Africa": {"alternatives": [
+      "ZA",
+      "RSA",
+      "Suid-Afrika"
+    ]
+  },
+  "South Georgia and the South Sandwich Islands": {"alternatives": [
+      "GS"
+    ]
+  },
+  "South Sudan": {"alternatives": [
+      "SS"
+    ]
+  },
+  "Spain": {"alternatives": [
+      "ES",
+      "España"
+    ]
+  },
+  "Sri Lanka": {"alternatives": [
+      "LK",
+      "ශ්‍රී",
+      "ලංකා",
+      "இலங்கை",
+      "Ceylon"
+    ]
+  },
+  "Sudan": {"alternatives": [
+      "SD",
+      "السودان"
+    ]
+  },
+  "Suriname": {"alternatives": [
+      "SR",
+      "शर्नम्",
+      "Sarnam",
+      "Sranangron"
+    ]
+  },
+  "Svalbard and Jan Mayen": {"alternatives": [
+      "SJ"
+    ]
+  },
+  "Swaziland": {"alternatives": [
+      "SZ",
+      "weSwatini",
+      "Swatini",
+      "Ngwane"
+    ]
+  },
+  "Sweden": {"alternatives": [
+      "SE",
+      "Sverige"
+    ]
+  },
+  "Switzerland": {"alternatives": [
+      "CH",
+      "Swiss",
+      "Confederation",
+      "Schweiz",
+      "Suisse",
+      "Svizzera",
+      "Svizra"
+    ]
+  },
+  "Syrian Arab Republic": {"alternatives": [
+      "SY",
+      "Syria",
+      "سورية"
+    ]
+  },
+  "Taiwan, Province of China": {"alternatives": [
+      "TW",
+      "台灣",
+      "臺灣"
+    ]
+  },
+  "Tajikistan": {"alternatives": [
+      "TJ",
+      "Тоҷикистон",
+      "Toçikiston"
+    ]
+  },
+  "Tanzania, United Republic of": {"alternatives": [
+      "TZ"
+    ]
+  },
+  "Thailand": {"alternatives": [
+      "TH",
+      "ประเทศไทย",
+      "Prathet",
+      "Thai"
+    ]
+  },
+  "Timor-Leste": {"alternatives": [
+      "TL"
+    ]
+  },
+  "Togo": {"alternatives": [
+      "TG",
+      "Togolese"
+    ]
+  },
+  "Tokelau": {"alternatives": [
+      "TK"
+    ]
+  },
+  "Tonga": {"alternatives": [
+      "TO"
+    ]
+  },
+  "Trinidad and Tobago": {"alternatives": [
+      "TT"
+    ]
+  },
+  "Tunisia": {"alternatives": [
+      "TN",
+      "تونس"
+    ]
+  },
+  "Turkey": {"alternatives": [
+      "TR",
+      "Türkiye",
+      "Turkiye"
+    ]
+  },
+  "Turkmenistan": {"alternatives": [
+      "TM",
+      "Türkmenistan"
+    ]
+  },
+  "Turks and Caicos Islands": {"alternatives": [
+      "TC"
+    ]
+  },
+  "Tuvalu": {"alternatives": [
+      "TV"
+    ]
+  },
+  "Uganda": {"alternatives": [
+      "UG"
+    ]
+  },
+  "Ukraine": {"alternatives": [
+      "UA",
+      "Ukrayina",
+      "Україна"
+    ]
+  },
+  "United Arab Emirates": {"alternatives": [
+      "AE",
+      "UAE",
+      "الإمارات"
+    ]
+  },
+  "United Kingdom": {"alternatives": [
+      "GB",
+      "Great",
+      "Britain",
+      "England",
+      "UK",
+      "Wales",
+      "Scotland",
+      "Northern",
+      "Ireland"
+    ]
+  },
+  "United States": {"alternatives": [
+      "US",
+      "USA",
+      "United",
+      "States",
+      "of",
+      "America"
+    ]
+  },
+  "United States Minor Outlying Islands": {"alternatives": [
+      "UM"
+    ]
+  },
+  "Uruguay": {"alternatives": [
+      "UY"
+    ]
+  },
+  "Uzbekistan": {"alternatives": [
+      "UZ",
+      "Ўзбекистон",
+      "O'zbekstan",
+      "O‘zbekiston"
+    ]
+  },
+  "Vanuatu": {"alternatives": [
+      "VU"
+    ]
+  },
+  "Venezuela": {"alternatives": [
+      "VE"
+    ]
+  },
+  "Vietnam": {"alternatives": [
+      "VN",
+      "Việt",
+      "Nam"
+    ]
+  },
+  "Virgin Islands, British": {"alternatives": [
+      "VG"
+    ]
+  },
+  "Virgin Islands, U.S.": {"alternatives": [
+      "VI"
+    ]
+  },
+  "Wallis and Futuna": {"alternatives": [
+      "WF"
+    ]
+  },
+  "Western Sahara": {"alternatives": [
+      "EH",
+      "لصحراء",
+      "الغربية"
+    ]
+  },
+  "Yemen": {"alternatives": [
+      "YE",
+      "اليمن"
+    ]
+  },
+  "Zambia": {"alternatives": [
+      "ZM"
+    ]
+  },
+  "Zimbabwe": {"alternatives": [
+      "ZW"
+    ]
+  }
+}
