@@ -1,5 +1,5 @@
 require("./test.js");
-const Factory = require("../src/persistance/factory.js");
+const Factory = require("../persistance/factory.js");
 const TestPersistable = require("./testPersitable.js");
 
 class TestFactory extends Factory{

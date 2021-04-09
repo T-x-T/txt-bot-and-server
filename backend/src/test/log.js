@@ -1,9 +1,8 @@
 require("./test.js");
 
 const assert = require("assert");
-const {prune} = require("../src/log");
-const log = require("../src/log");
-const Mongo = require("../src/persistance/mongo.js");
+const log = require("../log");
+const Mongo = require("../persistance/mongo.js");
 
 //Stolen from stackoverflow: https://stackoverflow.com/a/27872144
 function randomString(len, an) {

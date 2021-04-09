@@ -1,10 +1,9 @@
 require("./test.js");
-const Member = require("../src/user/member.js");
-const MemberFactory = require("../src/user/memberFactory.js");
-const Mongo = require("../src/persistance/mongo.js");
+const Member = require("../user/member.js");
+const MemberFactory = require("../user/memberFactory.js");
+const Mongo = require("../persistance/mongo.js");
 const assert = require("assert");
 const schema = Member.schema;
-const discord_helpers = require("../src/discord_bot");
 
 async function createAndSaveNewMember(){
   let memberFactory = new MemberFactory();

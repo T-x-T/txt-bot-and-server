@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "nyc mocha --exit -t 1000000",
+    "test": "nyc mocha --exit -t 1000000 src/test/",
     "prod": "index.js",
     "babel": "./node_modules/.bin/babel web/web/assets/react_js --out-dir web/web/assets/pax_js"
   },
@@ -9,7 +9,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "directories": {
-    "test": "test"
+    "test": "src/test"
   },
   "dependencies": {
     "discord.js": "^11.6.4",

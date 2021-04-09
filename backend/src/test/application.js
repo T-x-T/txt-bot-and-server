@@ -1,13 +1,13 @@
 require("./test.js");
 const assert = require("assert");
-const Application = require("../src/application/application.js");
-const ApplicationFactory = require("../src/application/applicationFactory.js");
+const Application = require("../application/application.js");
+const ApplicationFactory = require("../application/applicationFactory.js");
 const applicationFactory = new ApplicationFactory();
-const Mongo = require("../src/persistance/mongo.js");
-const Member = require("../src/user/member.js");
-const MemberFactory = require("../src/user/memberFactory.js");
+const Mongo = require("../persistance/mongo.js");
+const Member = require("../user/member.js");
+const MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory();
-const discord_helpers = require("../src/discord_bot");
+const discord_helpers = require("../discord_bot");
 
 async function createAndSaveApplication(){
   return await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");

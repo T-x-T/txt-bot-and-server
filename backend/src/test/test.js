@@ -6,7 +6,7 @@
 //Configure config
 ENVIRONMENT = 'testing';
 console.log(ENVIRONMENT)
-require('../config.js')();
+require('../../config.js')();
 
 //Setup the global emitter
 const EventEmitter = require('events');
@@ -14,28 +14,28 @@ class Emitter extends EventEmitter {}
 emitter = new Emitter();
 
 //Require all modules for init
-require('../src/discord_bot/main.js');
-require('../src/discord_api');
+require('../discord_bot/main.js');
+require('../discord_api');
 
-require('../src/auth');
-require('../src/log');
+require('../auth');
+require('../log');
 
-require('../src/stats');
-require('../src/youtube');
+require('../stats');
+require('../youtube');
 
-require('../src/discord_bot');
-require('../src/web/webServer.js');
-require('../src/email');
-require('../src/minecraft');
+require('../discord_bot');
+require('../web/webServer.js');
+require('../email');
+require('../minecraft');
 
 //setup global factories
-const MemberFactory = require('../src/user/memberFactory.js');
+const MemberFactory = require('../user/memberFactory.js');
 global.memberFactory = new MemberFactory();
 global.memberFactory.connect(); //This isnt await, might cause problems
 
 
 //Dependencies
-const log = require('../src/log'); //lgtm [js/unused-local-variable]
+const log = require('../log'); //lgtm [js/unused-local-variable]
 
 global.log(0, 'test', 'Mocha test started', false);
 
@@ -43,7 +43,7 @@ before("start discord_bot", function(done){
   this.timeout(10000);
   emitter.on("discord_bot_ready", () => done());
 
-  const discord_bot = require("../src/discord_bot");
+  const discord_bot = require("../discord_bot");
 });
 
 //This makes unhandledPromiseRejections fail tests
