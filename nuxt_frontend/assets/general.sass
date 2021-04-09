@@ -340,4 +340,8 @@ td
 
 .desktopOnly
   @media screen and ($mobile)
-    display: none
+    display: none!important
+
+.mobileOnly
+  @media screen and ($desktop)
+    display: none!important
