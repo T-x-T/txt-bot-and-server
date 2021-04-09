@@ -9,12 +9,14 @@ export default {
   css: ["assets/general", "assets/_vars"],
   components: true,
   head: {
-    titleTemplate: "%s | Paxterya",
+    titleTemplate: "%s | Paxterya Minecraft SMP",
     link: [
       {rel: "icon", type: "image/png", href: "/logo-icon.svg"}
     ],
     meta: [
-      {name: "viewport", content:"width=device-width, initial-scale=1.0"}
+      {name: "viewport", content:"width=device-width, initial-scale=1.0"},
+      {name: "description", content:"Paxterya is a Minecraft SMP with a whitelist and a friendly community! Apply and join us and our adventures today!"},
+      {name: "keywords", content:"Minecraft, Server, SMP, Survival, Creative, Whitelist, Application, Java Edition, Vanilla, Dynmap, Discord, YouTube channel, Seasons, Long-term, Community"}
     ]
   },
   axios: {
