@@ -12,6 +12,7 @@ test:
   services:
   - mongo:latest
   script:
+  - cd backend
   - npm i
   - cp $config ./config.js
   - npm test
@@ -25,13 +26,13 @@ build:
     FRONTEND_IMAGE_TAG: "$CI_REGISTRY_IMAGE/nuxt_frontend:$CI_COMMIT_REF_SLUG"
   script:
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  - docker build -t $IMAGE_TAG .
+  - docker build -t $IMAGE_TAG ./backend
   - docker push $IMAGE_TAG
   - docker build -t $FRONTEND_IMAGE_TAG ./nuxt_frontend
   - docker push $FRONTEND_IMAGE_TAG
 sast:
   variables:
-    SAST_EXCLUDED_PATHS: test, web/web/assets/js
+    SAST_EXCLUDED_PATHS: test
     SAST_DEFAULT_ANALYZERS: brakeman, bandit, eslint, flawfinder, kubesec, nodejs-scan,
       gosec, phpcs-security-audit, pmd-apex, security-code-scan, sobelow, spotbugs
   stage: sast
