@@ -7,7 +7,7 @@
     </div>
 
 <transition name="slide">
-    <nav v-if="isOpen">
+    <nav v-if="desktop || isOpen">
 
           <NuxtLink to="/join-us">
           <div class="item" id="apply">
@@ -110,7 +110,6 @@ nav
   height: 100%
   border-right: 10px solid $pax-darkestcyan
   pointer-events: none
-  overflow-y: auto
 
 .item
   background: $pax-darkmodecyan1
@@ -168,6 +167,7 @@ nav
     pointer-events: initial
     background: rgba(0, 0, 0, .4)
     padding-left: 100vw
+    overflow-y: auto
     .item
       margin: 7px 0
       &:hover
@@ -181,8 +181,13 @@ nav
 export default {
 
   data: () => ({
-    isOpen: false
+    isOpen: false,
+    desktop: false
   }),
+
+  mounted(){
+    this.desktop = window.innerWidth >= 1000;
+  },
 
   methods: {
     toggle: function(){
