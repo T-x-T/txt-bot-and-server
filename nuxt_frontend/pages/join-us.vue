@@ -360,6 +360,12 @@ svg.status
   color: $pax-white
   height: 48px
 
+.checkmarkContainer a
+  color: $pax-lightcyan
+  &:hover
+    color: $pax-white
+  
+
 </style>
 
 <script>
