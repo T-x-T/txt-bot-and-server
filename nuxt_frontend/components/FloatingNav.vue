@@ -141,6 +141,7 @@ nav
     color: $pax-lightcyan
     padding: 5px 7px 10px 12px
     box-sizing: border-box
+    pointer-events: none
   h1.title
     font-size: 20pt
     padding: 4px 0 4px 10px
