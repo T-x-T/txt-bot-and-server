@@ -2,12 +2,14 @@
 
 <div class="nav-container">
     <div @click="toggle()" class="mobile-nav mobileOnly">
-        <svg v-if="!isOpen" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bars" class="svg-inline--fa fa-bars fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"></path></svg>
-        <svg v-if="isOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="3 0 20 20" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
+      <transition name="fade" mode="out-in">
+        <svg key=1 v-if="!isOpen" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bars" class="svg-inline--fa fa-bars fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"></path></svg>
+        <svg key=2 v-if="isOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="3 0 20 20" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </transition>
     </div>
 
 <transition name="slide">
-    <nav v-if="isOpen">
+    <nav v-if="desktop || isOpen" @click="toggle()">
 
           <NuxtLink to="/join-us">
           <div class="item" id="apply">
@@ -95,8 +97,12 @@
 .slide-leave-to
     transform: translateX(100%)
  
+.fade-enter-active, .fade-leave-active
+    transition: .2s
 
-
+.fade-enter, .fade-leave-to
+    opacity: 0
+    transform: scale(.5)
 
 
 nav
@@ -110,7 +116,6 @@ nav
   height: 100%
   border-right: 10px solid $pax-darkestcyan
   pointer-events: none
-  overflow-y: auto
 
 .item
   background: $pax-darkmodecyan1
@@ -168,6 +173,7 @@ nav
     pointer-events: initial
     background: rgba(0, 0, 0, .4)
     padding-left: 100vw
+    overflow-y: auto
     .item
       margin: 7px 0
       &:hover
@@ -181,8 +187,13 @@ nav
 export default {
 
   data: () => ({
-    isOpen: false
+    isOpen: false,
+    desktop: false
   }),
+
+  mounted(){
+    this.desktop = window.innerWidth >= 1000;
+  },
 
   methods: {
     toggle: function(){
