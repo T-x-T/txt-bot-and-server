@@ -9,3 +9,11 @@
 #rules
   margin-top: 120px
 </style>
+
+<script>
+export default {
+  head: {
+    title: "Rules"
+  }
+}
+</script>
