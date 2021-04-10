@@ -73,7 +73,7 @@ div#section_features
       width: 17px
       height: auto
       color: $pax-lightcyan
-      margin: 0 0 -1px 5px
+      margin: 0 0 -2px 5px
     &:hover
       span.hoverInfo
         opacity: 1
