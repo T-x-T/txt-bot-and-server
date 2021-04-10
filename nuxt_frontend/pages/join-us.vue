@@ -319,7 +319,6 @@ div.formInput
     @extend .pax-regular
     color: $pax-white
     position: absolute
-    z-index: 10
     width: 20vw
     right: 50%
     bottom: 50%
