@@ -118,8 +118,16 @@ main.getNicknameByID = function (userID, callback) {
   try {
     callback(`${client.guilds.get(config.discord_bot.guild).members.get(userID).user.username}#${client.guilds.get(config.discord_bot.guild).members.get(userID).user.discriminator}`);
   } catch (e) {
-    global.log(0, 'discord_api', 'main.getNicknameByID encountered an error', {err: e, userID: userID});
-    callback(false);
+    try {
+      client.fetchUser(userID)
+        .then(user => {
+          callback(user.username + "#" + user.discriminator);
+        })
+        .catch(e => callback(false));
+    } catch (e) {
+      global.log(0, 'discord_api', 'main.getNicknameByID encountered an error', {err: e, userID: userID});
+      callback(false);
+    }
   }
 };
 

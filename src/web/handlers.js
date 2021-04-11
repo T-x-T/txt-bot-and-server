@@ -410,8 +410,10 @@ handlers.paxapi.statsoverview = function(data, callback){
 handlers.paxapi.discorduserfromcode = function(data, callback){
   const code = data.queryStringObject.code;
   oauth.getDiscordId({code: code}, {redirect: "applicationNew"}, function(err, discordId){
+    console.log(err, discordId)
     if(!err && discordId){
       discord_api.getNicknameByID(discordId, function(discordNick){
+        console.log(discordNick)
         if(discordNick){
           callback(200, {discordNick: discordNick, discordId: discordId}, "json");
         }else{
