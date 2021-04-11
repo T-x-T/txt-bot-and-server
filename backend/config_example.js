@@ -299,5 +299,5 @@ let conf = {
 
 //Export the container
 module.exports = function () {
-  config = conf[ENVIRONMENT];
+  global.g.config = conf[global.g.ENVIRONMENT];
 };

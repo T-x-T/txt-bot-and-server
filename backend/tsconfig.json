@@ -1,0 +1,19 @@
+{
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "src/test/*"
+  ],
+  "files": [
+    "src/global.d.ts"
+  ],
+  "compilerOptions": {
+    "target": "esnext",
+    "watch": true,
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "module": "commonjs"
+  }
+}

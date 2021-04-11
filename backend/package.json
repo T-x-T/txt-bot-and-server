@@ -2,7 +2,7 @@
   "scripts": {
     "test": "nyc mocha --exit -t 1000000 src/test/",
     "prod": "index.js",
-    "babel": "./node_modules/.bin/babel web/web/assets/react_js --out-dir web/web/assets/pax_js"
+    "compile": "tsc"
   },
   "name": "txt-bot-and-server",
   "description": "Combination of all Software related to txt's discord and servers",
@@ -12,17 +12,16 @@
     "test": "src/test"
   },
   "dependencies": {
-    "discord.js": "^11.6.4",
+    "bufferutil": "^4.0.3",
+    "discord.js": "^11.5.1",
     "mongoose": "^5.10.11",
     "node-mailer": "^0.1.1",
-    "rcon": "^1.0.3",
     "sanitize-filename": "^1.6.3",
     "sanitize-html": "^1.22.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.10.1",
-    "@babel/core": "^7.10.2",
-    "@babel/preset-react": "^7.10.1",
+    "@types/mocha": "^8.2.2",
+    "@types/node": "^14.14.37",
     "mocha": "^7.1.2",
     "nyc": "^15.1.0"
   },
