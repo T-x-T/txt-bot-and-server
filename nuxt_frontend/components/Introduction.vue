@@ -15,7 +15,7 @@
             You can do anything on Paxterya: start big projects with others, construct a town, or go far away to found your very own empire.
             <br>Let's be creative together!
           </p>
-          <button><img id="discordLogo" src="~/assets/Discord-Logo-Black.svg"> Join our Discord</button>
+          <a href="https://discord.gg/mAjZCTG" target="_blank"><button><img id="discordLogo" src="~/assets/Discord-Logo-Black.svg"> Join our Discord</button></a>
         </div>
       </div>
     </div>
