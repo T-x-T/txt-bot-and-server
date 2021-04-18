@@ -7,10 +7,10 @@
         <div class="hover paxItem rules1">
           <p class="headline">Community</p>
           <ol>
-            <li>Do not treat others in ways that you would not like to be treated. Any kind of insult, discrimination or harassment is unwished.</li>
-            <li>Everyone is playing Minecraft to have a good time. To ensure a good time on Paxterya, be tolerant and understanding towards other players and respect their wishes.</li>
+            <li>Treat others like you want to be treated. Insults, discrimination or harassment are not tolerated.</li>
+            <li>Everyone plays Minecraft to have a good time. Be tolerant and understanding towards other players and their wishes.</li>
             <li>Spamming is unwished.</li>
-            <li>Do not send links to websites with malicious or pornographic content.</li>
+            <li>Do not share malicious or pornographic content.</li>
             <li>Be at least 13 years old.</li>
           </ol>
         </div>
@@ -19,22 +19,21 @@
           <p class="headline">Public farms</p>
           <ol>
             <li>Only XP, villager trading, iron, (cobble)stone, wool and manual farms can be made public.</li>
-            <li>You shall consult a member of staff before constructing a public farm.</li>
-            <li>You may construct a farm that is on the list from above and run it privately.</li>
+            <li>Consult a staff member before making a farm public.</li>
+            <li>You can construct any type of farm for private use.</li>
           </ol>
         </div>
 
         <div class="hover paxItem rules3">
           <p class="headline">In-Game</p>
           <ol>
-            <li>It is forbidden to attack, harm or kill other players against their will.</li>
-            <li>It is forbidden to alter or destroy another player's building(s) against their will. When in doubt if a deserted, unprotected site is still in use, ask a moderator or administrator before destroying it.</li>
-            <li>It is forbidden to steal items from chests. This counts for chests on mob farms etc, too; ask the farm's owner first.</li>
-            <li>It is forbidden to steal other player's items from item frames, armor stands, barrels, hoppers etc.</li>
-            <li>It is forbidden to kill, free or steal other player's animals or villagers.</li>
-            <li>It is forbidden to use game modifications that give you an unfair advantage. Allowed modifications are optimization, minimap, inventory management and schematic mods.</li>
-            <li>It is forbidden to exploit game bugs that give you an unfair advantage, such as item duping.</li>
-            <li>It is permitted to use TNT dupers.</li>
+            <li>Don't attack, harm or kill other players against their will.</li>
+            <li>Don't alter or destroy another player's building(s) against their will. When in doubt if a deserted site is still in use, ask a staff member before using it.</li>
+            <li>Don't steal. This applies to farms, too: ask its owner first.</li>
+            <li>Don't kill or steal other player's mobs.</li>
+            <li>Don't use mods that give you an unfair advantage. Allowed mods are optimization, minimap, inventory management and schematic mods.</li>
+            <li>Don't exploit game bugs that give you an unfair advantage, such as item duping.</li>
+            <li>TNT dupers are allowed.</li>
           </ol>
         </div>
       </div>
@@ -65,6 +64,8 @@ div.grid
   grid-area: rules1
 .rules2
   grid-area: rules2
+  @media screen and ($desktop)
+    margin-top: 20px
 .rules3
   grid-area: rules3
 </style>

@@ -54,7 +54,7 @@ div#controls
   bottom: 50px
   z-index: 2
   border-radius: 25px 25px 0 0
-  padding: 10px 30px 0 30px
+  padding: 0 30px
   user-select: none
   @media screen and ($mobile)
     position: relative
@@ -63,6 +63,8 @@ div#controls
     border-radius: 0
     height: 70px
     padding: 10px 30px 20px 30px
+    display: flex
+    justify-content: space-around
   svg
     height: 50px
     width: 50px
@@ -77,15 +79,21 @@ div#controls
     &:hover
       color: $pax-lightcyan
       cursor: pointer
+    @media screen and ($mobile)
+      position: relative
   div#textContainer
     margin: 0 auto
     width: fit-content
     display: flex
+    @media screen and ($mobile)
+      display: none
   p
     text-align: center
   p#index
     @extend .pax-semibold
     font-size: 25pt
+    @media screen and ($mobile)
+      display: none
   span.town
     @extend .pax-regular
     color: white
