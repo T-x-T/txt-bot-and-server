@@ -35,7 +35,7 @@ module.exports = {
   }
 };
 
-global.g.emitter.emit('contact_new', (subject, text) => {
+global.g.emitter.on('contact_new', (subject, text) => {
   main.contact.new(subject, text);
 });
 

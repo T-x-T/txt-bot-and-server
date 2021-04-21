@@ -7,6 +7,7 @@
 const qs = require("querystring");
 const https = require("https");
 const discord_api = require("../discord_api/index.js");
+import util = require("util");
 import Discord = require("discord.js");
 
 var client: Discord.Client;
@@ -18,7 +19,6 @@ global.g.emitter.once('discord_bot_ready', (_client) => {
 const main = {
   returnAccessLevel(userID) {
     let access_level = 0;
-    console.log(client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).roles)
     try {
       if(client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).roles.has(global.g.config.discord_bot.roles.paxterya)) access_level = 3;
       if(client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).roles.has(global.g.config.discord_bot.roles.cool)) access_level = 4;

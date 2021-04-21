@@ -1,6 +1,6 @@
 const discord_helpers = require("./helpers.js");
 
-global.g.emitter.emit('youtube_new', (video) => {
+global.g.emitter.on('youtube_new', (video) => {
   global.g.log(0, 'discord_bot', 'event youtube_new received', {video: video});
   discord_helpers.sendMessage(`New Video: ${video.title} by ${video.channel_title}\n${video.url}\n<@&${video.channel.role}>`, video.channel.channel_id, function (err) {
     if(err) {
@@ -9,11 +9,11 @@ global.g.emitter.emit('youtube_new', (video) => {
   });
 });
 
-global.g.emitter.emit('contact_new', (subject, text) => {
+global.g.emitter.on('contact_new', (subject, text) => {
   discord_helpers.sendMessage(`Someone used the contact form!\nSubject: ${subject}\nBody: ${text}`, global.g.config.discord_bot.channel.new_application_announcement, function (err) {});
 });
 
-global.g.emitter.emit('crash', (err, origin) => {
+global.g.emitter.on('crash', (err, origin) => {
   discord_helpers.sendMessage(`HELP I crashed:\n${err.stack}\n\n${origin}`, global.g.config.discord_bot.channel.logs, function (err) {});
 });
 

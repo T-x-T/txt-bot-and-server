@@ -8,7 +8,7 @@ const memberFactory = new MemberFactory({});
 memberFactory.connect();
 
 let client;
-global.g.emitter.emit('discord_bot_ready', (_client) => {
+global.g.emitter.once('discord_bot_ready', (_client) => {
   client = _client;
 });
 
