@@ -6,9 +6,11 @@ WORKDIR /srv/txt_bot_and_server/
 # Bundle APP files
 COPY . .
 
+# Install OS dependencies
+RUN apt update && apt install node-typescript
+
 # Install app dependencies
 ENV NPM_CONFIG_LOGLEVEL warn
-RUN npm install typescript tsc
 RUN npm install --production
 
 # Build
