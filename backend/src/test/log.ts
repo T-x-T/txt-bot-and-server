@@ -5,12 +5,11 @@ const log = require("../log");
 const Mongo = require("../persistance/mongo.js");
 
 //Stolen from stackoverflow: https://stackoverflow.com/a/27872144
-function randomString(len, an) {
-  an = an && an.toLowerCase();
+function randomString(len) {
   var str = "",
     i = 0,
-    min = an == "a" ? 10 : 0,
-    max = an == "n" ? 10 : 62;
+    min = 0,
+    max = 62;
   for(; i++ < len;) {
     var r = Math.random() * (max - min) + min << 0;
     str += String.fromCharCode(r += r > 9 ? r < 36 ? 55 : 61 : 48);
@@ -41,10 +40,10 @@ describe("log", function(){
   describe("write", function(){
     it("the input should be correctly saved in the database with randomized inputs", async function(){
       for(let i = 0; i < 100; i++){
-        let level = Number.parseInt(Math.random() * 3);
-        let component = randomString(Number.parseInt(Math.random() * 10));
-        let name = randomString(Number.parseInt(Math.random() * 100));
-        let payload = {key: randomString(Number.parseInt(Math.random() * 100)), depth: {another_key: randomString(Number.parseInt(Math.random() * 80))}};
+        let level = Math.ceil(Math.random() * 3);
+        let component = randomString(Math.ceil(Math.random() * 10));
+        let name = randomString(Math.ceil(Math.random() * 100));
+        let payload = {key: randomString(Math.ceil(Math.random() * 100)), depth: {another_key: randomString(Math.ceil(Math.random() * 80))}};
         
         let logEntry = await log.write(level, component, name, payload);
 
@@ -57,11 +56,11 @@ describe("log", function(){
 
     it("the input should be correctly saved in the database with randomized inputs and timestamp", async function () {
       for(let i = 0; i < 100; i++) {
-        let level = Number.parseInt(Math.random() * 3);
-        let component = randomString(Number.parseInt(Math.random() * 10));
-        let name = randomString(Number.parseInt(Math.random() * 100));
-        let payload = {key: randomString(Number.parseInt(Math.random() * 100)), depth: {another_key: randomString(Number.parseInt(Math.random() * 80))}};
-        let timestamp = Date.now() - Number.parseInt(Math.random() * 1000000);
+        let level = Math.ceil(Math.random() * 3);
+        let component = randomString(Math.ceil(Math.random() * 10));
+        let name = randomString(Math.ceil(Math.random() * 100));
+        let payload = {key: randomString(Math.ceil(Math.random() * 100)), depth: {another_key: randomString(Math.ceil(Math.random() * 80))}};
+        let timestamp = Date.now() - Math.ceil(Math.random() * 1000000);
 
         let logEntry = await log.write(level, component, name, payload, timestamp);
 
@@ -128,10 +127,10 @@ describe("log", function(){
 
     it("should return the correct log", async function(){
       for(let i = 0; i < 100; i++) {
-        let level = Number.parseInt(Math.random() * 3);
-        let component = randomString(Number.parseInt(Math.random() * 10));
-        let name = randomString(Number.parseInt(Math.random() * 100));
-        let payload = {key: randomString(Number.parseInt(Math.random() * 100)), depth: {another_key: randomString(Number.parseInt(Math.random() * 80))}};
+        let level = Math.ceil(Math.random() * 3);
+        let component = randomString(Math.ceil(Math.random() * 10));
+        let name = randomString(Math.ceil(Math.random() * 100));
+        let payload = {key: randomString(Math.ceil(Math.random() * 100)), depth: {another_key: randomString(Math.ceil(Math.random() * 80))}};
 
         let id = await log.write(level, component, name, payload);
         let logEntry = await log.readById(id);
@@ -186,3 +185,5 @@ describe("log", function(){
     });
   });
 });
+
+export default {}

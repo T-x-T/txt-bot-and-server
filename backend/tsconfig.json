@@ -2,9 +2,6 @@
   "include": [
     "src"
   ],
-  "exclude": [
-    "src/test/*"
-  ],
   "files": [
     "src/global.d.ts"
   ],

@@ -272,7 +272,7 @@ describe("application", function(){
     });
 
     it("send accepted mail", function(){
-      return new Promise(async (resolve, reject) => {
+      return new Promise<void>(async (resolve, reject) => {
         global.g.emitter.once("testing_email_sendApplicationAcceptedMail", application => {
           assert.strictEqual(application.getId(), 0);
           resolve();
@@ -347,7 +347,7 @@ describe("application", function(){
     });
 
     it("send welcome message", function(){
-      return new Promise(async (resolve, reject) => {
+      return new Promise<void>(async (resolve, reject) => {
         global.g.emitter.once("testing_discordHelpers_sendMessage", (message, channelId) => {
           global.g.emitter.once("testing_discordHelpers_sendMessage", (message, channelId) => {
             assert.ok(message.includes("293029505457586176"));
@@ -362,7 +362,7 @@ describe("application", function(){
     });
 
     it("add member to whitelist", function(){
-      return new Promise(async (resolve, reject) => {
+      return new Promise<void>(async (resolve, reject) => {
         global.g.emitter.once("testing_minecraft_rcon_send", cmd => {
           assert.strictEqual(cmd, "whitelist add The__TxT");
           resolve();
@@ -374,7 +374,7 @@ describe("application", function(){
     });
 
     it("add member to paxterya role", function(){
-      return new Promise(async (resolve, reject) => {
+      return new Promise<void>(async (resolve, reject) => {
         let application = await createAndSaveApplication();
 
         global.g.emitter.once("testing_discordHelpers_addMemberToRole", (discordId, roleId) => {
@@ -388,7 +388,7 @@ describe("application", function(){
     });
 
     it("set correct nickname in discord", function(){
-      return new Promise(async (resolve, reject) => {
+      return new Promise<void>(async (resolve, reject) => {
         discord_helpers.getMemberObjectById("293029505457586176", async discordMember => {
           discordMember.setNickname("test");
           let application = await createAndSaveApplication();
@@ -512,3 +512,5 @@ describe("application", function(){
     });
   });
 });
+
+export default {}

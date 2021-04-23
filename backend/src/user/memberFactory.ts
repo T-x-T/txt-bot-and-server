@@ -86,3 +86,5 @@ module.exports = class MemberFactory extends Factory{
     });
   }
 }
+
+export default {}

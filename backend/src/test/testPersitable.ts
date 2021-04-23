@@ -33,3 +33,5 @@ class Test extends Persistable{
 Test.schema = schema;
 
 module.exports = Test;
+
+export default {}

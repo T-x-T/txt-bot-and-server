@@ -5,12 +5,11 @@ const blog = require("../blog");
 const Mongo = require("../persistance/mongo.js");
 
 //Stolen from stackoverflow: https://stackoverflow.com/a/27872144
-function randomString(len, an) {
-  an = an && an.toLowerCase();
+function randomString(len) {
   var str = "",
     i = 0,
-    min = an == "a" ? 10 : 0,
-    max = an == "n" ? 10 : 62;
+    min = 0,
+    max = 62;
   for(; i++ < len;) {
     var r = Math.random() * (max - min) + min << 0;
     str += String.fromCharCode(r += r > 9 ? r < 36 ? 55 : 61 : 48);
@@ -71,13 +70,13 @@ describe("blog", function(){
 
     it("save random data correctly", async function(){
       for(let i = 0; i < 100; i++){
-        let title = randomString(Number.parseInt(Math.random() * 100)) + "a";
-        let author = randomString(Number.parseInt(Math.random() * 100)) + "a";
-        let body = randomString(Number.parseInt(Math.random() * 100)) + "a";
-        let date = new Date(Number.parseInt(Math.random() * 10000000));
-        let public = Math.random() > 0.5 ? true : false;
+        let title = randomString(Math.ceil(Math.random() * 100)) + "a";
+        let author = randomString(Math.ceil(Math.random() * 100)) + "a";
+        let body = randomString(Math.ceil(Math.random() * 100)) + "a";
+        let date = new Date(Math.ceil(Math.random() * 10000000));
+        let visible = Math.random() > 0.5 ? true : false;
         
-        await blog.create({title: title, author: author, body: body, date: date, public: public});
+        await blog.create({title: title, author: author, body: body, date: date, public: visible});
         let res = await blog.getAll();
         res = res[res.length - 1];
         
@@ -85,7 +84,7 @@ describe("blog", function(){
         assert.strictEqual(res.author, author);
         assert.strictEqual(res.body, body);
         assert.deepStrictEqual(res.date, date);
-        assert.strictEqual(res.public, public);
+        assert.strictEqual(res.public, visible);
       }
     });
   });
@@ -129,13 +128,13 @@ describe("blog", function(){
       for(let i = 0; i < 100; i++){
         await blog.create({title: "title", author: "author", body: "body", public: false});
 
-        let title = randomString(Number.parseInt(Math.random() * 100)) + "a";
-        let author = randomString(Number.parseInt(Math.random() * 100)) + "a";
-        let body = randomString(Number.parseInt(Math.random() * 100)) + "a";
-        let date = new Date(Number.parseInt(Math.random() * 10000000));
-        let public = Math.random() > 0.5 ? true : false;
+        let title = randomString(Math.ceil(Math.random() * 100)) + "a";
+        let author = randomString(Math.ceil(Math.random() * 100)) + "a";
+        let body = randomString(Math.ceil(Math.random() * 100)) + "a";
+        let date = new Date(Math.ceil(Math.random() * 10000000));
+        let visible = Math.random() > 0.5 ? true : false;
 
-        await blog.replace({id: i, title: title, author: author, body: body, date: date, public: public});
+        await blog.replace({id: i, title: title, author: author, body: body, date: date, public: visible});
         let res = await blog.getAll();
         res = res[res.length - 1];
 
@@ -143,7 +142,7 @@ describe("blog", function(){
         assert.strictEqual(res.author, author);
         assert.strictEqual(res.body, body);
         assert.deepStrictEqual(res.date, date);
-        assert.strictEqual(res.public, public);
+        assert.strictEqual(res.public, visible);
       }
     });
   });
@@ -156,13 +155,13 @@ describe("blog", function(){
 
     it("return an array of length 100 with 100 elements in db", async function(){
       for(let i = 0; i < 100; i++) {
-        let title = randomString(Number.parseInt(Math.random() * 100)) + "a";
-        let author = randomString(Number.parseInt(Math.random() * 100)) + "a";
-        let body = randomString(Number.parseInt(Math.random() * 100)) + "a";
-        let date = new Date(Number.parseInt(Math.random() * 10000000));
-        let public = Math.random() > 0.5 ? true : false;
+        let title = randomString(Math.ceil(Math.random() * 100)) + "a";
+        let author = randomString(Math.ceil(Math.random() * 100)) + "a";
+        let body = randomString(Math.ceil(Math.random() * 100)) + "a";
+        let date = new Date(Math.ceil(Math.random() * 10000000));
+        let visible = Math.random() > 0.5 ? true : false;
 
-        await blog.create({title: title, author: author, body: body, date: date, public: public});
+        await blog.create({title: title, author: author, body: body, date: date, public: visible});
       }
       let res = await blog.getAll();
       assert.strictEqual(res.length, 100);
@@ -170,13 +169,13 @@ describe("blog", function(){
 
     it("retrieve random data correctly", async function() {
       for(let i = 0; i < 100; i++) {
-        let title = randomString(Number.parseInt(Math.random() * 100)) + "a";
-        let author = randomString(Number.parseInt(Math.random() * 100)) + "a";
-        let body = randomString(Number.parseInt(Math.random() * 100)) + "a";
-        let date = new Date(Number.parseInt(Math.random() * 10000000));
-        let public = Math.random() > 0.5 ? true : false;
+        let title = randomString(Math.ceil(Math.random() * 100)) + "a";
+        let author = randomString(Math.ceil(Math.random() * 100)) + "a";
+        let body = randomString(Math.ceil(Math.random() * 100)) + "a";
+        let date = new Date(Math.ceil(Math.random() * 10000000));
+        let visible = Math.random() > 0.5 ? true : false;
 
-        await blog.create({title: title, author: author, body: body, date: date, public: public});
+        await blog.create({title: title, author: author, body: body, date: date, public: visible});
         let res = await blog.getAll();
         res = res[res.length - 1];
 
@@ -184,7 +183,7 @@ describe("blog", function(){
         assert.strictEqual(res.author, author);
         assert.strictEqual(res.body, body);
         assert.deepStrictEqual(res.date, date);
-        assert.strictEqual(res.public, public);
+        assert.strictEqual(res.public, visible);
       }
     });
   });
@@ -232,13 +231,13 @@ describe("blog", function(){
 
     it("retrieve public random data correctly", async function() {
       for(let i = 0; i < 100; i++) {
-        let title = randomString(Number.parseInt(Math.random() * 100)) + "a";
-        let author = randomString(Number.parseInt(Math.random() * 100)) + "a";
-        let body = randomString(Number.parseInt(Math.random() * 100)) + "a";
-        let date = new Date(Number.parseInt(Math.random() * 10000000));
-        let public = true;
+        let title = randomString(Math.ceil(Math.random() * 100)) + "a";
+        let author = randomString(Math.ceil(Math.random() * 100)) + "a";
+        let body = randomString(Math.ceil(Math.random() * 100)) + "a";
+        let date = new Date(Math.ceil(Math.random() * 10000000));
+        let visible = true;
 
-        await blog.create({title: title, author: author, body: body, date: date, public: public});
+        await blog.create({title: title, author: author, body: body, date: date, public: visible});
         let res = await blog.getPublic();
         res = res[res.length - 1];
 
@@ -246,7 +245,7 @@ describe("blog", function(){
         assert.strictEqual(res.author, author);
         assert.strictEqual(res.body, body);
         assert.deepStrictEqual(res.date, date);
-        assert.strictEqual(res.public, public);
+        assert.strictEqual(res.public, visible);
       }
     });
   });
@@ -284,21 +283,23 @@ describe("blog", function(){
 
     it("retrieve random data correctly", async function() {
       for(let i = 0; i < 100; i++) {
-        let title = randomString(Number.parseInt(Math.random() * 100)) + "a";
-        let author = randomString(Number.parseInt(Math.random() * 100)) + "a";
-        let body = randomString(Number.parseInt(Math.random() * 100)) + "a";
-        let date = new Date(Number.parseInt(Math.random() * 10000000));
-        let public = Math.random() > 0.5 ? true : false;
+        let title = randomString(Math.ceil(Math.random() * 100)) + "a";
+        let author = randomString(Math.ceil(Math.random() * 100)) + "a";
+        let body = randomString(Math.ceil(Math.random() * 100)) + "a";
+        let date = new Date(Math.ceil(Math.random() * 10000000));
+        let visible = Math.random() > 0.5 ? true : false;
 
-        await blog.create({title: title, author: author, body: body, date: date, public: public});
+        await blog.create({title: title, author: author, body: body, date: date, public: visible});
         let res = await blog.getNewest();
 
         assert.strictEqual(res.title, title);
         assert.strictEqual(res.author, author);
         assert.strictEqual(res.body, body);
         assert.deepStrictEqual(res.date, date);
-        assert.strictEqual(res.public, public);
+        assert.strictEqual(res.public, visible);
       }
     });
   });
 });
+
+export default {}

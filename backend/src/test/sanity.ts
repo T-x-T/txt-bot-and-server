@@ -10,3 +10,5 @@ describe('sanity-checks', function(){
     assert.ok(!false);
   })
 });
+
+export default {}

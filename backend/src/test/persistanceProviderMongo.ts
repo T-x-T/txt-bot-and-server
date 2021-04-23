@@ -16,7 +16,8 @@ const schema = {
 
 const example_entry = {
   text: "hello world!",
-  bool: true
+  bool: true,
+  id: undefined
 };
 
 async function getConnection(){
@@ -39,7 +40,7 @@ async function saveMultipleExamples(count){
 describe("PersistanceProvider mongo", function(){
   
   after("clean test DB", async function(){
-    con = await getConnection();
+    const con = await getConnection();
     await con.deleteAll();
   });
 
@@ -271,3 +272,5 @@ describe("PersistanceProvider mongo", function(){
     });
   });
 });
+
+export default {}

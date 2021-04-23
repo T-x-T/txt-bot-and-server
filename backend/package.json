@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "nyc mocha --exit -t 1000000 src/test/",
+    "test": "cd dist && nyc mocha --exit -t 1000000 test/",
     "prod": "index.js",
     "compile": "tsc"
   },

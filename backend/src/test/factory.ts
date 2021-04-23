@@ -52,3 +52,5 @@ describe("factory base class", function(){
     });
   });
 });
+
+export default {}

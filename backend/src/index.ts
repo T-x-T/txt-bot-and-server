@@ -7,8 +7,7 @@
 global.g = {};
 global.g.ENVIRONMENT = process.env.NODE_ENV ? process.env.NODE_ENV : 'staging';
 console.log(global.g.ENVIRONMENT)
-const config = require("../config.js");
-config();
+require("../config.js")();
 
 //Setup the global emitter
 const EventEmitter = require("events");
@@ -36,9 +35,6 @@ global.g.log = log.write;
 //Log that the app got started
 global.g.log(1, 'index', 'Application started', null);
 
-//Create the container
-var app = {};
-
 process.on('uncaughtException', (err, origin) => {
   global.g.emitter.emit("crash", err, origin);
   console.error(err.stack);
@@ -47,5 +43,4 @@ process.on('uncaughtException', (err, origin) => {
   }, 200);
 });
 
-//Export the container
-module.exports = app;
+export default {}

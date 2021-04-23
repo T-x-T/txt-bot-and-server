@@ -6,31 +6,31 @@ const Factory = require("../persistance/factory.js");
 let dbOptions = {};
 
 const blog = {
-  async create(blog) {
-    if(!isValid(blog)) throw new Error("Incorrect Input! title, author and body must be truthy");
+  async create(input) {
+    if(!isValid(input)) throw new Error("Incorrect Input! title, author and body must be truthy");
 
     let persistable = new Persistable(dbOptions);
     await persistable.init();
 
-    if(!blog.date) blog.date = new Date();
-    persistable.data = blog;
+    if(!input.date) input.date = new Date();
+    persistable.data = input;
 
     await persistable.create();
     return persistable.data;
   },
 
-  async replace(blog) {
-    if(!isValid(blog)) throw new Error("Incorrect Input! title, author and body must be truthy");
-    if(!blog.hasOwnProperty("id") || typeof blog.id !== "number") throw new Error("blog must contain numerical id to replace");
+  async replace(input) {
+    if(!isValid(input)) throw new Error("Incorrect Input! title, author and body must be truthy");
+    if(!input.hasOwnProperty("id") || typeof input.id !== "number") throw new Error("blog must contain numerical id to replace");
 
     let blogFromDb = new Persistable(dbOptions);
     await blogFromDb.init();
-    blogFromDb.data = await blog.getFiltered({id: blog.id});
+    blogFromDb.data = await blog.getFiltered({id: input.id});
 
     if(blogFromDb.data.length === 0) throw new Error("no blog with given id found");
 
-    if(!blog.date) blog.date = new Date();
-    blogFromDb.data = blog;
+    if(!input.date) input.date = new Date();
+    blogFromDb.data = input;
 
     await blogFromDb.save();
     return blogFromDb.data;
@@ -77,8 +77,8 @@ const blog = {
   }
 }
 
-function isValid(blog) {
-  return blog.title && blog.author && blog.body;
+function isValid(input) {
+  return input.title && input.author && input.body;
 }
 
 dbOptions = {name: "post", schema: blog.schema};

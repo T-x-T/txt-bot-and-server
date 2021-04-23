@@ -25,3 +25,5 @@ describe("persistable", function(){
     });
   });
 });
+
+export default {}

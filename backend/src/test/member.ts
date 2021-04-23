@@ -504,16 +504,16 @@ describe("member", function(){
 
     it("get all with three members in the db should return an array with a length of three", async function () {
       await createAndSaveNewMember();
-      await memberFactory.create("243874567867596800", "MrSprouse#0001", "4fe6104dec5e4c8db78ebe3fe1ac36f8", "MrSprouse", "germany", 7, 2000, true, true);
-      await memberFactory.create("385133822762811394", "Mufon#7787", "28fc533e641f440fbe3a9bb0f8c5bed6", "Mufon59", "germany", 7, 2000, true, true);
+      await global.g.memberFactory.create("243874567867596800", "MrSprouse#0001", "4fe6104dec5e4c8db78ebe3fe1ac36f8", "MrSprouse", "germany", 7, 2000, true, true);
+      await global.g.memberFactory.create("385133822762811394", "Mufon#7787", "28fc533e641f440fbe3a9bb0f8c5bed6", "Mufon59", "germany", 7, 2000, true, true);
       let members = await new MemberFactory().getAll();
       assert.strictEqual(members.length, 3);
     });
 
     it("get all with three members in the db should return a valid member object", async function () {
       await createAndSaveNewMember();
-      await memberFactory.create("243874567867596800", "MrSprouse#0001", "4fe6104dec5e4c8db78ebe3fe1ac36f8", "MrSprouse", "germany", 7, 2000, true, true);
-      await memberFactory.create("385133822762811394", "Mufon#7787", "28fc533e641f440fbe3a9bb0f8c5bed6", "Mufon59", "germany", 7, 2000, true, true);
+      await global.g.memberFactory.create("243874567867596800", "MrSprouse#0001", "4fe6104dec5e4c8db78ebe3fe1ac36f8", "MrSprouse", "germany", 7, 2000, true, true);
+      await global.g.memberFactory.create("385133822762811394", "Mufon#7787", "28fc533e641f440fbe3a9bb0f8c5bed6", "Mufon59", "germany", 7, 2000, true, true);
 
       let members = await new MemberFactory().getAll();
       let member = members.find(m => m.getDiscordId() === "385133822762811394");
@@ -529,15 +529,15 @@ describe("member", function(){
 
     it("getAllWhitelisted should only return members with status 1", async function(){
       let m1 = await createAndSaveNewMember();
-      let m2 = await memberFactory.create("243874567867596800", "MrSprouse#0001", "4fe6104dec5e4c8db78ebe3fe1ac36f8", "MrSprouse", "germany", 7, 2000, true, true, 1);
-      await memberFactory.create("385133822762811394", "Mufon#7787", "28fc533e641f440fbe3a9bb0f8c5bed6", "Mufon59", "germany", 7, 2000, true, true, 1);
-      await memberFactory.create("455808529627086848", "PyroChicken#3588", "e31a7dbd39cb42658c751958c6c200d1", "PyroChicken99", "germany", 7, 2000, true, true, 1);
+      let m2 = await global.g.memberFactory.create("243874567867596800", "MrSprouse#0001", "4fe6104dec5e4c8db78ebe3fe1ac36f8", "MrSprouse", "germany", 7, 2000, true, true, 1);
+      await global.g.memberFactory.create("385133822762811394", "Mufon#7787", "28fc533e641f440fbe3a9bb0f8c5bed6", "Mufon59", "germany", 7, 2000, true, true, 1);
+      await global.g.memberFactory.create("455808529627086848", "PyroChicken#3588", "e31a7dbd39cb42658c751958c6c200d1", "PyroChicken99", "germany", 7, 2000, true, true, 1);
       m1.setStatus(0);
       await m1.save();
       m2.setStatus(0);
       await m2.save();
 
-      let res = await memberFactory.getAllWhitelisted();
+      let res = await global.g.memberFactory.getAllWhitelisted();
       assert.strictEqual(res.length, 2);
 
       let member = res.find(m => m.getDiscordId() === "385133822762811394");
@@ -690,7 +690,7 @@ describe("member", function(){
         if (count === 0) assert.strictEqual(cmd, "whitelist remove The__TxT");
         if (count === 1) {
           assert.strictEqual(cmd, "ban The__TxT");
-          emitter.removeAllListeners("testing_minecraft_rcon_send");
+          global.g.emitter.removeAllListeners("testing_minecraft_rcon_send");
         }
         count = 1;
       });
@@ -699,3 +699,5 @@ describe("member", function(){
     });
   });
 });
+
+export default {}

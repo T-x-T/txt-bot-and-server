@@ -22,3 +22,5 @@ class TestFactory extends Factory{
 }
 
 module.exports = TestFactory;
+
+export default {}

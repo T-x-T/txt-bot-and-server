@@ -4,21 +4,21 @@
  */
 
 //Configure config
+global.g = {};
 global.g.ENVIRONMENT = 'testing';
 console.log(global.g.ENVIRONMENT)
-require('../../global.g.config.js')();
+require('../../config.js')();
 
 //Setup the global emitter
 const EventEmitter = require('events');
-class Emitter extends EventEmitter {}
-emitter = new Emitter();
+global.g.emitter = new EventEmitter();
 
 //Require all modules for init
 require('../discord_bot/main.js');
 require('../discord_api');
 
 require('../auth');
-require('../log');
+const log = require('../log');
 
 require('../stats');
 require('../youtube');
@@ -28,20 +28,19 @@ require('../web/webServer.js');
 require('../email');
 require('../minecraft');
 
+//Make log.write global
+global.g.log = log.write;
+
 //setup global factories
 const MemberFactory = require('../user/memberFactory.js');
 global.g.memberFactory = new MemberFactory();
 global.g.memberFactory.connect(); //This isnt await, might cause problems
 
-
-//Dependencies
-const log = require('../log'); //lgtm [js/unused-local-variable]
-
 global.g.log(0, 'test', 'Mocha test started', false);
 
 before("start discord_bot", function(done){
   this.timeout(10000);
-  global.g.emitter.emit("discord_bot_ready", () => done());
+  global.g.emitter.once("discord_bot_ready", () => done());
 
   const discord_bot = require("../discord_bot");
 });
@@ -51,3 +50,5 @@ process.on('unhandledRejection', (reason, promise) => {
   console.log(reason);
   throw promise 
 });
+
+export default {}
