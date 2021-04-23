@@ -1,10 +1,13 @@
-FROM keymetrics/pm2:latest-alpine
+FROM keymetrics/pm2:latest
 
 # Set workdir
 WORKDIR /srv/txt_bot_and_server/
 
 # Bundle APP files
 COPY . .
+
+# Install OS dependencies
+RUN apt update && apt install typescript tsc
 
 # Install app dependencies
 ENV NPM_CONFIG_LOGLEVEL warn
