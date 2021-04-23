@@ -1,6 +1,6 @@
 {
   "name": "txt-bot-and-server",
-  "script": "index.js",
+  "script": "dist/index.js",
   "instances": "1",
   "env": {
     "NODE_ENV": "prod"

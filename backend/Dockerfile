@@ -10,6 +10,9 @@ COPY . .
 ENV NPM_CONFIG_LOGLEVEL warn
 RUN npm install --production
 
+# Build
+RUN npm run build
+
 # expose port
 EXPOSE 4000
 

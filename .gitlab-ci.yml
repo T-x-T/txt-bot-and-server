@@ -13,10 +13,10 @@ test:
   - mongo:latest
   script:
   - cd backend
-  - npm build
+  - npm run build
   - npm i
   - cp $config ./config.js
-  - npm test
+  - npm run test
 build:
   image: docker:19.03.11
   stage: build
