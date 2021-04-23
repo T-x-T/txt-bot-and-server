@@ -7,7 +7,7 @@ WORKDIR /srv/txt_bot_and_server/
 COPY . .
 
 # Install OS dependencies
-RUN apt update && apt install node-typescript
+RUN apt update && apt install node-typescript -y
 
 # Install app dependencies
 ENV NPM_CONFIG_LOGLEVEL warn
