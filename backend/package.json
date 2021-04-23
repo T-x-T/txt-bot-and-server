@@ -2,7 +2,8 @@
   "scripts": {
     "test": "cd dist && nyc mocha --exit -t 1000000 test/",
     "prod": "index.js",
-    "compile": "tsc"
+    "compile": "tsc",
+    "build": "tsc -b"
   },
   "name": "txt-bot-and-server",
   "description": "Combination of all Software related to txt's discord and servers",

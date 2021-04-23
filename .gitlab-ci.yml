@@ -13,6 +13,7 @@ test:
   - mongo:latest
   script:
   - cd backend
+  - npm build
   - npm i
   - cp $config ./config.js
   - npm test
