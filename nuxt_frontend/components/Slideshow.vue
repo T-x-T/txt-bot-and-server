@@ -126,32 +126,18 @@ export default {
         "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_11.png_1080.webp",
         "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_12.png_1080.webp",
         "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_13.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_20.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_21.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_22.png_1080.webp"
       ],
       "Town of Paxterya": [
-        "https://stor.paxterya.com/website/screenshots/top_01.webp",
-        "https://stor.paxterya.com/website/screenshots/top_02.webp",
-        "https://stor.paxterya.com/website/screenshots/top_03.webp",
-        "https://stor.paxterya.com/website/screenshots/top_04.webp",
-        "https://stor.paxterya.com/website/screenshots/top_05.webp",
-        "https://stor.paxterya.com/website/screenshots/top_06.webp",
-        "https://stor.paxterya.com/website/screenshots/top_07.webp",
-        "https://stor.paxterya.com/website/screenshots/top_08.webp",
-        "https://stor.paxterya.com/website/screenshots/top_09.webp",
-        "https://stor.paxterya.com/website/screenshots/top_10.webp"
-      ],
-      "Penliam": [
-        "https://stor.paxterya.com/website/screenshots/penliam_01.webp",
-        "https://stor.paxterya.com/website/screenshots/penliam_02.webp",
-        "https://stor.paxterya.com/website/screenshots/penliam_03.webp",
-        "https://stor.paxterya.com/website/screenshots/penliam_04.webp",
-        "https://stor.paxterya.com/website/screenshots/penliam_05.webp",
-        "https://stor.paxterya.com/website/screenshots/penliam_06.webp"
-      ],
-      "Cookieville": [
-        "https://stor.paxterya.com/website/screenshots/cookietown_01.webp",
-        "https://stor.paxterya.com/website/screenshots/cookietown_02.webp",
-        "https://stor.paxterya.com/website/screenshots/cookietown_03.webp",
-        "https://stor.paxterya.com/website/screenshots/cookietown_04.webp"
+        "https://stor.paxterya.com/website/screenshots/2021-04/top_01.jpg_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-04/top_02.jpg_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-04/top_03.jpg_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-04/top_04.jpg_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-04/top_05.jpg_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-04/top_06.jpg_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-04/top_07.jpg_1080.webp"
       ]
     }
   }),
