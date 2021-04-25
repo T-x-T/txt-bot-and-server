@@ -1,14 +1,14 @@
 {
   "scripts": {
     "test": "cd dist && nyc mocha --exit -t 1000000 test/",
-    "prod": "index.js",
+    "prod": "cd dist && node index.js",
     "compile": "tsc",
     "build": "tsc -b"
   },
   "name": "txt-bot-and-server",
   "description": "Combination of all Software related to txt's discord and servers",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "directories": {
     "test": "src/test"
   },

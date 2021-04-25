@@ -1,4 +1,4 @@
-FROM keymetrics/pm2:latest
+FROM node:alpine
 
 # Set workdir
 WORKDIR /srv/txt_bot_and_server/
@@ -13,4 +13,4 @@ RUN npm install --production
 # expose port
 EXPOSE 4000
 
-CMD [ "pm2-runtime", "start", "pm2.json" ]
+CMD [ "npm", "run", "prod" ]
