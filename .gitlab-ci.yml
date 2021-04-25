@@ -10,6 +10,7 @@ compile_backend:
   stage: compile
   image: node:latest
   script:
+    - cd backend
     - npm i --dev
     - npm run build
   artifacts:
