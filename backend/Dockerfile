@@ -6,19 +6,11 @@ WORKDIR /srv/txt_bot_and_server/
 # Bundle APP files
 COPY . .
 
-# Install OS dependencies
-RUN apt update && apt install node-typescript -y
-
 # Install app dependencies
 ENV NPM_CONFIG_LOGLEVEL warn
 RUN npm install --production
 
-# Build
-RUN npm run build
-
 # expose port
 EXPOSE 4000
-
-
 
 CMD [ "pm2-runtime", "start", "pm2.json" ]
