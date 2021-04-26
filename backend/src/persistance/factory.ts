@@ -1,11 +1,11 @@
 //This is a base clase that needs to be inherited by all classes that implement factories
 
 module.exports = class Factory{
-  persistanceProvider;
+  persistanceProvider: any; //TODO: fix any
   options;
   connected = false;
 
-  constructor(options){
+  constructor(options: any){ //TODO: fix any
     this.options = options;
     this._initializePersitanceProvider();
   }
@@ -27,7 +27,7 @@ module.exports = class Factory{
           this.connected = true;
           resolve(null);
         })
-        .catch(e => reject(e));
+        .catch((e: Error) => reject(e));
     });
   }  
 }

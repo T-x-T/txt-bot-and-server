@@ -5,9 +5,10 @@
 
 //Dependencies
 const main = require("./email.js");
+import type {Application} from "../application/application.js";
 
 module.exports = {
-  sendNewApplicationMail(application) {
+  sendNewApplicationMail(application: Application) {
     if(global.g.ENVIRONMENT === "testing") {
       global.g.emitter.emit("testing_email_sendNewApplicationMail", application);
       return;
@@ -16,7 +17,7 @@ module.exports = {
     main.application.confirmation(application);
   },
 
-  sendApplicationDeniedMail(application) {
+  sendApplicationDeniedMail(application: Application) {
     if(global.g.ENVIRONMENT === "testing") {
       global.g.emitter.emit("testing_email_sendApplicationDeniedMail", application);
       return;
@@ -25,7 +26,7 @@ module.exports = {
     main.application.denied(application);
   },
 
-  sendApplicationAcceptedMail(application) {
+  sendApplicationAcceptedMail(application: Application) {
     if(global.g.ENVIRONMENT === "testing") {
       global.g.emitter.emit("testing_email_sendApplicationAcceptedMail", application);
       return;
@@ -35,7 +36,7 @@ module.exports = {
   }
 };
 
-global.g.emitter.on('contact_new', (subject, text) => {
+global.g.emitter.on('contact_new', (subject: string, text: string) => {
   main.contact.new(subject, text);
 });
 

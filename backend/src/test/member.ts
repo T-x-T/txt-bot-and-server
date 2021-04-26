@@ -5,6 +5,8 @@ const Mongo = require("../persistance/mongo.js");
 const assert = require("assert");
 const schema = Member.schema;
 
+import type {Member as TMember} from "../user/member.js";
+
 async function createAndSaveNewMember(){
   let memberFactory = new MemberFactory();
   await memberFactory.connect();
@@ -376,7 +378,7 @@ describe("member", function(){
   });
 
   describe("status", function () {
-    async function createAndSaveNewMemberWithStatus(status) {
+    async function createAndSaveNewMemberWithStatus(status: number) {
       let memberFactory = new MemberFactory();
       await memberFactory.connect();
       let member = await memberFactory.create("293029505457586176", "TxT#0001", "dac25e44d1024f3b819978ed62d209a1", "The__TxT", "germany", 7, 2000, true, true, status);
@@ -516,7 +518,7 @@ describe("member", function(){
       await global.g.memberFactory.create("385133822762811394", "Mufon#7787", "28fc533e641f440fbe3a9bb0f8c5bed6", "Mufon59", "germany", 7, 2000, true, true);
 
       let members = await new MemberFactory().getAll();
-      let member = members.find(m => m.getDiscordId() === "385133822762811394");
+      let member = members.find((m: TMember) => m.getDiscordId() === "385133822762811394");
       assert.strictEqual(member.getDiscordUserName(), "Mufon#7787");
       assert.strictEqual(member.getMcUuid(), "28fc533e641f440fbe3a9bb0f8c5bed6");
       assert.strictEqual(member.getMcIgn(), "Mufon59");
@@ -540,7 +542,7 @@ describe("member", function(){
       let res = await global.g.memberFactory.getAllWhitelisted();
       assert.strictEqual(res.length, 2);
 
-      let member = res.find(m => m.getDiscordId() === "385133822762811394");
+      let member = res.find((m: TMember) => m.getDiscordId() === "385133822762811394");
       assert.strictEqual(member.getDiscordUserName(), "Mufon#7787");
       assert.strictEqual(member.getMcUuid(), "28fc533e641f440fbe3a9bb0f8c5bed6");
       assert.strictEqual(member.getMcIgn(), "Mufon59");
@@ -572,7 +574,7 @@ describe("member", function(){
     });
 
     it("inactivate should take paxterya role away", async function () {
-      global.g.emitter.once("testing_discordHelpers_removeMemberFromRole", (discordId, roleId) => {
+      global.g.emitter.once("testing_discordHelpers_removeMemberFromRole", (discordId: string, roleId: string) => {
         assert.strictEqual(discordId, member.getDiscordId());
         assert.strictEqual(roleId, global.g.config.discord_bot.roles.paxterya);
       });
@@ -582,7 +584,7 @@ describe("member", function(){
     });
 
     it("inactivate should give inactive role", async function () {
-      global.g.emitter.once("testing_discordHelpers_addMemberToRole", (discordId, roleId) => {
+      global.g.emitter.once("testing_discordHelpers_addMemberToRole", (discordId: string, roleId: string) => {
         assert.strictEqual(discordId, member.getDiscordId());
         assert.strictEqual(roleId, global.g.config.discord_bot.roles.inactive);
       });
@@ -594,7 +596,7 @@ describe("member", function(){
     it("inactivate should send whitelist remove command per rcon", async function(){
       let member = await createAndSaveNewMember();
       
-      global.g.emitter.once("testing_minecraft_rcon_send", cmd => {
+      global.g.emitter.once("testing_minecraft_rcon_send", (cmd: string) => {
         assert.strictEqual(cmd, "whitelist remove The__TxT");
       });
 
@@ -610,7 +612,7 @@ describe("member", function(){
     });
 
     it("activate should take inactive role away", async function () {
-      global.g.emitter.once("testing_discordHelpers_removeMemberFromRole", (discordId, roleId) => {
+      global.g.emitter.once("testing_discordHelpers_removeMemberFromRole", (discordId: string, roleId: string) => {
         assert.strictEqual(discordId, member.getDiscordId());
         assert.strictEqual(roleId, global.g.config.discord_bot.roles.inactive);
       });
@@ -620,7 +622,7 @@ describe("member", function(){
     });
 
     it("activate should give paxterya role", async function () {
-      global.g.emitter.once("testing_discordHelpers_addMemberToRole", (discordId, roleId) => {
+      global.g.emitter.once("testing_discordHelpers_addMemberToRole", (discordId: string, roleId: string) => {
         assert.strictEqual(discordId, member.getDiscordId());
         assert.strictEqual(roleId, global.g.config.discord_bot.roles.paxterya);
       });
@@ -632,7 +634,7 @@ describe("member", function(){
     it("activate should send whitelist add command per rcon", async function () {
       let member = await createAndSaveNewMember();
 
-      global.g.emitter.once("testing_minecraft_rcon_send", cmd => {
+      global.g.emitter.once("testing_minecraft_rcon_send", (cmd: string) => {
         assert.strictEqual(cmd, "whitelist add The__TxT");
       });
 
@@ -661,7 +663,7 @@ describe("member", function(){
     it("ban should bans member from discord", async function(){
       let member = await createAndSaveNewMember();
       
-      global.g.emitter.once("testing_discordhelpers_ban", discordId => {
+      global.g.emitter.once("testing_discordhelpers_ban", (discordId: string) => {
         assert.strictEqual(discordId, member.getDiscordId());
       });
 
@@ -686,7 +688,7 @@ describe("member", function(){
     it("ban should send whitelist remove and ban command per rcon", async function(){
       let member = await createAndSaveNewMember();
       let count = 0;
-      global.g.emitter.emit("testing_minecraft_rcon_send", cmd => {
+      global.g.emitter.emit("testing_minecraft_rcon_send", (cmd: string) => {
         if (count === 0) assert.strictEqual(cmd, "whitelist remove The__TxT");
         if (count === 1) {
           assert.strictEqual(cmd, "ban The__TxT");

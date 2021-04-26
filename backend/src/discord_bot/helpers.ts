@@ -4,21 +4,22 @@
 */
 
 import Discord = require("discord.js");
+import type {Application} from "../application/application.js";
 
 //Global var
-var client: Discord.Client;
-global.g.emitter.once('discord_bot_ready', (_client) => {
+let client: Discord.Client;
+global.g.emitter.once('discord_bot_ready', (_client: Discord.Client) => {
   client = _client;
 });
 
 const helpers = {
-  sendNewApplicationMessage(application) {
-    helpers.sendMessage('New application from ' + application.getMcIgn() + '\nYou can find it here: https://paxterya.com/interface', global.g.config.discord_bot.channel.new_application_announcement, function (err) {
-      if(err) global.g.log(2, 'discord_bot', 'discord_bot couldnt send the new application message', {err: err, application: application});
+  sendNewApplicationMessage(application: Application) {
+    helpers.sendMessage('New application from ' + application.getMcIgn() + '\nYou can find it here: https://paxterya.com/interface', global.g.config.discord_bot.channel.new_application_announcement, function (err: Error) {
+      if(err) global.g.log(2, 'discord_bot', 'discord_bot couldnt send the new application message', {err: err.message, application: application});
     });
   },
 
-  sendAcceptedMemberWelcomeMessage(application) {
+  sendAcceptedMemberWelcomeMessage(application: Application) {
     let msg = '';
     if(application.getPublishAboutMe()) msg = `Welcome <@${application.getDiscordId()}> to Paxterya!\nHere is the about me text they sent us:\n${application.getAboutMe()}`;
     else msg = `Welcome <@${application.getDiscordId()}> to Paxterya!`;
@@ -27,13 +28,13 @@ const helpers = {
     msg += `Please also take a look at our FAQ: <#624992850764890122>\n`;
     msg += 'The IP of the survival server is paxterya.com and the IP for the creative Server is paxterya.com:25566\n\n';
     msg += 'If you encounter any issues or have any questions, feel free to contact our staff.'
-    helpers.sendMessage(msg, global.g.config.discord_bot.channel.new_member_announcement, function (err) {
-      if(err) global.g.log(2, 'discord_bot', 'discord_bot couldnt send the welcome message', {err: err, application: application});
+    helpers.sendMessage(msg, global.g.config.discord_bot.channel.new_member_announcement, function (err: Error) {
+      if(err) global.g.log(2, 'discord_bot', 'discord_bot couldnt send the welcome message', {err: err.message, application: application});
     });
   },
 
   //Get the nickname of user by their id
-  getNicknameByID(userID, callback) {
+  getNicknameByID(userID: string, callback: Function) {
     try {
       callback(`${client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).user.username}#${client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).user.discriminator}`);
     } catch(e) {
@@ -42,27 +43,27 @@ const helpers = {
   },
 
   //Sends a given message in a given channel
-  sendMessage(message, channelID, callback) {
+  sendMessage(message: string, channelID: string, callback?: Function) {
     if(global.g.ENVIRONMENT === "testing") {
       global.g.emitter.emit("testing_discordHelpers_sendMessage", message, channelID);
-      callback(false);
+      if(callback) callback(false);
       return;
     }
 
     let curChannel = client.guilds.get(global.g.config.discord_bot.guild).channels.get(channelID) as Discord.TextChannel;
     curChannel.send(message)
-      .then(message => {
-        callback(false);
+      .then(() => {
+        if(callback) callback(false);
       })
       .catch(e => {
-        callback(e);
+        if(callback) callback(e);
       });
   },
 
   //Returns all roles from the guild defined in global.g.config.js
   //Returns only roles that members are allowed to join/leave themselves!
   returnRoles() {
-    let roles = [];
+    let roles: any[] = []; //TODO: fix any
     client.guilds.get(global.g.config.discord_bot.guild).roles.map(function (item) {
       if(item.name.indexOf('#') > -1) roles.push({id: item.id, name: item.name});
     });
@@ -70,7 +71,7 @@ const helpers = {
   },
 
   //Returns the role ID of a role by name
-  returnRoleId(roleName) {
+  returnRoleId(roleName: string) {
     let id: any = -1;
     client.guilds.get(global.g.config.discord_bot.guild).roles.map(function (item) {
       if(item.name == roleName) id = item.id;
@@ -79,7 +80,7 @@ const helpers = {
   },
 
   //Adds the given discord member to the given role
-  addMemberToRole(discordID, roleID, callback) {
+  addMemberToRole(discordID: string, roleID: string, callback: Function) {
     if(global.g.ENVIRONMENT === "testing") {
       global.g.emitter.emit("testing_discordHelpers_addMemberToRole", discordID, roleID);
       callback(false);
@@ -90,7 +91,7 @@ const helpers = {
       .catch(e => callback(e));
   },
 
-  removeMemberFromRole(discordID, roleID, callback) {
+  removeMemberFromRole(discordID: string, roleID: string, callback: Function) {
     if(global.g.ENVIRONMENT === "testing") {
       global.g.emitter.emit("testing_discordHelpers_removeMemberFromRole", discordID, roleID);
       callback(false);
@@ -101,20 +102,20 @@ const helpers = {
       .catch(e => callback(e));
   },
 
-  hasRole(discordID, roleToCheck) {
+  hasRole(discordID: string, roleToCheck: string) {
     return client.guilds.get(global.g.config.discord_bot.guild).members.get(discordID).roles.has(roleToCheck);
   },
 
   //Returns true if the given discord id is member of the guild and false if not
-  isGuildMember(userID) {
+  isGuildMember(userID: string) {
     return client.guilds.get(global.g.config.discord_bot.guild).members.has(userID);
   },
 
-  setNickname(discordID, newNick) {
+  setNickname(discordID: string, newNick: string) {
     client.guilds.get(global.g.config.discord_bot.guild).members.get(discordID).setNickname(newNick);
   },
 
-  getMemberObjectByID(userID, callback) {
+  getMemberObjectByID(userID: string, callback: Function) {
     try {
       callback(client.guilds.get(global.g.config.discord_bot.guild).members.get(userID));
     } catch(e) {
@@ -122,17 +123,12 @@ const helpers = {
     }
   },
 
-  banMember(userID) {
+  banMember(userID: string) {
     if(global.g.ENVIRONMENT == 'testing') {
       global.g.emitter.emit('testing_discordhelpers_ban', userID);
       return;
     }
     client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).ban();
-  },
-
-  //Init script, needs to be called from discord_bot.js, so we can use the client object here
-  init(origClient) {
-    client = origClient;
   },
 };
 

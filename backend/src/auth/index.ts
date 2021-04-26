@@ -10,7 +10,7 @@ module.exports = {
   //Gets the discord_id from an input
   //input is an object containing one key for the type of input and the value
   //Valid types are: code, token
-  getDiscordId(input, options, callback) {
+  getDiscordId(input: any, options: any, callback: Function) { //TODO: fix any
     global.g.log(0, 'auth', 'index.getDiscordId got called', {input: input, options: options});
     if(input.hasOwnProperty('code')) {
       main.getDiscordIdFromCode(input.code, options.redirect, callback);
@@ -24,7 +24,7 @@ module.exports = {
   //Gets the access_level from an input
   //input is an object containing one key for the type of input and the value
   //Valid types are: code, token, id
-  getAccessLevel(input, options, callback?) {
+  getAccessLevel(input: any, options: any, callback?: Function) { //TODO: fix any
     global.g.log(0, 'auth', 'index.getAccessLevel got called', {input: input, options: options});
     if(input.hasOwnProperty('code')) {
       main.getCodeAccessLevel(input.code, options.redirect, callback);

@@ -8,13 +8,15 @@ const MemberFactory = require("../../user/memberFactory.js");
 const memberFactory = new MemberFactory({});
 memberFactory.connect();
 
+import Discord = require("discord.js");
+
 module.exports = {
   name: 'minecraft',
   description: 'This command provides different functionality for minecraft server integration',
   aliases: ['mc', 'mcserver'],
   usage: '*Sub-Commands:*\nstats ([rank]) [collection]  [mention user to view other stats]\n+mc stats general\n+mc stats rank total',
 
-  execute(message, args) {
+  execute(message: Discord.Message, args: string[]) {
     switch(args[0]){
       case 'stats':
         //User wants to see some stats
@@ -39,7 +41,7 @@ module.exports = {
             if(args[1] == 'rank') {
               //Get the rank flavored stats
               let output = '```';
-              _internals.statsSwitch(args[2], member.getMcUuid(), member.getMcIgn(), true, function (statsOutput) {
+              _internals.statsSwitch(args[2], member.getMcUuid(), member.getMcIgn(), true, function (statsOutput: string) {
                 output += statsOutput;
                 output += '```';
                 message.channel.send(output);
@@ -47,22 +49,22 @@ module.exports = {
             } else {
               //Normal stats
               let output = '```';
-              _internals.statsSwitch(args[1], member.getMcUuid(), member.getMcIgn(), false, function (statsOutput) {
+              _internals.statsSwitch(args[1], member.getMcUuid(), member.getMcIgn(), false, function (statsOutput: string) {
                 output += statsOutput;
                 output += '```';
                 message.channel.send(output);
               });
             }
           })
-          .catch(e => {
-            message.reply('Couldnt get the IGN for that user: ' + e);
+          .catch((e: Error) => {
+            message.reply('Couldnt get the IGN for that user: ' + e.message);
           });
         }else{
           //If we made it here, the user wants to get the stats for all players combined
           let ign = 'all players';
 
           let output = '```';
-          _internals.statsSwitch(args[1], userID, ign, false, function(statsOutput){
+          _internals.statsSwitch(args[1], userID, ign, false, function(statsOutput: string){
             output += statsOutput;
             output += '```';
             message.channel.send(output);
@@ -79,7 +81,7 @@ module.exports = {
         }else{
           server = 'main_smp'
         }
-        minecraft.sendCmd('list', server, function (res) {
+        minecraft.sendCmd('list', server, function (res: string) {
           
           let onlinePlayerCount = parseInt(res.replace('There are ', ''));
           let onlinePlayers = res.split(': ')[1].split(', ');
@@ -109,12 +111,12 @@ module.exports = {
 
 var _internals: any = {};
 
-_internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
+_internals.statsSwitch = function(collection: string, userID: string, ign: string, rankInfo: string, callback: Function){
   const _stats = require('../../stats');
   let output = '';
   switch(collection){
     case 'general':
-      _stats.get('mc', {collection: 'general', rank: rankInfo, uuid: userID}, function(err, stats){
+      _stats.get('mc', {collection: 'general', rank: rankInfo, uuid: userID}, function(err: string, stats: any){
       if(!err){
         if(rankInfo){
           output += `General statistics for ${ign}:\n`;
@@ -149,7 +151,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     });
     break;
     case 'distance':
-      _stats.get('mc', {uuid: userID, collection: 'distances', rank: rankInfo}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'distances', rank: rankInfo}, function(err: string, stats: any){
       if(!err){
         if(rankInfo){
           output += `Distance statistics for ${ign}:\n`;
@@ -186,7 +188,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     });
     break;
     case 'ores':
-      _stats.get('mc', {uuid: userID, collection: 'minedOres', rank: rankInfo}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'minedOres', rank: rankInfo}, function(err: string, stats: any){
       if(!err){
         if(rankInfo){
           output += `Mined ores from ${ign}:\n`;
@@ -221,7 +223,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     });
     break;
     case 'total':
-      _stats.get('mc', {uuid: userID, collection: 'total', rank: rankInfo}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'total', rank: rankInfo}, function(err: string, stats: any){
       if(!err){
         if(rankInfo){
           output += `Totals from ${ign}:\n`;
@@ -249,11 +251,11 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_usage':
     if(!rankInfo){
-      _stats.get('mc', {uuid: userID, collection: 'topUsageItems'}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'topUsageItems'}, function(err: string, stats: any){
         if(!err){
           output += `Top used items from ${ign}:\n`;
           let i = 0;
-          stats.forEach((entry) => {
+          stats.forEach(() => {
             output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
             i++;
           });
@@ -269,11 +271,11 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_picked_up':
     if(!rankInfo){
-      _stats.get('mc', {uuid: userID, collection: 'topPickedUpItems'}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'topPickedUpItems'}, function(err: string, stats: any){
         if(!err){
           output += `Top picked up items from ${ign}:\n`;
           let i = 0;
-          stats.forEach((entry) => {
+          stats.forEach(() => {
             output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
             i++;
           });
@@ -289,11 +291,11 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_mined':
     if(!rankInfo){
-      _stats.get('mc', {uuid: userID, collection: 'topMinedBlocks'}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'topMinedBlocks'}, function(err: string, stats: any){
         if(!err){
           output += `Top mined items from ${ign}:\n`;
           let i = 0;
-          stats.forEach((entry) => {
+          stats.forEach(() => {
             output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
             i++;
           });
@@ -309,11 +311,11 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_dropped':
     if(!rankInfo){
-      _stats.get('mc', {uuid: userID, collection: 'topDroppedItems'}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'topDroppedItems'}, function(err: string, stats: any){
         if(!err){
           output += `Top dropped items from ${ign}:\n`;
           let i = 0;
-          stats.forEach((entry) => {
+          stats.forEach(() => {
             output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
             i++;
           });
@@ -329,11 +331,11 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_crafted':
     if(!rankInfo){
-      _stats.get('mc', {uuid: userID, collection: 'topCraftedItems'}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'topCraftedItems'}, function(err: string, stats: any){
         if(!err){
           output += `Top crafted items from ${ign}:\n`;
           let i = 0;
-          stats.forEach((entry) => {
+          stats.forEach(() => {
             output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
             i++;
           });
@@ -349,11 +351,11 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_broken':
     if(!rankInfo){
-      _stats.get('mc', {uuid: userID, collection: 'topBrokenItems'}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'topBrokenItems'}, function(err: string, stats: any){
         if(!err){
           output += `Top broken items from ${ign}:\n`;
           let i = 0;
-          stats.forEach((entry) => {
+          stats.forEach(() => {
             output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
             i++;
           });
@@ -369,11 +371,11 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_killed':
     if(!rankInfo){
-      _stats.get('mc', {uuid: userID, collection: 'topKilledMobs'}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'topKilledMobs'}, function(err: string, stats: any){
         if(!err){
           output += `Top killed mobs from ${ign}:\n`;
           let i = 0;
-          stats.forEach((entry) => {
+          stats.forEach(() => {
             output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
             i++;
           });
@@ -389,11 +391,11 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     break;
     case 'top_killed_by':
     if(!rankInfo){
-      _stats.get('mc', {uuid: userID, collection: 'topKilledByMobs'}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'topKilledByMobs'}, function(err: string, stats: any){
         if(!err){
           output += `Top mobs killed by from ${ign}:\n`;
           let i = 0;
-          stats.forEach((entry) => {
+          stats.forEach(() => {
             output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
             i++;
           });
@@ -408,7 +410,7 @@ _internals.statsSwitch = function(collection, userID, ign, rankInfo, callback){
     }
     break;
     case 'total_per_death':
-      _stats.get('mc', {uuid: userID, collection: 'totalPerDeath', rank: rankInfo}, function(err, stats){
+      _stats.get('mc', {uuid: userID, collection: 'totalPerDeath', rank: rankInfo}, function(err: string, stats: any){
       if(!err){
         if(rankInfo){
           output += `Totals per death from ${ign}:\n`;

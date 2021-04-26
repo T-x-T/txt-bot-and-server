@@ -1,15 +1,16 @@
 const Factory = require("../persistance/factory.js");
 const Member = require("./member.js");
+import type {Member as TMember} from "./member.js";
 
 module.exports = class MemberFactory extends Factory{
-  constructor(options) {
+  constructor(options: any) { //TODO: fix any
     if (typeof options != "object") var options: any = {};
     options.schema = Member.schema;
     options.name = "members";
     super(options);
   }
 
-  create(discord_id, discord_nick?, mc_uuid?, mc_ign?, country?, birth_month?, birth_year?, publish_age?, publish_country?, status?){
+  create(discord_id: string, discord_nick?: string, mc_uuid?: string, mc_ign?: string, country?: string, birth_month?: number, birth_year?: number, publish_age?: boolean, publish_country?: boolean, status?: number){
     return new Promise(async (resolve, reject) => {
       try{
         let member = new Member(discord_id, discord_nick, typeof status == 'number' ? status : 0, new Date(), 0, mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country);
@@ -22,7 +23,7 @@ module.exports = class MemberFactory extends Factory{
     });
   }
 
-  getByDiscordId(discord_id){
+  getByDiscordId(discord_id: string){
     return new Promise(async (resolve, reject) => {
       if (!discord_id) {
         reject(new Error("No discord_id given"));
@@ -38,7 +39,7 @@ module.exports = class MemberFactory extends Factory{
     });
   }
 
-  getByMcUuid(mc_uuid){
+  getByMcUuid(mc_uuid: string){
     return new Promise(async (resolve, reject) => {
       if (!mc_uuid) {
         reject(new Error("No mc_uuid given"));
@@ -68,14 +69,14 @@ module.exports = class MemberFactory extends Factory{
     });
   }
 
-  getFiltered(filter){
+  getFiltered(filter: any){ //TODO: fix any
     return new Promise(async (resolve, reject) => {
       try{
         if (!this.connected) await this.connect();
 
         let res = await this.persistanceProvider.retrieveFiltered(filter);
-        let members = [];
-        res.forEach(member => {
+        let members: TMember[] = [];
+        res.forEach((member: any) => { //TODO: fix any
           members.push(new Member(member.discord, member.discord_nick, member.status, new Date(member._id.getTimestamp()).valueOf(), member.karma, member.mcUUID, member.mcName, member.country, member.birth_month, member.birth_year, member.publish_age, member.publish_country));
         });
         await Promise.all(members.map(async member => await member.init()));

@@ -8,7 +8,7 @@ const Rcon = require('./node-rcon.js');
 
 const rcon = {
   //Initializes the connection to the rcon server, sends a message and terminates the connection again
-  send(cmd, server, callback?) {
+  send(cmd: string, server: string, callback?: Function) {
     //Abort if we are in testing mode
     if(global.g.ENVIRONMENT == 'testing') {
       global.g.emitter.emit('testing_minecraft_rcon_send', cmd, server);
@@ -48,14 +48,14 @@ const rcon = {
         let rconCon = new Rcon(server.rcon_server, server.rcon_port, server.rcon_password);
 
         //Establish the connection
-        rconCon.on('response', (str) => {
+        rconCon.on('response', (str: string) => {
           global.g.log(0, 'minecraft', 'rcon.send received message from server that was a response', {server: server.rcon_server, message: str});
           if(typeof callback == 'function') callback(str);
         });
-        rconCon.on('server', (str) => {
+        rconCon.on('server', (str: string) => {
           global.g.log(0, 'minecraft', 'rcon.send received message from server that wasnt a response', {server: server.rcon_server, message: str});
         });
-        rconCon.on('error', (err) => {
+        rconCon.on('error', (err: string) => {
           global.g.log(0, 'minecraft', 'rcon.send received an error', {err: err});
         });
         rconCon.on('auth', () => {
@@ -76,23 +76,23 @@ const rcon = {
     }
   },
 
-  getOnlinePlayers(callback) {
-    rcon.send('list', global.g.config.minecraft.rcon_main_server, function (str) {
+  getOnlinePlayers(callback: Function) {
+    rcon.send('list', global.g.config.minecraft.rcon_main_server, function (str: string) {
       callback(parseInt(str.replace('There are ', '')));
     });
   },
 
   updateOnlinePlayers() {
-    rcon.getOnlinePlayers(function (count) {
+    rcon.getOnlinePlayers(function (count: number) {
       global.g.mcPlayerCount = count;
     });
   },
 
-  getServerVersion(callback) {
-    rcon.send("version", global.g.config.minecraft.rcon_main_server, res => {
+  getServerVersion(callback: Function) {
+    rcon.send("version", global.g.config.minecraft.rcon_main_server, (res: string) => {
       let version = "";
       let inVersion = false;
-      res.split("\n")[0].split("").forEach(char => {
+      res.split("\n")[0].split("").forEach((char: string) => {
         if(char === "(") inVersion = true;
         if(inVersion && (char === "." || Number.isInteger(Number.parseInt(char)))) version += char;
       });

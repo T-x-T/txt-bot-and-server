@@ -5,7 +5,7 @@ const log = require("../log");
 const Mongo = require("../persistance/mongo.js");
 
 //Stolen from stackoverflow: https://stackoverflow.com/a/27872144
-function randomString(len) {
+function randomString(len: number) {
   var str = "",
     i = 0,
     min = 0,
@@ -17,7 +17,7 @@ function randomString(len) {
   return str;
 }
 
-async function writeExampleLogs(count){
+async function writeExampleLogs(count: number){
   for(let i = 0; i < count; i++) await writeExampleLog();
 }
 
@@ -85,7 +85,7 @@ describe("log", function(){
       await writeExampleLogs(10);
       let logEntries = await log.read(0, Date.now() - 10000);
 
-      logEntries.forEach(logEntry => {
+      logEntries.forEach((logEntry: any) => { //TODO: fix any
         assert.strictEqual(logEntry.level, _level);
         assert.strictEqual(logEntry.component, _component);
         assert.strictEqual(logEntry.name, _name);
@@ -113,7 +113,7 @@ describe("log", function(){
       let logEntries = await log.read(false, Date.now() - (1000 * 60 * 60 * 24 * 7));
 
       assert.strictEqual(logEntries.length, 4);
-      logEntries.forEach(logEntry => assert.ok(logEntry.timestamp > Date.now() - (1000 * 60 * 60 * 24 * 7)));
+      logEntries.forEach((logEntry: any) => assert.ok(logEntry.timestamp > Date.now() - (1000 * 60 * 60 * 24 * 7)));
     });
   });
 
@@ -155,7 +155,7 @@ describe("log", function(){
       let logEntries = await log.read(_level, Date.now() - (1000 * 60 * 60 * 24 * 10));
 
       assert.strictEqual(logEntries.length, 2);
-      logEntries.forEach(logEntry => assert.ok(logEntry.timestamp > Date.now() - (1000 * 60 * 60 * 24 * 7)));
+      logEntries.forEach((logEntry: any) => assert.ok(logEntry.timestamp > Date.now() - (1000 * 60 * 60 * 24 * 7)));
     });
   });
 
@@ -175,7 +175,7 @@ describe("log", function(){
       let logEntries = await log.read(false, Date.now() - (1000 * 60 * 60 * 24 * 10));
 
       assert.strictEqual(logEntries.length, 6);
-      logEntries.forEach(logEntry => {
+      logEntries.forEach((logEntry: any) => {
         if(logEntry.level === 1){
           assert.ok(logEntry.timestamp > Date.now() - (1000 * 60 * 60 * 24 * 10));
         }else{

@@ -4,26 +4,27 @@
 */
 
 const discordHelpers = require("../helpers.js");
+import Discord = require("discord.js");
 
 module.exports = {
   name: 'role',
   description: 'Used to change roles',
   aliases: ['roles'],
   usage: 'add ROLE_NAME OR remove ROLE_NAME OR list\n+role add upload\n+role list',
-  execute(message, args) {
+  execute(message: Discord.Message, args: string[]) {
 
     //Check if the user want to add, remove or list roles
     switch(args[0]){
       case 'add':
         //Check if the supplied role exists
         let valid = false;
-        discordHelpers.returnRoles().forEach((item) => {
+        discordHelpers.returnRoles().forEach((item: any) => { //TODO: fix any
           if(item.name == '#' + args[1]) valid = true;
         });
         if(valid){
           //Role exists, add it
           message.member.addRole(discordHelpers.returnRoleId('#' + args[1]))
-          .then(message.reply(`Welcome in the ${args[1]} role!`))
+          .then(() => message.reply(`Welcome in the ${args[1]} role!`))
           .catch(global.g.log(2, 'discord_bot', 'Role Command: Couldnt add user into role', {Message: message.content}));
         }else{
           //Role doesnt exist
@@ -47,7 +48,7 @@ module.exports = {
 
         //Print all available roles
         output += 'Available roles:\n'
-        discordHelpers.returnRoles().forEach((item) => {
+        discordHelpers.returnRoles().forEach((item: any) => { //TODO: fix any
           output += item.name[0] == '#'? item.name.slice(1) : item.name;
           output += '\n';
         });

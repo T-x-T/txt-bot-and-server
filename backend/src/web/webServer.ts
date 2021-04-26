@@ -3,17 +3,28 @@
 *  contains all setup and routing for web requests
 */
 
+import {IncomingMessage, OutgoingMessage, Server, ServerResponse} from "node:http";
+
 //Dependencies
-const http = require("http");
+import http = require("http");
 const StringDecoder = require("string_decoder");
 const url = require("url");
 const santize_path = require('sanitize-filename');
 const handlers = require("./handlers.js");
 
+interface IRequestData {
+  path: string,
+  queryStringObject: any,
+  method: string,
+  headers: any,
+  payload: any,
+  cookies: any
+}
+
 module.exports = () => {
-  http.createServer(function (req, res) {
+  http.createServer(function (req: IncomingMessage, res: ServerResponse) {
     if(global.g.config.web.https_redirect) {
-      getDataObject(req, function (data) {
+      getDataObject(req, function (data: IRequestData) {
         res.writeHead(302, {Location: `https://${data.headers.host}/${data.path}`});
         res.end();
       });
@@ -26,11 +37,11 @@ module.exports = () => {
   });
 };
   
-function uniserver(req, res) {
+function uniserver(req: IncomingMessage, res: ServerResponse) {
   //Form the data object
-  getDataObject(req, function (data) {
+  getDataObject(req, function (data: IRequestData) {
     //Log the request
-    global.g.log(0, 'web', 'Web Request received', {data: data, sourceIP: req.connection.remoteAddress});
+    global.g.log(0, 'web', 'Web Request received', {data: data});
 
     //Some requests seem to come in without any header, which is bad, so lets add one here if thats the case, also log it
     if(!data.headers.hasOwnProperty('host')) {
@@ -62,7 +73,7 @@ function uniserver(req, res) {
 
     //Send the request to the chosenHandler
     try {
-      chosenHandler(data, function (statusCode, payload, contentType) {
+      chosenHandler(data, function (statusCode: number, payload: any, contentType: string) {
         processHandlerResponse(res, data.method, data.path, statusCode, payload, contentType);
       });
     } catch(e) {
@@ -73,7 +84,7 @@ function uniserver(req, res) {
 };
 
 //Take a request and return a nice data object w/o payload
-function getDataObject(req, callback) {
+function getDataObject(req: IncomingMessage, callback: Function) {
   var parsedUrl = url.parse(req.url, true);
 
   //Try to get payload, if there is some
@@ -90,12 +101,12 @@ function getDataObject(req, callback) {
     } catch(e) {
       jsonObject = {};
     }
-    let cookies = {};
+    let cookies: any = {};
     if(req.headers.cookie) req.headers.cookie.replace(/\s/g, '').split(';').forEach((cookie) => {
       let parts = cookie.split('=');
       cookies[parts[0]] = parts[1];
     });
-    var data = {
+    const data: IRequestData = {
       'path': santize_path(parsedUrl.pathname.replace(/^\/+|\/+$/g, ''), {replacement: 'ÿ'}).replace(/ÿ/g, '/').replace(/\.\./g, ''),
       'queryStringObject': JSON.parse(JSON.stringify(parsedUrl.query)),
       'method': req.method.toLowerCase(),
@@ -109,7 +120,7 @@ function getDataObject(req, callback) {
 };
 
 //Take the response from the handler and process it
-function processHandlerResponse(res, method, path, statusCode, payload, contentType) {
+function processHandlerResponse(res: ServerResponse, method: string, path: string, statusCode: number, payload: any, contentType: string) {
   //Check responses from handler or use defaults
   statusCode = typeof (statusCode) == 'number' ? statusCode : 200;
   contentType = typeof (contentType) == 'string' ? contentType : 'html';
@@ -137,17 +148,19 @@ function processHandlerResponse(res, method, path, statusCode, payload, contentT
   res.end(payloadStr);
 };
 
-const router = {
-  '/html/api/application': handlers.paxapi.application,
-  '/html/api/contact': handlers.paxapi.contact,
-  '/html/api/member': handlers.paxapi.member,
-  '/html/api/blog': handlers.paxapi.blog,
-  '/html/api/roles': handlers.paxapi.roles,
-  '/html/api/mcversion': handlers.paxapi.mcversion,
-  '/html/api/worldmapdata': handlers.paxapi.memberworldmapdata,
-  '/html/api/statsoverview': handlers.paxapi.statsoverview,
-  '/html/api/discorduserfromcode': handlers.paxapi.discorduserfromcode,
-  '/html/api/tokenfromcode': handlers.paxapi.tokenfromcode,
+const router: {[path: string]: Function} = {
+  '/html/api/application': handlers.paxapi.application as Function,
+  '/html/api/contact': handlers.paxapi.contact as Function,
+  '/html/api/member': handlers.paxapi.member as Function,
+  '/html/api/blog': handlers.paxapi.blog as Function,
+  '/html/api/roles': handlers.paxapi.roles as Function,
+  '/html/api/mcversion': handlers.paxapi.mcversion as Function,
+  '/html/api/worldmapdata': handlers.paxapi.memberworldmapdata as Function,
+  '/html/api/statsoverview': handlers.paxapi.statsoverview as Function,
+  '/html/api/discorduserfromcode': handlers.paxapi.discorduserfromcode as Function,
+  '/html/api/tokenfromcode': handlers.paxapi.tokenfromcode as Function,
 };
+
+export type {IRequestData};
 
 export default {}

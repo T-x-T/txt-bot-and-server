@@ -3,20 +3,20 @@ const Factory = require("../persistance/factory.js");
 const TestPersistable = require("./testPersitable.js");
 
 class TestFactory extends Factory{
-  constructor(options){
+  constructor(options: any){
     options.schema = TestPersistable.schema;
     super(options);
   }
 
-  create(text, bool){
+  create(text: string, bool: boolean){
     return new TestPersistable(text, bool, this.options.persistanceProvider);
   }
 
-  getById(id){
+  getById(id: number){
     return new Promise((resolve, reject) => {
       this.persistanceProvider.retrieveFirstFiltered({ id: id })
-        .then(res => resolve(new TestPersistable(res.text, res.bool, this.options.persistanceProvider, id)))
-        .catch(e => reject(e));
+        .then((res: any) => resolve(new TestPersistable(res.text, res.bool, this.options.persistanceProvider, id)))
+        .catch((e: Error) => reject(e));
     });
   }
 }

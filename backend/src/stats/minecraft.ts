@@ -11,6 +11,7 @@ const Factory = require("../persistance/factory.js");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Mixed = Schema.Types.Mixed;
+import type {Member} from "../user/member.js";
 
 let schema = {
   timestamp: Date,
@@ -24,10 +25,10 @@ statsFactory.connect();
 
 const minecraft = {
   //Gets ranked stats for single player
-  getRanked(options, callback) {
+  getRanked(options: any, callback: Function) { //TODO: fix any
 
     //Gets stats from the user
-    minecraft.getSingle(options, function (err, stats) {
+    minecraft.getSingle(options, function (err: Error, stats: any) {
       if(!err && stats) {
 
         //Get stats from all players to create the ranking
@@ -39,7 +40,7 @@ const minecraft = {
             //Iterate over all single stats
             for(let key in stats) {
               //Put the each item of allRawStats through the singe template and into allStats
-              let allStats = [];
+              let allStats: any[] = [];
               allRawStats.forEach((rawStat) => {
                 if(rawStat['minecraft:mined']) {
                   let stat = _statsTemplates.single[key](rawStat);
@@ -73,7 +74,7 @@ const minecraft = {
   },
 
   //Gets stats for single player
-  getSingle(options, callback) {
+  getSingle(options: any, callback: Function) {
     getLatestStatsByUuid(options.uuid)
       .then(doc => {
         if(typeof _statsTemplates[options.collection] === 'function') {
@@ -88,7 +89,7 @@ const minecraft = {
   },
 
   //Gets stats for all players combined
-  getAll(options, callback) {
+  getAll(options: any, callback: Function) {
     getAllLatestStats()
       .then(docs => {
         let data = typeof _statsTemplates[options.collection] === 'function' ? _statsTemplates[options.collection](sumArray(docs)) : _statsTemplates.single[options.collection](sumArray(docs));
@@ -100,8 +101,8 @@ const minecraft = {
   }
 }
 
-function sumArray(docs){
-  let finishedObject = {};
+function sumArray(docs: any){
+  let finishedObject: any = {};
   for(let i = 0; i < docs.length; i++){
     for(let topkey in docs[i]){
       if(!finishedObject.hasOwnProperty(topkey)) finishedObject[topkey] = {};
@@ -115,15 +116,15 @@ function sumArray(docs){
 
 async function getAllLatestStats() {
   let members: any = await memberFactory.getAllWhitelisted();
-  let results: any = await Promise.allSettled(members.map(async member => await getLatestStatsByUuid(member.getMcUuid())));
-  let stats = [];
+  let results: any = await Promise.allSettled(members.map(async (member: Member) => await getLatestStatsByUuid(member.getMcUuid())));
+  let stats: any[] = [];
   results.forEach((res: any) => {
     if(res.status === "fulfilled") stats.push(res.value);
   });
   return stats;
 }
 
-async function getLatestStatsByUuid(uuid){
+async function getLatestStatsByUuid(uuid: string){
   let stats = await statsFactory.persistanceProvider.retrieveNewestFiltered({uuid: uuid});
   if(!stats) throw new Error("No stats received for " + uuid);
   return stats.stats.stats;
@@ -133,7 +134,7 @@ async function getLatestStatsByUuid(uuid){
 var _statsTemplates: any = {};
 
 //Contains number of deaths, player kills, mob kills, playtime, Total distance by foot (walking + sprinting + crouching)
-_statsTemplates.general = function(stats) {
+_statsTemplates.general = function(stats: any) {
   return {
     deaths:         _statsTemplates.single.deaths(stats),
     playerKills:    _statsTemplates.single.playerKills(stats),
@@ -149,7 +150,7 @@ _statsTemplates.general = function(stats) {
 };
 
 //Contains all different distances (walking, sprinting, boat, pig, climb, fall, elytra, ...)
-_statsTemplates.distances = function(stats) {
+_statsTemplates.distances = function(stats: any) {
   return {
     distance_sprint:         _statsTemplates.single.distance_sprint(stats)         + 'km',
     distance_walkOnWater:    _statsTemplates.single.distance_walkOnWater(stats)    + 'km',
@@ -166,7 +167,7 @@ _statsTemplates.distances = function(stats) {
 };
 
 //Contains mined ores (Diamond, Iron, Gold, Emerald, Coal, Lapis Lazuli, Redstone)
-_statsTemplates.minedOres = function(stats) {
+_statsTemplates.minedOres = function(stats: any) {
   return {
     mined_diamond_ore:     _statsTemplates.single.mined_diamond_ore(stats),
     mined_iron_ore:        _statsTemplates.single.mined_iron_ore(stats),
@@ -182,7 +183,7 @@ _statsTemplates.minedOres = function(stats) {
 };
 
 //Contains totals for blocks mined, items used, items crafted, items broken, items dropped, distance travelled
-_statsTemplates.total = function(stats) {
+_statsTemplates.total = function(stats: any) {
   return {
     total_mined:     _statsTemplates.single.total_mined(stats),
     total_used:      _statsTemplates.single.total_used(stats),
@@ -195,47 +196,47 @@ _statsTemplates.total = function(stats) {
 };
 
 //Contains top 10 used items with number of times used
-_statsTemplates.topUsageItems = function(stats) {
+_statsTemplates.topUsageItems = function(stats: any) {
   return top10(stats['minecraft:used']);
 };
 
 //Contains top 10 picked up items
-_statsTemplates.topPickedUpItems = function(stats) {
+_statsTemplates.topPickedUpItems = function(stats: any) {
   return top10(stats['minecraft:picked_up']);;
 };
 
 //Contains top 10 dropped items
-_statsTemplates.topDroppedItems = function(stats) {
+_statsTemplates.topDroppedItems = function(stats: any) {
   return top10(stats['minecraft:dropped']);
 };
 
 //Contains top 10 crafted items
-_statsTemplates.topCraftedItems = function(stats) {
+_statsTemplates.topCraftedItems = function(stats: any) {
   return top10(stats['minecraft:crafted']);
 };
 
 //Contains top 10 broken items
-_statsTemplates.topBrokenItems = function(stats) {
+_statsTemplates.topBrokenItems = function(stats: any) {
   return top10(stats['minecraft:broken']);;
 };
 
 //Contains top 10 mined blocks with number of times mined
-_statsTemplates.topMinedBlocks = function(stats) {
+_statsTemplates.topMinedBlocks = function(stats: any) {
   return top10(stats['minecraft:mined']);
 };
 
 //Contains top 10 killed mobs with number of times killed
-_statsTemplates.topKilledMobs = function(stats) {
+_statsTemplates.topKilledMobs = function(stats: any) {
   return top10(stats['minecraft:killed']);
 };
 
 //Contains top 10 caused of death with number of times died
-_statsTemplates.topKilledByMobs = function(stats) {
+_statsTemplates.topKilledByMobs = function(stats: any) {
   return top10(stats['minecraft:killed_by']);
 };
 
 //Contains some stats per death stats like k/d blocks mined per death, etc
-_statsTemplates.totalPerDeath = function(stats) {
+_statsTemplates.totalPerDeath = function(stats: any) {
   return {
     total_per_death_mined:     _statsTemplates.single.total_per_death_mined(stats),
     total_per_death_used:      _statsTemplates.single.total_per_death_used(stats),
@@ -247,7 +248,7 @@ _statsTemplates.totalPerDeath = function(stats) {
   };
 };
 
-_statsTemplates.overview = function(stats) {
+_statsTemplates.overview = function(stats: any) {
   return {
     cobblestone_mined_per_death_by_zombie: _statsTemplates.single.mined_cobblestone(stats) / _statsTemplates.single.killed_by_zombies(stats),
     playtime: _statsTemplates.single.playtime(stats)
@@ -256,65 +257,65 @@ _statsTemplates.overview = function(stats) {
 
 _statsTemplates.single = {};
 
-_statsTemplates.single.playtime                  = function(stats) {return prettifyDuration(stats['minecraft:custom']['minecraft:play_one_minute'])        ? prettifyDuration(stats['minecraft:custom']['minecraft:play_one_minute'])        : 0 };
-_statsTemplates.single.deaths                    = function(stats) {return stats['minecraft:custom']['minecraft:deaths']                                   ? stats['minecraft:custom']['minecraft:deaths']                                   : 0 };
-_statsTemplates.single.killed_by_zombies         = function(stats) {return stats['minecraft:killed_by']['minecraft:zombie']                                ? stats['minecraft:killed_by']['minecraft:zombie']                                : 0 };
-_statsTemplates.single.playerKills               = function(stats) {return stats['minecraft:custom']['minecraft:player_kills']                             ? stats['minecraft:custom']['minecraft:player_kills']                             : 0 };
-_statsTemplates.single.mobKills                  = function(stats) {return stats['minecraft:custom']['minecraft:mob_kills']                                ? stats['minecraft:custom']['minecraft:mob_kills']                                : 0 };
-_statsTemplates.single.damageDealt               = function(stats) {return stats['minecraft:custom']['minecraft:damage_dealt']                             ? stats['minecraft:custom']['minecraft:damage_dealt']                             : 0 };
-_statsTemplates.single.damageTaken               = function(stats) {return stats['minecraft:custom']['minecraft:damage_taken']                             ? stats['minecraft:custom']['minecraft:damage_taken']                             : 0 };
-_statsTemplates.single.distance_sprint           = function(stats) {return prettiyDistance(stats['minecraft:custom']['minecraft:sprint_one_cm'])           ? prettiyDistance(stats['minecraft:custom']['minecraft:sprint_one_cm'])           : 0 };
-_statsTemplates.single.distance_walkOnWater      = function(stats) {return prettiyDistance(stats['minecraft:custom']['minecraft:walk_on_water_one_cm'])    ? prettiyDistance(stats['minecraft:custom']['minecraft:walk_on_water_one_cm'])    : 0 };
-_statsTemplates.single.distance_crouch           = function(stats) {return prettiyDistance(stats['minecraft:custom']['minecraft:crouch_one_cm'])           ? prettiyDistance(stats['minecraft:custom']['minecraft:crouch_one_cm'])           : 0 };
-_statsTemplates.single.distance_climb            = function(stats) {return prettiyDistance(stats['minecraft:custom']['minecraft:climb_one_cm'])            ? prettiyDistance(stats['minecraft:custom']['minecraft:climb_one_cm'])            : 0 };
-_statsTemplates.single.distance_walk             = function(stats) {return prettiyDistance(stats['minecraft:custom']['minecraft:walk_one_cm'])             ? prettiyDistance(stats['minecraft:custom']['minecraft:walk_one_cm'])             : 0 };
-_statsTemplates.single.distance_walkUnderWater   = function(stats) {return prettiyDistance(stats['minecraft:custom']['minecraft:walk_under_water_one_cm']) ? prettiyDistance(stats['minecraft:custom']['minecraft:walk_under_water_one_cm']) : 0 };
-_statsTemplates.single.distance_boat             = function(stats) {return prettiyDistance(stats['minecraft:custom']['minecraft:boat_one_cm'])             ? prettiyDistance(stats['minecraft:custom']['minecraft:boat_one_cm'])             : 0 };
-_statsTemplates.single.distance_swim             = function(stats) {return prettiyDistance(stats['minecraft:custom']['minecraft:swim_one_cm'])             ? prettiyDistance(stats['minecraft:custom']['minecraft:swim_one_cm'])             : 0 };
-_statsTemplates.single.distance_fly              = function(stats) {return prettiyDistance(stats['minecraft:custom']['minecraft:fly_one_cm'])              ? prettiyDistance(stats['minecraft:custom']['minecraft:fly_one_cm'])              : 0 };
-_statsTemplates.single.distance_aviate           = function(stats) {return prettiyDistance(stats['minecraft:custom']['minecraft:aviate_one_cm'])           ? prettiyDistance(stats['minecraft:custom']['minecraft:aviate_one_cm'])           : 0 };
-_statsTemplates.single.distance_fall             = function(stats) {return prettiyDistance(stats['minecraft:custom']['minecraft:fall_one_cm'])             ? prettiyDistance(stats['minecraft:custom']['minecraft:fall_one_cm'])             : 0 };
-_statsTemplates.single.mined_diamond_ore         = function(stats) {return stats['minecraft:mined']['minecraft:diamond_ore']                               ? stats['minecraft:mined']['minecraft:diamond_ore']                               : 0 };
-_statsTemplates.single.mined_iron_ore            = function(stats) {return stats['minecraft:mined']['minecraft:iron_ore']                                  ? stats['minecraft:mined']['minecraft:iron_ore']                                  : 0 };
-_statsTemplates.single.mined_gold_ore            = function(stats) {return stats['minecraft:mined']['minecraft:gold_ore']                                  ? stats['minecraft:mined']['minecraft:gold_ore']                                  : 0 };
-_statsTemplates.single.mined_emerald_ore         = function(stats) {return stats['minecraft:mined']['minecraft:emerald_ore']                               ? stats['minecraft:mined']['minecraft:emerald_ore']                               : 0 };
-_statsTemplates.single.mined_coal_ore            = function(stats) {return stats['minecraft:mined']['minecraft:coal_ore']                                  ? stats['minecraft:mined']['minecraft:coal_ore']                                  : 0 };
-_statsTemplates.single.mined_lapis_ore           = function(stats) {return stats['minecraft:mined']['minecraft:lapis_ore']                                 ? stats['minecraft:mined']['minecraft:lapis_ore']                                 : 0 };
-_statsTemplates.single.mined_redstone_ore        = function(stats) {return stats['minecraft:mined']['minecraft:redstone_ore']                              ? stats['minecraft:mined']['minecraft:redstone_ore']                              : 0 };
-_statsTemplates.single.mined_quartz_ore          = function(stats) {return stats['minecraft:mined']['minecraft:nether_quartz_ore']                         ? stats['minecraft:mined']['minecraft:nether_quartz_ore']                         : 0 };
-_statsTemplates.single.mined_nether_gold_ore     = function(stats) {return stats['minecraft:mined']['minecraft:nether_gold_ore']                           ? stats['minecraft:mined']['minecraft:nether_gold_ore']                           : 0 };
-_statsTemplates.single.mined_ancient_debris      = function(stats) {return stats['minecraft:mined']['minecraft:ancient_debris']                            ? stats['minecraft:mined']['minecraft:ancient_debris']                            : 0 };
-_statsTemplates.single.mined_cobblestone         = function(stats) {return stats['minecraft:mined']['minecraft:cobblestone']                               ? stats['minecraft:mined']['minecraft:cobblestone']                               : 0 };
-_statsTemplates.single.total_mined               = function(stats) {return sumOfObject(stats['minecraft:mined'])                                           ? sumOfObject(stats['minecraft:mined'])                                           : 0 };
-_statsTemplates.single.total_used                = function(stats) {return sumOfObject(stats['minecraft:used'])                                            ? sumOfObject(stats['minecraft:used'])                                            : 0 };
-_statsTemplates.single.total_crafted             = function(stats) {return sumOfObject(stats['minecraft:crafted'])                                         ? sumOfObject(stats['minecraft:crafted'])                                         : 0 };
-_statsTemplates.single.total_broken              = function(stats) {return sumOfObject(stats['minecraft:broken'])                                          ? sumOfObject(stats['minecraft:broken'])                                          : 0 };
-_statsTemplates.single.total_dropped             = function(stats) {return sumOfObject(stats['minecraft:dropped'])                                         ? sumOfObject(stats['minecraft:dropped'])                                         : 0 };
-_statsTemplates.single.total_picked_up           = function(stats) {return sumOfObject(stats['minecraft:picked_up'])                                       ? sumOfObject(stats['minecraft:picked_up'])                                       : 0 };
-_statsTemplates.single.times_slept               = function(stats) {return stats['minecraft:custom']['minecraft:sleep_in_bed']                             ? stats['minecraft:custom']['minecraft:sleep_in_bed']                             : 0 };
-_statsTemplates.single.jumps                     = function(stats) {return stats['minecraft:custom']['minecraft:jump']                                     ? stats['minecraft:custom']['minecraft:jump']                                     : 0 };
-_statsTemplates.single.animals_bred              = function(stats) {return stats['minecraft:custom']['minecraft:animals_bred']                             ? stats['minecraft:custom']['minecraft:animals_bred']                             : 0 };
-_statsTemplates.single.distanceByFoot            = function(stats) {return prettiyDistance(stats['minecraft:custom']['minecraft:walk_on_water_one_cm'] + stats['minecraft:custom']['minecraft:crouch_one_cm'] + stats['minecraft:custom']['minecraft:walk_one_cm'] + stats['minecraft:custom']['minecraft:walk_under_water_one_cm'] + stats['minecraft:custom']['minecraft:sprint_one_cm']);};
-_statsTemplates.single.total_travelled           = function(stats) {return prettiyDistance(stats['minecraft:custom']['minecraft:sprint_one_cm'] + stats['minecraft:custom']['minecraft:walk_on_water_one_cm'] + stats['minecraft:custom']['minecraft:crouch_one_cm'] + stats['minecraft:custom']['minecraft:climb_one_cm'] + stats['minecraft:custom']['minecraft:walk_one_cm'] + stats['minecraft:custom']['minecraft:walk_under_water_one_cm'] + stats['minecraft:custom']['minecraft:boat_one_cm'] + stats['minecraft:custom']['minecraft:swim_one_cm'] + stats['minecraft:custom']['minecraft:fly_one_cm'] + stats['minecraft:custom']['minecraft:aviate_one_cm'] + stats['minecraft:custom']['minecraft:fall_one_cm']);};
-_statsTemplates.single.total_per_death_mined     = function(stats) {return Math.round(_statsTemplates.single.total_mined(stats)     / _statsTemplates.single.deaths(stats))};      
-_statsTemplates.single.total_per_death_used      = function(stats) {return Math.round(_statsTemplates.single.total_used(stats)      / _statsTemplates.single.deaths(stats))};
-_statsTemplates.single.total_per_death_crafted   = function(stats) {return Math.round(_statsTemplates.single.total_crafted(stats)   / _statsTemplates.single.deaths(stats))};
-_statsTemplates.single.total_per_death_broken    = function(stats) {return Math.round(_statsTemplates.single.total_broken(stats)    / _statsTemplates.single.deaths(stats))};
-_statsTemplates.single.total_per_death_dropped   = function(stats) {return Math.round(_statsTemplates.single.total_dropped(stats)   / _statsTemplates.single.deaths(stats))};
-_statsTemplates.single.total_per_death_picked_up = function(stats) {return Math.round(_statsTemplates.single.total_picked_up(stats) / _statsTemplates.single.deaths(stats))};
-_statsTemplates.single.total_per_death_travelled = function(stats) {return Math.round(_statsTemplates.single.total_travelled(stats) / _statsTemplates.single.deaths(stats))};
+_statsTemplates.single.playtime                  = function(stats: any) {return prettifyDuration(stats['minecraft:custom']['minecraft:play_one_minute'])        ? prettifyDuration(stats['minecraft:custom']['minecraft:play_one_minute'])        : 0 };
+_statsTemplates.single.deaths                    = function(stats: any) {return stats['minecraft:custom']['minecraft:deaths']                                   ? stats['minecraft:custom']['minecraft:deaths']                                   : 0 };
+_statsTemplates.single.killed_by_zombies         = function(stats: any) {return stats['minecraft:killed_by']['minecraft:zombie']                                ? stats['minecraft:killed_by']['minecraft:zombie']                                : 0 };
+_statsTemplates.single.playerKills               = function(stats: any) {return stats['minecraft:custom']['minecraft:player_kills']                             ? stats['minecraft:custom']['minecraft:player_kills']                             : 0 };
+_statsTemplates.single.mobKills                  = function(stats: any) {return stats['minecraft:custom']['minecraft:mob_kills']                                ? stats['minecraft:custom']['minecraft:mob_kills']                                : 0 };
+_statsTemplates.single.damageDealt               = function(stats: any) {return stats['minecraft:custom']['minecraft:damage_dealt']                             ? stats['minecraft:custom']['minecraft:damage_dealt']                             : 0 };
+_statsTemplates.single.damageTaken               = function(stats: any) {return stats['minecraft:custom']['minecraft:damage_taken']                             ? stats['minecraft:custom']['minecraft:damage_taken']                             : 0 };
+_statsTemplates.single.distance_sprint           = function(stats: any) {return prettiyDistance(stats['minecraft:custom']['minecraft:sprint_one_cm'])           ? prettiyDistance(stats['minecraft:custom']['minecraft:sprint_one_cm'])           : 0 };
+_statsTemplates.single.distance_walkOnWater      = function(stats: any) {return prettiyDistance(stats['minecraft:custom']['minecraft:walk_on_water_one_cm'])    ? prettiyDistance(stats['minecraft:custom']['minecraft:walk_on_water_one_cm'])    : 0 };
+_statsTemplates.single.distance_crouch           = function(stats: any) {return prettiyDistance(stats['minecraft:custom']['minecraft:crouch_one_cm'])           ? prettiyDistance(stats['minecraft:custom']['minecraft:crouch_one_cm'])           : 0 };
+_statsTemplates.single.distance_climb            = function(stats: any) {return prettiyDistance(stats['minecraft:custom']['minecraft:climb_one_cm'])            ? prettiyDistance(stats['minecraft:custom']['minecraft:climb_one_cm'])            : 0 };
+_statsTemplates.single.distance_walk             = function(stats: any) {return prettiyDistance(stats['minecraft:custom']['minecraft:walk_one_cm'])             ? prettiyDistance(stats['minecraft:custom']['minecraft:walk_one_cm'])             : 0 };
+_statsTemplates.single.distance_walkUnderWater   = function(stats: any) {return prettiyDistance(stats['minecraft:custom']['minecraft:walk_under_water_one_cm']) ? prettiyDistance(stats['minecraft:custom']['minecraft:walk_under_water_one_cm']) : 0 };
+_statsTemplates.single.distance_boat             = function(stats: any) {return prettiyDistance(stats['minecraft:custom']['minecraft:boat_one_cm'])             ? prettiyDistance(stats['minecraft:custom']['minecraft:boat_one_cm'])             : 0 };
+_statsTemplates.single.distance_swim             = function(stats: any) {return prettiyDistance(stats['minecraft:custom']['minecraft:swim_one_cm'])             ? prettiyDistance(stats['minecraft:custom']['minecraft:swim_one_cm'])             : 0 };
+_statsTemplates.single.distance_fly              = function(stats: any) {return prettiyDistance(stats['minecraft:custom']['minecraft:fly_one_cm'])              ? prettiyDistance(stats['minecraft:custom']['minecraft:fly_one_cm'])              : 0 };
+_statsTemplates.single.distance_aviate           = function(stats: any) {return prettiyDistance(stats['minecraft:custom']['minecraft:aviate_one_cm'])           ? prettiyDistance(stats['minecraft:custom']['minecraft:aviate_one_cm'])           : 0 };
+_statsTemplates.single.distance_fall             = function(stats: any) {return prettiyDistance(stats['minecraft:custom']['minecraft:fall_one_cm'])             ? prettiyDistance(stats['minecraft:custom']['minecraft:fall_one_cm'])             : 0 };
+_statsTemplates.single.mined_diamond_ore         = function(stats: any) {return stats['minecraft:mined']['minecraft:diamond_ore']                               ? stats['minecraft:mined']['minecraft:diamond_ore']                               : 0 };
+_statsTemplates.single.mined_iron_ore            = function(stats: any) {return stats['minecraft:mined']['minecraft:iron_ore']                                  ? stats['minecraft:mined']['minecraft:iron_ore']                                  : 0 };
+_statsTemplates.single.mined_gold_ore            = function(stats: any) {return stats['minecraft:mined']['minecraft:gold_ore']                                  ? stats['minecraft:mined']['minecraft:gold_ore']                                  : 0 };
+_statsTemplates.single.mined_emerald_ore         = function(stats: any) {return stats['minecraft:mined']['minecraft:emerald_ore']                               ? stats['minecraft:mined']['minecraft:emerald_ore']                               : 0 };
+_statsTemplates.single.mined_coal_ore            = function(stats: any) {return stats['minecraft:mined']['minecraft:coal_ore']                                  ? stats['minecraft:mined']['minecraft:coal_ore']                                  : 0 };
+_statsTemplates.single.mined_lapis_ore           = function(stats: any) {return stats['minecraft:mined']['minecraft:lapis_ore']                                 ? stats['minecraft:mined']['minecraft:lapis_ore']                                 : 0 };
+_statsTemplates.single.mined_redstone_ore        = function(stats: any) {return stats['minecraft:mined']['minecraft:redstone_ore']                              ? stats['minecraft:mined']['minecraft:redstone_ore']                              : 0 };
+_statsTemplates.single.mined_quartz_ore          = function(stats: any) {return stats['minecraft:mined']['minecraft:nether_quartz_ore']                         ? stats['minecraft:mined']['minecraft:nether_quartz_ore']                         : 0 };
+_statsTemplates.single.mined_nether_gold_ore     = function(stats: any) {return stats['minecraft:mined']['minecraft:nether_gold_ore']                           ? stats['minecraft:mined']['minecraft:nether_gold_ore']                           : 0 };
+_statsTemplates.single.mined_ancient_debris      = function(stats: any) {return stats['minecraft:mined']['minecraft:ancient_debris']                            ? stats['minecraft:mined']['minecraft:ancient_debris']                            : 0 };
+_statsTemplates.single.mined_cobblestone         = function(stats: any) {return stats['minecraft:mined']['minecraft:cobblestone']                               ? stats['minecraft:mined']['minecraft:cobblestone']                               : 0 };
+_statsTemplates.single.total_mined               = function(stats: any) {return sumOfObject(stats['minecraft:mined'])                                           ? sumOfObject(stats['minecraft:mined'])                                           : 0 };
+_statsTemplates.single.total_used                = function(stats: any) {return sumOfObject(stats['minecraft:used'])                                            ? sumOfObject(stats['minecraft:used'])                                            : 0 };
+_statsTemplates.single.total_crafted             = function(stats: any) {return sumOfObject(stats['minecraft:crafted'])                                         ? sumOfObject(stats['minecraft:crafted'])                                         : 0 };
+_statsTemplates.single.total_broken              = function(stats: any) {return sumOfObject(stats['minecraft:broken'])                                          ? sumOfObject(stats['minecraft:broken'])                                          : 0 };
+_statsTemplates.single.total_dropped             = function(stats: any) {return sumOfObject(stats['minecraft:dropped'])                                         ? sumOfObject(stats['minecraft:dropped'])                                         : 0 };
+_statsTemplates.single.total_picked_up           = function(stats: any) {return sumOfObject(stats['minecraft:picked_up'])                                       ? sumOfObject(stats['minecraft:picked_up'])                                       : 0 };
+_statsTemplates.single.times_slept               = function(stats: any) {return stats['minecraft:custom']['minecraft:sleep_in_bed']                             ? stats['minecraft:custom']['minecraft:sleep_in_bed']                             : 0 };
+_statsTemplates.single.jumps                     = function(stats: any) {return stats['minecraft:custom']['minecraft:jump']                                     ? stats['minecraft:custom']['minecraft:jump']                                     : 0 };
+_statsTemplates.single.animals_bred              = function(stats: any) {return stats['minecraft:custom']['minecraft:animals_bred']                             ? stats['minecraft:custom']['minecraft:animals_bred']                             : 0 };
+_statsTemplates.single.distanceByFoot            = function(stats: any) {return prettiyDistance(stats['minecraft:custom']['minecraft:walk_on_water_one_cm'] + stats['minecraft:custom']['minecraft:crouch_one_cm'] + stats['minecraft:custom']['minecraft:walk_one_cm'] + stats['minecraft:custom']['minecraft:walk_under_water_one_cm'] + stats['minecraft:custom']['minecraft:sprint_one_cm']);};
+_statsTemplates.single.total_travelled           = function(stats: any) {return prettiyDistance(stats['minecraft:custom']['minecraft:sprint_one_cm'] + stats['minecraft:custom']['minecraft:walk_on_water_one_cm'] + stats['minecraft:custom']['minecraft:crouch_one_cm'] + stats['minecraft:custom']['minecraft:climb_one_cm'] + stats['minecraft:custom']['minecraft:walk_one_cm'] + stats['minecraft:custom']['minecraft:walk_under_water_one_cm'] + stats['minecraft:custom']['minecraft:boat_one_cm'] + stats['minecraft:custom']['minecraft:swim_one_cm'] + stats['minecraft:custom']['minecraft:fly_one_cm'] + stats['minecraft:custom']['minecraft:aviate_one_cm'] + stats['minecraft:custom']['minecraft:fall_one_cm']);};
+_statsTemplates.single.total_per_death_mined     = function(stats: any) {return Math.round(_statsTemplates.single.total_mined(stats)     / _statsTemplates.single.deaths(stats))};      
+_statsTemplates.single.total_per_death_used      = function(stats: any) {return Math.round(_statsTemplates.single.total_used(stats)      / _statsTemplates.single.deaths(stats))};
+_statsTemplates.single.total_per_death_crafted   = function(stats: any) {return Math.round(_statsTemplates.single.total_crafted(stats)   / _statsTemplates.single.deaths(stats))};
+_statsTemplates.single.total_per_death_broken    = function(stats: any) {return Math.round(_statsTemplates.single.total_broken(stats)    / _statsTemplates.single.deaths(stats))};
+_statsTemplates.single.total_per_death_dropped   = function(stats: any) {return Math.round(_statsTemplates.single.total_dropped(stats)   / _statsTemplates.single.deaths(stats))};
+_statsTemplates.single.total_per_death_picked_up = function(stats: any) {return Math.round(_statsTemplates.single.total_picked_up(stats) / _statsTemplates.single.deaths(stats))};
+_statsTemplates.single.total_per_death_travelled = function(stats: any) {return Math.round(_statsTemplates.single.total_travelled(stats) / _statsTemplates.single.deaths(stats))};
 
 //Helper functions for formatting stats
 
-function prettifyDuration(duration) {
+function prettifyDuration(duration: number) {
   return Math.round(duration / 20 / 60 / 60);
 };
 
-function prettiyDistance(distance) {
+function prettiyDistance(distance: number) {
   return Math.round(distance / 100 / 1000);
 };
 
-function sumOfObject(object) {
+function sumOfObject(object: any) {
   var sum = 0;
 
   for(let key in object) {
@@ -324,7 +325,7 @@ function sumOfObject(object) {
   return sum;
 };
 
-function top10(object) {
+function top10(object: any) {
   var values = [];
   var i = 0;
 

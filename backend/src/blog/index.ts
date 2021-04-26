@@ -4,9 +4,9 @@ const Factory = require("../persistance/factory.js");
 
 //Options for instanciating Persistable/Factory
 let dbOptions = {};
-
+//TODO: create blog interface
 const blog = {
-  async create(input) {
+  async create(input: any) {
     if(!isValid(input)) throw new Error("Incorrect Input! title, author and body must be truthy");
 
     let persistable = new Persistable(dbOptions);
@@ -19,7 +19,7 @@ const blog = {
     return persistable.data;
   },
 
-  async replace(input) {
+  async replace(input: any) {
     if(!isValid(input)) throw new Error("Incorrect Input! title, author and body must be truthy");
     if(!input.hasOwnProperty("id") || typeof input.id !== "number") throw new Error("blog must contain numerical id to replace");
 
@@ -49,7 +49,7 @@ const blog = {
     });
   },
 
-  async getFiltered(filter) {
+  async getFiltered(filter: any) { //TODO: fix any
     const factory = new Factory(dbOptions);
     await factory.connect();
     return await factory.persistanceProvider.retrieveFiltered(filter);
@@ -77,7 +77,7 @@ const blog = {
   }
 }
 
-function isValid(input) {
+function isValid(input: any) { //TODO: fix any
   return input.title && input.author && input.body;
 }
 

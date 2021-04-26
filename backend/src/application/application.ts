@@ -6,18 +6,20 @@ const discord_api = require("../discord_api/index.js");
 const mc_helpers = require("../minecraft/index.js");
 const MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory({});
+import type {Member} from "../user/member.js";
 
+//TODO Add enum for application status
 class Application extends Persistable{
-  static schema;
+  static schema: any; //TODO fix any type
 
-  constructor(id, discordId, mcUuid, emailAddress, country, birth_month, birth_year, about_me, motivation, buildImages, publishAboutMe, publishAge, publishCountry, status, timestamp, discordUserName, mcIgn){
+  constructor(id: number, discordId: string, mcUuid: string, emailAddress: string, country: string, birth_month: number, birth_year: number, about_me: string, motivation: string, buildImages: string, publishAboutMe: boolean, publishAge: boolean, publishCountry: boolean, status: number, timestamp: Date, discordUserName: string, mcIgn: string){
     if(!discordId || !mcUuid || !emailAddress || !country || !birth_month || !birth_year || !about_me || !motivation || !buildImages){
       throw new Error("Missing parameter");
     }
     
     super({name: "applications", schema: Application.schema});
 
-    this.data.timestamp = timestamp ? timestamp : Date.now();
+    this.data.timestamp = timestamp ? timestamp : new Date();
     this.data.discord_id = discordId;
     this.data.mc_uuid = mcUuid;
     this.data.email_address = sanitize(emailAddress, {allowedTags: [], allowedAttributes: {}});
@@ -55,50 +57,47 @@ class Application extends Persistable{
     discord_helpers.sendAcceptedMemberWelcomeMessage(this);
     mc_helpers.whitelist(this.getMcUuid());
     discord_helpers.addMemberToRole(this.getDiscordId(), global.g.config.discord_bot.roles.paxterya, () => {});
-    discord_helpers.getMemberObjectById(this.getDiscordId(), discordMember => {
+    discord_helpers.getMemberObjectById(this.getDiscordId(), (discordMember: Member) => {
       if(discordMember) {
         discordMember.setNickname(this.getMcIgn())
-          .catch(e => global.g.log(2, "application", "Application#accept couldnt set discord nickname", {application: this.data, err: e.message}));
+          .catch((e: Error) => global.g.log(2, "application", "Application#accept couldnt set discord nickname", {application: this.data, err: e.message}));
       } else {
         global.g.log(2, "application", "Application#accept couldnt get discord member object", {application: this.data});
       }
     });
   }
 
-  createMemberFromApplication() {
-    return new Promise(async (resolve, reject) => {
-      memberFactory.getByDiscordId(this.getDiscordId())
-        .then(async (member: any) => {
-          if(member) {
-            try {
-              member.setDiscordUserName(this.getDiscordUserName());
-              member.setMcUuid(this.getMcUuid());
-              member.setMcIgn(this.getMcIgn());
-              member.setCountry(this.getCountry());
-              member.setBirthMonth(this.getBirthMonth());
-              member.setBirthYear(this.getBirthYear());
-              member.setPublishAge(this.getPublishAge());
-              member.setPublishCountry(this.getPublishCountry());
-              member.setStatus(1);
-              await member.save();
-              resolve(null);
-            } catch(e) {
-              global.g.log(2, 'application', 'failed to configure existing member object', {application: this.data, member: member, err: e.message});
-              reject();
-            }
-          } else {
-            await memberFactory.create(this.getDiscordId(), this.getDiscordUserName(), this.getMcUuid(), this.getMcIgn(), this.getCountry(), this.getBirthMonth(), this.getBirthYear(), this.getPublishAge(), this.getPublishCountry(), 1);
-            resolve(null);
-          }
-        })
-        .catch(e => {
-          global.g.log(2, 'application', 'failed to get user object of accepted member', {application: this.data, err: e.message});
-          reject();
-        });
-    });
+  async createMemberFromApplication() {    
+    try {
+      let member = await memberFactory.getByDiscordId(this.getDiscordId())
+      if(member) {
+        try {
+          member.setDiscordUserName(this.getDiscordUserName());
+          member.setMcUuid(this.getMcUuid());
+          member.setMcIgn(this.getMcIgn());
+          member.setCountry(this.getCountry());
+          member.setBirthMonth(this.getBirthMonth());
+          member.setBirthYear(this.getBirthYear());
+          member.setPublishAge(this.getPublishAge());
+          member.setPublishCountry(this.getPublishCountry());
+          member.setStatus(1);
+          await member.save();
+
+        } catch(e) {
+          global.g.log(2, 'application', 'failed to configure existing member object', {application: this.data, member: member, err: e.message});
+          throw new Error(e.message)
+        }
+      } else {
+        await memberFactory.create(this.getDiscordId(), this.getDiscordUserName(), this.getMcUuid(), this.getMcIgn(), this.getCountry(), this.getBirthMonth(), this.getBirthYear(), this.getPublishAge(), this.getPublishCountry(), 1);
+
+      }
+    } catch(e) {
+      global.g.log(2, 'application', 'failed to get user object of accepted member', {application: this.data, err: e.message});
+      throw new Error(e.message);
+    }
   };
 
-  async deny(reason){
+  async deny(reason: string){
     this.setStatus(2);
     if(reason) this.setDenyReason(reason);
     await this.save();
@@ -109,24 +108,24 @@ class Application extends Persistable{
    *  SETTERS
    */
 
-  setDiscordUserName(newDiscordUserName){
+  setDiscordUserName(newDiscordUserName: string){
     this.data.discord_nick = newDiscordUserName;
   }
 
-  setMcIgn(newMcIgn){
+  setMcIgn(newMcIgn: string){
     this.data.mc_ign = newMcIgn;
   }
 
-  setStatus(newStatus){
+  setStatus(newStatus: number){
     if(newStatus < 1 || newStatus > 3) throw new Error("status must be between 1 and 3");
     this.data.status = newStatus;
   }
 
-  setDenyReason(newDenyReason){
+  setDenyReason(newDenyReason: string){
     this.data.deny_reason = newDenyReason;
   }
 
-  setId(newId){
+  setId(newId: number){
     this.data.id = newId;
   }
 
@@ -134,39 +133,39 @@ class Application extends Persistable{
    *  GETTERS
    */
 
-  getId(){
+  getId(): number {
     return this.data.id;
   }
 
-  getTimestamp(){
-    return new Date(this.data.timestamp);
+  getTimestamp(): Date {
+    return this.data.timestamp;
   }
 
-  getDiscordId(){
+  getDiscordId(): string {
     return this.data.discord_id;
   }
 
-  getMcUuid() {
+  getMcUuid(): string {
     return this.data.mc_uuid;
   }
 
-  getEmailAddress(){
+  getEmailAddress(): string {
     return this.data.email_address;
   }
 
-  getCountry(){
+  getCountry(): string {
     return this.data.country;
   }
 
-  getBirthMonth(){
+  getBirthMonth(): number {
     return this.data.birth_month;
   }
 
-  getBirthYear(){
+  getBirthYear(): number {
     return this.data.birth_year;
   }
 
-  getAge(){
+  getAge(): number {
     if(this.getBirthMonth() <= new Date().getMonth() + 1) {
       return new Date().getFullYear() - this.getBirthYear();
     } else {
@@ -174,53 +173,53 @@ class Application extends Persistable{
     }
   }
 
-  getAboutMe(){
+  getAboutMe(): string {
     return this.data.about_me;
   }
 
-  getMotivation(){
+  getMotivation(): string {
     return this.data.motivation;
   }
 
-  getBuildImages(){
+  getBuildImages(): string {
     return this.data.build_images;
   }
 
-  getPublishAboutMe(){
+  getPublishAboutMe(): boolean {
     return this.data.publish_about_me;
   }
 
-  getPublishAge(){
+  getPublishAge(): boolean {
     return this.data.publish_age;
   }
 
-  getPublishCountry(){
+  getPublishCountry(): boolean {
     return this.data.publish_country;
   }
 
-  getDiscordUserName(){
+  getDiscordUserName(): string {
     return this.data.discord_nick;
   }
 
-  getMcIgn(){
+  getMcIgn(): string {
     return this.data.mc_ign;
   }
 
-  getStatus(){
+  getStatus(): number {
     return this.data.status;
   }
 
-  getDenyReason(){
+  getDenyReason(): string {
     return this.data.deny_reason;
   }
 
-  getMcSkinUrl() {
+  getMcSkinUrl(): string {
     return `https://crafatar.com/renders/body/${this.getMcUuid()}?overlay=true`;
   }
 
-  getDiscordAvatarUrl() {
+  getDiscordAvatarUrl(): Promise<string> {
     return new Promise((resolve, reject) => {
-      discord_api.getAvatarUrl(this.getDiscordId(), (avatarUrl) => {
+      discord_api.getAvatarUrl(this.getDiscordId(), (avatarUrl: string) => {
         resolve(avatarUrl);
       });
     });
@@ -258,5 +257,7 @@ Application.schema = {
 }
 
 module.exports = Application;
+
+export type {Application};
 
 export default {}

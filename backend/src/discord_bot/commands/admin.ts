@@ -13,12 +13,15 @@ const ApplicationFactory = require("../../application/applicationFactory.js");
 const applicationFactory = new ApplicationFactory({});
 applicationFactory.connect(); 
 
+import Discord = require("discord.js");
+import type {Application} from "../../application/application.js";
+
 module.exports = {
   name: 'admin',
   description: 'Commands only for admins',
   aliases: ['a'],
 
-  execute(message, args) {
+  execute(message: Discord.Message, args: string[]) {
     //Check if the author is admin
     if (auth.getAccessLevel({id: message.member.id}, null) >= 8) {
       //Check the first argument and execute it
@@ -66,9 +69,9 @@ module.exports = {
                   member.save();
                   message.reply("success");
                 })
-                .catch(e => message.reply(e.message));
+                .catch((e: Error) => message.reply(e.message));
             })
-            .catch(e => message.reply(e.message));
+            .catch((e: Error) => message.reply(e.message));
           break;
         case 'activate':
           memberFactory.getByDiscordId(message.mentions.users.first().id)
@@ -78,22 +81,22 @@ module.exports = {
                 member.save();
                 message.reply("success");
               })
-              .catch(e => message.reply(e.message));
+              .catch((e: Error) => message.reply(e.message));
             })
-            .catch(e => message.reply(e.message));
+            .catch((e: Error) => message.reply(e.message));
           break;
         case 'exec':
           //Command to execute manual tasks
           switch(args[1]){
             case 'forceaccept':
               applicationFactory.getByDiscordId(message.mentions.users.first().id)
-              .then(application => {
+              .then((application: Application) => {
                 if(application) application[0].acceptGuildMember()
                 .then(() => message.reply("success"))
-                .catch(e => message.reply(e.message));
+                .catch((e: Error) => message.reply(e.message));
                 else message.reply("couldnt get application")
               })
-              .catch(e => message.reply(e.message));
+              .catch((e: Error) => message.reply(e.message));
               break;
             default:
               message.reply('I didnt quite understand you moron');
@@ -112,7 +115,7 @@ module.exports = {
                 cmd += arg;
                 cmd += ' ';
               });
-              mc_helpers.sendCmd(cmd.trim(), server, (res) => {
+              mc_helpers.sendCmd(cmd.trim(), server, (res: string) => {
                 message.channel.send(res)
               });
               break;

@@ -12,17 +12,17 @@ global.g.mcPlayerCount = 0;
 
 module.exports = {
   //Gets uuid for a given ign
-  getUUID(ign, callback){
+  getUUID(ign: string, callback: Function){
     main.getUUID(ign, callback);
   },
 
   //Gets ign for a given uuid
-  getIGN(uuid, callback){
+  getIGN(uuid: string, callback: Function){
     main.getIGN(uuid, callback);
   },
 
   //Returns the url for the render of an uuid
-  returnRenderUrl(uuid){
+  returnRenderUrl(uuid: string){
     return main.returnRenderUrl(uuid);
   },
 
@@ -32,23 +32,23 @@ module.exports = {
   },
 
   //Always checks the survival server
-  getServerVersion(callback){
-    rcon.getServerVersion(res => callback(res));
+  getServerVersion(callback: Function){
+    rcon.getServerVersion((res: string) => callback(res));
   },
 
   //Sends a command directly to the minecraft server using rcon; Only use in edge cases! Rather use events
-  sendCmd(cmd, server, callback?){
-    rcon.send(cmd, server, function(res){
+  sendCmd(cmd: string, server: string, callback?: Function){
+    rcon.send(cmd, server, function(res: string){
       if(res && typeof callback == 'function') callback(res);
     });
   },
 
-  whitelist(mcUuid){
-    main.getIGN(mcUuid, function (err, ign) {
+  whitelist(uuid: string){
+    main.getIGN(uuid, function (err: string, ign: string) {
       if(!err && ign) {
-        rcon.send(`whitelist add ${ign}`, false, function (res) {});
+        rcon.send(`whitelist add ${ign}`, false, function (_res: string) {});
       } else {
-        global.g.log(2, 'minecraft', 'index.whitelist couldnt get the ign', {err: err, ign: ign, mcUuid: mcUuid});
+        global.g.log(2, 'minecraft', 'index.whitelist couldnt get the ign', {err: err, ign: ign, mcUuid: uuid});
       }
     });
   }

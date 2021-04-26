@@ -4,8 +4,8 @@ const discord_helpers = require("../discord_bot/helpers.js");
 const discord_api = require("../discord_api/index.js");
 
 class Member extends Persistable{
-  static schema;
-  constructor(discord_id, discord_nick, status, joinedDate, karma, mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country){
+  static schema: any;
+  constructor(discord_id: string, discord_nick: string, status: number, joinedDate: Date, karma: number, mc_uuid: string, mc_ign: string, country: string, birth_month: number, birth_year: number, publish_age: boolean, publish_country: boolean){
     super({name: "members", schema: Member.schema});
 
     this.data.discord = discord_id;
@@ -34,7 +34,7 @@ class Member extends Persistable{
     return this.data.discord_nick;
   }
 
-  setDiscordUserName(newDiscordUserName) {
+  setDiscordUserName(newDiscordUserName: string) {
     if(typeof newDiscordUserName != "string") throw new Error("no input given");
     if(newDiscordUserName.indexOf("#") === -1) throw new Error("no # in new nick");
     if(!Number.isInteger(Number.parseInt(newDiscordUserName.slice(newDiscordUserName.length - 4, newDiscordUserName.length)))) throw new Error("no discriminator");
@@ -44,7 +44,7 @@ class Member extends Persistable{
 
   getDiscordAvatarUrl() {
     return new Promise((resolve, reject) => {
-      discord_api.getAvatarUrl(this.data.discord, (avatarUrl) => {
+      discord_api.getAvatarUrl(this.data.discord, (avatarUrl: string) => {
         resolve(avatarUrl);
       });
     });
@@ -52,7 +52,7 @@ class Member extends Persistable{
 
   getDiscordUserdata() {
     return new Promise((resolve, reject) => {
-      discord_api.getUserObject({id: this.data.discord}, {fromApi: true}, (err, userObject) => {
+      discord_api.getUserObject({id: this.data.discord}, {fromApi: true}, (err: Error, userObject: string) => {
         if(err) {
           reject(err);
         } else {
@@ -70,7 +70,7 @@ class Member extends Persistable{
     return this.data.karma;
   }
 
-  modifyKarmaBy(modifier) {
+  modifyKarmaBy(modifier: number) {
     this.data.karma += modifier;
   }
 
@@ -78,7 +78,7 @@ class Member extends Persistable{
     return this.data.status;
   }
 
-  setStatus(status) {
+  setStatus(status: number) {
     if(Member.isValidStatus(status)) {
       this.data.status = status;
     } else {
@@ -86,7 +86,7 @@ class Member extends Persistable{
     }
   }
 
-  static isValidStatus(status) {
+  static isValidStatus(status: number) {
     return status >= 0 && status <= 2;
   }
 
@@ -94,7 +94,7 @@ class Member extends Persistable{
     return this.data.mcUUID ? this.data.mcUUID : false;
   }
 
-  setMcUuid(newMcUuid){
+  setMcUuid(newMcUuid: string){
     if(typeof newMcUuid !== "string") throw new Error("newMcUuid must be of type string");
     if(newMcUuid.length !== 32) throw new Error("newMcUuid must be 32 characters long");
     this.data.mcUUID = newMcUuid;
@@ -104,7 +104,7 @@ class Member extends Persistable{
     return this.data.mcName ? this.data.mcName : false;
   }
 
-  setMcIgn(newIgn) {
+  setMcIgn(newIgn: string) {
     if(typeof newIgn !== "string") throw new Error("newIgn must be of type string");
     if(newIgn.length < 3 || newIgn.length > 16) throw new Error("newIgn has to be be >= 3 and <= 16");
     this.data.mcName = newIgn;
@@ -112,7 +112,7 @@ class Member extends Persistable{
 
   updateMcIgn() {
     return new Promise((resolve, reject) => {
-      mc.getIGN(this.getMcUuid(), (err, newIgn) => {
+      mc.getIGN(this.getMcUuid(), (err: Error, newIgn: string) => {
         if(err || !newIgn) {
           reject(err);
         } else {
@@ -131,7 +131,7 @@ class Member extends Persistable{
     return this.data.publish_country ? this.getCountry() : false;
   }
 
-  setCountry(newCountry){
+  setCountry(newCountry: string){
     if(typeof newCountry !== "string") throw new Error("newCountry must be of type string");
     this.data.country = newCountry;
   }
@@ -140,7 +140,7 @@ class Member extends Persistable{
     return this.data.birth_month ? this.data.birth_month : false;
   }
 
-  setBirthMonth(newBirthMonth){
+  setBirthMonth(newBirthMonth: number){
     if(!Number.isInteger(newBirthMonth)) throw new Error("newBirthMonth must be Integer");
     if(newBirthMonth < 1 || newBirthMonth > 12) throw new Error("newBirthMonth must be > 0 and < 13");
     this.data.birth_month = newBirthMonth;
@@ -150,13 +150,13 @@ class Member extends Persistable{
     return this.data.birth_year ? this.data.birth_year : false;
   }
 
-  setBirthYear(newBirthYear){
+  setBirthYear(newBirthYear: number){
     if(!Number.isInteger(newBirthYear)) throw new Error("newBirthYear must be Integer");
     this.data.birth_year = newBirthYear;
   }
 
   getAge(){
-    if(!this.getBirthMonth()) return false;
+    if(!this.getBirthMonth()) return 0;
     if (this.getBirthMonth() <= new Date().getMonth() + 1){
       return new Date().getFullYear() - this.getBirthYear();
     }else{
@@ -172,12 +172,12 @@ class Member extends Persistable{
     return this.data.publish_age ? {publish_age: this.data.publish_age, publish_country: this.data.publish_country} : false;
   }
 
-  setPublishAge(newPublishAge){
+  setPublishAge(newPublishAge: boolean){
     if(typeof newPublishAge !== "boolean") throw new Error("newPublishAge must be of type boolean");
     this.data.publish_age = newPublishAge;
   }
 
-  setPublishCountry(newPublishCountry) {
+  setPublishCountry(newPublishCountry: boolean) {
     if(typeof newPublishCountry !== "boolean") throw new Error("newPublishCountry must be of type boolean");
     this.data.publish_country = newPublishCountry;
   }
@@ -190,9 +190,9 @@ class Member extends Persistable{
    *  LIFECYCLE
    */
 
-  giveDiscordRole(role){
+  giveDiscordRole(role: string){
     return new Promise((resolve, reject) => {
-      discord_helpers.addMemberToRole(this.getDiscordId(), role, e => {
+      discord_helpers.addMemberToRole(this.getDiscordId(), role, (e: Error) => {
         if(e){
           reject(e);
         }else{
@@ -202,9 +202,9 @@ class Member extends Persistable{
     });
   }
 
-  takeDiscordRole(role){
+  takeDiscordRole(role: string){
     return new Promise((resolve, reject) => {
-      discord_helpers.removeMemberFromRole(this.getDiscordId(), role, e => {
+      discord_helpers.removeMemberFromRole(this.getDiscordId(), role, (e: Error) => {
         if (e) {
           reject(e);
         } else {
@@ -269,5 +269,7 @@ Member.schema = {
 };
 
 module.exports = Member;
+
+export type {Member};
 
 export default {}

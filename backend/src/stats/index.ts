@@ -14,7 +14,7 @@ module.exports = {
   },
 
   //Get a statistics template
-  get(template, options, callback) {
+  get(template: string, options: any, callback: Function) { //TODO: fix any
     main.template[template](options, callback);
   }
 }

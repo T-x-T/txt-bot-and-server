@@ -2,18 +2,18 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let connected = false;
-let models = {};
+let models: any = {}; //TODO: fix any
 
 //This is the peristableProvider for saving and getting data to and from a mongoDB Database
-module.exports = class Mongo{
+class Mongo{
   mongodb_url;
   collection;
   schema;
-  model;
+  model: any;
   
   //options:
   //mongodb_url: if not given, use the value from the config
-  constructor(collection, schema, options){
+  constructor(collection: string, schema: any, options: any){
     this.collection = collection;
     this.schema = schema;
     this.mongodb_url = global.g.config.data.mongodb_url;
@@ -51,11 +51,11 @@ module.exports = class Mongo{
     }
   }
 
-  _autoIncrement(key, collection){
+  _autoIncrement(key: string, collection: string){
     this.schema.pre('save', 
-      function(next) {
+      function(next: Function) {
         if (this.isNew) {
-          models[collection].countDocuments().then(res => {
+          models[collection].countDocuments().then((res: number) => {
             this[key] = res;
             next();
           });
@@ -78,11 +78,11 @@ module.exports = class Mongo{
     return await this.retrieveFiltered({});
   }
 
-  async retrieveFirstFiltered(filter){
+  async retrieveFirstFiltered(filter: any){ //TODO: fix any
     return await this.retrieveOneFilteredAndSorted(filter, null);
   }
 
-  async retrieveFiltered(filter){
+  async retrieveFiltered(filter: any){
     return await this.retrieveFilteredAndSorted(filter, null);
   }
 
@@ -90,16 +90,16 @@ module.exports = class Mongo{
     return await this.retrieveNewestFiltered({});
   }
 
-  async retrieveNewestFiltered(filter){
+  async retrieveNewestFiltered(filter: any){
     return await this.retrieveOneFilteredAndSorted(filter, {_id: -1});
   }
 
-  async retrieveFilteredAndSorted(filter, sort){
+  async retrieveFilteredAndSorted(filter: any, sort: any){
     sort = typeof sort == "object" ? { "sort": sort, lean: true } : null;
     return await this.model.find(filter, null, sort);
   }
 
-  async retrieveOneFilteredAndSorted(filter, sort) {
+  async retrieveOneFilteredAndSorted(filter: any, sort: any) {
     sort = typeof sort == "object" ? { "sort": sort } : null;
     return await this.model.findOne(filter, null, sort);
   }
@@ -109,7 +109,7 @@ module.exports = class Mongo{
    * Save
    */
 
-  async save(input){
+  async save(input: any){
     let filter: any = false;
     filter = input.hasOwnProperty('_id') ? {_id: input._id} : filter;
     filter = input.hasOwnProperty('discord') ? {discord: input.discord} : filter;
@@ -123,7 +123,7 @@ module.exports = class Mongo{
     }
   }
 
-  async create(input){
+  async create(input: any){
     return await new this.model(input).save();
   }
 
@@ -135,9 +135,13 @@ module.exports = class Mongo{
     await this.deleteByFilter({});
   }
 
-  async deleteByFilter(filter){
+  async deleteByFilter(filter: any){
     await this.model.deleteMany(filter);
   }
 }
+
+module.exports = Mongo;
+
+export type {Mongo};
 
 export default {}

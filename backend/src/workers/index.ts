@@ -14,8 +14,8 @@ const rcon = require("../minecraft/rcon.js");
 //Stuff that should run on startup
 mc_helpers.updateOnlinePlayers();
 
-log.prune(30).catch(e => console.log("failed to prune logs:", e));
-log.pruneLevel(1, 0).catch(e => console.log("failed to prune logs:", e));
+log.prune(30).catch((e: Error) => console.log("failed to prune logs:", e));
+log.pruneLevel(1, 0).catch((e: Error) => console.log("failed to prune logs:", e));
 
 //Contains discord user objects mapped by the discord id; gets cleared once an hour in workers
 global.g.cache = {};
@@ -23,7 +23,7 @@ global.g.cache.discordUserObjects = {};
 update.updateUserIdCache();
 
 global.g.cache.minecraftServerVersion = "";
-rcon.getServerVersion(res => global.g.cache.minecraftServerVersion = res);
+rcon.getServerVersion((res: string) => global.g.cache.minecraftServerVersion = res);
 
 //10 seconds after startup
 setTimeout(() => {
@@ -52,7 +52,7 @@ setInterval(function(){
   update.updateAllIGNs();
   update.updateAllNicks();
   update.updateUserIdCache();
-  rcon.getServerVersion(res => global.g.cache.minecraftServerVersion = res);
+  rcon.getServerVersion((res: string) => global.g.cache.minecraftServerVersion = res);
 }, 1000 * 60 * 60);
 
 
@@ -66,8 +66,8 @@ setInterval(function(){
 
 //Every day
 setInterval(function(){
-  log.prune(30).catch(e => console.log("failed to prune logs:", e));
-  log.pruneLevel(1, 0).catch(e => console.log("failed to prune logs:", e));
+  log.prune(30).catch((e: Error) => console.log("failed to prune logs:", e));
+  log.pruneLevel(1, 0).catch((e: Error) => console.log("failed to prune logs:", e));
 }, 1000 * 60 * 60 * 24);
 
 export default {}

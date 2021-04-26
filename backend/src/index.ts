@@ -35,7 +35,7 @@ global.g.log = log.write;
 //Log that the app got started
 global.g.log(1, 'index', 'Application started', null);
 
-process.on('uncaughtException', (err, origin) => {
+process.on('uncaughtException', (err: Error, origin: string) => {
   global.g.emitter.emit("crash", err, origin);
   console.error(err.stack);
   setTimeout(() => {

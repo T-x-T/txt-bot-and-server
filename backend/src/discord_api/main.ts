@@ -5,16 +5,18 @@
 
 //Dependencies
 const https = require("https");
+import Discord = require("discord.js");
+import {IncomingMessage} from "node:http";
 
-var client;
+let client: Discord.Client;
 
-global.g.emitter.once('discord_bot_ready', (_client) => {
+global.g.emitter.once('discord_bot_ready', (_client: Discord.Client) => {
   client = _client;
 });
 
 const main = {
   //Get the user object from an access_token
-  getUserObject(access_token, callback) {
+  getUserObject(access_token: string, callback: Function) {
     //Get the users object
     https.get({
       host: 'discordapp.com',
@@ -24,7 +26,7 @@ const main = {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Authorization': 'Bearer ' + access_token
       }
-    }, function (res) {
+    }, function (res: IncomingMessage) {
       res.setEncoding('utf8');
       let userData = '';
       res.on('data', function (chunk) {
@@ -44,7 +46,7 @@ const main = {
     });
   },
 
-  getUserObjectById(id, options, callback) {
+  getUserObjectById(id: string, options: any, callback: Function) { //TODO: fix any
     //Check if this id is already cached
     if(global.g.cache.discordUserObjects.hasOwnProperty(id)) {
       //Its cached, return that
@@ -52,7 +54,7 @@ const main = {
     } else {
       if(options.fromApi) {
         //Ask the api anyways
-        main.getUserObjectByIdFromApi(id, function (userData) {
+        main.getUserObjectByIdFromApi(id, function (userData: any) { //TODO: fix any
           if(userData) {
             callback(false, userData);
           } else {
@@ -67,7 +69,7 @@ const main = {
   },
 
   //Get userObject by ID directly from api WITHOUT caching, NEVER EVER use this, unless you are 100% sure and asked TxT
-  getUserObjectByIdFromApi(id, callback) {
+  getUserObjectByIdFromApi(id: string, callback: Function) {
     //Get the users object
     https.get({
       host: 'discordapp.com',
@@ -77,7 +79,7 @@ const main = {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Authorization': 'Bot ' + global.g.config.discord_bot.bot_token
       }
-    }, function (res) {
+    }, function (res: IncomingMessage) {
       res.setEncoding('utf8');
       let userData: any = '';
       res.on('data', function (chunk) {
@@ -95,7 +97,7 @@ const main = {
           if(userData.hasOwnProperty("retry_after")) {
             //We got rate-limited, try again after it expired
             setTimeout(function () {
-              main.getUserObjectById(id, false, function (_userData) {
+              main.getUserObjectById(id, false, function (_userData: any) { //TODO: fix any
                 callback(_userData);
               });
             }, userData.retry_after + 10);
@@ -112,7 +114,7 @@ const main = {
     });
   },
 
-  getNicknameByID(userID, callback) {
+  getNicknameByID(userID: string, callback: Function) {
     try {
       callback(`${client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).user.username}#${client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).user.discriminator}`);
     } catch(e) {
@@ -122,13 +124,13 @@ const main = {
   },
 
   //Callbacks the avatar url of the given userID
-  getAvatarUrl(discord_id, callback) {
+  getAvatarUrl(discord_id: string, callback: Function) {
     client.fetchUser(discord_id).then(myUser => {
       callback(myUser.avatarURL);
     }).catch(function () {callback(false)});
   },
 
-  getMemberObjectByID(userID, callback) {
+  getMemberObjectByID(userID: string, callback: Function) {
     try {
       callback(client.guilds.get(global.g.config.discord_bot.guild).members.get(userID));
     } catch(e) {

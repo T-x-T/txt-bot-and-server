@@ -1,15 +1,15 @@
 //This is a base clase that needs to be inherited by all classes that implement persistance
 
 module.exports = class Persistable{
-  persistanceProvider;
-  options;
+  persistanceProvider: any; //TODO: fix any
+  options: any;
   data: any = {};
 
   //options:
   //persistanceProvider: "mongo" or "testing", if not set get default from config
   //name: name for the collection/table in the database
   //schema: object describing the data: https://mongoosejs.com/docs/guide.html
-  constructor(options){
+  constructor(options: any){
     this.options = typeof options == "object" ? options : {};
 
     this._initializePersitanceProvider();

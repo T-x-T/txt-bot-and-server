@@ -5,7 +5,7 @@ const blog = require("../blog");
 const Mongo = require("../persistance/mongo.js");
 
 //Stolen from stackoverflow: https://stackoverflow.com/a/27872144
-function randomString(len) {
+function randomString(len: number) {
   var str = "",
     i = 0,
     min = 0,

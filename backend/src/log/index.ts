@@ -14,11 +14,11 @@ let log: any;
 
 log = {};
 //Write a log entry
-log.write = async function (level, component, name, payload, timestamp) {
+log.write = async function (level: number, component: string, name: string, payload: any, timestamp?: Date) {
   let entry = new Persistable({name: "log", schema: log.schema});
   await entry.init();
   entry.data = {
-    timestamp: timestamp ? timestamp : Date.now(),
+    timestamp: timestamp ? timestamp : new Date(),
     level: level,
     component: component,
     name: name,
@@ -29,7 +29,7 @@ log.write = async function (level, component, name, payload, timestamp) {
 
 //Get log entries
 //Input: level: the loglevel to query, timestamp: Date after which we give log entries back
-log.read = async function (level, timestamp) {
+log.read = async function (level: number, timestamp: Date) {
   let factory = new Factory({name: "log", schema: log.schema});
   await factory.connect();
 
@@ -44,7 +44,7 @@ log.read = async function (level, timestamp) {
 };
 
 //Get log entries by a given id
-log.readById = async function (id) {
+log.readById = async function (id: string) {
   let factory = new Factory({name: "log", schema: log.schema});
   await factory.connect();
 
@@ -52,7 +52,7 @@ log.readById = async function (id) {
 };
 
 //This will delete older than the given amount of days
-log.prune = async function(days){
+log.prune = async function(days: number){
   let factory = new Factory({name: "log", schema: log.schema});
   await factory.connect();
 
@@ -60,7 +60,7 @@ log.prune = async function(days){
 };
 
 //This will delete older than the given amount of days of given log level
-log.pruneLevel = async function(days, level){
+log.pruneLevel = async function(days: number, level: number){
   let factory = new Factory({name: "log", schema: log.schema});
   await factory.connect();
 

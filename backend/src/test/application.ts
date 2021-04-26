@@ -9,6 +9,10 @@ const MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory();
 const discord_helpers = require("../discord_bot");
 
+import type {Application as TApplication} from "../application/application.js";
+import type {Member as TMember} from "../user/member.js";
+import Discord = require("discord.js");
+
 async function createAndSaveApplication(){
   return await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
 }
@@ -247,7 +251,7 @@ describe("application", function(){
 
     it("send denied mail", async function(){
       return new Promise(async (resolve, reject) => {
-        global.g.emitter.once("testing_email_sendApplicationDeniedMail", application => {
+        global.g.emitter.once("testing_email_sendApplicationDeniedMail", (application: TApplication) => {
           assert.strictEqual(application.getId(), 0);
           resolve();
         });
@@ -273,7 +277,7 @@ describe("application", function(){
 
     it("send accepted mail", function(){
       return new Promise<void>(async (resolve, reject) => {
-        global.g.emitter.once("testing_email_sendApplicationAcceptedMail", application => {
+        global.g.emitter.once("testing_email_sendApplicationAcceptedMail", (application: TApplication) => {
           assert.strictEqual(application.getId(), 0);
           resolve();
         });
@@ -348,8 +352,8 @@ describe("application", function(){
 
     it("send welcome message", function(){
       return new Promise<void>(async (resolve, reject) => {
-        global.g.emitter.once("testing_discordHelpers_sendMessage", (message, channelId) => {
-          global.g.emitter.once("testing_discordHelpers_sendMessage", (message, channelId) => {
+        global.g.emitter.once("testing_discordHelpers_sendMessage", (_message: string, _channelId: string) => {
+          global.g.emitter.once("testing_discordHelpers_sendMessage", (message: string, channelId: string) => {
             assert.ok(message.includes("293029505457586176"));
             assert.strictEqual(channelId, global.g.config.discord_bot.channel.new_member_announcement);
             resolve();
@@ -363,7 +367,7 @@ describe("application", function(){
 
     it("add member to whitelist", function(){
       return new Promise<void>(async (resolve, reject) => {
-        global.g.emitter.once("testing_minecraft_rcon_send", cmd => {
+        global.g.emitter.once("testing_minecraft_rcon_send", (cmd: string) => {
           assert.strictEqual(cmd, "whitelist add The__TxT");
           resolve();
         });
@@ -377,7 +381,7 @@ describe("application", function(){
       return new Promise<void>(async (resolve, reject) => {
         let application = await createAndSaveApplication();
 
-        global.g.emitter.once("testing_discordHelpers_addMemberToRole", (discordId, roleId) => {
+        global.g.emitter.once("testing_discordHelpers_addMemberToRole", (discordId: string, roleId: string) => {
           assert.strictEqual(discordId, application.getDiscordId());
           assert.strictEqual(roleId, global.g.config.discord_bot.roles.paxterya);
           resolve();
@@ -389,11 +393,11 @@ describe("application", function(){
 
     it("set correct nickname in discord", function(){
       return new Promise<void>(async (resolve, reject) => {
-        discord_helpers.getMemberObjectById("293029505457586176", async discordMember => {
+        discord_helpers.getMemberObjectById("293029505457586176", async (discordMember: Discord.GuildMember) => {
           discordMember.setNickname("test");
           let application = await createAndSaveApplication();
           await application.accept();
-          discord_helpers.getMemberObjectById("293029505457586176", discordMember => {
+          discord_helpers.getMemberObjectById("293029505457586176", (discordMember: Discord.GuildMember) => {
             assert.strictEqual(discordMember.nickname, "The__TxT");
             resolve();
           });

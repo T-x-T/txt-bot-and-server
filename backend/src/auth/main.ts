@@ -5,19 +5,19 @@
 
 //Dependencies
 const qs = require("querystring");
-const https = require("https");
+import https = require("https");
 const discord_api = require("../discord_api/index.js");
-import util = require("util");
 import Discord = require("discord.js");
+import {IncomingMessage} from "node:http";
 
 var client: Discord.Client;
 
-global.g.emitter.once('discord_bot_ready', (_client) => {
+global.g.emitter.once('discord_bot_ready', (_client: Discord.Client) => {
   client = _client;
 });
 
 const main = {
-  returnAccessLevel(userID) {
+  returnAccessLevel(userID: string) {
     let access_level = 0;
     try {
       if(client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).roles.has(global.g.config.discord_bot.roles.paxterya)) access_level = 3;
@@ -32,15 +32,15 @@ const main = {
   },
 
   //Returns true if the given discord id is member of the guild and false if not
-  isGuildMember(userID) {
+  isGuildMember(userID: string) {
     let is = client.guilds.get(global.g.config.discord_bot.guild).members.has(userID);
     global.g.log(0, 'auth', 'main.isGuildMember returned', {userID: userID, isGuildMember: is});
     return is
   },
 
   //Takes a code and returns the discord_id
-  getDiscordIdFromCode(code, redirect, callback) {
-    main.getAccess_token(code, redirect, function (err, access_token) {
+  getDiscordIdFromCode(code: string, redirect: string, callback: Function) {
+    main.getAccess_token(code, redirect, function (_err: Error, access_token: string) {
       if(access_token) {
         main.getDiscordIdFromToken(access_token, callback);
       } else {
@@ -50,8 +50,8 @@ const main = {
   },
 
   //Calls back true if the given access_token belongs to an admin
-  getTokenAccessLevel(access_token, callback) {
-    main.getDiscordIdFromToken(access_token, function (err, discord_id) {
+  getTokenAccessLevel(access_token: string, callback: Function) {
+    main.getDiscordIdFromToken(access_token, function (_err: Error, discord_id: string) {
       let access_level = main.returnAccessLevel(discord_id);
       if(access_level) {
         callback(false, access_level);
@@ -62,8 +62,8 @@ const main = {
   },
 
   //Takes an access_token and returns the discord_id
-  getDiscordIdFromToken(access_token, callback) {
-    discord_api.getUserObject({token: access_token}, false, function (err, userObject) {
+  getDiscordIdFromToken(access_token: string, callback: Function) {
+    discord_api.getUserObject({token: access_token}, false, function (_err: Error, userObject: any) { //TODO: fix any
       if(userObject.hasOwnProperty('id')) {
         callback(false, userObject.id, access_token); //The access_token is only needed by oauth.isCodeAdmin
       } else {
@@ -72,8 +72,8 @@ const main = {
     });
   },
 
-  getCodeAccessLevel(code, redirect, callback) {
-    main.getDiscordIdFromCode(code, redirect, function (err, discord_id, access_token) {
+  getCodeAccessLevel(code: string, redirect: string, callback: Function) {
+    main.getDiscordIdFromCode(code, redirect, function (_err: Error, discord_id: string, access_token: string) {
       if(discord_id) {
         callback(false, main.returnAccessLevel(discord_id), access_token); //handlers.paxLogin sets the access_token as a cookie
       } else {
@@ -83,13 +83,13 @@ const main = {
   },
 
   //Takes a code and returns the access_token
-  getAccess_token(code, redirect, callback) {
+  getAccess_token(code: string, redirect: string, callback: Function) {
     let redirect_uri = '';
     redirect_uri = redirect == 'application' ? global.g.config.auth.discord_redirect_uri_application : redirect_uri;
     redirect_uri = redirect == 'staffLogin' ? global.g.config.auth.discord_redirect_uri_staffLogin : redirect_uri;
     redirect_uri = redirect == 'applicationNew' ? global.g.config.auth.discord_redirect_uri_applicationNew : redirect_uri;
     redirect_uri = redirect == 'interface' ? global.g.config.auth.discord_redirect_uri_interface : redirect_uri;
-
+    
     //Now lets get the access_token from that code
     let payload = qs.stringify({
       'client_id': global.g.config.auth.discord_client_id,
@@ -107,7 +107,7 @@ const main = {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
-    }, function (res) {
+    }, function (res: IncomingMessage) {
       res.setEncoding('utf8');
       let data: any = '';
       res.on('data', function (chunk) {

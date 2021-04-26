@@ -6,10 +6,11 @@
 //Dependencies
 const mailer   = require('nodemailer');
 const sanitize = require('sanitize-html');
+import type {Application} from "../application/application.js";
 
 const email = {
   application: {
-    confirmation(application) {
+    confirmation(application: Application) {
       //Build the test for the mail
       let text = `Hi ${application.getMcIgn()},\n`;
       text += 'thank you for applying to join Paxterya! We are happy to tell you that we received your application successfully!\n';
@@ -33,7 +34,7 @@ const email = {
       email.send(application.getEmailAddress(), 'We have received your application', text);
     },
 
-    denied(application) {
+    denied(application: Application) {
       //Build the text for the email
       let text = '';
       text += `Hi ${application.getMcIgn()},\n`;
@@ -53,7 +54,7 @@ const email = {
       email.send(application.getEmailAddress(), 'Your application was unsuccessful :(', text);
     },
 
-    accepted(application) {
+    accepted(application: Application) {
       //Build the text for the email
       let text = '';
       text += `Hi ${application.getMcIgn()},\n`;
@@ -72,11 +73,11 @@ const email = {
     }
   },
   contact: {
-    new(subject, text) {
+    new(subject: string, text: string) {
       email.send('contact@paxterya.com', subject, text);
     }
   },
-  send(recipient, subject, text) {
+  send(recipient: string, subject: string, text: string) {
     //Set up the mail settings
     const mailTransporter = mailer.createTransport({
       host: 'mail.gandi.net',
@@ -94,8 +95,8 @@ const email = {
       subject: subject,
       text: sanitize(text, {allowedTags: [], allowedAttributes: {}}),
     };
-    mailTransporter.sendMail(mailOptions, function (err, info) {
-      global.g.log(0, 'email', 'email.send sent email', {recipient: recipient, subject: subject, text: text, err: err, info: info});
+    mailTransporter.sendMail(mailOptions, function (err: Error, info: string) {
+      global.g.log(0, 'email', 'email.send sent email', {recipient: recipient, subject: subject, text: text, err: err.message, info: info});
       if(err) {
         global.g.log(2, 'email', 'email.send couldnt sent the email out', {mail: mailOptions});
       }
