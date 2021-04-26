@@ -18,6 +18,7 @@ const sanitize = require('sanitize-html');
 
 import type {IRequestData} from "./webServer.js";
 import type {Application} from "../application/application.js";
+import type {Member} from "../user/member.js";
 
 //Create the container
 var handlers: any = {};
@@ -37,7 +38,7 @@ handlers.notFound = function (_data: IRequestData, callback: Function) {
 //API endpoint for querying roles of players; Requires one uuid in the querystring
 handlers.paxapi.roles = function(data: IRequestData, callback: Function){
   memberFactory.getByMcUuid(data.queryStringObject.uuid)
-  .then((member: any) => {
+  .then((member: Member) => {
     if(member) {
       callback(200, {role: oauth.getAccessLevel({id: member.getDiscordId()}, false)}, 'json');
     } else {
@@ -258,9 +259,9 @@ async function turnFilterIntoApplicationAndCallbackResult(filter: any, callback:
   switch(Object.keys(filter)[0]) {
     case "id":
       applicationFactory.getById(filter.id)
-        .then(async (applications: Application[]) => {
-          if(applications) {
-            callback(200, await turnApplicationIntoJson(applications[0], true), "json");
+        .then(async (application: Application) => {
+          if(application) {
+            callback(200, await turnApplicationIntoJson(application, true), "json");
           } else {
             callback(404, {err: "no application found with the given id", id: filter.id}, "json");
           }
@@ -355,7 +356,7 @@ handlers.paxapi.application.patch = function(data: IRequestData, callback: Funct
 
   if(typeof id == 'number' && status){
     applicationFactory.getById(id)
-    .then(async (application: any) => {
+    .then(async (application: Application) => {
       if(application){
         if(application.getStatus() !== 2){
           if(status === 3){

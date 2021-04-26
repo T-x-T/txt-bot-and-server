@@ -423,12 +423,12 @@ describe("application", function(){
       assert.strictEqual(application.getId(), 2);
     });
 
-    it("getById should return null when there is no application with the given id in the db", async function(){
+    it("getById should return falsy when there is no application with the given id in the db", async function(){
       await createAndSaveApplication();
       await applicationFactory.create("293029505457586175", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
 
       let res = await applicationFactory.getById(5);
-      assert.strictEqual(null, res);
+      assert.ok(!res);
     });
 
     it("getByDiscordId should return an array of correct results with one correct one in the db", async function(){
