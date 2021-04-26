@@ -43,6 +43,7 @@ sast:
 build_backend:
   image: docker:19.03.11
   needs: 
+    - compile_backend
     - test
   stage: build
   services:
