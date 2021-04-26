@@ -58,6 +58,7 @@ build_backend:
     - compile_backend
 build_frontend:
   image: docker:19.03.11
+  needs:
   stage: build
   services:
   - docker:19.03.11-dind
