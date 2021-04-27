@@ -1,6 +1,6 @@
 //This is a base clase that needs to be inherited by all classes that implement persistance
 
-module.exports = class Persistable{
+export = class Persistable{
   persistanceProvider: any; //TODO: fix any
   options: any;
   data: any = {};
@@ -37,5 +37,3 @@ module.exports = class Persistable{
     return await this.persistanceProvider.create(this.data);
   }
 }
-
-export default {}

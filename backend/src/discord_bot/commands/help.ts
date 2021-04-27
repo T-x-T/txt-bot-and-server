@@ -5,7 +5,7 @@
 
 import Discord = require("discord.js");
 
-module.exports = {
+export = {
   name: 'help',
   description: 'List all commands or all arguments for a single command',
   aliases: ['man'],
@@ -48,5 +48,3 @@ module.exports = {
     message.channel.send(data, { split: true });
   }
 };
-
-export default {}

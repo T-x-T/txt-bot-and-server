@@ -1,11 +1,9 @@
 require("./test.js");
-const Member = require("../user/member.js");
-const MemberFactory = require("../user/memberFactory.js");
-const Mongo = require("../persistance/mongo.js");
-const assert = require("assert");
+import Member = require("../user/member.js");
+import MemberFactory = require("../user/memberFactory.js");
+import Mongo = require("../persistance/mongo.js");
+import assert = require("assert");
 const schema = Member.schema;
-
-import type {Member as TMember} from "../user/member.js";
 
 async function createAndSaveNewMember(){
   let memberFactory = new MemberFactory();
@@ -180,64 +178,14 @@ describe("member", function(){
       assert.throws(() => member.setMcUuid("dac25e44d1024f3b819978ed62d209axx"), new Error("newMcUuid must be 32 characters long"));
     });
 
-    it("setMcUuid should throw with number as input", async function () {
-      let member = await createAndSaveNewMember();
-      assert.throws(() => member.setMcUuid(123), new Error("newMcUuid must be of type string"));
-    });
-
-    it("setMcUuid should throw with 0 as input", async function () {
-      let member = await createAndSaveNewMember();
-      assert.throws(() => member.setMcUuid(0), new Error("newMcUuid must be of type string"));
-    });
-
-    it("setMcUuid should throw with no input", async function () {
-      let member = await createAndSaveNewMember();
-      assert.throws(() => member.setMcUuid(), new Error("newMcUuid must be of type string"));
-    });
-
     it("setCountry should not throw with correct input", async function(){
       let member = await createAndSaveNewMember();
       assert.doesNotThrow(() => member.setCountry("thisIsAValidCountry"));
     });
 
-    it("setCountry should throw with number as input", async function(){
-      let member = await createAndSaveNewMember();
-      assert.throws(() => member.setCountry(123), new Error("newCountry must be of type string"));
-    });
-
-    it("setCountry should throw with 0 as input", async function () {
-      let member = await createAndSaveNewMember();
-      assert.throws(() => member.setCountry(0), new Error("newCountry must be of type string"));
-    });
-
-    it("setCountry should throw with no input", async function () {
-      let member = await createAndSaveNewMember();
-      assert.throws(() => member.setCountry(), new Error("newCountry must be of type string"));
-    });
-
-    it("setCountry should throw with false as input", async function () {
-      let member = await createAndSaveNewMember();
-      assert.throws(() => member.setCountry(false), new Error("newCountry must be of type string"));
-    });
-
     it("setBirthMonth should not throw with correct input", async function(){
       let member = await createAndSaveNewMember();
       assert.doesNotThrow(() => member.setBirthMonth(2));
-    });
-
-    it("setBirthMonth should throw with decimal as input", async function () {
-      let member = await createAndSaveNewMember();
-      assert.throws(() => member.setBirthMonth(2.1), new Error("newBirthMonth must be Integer"));
-    });
-
-    it("setBirthMonth should throw with string as input", async function () {
-      let member = await createAndSaveNewMember();
-      assert.throws(() => member.setBirthMonth("january"), new Error("newBirthMonth must be Integer"));
-    });
-
-    it("setBirthMonth should throw with no input", async function () {
-      let member = await createAndSaveNewMember();
-      assert.throws(() => member.setBirthMonth(), new Error("newBirthMonth must be Integer"));
     });
 
     it("setBirthMonth should throw with 0 as input", async function () {
@@ -255,44 +203,14 @@ describe("member", function(){
       assert.doesNotThrow(() => member.setBirthYear(2001));
     });
 
-    it("setBirthYear should throw with decimal as input", async function(){
-      let member = await createAndSaveNewMember();
-      assert.throws(() => member.setBirthYear(2000.4), new Error("newBirthYear must be Integer"))
-    });
-
-    it("setBirthYear should throw with string as input", async function () {
-      let member = await createAndSaveNewMember();
-      assert.throws(() => member.setBirthYear("this is definitely not an Integer"), new Error("newBirthYear must be Integer"))
-    });
-
     it("setPublishAge should not throw with correct input", async function(){
       let member = await createAndSaveNewMember();
       assert.doesNotThrow(() => member.setPublishAge(true));
     });
 
-    it("setPublishAge should throw with string as input", async function () {
-      let member = await createAndSaveNewMember();
-      assert.throws(() => member.setPublishAge("true"), new Error("newPublishAge must be of type boolean"));
-    });
-
-    it("setPublishAge should throw with no input", async function () {
-      let member = await createAndSaveNewMember();
-      assert.throws(() => member.setPublishAge(), new Error("newPublishAge must be of type boolean"));
-    });
-
     it("setPublishCountry should not throw with correct input", async function () {
       let member = await createAndSaveNewMember();
       assert.doesNotThrow(() => member.setPublishCountry(true));
-    });
-
-    it("setPublishCountry should throw with string as input", async function () {
-      let member = await createAndSaveNewMember();
-      assert.throws(() => member.setPublishCountry("true"), new Error("newPublishCountry must be of type boolean"));
-    });
-
-    it("setPublishCountry should throw with no input", async function () {
-      let member = await createAndSaveNewMember();
-      assert.throws(() => member.setPublishCountry(), new Error("newPublishCountry must be of type boolean"));
     });
   });
 
@@ -336,7 +254,7 @@ describe("member", function(){
 
     it("User#getDiscordUserdata should return a user object of the correct user", async function () {
       let member = await createAndSaveNewMember();
-      let userData = await member.getDiscordUserdata();
+      let userData: any = await member.getDiscordUserdata(); //TODO: fix any
       assert.strictEqual(userData.id, member.data.discord)
     });
   });
@@ -351,11 +269,6 @@ describe("member", function(){
       let member = await createAndSaveNewMember();
       member.setDiscordUserName("TheTxt#1234");
       assert.strictEqual(member.data.discord_nick, "TheTxt#1234")
-    });
-
-    it("passing nothing should throw", async function () {
-      let member = await createAndSaveNewMember();
-      assert.throws(() => member.setDiscordUserName(), new Error("no input given"));
     });
 
     it("passing nick without # should throw", async function () {
@@ -445,10 +358,6 @@ describe("member", function(){
       assert.strictEqual(member.getMcUuid(), "dac25e44d1024f3b819978ed62d209a1");
     });
 
-    it("getByDiscordId should reject when no discord_id is given", async function () {
-      await assert.rejects(async () => await new MemberFactory().getByDiscordId(), new Error("No discord_id given"));
-    });
-
     it("getByDiscordId should create a correct object", async function () {
       await createAndSaveNewMember();
       let member = await new MemberFactory().getByDiscordId("293029505457586176");
@@ -466,10 +375,6 @@ describe("member", function(){
       await createAndSaveNewMember();
       let member = await new MemberFactory().getByMcUuid("dac25e44d1024f3b819978ed62d209a1");
       assert.strictEqual(member.getDiscordId(), "293029505457586176");
-    });
-
-    it("getByMcUuid should reject when no mc_uuid is given", async function(){
-      await assert.rejects(async () => new MemberFactory().getByMcUuid(), new Error("No mc_uuid given"));
     });
 
     it("getByMcUuid should create a correct object", async function () {
@@ -518,7 +423,7 @@ describe("member", function(){
       await global.g.memberFactory.create("385133822762811394", "Mufon#7787", "28fc533e641f440fbe3a9bb0f8c5bed6", "Mufon59", "germany", 7, 2000, true, true);
 
       let members = await new MemberFactory().getAll();
-      let member = members.find((m: TMember) => m.getDiscordId() === "385133822762811394");
+      let member = members.find((m: Member) => m.getDiscordId() === "385133822762811394");
       assert.strictEqual(member.getDiscordUserName(), "Mufon#7787");
       assert.strictEqual(member.getMcUuid(), "28fc533e641f440fbe3a9bb0f8c5bed6");
       assert.strictEqual(member.getMcIgn(), "Mufon59");
@@ -542,7 +447,7 @@ describe("member", function(){
       let res = await global.g.memberFactory.getAllWhitelisted();
       assert.strictEqual(res.length, 2);
 
-      let member = res.find((m: TMember) => m.getDiscordId() === "385133822762811394");
+      let member = res.find((m: Member) => m.getDiscordId() === "385133822762811394");
       assert.strictEqual(member.getDiscordUserName(), "Mufon#7787");
       assert.strictEqual(member.getMcUuid(), "28fc533e641f440fbe3a9bb0f8c5bed6");
       assert.strictEqual(member.getMcIgn(), "Mufon59");
@@ -701,5 +606,3 @@ describe("member", function(){
     });
   });
 });
-
-export default {}

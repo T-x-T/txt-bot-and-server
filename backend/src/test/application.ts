@@ -1,16 +1,14 @@
 require("./test.js");
-const assert = require("assert");
-const Application = require("../application/application.js");
-const ApplicationFactory = require("../application/applicationFactory.js");
+import assert = require("assert");
+import Application = require("../application/application.js");
+import ApplicationFactory = require("../application/applicationFactory.js");
 const applicationFactory = new ApplicationFactory();
-const Mongo = require("../persistance/mongo.js");
-const Member = require("../user/member.js");
-const MemberFactory = require("../user/memberFactory.js");
+import Mongo = require("../persistance/mongo.js");
+import Member = require("../user/member.js");
+import MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory();
-const discord_helpers = require("../discord_bot");
+import discord_helpers = require("../discord_bot");
 
-import type {Application as TApplication} from "../application/application.js";
-import type {Member as TMember} from "../user/member.js";
 import Discord = require("discord.js");
 
 async function createAndSaveApplication(){
@@ -78,7 +76,7 @@ describe("application", function(){
 
     it("getId should return on the second created application", async function(){
       await createAndSaveApplication();
-      let application = await applicationFactory.create("293029505457586175", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, "TxT#0001", "The__TxT");
+      let application = await applicationFactory.create("293029505457586175", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, 1, "TxT#0001", "The__TxT");
       assert.strictEqual(application.getId(), 1);
     });
 
@@ -251,7 +249,7 @@ describe("application", function(){
 
     it("send denied mail", async function(){
       return new Promise(async (resolve, reject) => {
-        global.g.emitter.once("testing_email_sendApplicationDeniedMail", (application: TApplication) => {
+        global.g.emitter.once("testing_email_sendApplicationDeniedMail", (application: Application) => {
           assert.strictEqual(application.getId(), 0);
           resolve();
         });
@@ -277,7 +275,7 @@ describe("application", function(){
 
     it("send accepted mail", function(){
       return new Promise<void>(async (resolve, reject) => {
-        global.g.emitter.once("testing_email_sendApplicationAcceptedMail", (application: TApplication) => {
+        global.g.emitter.once("testing_email_sendApplicationAcceptedMail", (application: Application) => {
           assert.strictEqual(application.getId(), 0);
           resolve();
         });
@@ -498,23 +496,21 @@ describe("application", function(){
       await (await createAndSaveApplication()).accept();
 
       let res = await applicationFactory.getAcceptedByDiscordId("293029505457586176");
-      assert.strictEqual(res.getDiscordId(), "293029505457586176");
+      assert.strictEqual(res[0].getDiscordId(), "293029505457586176");
     });
 
-    it("getAcceptedByDiscordId should return null with no accepted applications in db", async function () {
+    it("getAcceptedByDiscordId should return [] with no accepted applications in db", async function () {
       await (await createAndSaveApplication()).deny();
 
       let res = await applicationFactory.getAcceptedByDiscordId("293029505457586176");
-      assert.strictEqual(res, null);
+      assert.deepStrictEqual(res, []);
     });
 
-    it("getAcceptedByDiscordId should return null with no accepted applications in db for given discordId", async function () {
+    it("getAcceptedByDiscordId should return [] with no accepted applications in db for given discordId", async function () {
       await (await createAndSaveApplication()).deny();
       await (await applicationFactory.create("293029505457586171", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT")).accept();
       let res = await applicationFactory.getAcceptedByDiscordId("293029505457586176");
-      assert.strictEqual(res, null);
+      assert.deepStrictEqual(res, []);
     });
   });
 });
-
-export default {}

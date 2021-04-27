@@ -1,4 +1,4 @@
-const discord_helpers = require("./helpers.js");
+import discord_helpers = require("./helpers.js");
 
 global.g.emitter.on('youtube_new', (video: any) => { //TODO: fix any
   global.g.log(0, 'discord_bot', 'event youtube_new received', {video: video});
@@ -16,5 +16,3 @@ global.g.emitter.on('contact_new', (subject: string, text: string) => {
 global.g.emitter.on('crash', (err: Error, origin: string) => {
   discord_helpers.sendMessage(`HELP I crashed:\n${err.stack}\n\n${origin}`, global.g.config.discord_bot.channel.logs, function (_err: Error) {});
 });
-
-export default {}

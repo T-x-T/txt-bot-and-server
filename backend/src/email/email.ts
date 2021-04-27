@@ -4,9 +4,9 @@
  */
 
 //Dependencies
-const mailer   = require('nodemailer');
-const sanitize = require('sanitize-html');
-import type {Application} from "../application/application.js";
+import mailer   = require('nodemailer');
+import sanitize = require('sanitize-html');
+import type Application = require("../application/application.js");
 
 const email = {
   application: {
@@ -104,6 +104,4 @@ const email = {
   }
 };
 
-module.exports = email;
-
-export default {}
+export = email;

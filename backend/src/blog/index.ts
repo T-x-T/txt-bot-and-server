@@ -1,6 +1,6 @@
 //Dependencies
-const Persistable = require("../persistance/persistable.js");
-const Factory = require("../persistance/factory.js");
+import Persistable = require("../persistance/persistable.js");
+import Factory = require("../persistance/factory.js");
 
 //Options for instanciating Persistable/Factory
 let dbOptions = {};
@@ -83,6 +83,4 @@ function isValid(input: any) { //TODO: fix any
 
 dbOptions = {name: "post", schema: blog.schema};
 
-module.exports = blog;
-
-export default {}
+export = blog;

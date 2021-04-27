@@ -4,9 +4,9 @@
  */
 
 //Dependencies
-const main = require("./main.js");
+import main = require("./main.js");
 
-module.exports = {
+export = {
   //Returns a userObject from discords api
   //Input is an object with the type as a key
   //Allowed types are: id, token
@@ -38,5 +38,3 @@ module.exports = {
 
   getUserObjectByIdFromApi: main.getUserObjectByIdFromApi
 }
-
-export default {}

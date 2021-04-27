@@ -1,14 +1,14 @@
 /*
  *  RCON INTERFACE
- *  This file handles all tasks related to rcon and sendming commands to the minecraft server
+ *  This file handles all tasks related to rcon and sending commands to the minecraft server
  */
 
 //Dependencies
-const Rcon = require('./node-rcon.js');
+import Rcon = require('./node-rcon.js');
 
 const rcon = {
   //Initializes the connection to the rcon server, sends a message and terminates the connection again
-  send(cmd: string, server: string, callback?: Function) {
+  send(cmd: string | string[], server?: string, callback?: Function) {
     //Abort if we are in testing mode
     if(global.g.ENVIRONMENT == 'testing') {
       global.g.emitter.emit('testing_minecraft_rcon_send', cmd, server);
@@ -102,6 +102,4 @@ const rcon = {
   }
 };
 
-module.exports = rcon;
-
-export default {}
+export = rcon;

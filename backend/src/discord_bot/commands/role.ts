@@ -3,10 +3,10 @@
 *	With this command users can manage their role membership for certain roles
 */
 
-const discordHelpers = require("../helpers.js");
+import discordHelpers = require("../helpers.js");
 import Discord = require("discord.js");
 
-module.exports = {
+export = {
   name: 'role',
   description: 'Used to change roles',
   aliases: ['roles'],
@@ -75,5 +75,3 @@ module.exports = {
     }
   }
 };
-
-export default {}

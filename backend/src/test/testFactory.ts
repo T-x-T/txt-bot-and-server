@@ -1,6 +1,6 @@
 require("./test.js");
-const Factory = require("../persistance/factory.js");
-const TestPersistable = require("./testPersitable.js");
+import Factory = require("../persistance/factory.js");
+import TestPersistable = require("./testPersitable.js");
 
 class TestFactory extends Factory{
   constructor(options: any){
@@ -21,6 +21,4 @@ class TestFactory extends Factory{
   }
 }
 
-module.exports = TestFactory;
-
-export default {}
+export = TestFactory;

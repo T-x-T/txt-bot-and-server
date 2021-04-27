@@ -4,12 +4,12 @@
 */
 
 //Dependencies
-const youtube = require("../youtube/index.js");
-const log = require("../log/index.js");
-const mc_helpers = require("../minecraft/index.js");
-const stats = require("../stats/index.js");
-const update = require("./update.js");
-const rcon = require("../minecraft/rcon.js");
+import youtube = require("../youtube/index.js");
+import log = require("../log/index.js");
+import mc_helpers = require("../minecraft/index.js");
+import stats = require("../stats/index.js");
+import update = require("./update.js");
+import rcon = require("../minecraft/rcon.js");
 
 //Stuff that should run on startup
 mc_helpers.updateOnlinePlayers();
@@ -69,5 +69,3 @@ setInterval(function(){
   log.prune(30).catch((e: Error) => console.log("failed to prune logs:", e));
   log.pruneLevel(1, 0).catch((e: Error) => console.log("failed to prune logs:", e));
 }, 1000 * 60 * 60 * 24);
-
-export default {}

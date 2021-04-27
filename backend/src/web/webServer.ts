@@ -7,12 +7,12 @@ import {IncomingMessage, OutgoingMessage, Server, ServerResponse} from "node:htt
 
 //Dependencies
 import http = require("http");
-const StringDecoder = require("string_decoder");
-const url = require("url");
-const santize_path = require('sanitize-filename');
-const handlers = require("./handlers.js");
+import StringDecoder = require("string_decoder");
+import url = require("url");
+import santize_path = require('sanitize-filename');
+import handlers = require("./handlers.js");
 
-interface IRequestData {
+export interface IRequestData {
   path: string,
   queryStringObject: any,
   method: string,
@@ -160,7 +160,3 @@ const router: {[path: string]: Function} = {
   '/html/api/discorduserfromcode': handlers.paxapi.discorduserfromcode as Function,
   '/html/api/tokenfromcode': handlers.paxapi.tokenfromcode as Function,
 };
-
-export type {IRequestData};
-
-export default {}

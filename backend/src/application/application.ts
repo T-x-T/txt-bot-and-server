@@ -1,12 +1,12 @@
-const Persistable = require("../persistance/persistable.js");
-const sanitize = require("sanitize-html");
-const email = require("../email/index.js");
-const discord_helpers = require("../discord_bot/index.js");
-const discord_api = require("../discord_api/index.js");
-const mc_helpers = require("../minecraft/index.js");
-const MemberFactory = require("../user/memberFactory.js");
+import Persistable = require("../persistance/persistable.js");
+import sanitize = require("sanitize-html");
+import email = require("../email/index.js");
+import discord_helpers = require("../discord_bot/index.js");
+import discord_api = require("../discord_api/index.js");
+import mc_helpers = require("../minecraft/index.js");
+import MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory({});
-import type {Member} from "../user/member.js";
+import Discord = require("discord.js");
 
 //TODO Add enum for application status
 class Application extends Persistable{
@@ -57,7 +57,7 @@ class Application extends Persistable{
     discord_helpers.sendAcceptedMemberWelcomeMessage(this);
     mc_helpers.whitelist(this.getMcUuid());
     discord_helpers.addMemberToRole(this.getDiscordId(), global.g.config.discord_bot.roles.paxterya, () => {});
-    discord_helpers.getMemberObjectById(this.getDiscordId(), (discordMember: Member) => {
+    discord_helpers.getMemberObjectById(this.getDiscordId(), (discordMember: Discord.GuildMember) => {
       if(discordMember) {
         discordMember.setNickname(this.getMcIgn())
           .catch((e: Error) => global.g.log(2, "application", "Application#accept couldnt set discord nickname", {application: this.data, err: e.message}));
@@ -97,7 +97,7 @@ class Application extends Persistable{
     }
   };
 
-  async deny(reason: string){
+  async deny(reason?: string){
     this.setStatus(2);
     if(reason) this.setDenyReason(reason);
     await this.save();
@@ -256,8 +256,4 @@ Application.schema = {
   deny_reason: String
 }
 
-module.exports = Application;
-
-export type {Application};
-
-export default {}
+export = Application;

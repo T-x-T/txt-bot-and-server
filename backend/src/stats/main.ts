@@ -4,12 +4,12 @@
  */
 
 //Dependencies
-const mc = require("./minecraft.js");
-const MemberFactory = require("../user/memberFactory.js");
+import mc = require("./minecraft.js");
+import MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory({});
 memberFactory.connect();
 
-import type {Member} from "../user/member.js";
+import type Member = require("../user/member.js");
 
 const main = {
   template: {
@@ -432,6 +432,4 @@ _internal.getCountries = function() {
   };
 };
 
-module.exports = main;
-
-export default {}
+export = main;

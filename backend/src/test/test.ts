@@ -10,7 +10,7 @@ console.log(global.g.ENVIRONMENT)
 require('../../config.js')();
 
 //Setup the global emitter
-const EventEmitter = require('events');
+import EventEmitter = require('events');
 global.g.emitter = new EventEmitter();
 
 //Require all modules for init
@@ -18,7 +18,7 @@ require('../discord_bot/main.js');
 require('../discord_api');
 
 require('../auth');
-const log = require('../log');
+import log = require('../log');
 
 require('../stats');
 require('../youtube');
@@ -50,5 +50,3 @@ process.on('unhandledRejection', (reason, promise) => {
   console.log(reason);
   throw promise 
 });
-
-export default {}

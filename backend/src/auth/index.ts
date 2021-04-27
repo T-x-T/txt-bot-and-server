@@ -4,9 +4,9 @@
  */
 
 //Dependencies
-const main = require("./main.js");
+import main = require("./main.js");
 
-module.exports = {
+export = {
   //Gets the discord_id from an input
   //input is an object containing one key for the type of input and the value
   //Valid types are: code, token
@@ -36,9 +36,8 @@ module.exports = {
     } else {
       if(callback) callback('No valid input received, input: ' + input, false);
     }
+    return null;
   },
 
   isGuildMember: main.isGuildMember
 }
-
-export default {}

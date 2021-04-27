@@ -44,7 +44,7 @@ class Rcon extends events.EventEmitter{
   _tcpSocket: any;
   _udpSocket: any;
 
-  constructor(host: string, port: number, password: string, options: IOptions){
+  constructor(host: string, port: number, password: string, options?: IOptions){
     super();
 
     if(!(this instanceof Rcon)) return new Rcon(host, port, password, options);
@@ -62,7 +62,7 @@ class Rcon extends events.EventEmitter{
     events.EventEmitter.call(this);
   }
 
-  send(data: any, cmd: any, id: any) {
+  send(data: any, cmd?: any, id?: any) {
     var sendBuf;
     if(this.tcp) {
       cmd = cmd || PacketType.COMMAND;
@@ -222,6 +222,4 @@ class Rcon extends events.EventEmitter{
 }
 
 
-module.exports = Rcon;
-
-export default {}
+export = Rcon;

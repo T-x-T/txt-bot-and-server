@@ -1,10 +1,9 @@
-const Factory = require("../persistance/factory.js");
-const Application = require("./application.js");
-const discord_helpers = require("../discord_bot/helpers.js");
-const email = require("../email/index.js");
-import type {Application as TApplication} from "./application.js";
+import Factory = require("../persistance/factory.js");
+import Application = require("./application.js");
+import discord_helpers = require("../discord_bot/helpers.js");
+import email = require("../email/index.js");
 class ApplicationFactory extends Factory{
-  constructor(options: any) { //TODO: fix any
+  constructor(options?: any) { //TODO: fix any
     if(typeof options != "object") options = {};
     options.schema = Application.schema;
     options.name = "applications";
@@ -31,13 +30,13 @@ class ApplicationFactory extends Factory{
     return byDiscordId.length > 0 || byMcUuid.length > 0;
   }
 
-  announceNewApplication(application: TApplication){
+  announceNewApplication(application: Application){
     discord_helpers.sendMessage('New application from ' + application.getDiscordUserName() + '\nYou can find it here: https://paxterya.com/interface', global.g.config.discord_bot.channel.new_application_announcement, function (err: String) {
       if(err) global.g.log(2, 'discord_bot', 'discord_bot couldnt send the new application message', {err: err, application: application});
     });
   }
 
-  sendNewApplicationEmail(application: TApplication){
+  sendNewApplicationEmail(application: Application){
     email.sendNewApplicationMail(application);
   }
 
@@ -55,18 +54,15 @@ class ApplicationFactory extends Factory{
   }
 
   async getAcceptedByDiscordId(discordId: string){
-    let res = await this.getFiltered({$and: [{status: 3}, {discord_id: discordId}]});
-    if(res.length > 0) return res[0];
-    if(res.length === 0) return null;
-    return res;
+    return await this.getFiltered({$and: [{status: 3}, {discord_id: discordId}]});
   }
 
   async getFiltered(filter?: any){ //TODO: fix any
     if(!this.connected) await this.connect();
     const res = await this.persistanceProvider.retrieveFiltered(filter);
-    let applications: TApplication[] = [];
+    let applications: Application[] = [];
     res.forEach((application: any) => {
-      applications.push(new Application(application.id, application.discord_id, application.mc_uuid, application.email_address, application.country, application.birth_month, application.birth_year, application.about_me, application.motivation, application.build_images, application.publish_about_me, application.publish_age, application.publish_country, application.status, new Date(application._id.getTimestamp()).valueOf(), application.discord_nick, application.mc_ign));
+      applications.push(new Application(application.id, application.discord_id, application.mc_uuid, application.email_address, application.country, application.birth_month, application.birth_year, application.about_me, application.motivation, application.build_images, application.publish_about_me, application.publish_age, application.publish_country, application.status, new Date(application._id.getTimestamp()), application.discord_nick, application.mc_ign));
     });
     await Promise.all(applications.map(async application => application.init()));
 
@@ -74,8 +70,4 @@ class ApplicationFactory extends Factory{
   }
 }
 
-module.exports = ApplicationFactory;
-
-export type {ApplicationFactory};
-
-export default {}
+export = ApplicationFactory;

@@ -1,8 +1,6 @@
 require("./test.js");
-const assert = require("assert");
-const Mongo = require("../persistance/mongo.js");
-
-import type {Mongo as con} from "../persistance/mongo.js";
+import assert = require("assert");
+import Mongo = require("../persistance/mongo.js");
 
 const schema = {
   id: {
@@ -108,7 +106,7 @@ describe("PersistanceProvider mongo", function(){
   });
 
   describe("retrieve filtered", function(){
-    let con: con;
+    let con: Mongo;
     before("delete existing enties and then add 10 test_entries", async function(){
       con = await getConnection();
       await con.deleteAll();
@@ -131,7 +129,7 @@ describe("PersistanceProvider mongo", function(){
   });
 
   describe("retrieve sorted", function () {
-    let con: con;
+    let con: Mongo;
     before("delete existing enties and then add 10 test_entries", async function () {
       con = await getConnection();
       await con.deleteAll();
@@ -150,7 +148,7 @@ describe("PersistanceProvider mongo", function(){
   });
 
   describe("retrieve first", function(){
-    let con: con;
+    let con: Mongo;
     before("delete existing enties and then add 10 test_entries", async function () {
       con = await getConnection();
       await con.deleteAll();
@@ -170,7 +168,7 @@ describe("PersistanceProvider mongo", function(){
   });
 
   describe("retrieve first filtered", function () {
-    let con: con;
+    let con: Mongo;
     before("delete existing enties and then add 10 test_entries", async function () {
       con = await getConnection();
       await con.deleteAll();
@@ -190,7 +188,7 @@ describe("PersistanceProvider mongo", function(){
   });
 
   describe("retrieve newest", function () {
-    let con: con;
+    let con: Mongo;
     before("delete existing enties and then add 10 test_entries", async function () {
       con = await getConnection();
       await con.deleteAll();
@@ -210,7 +208,7 @@ describe("PersistanceProvider mongo", function(){
   });
 
   describe("retrieve newest filtered", function () {
-    let con: con;
+    let con: Mongo;
     before("delete existing enties and then add 10 test_entries", async function () {
       con = await getConnection();
       await con.deleteAll();
@@ -230,7 +228,7 @@ describe("PersistanceProvider mongo", function(){
   });
 
   describe("delete filtered", function(){
-    let con: con;
+    let con: Mongo;
     beforeEach("delete existing enties and then add 10 test_entries", async function () {
       con = await getConnection();
       await con.deleteAll();
@@ -257,7 +255,7 @@ describe("PersistanceProvider mongo", function(){
   });
 
   describe("replace", function(){
-    let con: con;
+    let con: Mongo;
     beforeEach("delete existing enties and then add 10 test_entries", async function () {
       con = await getConnection();
       await con.deleteAll();
@@ -274,5 +272,3 @@ describe("PersistanceProvider mongo", function(){
     });
   });
 });
-
-export default {}

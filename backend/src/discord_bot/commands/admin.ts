@@ -3,20 +3,20 @@
 *	Command for all the admin thingys
 */
 
-const mc_helpers = require("../../minecraft/index.js");
-const auth = require("../../auth/index.js");
-const MemberFactory = require("../../user/memberFactory.js");
+import mc_helpers = require("../../minecraft/index.js");
+import auth = require("../../auth/index.js");
+import MemberFactory = require("../../user/memberFactory.js");
 const memberFactory = new MemberFactory({});
 memberFactory.connect();
 
-const ApplicationFactory = require("../../application/applicationFactory.js");
+import ApplicationFactory = require("../../application/applicationFactory.js");
 const applicationFactory = new ApplicationFactory({});
 applicationFactory.connect(); 
 
 import Discord = require("discord.js");
-import type {Application} from "../../application/application.js";
+import type Application = require("../../application/application.js");
 
-module.exports = {
+export = {
   name: 'admin',
   description: 'Commands only for admins',
   aliases: ['a'],
@@ -90,8 +90,8 @@ module.exports = {
           switch(args[1]){
             case 'forceaccept':
               applicationFactory.getByDiscordId(message.mentions.users.first().id)
-              .then((application: Application) => {
-                if(application) application[0].acceptGuildMember()
+              .then((applications: Application[]) => {
+                if(applications) applications[applications.length - 1].acceptGuildMember()
                 .then(() => message.reply("success"))
                 .catch((e: Error) => message.reply(e.message));
                 else message.reply("couldnt get application")
@@ -131,5 +131,3 @@ module.exports = {
     }
   }
 };
-
-export default {}

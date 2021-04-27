@@ -1,6 +1,6 @@
 //This is a base clase that needs to be inherited by all classes that implement factories
 
-module.exports = class Factory{
+export = class Factory{
   persistanceProvider: any; //TODO: fix any
   options;
   connected = false;
@@ -31,5 +31,3 @@ module.exports = class Factory{
     });
   }  
 }
-
-export default {}

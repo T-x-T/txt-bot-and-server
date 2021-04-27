@@ -5,7 +5,7 @@
 
 import Discord = require("discord.js");
 
-module.exports = {
+export = {
   name: 'ping',
   description: 'It pings',
   aliases: ['ping!', 'pong'],
@@ -13,5 +13,3 @@ module.exports = {
     message.channel.send('Pong.');
   }
 };
-
-export default {}

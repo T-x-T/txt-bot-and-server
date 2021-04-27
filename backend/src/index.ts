@@ -10,7 +10,7 @@ console.log(global.g.ENVIRONMENT)
 require("../config.js")();
 
 //Setup the global emitter
-const EventEmitter = require("events");
+import EventEmitter = require("events");
 global.g.emitter = new EventEmitter();
 
 //Require all modules for init
@@ -18,7 +18,7 @@ require("./discord_bot/main.js");
 require("./discord_api/index.js");
 
 require("./auth/index.js");
-const log = require("./log/index.js");
+import log = require("./log/index.js");
 
 require("./stats/index.js");
 require("./youtube/index.js");
@@ -42,5 +42,3 @@ process.on('uncaughtException', (err: Error, origin: string) => {
     process.exit(1);
   }, 200);
 });
-
-export default {}

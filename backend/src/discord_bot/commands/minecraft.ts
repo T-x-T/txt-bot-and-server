@@ -3,14 +3,14 @@
 *	Command to handle all minecraft related tasks
 */
 
-const minecraft = require("../../minecraft/index.js");
-const MemberFactory = require("../../user/memberFactory.js");
+import minecraft = require("../../minecraft/index.js");
+import MemberFactory = require("../../user/memberFactory.js");
 const memberFactory = new MemberFactory({});
 memberFactory.connect();
 
 import Discord = require("discord.js");
 
-module.exports = {
+export = {
   name: 'minecraft',
   description: 'This command provides different functionality for minecraft server integration',
   aliases: ['mc', 'mcserver'],
@@ -36,7 +36,7 @@ module.exports = {
         if(userID){
           //If we made it here, the user wants to get the stats for one specific person
           //Find the IGN out as well
-          memberFactory.getByDiscordId(userID)
+          memberFactory.getByDiscordId(userID as string)
           .then((member: any) => {
             if(args[1] == 'rank') {
               //Get the rank flavored stats
@@ -442,5 +442,3 @@ _internals.statsSwitch = function(collection: string, userID: string, ign: strin
     break;
   }
 };
-
-export default {}

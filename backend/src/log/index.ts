@@ -4,9 +4,9 @@
 */
 
 //Dependencies
-const Persistable = require("../persistance/persistable.js");
-const Factory = require("../persistance/factory.js");
-const mongoose = require("mongoose");
+import Persistable = require("../persistance/persistable.js");
+import Factory = require("../persistance/factory.js");
+import mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Mixed = Schema.Types.Mixed;
 
@@ -80,6 +80,4 @@ log.schema = {
   data: Mixed
 };
 
-module.exports = log;
-
-export default {}
+export = log;

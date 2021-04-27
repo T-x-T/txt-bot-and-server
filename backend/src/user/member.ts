@@ -1,7 +1,7 @@
-const Persistable = require("../persistance/persistable.js");
-const mc = require("../minecraft/index.js");
-const discord_helpers = require("../discord_bot/helpers.js");
-const discord_api = require("../discord_api/index.js");
+import Persistable = require("../persistance/persistable.js");
+import mc = require("../minecraft/index.js");
+import discord_helpers = require("../discord_bot/helpers.js");
+import discord_api = require("../discord_api/index.js");
 
 class Member extends Persistable{
   static schema: any;
@@ -35,14 +35,13 @@ class Member extends Persistable{
   }
 
   setDiscordUserName(newDiscordUserName: string) {
-    if(typeof newDiscordUserName != "string") throw new Error("no input given");
     if(newDiscordUserName.indexOf("#") === -1) throw new Error("no # in new nick");
     if(!Number.isInteger(Number.parseInt(newDiscordUserName.slice(newDiscordUserName.length - 4, newDiscordUserName.length)))) throw new Error("no discriminator");
 
     this.data.discord_nick = newDiscordUserName;
   }
 
-  getDiscordAvatarUrl() {
+  getDiscordAvatarUrl(): Promise<string> {
     return new Promise((resolve, reject) => {
       discord_api.getAvatarUrl(this.data.discord, (avatarUrl: string) => {
         resolve(avatarUrl);
@@ -95,7 +94,6 @@ class Member extends Persistable{
   }
 
   setMcUuid(newMcUuid: string){
-    if(typeof newMcUuid !== "string") throw new Error("newMcUuid must be of type string");
     if(newMcUuid.length !== 32) throw new Error("newMcUuid must be 32 characters long");
     this.data.mcUUID = newMcUuid;
   }
@@ -105,7 +103,6 @@ class Member extends Persistable{
   }
 
   setMcIgn(newIgn: string) {
-    if(typeof newIgn !== "string") throw new Error("newIgn must be of type string");
     if(newIgn.length < 3 || newIgn.length > 16) throw new Error("newIgn has to be be >= 3 and <= 16");
     this.data.mcName = newIgn;
   }
@@ -132,7 +129,6 @@ class Member extends Persistable{
   }
 
   setCountry(newCountry: string){
-    if(typeof newCountry !== "string") throw new Error("newCountry must be of type string");
     this.data.country = newCountry;
   }
 
@@ -141,7 +137,6 @@ class Member extends Persistable{
   }
 
   setBirthMonth(newBirthMonth: number){
-    if(!Number.isInteger(newBirthMonth)) throw new Error("newBirthMonth must be Integer");
     if(newBirthMonth < 1 || newBirthMonth > 12) throw new Error("newBirthMonth must be > 0 and < 13");
     this.data.birth_month = newBirthMonth;
   }
@@ -151,7 +146,6 @@ class Member extends Persistable{
   }
 
   setBirthYear(newBirthYear: number){
-    if(!Number.isInteger(newBirthYear)) throw new Error("newBirthYear must be Integer");
     this.data.birth_year = newBirthYear;
   }
 
@@ -169,16 +163,14 @@ class Member extends Persistable{
   }
 
   getPrivacySettings(){
-    return this.data.publish_age ? {publish_age: this.data.publish_age, publish_country: this.data.publish_country} : false;
+    return {publish_age: this.data.publish_age, publish_country: this.data.publish_country};
   }
 
   setPublishAge(newPublishAge: boolean){
-    if(typeof newPublishAge !== "boolean") throw new Error("newPublishAge must be of type boolean");
     this.data.publish_age = newPublishAge;
   }
 
   setPublishCountry(newPublishCountry: boolean) {
-    if(typeof newPublishCountry !== "boolean") throw new Error("newPublishCountry must be of type boolean");
     this.data.publish_country = newPublishCountry;
   }
 
@@ -215,29 +207,29 @@ class Member extends Persistable{
   }
 
   async ban(){
-    mc.sendCmd(`whitelist remove ${this.getMcIgn()}`, false);
-    mc.sendCmd(`ban ${this.getMcIgn()}`, false);
+    mc.sendCmd(`whitelist remove ${this.getMcIgn()}`);
+    mc.sendCmd(`ban ${this.getMcIgn()}`);
     discord_helpers.banMember(this.getDiscordId());
     await this.delete();
   }
 
   async delete(){
     await this.persistanceProvider.deleteByFilter({discord: this.getDiscordId()});
-    mc.sendCmd(`whitelist remove ${this.getMcIgn()}`, false);
+    mc.sendCmd(`whitelist remove ${this.getMcIgn()}`);
   }
 
   async inactivate(){
     this.setStatus(2);
     await this.takeDiscordRole(global.g.config.discord_bot.roles.paxterya);
     await this.giveDiscordRole(global.g.config.discord_bot.roles.inactive);
-    mc.sendCmd(`whitelist remove ${this.getMcIgn()}`, false);
+    mc.sendCmd(`whitelist remove ${this.getMcIgn()}`);
   }
 
   async activate(){
     this.setStatus(1);
     await this.takeDiscordRole(global.g.config.discord_bot.roles.inactive);
     await this.giveDiscordRole(global.g.config.discord_bot.roles.paxterya);
-    mc.sendCmd(`whitelist add ${this.getMcIgn()}`, false);
+    mc.sendCmd(`whitelist add ${this.getMcIgn()}`);
   }
 }
 
@@ -268,8 +260,4 @@ Member.schema = {
   }
 };
 
-module.exports = Member;
-
-export type {Member};
-
-export default {}
+export = Member;

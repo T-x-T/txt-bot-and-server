@@ -1,6 +1,6 @@
 require("./test.js");
-const assert = require("assert");
-const TestPersistable = require("./testPersitable.js");
+import assert = require("assert");
+import TestPersistable = require("./testPersitable.js");
 
 describe("persistable", function(){
 
@@ -25,5 +25,3 @@ describe("persistable", function(){
     });
   });
 });
-
-export default {}

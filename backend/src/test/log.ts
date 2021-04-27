@@ -1,8 +1,8 @@
 require("./test.js");
 
-const assert = require("assert");
-const log = require("../log");
-const Mongo = require("../persistance/mongo.js");
+import assert = require("assert");
+import log = require("../log");
+import Mongo = require("../persistance/mongo.js");
 
 //Stolen from stackoverflow: https://stackoverflow.com/a/27872144
 function randomString(len: number) {
@@ -185,5 +185,3 @@ describe("log", function(){
     });
   });
 });
-
-export default {}

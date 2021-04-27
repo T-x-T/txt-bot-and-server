@@ -3,10 +3,9 @@
 *  Contains all functionallity for interacting with the youtube API
 */
 
-import {IncomingMessage} from "node:http";
-
 //Dependencies
-const https = require("https");
+import https = require("https");
+import {IncomingMessage} from "node:http";
 
 interface IYoutubeChannel {
   youtube_id: string,
@@ -99,6 +98,4 @@ const index = {
   }
 };
 
-module.exports = index;
-
-export default {}
+export = index;

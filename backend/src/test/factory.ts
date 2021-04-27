@@ -1,7 +1,7 @@
 require("./test.js");
-const assert = require("assert");
-const TestFactory = require("./testFactory.js");
-const TestPersistable = require("./testPersitable.js");
+import assert = require("assert");
+import TestFactory = require("./testFactory.js");
+import TestPersistable = require("./testPersitable.js");
 
 describe("factory base class", function(){
   describe("init", function(){
@@ -47,10 +47,8 @@ describe("factory base class", function(){
     it("get entry with id 0 should return correct instance", async function(){
       let testFactory = new TestFactory({ name: "test", persistanceProvider: "mongo" });
       await testFactory.connect();
-      let res = await testFactory.getById(0);
+      let res: any = await testFactory.getById(0);
       assert.strictEqual(res.data.id, 0);
     });
   });
 });
-
-export default {}

@@ -4,18 +4,16 @@
 */
 
 //Dependencies
-const fs = require("fs");
+import fs = require("fs");
 import Discord = require("discord.js");
 const client = new Discord.Client({restWsBridgeTimeout: 50000, restTimeOffset: 1000});
-const discordHelpers = require("../discord_bot/helpers.js");
-const MemberFactory = require("../user/memberFactory.js");
+import discordHelpers = require("../discord_bot/helpers.js");
+import MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory({});
 memberFactory.connect();
-const ApplicationFactory = require("../application/applicationFactory.js");
+import ApplicationFactory = require("../application/applicationFactory.js");
 const applicationFactory = new ApplicationFactory({});
 applicationFactory.connect();
-
-export default {};
 
 //Gets called when everything is ok and the bot is logged in
 client.once('ready', () => {

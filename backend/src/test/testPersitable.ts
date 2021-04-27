@@ -1,5 +1,5 @@
 require("./test.js");
-const Persistable = require("../persistance/persistable.js");
+import Persistable = require("../persistance/persistable.js");
 
 class Test extends Persistable{
   text: string;
@@ -28,6 +28,4 @@ class Test extends Persistable{
   }
 }
 
-module.exports = Test;
-
-export default {}
+export = Test;

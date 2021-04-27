@@ -4,7 +4,7 @@
 */
 
 import Discord = require("discord.js");
-import type {Application} from "../application/application.js";
+import Application = require("../application/application.js");
 
 //Global var
 let client: Discord.Client;
@@ -132,6 +132,4 @@ const helpers = {
   },
 };
 
-module.exports = helpers;
-
-export default {}
+export = helpers;

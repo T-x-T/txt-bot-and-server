@@ -1,14 +1,14 @@
 
 //Dependencies
-const discord_api = require("../discord_api/index.js");
-const helpers = require("../discord_bot/helpers.js");
-const mc = require("../minecraft/index.js");
-const MemberFactory = require("../user/memberFactory.js");
+import discord_api = require("../discord_api/index.js");
+import helpers = require("../discord_bot/helpers.js");
+import mc = require("../minecraft/index.js");
+import MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory({});
 memberFactory.connect();
 
 import Discord = require("discord.js");
-import type {Member} from "../user/member.js";
+import type Member = require("../user/member.js");
 
 let client: Discord.Client;
 global.g.emitter.once('discord_bot_ready', (_client: Discord.Client) => {
@@ -118,6 +118,4 @@ const update = {
   }
 }
 
-module.exports = update;
-
-export default {}
+export = update;

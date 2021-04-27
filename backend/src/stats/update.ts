@@ -4,10 +4,10 @@
  */
 
 //Dependencies
-const fs = require("fs");
-const path = require("path");
-const Persistable = require("../persistance/persistable.js");
-const mongoose = require("mongoose");
+import fs = require("fs");
+import path = require("path");
+import Persistable = require("../persistance/persistable.js");
+import mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Mixed = Schema.Types.Mixed;
 
@@ -18,7 +18,7 @@ let schema = {
   stats: Mixed
 };
 
-module.exports = function () {
+export = function () {
   read_mc_stats();
 };
 
@@ -69,5 +69,3 @@ function read_mc_stats() {
     }
   });
 };
-
-export default {}

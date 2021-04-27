@@ -4,9 +4,9 @@
  */
 
 //Dependencies
-const discord_helpers = require("./helpers.js");
+import discord_helpers = require("./helpers.js");
 
-module.exports = {
+export = {
   getNicknameByID: discord_helpers.getNicknameByID,
   returnRoles: discord_helpers.returnRoles,
   returnRoleId: discord_helpers.returnRoleId,
@@ -20,5 +20,3 @@ module.exports = {
   sendNewApplicationMessage: discord_helpers.sendNewApplicationMessage,
   sendAcceptedMemberWelcomeMessage: discord_helpers.sendAcceptedMemberWelcomeMessage,
 }
-
-export default {}

@@ -4,13 +4,13 @@
  */
 
 //Dependencies
-const main = require("./main.js");
-const rcon = require("./rcon.js");
+import main = require("./main.js");
+import rcon = require("./rcon.js");
 
 //Create the global variable that holds the current player count
 global.g.mcPlayerCount = 0;
 
-module.exports = {
+export = {
   //Gets uuid for a given ign
   getUUID(ign: string, callback: Function){
     main.getUUID(ign, callback);
@@ -37,7 +37,7 @@ module.exports = {
   },
 
   //Sends a command directly to the minecraft server using rcon; Only use in edge cases! Rather use events
-  sendCmd(cmd: string, server: string, callback?: Function){
+  sendCmd(cmd: string | string[], server?: string, callback?: Function){
     rcon.send(cmd, server, function(res: string){
       if(res && typeof callback == 'function') callback(res);
     });
@@ -46,12 +46,10 @@ module.exports = {
   whitelist(uuid: string){
     main.getIGN(uuid, function (err: string, ign: string) {
       if(!err && ign) {
-        rcon.send(`whitelist add ${ign}`, false, function (_res: string) {});
+        rcon.send(`whitelist add ${ign}`);
       } else {
         global.g.log(2, 'minecraft', 'index.whitelist couldnt get the ign', {err: err, ign: ign, mcUuid: uuid});
       }
     });
   }
 };
-
-export default {}

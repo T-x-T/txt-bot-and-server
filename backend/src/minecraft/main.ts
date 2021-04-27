@@ -3,12 +3,11 @@
  *  Contains various helper functions for different Minecraft related operations
  */
 
+//Dependencies
+import https = require("https");
 import {IncomingMessage} from "node:http";
 
-//Dependencies
-const https = require("https");
-
-module.exports = {
+export = {
   //Takes an IGN and returns the UUID
   getUUID(ign: string, callback: Function) {
     //Make the web request
@@ -96,5 +95,3 @@ module.exports = {
     return `https://crafatar.com/renders/body/${uuid}?overlay=true`;
   }
 }
-
-export default {}

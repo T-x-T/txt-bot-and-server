@@ -4,21 +4,21 @@
 */
 
 //Dependencies
-const oauth = require("../auth/index.js");
-const discord_api = require("../discord_api/index.js");
-const stats = require("../stats/index.js");
-const blog = require("../blog/index.js");
-const MemberFactory = require("../user/memberFactory.js");
+import oauth = require("../auth/index.js");
+import discord_api = require("../discord_api/index.js");
+import stats = require("../stats/index.js");
+import blog = require("../blog/index.js");
+import MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory({});
 memberFactory.connect();
-const ApplicationFactory = require("../application/applicationFactory.js");
+import ApplicationFactory = require("../application/applicationFactory.js");
 const applicationFactory = new ApplicationFactory({});
-const mc_helpers = require("../minecraft/index.js");
-const sanitize = require('sanitize-html');
+import mc_helpers = require("../minecraft/index.js");
+import sanitize = require('sanitize-html');
 
 import type {IRequestData} from "./webServer.js";
-import type {Application} from "../application/application.js";
-import type {Member} from "../user/member.js";
+import type Application = require("../application/application.js");
+import type Member = require("../user/member.js");
 
 //Create the container
 var handlers: any = {};
@@ -108,7 +108,7 @@ handlers.paxapi.member.get = function(data: IRequestData, callback: Function){
   let filter: any = {};
   if(data.queryStringObject.hasOwnProperty('id')) filter['discord'] = data.queryStringObject.id;
   //Retrieve the data with our custom made filter
-  stats.get('memberOverview', {filter: filter}, function(err: string, docs: any){
+  stats.get(stats.ETemplates.memberOverview, {filter: filter}, function(err: string, docs: any){
     if(docs){
       callback(200, docs, 'json');
     }else{
@@ -184,14 +184,14 @@ handlers.paxapi.application.post = function(data: IRequestData, callback: Functi
     return;
   }
   
-  let discordId = data.payload.discord_id.length >= 17 && data.payload.discord_id.length <= 18 ? data.payload.discord_id : false;
-  let emailAddress = data.payload.email_address.indexOf("@") > -1 && data.payload.email_address.length > 5 ? data.payload.email_address.trim() : false;
-  let country = data.payload.country ? sanitize(data.payload.country, {allowedTags: [], allowedAttributes: []}) : false;
-  let birthMonth = Number.parseInt(data.payload.birth_month) >= 1 && Number.parseInt(data.payload.birth_month) <= 12 ? Number.parseInt(data.payload.birth_month) : false;
-  let birthYear = Number.parseInt(data.payload.birth_year) >= 1900 && Number.isInteger(Number.parseInt(data.payload.birth_year)) ? Number.parseInt(data.payload.birth_year) : false;
-  let aboutMe = data.payload.about_me.length > 1 && data.payload.about_me.length <= 1500 ? sanitize(data.payload.about_me, {allowedTags: [], allowedAttributes: {}}) : false;
-  let motivation = data.payload.motivation.length > 1 && data.payload.motivation.length <= 1500 ? sanitize(data.payload.motivation, {allowedTags: [], allowedAttributes: {}}) : false;
-  let buildImages = data.payload.build_images.length > 1 && data.payload.build_images.length <= 1500 ? sanitize(data.payload.build_images, {allowedTags: [], allowedAttributes: {}}) : false;
+  let discordId: string = data.payload.discord_id.length >= 17 && data.payload.discord_id.length <= 18 ? data.payload.discord_id : "";
+  let emailAddress: string = data.payload.email_address.indexOf("@") > -1 && data.payload.email_address.length > 5 ? data.payload.email_address.trim() : "";
+  let country = data.payload.country ? sanitize(data.payload.country, {allowedTags: []}) : "";
+  let birthMonth = Number.parseInt(data.payload.birth_month) >= 1 && Number.parseInt(data.payload.birth_month) <= 12 ? Number.parseInt(data.payload.birth_month) : -1;
+  let birthYear = Number.parseInt(data.payload.birth_year) >= 1900 && Number.isInteger(Number.parseInt(data.payload.birth_year)) ? Number.parseInt(data.payload.birth_year) : -1;
+  let aboutMe = data.payload.about_me.length > 1 && data.payload.about_me.length <= 1500 ? sanitize(data.payload.about_me, {allowedTags: [], allowedAttributes: {}}) : "";
+  let motivation = data.payload.motivation.length > 1 && data.payload.motivation.length <= 1500 ? sanitize(data.payload.motivation, {allowedTags: [], allowedAttributes: {}}) : "";
+  let buildImages = data.payload.build_images.length > 1 && data.payload.build_images.length <= 1500 ? sanitize(data.payload.build_images, {allowedTags: [], allowedAttributes: {}}) : "";
   let publishAboutMe = data.payload.publish_about_me;
   let publishAge = data.payload.publish_age;
   let publishCountry = data.payload.publish_country;
@@ -201,7 +201,7 @@ handlers.paxapi.application.post = function(data: IRequestData, callback: Functi
     return;
   }
   
-  if(!discordId || !data.payload.mc_ign || !emailAddress || !country || !birthMonth || !birthYear || !aboutMe || !motivation || !buildImages){
+  if(discordId.length === 0 || !data.payload.mc_ign || emailAddress.length === 0 || country.length === 0 || birthMonth === -1 || birthYear === -1 || aboutMe.length === 0 || motivation.length === 0 || buildImages.length === 0){
     callback(400, {err: "Incorrect input"}, "json");
     global.g.log(0, "web", "handlers.paxapi.application.post received incorrect input", {
       discordId: discordId,
@@ -216,6 +216,7 @@ handlers.paxapi.application.post = function(data: IRequestData, callback: Functi
     });
     return;
   }
+
   mc_helpers.getUUID(data.payload.mc_ign, (err: string, mcUuid: string) => {
     if(!err && mcUuid){
       mc_helpers.getIGN(mcUuid, (err: string, mcIgn: string) => {
@@ -392,7 +393,7 @@ handlers.paxapi.mcversion = function(data: IRequestData, callback: Function){
 }
 
 handlers.paxapi.memberworldmapdata = function(data: IRequestData, callback: Function) {
-  stats.get("countryList", false, function(err: string, map_data: any){
+  stats.get(stats.ETemplates.countryList, false, function(err: string, map_data: any){
     if(!err){
       callback(200, map_data, "json");
     }else{
@@ -402,7 +403,7 @@ handlers.paxapi.memberworldmapdata = function(data: IRequestData, callback: Func
 }
 
 handlers.paxapi.statsoverview = function(data: IRequestData, callback: Function){
-  stats.get("overview", false, function(err: string, stats: any){
+  stats.get(stats.ETemplates.overview, false, function(err: string, stats: any){
     if(!err && stats){
       callback(200, stats, "json");
     }else{
@@ -473,6 +474,4 @@ function getRequestAuthorizationError(data: IRequestData, minAccessLevel: number
   }
 }
 
-module.exports = handlers;
-
-export default {}
+export = handlers;

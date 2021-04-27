@@ -4,10 +4,10 @@
  */
 
 //Dependencies
-const main = require("./email.js");
-import type {Application} from "../application/application.js";
+import main = require("./email.js");
+import type Application = require("../application/application.js");
 
-module.exports = {
+export = {
   sendNewApplicationMail(application: Application) {
     if(global.g.ENVIRONMENT === "testing") {
       global.g.emitter.emit("testing_email_sendNewApplicationMail", application);
@@ -39,5 +39,3 @@ module.exports = {
 global.g.emitter.on('contact_new', (subject: string, text: string) => {
   main.contact.new(subject, text);
 });
-
-export default {}

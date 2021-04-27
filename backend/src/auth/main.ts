@@ -4,9 +4,9 @@
  */
 
 //Dependencies
-const qs = require("querystring");
+import qs = require("querystring");
 import https = require("https");
-const discord_api = require("../discord_api/index.js");
+import discord_api = require("../discord_api/index.js");
 import Discord = require("discord.js");
 import {IncomingMessage} from "node:http";
 
@@ -136,6 +136,4 @@ const main = {
   }
 }
 
-module.exports = main;
-
-export default {}
+export = main;

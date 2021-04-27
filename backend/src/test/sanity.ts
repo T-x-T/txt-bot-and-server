@@ -1,5 +1,5 @@
 require("./test.js");
-const assert = require('assert');
+import assert = require('assert');
 
 describe('sanity-checks', function(){
   it('1 equals 1', function(){
@@ -10,5 +10,3 @@ describe('sanity-checks', function(){
     assert.ok(!false);
   })
 });
-
-export default {}

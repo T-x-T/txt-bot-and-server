@@ -4,7 +4,7 @@
  */
 
 //Dependencies
-const https = require("https");
+import https = require("https");
 import Discord = require("discord.js");
 import {IncomingMessage} from "node:http";
 
@@ -139,6 +139,4 @@ const main = {
   }
 }
 
-module.exports = main;
-
-export default {}
+export = main;

@@ -4,14 +4,14 @@
  */
 
 //Dependencies
-const MemberFactory = require("../user/memberFactory.js");
+import MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory({});
 memberFactory.connect();
-const Factory = require("../persistance/factory.js");
-const mongoose = require("mongoose");
+import Factory = require("../persistance/factory.js");
+import mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Mixed = Schema.Types.Mixed;
-import type {Member} from "../user/member.js";
+import type Member = require("../user/member.js");
 
 let schema = {
   timestamp: Date,
@@ -357,6 +357,4 @@ function top10(object: any) {
   return top10Values;
 };
 
-module.exports = minecraft;
-
-export default {}
+export = minecraft;

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let connected = false;
@@ -13,7 +13,7 @@ class Mongo{
   
   //options:
   //mongodb_url: if not given, use the value from the config
-  constructor(collection: string, schema: any, options: any){
+  constructor(collection: string, schema: any, options?: any){
     this.collection = collection;
     this.schema = schema;
     this.mongodb_url = global.g.config.data.mongodb_url;
@@ -140,8 +140,4 @@ class Mongo{
   }
 }
 
-module.exports = Mongo;
-
-export type {Mongo};
-
-export default {}
+export = Mongo;
