@@ -5,7 +5,7 @@
 
 import minecraft = require("../../minecraft/index.js");
 import MemberFactory = require("../../user/memberFactory.js");
-const memberFactory = new MemberFactory({});
+const memberFactory = new MemberFactory();
 memberFactory.connect();
 
 import Discord = require("discord.js");

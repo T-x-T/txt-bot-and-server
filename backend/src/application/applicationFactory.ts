@@ -2,12 +2,15 @@ import Factory = require("../persistance/factory.js");
 import Application = require("./application.js");
 import discord_helpers = require("../discord_bot/helpers.js");
 import email = require("../email/index.js");
+import type {MongooseFilterQuery} from "mongoose";
+
 class ApplicationFactory extends Factory{
-  constructor(options?: any) { //TODO: fix any
-    if(typeof options != "object") options = {};
-    options.schema = Application.schema;
-    options.name = "applications";
-    super(options);
+  constructor(options?: IFactoryOptions) {
+    super({
+      schema: Application.schema,
+      name: "applications",
+      ...options
+    });
   }
 
   //discordUserName and mcIgn are optional
@@ -54,10 +57,10 @@ class ApplicationFactory extends Factory{
   }
 
   async getAcceptedByDiscordId(discordId: string){
-    return await this.getFiltered({$and: [{status: 3}, {discord_id: discordId}]});
+    return await this.getFiltered({$and: [{status: EApplicationStatus.accepted}, {discord_id: discordId}]});
   }
 
-  async getFiltered(filter?: any){ //TODO: fix any
+  async getFiltered(filter?: MongooseFilterQuery<any>){
     if(!this.connected) await this.connect();
     const res = await this.persistanceProvider.retrieveFiltered(filter);
     let applications: Application[] = [];

@@ -13,7 +13,7 @@ enum ETemplates {
   countryList = "countryList",
   mc = "mc"
 }
-ETemplates.countryList
+
 export = {
   //Execute the update workflow of the mc stats
   updateMcStats() {
@@ -21,7 +21,7 @@ export = {
   },
 
   //Get a statistics template
-  get(template: ETemplates, options: any, callback: Function) { //TODO: fix any
+  get(template: ETemplates, options: IStatsOptions, callback: Function) {
     main.template[template](options, callback);
   },
 

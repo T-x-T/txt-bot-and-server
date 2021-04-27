@@ -1,5 +1,6 @@
 import mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+import type {MongooseFilterQuery} from "mongoose";
 
 let connected = false;
 let models: any = {}; //TODO: fix any
@@ -78,11 +79,11 @@ class Mongo{
     return await this.retrieveFiltered({});
   }
 
-  async retrieveFirstFiltered(filter: any){ //TODO: fix any
+  async retrieveFirstFiltered(filter: MongooseFilterQuery<any>){
     return await this.retrieveOneFilteredAndSorted(filter, null);
   }
 
-  async retrieveFiltered(filter: any){
+  async retrieveFiltered(filter: MongooseFilterQuery<any>){
     return await this.retrieveFilteredAndSorted(filter, null);
   }
 
@@ -90,16 +91,16 @@ class Mongo{
     return await this.retrieveNewestFiltered({});
   }
 
-  async retrieveNewestFiltered(filter: any){
+  async retrieveNewestFiltered(filter: MongooseFilterQuery<any>){
     return await this.retrieveOneFilteredAndSorted(filter, {_id: -1});
   }
 
-  async retrieveFilteredAndSorted(filter: any, sort: any){
+  async retrieveFilteredAndSorted(filter: MongooseFilterQuery<any>, sort: any){
     sort = typeof sort == "object" ? { "sort": sort, lean: true } : null;
     return await this.model.find(filter, null, sort);
   }
 
-  async retrieveOneFilteredAndSorted(filter: any, sort: any) {
+  async retrieveOneFilteredAndSorted(filter: MongooseFilterQuery<any>, sort: any) {
     sort = typeof sort == "object" ? { "sort": sort } : null;
     return await this.model.findOne(filter, null, sort);
   }
@@ -135,7 +136,7 @@ class Mongo{
     await this.deleteByFilter({});
   }
 
-  async deleteByFilter(filter: any){
+  async deleteByFilter(filter: MongooseFilterQuery<any>){
     await this.model.deleteMany(filter);
   }
 }

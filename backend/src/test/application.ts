@@ -165,9 +165,9 @@ describe("application", function(){
       assert.strictEqual(application.getMcIgn(), "The__TxT");
     });
 
-    it("getStatus should return 1", async function(){
+    it("getStatus should return pending", async function(){
       let application = await createAndSaveApplication();
-      assert.strictEqual(application.getStatus(), 1);
+      assert.strictEqual(application.getStatus(), EApplicationStatus.pending);
     });
 
     it("getDenyReason should return correct value after application has been denied", async function(){
@@ -202,43 +202,33 @@ describe("application", function(){
       assert.strictEqual(application.getMcIgn(), "testUser");
     });
 
-    it("setStatus should correctly set status 1", async function(){
+    it("setStatus should correctly set status pending", async function(){
       let application = await createAndSaveApplication();
-      application.setStatus(1);
-      assert.strictEqual(application.getStatus(), 1);
+      application.setStatus(EApplicationStatus.pending);
+      assert.strictEqual(application.getStatus(), EApplicationStatus.pending);
     });
 
-    it("setStatus should correctly set status 3", async function () {
+    it("setStatus should correctly set status denied", async function () {
       let application = await createAndSaveApplication();
-      application.setStatus(3);
-      assert.strictEqual(application.getStatus(), 3);
-    });
-
-    it("setStatus should throw when trying to set status 0", async function(){
-      let application = await createAndSaveApplication();
-      assert.throws(() => application.setStatus(0), new Error("status must be between 1 and 3"));
-    });
-
-    it("setStatus should throw when trying to set status 4", async function () {
-      let application = await createAndSaveApplication();
-      assert.throws(() => application.setStatus(4), new Error("status must be between 1 and 3"));
+      application.setStatus(EApplicationStatus.denied);
+      assert.strictEqual(application.getStatus(), EApplicationStatus.denied);
     });
 
     it("setStatus and save should save the new status correctly", async function () {
       let application = await createAndSaveApplication();
-      application.setStatus(3);
+      application.setStatus(EApplicationStatus.denied);
       await application.save();
 
       let loadedApplication = await applicationFactory.getById(0);
-      assert.strictEqual(loadedApplication.getStatus(), 3);
+      assert.strictEqual(loadedApplication.getStatus(), EApplicationStatus.denied);
     });
   });
 
   describe("deny", function(){
-    it("set status to 2", async function(){
+    it("set status to denied", async function(){
       let application = await createAndSaveApplication();
       await application.deny("reason");
-      assert.strictEqual(application.getStatus(), 2);
+      assert.strictEqual(application.getStatus(), EApplicationStatus.denied);
     });
 
     it("set given deny reason", async function () {
@@ -267,10 +257,10 @@ describe("application", function(){
       await con.deleteAll();
     });
 
-    it("set status to 3", async function(){
+    it("set status to accepted", async function(){
       let application = await createAndSaveApplication();
       await application.accept();
-      assert.strictEqual(application.getStatus(), 3);
+      assert.strictEqual(application.getStatus(), EApplicationStatus.accepted);
     });
 
     it("send accepted mail", function(){
@@ -341,11 +331,11 @@ describe("application", function(){
       assert.strictEqual(application.getMcIgn(), member.getMcIgn());
     });
 
-    it("create member with status 1", async function(){
+    it("create member with status pending", async function(){
       let application = await createAndSaveApplication();
       await application.accept();
       let member = await memberFactory.getByDiscordId("293029505457586176");
-      assert.strictEqual(member.getStatus(), 1);
+      assert.strictEqual(member.getStatus(), EApplicationStatus.pending);
     });
 
     it("send welcome message", function(){

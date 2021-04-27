@@ -9,10 +9,10 @@ import discord_api = require("../discord_api/index.js");
 import stats = require("../stats/index.js");
 import blog = require("../blog/index.js");
 import MemberFactory = require("../user/memberFactory.js");
-const memberFactory = new MemberFactory({});
+const memberFactory = new MemberFactory();
 memberFactory.connect();
 import ApplicationFactory = require("../application/applicationFactory.js");
-const applicationFactory = new ApplicationFactory({});
+const applicationFactory = new ApplicationFactory();
 import mc_helpers = require("../minecraft/index.js");
 import sanitize = require('sanitize-html');
 
@@ -105,10 +105,7 @@ handlers.paxapi.member = function(data: IRequestData, callback: Function){
 
 //Retrieves member objects
 handlers.paxapi.member.get = function(data: IRequestData, callback: Function){
-  let filter: any = {};
-  if(data.queryStringObject.hasOwnProperty('id')) filter['discord'] = data.queryStringObject.id;
-  //Retrieve the data with our custom made filter
-  stats.get(stats.ETemplates.memberOverview, {filter: filter}, function(err: string, docs: any){
+  stats.get(stats.ETemplates.memberOverview, null, function(err: string, docs: any){
     if(docs){
       callback(200, docs, 'json');
     }else{
@@ -393,7 +390,7 @@ handlers.paxapi.mcversion = function(data: IRequestData, callback: Function){
 }
 
 handlers.paxapi.memberworldmapdata = function(data: IRequestData, callback: Function) {
-  stats.get(stats.ETemplates.countryList, false, function(err: string, map_data: any){
+  stats.get(stats.ETemplates.countryList, null, function(err: string, map_data: any){
     if(!err){
       callback(200, map_data, "json");
     }else{
@@ -403,7 +400,7 @@ handlers.paxapi.memberworldmapdata = function(data: IRequestData, callback: Func
 }
 
 handlers.paxapi.statsoverview = function(data: IRequestData, callback: Function){
-  stats.get(stats.ETemplates.overview, false, function(err: string, stats: any){
+  stats.get(stats.ETemplates.overview, null, function(err: string, stats: any){
     if(!err && stats){
       callback(200, stats, "json");
     }else{

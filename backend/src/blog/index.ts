@@ -2,8 +2,6 @@
 import Persistable = require("../persistance/persistable.js");
 import Factory = require("../persistance/factory.js");
 
-//Options for instanciating Persistable/Factory
-let dbOptions = {};
 //TODO: create blog interface
 const blog = {
   async create(input: any) {
@@ -81,6 +79,7 @@ function isValid(input: any) { //TODO: fix any
   return input.title && input.author && input.body;
 }
 
-dbOptions = {name: "post", schema: blog.schema};
+//Options for instanciating Persistable/Factory
+const dbOptions = {name: "post", schema: blog.schema};
 
 export = blog;

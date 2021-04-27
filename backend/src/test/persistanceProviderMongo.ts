@@ -122,10 +122,6 @@ describe("PersistanceProvider mongo", function(){
       let res = await con.retrieveFiltered({id: {$gt: 5}});
       assert.strictEqual(res.length, 4);
     });
-
-    it("passing a string as filter should reject", async function(){
-      await assert.rejects(() => con.retrieveFiltered("test"), { message: 'Parameter "filter" to find() must be an object, got test', name: 'ObjectParameterError'});
-    });
   });
 
   describe("retrieve sorted", function () {

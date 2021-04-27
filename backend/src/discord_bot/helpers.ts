@@ -60,12 +60,11 @@ const helpers = {
       });
   },
 
-  //Returns all roles from the guild defined in global.g.config.js
   //Returns only roles that members are allowed to join/leave themselves!
   returnRoles() {
-    let roles: any[] = []; //TODO: fix any
-    client.guilds.get(global.g.config.discord_bot.guild).roles.map(function (item) {
-      if(item.name.indexOf('#') > -1) roles.push({id: item.id, name: item.name});
+    let roles: {id: string, name: string}[] = [];
+    client.guilds.get(global.g.config.discord_bot.guild).roles.map((item) => {
+      if(item.name.indexOf('#') === 0) roles.push({id: item.id, name: item.name});
     });
     return roles;
   },
@@ -129,7 +128,7 @@ const helpers = {
       return;
     }
     client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).ban();
-  },
+  }
 };
 
 export = helpers;

@@ -1,11 +1,10 @@
 //This is a base clase that needs to be inherited by all classes that implement factories
-
-export = class Factory{
+export = class{
   persistanceProvider: any; //TODO: fix any
   options;
   connected = false;
 
-  constructor(options: any){ //TODO: fix any
+  constructor(options: IFactoryOptions){
     this.options = options;
     this._initializePersitanceProvider();
   }

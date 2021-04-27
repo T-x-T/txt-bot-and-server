@@ -5,18 +5,13 @@ import discord_helpers = require("../discord_bot/index.js");
 import discord_api = require("../discord_api/index.js");
 import mc_helpers = require("../minecraft/index.js");
 import MemberFactory = require("../user/memberFactory.js");
-const memberFactory = new MemberFactory({});
+const memberFactory = new MemberFactory();
 import Discord = require("discord.js");
 
-//TODO Add enum for application status
 class Application extends Persistable{
   static schema: any; //TODO fix any type
 
-  constructor(id: number, discordId: string, mcUuid: string, emailAddress: string, country: string, birth_month: number, birth_year: number, about_me: string, motivation: string, buildImages: string, publishAboutMe: boolean, publishAge: boolean, publishCountry: boolean, status: number, timestamp: Date, discordUserName: string, mcIgn: string){
-    if(!discordId || !mcUuid || !emailAddress || !country || !birth_month || !birth_year || !about_me || !motivation || !buildImages){
-      throw new Error("Missing parameter");
-    }
-    
+  constructor(id: number, discordId: string, mcUuid: string, emailAddress: string, country: string, birth_month: number, birth_year: number, about_me: string, motivation: string, buildImages: string, publishAboutMe: boolean, publishAge: boolean, publishCountry: boolean, status: EApplicationStatus, timestamp: Date, discordUserName: string, mcIgn: string){
     super({name: "applications", schema: Application.schema});
 
     this.data.timestamp = timestamp ? timestamp : new Date();
@@ -32,7 +27,7 @@ class Application extends Persistable{
     this.data.publish_about_me = publishAboutMe;
     this.data.publish_age = publishAge;
     this.data.publish_country = publishCountry;
-    this.data.status = Number.isInteger(status) ? status : 1;
+    this.data.status = status ? status : 1;
     this.data.id = Number.isInteger(id) ? id : null;
     this.data.discord_nick = discordUserName ? discordUserName : null;
     this.data.mc_ign = mcIgn ? mcIgn : null;
@@ -43,7 +38,7 @@ class Application extends Persistable{
    */
 
   async accept(){
-    this.setStatus(3);
+    this.setStatus(EApplicationStatus.accepted);
     await this.save();
     email.sendApplicationAcceptedMail(this);
 
@@ -98,7 +93,7 @@ class Application extends Persistable{
   };
 
   async deny(reason?: string){
-    this.setStatus(2);
+    this.setStatus(EApplicationStatus.denied);
     if(reason) this.setDenyReason(reason);
     await this.save();
     email.sendApplicationDeniedMail(this);
@@ -116,8 +111,7 @@ class Application extends Persistable{
     this.data.mc_ign = newMcIgn;
   }
 
-  setStatus(newStatus: number){
-    if(newStatus < 1 || newStatus > 3) throw new Error("status must be between 1 and 3");
+  setStatus(newStatus: EApplicationStatus){
     this.data.status = newStatus;
   }
 
@@ -205,7 +199,7 @@ class Application extends Persistable{
     return this.data.mc_ign;
   }
 
-  getStatus(): number {
+  getStatus(): EApplicationStatus {
     return this.data.status;
   }
 

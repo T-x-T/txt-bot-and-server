@@ -5,7 +5,7 @@
 
 //Dependencies
 import MemberFactory = require("../user/memberFactory.js");
-const memberFactory = new MemberFactory({});
+const memberFactory = new MemberFactory();
 memberFactory.connect();
 import Factory = require("../persistance/factory.js");
 import mongoose = require("mongoose");
@@ -25,7 +25,7 @@ statsFactory.connect();
 
 const minecraft = {
   //Gets ranked stats for single player
-  getRanked(options: any, callback: Function) { //TODO: fix any
+  getRanked(options: IStatsOptions, callback: Function) {
 
     //Gets stats from the user
     minecraft.getSingle(options, function (err: Error, stats: any) {
@@ -74,7 +74,7 @@ const minecraft = {
   },
 
   //Gets stats for single player
-  getSingle(options: any, callback: Function) {
+  getSingle(options: IStatsOptions, callback: Function) {
     getLatestStatsByUuid(options.uuid)
       .then(doc => {
         if(typeof _statsTemplates[options.collection] === 'function') {
@@ -89,7 +89,7 @@ const minecraft = {
   },
 
   //Gets stats for all players combined
-  getAll(options: any, callback: Function) {
+  getAll(options: IStatsOptions, callback: Function) {
     getAllLatestStats()
       .then(docs => {
         let data = typeof _statsTemplates[options.collection] === 'function' ? _statsTemplates[options.collection](sumArray(docs)) : _statsTemplates.single[options.collection](sumArray(docs));

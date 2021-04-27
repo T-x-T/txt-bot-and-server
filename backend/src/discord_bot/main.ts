@@ -9,10 +9,10 @@ import Discord = require("discord.js");
 const client = new Discord.Client({restWsBridgeTimeout: 50000, restTimeOffset: 1000});
 import discordHelpers = require("../discord_bot/helpers.js");
 import MemberFactory = require("../user/memberFactory.js");
-const memberFactory = new MemberFactory({});
+const memberFactory = new MemberFactory();
 memberFactory.connect();
 import ApplicationFactory = require("../application/applicationFactory.js");
-const applicationFactory = new ApplicationFactory({});
+const applicationFactory = new ApplicationFactory();
 applicationFactory.connect();
 
 //Gets called when everything is ok and the bot is logged in

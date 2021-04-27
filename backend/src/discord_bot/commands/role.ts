@@ -18,7 +18,7 @@ export = {
       case 'add':
         //Check if the supplied role exists
         let valid = false;
-        discordHelpers.returnRoles().forEach((item: any) => { //TODO: fix any
+        discordHelpers.returnRoles().forEach((item) => {
           if(item.name == '#' + args[1]) valid = true;
         });
         if(valid){
@@ -48,7 +48,7 @@ export = {
 
         //Print all available roles
         output += 'Available roles:\n'
-        discordHelpers.returnRoles().forEach((item: any) => { //TODO: fix any
+        discordHelpers.returnRoles().forEach((item) => {
           output += item.name[0] == '#'? item.name.slice(1) : item.name;
           output += '\n';
         });

@@ -4,7 +4,7 @@ import discord_api = require("../discord_api/index.js");
 import helpers = require("../discord_bot/helpers.js");
 import mc = require("../minecraft/index.js");
 import MemberFactory = require("../user/memberFactory.js");
-const memberFactory = new MemberFactory({});
+const memberFactory = new MemberFactory();
 memberFactory.connect();
 
 import Discord = require("discord.js");

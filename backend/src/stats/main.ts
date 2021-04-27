@@ -6,7 +6,7 @@
 //Dependencies
 import mc = require("./minecraft.js");
 import MemberFactory = require("../user/memberFactory.js");
-const memberFactory = new MemberFactory({});
+const memberFactory = new MemberFactory();
 memberFactory.connect();
 
 import type Member = require("../user/member.js");
@@ -14,7 +14,7 @@ import type Member = require("../user/member.js");
 const main = {
   template: {
     //Gets the basic stats for the statistics.html overview
-    overview(options: any, callback: Function) {
+    overview(options: IStatsOptions, callback: Function) {
       memberFactory.getAllWhitelisted()
         .then((members: any) => {
           if(!members || members.length === 0) {
@@ -23,7 +23,7 @@ const main = {
           }
           global.g.log(0, "stats", "stats.template.overview received members", {memberCount: members.length});
 
-          main.template.mc({collection: 'overview'}, function (err: string, overview: any) { //TODO: fix any
+          main.template.mc({collection: 'overview'}, function (err: string, overview: {[index: string]: string | number}) {
             if(!err && overview) {
               let averageAge = 0;
               members.forEach((member: Member) => averageAge += member.getAge());
@@ -38,7 +38,7 @@ const main = {
                 'average_age': averageAge,
                 'median_age': medianAge,
                 'total_playtime': overview.playtime,
-                'silly': Math.round(overview.cobblestone_mined_per_death_by_zombie)
+                'silly': Math.round(overview.cobblestone_mined_per_death_by_zombie as number)
               });
             } else {
               callback('Couldnt get mc stats: ' + err, false);
@@ -52,7 +52,7 @@ const main = {
 
     //Gets the basic overview of one or multiple members
     //This includes: discord_id, mc_uuid, discord_nick, mc_nick, age, country, playtime, mc_render_url, discord_avatar_url
-    memberOverview(options: any, callback: Function) {
+    memberOverview(options: IStatsOptions, callback: Function) {
       let discord_id = options.hasOwnProperty('discord_id') ? options.discord_id : false;
       if(discord_id) {
 
@@ -82,9 +82,9 @@ const main = {
         memberFactory.getAllWhitelisted()
           .then((members: Member[]) => {
             let error = false;
-            let output: any[] = []; //TODO: fix any
+            let output: {[index: string]: string}[] = [];
             for(let i = 0; i < members.length; i++) {
-              main.template.memberOverview({discord_id: members[i].getDiscordId()}, function (err: string, doc: any) { //TODO: fix any
+              main.template.memberOverview({discord_id: members[i].getDiscordId()}, function (err: string, doc: {[index: string]: string}) {
                 output.push(doc);
                 if(err) error = true;
                 //Check if this is the last callback
@@ -102,7 +102,7 @@ const main = {
     },
 
     //callsback a list of all countries with their respective member count and coloring for the map-view in statistics.html
-    countryList(options: any, callback: Function) {
+    countryList(options: IStatsOptions, callback: Function) {
       memberFactory.getAllWhitelisted()
         .then(async (members: Member[]) => {
           //Get the country list
@@ -140,7 +140,7 @@ const main = {
     //collections: See mc_collections.js
     //uuid: uuid if stats of a single player are wanted; if false or not set this returns stats for all players
     //rank: include rank; only gets evaluated if uuid is given
-    mc(options: any, callback: Function) {
+    mc(options: IStatsOptions, callback: Function) {
       if(options.uuid) {
         if(options.rank) {
           mc.getRanked(options, callback);
@@ -153,7 +153,7 @@ const main = {
     }
   }, 
   templatePromise: {
-    mc(options: any) {
+    mc(options: IStatsOptions) {
       return new Promise((resolve, reject) => {
         main.template.mc(options, (err: Error, res: any) => {
           if(err) {

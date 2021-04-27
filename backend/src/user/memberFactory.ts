@@ -1,12 +1,14 @@
 import Factory = require("../persistance/factory.js");
 import Member = require("./member.js");
+import type {MongooseFilterQuery} from "mongoose";
 
 export = class MemberFactory extends Factory{
-  constructor(options?: any) { //TODO: fix any
-    if (typeof options != "object") var options: any = {};
-    options.schema = Member.schema;
-    options.name = "members";
-    super(options);
+  constructor(options?: IFactoryOptions) {
+    super({
+      schema: Member.schema,
+      name: "members",
+      ...options
+    });
   }
 
   create(discord_id: string, discord_nick?: string, mc_uuid?: string, mc_ign?: string, country?: string, birth_month?: number, birth_year?: number, publish_age?: boolean, publish_country?: boolean, status?: number): Promise<Member>{
@@ -68,14 +70,14 @@ export = class MemberFactory extends Factory{
     });
   }
 
-  getFiltered(filter: any): Promise<Member[]>{ //TODO: fix any
+  getFiltered(filter: MongooseFilterQuery<any>): Promise<Member[]>{
     return new Promise(async (resolve, reject) => {
       try{
         if (!this.connected) await this.connect();
 
         let res = await this.persistanceProvider.retrieveFiltered(filter);
         let members: Member[] = [];
-        res.forEach((member: any) => { //TODO: fix any
+        res.forEach((member: any) => {
           members.push(new Member(member.discord, member.discord_nick, member.status, new Date(member._id.getTimestamp()), member.karma, member.mcUUID, member.mcName, member.country, member.birth_month, member.birth_year, member.publish_age, member.publish_country));
         });
         await Promise.all(members.map(async member => await member.init()));
