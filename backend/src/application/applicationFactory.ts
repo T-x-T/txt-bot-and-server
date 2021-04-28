@@ -16,7 +16,7 @@ class ApplicationFactory extends Factory{
   //discordUserName and mcIgn are optional
   async create(discordId: string, mcUuid: string, emailAddress: string, country: string, birth_month: number, birth_year: number, about_me: string, motivation: string, buildImages: string, publishAboutMe: boolean, publishAge: boolean, publishCountry: boolean, status: number, discordUserName: string, mcIgn: string){
     if(!this.connected) await this.connect();
-    if(await applicantHasOpenApplication(discordId, mcUuid)) throw new Error("Applicant still has open application or got accepted already");
+    if(await this.applicantHasOpenApplication(discordId, mcUuid)) throw new Error("Applicant still has open application or got accepted already");
 
     const application = new Application(null, discordId, mcUuid, emailAddress, country, birth_month, birth_year, about_me, motivation, buildImages, publishAboutMe, publishAge, publishCountry, status, null, discordUserName, mcIgn);
     await application.init();
@@ -25,6 +25,12 @@ class ApplicationFactory extends Factory{
     announceNewApplication(application);
     sendNewApplicationEmail(application);
     return application;
+  }
+
+  async applicantHasOpenApplication(discordId: string, mcUuid: string) {
+    const byDiscordId = await this.getFiltered({$and: [{discord_id: discordId}, {$or: [{status: 1}, {status: 3}]}]});
+    const byMcUuid = await this.getFiltered({$and: [{mc_uuid: mcUuid}, {$or: [{status: 1}, {status: 3}]}]});
+    return byDiscordId.length > 0 || byMcUuid.length > 0;
   }
 
   async getById(id: Number){
@@ -52,12 +58,6 @@ class ApplicationFactory extends Factory{
 
     return applications;
   }
-}
-
-async function applicantHasOpenApplication(discordId: string, mcUuid: string){
-  const byDiscordId = await this.getFiltered({$and: [{discord_id: discordId}, {$or: [{status: 1}, {status: 3}]}]});
-  const byMcUuid = await this.getFiltered({$and: [{mc_uuid: mcUuid}, {$or: [{status: 1}, {status: 3}]}]});
-  return byDiscordId.length > 0 || byMcUuid.length > 0;
 }
 
 async function announceNewApplication(application: Application){

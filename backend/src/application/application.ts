@@ -60,12 +60,12 @@ class Application extends Persistable{
     }
   }
 
-  async createMemberFromApplication() {    
+  async createMemberFromApplication(): Promise<void> {    
     try {
       const member = await memberFactory.getByDiscordId(this.getDiscordId())
       if(!member) {
         await memberFactory.create(this.getDiscordId());
-        this.createMemberFromApplication();
+        return this.createMemberFromApplication();
       }
       member.setDiscordUserName(this.getDiscordUserName());
       member.setMcUuid(this.getMcUuid());
