@@ -49,9 +49,9 @@ class Member extends Persistable{
     });
   }
 
-  getDiscordUserdata() {
+  getDiscordUserdata(): Promise<IDiscordApiUserObject> {
     return new Promise((resolve, reject) => {
-      discord_api.getUserObject({id: this.data.discord}, {fromApi: true}, (err: Error, userObject: string) => {
+      discord_api.getUserObject({id: this.data.discord}, {fromApi: true}, (err: Error, userObject: IDiscordApiUserObject) => {
         if(err) {
           reject(err);
         } else {

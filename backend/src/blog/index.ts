@@ -1,10 +1,19 @@
 //Dependencies
 import Persistable = require("../persistance/persistable.js");
 import Factory = require("../persistance/factory.js");
+import {MongooseFilterQuery} from "mongoose";
 
-//TODO: create blog interface
+interface IBlogPost {
+  id?: number
+  title: string,
+  author: string,
+  body: string,
+  date?: Date,
+  public: boolean
+}
+
 const blog = {
-  async create(input: any) {
+  async create(input: IBlogPost) {
     if(!isValid(input)) throw new Error("Incorrect Input! title, author and body must be truthy");
 
     let persistable = new Persistable(dbOptions);
@@ -17,7 +26,7 @@ const blog = {
     return persistable.data;
   },
 
-  async replace(input: any) {
+  async replace(input: IBlogPost ) {
     if(!isValid(input)) throw new Error("Incorrect Input! title, author and body must be truthy");
     if(!input.hasOwnProperty("id") || typeof input.id !== "number") throw new Error("blog must contain numerical id to replace");
 
@@ -47,7 +56,7 @@ const blog = {
     });
   },
 
-  async getFiltered(filter: any) { //TODO: fix any
+  async getFiltered(filter: MongooseFilterQuery<any>) {
     const factory = new Factory(dbOptions);
     await factory.connect();
     return await factory.persistanceProvider.retrieveFiltered(filter);
@@ -75,7 +84,7 @@ const blog = {
   }
 }
 
-function isValid(input: any) { //TODO: fix any
+function isValid(input: IBlogPost) {
   return input.title && input.author && input.body;
 }
 

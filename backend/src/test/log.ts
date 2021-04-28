@@ -85,7 +85,7 @@ describe("log", function(){
       await writeExampleLogs(10);
       let logEntries = await log.read(0, Date.now() - 10000);
 
-      logEntries.forEach((logEntry: any) => { //TODO: fix any
+      logEntries.forEach((logEntry: any) => {
         assert.strictEqual(logEntry.level, _level);
         assert.strictEqual(logEntry.component, _component);
         assert.strictEqual(logEntry.name, _name);

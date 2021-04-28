@@ -106,7 +106,7 @@ const update = {
         members.forEach((member) => {
           i = i + 1000;
           setTimeout(function () {
-            discord_api.getUserObjectByIdFromApi(member.getDiscordId(), function (userObject: any) {
+            discord_api.getUserObjectByIdFromApi(member.getDiscordId(), function (userObject: IDiscordApiUserObject) {
               global.g.cache.discordUserObjects[userObject.id] = userObject;
             });
           }, i);

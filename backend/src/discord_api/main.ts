@@ -46,7 +46,7 @@ const main = {
     });
   },
 
-  getUserObjectById(id: string, options: any, callback: Function) { //TODO: fix any
+  getUserObjectById(id: string, options: {fromApi: boolean}, callback: Function) {
     //Check if this id is already cached
     if(global.g.cache.discordUserObjects.hasOwnProperty(id)) {
       //Its cached, return that
@@ -54,7 +54,7 @@ const main = {
     } else {
       if(options.fromApi) {
         //Ask the api anyways
-        main.getUserObjectByIdFromApi(id, function (userData: any) { //TODO: fix any
+        main.getUserObjectByIdFromApi(id, function (userData: IDiscordApiUserObject) {
           if(userData) {
             callback(false, userData);
           } else {
@@ -97,7 +97,7 @@ const main = {
           if(userData.hasOwnProperty("retry_after")) {
             //We got rate-limited, try again after it expired
             setTimeout(function () {
-              main.getUserObjectById(id, false, function (_userData: any) { //TODO: fix any
+              main.getUserObjectById(id, null, function (_userData: IDiscordApiUserObject) {
                 callback(_userData);
               });
             }, userData.retry_after + 10);

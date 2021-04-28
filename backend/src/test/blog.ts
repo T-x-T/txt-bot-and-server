@@ -25,24 +25,12 @@ describe("blog", function(){
   });
 
   describe("create", function(){
-    it("throw without title", async function(){
-      await assert.rejects(async () => blog.create({author: "author", body: "body", public: true}), new Error("Incorrect Input! title, author and body must be truthy"));
-    });
-
     it("throw with empty title", async function() {
       await assert.rejects(async () => blog.create({title: "", author: "author", body: "body", public: true}), new Error("Incorrect Input! title, author and body must be truthy"));
     });
 
-    it("throw without author", async function() {
-      await assert.rejects(async () => blog.create({title: "title", body: "body", public: true}), new Error("Incorrect Input! title, author and body must be truthy"));
-    });
-
     it("throw with empty author", async function() {
       await assert.rejects(async () => blog.create({title: "title", author: "", body: "body", public: true}), new Error("Incorrect Input! title, author and body must be truthy"));
-    });
-
-    it("throw without body", async function() {
-      await assert.rejects(async () => blog.create({title: "title", author: "author", public: true}), new Error("Incorrect Input! title, author and body must be truthy"));
     });
 
     it("throw with empty body", async function() {
@@ -51,8 +39,8 @@ describe("blog", function(){
 
     it("save correct input", async function(){
       await blog.create({title: "title", author: "author", body: "body", date: new Date("December 17, 1995 03: 24: 00"), public: true});
-      let res = await blog.getAll();
-      res = res[0];
+      const _res = await blog.getAll();
+      const res = _res[0];
       assert.strictEqual(res.title, "title");
       assert.strictEqual(res.author, "author");
       assert.strictEqual(res.body, "body");
@@ -63,9 +51,9 @@ describe("blog", function(){
     it("if not date is given, use cuurent date", async function(){
       await blog.create({title: "title", author: "author", body: "body", public: true});
       let res = await blog.getAll();
-      res = res[0];
-      assert.ok(res.date > Date.now() - 2000);
-      assert.ok(res.date < Date.now());
+      
+      assert.ok(res[0].date > Date.now() - 2000);
+      assert.ok(res[0].date < Date.now());
     });
 
     it("save random data correctly", async function(){
@@ -77,8 +65,8 @@ describe("blog", function(){
         let visible = Math.random() > 0.5 ? true : false;
         
         await blog.create({title: title, author: author, body: body, date: date, public: visible});
-        let res = await blog.getAll();
-        res = res[res.length - 1];
+        const _res = await blog.getAll();
+        const res = _res[_res.length - 1];
         
         assert.strictEqual(res.title, title);
         assert.strictEqual(res.author, author);
@@ -90,24 +78,8 @@ describe("blog", function(){
   });
 
   describe("replace", function(){
-    it("throw with empty title", async function() {
-      await assert.rejects(async () => blog.replace({title: "", author: "author", body: "body", public: true}), new Error("Incorrect Input! title, author and body must be truthy"));
-    });
-
-    it("throw without author", async function() {
-      await assert.rejects(async () => blog.replace({title: "title", body: "body", public: true}), new Error("Incorrect Input! title, author and body must be truthy"));
-    });
-
-    it("throw without body", async function() {
-      await assert.rejects(async () => blog.replace({title: "title", author: "author", public: true}), new Error("Incorrect Input! title, author and body must be truthy"));
-    });
-
     it("throw without id", async function() {
       await assert.rejects(async () => blog.replace({title: "title", author: "author", body: "body", public: true}), new Error("blog must contain numerical id to replace"));
-    });
-
-    it("throw with id of type string", async function() {
-      await assert.rejects(async () => blog.replace({id: "1", title: "title", author: "author", body: "body", public: true}), new Error("blog must contain numerical id to replace"));
     });
 
     it("throw when no blog with given id exists", async function() {
@@ -119,9 +91,9 @@ describe("blog", function(){
       await blog.create({title: "title", author: "author", body: "body", public: true});
       await blog.replace({id: 0, title: "title", author: "author", body: "body", public: false});
       let res = await blog.getAll();
-      res = res[0];
-      assert.ok(res.date > Date.now() - 2000);
-      assert.ok(res.date < Date.now());
+      
+      assert.ok(res[0].date > Date.now() - 2000);
+      assert.ok(res[0].date < Date.now());
     });
 
     it("replace existing one", async function(){
@@ -135,8 +107,8 @@ describe("blog", function(){
         let visible = Math.random() > 0.5 ? true : false;
 
         await blog.replace({id: i, title: title, author: author, body: body, date: date, public: visible});
-        let res = await blog.getAll();
-        res = res[res.length - 1];
+        const _res = await blog.getAll();
+        const res = _res[_res.length - 1];
 
         assert.strictEqual(res.title, title);
         assert.strictEqual(res.author, author);
@@ -176,8 +148,8 @@ describe("blog", function(){
         let visible = Math.random() > 0.5 ? true : false;
 
         await blog.create({title: title, author: author, body: body, date: date, public: visible});
-        let res = await blog.getAll();
-        res = res[res.length - 1];
+        const _res = await blog.getAll();
+        const res = _res[_res.length - 1];
 
         assert.strictEqual(res.title, title);
         assert.strictEqual(res.author, author);
@@ -238,8 +210,8 @@ describe("blog", function(){
         let visible = true;
 
         await blog.create({title: title, author: author, body: body, date: date, public: visible});
-        let res = await blog.getPublic();
-        res = res[res.length - 1];
+        const _res = await blog.getPublic();
+        const res: any = _res[_res.length - 1];
 
         assert.strictEqual(res.title, title);
         assert.strictEqual(res.author, author);
@@ -257,9 +229,8 @@ describe("blog", function(){
       await blog.create({title: "title2", author: "author", body: "body", date: new Date(Date.now() - 8000), public: true});
 
       let res = await blog.getFiltered({title: "title1"});
-      res = res [0];
 
-      assert.strictEqual(res.title, "title1");
+      assert.strictEqual(res[0].title, "title1");
     });
   });
 

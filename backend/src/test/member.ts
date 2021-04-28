@@ -254,7 +254,7 @@ describe("member", function(){
 
     it("User#getDiscordUserdata should return a user object of the correct user", async function () {
       let member = await createAndSaveNewMember();
-      let userData: any = await member.getDiscordUserdata(); //TODO: fix any
+      let userData: IDiscordApiUserObject = await member.getDiscordUserdata();
       assert.strictEqual(userData.id, member.data.discord)
     });
   });

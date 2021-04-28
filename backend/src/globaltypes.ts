@@ -13,6 +13,12 @@ interface IStatsOptions {
   collection?: string
 }
 
+interface IDiscordApiUserObject {
+  id: string,
+  username: string,
+  discriminator: string,  
+}
+
 const enum EApplicationStatus {
   pending = 1,
   denied = 2,

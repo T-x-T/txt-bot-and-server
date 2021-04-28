@@ -1,12 +1,13 @@
 import mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 import type {MongooseFilterQuery} from "mongoose";
+import type {IPersistanceProvider} from "./IPersistanceProvider";
 
 let connected = false;
 let models: any = {}; //TODO: fix any
 
 //This is the peristableProvider for saving and getting data to and from a mongoDB Database
-class Mongo{
+class Mongo implements IPersistanceProvider<any>{
   mongodb_url;
   collection;
   schema;
@@ -14,7 +15,7 @@ class Mongo{
   
   //options:
   //mongodb_url: if not given, use the value from the config
-  constructor(collection: string, schema: any, options?: any){
+  constructor(collection: string, schema: any, options?: {[key: string]: string | number | boolean}){
     this.collection = collection;
     this.schema = schema;
     this.mongodb_url = global.g.config.data.mongodb_url;

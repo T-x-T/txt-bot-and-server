@@ -218,7 +218,7 @@ handlers.paxapi.application.post = function(data: IRequestData, callback: Functi
     if(!err && mcUuid){
       mc_helpers.getIGN(mcUuid, (err: string, mcIgn: string) => {
         if(!err && mcIgn){
-          discord_api.getUserObjectByIdFromApi(data.payload.discord_id, (userData: any) => {
+          discord_api.getUserObjectByIdFromApi(data.payload.discord_id, (userData: IDiscordApiUserObject) => {
             if(userData) {
               let discordUserName = `${userData.username}#${userData.discriminator}`;
               applicationFactory.create(discordId, mcUuid, emailAddress, country, birthMonth, birthYear, aboutMe, motivation, buildImages, publishAboutMe, publishAge, publishCountry, 1, discordUserName, mcIgn)

@@ -63,7 +63,7 @@ const main = {
 
   //Takes an access_token and returns the discord_id
   getDiscordIdFromToken(access_token: string, callback: Function) {
-    discord_api.getUserObject({token: access_token}, false, function (_err: Error, userObject: any) { //TODO: fix any
+    discord_api.getUserObject({token: access_token}, false, function (_err: Error, userObject: IDiscordApiUserObject) {
       if(userObject.hasOwnProperty('id')) {
         callback(false, userObject.id, access_token); //The access_token is only needed by oauth.isCodeAdmin
       } else {
