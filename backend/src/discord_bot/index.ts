@@ -8,8 +8,8 @@ import discord_helpers = require("./helpers.js");
 
 export = {
   getNicknameByID: discord_helpers.getNicknameByID,
-  returnRoles: discord_helpers.returnRoles,
-  returnRoleId: discord_helpers.returnRoleId,
+  getSelfAssignableRoles: discord_helpers.getSelfAssignableRoles,
+  getRoleId: discord_helpers.getRoleId,
   addMemberToRole: discord_helpers.addMemberToRole,
   removeMemberFromRole: discord_helpers.removeMemberFromRole,
   hasRole: discord_helpers.hasRole,
@@ -17,6 +17,4 @@ export = {
   isGuildMember: discord_helpers.isGuildMember,
   getMemberObjectById: discord_helpers.getMemberObjectByID,
   sendMessage: discord_helpers.sendMessage,
-  sendNewApplicationMessage: discord_helpers.sendNewApplicationMessage,
-  sendAcceptedMemberWelcomeMessage: discord_helpers.sendAcceptedMemberWelcomeMessage,
 }

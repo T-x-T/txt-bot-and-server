@@ -50,7 +50,7 @@ const update = {
         global.g.log(0, 'workers', 'discord_helpers.updateNick got member object', {member: member.data});
         let ign = typeof member.getMcIgn() == 'string' ? member.getMcIgn() : '';
         //Get the members object
-        helpers.getMemberObjectByID(discord_id, function (discordMember: any) {
+        const discordMember = helpers.getMemberObjectByID(discord_id);
           if(discordMember) {
             //Now its time to change the users nick
             discordMember.setNickname(ign)
@@ -58,7 +58,6 @@ const update = {
           } else {
             global.g.log(2, 'workers', 'discord_helpers.updateNick couldnt get the member object', {user: discord_id, discordMember: discordMember});
           }
-        });
       })
       .catch((e: Error) => {
         global.g.log(2, 'workers', 'discord_helpers.updateNick couldnt get the member document', {user: discord_id, error: e.message});
@@ -77,24 +76,17 @@ const update = {
   },
 
   //This gets the current username of all users and writes them into the db
-  updateAllDiscordNicks() {
-    //Get all users
-    memberFactory.getAllWhitelisted()
-      .then((members: Member[]) => {
-        members.forEach(member => {
-          //Update discord nick
-          helpers.getNicknameByID(member.getDiscordId(), function (discord_nick: string) {
-            if(discord_nick) {
-              member.setDiscordUserName(discord_nick);
-              member.save()
-                .catch((e: Error) => global.g.log(2, 'workers', 'user.updateNick couldnt update user', {err: e, member: member.data}));
-            }
-          });
-        });
-      })
-      .catch((e: Error) => {
-        global.g.log(2, 'workers', 'user.updateNicks cant get any users', {err: e.message});
-      });
+  async updateAllDiscordNicks() {
+    const members = await memberFactory.getAllWhitelisted();
+    members.forEach(async member => {
+      try {
+        const discordNick = await helpers.getNicknameByID(member.getDiscordId());
+        member.setDiscordUserName(discordNick);
+        await member.save();
+      } catch (e) {
+        global.g.log(2, 'workers', 'user.updateNick couldnt proceses user', {err: e.message, member: member.data})
+      }
+    });
   },
 
   updateUserIdCache() {

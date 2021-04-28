@@ -91,9 +91,8 @@ client.on('guildBanAdd', (guild, user) => {
 //Gets called whenever a new member joins the guild
 client.on('guildMemberAdd', (user) => {
   //Send a welcome message
-  discordHelpers.sendMessage(`Welcome <@${user.id}>! If you are here for joining the Minecraft server, then please read the <#${user.guild.channels.find(channel => channel.name == "faq").id}> and read the rules at https://paxterya.com/rules. You can then apply under https://paxterya.com/join-us\nIf you have any questions just ask in <#${user.guild.channels.find(channel => channel.name == "support").id}>\nWe are looking forward to see you ingame :)`, global.g.config.discord_bot.channel.general, function (err: Error) {
-    if(err) global.g.log(2, 'discord_bot', 'discord_bot couldnt send the guildMemberAdd message', { err: err});
-  });
+  discordHelpers.sendMessage(`Welcome <@${user.id}>! If you are here for joining the Minecraft server, then please read the <#${user.guild.channels.find(channel => channel.name == "faq").id}> and read the rules at https://paxterya.com/rules. You can then apply under https://paxterya.com/join-us\nIf you have any questions just ask in <#${user.guild.channels.find(channel => channel.name == "support").id}>\nWe are looking forward to see you ingame :)`, global.g.config.discord_bot.channel.general)
+    .catch((e: Error) => global.g.log(2, 'discord_bot', 'discord_bot couldnt send the guildMemberAdd message', {err: e.message}));
   //Check if the new member got accepted as a member
   applicationFactory.getAcceptedByDiscordId(user.id)
   .then((application: any) => {

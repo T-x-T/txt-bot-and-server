@@ -52,7 +52,7 @@ const main = {
       //Its cached, return that
       callback(false, global.g.cache.discordUserObjects[id]);
     } else {
-      if(options.fromApi) {
+      if(options?.fromApi) {
         //Ask the api anyways
         main.getUserObjectByIdFromApi(id, function (userData: IDiscordApiUserObject) {
           if(userData) {

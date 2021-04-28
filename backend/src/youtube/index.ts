@@ -85,9 +85,6 @@ function postIfNew(video: IYoutubeVideo) {
 }
 
 function post(video: IYoutubeVideo) {
-  discord_helpers.sendMessage(`New Video: ${video.title} by ${video.channel_title}\n${video.url}\n<@&${video.channel.role}>`, video.channel.channel_id, function (err: Error) {
-    if(err) {
-      global.g.log(2, 'youtube', 'couldnt send the new youtube video message', {err: err.message, video: video});
-    }
-  });
+  discord_helpers.sendMessage(`New Video: ${video.title} by ${video.channel_title}\n${video.url}\n<@&${video.channel.role}>`, video.channel.channel_id)
+    .catch((e: Error) => global.g.log(2, 'youtube', 'couldnt send the new youtube video message', {error: e.message, video: video}));
 }

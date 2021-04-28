@@ -33,10 +33,8 @@ class ApplicationFactory extends Factory{
     return byDiscordId.length > 0 || byMcUuid.length > 0;
   }
 
-  announceNewApplication(application: Application){
-    discord_helpers.sendMessage('New application from ' + application.getDiscordUserName() + '\nYou can find it here: https://paxterya.com/interface', global.g.config.discord_bot.channel.new_application_announcement, function (err: String) {
-      if(err) global.g.log(2, 'discord_bot', 'discord_bot couldnt send the new application message', {err: err, application: application});
-    });
+  async announceNewApplication(application: Application){
+    await discord_helpers.sendMessage('New application from ' + application.getDiscordUserName() + '\nYou can find it here: https://paxterya.com/interface', global.g.config.discord_bot.channel.new_application_announcement);
   }
 
   sendNewApplicationEmail(application: Application){

@@ -49,18 +49,16 @@ class Application extends Persistable{
 
   async acceptGuildMember(){
     await this.createMemberFromApplication();
-    discord_helpers.sendAcceptedMemberWelcomeMessage(this);
+    await sendAcceptedMemberWelcomeMessage(this);
     mc_helpers.whitelist(this.getMcUuid());
-    discord_helpers.addMemberToRole(this.getDiscordId(), global.g.config.discord_bot.roles.paxterya, () => {});
-    discord_helpers.getMemberObjectById(this.getDiscordId(), (discordMember: Discord.GuildMember) => {
-      if(discordMember) {
-        discordMember.setNickname(this.getMcIgn())
-          .catch((e: Error) => global.g.log(2, "application", "Application#accept couldnt set discord nickname", {application: this.data, err: e.message}));
-      } else {
-        global.g.log(2, "application", "Application#accept couldnt get discord member object", {application: this.data});
-      }
-    });
-  }
+    await discord_helpers.addMemberToRole(this.getDiscordId(), global.g.config.discord_bot.roles.paxterya);
+    const discordMember = discord_helpers.getMemberObjectById(this.getDiscordId());
+    if(discordMember) {
+      await discordMember.setNickname(this.getMcIgn())
+    } else {
+      global.g.log(2, "application", "Application#accept couldnt get discord member object", {application: this.data});
+    }
+}
 
   async createMemberFromApplication() {    
     try {
@@ -218,6 +216,18 @@ class Application extends Persistable{
       });
     });
   }
+}
+
+async function sendAcceptedMemberWelcomeMessage(application: Application) {
+  let msg = '';
+  if(application.getPublishAboutMe()) msg = `Welcome <@${application.getDiscordId()}> to Paxterya!\nHere is the about me text they sent us:\n${application.getAboutMe()}`;
+  else msg = `Welcome <@${application.getDiscordId()}> to Paxterya!`;
+  msg += '\n\nThis means you can now join the server! If you have any troubles please ping the admins!\n';
+  msg += 'It is also a good time to give our rules a read: https://paxterya.com/rules\n';
+  msg += `Please also take a look at our FAQ: <#624992850764890122>\n`;
+  msg += 'The IP of the survival server is paxterya.com and the IP for the creative Server is paxterya.com:25566\n\n';
+  msg += 'If you encounter any issues or have any questions, feel free to contact our staff.';
+  await discord_helpers.sendMessage(msg, global.g.config.discord_bot.channel.new_member_announcement);
 }
 
 Application.schema = {

@@ -379,18 +379,13 @@ describe("application", function(){
       });
     });
 
-    it("set correct nickname in discord", function(){
-      return new Promise<void>(async (resolve, reject) => {
-        discord_helpers.getMemberObjectById("293029505457586176", async (discordMember: Discord.GuildMember) => {
-          discordMember.setNickname("test");
-          let application = await createAndSaveApplication();
-          await application.accept();
-          discord_helpers.getMemberObjectById("293029505457586176", (discordMember: Discord.GuildMember) => {
-            assert.strictEqual(discordMember.nickname, "The__TxT");
-            resolve();
-          });
-        });
-      });
+    it("set correct nickname in discord", async function(){
+      const discordMember = discord_helpers.getMemberObjectById("293029505457586176");
+      discordMember.setNickname("test");
+      const application = await createAndSaveApplication();
+      await application.accept();
+      const newDiscordMember = discord_helpers.getMemberObjectById("293029505457586176");
+      assert.strictEqual(newDiscordMember.nickname, "The__TxT");
     });
   });
 
