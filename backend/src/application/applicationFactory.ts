@@ -16,29 +16,15 @@ class ApplicationFactory extends Factory{
   //discordUserName and mcIgn are optional
   async create(discordId: string, mcUuid: string, emailAddress: string, country: string, birth_month: number, birth_year: number, about_me: string, motivation: string, buildImages: string, publishAboutMe: boolean, publishAge: boolean, publishCountry: boolean, status: number, discordUserName: string, mcIgn: string){
     if(!this.connected) await this.connect();
-    if(await this.applicantHasOpenApplication(discordId, mcUuid)) throw new Error("Applicant still has open application or got accepted already");
+    if(await applicantHasOpenApplication(discordId, mcUuid)) throw new Error("Applicant still has open application or got accepted already");
 
-    let application = new Application(null, discordId, mcUuid, emailAddress, country, birth_month, birth_year, about_me, motivation, buildImages, publishAboutMe, publishAge, publishCountry, status, null, discordUserName, mcIgn);
+    const application = new Application(null, discordId, mcUuid, emailAddress, country, birth_month, birth_year, about_me, motivation, buildImages, publishAboutMe, publishAge, publishCountry, status, null, discordUserName, mcIgn);
     await application.init();
-    let raw_result = await application.create();
-    application.setId(raw_result.id);
-    this.announceNewApplication(application);
-    this.sendNewApplicationEmail(application);
+    const rawResult = await application.create();
+    application.setId(rawResult.id);
+    announceNewApplication(application);
+    sendNewApplicationEmail(application);
     return application;
-  }
-
-  async applicantHasOpenApplication(discordId: string, mcUuid: string){
-    let byDiscordId = await this.getFiltered({$and: [{discord_id: discordId}, {$or: [{status: 1}, {status: 3}]}]});
-    let byMcUuid = await this.getFiltered({$and: [{mc_uuid: mcUuid}, {$or: [{status: 1}, {status: 3}]}]});
-    return byDiscordId.length > 0 || byMcUuid.length > 0;
-  }
-
-  async announceNewApplication(application: Application){
-    await discord_helpers.sendMessage('New application from ' + application.getDiscordUserName() + '\nYou can find it here: https://paxterya.com/interface', global.g.config.discord_bot.channel.new_application_announcement);
-  }
-
-  sendNewApplicationEmail(application: Application){
-    email.sendNewApplicationMail(application);
   }
 
   async getById(id: Number){
@@ -61,14 +47,25 @@ class ApplicationFactory extends Factory{
   async getFiltered(filter?: MongooseFilterQuery<any>){
     if(!this.connected) await this.connect();
     const res = await this.persistanceProvider.retrieveFiltered(filter);
-    let applications: Application[] = [];
-    res.forEach((application: any) => {
-      applications.push(new Application(application.id, application.discord_id, application.mc_uuid, application.email_address, application.country, application.birth_month, application.birth_year, application.about_me, application.motivation, application.build_images, application.publish_about_me, application.publish_age, application.publish_country, application.status, new Date(application._id.getTimestamp()), application.discord_nick, application.mc_ign));
-    });
+    const applications: Application[] = res.map((application: any) => new Application(application.id, application.discord_id, application.mc_uuid, application.email_address, application.country, application.birth_month, application.birth_year, application.about_me, application.motivation, application.build_images, application.publish_about_me, application.publish_age, application.publish_country, application.status, new Date(application._id.getTimestamp()), application.discord_nick, application.mc_ign));
     await Promise.all(applications.map(async application => application.init()));
 
     return applications;
   }
+}
+
+async function applicantHasOpenApplication(discordId: string, mcUuid: string){
+  const byDiscordId = await this.getFiltered({$and: [{discord_id: discordId}, {$or: [{status: 1}, {status: 3}]}]});
+  const byMcUuid = await this.getFiltered({$and: [{mc_uuid: mcUuid}, {$or: [{status: 1}, {status: 3}]}]});
+  return byDiscordId.length > 0 || byMcUuid.length > 0;
+}
+
+async function announceNewApplication(application: Application){
+  await discord_helpers.sendMessage('New application from ' + application.getDiscordUserName() + '\nYou can find it here: https://paxterya.com/interface', global.g.config.discord_bot.channel.new_application_announcement);
+}
+
+function sendNewApplicationEmail(application: Application){
+  email.sendNewApplicationMail(application);
 }
 
 export = ApplicationFactory;

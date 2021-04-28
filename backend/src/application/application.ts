@@ -6,8 +6,6 @@ import discord_api = require("../discord_api/index.js");
 import mc_helpers = require("../minecraft/index.js");
 import MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory();
-import Discord = require("discord.js");
-
 class Application extends Persistable{
   static schema: any; //TODO fix any type
 
@@ -48,44 +46,39 @@ class Application extends Persistable{
   }
 
   async acceptGuildMember(){
-    await this.createMemberFromApplication();
-    await sendAcceptedMemberWelcomeMessage(this);
+    await Promise.all([
+      this.createMemberFromApplication(),
+      sendAcceptedMemberWelcomeMessage(this),
+      discord_helpers.addMemberToRole(this.getDiscordId(), global.g.config.discord_bot.roles.paxterya)
+    ]);
     mc_helpers.whitelist(this.getMcUuid());
-    await discord_helpers.addMemberToRole(this.getDiscordId(), global.g.config.discord_bot.roles.paxterya);
     const discordMember = discord_helpers.getMemberObjectById(this.getDiscordId());
     if(discordMember) {
       await discordMember.setNickname(this.getMcIgn())
     } else {
       global.g.log(2, "application", "Application#accept couldnt get discord member object", {application: this.data});
     }
-}
+  }
 
   async createMemberFromApplication() {    
     try {
-      let member = await memberFactory.getByDiscordId(this.getDiscordId())
-      if(member) {
-        try {
-          member.setDiscordUserName(this.getDiscordUserName());
-          member.setMcUuid(this.getMcUuid());
-          member.setMcIgn(this.getMcIgn());
-          member.setCountry(this.getCountry());
-          member.setBirthMonth(this.getBirthMonth());
-          member.setBirthYear(this.getBirthYear());
-          member.setPublishAge(this.getPublishAge());
-          member.setPublishCountry(this.getPublishCountry());
-          member.setStatus(1);
-          await member.save();
-
-        } catch(e) {
-          global.g.log(2, 'application', 'failed to configure existing member object', {application: this.data, member: member, err: e.message});
-          throw new Error(e.message)
-        }
-      } else {
-        await memberFactory.create(this.getDiscordId(), this.getDiscordUserName(), this.getMcUuid(), this.getMcIgn(), this.getCountry(), this.getBirthMonth(), this.getBirthYear(), this.getPublishAge(), this.getPublishCountry(), 1);
-
+      const member = await memberFactory.getByDiscordId(this.getDiscordId())
+      if(!member) {
+        await memberFactory.create(this.getDiscordId());
+        this.createMemberFromApplication();
       }
+      member.setDiscordUserName(this.getDiscordUserName());
+      member.setMcUuid(this.getMcUuid());
+      member.setMcIgn(this.getMcIgn());
+      member.setCountry(this.getCountry());
+      member.setBirthMonth(this.getBirthMonth());
+      member.setBirthYear(this.getBirthYear());
+      member.setPublishAge(this.getPublishAge());
+      member.setPublishCountry(this.getPublishCountry());
+      member.setStatus(1);
+      await member.save();
     } catch(e) {
-      global.g.log(2, 'application', 'failed to get user object of accepted member', {application: this.data, err: e.message});
+      global.g.log(2, 'application', 'createMemberFromApplication failed', {application: this.data, err: e.message});
       throw new Error(e.message);
     }
   };
@@ -158,11 +151,8 @@ class Application extends Persistable{
   }
 
   getAge(): number {
-    if(this.getBirthMonth() <= new Date().getMonth() + 1) {
-      return new Date().getFullYear() - this.getBirthYear();
-    } else {
-      return new Date().getFullYear() - this.getBirthYear() - 1;
-    }
+    const age = new Date().getFullYear() - this.getBirthYear();
+    return this.getBirthMonth() <= new Date().getMonth() + 1 ? age : age -1;
   }
 
   getAboutMe(): string {
