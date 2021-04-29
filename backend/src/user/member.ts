@@ -2,7 +2,6 @@ import Persistable = require("../persistance/persistable.js");
 import mc = require("../minecraft/index.js");
 import discord_helpers = require("../discord_bot/helpers.js");
 import discord_api = require("../discord_api/index.js");
-
 class Member extends Persistable{
   static schema: any;
   constructor(discord_id: string, discord_nick: string, status: number, joinedDate: Date, karma: number, mc_uuid: string, mc_ign: string, country: string, birth_month: number, birth_year: number, publish_age: boolean, publish_country: boolean){
@@ -41,24 +40,12 @@ class Member extends Persistable{
     this.data.discord_nick = newDiscordUserName;
   }
 
-  getDiscordAvatarUrl(): Promise<string> {
-    return new Promise((resolve, reject) => {
-      discord_api.getAvatarUrl(this.data.discord, (avatarUrl: string) => {
-        resolve(avatarUrl);
-      });
-    });
+  async getDiscordAvatarUrl() {
+    return await discord_api.getAvatarUrl(this.getDiscordId());
   }
 
-  getDiscordUserdata(): Promise<IDiscordApiUserObject> {
-    return new Promise((resolve, reject) => {
-      discord_api.getUserObject({id: this.data.discord}, {fromApi: true}, (err: Error, userObject: IDiscordApiUserObject) => {
-        if(err) {
-          reject(err);
-        } else {
-          resolve(userObject);
-        }
-      });
-    });
+  async getDiscordUserdata() {
+    return await discord_api.getUserObjectFromId(this.getDiscordId());
   }
 
   getJoinedDate() {

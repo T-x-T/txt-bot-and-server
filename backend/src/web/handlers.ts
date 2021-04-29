@@ -172,7 +172,7 @@ handlers.paxapi.application = async function(data: IRequestData, callback: Funct
 };
 
 //To send a new application
-handlers.paxapi.application.post = function(data: IRequestData, callback: Function){
+handlers.paxapi.application.post = async function(data: IRequestData, callback: Function){
   if(!data.payload || !data.payload.accept_rules || !data.payload.accept_privacy_policy){
     callback(400, {err: "Missing or malformed payload", payload: data.payload}, "json");
     return;
@@ -213,22 +213,21 @@ handlers.paxapi.application.post = function(data: IRequestData, callback: Functi
 
   mc_helpers.getUUID(data.payload.mc_ign, (err: string, mcUuid: string) => {
     if(!err && mcUuid){
-      mc_helpers.getIGN(mcUuid, (err: string, mcIgn: string) => {
+      mc_helpers.getIGN(mcUuid, async (err: string, mcIgn: string) => {
         if(!err && mcIgn){
-          discord_api.getUserObjectByIdFromApi(data.payload.discord_id, (userData: IDiscordApiUserObject) => {
-            if(userData) {
-              let discordUserName = `${userData.username}#${userData.discriminator}`;
-              applicationFactory.create(discordId, mcUuid, emailAddress, country, birthMonth, birthYear, aboutMe, motivation, buildImages, publishAboutMe, publishAge, publishCountry, 1, discordUserName, mcIgn)
-                .then(() => {
-                  callback(201, {}, "json");
-                })
-                .catch((e: Error) => {
-                  callback(500, {err: e.message}, "json");
-                });
-            } else {
-              callback(500, {err: "Couldnt get your nickname from Discord :( Please contact TxT#0001 on Discord if you read this", payload: data.payload}, "json");
-            }
-          });
+          const userData = await discord_api.getUserObjectFromId(data.payload.discord_id);
+          if(userData) {
+            let discordUserName = `${userData.username}#${userData.discriminator}`;
+            applicationFactory.create(discordId, mcUuid, emailAddress, country, birthMonth, birthYear, aboutMe, motivation, buildImages, publishAboutMe, publishAge, publishCountry, 1, discordUserName, mcIgn)
+              .then(() => {
+                callback(201, {}, "json");
+              })
+              .catch((e: Error) => {
+                callback(500, {err: e.message}, "json");
+              });
+          } else {
+            callback(500, {err: "Couldnt get your nickname from Discord :( Please contact TxT#0001 on Discord if you read this", payload: data.payload}, "json");
+          }
         }else{
           callback(500, {err: err}, "json");
         }
@@ -409,13 +408,12 @@ handlers.paxapi.statsoverview = function(data: IRequestData, callback: Function)
 handlers.paxapi.discorduserfromcode = async function(data: IRequestData, callback: Function){
   const code = data.queryStringObject.code;
   const discordId = await oauth.getDiscordIdFromCode(code, "applicationNew");
-  discord_api.getNicknameByID(discordId, function(discordNick: string){
-    if(discordNick){
-      callback(200, {discordNick: discordNick, discordId: discordId}, "json");
-    }else{
-      callback(500, {err: `Couldnt turn discord id ${discordId} into username`});
-    }
-  });
+  const discordNick = discord_api.getNicknameByID(discordId);
+  if(discordNick){
+    callback(200, {discordNick: discordNick, discordId: discordId}, "json");
+  }else{
+    callback(500, {err: `Couldnt turn discord id ${discordId} into username`});
+  }
 }
 
 handlers.paxapi.tokenfromcode = async function(data: IRequestData, callback: Function){

@@ -199,12 +199,8 @@ class Application extends Persistable{
     return `https://crafatar.com/renders/body/${this.getMcUuid()}?overlay=true`;
   }
 
-  getDiscordAvatarUrl(): Promise<string> {
-    return new Promise((resolve, reject) => {
-      discord_api.getAvatarUrl(this.getDiscordId(), (avatarUrl: string) => {
-        resolve(avatarUrl);
-      });
-    });
+  async getDiscordAvatarUrl() {
+    return await discord_api.getAvatarUrl(this.getDiscordId());
   }
 }
 

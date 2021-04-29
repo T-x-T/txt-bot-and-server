@@ -16,7 +16,7 @@ const blog = {
   async create(input: IBlogPost) {
     if(!isValid(input)) throw new Error("Incorrect Input! title, author and body must be truthy");
 
-    let persistable = new Persistable(dbOptions);
+    const persistable = new Persistable(dbOptions);
     await persistable.init();
 
     if(!input.date) input.date = new Date();
@@ -30,7 +30,7 @@ const blog = {
     if(!isValid(input)) throw new Error("Incorrect Input! title, author and body must be truthy");
     if(!input.hasOwnProperty("id") || typeof input.id !== "number") throw new Error("blog must contain numerical id to replace");
 
-    let blogFromDb = new Persistable(dbOptions);
+    const blogFromDb = new Persistable(dbOptions);
     await blogFromDb.init();
     blogFromDb.data = await blog.getFiltered({id: input.id});
 

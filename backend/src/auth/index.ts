@@ -54,16 +54,8 @@ const main = {
     }
   },
 
-  getDiscordIdFromToken(access_token: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      discord_api.getUserObject({token: access_token}, false, function (_err: Error, userObject: IDiscordApiUserObject) {
-        if(userObject.hasOwnProperty('id')) {
-          resolve(userObject.id);
-        } else {
-          reject('Couldnt get valid userObject, this is what we got: ' + JSON.stringify(userObject));
-        }
-      });
-    });
+  async getDiscordIdFromToken(access_token: string) {
+    return (await discord_api.getUserObjectFromToken(access_token)).id;
   },
 
   async getAccessLevelFromCode(code: string, redirect: string) {

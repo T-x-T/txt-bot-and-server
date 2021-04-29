@@ -87,26 +87,6 @@ const update = {
         global.g.log(2, 'workers', 'user.updateNick couldnt proceses user', {err: e.message, member: member.data})
       }
     });
-  },
-
-  updateUserIdCache() {
-    //Get all discord Ids
-    memberFactory.getAllWhitelisted()
-      .then((members: Member[]) => {
-        //Update the cache for each user
-        let i = 0;
-        members.forEach((member) => {
-          i = i + 1000;
-          setTimeout(function () {
-            discord_api.getUserObjectByIdFromApi(member.getDiscordId(), function (userObject: IDiscordApiUserObject) {
-              global.g.cache.discordUserObjects[userObject.id] = userObject;
-            });
-          }, i);
-        });
-      })
-      .catch((e: Error) => {
-        global.g.log(2, 'workers', 'user.updateUserIdCache cant get any users', {err: e.message});
-      });
   }
 }
 

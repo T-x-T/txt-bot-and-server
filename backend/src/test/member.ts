@@ -245,11 +245,10 @@ describe("member", function(){
     it("User#getDiscordUserdata should return a valid discord user object", async function () {
       let member = await createAndSaveNewMember();
       let userData = await member.getDiscordUserdata();
-
+      
       assert.ok(userData.hasOwnProperty("id"));
       assert.ok(userData.hasOwnProperty("username"));
       assert.ok(userData.hasOwnProperty("discriminator"));
-      assert.ok(userData.hasOwnProperty("public_flags"));
     });
 
     it("User#getDiscordUserdata should return a user object of the correct user", async function () {

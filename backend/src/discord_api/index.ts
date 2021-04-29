@@ -1,40 +1,57 @@
 /*
- *  INDEX FILE FOR DISCORD_API COMPONENT
- *  This file contains all functions that are to be called from other components
+ *  MAIN FILE OF THE DISCORD_API COMPONENT
+ *  The discord_api component contains functions to communicate with the discord api, outside of the scope from what discordjs provides and not including oauth
  */
 
 //Dependencies
-import main = require("./main.js");
+import https = require("https");
+import Discord = require("discord.js");
+import {IncomingMessage} from "node:http";
 
-export = {
-  //Returns a userObject from discords api
-  //Input is an object with the type as a key
-  //Allowed types are: id, token
-  async getUserObject(input: any, options: any, callback: Function) { //TODO: replace with promise based functions
-    global.g.log(0, 'discord_api', 'index.getUserObject got called', {input: input, options: options});
-    if(input.hasOwnProperty('id')) {
-      main.getUserObjectById(input.id, options, callback);
-    } else if(input.hasOwnProperty('token')) {
-      main.getUserObject(input.token, callback);
-    } else {
-      callback('No valid input received, input: ' + input, false);
-    }
+let client: Discord.Client;
+
+global.g.emitter.once("discord_bot_ready", (_client: Discord.Client) => {
+  client = _client;
+});
+
+const main = {
+  getUserObjectFromToken(access_token: string): Promise<IDiscordApiUserObject> {
+    return new Promise((resolve, reject) => {
+      https.get({
+        host: "discordapp.com",
+        port: 443,
+        path: "/api/users/@me",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: "Bearer " + access_token
+        }
+      }, function (res: IncomingMessage) {
+        res.setEncoding("utf8");
+        let userData = "";
+        res.on("data", function (chunk) {
+          userData += chunk;
+        }).on("end", function () {
+          resolve(JSON.parse(userData));
+        });
+      });
+    });
   },
 
-  //Calls back the guildMember Object using the discord bot
-  getMemberObjectByID(discord_id: string, callback: Function) {
-    main.getMemberObjectByID(discord_id, callback);
+  async getUserObjectFromId(id: string) {
+    return client.fetchUser(id);
   },
 
-  //only works for guildMembers
-  getNicknameByID(userID: string, callback: Function) {
-    global.g.log(0, 'discord_api', 'index.getNicknameByID', {userID: userID});
-    main.getNicknameByID(userID, callback);
+  getNicknameByID(userID: string) {
+    return `${client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).user.username}#${client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).user.discriminator}`;
   },
 
-  getAvatarUrl(discord_id: string, callback: Function) {
-    main.getAvatarUrl(discord_id, callback);
+  async getAvatarUrl(discord_id: string) {
+    return (await client.fetchUser(discord_id)).avatarURL;
   },
 
-  getUserObjectByIdFromApi: main.getUserObjectByIdFromApi
+  getMemberObjectByID(userID: string) {
+    return client.guilds.get(global.g.config.discord_bot.guild).members.get(userID);
+  }
 }
+
+export = main;
