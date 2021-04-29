@@ -94,19 +94,6 @@ class Member extends Persistable{
     this.data.mcName = newIgn;
   }
 
-  updateMcIgn() {
-    return new Promise((resolve, reject) => {
-      mc.getIGN(this.getMcUuid(), (err: Error, newIgn: string) => {
-        if(err || !newIgn) {
-          reject(err);
-        } else {
-          this.data.mc_ign = newIgn;
-          resolve(newIgn);
-        }
-      });
-    });
-  }
-
   getCountry(){
     return this.data.country ? this.data.country : false;
   }

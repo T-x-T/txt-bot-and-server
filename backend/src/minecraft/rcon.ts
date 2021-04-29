@@ -4,101 +4,95 @@
  */
 
 //Dependencies
-import Rcon = require('./node-rcon.js');
+import Rcon = require("./node-rcon.js");
+
+interface IRconServer {
+  rcon_server: string,
+  rcon_port: number,
+  rcon_password: string
+}
 
 const rcon = {
   //Initializes the connection to the rcon server, sends a message and terminates the connection again
-  send(cmd: string | string[], server?: string, callback?: Function) {
-    //Abort if we are in testing mode
-    if(global.g.ENVIRONMENT == 'testing') {
-      global.g.emitter.emit('testing_minecraft_rcon_send', cmd, server);
-      return;
-    }
+  send(cmd: string | string[], server?: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      //Abort if we are in testing mode
+      if(global.g.ENVIRONMENT == 'testing') {
+        global.g.emitter.emit('testing_minecraft_rcon_send', cmd, server);
+        resolve(null);
+      }
 
-    if(!global.g.config.minecraft.rcon_enabled) {
-      global.g.log(0, 'minecraft', 'rcon.send received command to send, although its disabled', {});
-      return;
-    }
+      if(!global.g.config.minecraft.rcon_enabled) {
+        global.g.log(0, 'minecraft', 'rcon.send received command to send, although its disabled', {});
+        resolve(null);
+      }
 
-    //Check if cmd is an array
-    if(Array.isArray(cmd)) {
-      global.g.log(0, 'minecraft', 'rcon.send received array', {cmd: cmd});
-      cmd.forEach((_cmd) => {
-        rcon.send(_cmd, server);
-      });
-    } else {
-      //Do all the sending for every configured server
-      let servers: any = {};
-      if(!server) servers = global.g.config.minecraft.rcon_servers
-      else if(global.g.config.minecraft.rcon_servers[server]) {
-        servers[server] = global.g.config.minecraft.rcon_servers[server];
+      if(Array.isArray(cmd)) {
+        global.g.log(0, 'minecraft', 'rcon.send received array', {cmd: cmd});
+        cmd.forEach((_cmd) => {
+          rcon.send(_cmd, server);
+        });
+        resolve(null);
+      }
+
+      let servers: IRconServer[] = [];
+      if(!server) {
+        Object.values(global.g.config.minecraft.rcon_servers).forEach((server: IRconServer) => servers.push(server));
       } else {
-        servers = false;
+        servers.push(global.g.config.minecraft.rcon_servers[server]);
       }
 
       if(!servers) {
-        global.g.log(0, 'minecraft', 'rcon.send received non-existent server', {cmd: cmd, server: server});
-        if(typeof callback == 'function') callback('invalid server');
-        return;
+        global.g.log(0, "minecraft", "rcon.send received non-existent server", {cmd: cmd, server: server});
+        reject(new Error("Invalid server: " + server));
       }
 
-      for(let _server in servers) {
-        let server = servers[_server];
-        //Setup of the connection
-        let rconCon = new Rcon(server.rcon_server, server.rcon_port, server.rcon_password);
+      servers.forEach(server => {
+        const con = new Rcon(server.rcon_server, server.rcon_port, server.rcon_password);
 
-        //Establish the connection
-        rconCon.on('response', (str: string) => {
-          global.g.log(0, 'minecraft', 'rcon.send received message from server that was a response', {server: server.rcon_server, message: str});
-          if(typeof callback == 'function') callback(str);
+        con.on("response", (str: string) => {
+          global.g.log(0, "minecraft", "rcon.send received message from server that was a response", {server: server.rcon_server, message: str});
+          resolve(str);
         });
-        rconCon.on('server', (str: string) => {
-          global.g.log(0, 'minecraft', 'rcon.send received message from server that wasnt a response', {server: server.rcon_server, message: str});
+        con.on("server", (str: string) => {
+          global.g.log(0, "minecraft", "rcon.send received message from server that wasnt a response", {server: server.rcon_server, message: str});
         });
-        rconCon.on('error', (err: string) => {
-          global.g.log(0, 'minecraft', 'rcon.send received an error', {err: err});
+        con.on("error", (err: Error) => {
+          global.g.log(0, "minecraft", "rcon.send received an error", {err: err});
+          reject(err);
         });
-        rconCon.on('auth', () => {
+        con.on("auth", () => {
           //Everything fine, send the command
-          global.g.log(0, 'minecraft', 'rcon.send successfully authenticated to the rcon server', {server: server.rcon_server, cmd: cmd});
-          rconCon.send(cmd);
+          global.g.log(0, "minecraft", "rcon.send successfully authenticated to the rcon server", {server: server.rcon_server, cmd: cmd});
+          con.send(cmd);
           //We can disconnect again
-          rconCon.disconnect();
+          con.disconnect();
         });
 
-        //Connect
-        try {
-          rconCon.connect();
-        } catch(e) {
-          //Dont do anything
-        }
-      }
-    }
-  },
-
-  getOnlinePlayers(callback: Function) {
-    rcon.send('list', global.g.config.minecraft.rcon_main_server, function (str: string) {
-      callback(parseInt(str.replace('There are ', '')));
-    });
-  },
-
-  updateOnlinePlayers() {
-    rcon.getOnlinePlayers(function (count: number) {
-      global.g.mcPlayerCount = count;
-    });
-  },
-
-  getServerVersion(callback: Function) {
-    rcon.send("version", global.g.config.minecraft.rcon_main_server, (res: string) => {
-      let version = "";
-      let inVersion = false;
-      res.split("\n")[0].split("").forEach((char: string) => {
-        if(char === "(") inVersion = true;
-        if(inVersion && (char === "." || Number.isInteger(Number.parseInt(char)))) version += char;
+        //Connec
+        con.connect();
       });
-      version = version.substring(0, 6);
-      callback(version);
     });
+  },
+
+  async getOnlinePlayers() {
+    return await rcon.send("list", global.g.config.minecraft.rcon_main_server);
+  },
+
+  async updateOnlinePlayers() {
+    global.g.mcPlayerCount = await rcon.getOnlinePlayers();
+  },
+
+  async getServerVersion() {
+    const res = await rcon.send("version", global.g.config.minecraft.rcon_main_server);
+    let version = "";
+    let inVersion = false;
+    res.split("\n")[0].split("").forEach((char: string) => {
+      if(char === "(") inVersion = true;
+      if(inVersion && (char === "." || Number.isInteger(Number.parseInt(char)))) version += char;
+    });
+    version = version.substring(0, 6);
+    return version;
   }
 };
 

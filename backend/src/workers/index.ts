@@ -20,7 +20,7 @@ log.pruneLevel(1, 0).catch((e: Error) => console.log("failed to prune logs:", e)
 //Contains discord user objects mapped by the discord id; gets cleared once an hour in workers
 global.g.cache = {};
 global.g.cache.minecraftServerVersion = "";
-rcon.getServerVersion((res: string) => global.g.cache.minecraftServerVersion = res);
+rcon.getServerVersion().then(res => global.g.cache.minecraftServerVersion = res);
 
 //10 seconds after startup
 setTimeout(() => {
@@ -43,11 +43,11 @@ setInterval(function(){
 }, 1000 * 60 * 5);
 
 //Every hour
-setInterval(function(){
+setInterval(async function(){
   update.updateAllNicks();
   update.updateAllIGNs();
   update.updateAllNicks();
-  rcon.getServerVersion((res: string) => global.g.cache.minecraftServerVersion = res);
+  global.g.cache.minecraftServerVersion = await rcon.getServerVersion();
 }, 1000 * 60 * 60);
 
 

@@ -172,7 +172,7 @@ handlers.paxapi.application = async function(data: IRequestData, callback: Funct
 };
 
 //To send a new application
-handlers.paxapi.application.post = async function(data: IRequestData, callback: Function){
+handlers.paxapi.application.post = function(data: IRequestData, callback: Function){
   if(!data.payload || !data.payload.accept_rules || !data.payload.accept_privacy_policy){
     callback(400, {err: "Missing or malformed payload", payload: data.payload}, "json");
     return;
@@ -211,31 +211,26 @@ handlers.paxapi.application.post = async function(data: IRequestData, callback: 
     return;
   }
 
-  mc_helpers.getUUID(data.payload.mc_ign, (err: string, mcUuid: string) => {
-    if(!err && mcUuid){
-      mc_helpers.getIGN(mcUuid, async (err: string, mcIgn: string) => {
-        if(!err && mcIgn){
-          const userData = await discord_api.getUserObjectFromId(data.payload.discord_id);
-          if(userData) {
-            let discordUserName = `${userData.username}#${userData.discriminator}`;
-            applicationFactory.create(discordId, mcUuid, emailAddress, country, birthMonth, birthYear, aboutMe, motivation, buildImages, publishAboutMe, publishAge, publishCountry, 1, discordUserName, mcIgn)
-              .then(() => {
-                callback(201, {}, "json");
-              })
-              .catch((e: Error) => {
-                callback(500, {err: e.message}, "json");
-              });
-          } else {
-            callback(500, {err: "Couldnt get your nickname from Discord :( Please contact TxT#0001 on Discord if you read this", payload: data.payload}, "json");
-          }
-        }else{
-          callback(500, {err: err}, "json");
-        }
-      });
-    }else{
-      callback(400, {err: "No Minecraft Account for given Minecraft In-Game-Name found", payload: data.payload}, "json");
-    }
-  });
+  mc_helpers.getUUID(data.payload.mc_ign)
+    .then(mcUuid => {
+      mc_helpers.getIGN(mcUuid)
+        .then(mcIgn => {
+          discord_api.getUserObjectFromId(data.payload.discord_id)
+            .then(userData => {
+              let discordUserName = `${userData.username}#${userData.discriminator}`;
+              applicationFactory.create(discordId, mcUuid, emailAddress, country, birthMonth, birthYear, aboutMe, motivation, buildImages, publishAboutMe, publishAge, publishCountry, 1, discordUserName, mcIgn)
+                .then(() => {
+                  callback(201, {}, "json");
+                })
+                .catch((e: Error) => {
+                  callback(500, {err: e.message}, "json");
+                });
+            })
+            .catch(err => callback(500, {message: "Couldnt get your nickname from Discord :( Please contact TxT#0001 on Discord if you read this", payload: data.payload, err: err}, "json"));
+        })
+        .catch(err => callback(500, {err: err}, "json"));
+    })
+    .catch(err => callback(400, {err: "No Minecraft Account for given Minecraft In-Game-Name found", payload: data.payload}, "json"));
 };
 
 //Retrieves a list of applications
@@ -376,13 +371,9 @@ handlers.paxapi.application.patch = function(data: IRequestData, callback: Funct
 };
 
 handlers.paxapi.mcversion = function(data: IRequestData, callback: Function){
-  mc_helpers.getServerVersion((version: string) => {
-    if(version){
-      callback(200, version, "plain");
-    }else{
-      callback(500, {err: "Couldnt get version"}, "json");
-    }
-  });
+  mc_helpers.getServerVersion()
+    .then(version => callback(200, version, "plain"))
+    .catch(e => callback(500, {message: "Couldnt get version", error: e}, "json"));
 }
 
 handlers.paxapi.memberworldmapdata = function(data: IRequestData, callback: Function) {

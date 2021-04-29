@@ -32,25 +32,6 @@ describe("member", function(){
     });
   });
 
-  describe("updateMcIgn", function(){
-    it("updateMcIgn shouldnt reject", async function(){
-      let member = await createAndSaveNewMember();
-      await assert.doesNotReject(async () => await member.updateMcIgn());
-    });
-
-    it("updateMcIgn should set correct McIgn", async function(){
-      let member = await createAndSaveNewMember();
-      await member.updateMcIgn();
-      assert.strictEqual(member.data.mcName, "The__TxT");
-    });
-
-    it("updateMcIgn should resolve with correct McIgn", async function () {
-      let member = await createAndSaveNewMember();
-      let ign = await member.updateMcIgn();
-      assert.strictEqual(ign, "The__TxT");
-    });
-  });
-
   describe("basic getters", function(){
     it("calling User#getJoinedDate should return a date", async function () {
       let member = await createAndSaveNewMember();

@@ -21,19 +21,13 @@ const update = {
     //Get all members from db
     memberFactory.getAll()
       .then((members: Member[]) => {
-        members.forEach(member => {
+        members.forEach(async member => {
           //Check if the user has a ign, if not, then we have nothing to do
           if(member.getMcUuid() != null) {
             //Get the ign for the uuid
-            mc.getIGN(member.getMcUuid(), function (err: string, ign: string) {
-              if(ign) {
-                //Save ign
-                member.setMcIgn(ign);
-                member.save();
-              } else {
-                global.g.log(2, 'workers', 'mc.updateAllIGNs couldnt get a valid IGN for user', member.data);
-              }
-            });
+            const ign = await mc.getIGN(member.getMcUuid());
+            member.setMcIgn(ign);
+            member.save();
           }
         });
       })

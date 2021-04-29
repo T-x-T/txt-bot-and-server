@@ -21,7 +21,7 @@ export = {
   description: 'Commands only for admins',
   aliases: ['a'],
 
-  execute(message: Discord.Message, args: string[]) {
+  async execute(message: Discord.Message, args: string[]) {
     //Check if the author is admin
     if (auth.getAccessLevelFromDiscordId(message.member.id) >= 8) {
       //Check the first argument and execute it
@@ -115,9 +115,7 @@ export = {
                 cmd += arg;
                 cmd += ' ';
               });
-              mc_helpers.sendCmd(cmd.trim(), server, (res: string) => {
-                message.channel.send(res)
-              });
+              message.channel.send(await mc_helpers.sendCmd(cmd.trim(), server));
               break;
           }
           break;

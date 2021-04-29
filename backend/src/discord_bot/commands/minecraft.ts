@@ -16,7 +16,7 @@ export = {
   aliases: ['mc', 'mcserver'],
   usage: '*Sub-Commands:*\nstats ([rank]) [collection]  [mention user to view other stats]\n+mc stats general\n+mc stats rank total',
 
-  execute(message: Discord.Message, args: string[]) {
+  async execute(message: Discord.Message, args: string[]) {
     switch(args[0]){
       case 'stats':
         //User wants to see some stats
@@ -81,20 +81,19 @@ export = {
         }else{
           server = 'main_smp'
         }
-        minecraft.sendCmd('list', server, function (res: string) {
-          
-          let onlinePlayerCount = parseInt(res.replace('There are ', ''));
-          let onlinePlayers = res.split(': ')[1].split(', ');
 
-          if (onlinePlayerCount === 1) output += `The following player is currently online:\n`;
-          else if (onlinePlayerCount === 0) output += `There are no players online right now. It's on you to change that now!\n`;
-          else output += `The following ${onlinePlayerCount} players are currently online:\n`;
+        const res = await minecraft.sendCmd('list', server);
+        let onlinePlayerCount = parseInt(res.replace('There are ', ''));
+        let onlinePlayers = res.split(': ')[1].split(', ');
 
-          onlinePlayers.forEach(player => output += player + '\n');
+        if (onlinePlayerCount === 1) output += `The following player is currently online:\n`;
+        else if (onlinePlayerCount === 0) output += `There are no players online right now. It's on you to change that now!\n`;
+        else output += `The following ${onlinePlayerCount} players are currently online:\n`;
 
-          output += '```';
-          message.channel.send(output);
-        });
+        onlinePlayers.forEach(player => output += player + '\n');
+
+        output += '```';
+        message.channel.send(output);
         break;
       default:
         message.reply('you tried to do something that I dont understand');
