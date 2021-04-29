@@ -23,7 +23,7 @@ export = {
 
   execute(message: Discord.Message, args: string[]) {
     //Check if the author is admin
-    if (auth.getAccessLevel({id: message.member.id}, null) >= 8) {
+    if (auth.getAccessLevelFromDiscordId(message.member.id) >= 8) {
       //Check the first argument and execute it
       switch (args[0]) {
         case 'delete':

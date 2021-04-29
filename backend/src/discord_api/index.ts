@@ -10,7 +10,7 @@ export = {
   //Returns a userObject from discords api
   //Input is an object with the type as a key
   //Allowed types are: id, token
-  getUserObject(input: any, options: any, callback: Function) { //TODO: replace with promise based functions
+  async getUserObject(input: any, options: any, callback: Function) { //TODO: replace with promise based functions
     global.g.log(0, 'discord_api', 'index.getUserObject got called', {input: input, options: options});
     if(input.hasOwnProperty('id')) {
       main.getUserObjectById(input.id, options, callback);

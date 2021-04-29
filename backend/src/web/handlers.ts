@@ -40,7 +40,7 @@ handlers.paxapi.roles = function(data: IRequestData, callback: Function){
   memberFactory.getByMcUuid(data.queryStringObject.uuid)
   .then((member: Member) => {
     if(member) {
-      callback(200, {role: oauth.getAccessLevel({id: member.getDiscordId()}, false)}, 'json');
+      callback(200, {role: oauth.getAccessLevelFromDiscordId(member.getDiscordId())}, 'json');
     } else {
       callback(404, {}, 'json');
     }
@@ -57,7 +57,7 @@ handlers.paxapi.blog = function(data: IRequestData, callback: Function) {
       //Only this case is allowed without auth
       handlers.paxapi.blog.getPublic(data, callback);
     } else {
-      getRequestAuthorizationError(data, 9, (err: string) => {
+      authorizeRequest(data, 9, (err: string) => {
         if(!err) {
           handlers.paxapi.blog[data.method](data, callback);
         } else {
@@ -144,7 +144,7 @@ handlers.paxapi.contact.post = function(data: IRequestData, callback: Function){
   }
 };
 
-handlers.paxapi.application = function(data: IRequestData, callback: Function){
+handlers.paxapi.application = async function(data: IRequestData, callback: Function){
   if(typeof handlers.paxapi.application[data.method] == 'function'){
     if(data.method != 'post') {
       //All non post requests require authorization
@@ -152,14 +152,11 @@ handlers.paxapi.application = function(data: IRequestData, callback: Function){
       if(data.headers.hasOwnProperty('cookie')){
         if(data.headers.cookie.indexOf('access_token'.length > -1)){
           //There is an access_token cookie, lets check if it belongs to at least a mod
-          oauth.getAccessLevel({token: data.cookies.access_token}, false, function(_err: string, access_level: number){
-            if(access_level >= 7){
-              //The requester is allowed to get the records
-              handlers.paxapi.application[data.method](data, callback);
-            }else{
-              callback(403, {err: 'You are not authorized to do that!'}, 'json');
-            }
-          });
+          if(await oauth.getAccessLevelFromToken(data.cookies.access_token) >= 7){
+            handlers.paxapi.application[data.method](data, callback);
+          }else{
+            callback(403, {err: 'You are not authorized to do that!'}, 'json');
+          }
         }else{
           callback(401, {err: 'Your client didnt send an access_token, please log in again'}, 'json');
         }
@@ -409,32 +406,23 @@ handlers.paxapi.statsoverview = function(data: IRequestData, callback: Function)
   });
 }
 
-handlers.paxapi.discorduserfromcode = function(data: IRequestData, callback: Function){
+handlers.paxapi.discorduserfromcode = async function(data: IRequestData, callback: Function){
   const code = data.queryStringObject.code;
-  oauth.getDiscordId({code: code}, {redirect: "applicationNew"}, function(err: string, discordId: string){
-    if(!err && discordId){
-      discord_api.getNicknameByID(discordId, function(discordNick: string){
-        if(discordNick){
-          callback(200, {discordNick: discordNick, discordId: discordId}, "json");
-        }else{
-          callback(500, {err: `Couldnt turn discord id ${discordId} into username`});
-        }
-      });
+  const discordId = await oauth.getDiscordIdFromCode(code, "applicationNew");
+  discord_api.getNicknameByID(discordId, function(discordNick: string){
+    if(discordNick){
+      callback(200, {discordNick: discordNick, discordId: discordId}, "json");
     }else{
-      callback(500, {err}, "json");
+      callback(500, {err: `Couldnt turn discord id ${discordId} into username`});
     }
   });
 }
 
-handlers.paxapi.tokenfromcode = function(data: IRequestData, callback: Function){
+handlers.paxapi.tokenfromcode = async function(data: IRequestData, callback: Function){
   const code = data.queryStringObject.code;
-  oauth.getAccessLevel({code: code}, {redirect: 'interface'}, function(err: string, access_level: number, access_token: string) {
-    if(access_token && !err){
-      callback(200, {access_token: access_token, access_level: access_level}, "json");
-    }else{
-      callback(500, {err}, "json");
-    }
-  });
+  const access_level = await oauth.getAccessLevelFromCode(code, "interface");
+  const access_token = await oauth.getAccessTokenFromCode(code, "interface");
+  callback(200, {access_token: access_token, access_level: access_level}, "json");
 }
 
 //Internal helper functions to make code cleaner
@@ -443,26 +431,20 @@ var _internal: any = {};
 //Redirect user to the same url with the discord_id as queryStringObject
 _internal.redirectToDiscordId = function(data: IRequestData, callback: Function){
   let code = data.queryStringObject.code;
-  oauth.getDiscordId({code: code}, {redirect: 'application'}, function(err: string, id: number){
-    if(id){
-      callback(302, {Location: `https://${data.headers.host}/${data.path.replace('/html/', '')}?id=${id}`}, 'plain');
-    }else{
-      callback(500, 'Couldnt get your user data from discord', 'html');
-    }
-  });
+  const discordId = oauth.getDiscordIdFromCode(code, 'application');
+  callback(302, {Location: `https://${data.headers.host}/${data.path.replace('/html/', '')}?id=${discordId}`}, 'plain');
 };
 
-function getRequestAuthorizationError(data: IRequestData, minAccessLevel: number, callback: Function) {
+async function authorizeRequest(data: IRequestData, minAccessLevel: number, callback: Function) {
   if(data.headers.hasOwnProperty('cookie')) {
     if(data.headers.cookie.indexOf('access_token'.length > -1)) {
       //There is an access_token cookie, lets check if it belongs to an admin
-      oauth.getAccessLevel({token: data.cookies.access_token}, false, function(err: string, accessLevel: number) {
-        if(accessLevel >= minAccessLevel) {
-          callback(false)
-        } else {
-          callback('You are not authorized to access this resource');
-        }
-      });
+      const accessLevel = await oauth.getAccessLevelFromToken(data.cookies.access_token);
+      if(accessLevel >= minAccessLevel) {
+        callback(false)
+      } else {
+        callback('You are not authorized to access this resource');
+      }
     } else {
       callback('Your client didnt send an access_token, please log in again');
     }
