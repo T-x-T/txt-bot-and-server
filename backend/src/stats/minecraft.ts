@@ -25,79 +25,54 @@ statsFactory.connect();
 
 const minecraft = {
   //Gets ranked stats for single player
-  getRanked(options: IStatsOptions, callback: Function) {
+  async getRanked(uuid: string, collection: string) {
+    const stats = await minecraft.getSingle(uuid, collection);
+    const allRawStats = await getAllLatestStats();
+    
+    //Create the object that will hold the final ranked data
+    let finalStats: any = {};
 
-    //Gets stats from the user
-    minecraft.getSingle(options, function (err: Error, stats: any) {
-      if(!err && stats) {
+    //Iterate over all single stats
+    for(const key in stats) {
+      //Put the each item of allRawStats through the singe template and into allStats
+      let allStats: any[] = [];
+      allRawStats.forEach((rawStat) => {
+        if(rawStat['minecraft:mined']) {
+          const stat = _statsTemplates.single[key](rawStat);
+          if(!Number.isNaN(stat)) allStats.push(stat);
+        }
+      });
 
-        //Get stats from all players to create the ranking
-        getAllLatestStats()
-          .then(allRawStats => {
-            //Create the object that will hold the final ranked data
-            let finalStats: any = {};
+      //Sort that array
+      allStats = allStats.sort(function (a, b) {
+        return b - a;
+      });
 
-            //Iterate over all single stats
-            for(let key in stats) {
-              //Put the each item of allRawStats through the singe template and into allStats
-              let allStats: any[] = [];
-              allRawStats.forEach((rawStat) => {
-                if(rawStat['minecraft:mined']) {
-                  let stat = _statsTemplates.single[key](rawStat);
-                  if(!Number.isNaN(stat)) allStats.push(stat);
-                }
-              });
-
-              //Sort that array
-              allStats = allStats.sort(function (a, b) {
-                return b - a;
-              });
-
-              //Get the rank for the current stat
-              finalStats[key] = {
-                stat: stats[key],
-                rank: allStats.indexOf(parseInt(stats[key])) + 1
-              };
-            }
-            //Finish the object and call it back
-            finalStats._totalPlayers = allRawStats.length;
-            callback(false, finalStats);
-          })
-          .catch(e => {
-            callback('Couldnt get stats for all users: ' + e, false);
-          });
-      } else {
-        callback('Couldnt get stats for user: ' + options.uuid + err, false);
-      }
-    });
-
+      //Get the rank for the current stat
+      finalStats[key] = {
+        stat: stats[key],
+        rank: allStats.indexOf(parseInt(stats[key])) + 1
+      };
+    }
+    //Finish the object and call it back
+    finalStats._totalPlayers = allRawStats.length;
+    return finalStats;
   },
 
   //Gets stats for single player
-  getSingle(options: IStatsOptions, callback: Function) {
-    getLatestStatsByUuid(options.uuid)
-      .then(doc => {
-        if(typeof _statsTemplates[options.collection] === 'function') {
-          callback(false, _statsTemplates[options.collection](doc));
-        } else {
-          callback(false, _statsTemplates.single[options.collection](doc));
-        }
-      })
-      .catch(e => {
-        callback(e, false);
-      });
+  async getSingle(uuid: string, collection: string) {
+    const doc = await getLatestStatsByUuid(uuid);
+    if(typeof _statsTemplates[collection] === 'function') {
+      return _statsTemplates[collection](doc);
+    } else {
+      return _statsTemplates.single[collection](doc);
+    }
   },
 
   //Gets stats for all players combined
-  getAll(options: IStatsOptions, callback: Function) {
-    getAllLatestStats()
-      .then(docs => {
-        let data = typeof _statsTemplates[options.collection] === 'function' ? _statsTemplates[options.collection](sumArray(docs)) : _statsTemplates.single[options.collection](sumArray(docs));
-        callback(false, data);
-      })
-      .catch(e => {
-        callback(e, false);
-      });
+  async getAll(collection: string) {
+    const docs = await getAllLatestStats();
+    return typeof _statsTemplates[collection] === 'function' ? _statsTemplates[collection](sumArray(docs)) : _statsTemplates.single[collection](sumArray(docs));
   }
 }
 
@@ -115,9 +90,9 @@ function sumArray(docs: any){
 }
 
 async function getAllLatestStats() {
-  let members: any = await memberFactory.getAllWhitelisted();
-  let results: any = await Promise.allSettled(members.map(async (member: Member) => await getLatestStatsByUuid(member.getMcUuid())));
-  let stats: any[] = [];
+  const members: any = await memberFactory.getAllWhitelisted();
+  const results: any = await Promise.allSettled(members.map(async (member: Member) => await getLatestStatsByUuid(member.getMcUuid())));
+  const stats: any[] = [];
   results.forEach((res: any) => {
     if(res.status === "fulfilled") stats.push(res.value);
   });
@@ -125,7 +100,7 @@ async function getAllLatestStats() {
 }
 
 async function getLatestStatsByUuid(uuid: string){
-  let stats = await statsFactory.persistanceProvider.retrieveNewestFiltered({uuid: uuid});
+  const stats = await statsFactory.persistanceProvider.retrieveNewestFiltered({uuid: uuid});
   if(!stats) throw new Error("No stats received for " + uuid);
   return stats.stats.stats;
 }

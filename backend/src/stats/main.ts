@@ -12,159 +12,77 @@ memberFactory.connect();
 import type Member = require("../user/member.js");
 
 const main = {
-  template: {
-    //Gets the basic stats for the statistics.html overview
-    overview(options: IStatsOptions, callback: Function) {
-      memberFactory.getAllWhitelisted()
-        .then((members: any) => {
-          if(!members || members.length === 0) {
-            callback('Didnt receive members');
-            return;
-          }
-          global.g.log(0, "stats", "stats.template.overview received members", {memberCount: members.length});
+  //Gets the basic stats for the statistics.html overview
+  async overview() {
+    let members = await memberFactory.getAllWhitelisted();
+    if(members.length === 0) throw new Error("No Members received");
 
-          main.template.mc({collection: 'overview'}, function (err: string, overview: {[index: string]: string | number}) {
-            if(!err && overview) {
-              let averageAge = 0;
-              members.forEach((member: Member) => averageAge += member.getAge());
-              averageAge = Math.round(averageAge / members.length);
+    const overview = await main.mcGetAll("overview");
 
-              members = members.sort((a: Member, b: Member) => a.getAge() - b.getAge());
-              let medianAge = members[Number.parseInt((members.length / 2).toString())].getAge();
+    let averageAge = 0;
+    members.forEach((member: Member) => averageAge += member.getAge());
+    averageAge = Math.round(averageAge / members.length);
 
-              //Constuct and callback the final object
-              callback(false, {
-                'total_members': members.length,
-                'average_age': averageAge,
-                'median_age': medianAge,
-                'total_playtime': overview.playtime,
-                'silly': Math.round(overview.cobblestone_mined_per_death_by_zombie as number)
-              });
-            } else {
-              callback('Couldnt get mc stats: ' + err, false);
-            }
-          });
-        })
-        .catch((e: Error) => {
-          callback('Got error trying to get all whitelisted players: ' + e, false);
-        });
-    },
+    members = members.sort((a: Member, b: Member) => a.getAge() - b.getAge());
+    const medianAge = members[Number.parseInt((members.length / 2).toString())].getAge();
 
-    //Gets the basic overview of one or multiple members
-    //This includes: discord_id, mc_uuid, discord_nick, mc_nick, age, country, playtime, mc_render_url, discord_avatar_url
-    memberOverview(options: IStatsOptions, callback: Function) {
-      let discord_id = options.hasOwnProperty('discord_id') ? options.discord_id : false;
-      if(discord_id) {
+    return {
+      total_members: members.length,
+      average_age: averageAge,
+      median_age: medianAge,
+      total_playtime: overview.playtime,
+      silly: Math.round(overview.cobblestone_mined_per_death_by_zombie as number)
+    };
+  },
 
-        //Get stats only for one member
-        memberFactory.getByDiscordId(discord_id)
-          .then((member: Member) => {
-            main.template.mc({uuid: member.getMcUuid(), collection: 'playtime'}, function (err: string, playtime: number) {
-              if(err || !playtime) playtime = 0;
-              //Build the object to send back
-              let obj = {
-                discord_nick: member.getDiscordUserName(),
-                mc_nick: member.getMcIgn(),
-                age: member.getAgeConsiderPrivacy(),
-                country: member.getCountryConsiderPrivacy(),
-                playtime: playtime,
-                mc_render_url: member.getMcSkinUrl(),
-                joined_date: member.getJoinedDate()
-              };
-              callback(false, obj);
-            });
-          })
-          .catch((e: Error) => {
-            callback('Got error while trying to get member: ' + e.message, false);
-          });
+  async memberOverview() {
+    const members = await memberFactory.getAllWhitelisted();
+    return await Promise.all(members.map(member => main.singleMemberOverview(member.getDiscordId())));
+  },
+
+  async singleMemberOverview(discordId: string) {
+    const member = await memberFactory.getByDiscordId(discordId);
+    const playtime = await main.mcGetSingle(member.getMcUuid(), "playtime");
+
+    return {
+      discord_nick: member.getDiscordUserName(),
+      mc_nick: member.getMcIgn(),
+      age: member.getAgeConsiderPrivacy(),
+      country: member.getCountryConsiderPrivacy(),
+      playtime: playtime ? playtime : 0,
+      mc_render_url: member.getMcSkinUrl(),
+      joined_date: member.getJoinedDate()
+    };
+  },
+
+  async countryList() {
+    const members = await memberFactory.getAllWhitelisted();
+    //Get the country list
+    let countries = _internal.getCountries();
+
+    //Add the data of each member to countries
+    await Promise.allSettled(members.map(async member => {
+      const iso = _internal.getCountryIsoByName(countries, member.getCountry());
+      if(iso) {
+        countries[iso].numberOfThings++;
+        countries[iso].count++;
+        countries[iso].playtime.push(await main.mcGetSingle(member.getMcUuid(), "playtime"));
       } else {
-        //Get stats for all players
-        memberFactory.getAllWhitelisted()
-          .then((members: Member[]) => {
-            let error = false;
-            let output: {[index: string]: string}[] = [];
-            for(let i = 0; i < members.length; i++) {
-              main.template.memberOverview({discord_id: members[i].getDiscordId()}, function (err: string, doc: {[index: string]: string}) {
-                output.push(doc);
-                if(err) error = true;
-                //Check if this is the last callback
-                if(output.length == members.length) {
-                  if(!error) callback(false, output);
-                  else callback('There was some error, idk I cant read my own code, no idea what it is', false);
-                }
-              });
-            }
-          })
-          .catch((e: Error) => {
-            callback('got error while trying to get all members: ' + e.message, false);
-          });
+        global.g.log(2, 'stats', 'stats.countryList doesnt contain a country', {country: member.getCountry()})
       }
-    },
+    }));
 
-    //callsback a list of all countries with their respective member count and coloring for the map-view in statistics.html
-    countryList(options: IStatsOptions, callback: Function) {
-      memberFactory.getAllWhitelisted()
-        .then(async (members: Member[]) => {
-          //Get the country list
-          let countries = _internal.getCountries();
-
-          //Add the data of each member to countries
-          await Promise.allSettled(members.map(async (member) => {
-            //Get the ISO representation of the country
-            let iso = _internal.getCountryIsoByName(countries, member.getCountry());
-            if(iso) {
-              countries[iso].numberOfThings++;
-              countries[iso].count++;
-              try {
-                countries[iso].playtime.push(await main.templatePromise.mc({uuid: member.getMcUuid(), collection: 'playtime'}));
-              } catch(_) {}
-            } else {
-              global.g.log(2, 'stats', 'stats.countryList doesnt contain a country', {country: member.getCountry()})
-            }
-          }));
-
-          //Combine the playtime arrays
-          for(let country in countries) {
-            countries[country].playtime = countries[country].playtime.reduce((a: number, b: number) => a + b, 0);
-          }
-
-          callback(false, countries);
-        })
-        .catch((e: Error) => {
-          callback('got error trying to get countryList data: ' + e.message, false);
-        });
-    },
-
-    //This is template for all kinds of different minecraft stats collections
-    //Options:
-    //collections: See mc_collections.js
-    //uuid: uuid if stats of a single player are wanted; if false or not set this returns stats for all players
-    //rank: include rank; only gets evaluated if uuid is given
-    mc(options: IStatsOptions, callback: Function) {
-      if(options.uuid) {
-        if(options.rank) {
-          mc.getRanked(options, callback);
-        } else {
-          mc.getSingle(options, callback);
-        }
-      } else {
-        mc.getAll(options, callback);
-      }
+    //Combine the playtime arrays
+    for(let country in countries) {
+      countries[country].playtime = countries[country].playtime.reduce((a: number, b: number) => a + b, 0);
     }
-  }, 
-  templatePromise: {
-    mc(options: IStatsOptions) {
-      return new Promise((resolve, reject) => {
-        main.template.mc(options, (err: Error, res: any) => {
-          if(err) {
-            reject(err);
-          } else {
-            resolve(res);
-          }
-        });
-      });
-    }
-  }
+
+    return countries;
+  },
+
+  mcGetRanked: mc.getRanked,
+  mcGetSingle: mc.getSingle,
+  mcGetAll: mc.getAll
 };
 
 //Internal stuff

@@ -105,13 +105,9 @@ handlers.paxapi.member = function(data: IRequestData, callback: Function){
 
 //Retrieves member objects
 handlers.paxapi.member.get = function(data: IRequestData, callback: Function){
-  stats.get(stats.ETemplates.memberOverview, null, function(err: string, docs: any){
-    if(docs){
-      callback(200, docs, 'json');
-    }else{
-      callback(500, {err: 'Couldnt retrieve data: ' + err}, 'json');
-    }
-  });
+  stats.memberOverview()
+    .then(docs => callback(200, docs, 'json'))
+    .catch(e => callback(500, {err: 'Couldnt retrieve data: ' + e}, 'json'));
 };
 
 //API functionallity surrounding the contact form
@@ -377,23 +373,15 @@ handlers.paxapi.mcversion = function(data: IRequestData, callback: Function){
 }
 
 handlers.paxapi.memberworldmapdata = function(data: IRequestData, callback: Function) {
-  stats.get(stats.ETemplates.countryList, null, function(err: string, map_data: any){
-    if(!err){
-      callback(200, map_data, "json");
-    }else{
-      callback(500, {err: "Couldnt get map data", details: err}, "json");
-    }
-  });
+  stats.countryList()
+    .then(mapData => callback(200, mapData, "json"))
+    .catch(e => callback(500, {err: "Couldnt get map data", details: e.message}, "json"));
 }
 
 handlers.paxapi.statsoverview = function(data: IRequestData, callback: Function){
-  stats.get(stats.ETemplates.overview, null, function(err: string, stats: any){
-    if(!err && stats){
-      callback(200, stats, "json");
-    }else{
-      callback(500, {err: "failed to get stats overview", stats: stats, details: err}, "json");
-    }
-  });
+  stats.overview()
+    .then(stats => callback(200, stats, "json"))
+    .catch(e => callback(500, {err: "failed to get stats overview", stats: stats, details: e.message}, "json"));
 }
 
 handlers.paxapi.discorduserfromcode = async function(data: IRequestData, callback: Function){
