@@ -22,14 +22,8 @@ export = class{
     this.persistanceProvider = new persistanceProviderConstructor(this.options.name, this.options.schema, {});
   }
 
-  connect(){
-    return new Promise((resolve, reject) => {
-      this.persistanceProvider.connect()
-        .then(() => {
-          this.connected = true;
-          resolve(null);
-        })
-        .catch((e: Error) => reject(e));
-    });
+  async connect() {
+    await this.persistanceProvider.connect();
+    this.connected = true;
   }  
 }
