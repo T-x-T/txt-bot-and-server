@@ -4,7 +4,7 @@
 */
 
 //Dependencies
-import oauth = require("../auth/index.js");
+import auth = require("../auth/index.js");
 import discord_api = require("../discord_api/index.js");
 import stats = require("../stats/index.js");
 import blog = require("../blog/index.js");
@@ -14,188 +14,198 @@ memberFactory.connect();
 import ApplicationFactory = require("../application/applicationFactory.js");
 const applicationFactory = new ApplicationFactory();
 import mc_helpers = require("../minecraft/index.js");
-import sanitize = require('sanitize-html');
+import sanitize = require("sanitize-html");
 
-import type {IRequestData} from "./webServer.js";
+import type {IRequestData, IHandlerResponse} from "./webServer.js";
 import type Application = require("../application/application.js");
-import type Member = require("../user/member.js");
 
 //Create the container
-var handlers: any = {};
+let handlers: any = {};
 handlers.paxapi = {};
 
 //Not found handler
-handlers.notFound = function (_data: IRequestData, callback: Function) {
-  callback(404, {err: 'The page you requested is not available'}, 'json');
+handlers.notFound = async function (_data: IRequestData): Promise<IHandlerResponse> {
+  return {
+    status: 404,
+    payload: {err: "The page you requested is not available"}
+  };
 };
-
-/*
-*
-* paxapi stuff
-*
-*/
 
 //API endpoint for querying roles of players; Requires one uuid in the querystring
-handlers.paxapi.roles = function(data: IRequestData, callback: Function){
-  memberFactory.getByMcUuid(data.queryStringObject.uuid)
-  .then((member: Member) => {
-    if(member) {
-      callback(200, {role: oauth.getAccessLevelFromDiscordId(member.getDiscordId())}, 'json');
-    } else {
-      callback(404, {}, 'json');
-    }
-  })
-  .catch((e: Error) => {
-    callback(500, {err: 'encountered error while trying to execute query: ' + e.message}, 'json');
-  });
-};
-
-//API functionality for handling blog posts
-handlers.paxapi.blog = function(data: IRequestData, callback: Function) {
-  if(typeof handlers.paxapi.blog[data.method] == 'function') {
-    if(data.method === 'get' && data.queryStringObject.hasOwnProperty('public')) {
-      //Only this case is allowed without auth
-      handlers.paxapi.blog.getPublic(data, callback);
-    } else {
-      authorizeRequest(data, 9, (err: string) => {
-        if(!err) {
-          handlers.paxapi.blog[data.method](data, callback);
-        } else {
-          callback(401, {err: err}, 'json');
-        }
-      });
-    }
+handlers.paxapi.roles = async function(data: IRequestData): Promise<IHandlerResponse> {
+  const member = await memberFactory.getByMcUuid(data.queryStringObject.uuid);
+  if(member) {
+    return {
+      payload: {role: auth.getAccessLevelFromDiscordId(member.getDiscordId())}
+    };
   } else {
-    callback(405, {err: 'Verb not allowed'}, 'json');
+    return {
+      status: 404,
+      payload: {err: "No Member with given uuid found"}
+    };
   }
 };
 
-handlers.paxapi.blog.post = function(data: IRequestData, callback: Function) {
-  blog.create(data.payload)
-    .then((res: any) => callback(200, {doc: res}, 'json'))
-    .catch((e: Error) => callback(500, {err: e.message}, 'json'));
+//API functionality for handling blog posts
+handlers.paxapi.blog = async function(data: IRequestData): Promise<IHandlerResponse> {
+  if(typeof handlers.paxapi.blog[data.method] == "function") {
+    if(data.method === "get" && data.queryStringObject.hasOwnProperty("public")) {
+      //Only this case is allowed without auth
+      return await handlers.paxapi.blog.getPublic(data);
+    } else {
+      const errorMessage = await authorizeRequest(data, 9);
+      if(errorMessage.length === 0) {
+        return await handlers.paxapi.blog[data.method](data);
+      } else {
+        return {
+          status: 401,
+          payload: {err: errorMessage}
+        };
+      }
+    }
+  } else {
+    return {
+      status: 405,
+      payload: {err: "Verb not allowed"}
+    };
+  }
 };
 
-handlers.paxapi.blog.put = function(data: IRequestData, callback: Function) {
-  blog.replace(data.payload)
-    .then((res: any) => callback(200, {doc: res}, 'json'))
-    .catch((e: Error) => callback(500, {err: e.message}, 'json'));
+handlers.paxapi.blog.post = async function(data: IRequestData): Promise<IHandlerResponse> {
+  return {
+    payload: {doc: await blog.create(data.payload)}
+  };
+};
+
+handlers.paxapi.blog.put = async function(data: IRequestData): Promise<IHandlerResponse> {
+  return {
+    payload: {doc: await blog.replace(data.payload)}
+  };
 }
 
-handlers.paxapi.blog.get = function(data: IRequestData, callback: Function) {
-  blog.getAll()
-    .then((res: any) => callback(200, res, 'json'))
-    .catch((e: Error) => callback(500, {err: e.message}, 'json'));
+handlers.paxapi.blog.get = async function(data: IRequestData): Promise<IHandlerResponse> {
+  return {
+    payload: await blog.getAll()
+  };
 };
 
-handlers.paxapi.blog.getPublic = function(data: IRequestData, callback: Function) {
-  blog.getPublic()
-    .then((res: any) => callback(200, res, 'json'))
-    .catch((e: Error) => callback(500, {err: e.message}, 'json'));
+handlers.paxapi.blog.getPublic = async function (data: IRequestData): Promise<IHandlerResponse> {
+  return {
+    payload: await blog.getPublic()
+  };
 };
 
 //API functionallity surrounding member stuff
-handlers.paxapi.member = function(data: IRequestData, callback: Function){
-  if(typeof handlers.paxapi.member[data.method] == 'function'){
-    handlers.paxapi.member[data.method](data, callback);
+handlers.paxapi.member = async function(data: IRequestData): Promise<IHandlerResponse> {
+  if(typeof handlers.paxapi.member[data.method] == "function"){
+    return await handlers.paxapi.member[data.method](data);
   }else{
-    callback(404, { err: 'Verb not allowed' }, 'json');
+    return {
+      status: 405,
+      payload: {err: "Verb not allowed"}
+    };
   }
 };
 
 //Retrieves member objects
-handlers.paxapi.member.get = function(data: IRequestData, callback: Function){
-  stats.memberOverview()
-    .then(docs => callback(200, docs, 'json'))
-    .catch(e => callback(500, {err: 'Couldnt retrieve data: ' + e}, 'json'));
+handlers.paxapi.member.get = async function(data: IRequestData): Promise<IHandlerResponse> {
+  return {
+    payload: await stats.memberOverview()
+  };
 };
 
 //API functionallity surrounding the contact form
-handlers.paxapi.contact = function(data: IRequestData, callback: Function){
-  if(typeof handlers.paxapi.contact[data.method] == 'function'){
-    handlers.paxapi.contact[data.method](data, callback);
+handlers.paxapi.contact = async function(data: IRequestData): Promise<IHandlerResponse> {
+  if(typeof handlers.paxapi.contact[data.method] == "function"){
+    return await handlers.paxapi.contact[data.method](data);
   }else{
-    callback(405, {err: 'Verb not allowed'}, 'json');
+    return {
+      status: 405,
+      payload: {err: "Verb not allowed"}
+    };
   }
 };
 
 //To send a contact email
-handlers.paxapi.contact.post = function(data: IRequestData, callback: Function){
+handlers.paxapi.contact.post = async function(data: IRequestData): Promise<IHandlerResponse> {
   //Check the inputs
-  let name      = typeof data.payload.name == 'string' && data.payload.name.length > 0 ? data.payload.name : false;
-  let recipient = typeof data.payload.email == 'string' && data.payload.email.length > 3 ? data.payload.email : false;
-  let subject   = typeof data.payload.subject == 'string' && data.payload.subject.length > 0 ? data.payload.subject : false;
-  let text      = typeof data.payload.text == 'string' && data.payload.text.length > 10 ? data.payload.text : false;
+  let name: string      = typeof data.payload.name == "string" && data.payload.name.length > 0 ? data.payload.name : "";
+  let recipient: string = typeof data.payload.email == "string" && data.payload.email.length > 3 ? data.payload.email : "";
+  let subject: string   = typeof data.payload.subject == "string" && data.payload.subject.length > 0 ? data.payload.subject : "";
+  let text: string      = typeof data.payload.text == "string" && data.payload.text.length > 10 ? data.payload.text : "";
 
-  if(name && recipient && subject && text){
+  if(name.length > 0 && recipient.length > 0 && subject.length > 0 && text.length > 0){
     //Add the email of the sender to the text
-    text = text + '\n\n' + recipient;
+    text = text + "\n\n" + recipient;
 
     //Send the email
-    global.g.emitter.emit('contact_new', subject, text);
+    global.g.emitter.emit("contact_new", subject, text);
 
-    callback(200, {}, 'json');
+    return {};
   }else{
-    callback(400, {err: 'One of your inputs is a little off'}, 'json');
+    return {
+      status: 400,
+      payload: {err: "One of your inputs is a little off"}
+    };
   }
 };
 
-handlers.paxapi.application = async function(data: IRequestData, callback: Function){
-  if(typeof handlers.paxapi.application[data.method] == 'function'){
-    if(data.method != 'post') {
+handlers.paxapi.application = async function(data: IRequestData): Promise<IHandlerResponse> {
+  if(typeof handlers.paxapi.application[data.method] == "function"){
+    if(data.method != "post") {
       //All non post requests require authorization
-      //Check if there is an access_token
-      if(data.headers.hasOwnProperty('cookie')){
-        if(data.headers.cookie.indexOf('access_token'.length > -1)){
-          //There is an access_token cookie, lets check if it belongs to at least a mod
-          if(await oauth.getAccessLevelFromToken(data.cookies.access_token) >= 7){
-            handlers.paxapi.application[data.method](data, callback);
-          }else{
-            callback(403, {err: 'You are not authorized to do that!'}, 'json');
-          }
-        }else{
-          callback(401, {err: 'Your client didnt send an access_token, please log in again'}, 'json');
-        }
-      }else{
-        callback(401, {err: 'Your client didnt send an access_token, please log in again'}, 'json');
+      const authError = await authorizeRequest(data, 7);
+      if(authError.length === 0) {
+        return await handlers.paxapi.application[data.method](data);
+      } else {
+        return {
+          status: 401,
+          payload: {err: authError}
+        };
       }
     }else{
-      handlers.paxapi.application[data.method](data, callback);
+      return await handlers.paxapi.application[data.method](data);
     }
-  }else{
-    callback(405, {err: 'Verb not allowed'}, 'json');
+  } else {
+    return {
+      status: 405,
+      payload: {err: "Verb not allowed"}
+    };
   }
 };
 
-//To send a new application
-handlers.paxapi.application.post = function(data: IRequestData, callback: Function){
+handlers.paxapi.application.post = async function(data: IRequestData): Promise<IHandlerResponse> {
   if(!data.payload || !data.payload.accept_rules || !data.payload.accept_privacy_policy){
-    callback(400, {err: "Missing or malformed payload", payload: data.payload}, "json");
-    return;
+    return {
+      status: 400,
+      payload: {err: "Missing or malformed payload", payload: data.payload}
+    };
   }
   
-  let discordId: string = data.payload.discord_id.length >= 17 && data.payload.discord_id.length <= 18 ? data.payload.discord_id : "";
-  let emailAddress: string = data.payload.email_address.indexOf("@") > -1 && data.payload.email_address.length > 5 ? data.payload.email_address.trim() : "";
-  let country = data.payload.country ? sanitize(data.payload.country, {allowedTags: []}) : "";
-  let birthMonth = Number.parseInt(data.payload.birth_month) >= 1 && Number.parseInt(data.payload.birth_month) <= 12 ? Number.parseInt(data.payload.birth_month) : -1;
-  let birthYear = Number.parseInt(data.payload.birth_year) >= 1900 && Number.isInteger(Number.parseInt(data.payload.birth_year)) ? Number.parseInt(data.payload.birth_year) : -1;
-  let aboutMe = data.payload.about_me.length > 1 && data.payload.about_me.length <= 1500 ? sanitize(data.payload.about_me, {allowedTags: [], allowedAttributes: {}}) : "";
-  let motivation = data.payload.motivation.length > 1 && data.payload.motivation.length <= 1500 ? sanitize(data.payload.motivation, {allowedTags: [], allowedAttributes: {}}) : "";
-  let buildImages = data.payload.build_images.length > 1 && data.payload.build_images.length <= 1500 ? sanitize(data.payload.build_images, {allowedTags: [], allowedAttributes: {}}) : "";
-  let publishAboutMe = data.payload.publish_about_me;
-  let publishAge = data.payload.publish_age;
-  let publishCountry = data.payload.publish_country;
+  const discordId: string = data.payload.discord_id.length >= 17 && data.payload.discord_id.length <= 18 ? data.payload.discord_id : "";
+  const mcIgn: string = data.payload.mc_ign.length >= 3 && data.payload.mc_ign.length <= 16 ? data.payload.mc_ign : "";
+  const emailAddress: string = data.payload.email_address.indexOf("@") > -1 && data.payload.email_address.length > 5 ? data.payload.email_address.trim() : "";
+  const country = data.payload.country ? sanitize(data.payload.country, {allowedTags: []}) : "";
+  const birthMonth = Number.parseInt(data.payload.birth_month) >= 1 && Number.parseInt(data.payload.birth_month) <= 12 ? Number.parseInt(data.payload.birth_month) : -1;
+  const birthYear = Number.parseInt(data.payload.birth_year) >= 1900 && Number.isInteger(Number.parseInt(data.payload.birth_year)) ? Number.parseInt(data.payload.birth_year) : -1;
+  const aboutMe = data.payload.about_me.length > 1 && data.payload.about_me.length <= 1500 ? sanitize(data.payload.about_me, {allowedTags: [], allowedAttributes: {}}) : "";
+  const motivation = data.payload.motivation.length > 1 && data.payload.motivation.length <= 1500 ? sanitize(data.payload.motivation, {allowedTags: [], allowedAttributes: {}}) : "";
+  const buildImages = data.payload.build_images.length > 1 && data.payload.build_images.length <= 1500 ? sanitize(data.payload.build_images, {allowedTags: [], allowedAttributes: {}}) : "";
+  const publishAboutMe = data.payload.publish_about_me;
+  const publishAge = data.payload.publish_age;
+  const publishCountry = data.payload.publish_country;
   
   if(birthYear > new Date().getFullYear() - 13 || (birthYear > new Date().getFullYear() - 12 && new Date().getMonth() < birthMonth)){
-    callback(401, {err: "you need to be at least 13 years old to apply. If you believe this is an error contact TxT#0001 in Discord"}, "json");
-    return;
+    return {
+      status: 401,
+      payload: {err: "you need to be at least 13 years old to apply. If you believe this is an error contact TxT#0001 in Discord"}
+    };
   }
   
-  if(discordId.length === 0 || !data.payload.mc_ign || emailAddress.length === 0 || country.length === 0 || birthMonth === -1 || birthYear === -1 || aboutMe.length === 0 || motivation.length === 0 || buildImages.length === 0){
-    callback(400, {err: "Incorrect input"}, "json");
-    global.g.log(0, "web", "handlers.paxapi.application.post received incorrect input", {
+  if(discordId.length === 0 || mcIgn.length === 0 || emailAddress.length === 0 || country.length === 0 || birthMonth === -1 || birthYear === -1 || aboutMe.length === 0 || motivation.length === 0 || buildImages.length === 0){
+    const payload = {
       discordId: discordId,
-      mc_ign: data.payload.mc_ign,
+      mcIgn: data.payload.mcIgn,
       emailAddress: emailAddress,
       country: country,
       birthMonth: birthMonth,
@@ -203,112 +213,62 @@ handlers.paxapi.application.post = function(data: IRequestData, callback: Functi
       aboutMe: aboutMe,
       motivation: motivation,
       buildImages: buildImages
-    });
-    return;
+    }
+    global.g.log(0, "web", "handlers.paxapi.application.post received incorrect input", payload);
+    return {
+      status: 400,
+      payload: {err: "Incorrect input", payload: payload}
+    }
   }
 
-  mc_helpers.getUUID(data.payload.mc_ign)
-    .then(mcUuid => {
-      mc_helpers.getIGN(mcUuid)
-        .then(mcIgn => {
-          discord_api.getUserObjectFromId(data.payload.discord_id)
-            .then(userData => {
-              let discordUserName = `${userData.username}#${userData.discriminator}`;
-              applicationFactory.create(discordId, mcUuid, emailAddress, country, birthMonth, birthYear, aboutMe, motivation, buildImages, publishAboutMe, publishAge, publishCountry, 1, discordUserName, mcIgn)
-                .then(() => {
-                  callback(201, {}, "json");
-                })
-                .catch((e: Error) => {
-                  callback(500, {err: e.message}, "json");
-                });
-            })
-            .catch(err => callback(500, {message: "Couldnt get your nickname from Discord :( Please contact TxT#0001 on Discord if you read this", payload: data.payload, err: err}, "json"));
-        })
-        .catch(err => callback(500, {err: err}, "json"));
-    })
-    .catch(err => callback(400, {err: "No Minecraft Account for given Minecraft In-Game-Name found", payload: data.payload}, "json"));
+  const mcUuid = await mc_helpers.getUUID(mcIgn)
+  const actualMcIgn = await mc_helpers.getIGN(mcUuid);
+  const userData = await discord_api.getUserObjectFromId(discordId);
+  const discordUserName = `${userData.username}#${userData.discriminator}`;
+  await applicationFactory.create(discordId, mcUuid, emailAddress, country, birthMonth, birthYear, aboutMe, motivation, buildImages, publishAboutMe, publishAge, publishCountry, 1, discordUserName, actualMcIgn);
+
+  return {
+    status: 201
+  };
 };
 
 //Retrieves a list of applications
 //REQUIRES AUTHORIZATION!
 //Required data: none - this will return all applications
 //Optional id, discord, discord_id, mc_ign, status - these are filters, only return records matching the filter
-handlers.paxapi.application.get = function(data: IRequestData, callback: Function){
-  //Retrieve all records
+handlers.paxapi.application.get = async function(data: IRequestData): Promise<IHandlerResponse> {
   //Clear the 0 status code, as 0 means get all data
   if(data.queryStringObject.status == 0) data.queryStringObject = undefined;
-  turnFilterIntoApplicationAndCallbackResult(data.queryStringObject, callback)
+  return await turnFilterIntoApplication(data.queryStringObject);
 };
 
-async function turnFilterIntoApplicationAndCallbackResult(filter: any, callback: Function){
+async function turnFilterIntoApplication(filter: any): Promise<IHandlerResponse> {
   switch(Object.keys(filter)[0]) {
     case "id":
-      applicationFactory.getById(filter.id)
-        .then(async (application: Application) => {
-          if(application) {
-            callback(200, await turnApplicationIntoJson(application, true), "json");
-          } else {
-            callback(404, {err: "no application found with the given id", id: filter.id}, "json");
-          }
-        })
-        .catch((e: Error) => {
-          callback(500, {err: e.message}, "json");
-        })
-        .catch((e: Error) => callback(500, {err: e.message}, 'json'));
-      break;
+      return {
+        payload: await turnApplicationIntoJson(await applicationFactory.getById(filter.id), true)
+      };
     case "discord_id":
-      applicationFactory.getByDiscordId(filter.discord_id)
-        .then(async (applications: Application[]) => {
-          if(applications.length > 0) {
-            callback(200, await turnApplicationsIntoJson(applications), "json");
-          } else {
-            callback(404, {err: "no application found with the given discord_id", discord_id: filter.discord_id}, "json");
-          }
-        })
-        .catch((e: Error) => {
-          callback(500, {err: e.message}, "json");
-        })
-      break;
+      return {
+        payload: await turnApplicationsIntoJson(await applicationFactory.getByDiscordId(filter.discord_id))
+      };
     case "mc_uuid":
-      applicationFactory.getByMcUuid(filter.mc_uuid)
-        .then(async (applications: Application[]) => {
-          if(applications.length > 0) {
-            callback(200, await turnApplicationsIntoJson(applications), "json");
-          } else {
-            callback(404, {err: "no application found with the given mc_uuid", mc_uuid: filter.mc_uuid}, "json");
-          }
-        })
-        .catch((e: Error) => {
-          callback(500, {err: e.message}, "json");
-        })
-      break;
+      return {
+        payload: await turnApplicationsIntoJson(await applicationFactory.getByMcUuid(filter.mc_uuid))
+      };
     default:
-      applicationFactory.getFiltered({})
-        .then(async (applications: Application[]) => {
-          if(applications.length > 0) {
-            callback(200, await turnApplicationsIntoJson(applications), "json");
-          } else {
-            callback(404, {err: "no applications found"}, "json");
-          }
-        })
-        .catch((e: Error) => {
-          callback(500, {err: e.message}, "json");
-        })
-      break;
+      return {
+        payload: await turnApplicationsIntoJson(await applicationFactory.getFiltered({}))
+      };
   }
 }
 
 async function turnApplicationsIntoJson(applications: Application[]) {
-  let applicationObjects: any[] = [];
-  (await Promise.all(applications.map(async application => await turnApplicationIntoJson(application, false)))).forEach(application => {
-    if(application) applicationObjects.push(application);
-  });
-  return applicationObjects;
+  const applicationObjects: any[] = applications.map(async application => await turnApplicationIntoJson(application, false));
+  return applicationObjects.filter(x => x);
 }
 
 async function turnApplicationIntoJson(application: Application, getExpensiveData: boolean){
-  let discordAvatarUrl = null;
-  if(getExpensiveData) discordAvatarUrl = await application.getDiscordAvatarUrl();
   return {
     id: application.getId(),
     timestamp: application.getTimestamp().valueOf(),
@@ -327,106 +287,104 @@ async function turnApplicationIntoJson(application: Application, getExpensiveDat
     mc_ign: application.getMcIgn(),
     status: application.getStatus(),
     mc_skin_url: application.getMcSkinUrl(),
-    discord_avatar_url: discordAvatarUrl
+    discord_avatar_url: getExpensiveData ? await application.getDiscordAvatarUrl() : null
   };
 }
 
 //To change the status of a single application
 //REQUIRES AUTHORIZATION!
 //Required data: id, new status (2 or 3)
-handlers.paxapi.application.patch = function(data: IRequestData, callback: Function){
+handlers.paxapi.application.patch = async function(data: IRequestData): Promise<IHandlerResponse> {
   //Check if the required fields are set
-  let id     = typeof data.payload.id     == 'number' && data.payload.id     > -1 ? data.payload.id     : false;
-  let status = typeof data.payload.status == 'number' && data.payload.status >= 2 && data.payload.status <= 3 ? data.payload.status : false;
+  const id: number     = typeof data.payload.id     == "number" && data.payload.id     > -1 ? data.payload.id     : -Infinity;
+  const status: number = typeof data.payload.status == "number" && data.payload.status >= 2 && data.payload.status <= 3 ? data.payload.status : -Infinity;
 
-  if(typeof id == 'number' && status){
-    applicationFactory.getById(id)
-    .then(async (application: Application) => {
-      if(application){
-        if(application.getStatus() !== 2){
-          if(status === 3){
-            await application.accept();
-            callback(200, {}, "json");
-          } else {
-            await application.deny(data.payload.reason);
-            callback(200, {}, "json");
-          }
-        }else{
-          callback(401, {err: "The application got already decided upon. Please refresh your browser!"}, "json");
-        }
-      }else{
-        callback(404, {err: "No application with given id found", id: id}, "json");
-      }
-    })
-    .catch((e: Error) => {
-      callback(500, {err: e.message}, "json");
-    });
+  if(id > -Infinity && status > -Infinity){
+    const application = await applicationFactory.getById(id);
+    
+    if(status === 3) {
+      await application.accept();
+      return {};
+    } else {
+      await application.deny(data.payload.reason);
+      return {};
+    }
   }else{
-    callback(401, {err: 'One of the inputs is not quite right'}, 'json');
+    return {
+      status: 401,
+      payload: {err: "One of the inputs is not quite right"}
+    };
   }
 };
 
-handlers.paxapi.mcversion = function(data: IRequestData, callback: Function){
-  mc_helpers.getServerVersion()
-    .then(version => callback(200, version, "plain"))
-    .catch(e => callback(500, {message: "Couldnt get version", error: e}, "json"));
+handlers.paxapi.mcversion = async function(data: IRequestData): Promise<IHandlerResponse> {
+  return {
+    payload: await mc_helpers.getServerVersion(),
+    contentType: "plain"
+  };
 }
 
-handlers.paxapi.memberworldmapdata = function(data: IRequestData, callback: Function) {
-  stats.countryList()
-    .then(mapData => callback(200, mapData, "json"))
-    .catch(e => callback(500, {err: "Couldnt get map data", details: e.message}, "json"));
+handlers.paxapi.memberworldmapdata = async function(data: IRequestData): Promise<IHandlerResponse> {
+  return {
+    payload: await stats.countryList()
+  };
 }
 
-handlers.paxapi.statsoverview = function(data: IRequestData, callback: Function){
-  stats.overview()
-    .then(stats => callback(200, stats, "json"))
-    .catch(e => callback(500, {err: "failed to get stats overview", stats: stats, details: e.message}, "json"));
+handlers.paxapi.statsoverview = async function(data: IRequestData): Promise<IHandlerResponse> {
+  return {
+    payload: await stats.overview()
+  };
 }
 
-handlers.paxapi.discorduserfromcode = async function(data: IRequestData, callback: Function){
+handlers.paxapi.discorduserfromcode = async function(data: IRequestData): Promise<IHandlerResponse> {
   const code = data.queryStringObject.code;
-  const discordId = await oauth.getDiscordIdFromCode(code, "applicationNew");
+  const discordId = await auth.getDiscordIdFromCode(code, "applicationNew");
   const discordNick = discord_api.getNicknameByID(discordId);
-  if(discordNick){
-    callback(200, {discordNick: discordNick, discordId: discordId}, "json");
-  }else{
-    callback(500, {err: `Couldnt turn discord id ${discordId} into username`});
-  }
+  
+  return {
+    payload: {discordNick: discordNick, discordId: discordId}
+  };
 }
 
-handlers.paxapi.tokenfromcode = async function(data: IRequestData, callback: Function){
+handlers.paxapi.tokenfromcode = async function(data: IRequestData): Promise<IHandlerResponse> {
   const code = data.queryStringObject.code;
-  const access_level = await oauth.getAccessLevelFromCode(code, "interface");
-  const access_token = await oauth.getAccessTokenFromCode(code, "interface");
-  callback(200, {access_token: access_token, access_level: access_level}, "json");
+  const access_level = await auth.getAccessLevelFromCode(code, "interface");
+  const access_token = await auth.getAccessTokenFromCode(code, "interface");
+  
+  return {
+    payload: {access_token: access_token, access_level: access_level}
+  };
 }
 
 //Internal helper functions to make code cleaner
 var _internal: any = {};
 
 //Redirect user to the same url with the discord_id as queryStringObject
-_internal.redirectToDiscordId = function(data: IRequestData, callback: Function){
-  let code = data.queryStringObject.code;
-  const discordId = oauth.getDiscordIdFromCode(code, 'application');
-  callback(302, {Location: `https://${data.headers.host}/${data.path.replace('/html/', '')}?id=${discordId}`}, 'plain');
+_internal.redirectToDiscordId = async function(data: IRequestData): Promise<IHandlerResponse> {
+  const code = data.queryStringObject.code;
+  const discordId = await auth.getDiscordIdFromCode(code, "application");
+  return {
+    status: 302,
+    payload: {Location: `https://${data.headers.host}/${data.path.replace("/html/", "")}?id=${discordId}`}, //TODO: find out if the replace of /html" is still required
+    contentType: "plain"
+  };
 };
 
-async function authorizeRequest(data: IRequestData, minAccessLevel: number, callback: Function) {
-  if(data.headers.hasOwnProperty('cookie')) {
-    if(data.headers.cookie.indexOf('access_token'.length > -1)) {
+async function authorizeRequest(data: IRequestData, minAccessLevel: number) {
+  if(data.headers.hasOwnProperty("cookie")) {
+    if(data.headers.cookie.indexOf("access_token".length > -1)) {
       //There is an access_token cookie, lets check if it belongs to an admin
-      const accessLevel = await oauth.getAccessLevelFromToken(data.cookies.access_token);
+      const accessLevel = await auth.getAccessLevelFromToken(data.cookies.access_token);
       if(accessLevel >= minAccessLevel) {
-        callback(false)
+        return "";
       } else {
-        callback('You are not authorized to access this resource');
+        return "You are not authorized to access this resource";
       }
     } else {
-      callback('Your client didnt send an access_token, please log in again');
+      return "Your client didnt send an access_token, please log in again";
     }
   } else {
-    callback('Your client didnt send an access_token, please log in again');
+    return "Your client didnt send an access_token, please log in again";
   }
 }
 

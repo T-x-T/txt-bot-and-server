@@ -6,13 +6,6 @@ interface IFactoryOptions {
   name: string
 }
 
-interface IStatsOptions {
-  discord_id?: string,
-  uuid?: string,
-  rank?: string,
-  collection?: string
-}
-
 interface IDiscordApiUserObject {
   id: string,
   username: string,
