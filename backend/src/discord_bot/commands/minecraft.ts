@@ -4,6 +4,7 @@
 */
 
 import minecraft = require("../../minecraft/index.js");
+import stats = require("../../stats");
 import MemberFactory = require("../../user/memberFactory.js");
 const memberFactory = new MemberFactory();
 memberFactory.connect();
@@ -11,18 +12,17 @@ memberFactory.connect();
 import Discord = require("discord.js");
 
 export = {
-  name: 'minecraft',
-  description: 'This command provides different functionality for minecraft server integration',
-  aliases: ['mc', 'mcserver'],
-  usage: '*Sub-Commands:*\nstats ([rank]) [collection]  [mention user to view other stats]\n+mc stats general\n+mc stats rank total',
+  name: "minecraft",
+  description: "This command provides different functionality for minecraft server integration",
+  aliases: ["mc", "mcserver"],
+  usage: "*Sub-Commands:*\nstats ([rank]) [collection]  [mention user to view other stats]\n+mc stats general\n+mc stats rank total",
 
   async execute(message: Discord.Message, args: string[]) {
     switch(args[0]){
-      case 'stats':
-        //User wants to see some stats
+      case "stats":
         let userID;
         //If the user is all then get stats for all users combined
-        if(args[2] == 'all'){
+        if(args[2] == "all"){
           userID = false;
         }else{
           //Use the userID of the first mentioned user, or the userID of the author
@@ -35,409 +35,303 @@ export = {
 
         if(userID){
           //If we made it here, the user wants to get the stats for one specific person
-          //Find the IGN out as well
+          const member = await memberFactory.getByDiscordId(userID as string);
           memberFactory.getByDiscordId(userID as string)
-          .then((member: any) => {
-            if(args[1] == 'rank') {
-              //Get the rank flavored stats
-              let output = '```';
-              _internals.statsSwitch(args[2], member.getMcUuid(), member.getMcIgn(), true, function (statsOutput: string) {
-                output += statsOutput;
-                output += '```';
-                message.channel.send(output);
-              });
-            } else {
-              //Normal stats
-              let output = '```';
-              _internals.statsSwitch(args[1], member.getMcUuid(), member.getMcIgn(), false, function (statsOutput: string) {
-                output += statsOutput;
-                output += '```';
-                message.channel.send(output);
-              });
-            }
-          })
-          .catch((e: Error) => {
-            message.reply('Couldnt get the IGN for that user: ' + e.message);
-          });
+          if(args[1] == "rank") {
+            let output = "```";
+            output += await statsSwitch(args[2], member.getMcUuid(), member.getMcIgn(), true);
+            output += "```";
+            message.channel.send(output);
+          } else {
+            let output = "```";
+            output += await statsSwitch(args[1], member.getMcUuid(), member.getMcIgn(), false);
+            output += "```";
+            message.channel.send(output);
+          }
         }else{
           //If we made it here, the user wants to get the stats for all players combined
-          let ign = 'all players';
+          const ign = "all players";
 
-          let output = '```';
-          _internals.statsSwitch(args[1], userID, ign, false, function(statsOutput: string){
-            output += statsOutput;
-            output += '```';
-            message.channel.send(output);
-          });
+          const statsOutput = await statsSwitch(args[1], false, ign, false)
+          let output = "```";
+          output += statsOutput;
+          output += "```";
+          message.channel.send(output);
         }
 
         break;
-      case 'online':
-        let output = '```';
+      case "online":
+        let output = "```";
         
         let server;
-        if(args[1] == 'creative' || args[1] == 'c'){
-          server = 'creative_server';
+        if(args[1] == "creative" || args[1] == "c"){
+          server = "creative_server";
         }else{
-          server = 'main_smp'
+          server = "main_smp"
         }
 
-        const res = await minecraft.sendCmd('list', server);
-        let onlinePlayerCount = parseInt(res.replace('There are ', ''));
-        let onlinePlayers = res.split(': ')[1].split(', ');
+        const res = await minecraft.sendCmd("list", server);
+        let onlinePlayerCount = parseInt(res.replace("There are ", ""));
+        let onlinePlayers = res.split(": ")[1].split(", ");
 
         if (onlinePlayerCount === 1) output += `The following player is currently online:\n`;
-        else if (onlinePlayerCount === 0) output += `There are no players online right now. It's on you to change that now!\n`;
+        else if (onlinePlayerCount === 0) output += `There are no players online right now. It"s on you to change that now!\n`;
         else output += `The following ${onlinePlayerCount} players are currently online:\n`;
 
-        onlinePlayers.forEach(player => output += player + '\n');
+        onlinePlayers.forEach(player => output += player + "\n");
 
-        output += '```';
+        output += "```";
         message.channel.send(output);
         break;
       default:
-        message.reply('you tried to do something that I dont understand');
+        message.reply("you tried to do something that I dont understand");
         break;
     }
   }
 };
 
-/*
-*
-*  From here on are some internal functions to make things neater
-*
-*/
-
-var _internals: any = {};
-
-_internals.statsSwitch = function(collection: string, userID: string, ign: string, rankInfo: string, callback: Function){
-  const _stats = require('../../stats');
-  let output = '';
+async function statsSwitch(collection: string, uuid: string | boolean, ign: string, rankInfo: boolean){
+  let output = "";
   switch(collection){
-    case 'general':
-      _stats.get('mc', {collection: 'general', rank: rankInfo, uuid: userID}, function(err: string, stats: any){
-      if(!err){
-        if(rankInfo){
-          output += `General statistics for ${ign}:\n`;
-          output += `Deaths: ${stats.deaths.rank} of ${stats._totalPlayers} (${stats.deaths.stat})\n`;
-          output += `Players killed: ${stats.playerKills.rank} of ${stats._totalPlayers} (${stats.playerKills.stat})\n`;
-          output += `Mobs killed: ${stats.mobKills.rank} of ${stats._totalPlayers} (${stats.mobKills.stat})\n`;
-          output += `Damage dealt: ${stats.damageDealt.rank} of ${stats._totalPlayers} (${stats.damageDealt.stat})\n`;
-          output += `Damage taken: ${stats.damageTaken.rank} of ${stats._totalPlayers} (${stats.damageTaken.stat})\n`;
-          output += `Playtime: ${stats.playtime.rank} of ${stats._totalPlayers} (${stats.playtime.stat})\n`;
-          output += `Distance by foot: ${stats.distanceByFoot.rank} of ${stats._totalPlayers} (${stats.distanceByFoot.stat})\n`;
-          output += `Jumps: ${stats.jumps.rank} of ${stats._totalPlayers} (${stats.jumps.stat})\n`;
-          output += `Animals bred: ${stats.animals_bred.rank} of ${stats._totalPlayers} (${stats.animals_bred.stat})\n`;
-          output += `Times slept: ${stats.times_slept.rank} of ${stats._totalPlayers} (${stats.times_slept.stat})\n`;
-        }else{
-          output += `General statistics for ${ign}:\n`;
-          output += `Deaths: ${stats.deaths}\n`;
-          output += `Players killed: ${stats.playerKills}\n`;
-          output += `Mobs killed: ${stats.mobKills}\n`;
-          output += `Damage dealt: ${stats.damageDealt}\n`;
-          output += `Damage taken: ${stats.damageTaken}\n`;
-          output += `Playtime: ${stats.playtime}\n`;
-          output += `Distance by foot: ${stats.distanceByFoot}\n`;
-          output += `Jumps: ${stats.jumps}\n`;
-          output += `Animals bred: ${stats.animals_bred}\n`;
-          output += `Times slept: ${stats.times_slept}\n`;
-        }
-      }else{
-        output += 'Something went wrong and I couldnt get the stats';
-        output += err;
+    case "general": {
+      const data = await getStats(collection, uuid, rankInfo);
+      if(rankInfo) {
+        output += `General statistics for ${ign}:\n`;
+        output += `Deaths: ${data.deaths.rank} of ${data._totalPlayers} (${data.deaths.stat})\n`;
+        output += `Players killed: ${data.playerKills.rank} of ${data._totalPlayers} (${data.playerKills.stat})\n`;
+        output += `Mobs killed: ${data.mobKills.rank} of ${data._totalPlayers} (${data.mobKills.stat})\n`;
+        output += `Damage dealt: ${data.damageDealt.rank} of ${data._totalPlayers} (${data.damageDealt.stat})\n`;
+        output += `Damage taken: ${data.damageTaken.rank} of ${data._totalPlayers} (${data.damageTaken.stat})\n`;
+        output += `Playtime: ${data.playtime.rank} of ${data._totalPlayers} (${data.playtime.stat})\n`;
+        output += `Distance by foot: ${data.distanceByFoot.rank} of ${data._totalPlayers} (${data.distanceByFoot.stat})\n`;
+        output += `Jumps: ${data.jumps.rank} of ${data._totalPlayers} (${data.jumps.stat})\n`;
+        output += `Animals bred: ${data.animals_bred.rank} of ${data._totalPlayers} (${data.animals_bred.stat})\n`;
+        output += `Times slept: ${data.times_slept.rank} of ${data._totalPlayers} (${data.times_slept.stat})\n`;
+      } else {
+        output += `General statistics for ${ign}:\n`;
+        output += `Deaths: ${data.deaths}\n`;
+        output += `Players killed: ${data.playerKills}\n`;
+        output += `Mobs killed: ${data.mobKills}\n`;
+        output += `Damage dealt: ${data.damageDealt}\n`;
+        output += `Damage taken: ${data.damageTaken}\n`;
+        output += `Playtime: ${data.playtime}\n`;
+        output += `Distance by foot: ${data.distanceByFoot}\n`;
+        output += `Jumps: ${data.jumps}\n`;
+        output += `Animals bred: ${data.animals_bred}\n`;
+        output += `Times slept: ${data.times_slept}\n`;
       }
-      callback(output);
-    });
-    break;
-    case 'distance':
-      _stats.get('mc', {uuid: userID, collection: 'distances', rank: rankInfo}, function(err: string, stats: any){
-      if(!err){
-        if(rankInfo){
-          output += `Distance statistics for ${ign}:\n`;
-          output += `Walk: ${stats.distance_walk.rank} of ${stats._totalPlayers} (${stats.distance_walk.stat})\n`;
-          output += `Sprint: ${stats.distance_sprint.rank} of ${stats._totalPlayers} (${stats.distance_sprint.stat})\n`;
-          output += `Crouch: ${stats.distance_crouch.rank} of ${stats._totalPlayers} (${stats.distance_crouch.stat})\n`;
-          output += `Climb: ${stats.distance_climb.rank} of ${stats._totalPlayers} (${stats.distance_climb.stat})\n`;
-          output += `Fall: ${stats.distance_fall.rank} of ${stats._totalPlayers} (${stats.distance_fall.stat})\n`;
-          output += `Walk on Water: ${stats.distance_walkOnWater.rank} of ${stats._totalPlayers} (${stats.distance_walkOnWater.stat})\n`;
-          output += `Walk under Water: ${stats.distance_walkUnderWater.rank} of ${stats._totalPlayers} (${stats.distance_walkUnderWater.stat})\n`;
-          output += `Swim: ${stats.distance_swim.rank} of ${stats._totalPlayers} (${stats.distance_swim.stat})\n`;
-          output += `Boat: ${stats.distance_boat.rank} of ${stats._totalPlayers} (${stats.distance_boat.stat})\n`;
-          output += `Elytra: ${stats.distance_aviate.rank} of ${stats._totalPlayers} (${stats.distance_aviate.stat})\n`;
-          output += `Fly: ${stats.distance_fly.rank} of ${stats._totalPlayers} (${stats.distance_fly.stat})\n`;
-        }else{
-          output += `Distance statistics for ${ign}:\n`;
-          output += `Walk: ${stats.distance_walk}\n`;
-          output += `Sprint: ${stats.distance_sprint}\n`;
-          output += `Crouch: ${stats.distance_crouch}\n`;
-          output += `Climb: ${stats.distance_climb}\n`;
-          output += `Fall: ${stats.distance_fall}\n`;
-          output += `Walk on Water: ${stats.distance_walkOnWater}\n`;
-          output += `Walk under Water: ${stats.distance_walkUnderWater}\n`;
-          output += `Swim: ${stats.distance_swim}\n`;
-          output += `Boat: ${stats.distance_boat}\n`;
-          output += `Elytra: ${stats.distance_aviate}\n`;
-          output += `Fly: ${stats.distance_fly}\n`;
-        }
-      }else{
-        output += 'Something went wrong and I couldnt get the stats';
-        output += err;
+
+      return output;
+    }
+    case "distance": {
+      const data = await getStats(collection, uuid, rankInfo);
+      if(rankInfo) {
+        output += `Distance statistics for ${ign}:\n`;
+        output += `Walk: ${data.distance_walk.rank} of ${data._totalPlayers} (${data.distance_walk.stat})\n`;
+        output += `Sprint: ${data.distance_sprint.rank} of ${data._totalPlayers} (${data.distance_sprint.stat})\n`;
+        output += `Crouch: ${data.distance_crouch.rank} of ${data._totalPlayers} (${data.distance_crouch.stat})\n`;
+        output += `Climb: ${data.distance_climb.rank} of ${data._totalPlayers} (${data.distance_climb.stat})\n`;
+        output += `Fall: ${data.distance_fall.rank} of ${data._totalPlayers} (${data.distance_fall.stat})\n`;
+        output += `Walk on Water: ${data.distance_walkOnWater.rank} of ${data._totalPlayers} (${data.distance_walkOnWater.stat})\n`;
+        output += `Walk under Water: ${data.distance_walkUnderWater.rank} of ${data._totalPlayers} (${data.distance_walkUnderWater.stat})\n`;
+        output += `Swim: ${data.distance_swim.rank} of ${data._totalPlayers} (${data.distance_swim.stat})\n`;
+        output += `Boat: ${data.distance_boat.rank} of ${data._totalPlayers} (${data.distance_boat.stat})\n`;
+        output += `Elytra: ${data.distance_aviate.rank} of ${data._totalPlayers} (${data.distance_aviate.stat})\n`;
+        output += `Fly: ${data.distance_fly.rank} of ${data._totalPlayers} (${data.distance_fly.stat})\n`;
+      } else {
+        output += `Distance statistics for ${ign}:\n`;
+        output += `Walk: ${data.distance_walk}\n`;
+        output += `Sprint: ${data.distance_sprint}\n`;
+        output += `Crouch: ${data.distance_crouch}\n`;
+        output += `Climb: ${data.distance_climb}\n`;
+        output += `Fall: ${data.distance_fall}\n`;
+        output += `Walk on Water: ${data.distance_walkOnWater}\n`;
+        output += `Walk under Water: ${data.distance_walkUnderWater}\n`;
+        output += `Swim: ${data.distance_swim}\n`;
+        output += `Boat: ${data.distance_boat}\n`;
+        output += `Elytra: ${data.distance_aviate}\n`;
+        output += `Fly: ${data.distance_fly}\n`;
       }
-      callback(output);
-    });
-    break;
-    case 'ores':
-      _stats.get('mc', {uuid: userID, collection: 'minedOres', rank: rankInfo}, function(err: string, stats: any){
-      if(!err){
-        if(rankInfo){
-          output += `Mined ores from ${ign}:\n`;
-          output += `Diamond: ${stats.mined_diamond_ore.rank} of ${stats._totalPlayers} (${stats.mined_diamond_ore.stat})\n`;
-          output += `Iron: ${stats.mined_iron_ore.rank} of ${stats._totalPlayers} (${stats.mined_iron_ore.stat})\n`;
-          output += `Gold: ${stats.mined_gold_ore.rank} of ${stats._totalPlayers} (${stats.mined_gold_ore.stat})\n`;
-          output += `Emerald: ${stats.mined_emerald_ore.rank} of ${stats._totalPlayers} (${stats.mined_emerald_ore.stat})\n`;
-          output += `Coal: ${stats.mined_coal_ore.rank} of ${stats._totalPlayers} (${stats.mined_coal_ore.stat})\n`;
-          output += `Lapis Lazuli: ${stats.mined_lapis_ore.rank} of ${stats._totalPlayers} (${stats.mined_lapis_ore.stat})\n`;
-          output += `Redstone: ${stats.mined_redstone_ore.rank} of ${stats._totalPlayers} (${stats.mined_redstone_ore.stat})\n`;
-          output += `Quartz: ${stats.mined_quartz_ore.rank} of ${stats._totalPlayers} (${stats.mined_quartz_ore.stat})\n`
-          output += `Nether Gold: ${stats.mined_nether_gold_ore.rank} of ${stats._totalPlayers} (${stats.mined_nether_gold_ore.stat})\n`
-          output += `Ancient Debris: ${stats.mined_ancient_debris.rank} of ${stats._totalPlayers} (${stats.mined_ancient_debris.stat})\n`
-        }else{
-          output += `Mined ores from ${ign}:\n`;
-          output += `Diamond: ${stats.mined_diamond_ore}\n`;
-          output += `Iron: ${stats.mined_iron_ore}\n`;
-          output += `Gold: ${stats.mined_gold_ore}\n`;
-          output += `Emerald: ${stats.mined_emerald_ore}\n`;
-          output += `Coal: ${stats.mined_coal_ore}\n`;
-          output += `Lapis Lazuli: ${stats.mined_lapis_ore}\n`;
-          output += `Redstone: ${stats.mined_redstone_ore}\n`;
-          output += `Quartz: ${stats.mined_quartz_ore}\n`;
-          output += `Nether Gold: ${stats.mined_nether_gold_ore}\n`;
-          output += `Ancient Debris: ${stats.mined_ancient_debris}\n`;
-        }
-      }else{
-        output += 'Something went wrong and I couldnt get the stats';
-        output += err;
+
+      return output;
+    }
+    case "ores": {
+      const data = await getStats(collection, uuid, rankInfo);
+      if(rankInfo) {
+        output += `Mined ores from ${ign}:\n`;
+        output += `Diamond: ${data.mined_diamond_ore.rank} of ${data._totalPlayers} (${data.mined_diamond_ore.stat})\n`;
+        output += `Iron: ${data.mined_iron_ore.rank} of ${data._totalPlayers} (${data.mined_iron_ore.stat})\n`;
+        output += `Gold: ${data.mined_gold_ore.rank} of ${data._totalPlayers} (${data.mined_gold_ore.stat})\n`;
+        output += `Emerald: ${data.mined_emerald_ore.rank} of ${data._totalPlayers} (${data.mined_emerald_ore.stat})\n`;
+        output += `Coal: ${data.mined_coal_ore.rank} of ${data._totalPlayers} (${data.mined_coal_ore.stat})\n`;
+        output += `Lapis Lazuli: ${data.mined_lapis_ore.rank} of ${data._totalPlayers} (${data.mined_lapis_ore.stat})\n`;
+        output += `Redstone: ${data.mined_redstone_ore.rank} of ${data._totalPlayers} (${data.mined_redstone_ore.stat})\n`;
+        output += `Quartz: ${data.mined_quartz_ore.rank} of ${data._totalPlayers} (${data.mined_quartz_ore.stat})\n`
+        output += `Nether Gold: ${data.mined_nether_gold_ore.rank} of ${data._totalPlayers} (${data.mined_nether_gold_ore.stat})\n`
+        output += `Ancient Debris: ${data.mined_ancient_debris.rank} of ${data._totalPlayers} (${data.mined_ancient_debris.stat})\n`
+      } else {
+        output += `Mined ores from ${ign}:\n`;
+        output += `Diamond: ${data.mined_diamond_ore}\n`;
+        output += `Iron: ${data.mined_iron_ore}\n`;
+        output += `Gold: ${data.mined_gold_ore}\n`;
+        output += `Emerald: ${data.mined_emerald_ore}\n`;
+        output += `Coal: ${data.mined_coal_ore}\n`;
+        output += `Lapis Lazuli: ${data.mined_lapis_ore}\n`;
+        output += `Redstone: ${data.mined_redstone_ore}\n`;
+        output += `Quartz: ${data.mined_quartz_ore}\n`;
+        output += `Nether Gold: ${data.mined_nether_gold_ore}\n`;
+        output += `Ancient Debris: ${data.mined_ancient_debris}\n`;
       }
-      callback(output);
-    });
-    break;
-    case 'total':
-      _stats.get('mc', {uuid: userID, collection: 'total', rank: rankInfo}, function(err: string, stats: any){
-      if(!err){
-        if(rankInfo){
-          output += `Totals from ${ign}:\n`;
-          output += `Blocks mined: ${stats.total_mined.rank} of ${stats._totalPlayers} (${stats.total_mined.stat})\n`;
-          output += `Blocks built & Items used: ${stats.total_used.rank} of ${stats._totalPlayers} (${stats.total_used.stat})\n`;
-          output += `Items crafted: ${stats.total_crafted.rank} of ${stats._totalPlayers} (${stats.total_crafted.stat})\n`;
-          output += `Items broken: ${stats.total_broken.rank} of ${stats._totalPlayers} (${stats.total_broken.stat})\n`;
-          output += `Items dropped: ${stats.total_dropped.rank} of ${stats._totalPlayers} (${stats.total_dropped.stat})\n`;
-          output += `Distance travelled: ${stats.total_travelled.rank} of ${stats._totalPlayers} (${stats.total_travelled.stat})\n`;
-        }else{
-          output += `Totals from ${ign}:\n`;
-          output += `Blocks mined: ${stats.total_mined}\n`;
-          output += `Blocks built & Items used: ${stats.total_used}\n`;
-          output += `Items crafted: ${stats.total_crafted}\n`;
-          output += `Items broken: ${stats.total_broken}\n`;
-          output += `Items dropped: ${stats.total_dropped}\n`;
-          output += `Distance travelled: ${stats.total_travelled}\n`;
-        }
-      }else{
-        output += 'Something went wrong and I couldnt get the stats';
-        output += err;
+
+      return output;
+    }
+    case "total": {
+      const data = await getStats(collection, uuid, rankInfo);
+      if(rankInfo) {
+        output += `Totals from ${ign}:\n`;
+        output += `Blocks mined: ${data.total_mined.rank} of ${data._totalPlayers} (${data.total_mined.stat})\n`;
+        output += `Blocks built & Items used: ${data.total_used.rank} of ${data._totalPlayers} (${data.total_used.stat})\n`;
+        output += `Items crafted: ${data.total_crafted.rank} of ${data._totalPlayers} (${data.total_crafted.stat})\n`;
+        output += `Items broken: ${data.total_broken.rank} of ${data._totalPlayers} (${data.total_broken.stat})\n`;
+        output += `Items dropped: ${data.total_dropped.rank} of ${data._totalPlayers} (${data.total_dropped.stat})\n`;
+        output += `Distance travelled: ${data.total_travelled.rank} of ${data._totalPlayers} (${data.total_travelled.stat})\n`;
+      } else {
+        output += `Totals from ${ign}:\n`;
+        output += `Blocks mined: ${data.total_mined}\n`;
+        output += `Blocks built & Items used: ${data.total_used}\n`;
+        output += `Items crafted: ${data.total_crafted}\n`;
+        output += `Items broken: ${data.total_broken}\n`;
+        output += `Items dropped: ${data.total_dropped}\n`;
+        output += `Distance travelled: ${data.total_travelled}\n`;
       }
-      callback(output);
-    });
-    break;
-    case 'top_usage':
-    if(!rankInfo){
-      _stats.get('mc', {uuid: userID, collection: 'topUsageItems'}, function(err: string, stats: any){
-        if(!err){
-          output += `Top used items from ${ign}:\n`;
-          let i = 0;
-          stats.forEach(() => {
-            output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
-            i++;
-          });
-        }else{
-          output += 'Something went wrong and I couldnt get the stats';
-          output += err;
-        }
-        callback(output);
-      });
-    }else{
-      callback('This stats collection doesnt work with ranks :(');
+      
+      return output;
     }
-    break;
-    case 'top_picked_up':
-    if(!rankInfo){
-      _stats.get('mc', {uuid: userID, collection: 'topPickedUpItems'}, function(err: string, stats: any){
-        if(!err){
-          output += `Top picked up items from ${ign}:\n`;
-          let i = 0;
-          stats.forEach(() => {
-            output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
-            i++;
-          });
-        }else{
-          output += 'Something went wrong and I couldnt get the stats';
-          output += err;
-        }
-        callback(output);
+    case "top_usage": {
+      if(!rankInfo) return "This stats collection doesnt work with ranks :(";
+      const data = await getStats(collection, uuid, rankInfo);
+      output += `Top used items from ${ign}:\n`;
+      let i = 0;
+      data.forEach(() => {
+        output += `${i + 1}: ${data[i].key}: ${data[i].value}\n`
+        i++;
       });
-    }else{
-      callback('This stats collection doesnt work with ranks :(');
+      return output;
     }
-    break;
-    case 'top_mined':
-    if(!rankInfo){
-      _stats.get('mc', {uuid: userID, collection: 'topMinedBlocks'}, function(err: string, stats: any){
-        if(!err){
-          output += `Top mined items from ${ign}:\n`;
-          let i = 0;
-          stats.forEach(() => {
-            output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
-            i++;
-          });
-        }else{
-          output += 'Something went wrong and I couldnt get the stats';
-          output += err;
-        }
-        callback(output);
+    case "top_picked_up": {
+      if(!rankInfo) return "This stats collection doesnt work with ranks :(";
+      const data = await getStats(collection, uuid, rankInfo);
+      output += `Top picked up items from ${ign}:\n`;
+      let i = 0;
+      data.forEach(() => {
+        output += `${i + 1}: ${data[i].key}: ${data[i].value}\n`
+        i++;
       });
-    }else{
-      callback('This stats collection doesnt work with ranks :(');
+      return output;
     }
-    break;
-    case 'top_dropped':
-    if(!rankInfo){
-      _stats.get('mc', {uuid: userID, collection: 'topDroppedItems'}, function(err: string, stats: any){
-        if(!err){
-          output += `Top dropped items from ${ign}:\n`;
-          let i = 0;
-          stats.forEach(() => {
-            output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
-            i++;
-          });
-        }else{
-          output += 'Something went wrong and I couldnt get the stats';
-          output += err;
-        }
-        callback(output);
+    case "top_mined": {
+      if(!rankInfo) return "This stats collection doesnt work with ranks :(";
+      const data = await getStats(collection, uuid, rankInfo);
+      output += `Top mined items from ${ign}:\n`;
+      let i = 0;
+      data.forEach(() => {
+        output += `${i + 1}: ${data[i].key}: ${data[i].value}\n`
+        i++;
       });
-    }else{
-      callback('This stats collection doesnt work with ranks :(');
+      return output;
     }
-    break;
-    case 'top_crafted':
-    if(!rankInfo){
-      _stats.get('mc', {uuid: userID, collection: 'topCraftedItems'}, function(err: string, stats: any){
-        if(!err){
-          output += `Top crafted items from ${ign}:\n`;
-          let i = 0;
-          stats.forEach(() => {
-            output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
-            i++;
-          });
-        }else{
-          output += 'Something went wrong and I couldnt get the stats';
-          output += err;
-        }
-        callback(output);
+    case "top_dropped": {
+      if(!rankInfo) return "This stats collection doesnt work with ranks :(";
+      const data = await getStats(collection, uuid, rankInfo);
+      output += `Top dropped items from ${ign}:\n`;
+      let i = 0;
+      data.forEach(() => {
+        output += `${i + 1}: ${data[i].key}: ${data[i].value}\n`
+        i++;
       });
-    }else{
-      callback('This stats collection doesnt work with ranks :(');
+      return output;
     }
-    break;
-    case 'top_broken':
-    if(!rankInfo){
-      _stats.get('mc', {uuid: userID, collection: 'topBrokenItems'}, function(err: string, stats: any){
-        if(!err){
-          output += `Top broken items from ${ign}:\n`;
-          let i = 0;
-          stats.forEach(() => {
-            output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
-            i++;
-          });
-        }else{
-          output += 'Something went wrong and I couldnt get the stats';
-          output += err;
-        }
-        callback(output);
+    case "top_crafted": {
+      if(!rankInfo) return "This stats collection doesnt work with ranks :(";
+      const data = await getStats(collection, uuid, rankInfo);
+      output += `Top crafted items from ${ign}:\n`;
+      let i = 0;
+      data.forEach(() => {
+        output += `${i + 1}: ${data[i].key}: ${data[i].value}\n`
+        i++;
       });
-    }else{
-      callback('This stats collection doesnt work with ranks :(');
+      return output;
     }
-    break;
-    case 'top_killed':
-    if(!rankInfo){
-      _stats.get('mc', {uuid: userID, collection: 'topKilledMobs'}, function(err: string, stats: any){
-        if(!err){
-          output += `Top killed mobs from ${ign}:\n`;
-          let i = 0;
-          stats.forEach(() => {
-            output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
-            i++;
-          });
-        }else{
-          output += 'Something went wrong and I couldnt get the stats';
-          output += err;
-        }
-        callback(output);
+    case "top_broken": {
+      if(!rankInfo) return "This stats collection doesnt work with ranks :(";
+      const data = await getStats(collection, uuid, rankInfo);
+      output += `Top broken items from ${ign}:\n`;
+      let i = 0;
+      data.forEach(() => {
+        output += `${i + 1}: ${data[i].key}: ${data[i].value}\n`
+        i++;
       });
-    }else{
-      callback('This stats collection doesnt work with ranks :(');
+      return output;
     }
-    break;
-    case 'top_killed_by':
-    if(!rankInfo){
-      _stats.get('mc', {uuid: userID, collection: 'topKilledByMobs'}, function(err: string, stats: any){
-        if(!err){
-          output += `Top mobs killed by from ${ign}:\n`;
-          let i = 0;
-          stats.forEach(() => {
-            output += `${i + 1}: ${stats[i].key}: ${stats[i].value}\n`
-            i++;
-          });
-        }else{
-          output += 'Something went wrong and I couldnt get the stats';
-          output += err;
-        }
-        callback(output);
+    case "top_killed": {
+      if(!rankInfo) return "This stats collection doesnt work with ranks :(";
+      const data = await getStats(collection, uuid, rankInfo);
+      output += `Top killed mobs from ${ign}:\n`;
+      let i = 0;
+      data.forEach(() => {
+        output += `${i + 1}: ${data[i].key}: ${data[i].value}\n`
+        i++;
       });
-    }else{
-      callback('This stats collection doesnt work with ranks :(');
+      return output;
     }
-    break;
-    case 'total_per_death':
-      _stats.get('mc', {uuid: userID, collection: 'totalPerDeath', rank: rankInfo}, function(err: string, stats: any){
-      if(!err){
-        if(rankInfo){
-          output += `Totals per death from ${ign}:\n`;
-          output += `Blocks mined: ${stats.total_per_death_mined.rank} of ${stats._totalPlayers} (${stats.total_per_death_mined.stat})\n`;
-          output += `Blocks built / Items used: ${stats.total_per_death_used.rank} of ${stats._totalPlayers} (${stats.total_per_death_used.stat})\n`;
-          output += `Items crafted: ${stats.total_per_death_crafted.rank} of ${stats._totalPlayers} (${stats.total_per_death_crafted.stat})\n`;
-          output += `Items broken: ${stats.total_per_death_broken.rank} of ${stats._totalPlayers} (${stats.total_per_death_broken.stat})\n`;
-          output += `Items dropped: ${stats.total_per_death_dropped.rank} of ${stats._totalPlayers} (${stats.total_per_death_dropped.stat})\n`;
-          output += `Distance travelled: ${stats.total_per_death_travelled.rank} of ${stats._totalPlayers} (${stats.total_per_death_travelled.stat})\n`;
-        }else{
-          output += `Totals per death from ${ign}:\n`;
-          output += `Blocks mined: ${stats.total_per_death_mined}\n`;
-          output += `Blocks built / Items used: ${stats.total_per_death_used}\n`;
-          output += `Items crafted: ${stats.total_per_death_crafted}\n`;
-          output += `Items broken: ${stats.total_per_death_broken}\n`;
-          output += `Items dropped: ${stats.total_per_death_dropped}\n`;
-          output += `Distance travelled: ${stats.total_per_death_travelled}\n`;
-        }
-      }else{
-        output += 'Something went wrong and I couldnt get the stats';
-        output += err;
+    case "top_killed_by": {
+      if(!rankInfo) return "This stats collection doesnt work with ranks :(";
+      const data = await getStats(collection, uuid, rankInfo);
+      output += `Top mobs killed by from ${ign}:\n`;
+      let i = 0;
+      data.forEach(() => {
+        output += `${i + 1}: ${data[i].key}: ${data[i].value}\n`
+        i++;
+      });
+      return output;
+    }
+    case "total_per_death": {
+      if(!rankInfo) return "This stats collection doesnt work with ranks :(";
+      const data = await getStats(collection, uuid, rankInfo);
+      if(rankInfo) {
+        output += `Totals per death from ${ign}:\n`;
+        output += `Blocks mined: ${data.total_per_death_mined.rank} of ${data._totalPlayers} (${data.total_per_death_mined.stat})\n`;
+        output += `Blocks built / Items used: ${data.total_per_death_used.rank} of ${data._totalPlayers} (${data.total_per_death_used.stat})\n`;
+        output += `Items crafted: ${data.total_per_death_crafted.rank} of ${data._totalPlayers} (${data.total_per_death_crafted.stat})\n`;
+        output += `Items broken: ${data.total_per_death_broken.rank} of ${data._totalPlayers} (${data.total_per_death_broken.stat})\n`;
+        output += `Items dropped: ${data.total_per_death_dropped.rank} of ${data._totalPlayers} (${data.total_per_death_dropped.stat})\n`;
+        output += `Distance travelled: ${data.total_per_death_travelled.rank} of ${data._totalPlayers} (${data.total_per_death_travelled.stat})\n`;
+      } else {
+        output += `Totals per death from ${ign}:\n`;
+        output += `Blocks mined: ${data.total_per_death_mined}\n`;
+        output += `Blocks built / Items used: ${data.total_per_death_used}\n`;
+        output += `Items crafted: ${data.total_per_death_crafted}\n`;
+        output += `Items broken: ${data.total_per_death_broken}\n`;
+        output += `Items dropped: ${data.total_per_death_dropped}\n`;
+        output += `Distance travelled: ${data.total_per_death_travelled}\n`;
       }
-      callback(output);
-    });
-    break;
+
+      return output;
+    }
     default:
-    output += 'I couldnt find that collection. Please use one of the following collecitons: general, distance, ores, total, top_usage, top_picked_up, top_dropped, top_crafted, top_broken, top_mined, top_killed, top_killed_by, total_per_death';
-    callback(output);
-    break;
+      return "I couldnt find that collection. Please use one of the following collecitons: general, distance, ores, total, top_usage, top_picked_up, top_dropped, top_crafted, top_broken, top_mined, top_killed, top_killed_by, total_per_death";
   }
 };
+
+async function getStats(collection: string, uuid: string | boolean, rankInfo: boolean) {
+  let data;
+  if(!uuid) {
+    data = await stats.mcGetAll(collection);
+  } else if(rankInfo) {
+    data = await stats.mcGetRanked(uuid as string, collection);
+  } else {
+    data = await stats.mcGetSingle(uuid as string, collection);
+  }
+
+  return data;
+}
