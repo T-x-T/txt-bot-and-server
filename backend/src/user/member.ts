@@ -1,7 +1,6 @@
 import Persistable = require("../persistance/persistable.js");
 import mc = require("../minecraft/index.js");
 import discord_helpers = require("../discord_bot/helpers.js");
-import discord_api = require("../discord_api/index.js");
 class Member extends Persistable{
   static schema: any;
   constructor(discord_id: string, discord_nick: string, status: EMemberStatus, joinedDate: Date, mc_uuid: string, mc_ign: string, country: string, birth_month: number, birth_year: number, publish_age: boolean, publish_country: boolean){
@@ -40,11 +39,11 @@ class Member extends Persistable{
   }
 
   async getDiscordAvatarUrl() {
-    return discord_api.getAvatarUrl(this.getDiscordId());
+    return discord_helpers.getAvatarUrl(this.getDiscordId());
   }
 
   async getDiscordUserdata() {
-    return discord_api.getUserObjectFromId(this.getDiscordId());
+    return discord_helpers.fetchUser(this.getDiscordId());
   }
 
   getJoinedDate(): Date {

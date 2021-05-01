@@ -3,14 +3,11 @@
 import helpers = require("../discord_bot/helpers.js");
 import mc = require("../minecraft/index.js");
 import MemberFactory = require("../user/memberFactory.js");
-import Discord = require("discord.js");
+import discordBot = require("../discord_bot/index.js");
 const memberFactory = new MemberFactory();
 memberFactory.connect();
 
-let client: Discord.Client;
-global.g.emitter.once("discord_bot_ready", (_client: Discord.Client) => {
-  client = _client;
-});
+const client = discordBot.client;
 
 const update = {
   async updateAllIGNs() {

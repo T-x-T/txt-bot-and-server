@@ -7,14 +7,10 @@
 import qs = require("querystring");
 import https = require("https");
 import discord_api = require("../discord_api/index.js");
-import Discord = require("discord.js");
+import discordBot = require("../discord_bot/index.js");
 import {IncomingMessage} from "node:http";
 
-var client: Discord.Client;
-
-global.g.emitter.once('discord_bot_ready', (_client: Discord.Client) => {
-  client = _client;
-});
+const client = discordBot.client;
 
 const main = {
   getAccessLevelFromDiscordId(userID: string) {

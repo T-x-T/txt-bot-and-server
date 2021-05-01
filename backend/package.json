@@ -3,7 +3,9 @@
     "test": "cd dist && nyc mocha --exit -t 1000000 test/",
     "prod": "cd dist && node index.js",
     "compile": "tsc",
-    "build": "tsc -b"
+    "build": "tsc -b",
+    "analyze_dependencies": "depcruise --exclude \"^(node_modules|dist/test)\" --output-type dot dist | dot -T svg | depcruise-wrap-stream-in-html > dependency-graph.html",
+    "find_circular_dependency": "madge --circular dist/"
   },
   "name": "txt-bot-and-server",
   "description": "Combination of all Software related to txt's discord and servers",
@@ -26,6 +28,8 @@
     "@types/node": "^14.14.37",
     "@types/nodemailer": "^6.4.1",
     "@types/sanitize-html": "^2.3.1",
+    "dependency-cruiser": "^9.26.0",
+    "madge": "^4.0.2",
     "mocha": "^7.1.2",
     "nyc": "^15.1.0",
     "typescript": "^4.2.4"

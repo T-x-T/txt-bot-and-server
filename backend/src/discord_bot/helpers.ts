@@ -6,17 +6,28 @@
 import Discord = require("discord.js");
 
 //Global var
-let client: Discord.Client;
+const client = new Discord.Client({restWsBridgeTimeout: 50000, restTimeOffset: 1000});
 let guild: Discord.Guild;
-global.g.emitter.once('discord_bot_ready', (_client: Discord.Client) => {
-  client = _client;
-  guild = client.guilds.get(global.g.config.discord_bot.guild);
-});
+
+client.login(global.g.config.discord_bot.bot_token)
+  .then(() => {
+    console.log('The Discord helpers are ready!');
+    global.g.log(1, 'discord_bot', 'Discord helpers connected sucessfully', null);
+    guild = client.guilds.get(global.g.config.discord_bot.guild);
+  })
+  .catch(e => console.log("Failed to log in with token: ", e));
 
 
-export = {
+
+const helpers = {
+  client: client,
+
   async getNicknameByID(userID: string) {
     return `${guild.members.get(userID).user.username}#${guild.members.get(userID).user.discriminator}`;
+  },
+
+  sendCrashMessage(err: Error, origin: string) {
+    helpers.sendMessage(`HELP I crashed:\n${err.stack}\n\n${origin}`, global.g.config.discord_bot.channel.logs);
   },
 
   async sendMessage(message: string, channelID: string) {
@@ -67,8 +78,16 @@ export = {
     guild.members.get(discordID).setNickname(newNick);
   },
 
+  getNickname(discordId: string) {
+    return `${client.guilds.get(global.g.config.discord_bot.guild).members.get(discordId).user.username}#${client.guilds.get(global.g.config.discord_bot.guild).members.get(discordId).user.discriminator}`;
+  },
+
   getMemberObjectByID(userID: string) {
     return guild.members.get(userID);
+  },
+
+  fetchUser(userId: string) {
+    return client.fetchUser(userId);
   },
 
   banMember(userID: string) {
@@ -77,5 +96,11 @@ export = {
       return;
     }
     guild.members.get(userID).ban();
+  },
+
+  async getAvatarUrl(discordId: string) {
+    return (await client.fetchUser(discordId)).avatarURL;
   }
 };
+
+export = helpers;

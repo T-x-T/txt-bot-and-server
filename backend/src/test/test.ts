@@ -23,7 +23,7 @@ import log = require('../log');
 require('../stats');
 require('../youtube');
 
-require('../discord_bot');
+import discordBot = require('../discord_bot/index.js');
 require('../web/webServer.js');
 require('../email');
 require('../minecraft');
@@ -40,10 +40,16 @@ global.g.log(0, 'test', 'Mocha test started', false);
 
 before("start discord_bot", function(done){
   this.timeout(10000);
-  global.g.emitter.once("discord_bot_ready", () => done());
-
-  const discord_bot = require("../discord_bot");
+  callDoneWhenLoggedIn(done);
 });
+
+function callDoneWhenLoggedIn(done: Function) {
+  if(discordBot.client.status === 0) {
+    done();
+  } else {
+    setTimeout(() => callDoneWhenLoggedIn(done), 10);
+  }
+}
 
 //This makes unhandledPromiseRejections fail tests
 process.on('unhandledRejection', (reason, promise) => { 

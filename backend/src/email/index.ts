@@ -33,9 +33,7 @@ export = {
     }
     global.g.log(0, 'email', 'index.sendApplicationAcceptedMail called', {application: application});
     main.application.accepted(application);
-  }
-};
+  },
 
-global.g.emitter.on('contact_new', (subject: string, text: string) => {
-  main.contact.new(subject, text);
-});
+  sendContactUsEmail: main.contact.new
+};

@@ -12,6 +12,7 @@
 config.js
 mc_stats
 dist
+dependency-graph.html
 .*
 bin
 # User-specific files (MonoDevelop/Xamarin Studio)

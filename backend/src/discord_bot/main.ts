@@ -17,8 +17,6 @@ applicationFactory.connect();
 
 client.once("ready", () => {
   client.user.setActivity("your messages",{type: "LISTENING"});
-
-  require("./eventListeners.js");
 });
 
 client.on("message", async message => {
@@ -53,7 +51,7 @@ client.on("message", async message => {
     global.g.log(3, "discord_bot", "Some Discord command just broke", { error: e.message, msg: message.content });
     console.log("Discord command broke:", message.content, e);
     message.reply("There was an oopsie when I tried to do that");
-    global.g.emitter.emit("crash", e, "discord command");
+    discordHelpers.sendCrashMessage(e, "discord command");
   }
 });
 
@@ -63,7 +61,7 @@ client.on("guildMemberRemove", async user => {
     await member.delete();
     discordHelpers.sendMessage(`${user.displayName} left the server`, global.g.config.discord_bot.channel.mod_notifications);
   } catch (e) {
-    global.g.emitter.emit("crash", e, "discord event handler");
+    discordHelpers.sendCrashMessage(e, "discord event handler");
     global.g.log(3, "discord_bot", "guildMemberRemove failed", {error: e.message, user: user.id});
   }
 });
@@ -74,7 +72,7 @@ client.on("guildBanAdd", async (guild, user) => {
     await member.ban();
     discordHelpers.sendMessage(`${user.username} was banned from the server`, global.g.config.discord_bot.channel.mod_notifications);
   } catch (e) {
-    global.g.emitter.emit("crash", e, "discord event handler");
+    discordHelpers.sendCrashMessage(e, "discord event handler");
     global.g.log(3, "discord_bot", "guildBanAdd failed", {error: e.message, user: user.id});
   }
 });
@@ -90,7 +88,7 @@ client.on("guildMemberAdd", async user => {
     const application = await applicationFactory.getAcceptedByDiscordId(user.id);
     if(application?.length > 0) await application[0].acceptGuildMember();
   } catch(e) {
-    global.g.emitter.emit("crash", e, "discord event handler");
+    discordHelpers.sendCrashMessage(e, "discord event handler");
     global.g.log(3, "discord_bot", "guildMemberAdd failed", {error: e.message, user: user.id});
   }
 });
@@ -106,6 +104,5 @@ client.login(global.g.config.discord_bot.bot_token)
   .then(() => {
     console.log('The Discord bot is ready!');
     global.g.log(1, 'discord_bot', 'Discord Bot connected sucessfully', null);
-    global.g.emitter.emit('discord_bot_ready', client);
   })
   .catch(e => console.log("Failed to log in with token: ", e));

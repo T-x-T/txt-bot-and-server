@@ -23,7 +23,7 @@ import log = require("./log/index.js");
 require("./stats/index.js");
 require("./youtube/index.js");
 
-require("./discord_bot/index.js");
+import discordHelpers = require("./discord_bot/index.js");
 require("./web/webServer.js")();
 require("./email/index.js");
 require("./minecraft/index.js");
@@ -36,8 +36,8 @@ global.g.log = log.write;
 global.g.log(1, 'index', 'Application started', null);
 
 process.on('uncaughtException', (err: Error, origin: string) => {
-  global.g.emitter.emit("crash", err, origin);
-  console.error(err.stack);
+  discordHelpers.sendCrashMessage(err, origin);
+  console.error(err);
   setTimeout(() => {
     process.exit(1);
   }, 200);

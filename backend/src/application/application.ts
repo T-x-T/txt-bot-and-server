@@ -2,7 +2,6 @@ import Persistable = require("../persistance/persistable.js");
 import sanitize = require("sanitize-html");
 import email = require("../email/index.js");
 import discord_helpers = require("../discord_bot/index.js");
-import discord_api = require("../discord_api/index.js");
 import mc_helpers = require("../minecraft/index.js");
 import MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory();
@@ -203,7 +202,7 @@ class Application extends Persistable{
   }
 
   async getDiscordAvatarUrl() {
-    return await discord_api.getAvatarUrl(this.getDiscordId());
+    return await discord_helpers.getAvatarUrl(this.getDiscordId());
   }
 }
 

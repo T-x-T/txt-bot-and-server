@@ -5,14 +5,10 @@
 
 //Dependencies
 import https = require("https");
-import Discord = require("discord.js");
+import discordBot = require("../discord_bot/index.js");
 import {IncomingMessage} from "node:http";
 
-let client: Discord.Client;
-
-global.g.emitter.once("discord_bot_ready", (_client: Discord.Client) => {
-  client = _client;
-});
+const client = discordBot.client;
 
 const main = {
   getUserObjectFromToken(access_token: string): Promise<IDiscordApiUserObject> {
@@ -35,22 +31,6 @@ const main = {
         });
       });
     });
-  },
-
-  async getUserObjectFromId(id: string) {
-    return client.fetchUser(id);
-  },
-
-  getNicknameByID(userID: string) {
-    return `${client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).user.username}#${client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).user.discriminator}`;
-  },
-
-  async getAvatarUrl(discord_id: string) {
-    return (await client.fetchUser(discord_id)).avatarURL;
-  },
-
-  getMemberObjectByID(userID: string) {
-    return client.guilds.get(global.g.config.discord_bot.guild).members.get(userID);
   }
 }
 

@@ -5,7 +5,7 @@
 
 //Dependencies
 import auth = require("../auth/index.js");
-import discord_api = require("../discord_api/index.js");
+import discordHelpers = require("../discord_bot/index.js");
 import stats = require("../stats/index.js");
 import blog = require("../blog/index.js");
 import MemberFactory = require("../user/memberFactory.js");
@@ -15,6 +15,7 @@ import ApplicationFactory = require("../application/applicationFactory.js");
 const applicationFactory = new ApplicationFactory();
 import mc_helpers = require("../minecraft/index.js");
 import sanitize = require("sanitize-html");
+import email = require("../email/index.js");
 
 import type {IRequestData, IHandlerResponse} from "./webServer.js";
 import type Application = require("../application/application.js");
@@ -138,8 +139,8 @@ handlers.paxapi.contact.post = async function(data: IRequestData): Promise<IHand
     //Add the email of the sender to the text
     text = text + "\n\n" + recipient;
 
-    //Send the email
-    global.g.emitter.emit("contact_new", subject, text);
+    discordHelpers.sendMessage(`Someone used the contact form!\nSubject: ${subject}\nBody: ${text}`, global.g.config.discord_bot.channel.new_application_announcement);
+    email.sendContactUsEmail(subject, text);
 
     return {};
   }else{
@@ -223,7 +224,7 @@ handlers.paxapi.application.post = async function(data: IRequestData): Promise<I
 
   const mcUuid = await mc_helpers.getUUID(mcIgn)
   const actualMcIgn = await mc_helpers.getIGN(mcUuid);
-  const userData = await discord_api.getUserObjectFromId(discordId);
+  const userData = await discordHelpers.fetchUser(discordId);
   const discordUserName = `${userData.username}#${userData.discriminator}`;
   await applicationFactory.create(discordId, mcUuid, emailAddress, country, birthMonth, birthYear, aboutMe, motivation, buildImages, publishAboutMe, publishAge, publishCountry, 1, discordUserName, actualMcIgn);
 
@@ -339,7 +340,7 @@ handlers.paxapi.statsoverview = async function(data: IRequestData): Promise<IHan
 handlers.paxapi.discorduserfromcode = async function(data: IRequestData): Promise<IHandlerResponse> {
   const code = data.queryStringObject.code;
   const discordId = await auth.getDiscordIdFromCode(code, "applicationNew");
-  const discordNick = discord_api.getNicknameByID(discordId);
+  const discordNick = discordHelpers.getNicknameByID(discordId);
   
   return {
     payload: {discordNick: discordNick, discordId: discordId}
