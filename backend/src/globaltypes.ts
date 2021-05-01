@@ -17,3 +17,9 @@ const enum EApplicationStatus {
   denied = 2,
   accepted = 3
 }
+
+const enum EMemberStatus {
+  default,
+  active,
+  inactive
+}

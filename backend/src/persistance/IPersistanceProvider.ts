@@ -19,8 +19,8 @@ interface IPersistanceProvider<T> {
   retrieveOneFilteredAndSorted(filter: MongooseFilterQuery<any>, sort: any): Promise<T>,
   save(input: any): Promise<T>,
   create(input: any): Promise<T>,
-  deleteAll(): void,
-  deleteByFilter(filter: MongooseFilterQuery<any>): void
+  deleteAll(): Promise<void>,
+  deleteByFilter(filter: MongooseFilterQuery<any>): Promise<void>
 }
 
 export type {IPersistanceProviderConstructor, IPersistanceProvider};

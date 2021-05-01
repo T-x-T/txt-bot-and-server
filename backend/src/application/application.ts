@@ -6,6 +6,7 @@ import discord_api = require("../discord_api/index.js");
 import mc_helpers = require("../minecraft/index.js");
 import MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory();
+import type Member = require("../user/member.js");
 class Application extends Persistable{
   static schema: any; //TODO fix any type
 
@@ -60,13 +61,15 @@ class Application extends Persistable{
     }
   }
 
-  async createMemberFromApplication(): Promise<void> {    
+  async createMemberFromApplication() {    
     try {
-      const member = await memberFactory.getByDiscordId(this.getDiscordId())
-      if(!member) {
-        await memberFactory.create(this.getDiscordId());
-        return this.createMemberFromApplication();
+      let member: Member;
+      try{
+        member = await memberFactory.getByDiscordId(this.getDiscordId())
+      } catch(e) {
+        member = await memberFactory.create(this.getDiscordId());
       }
+
       member.setDiscordUserName(this.getDiscordUserName());
       member.setMcUuid(this.getMcUuid());
       member.setMcIgn(this.getMcIgn());

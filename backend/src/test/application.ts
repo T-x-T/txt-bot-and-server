@@ -286,8 +286,7 @@ describe("application", function(){
     it("dont create a member from the application if the discord user is not in the guild", async function(){
       let application = await applicationFactory.create("214884802749399041", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", true, true, true, null, "NotTxT#0001", "The__TxT");
       await application.accept();
-      let member = await memberFactory.getByDiscordId("214884802749399041");
-      assert.ok(!member);
+      assert.rejects(async () => await memberFactory.getByDiscordId("214884802749399041"));
     });
 
     it("create a member from the application that has correct data", async function(){

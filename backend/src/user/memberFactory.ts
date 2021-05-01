@@ -11,80 +11,41 @@ export = class MemberFactory extends Factory{
     });
   }
 
-  create(discord_id: string, discord_nick?: string, mc_uuid?: string, mc_ign?: string, country?: string, birth_month?: number, birth_year?: number, publish_age?: boolean, publish_country?: boolean, status?: number): Promise<Member>{
-    return new Promise(async (resolve, reject) => {
-      try{
-        let member = new Member(discord_id, discord_nick, typeof status == 'number' ? status : 0, new Date(), 0, mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country);
-        await member.init();
-        await member.create();
-        resolve(member);
-      }catch(e){
-        reject(e);
-      }
-    });
+  async create(discord_id: string, discord_nick?: string, mc_uuid?: string, mc_ign?: string, country?: string, birth_month?: number, birth_year?: number, publish_age?: boolean, publish_country?: boolean, status?: number) {
+    const member = new Member(discord_id, discord_nick, typeof status == "number" ? status : EMemberStatus.default, new Date(), mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country);
+    await member.init();
+    await member.create();
+    return member;
   }
 
-  getByDiscordId(discord_id: string): Promise<Member>{
-    return new Promise(async (resolve, reject) => {
-      if (!discord_id) {
-        reject(new Error("No discord_id given"));
-        return;
-      }
-
-      let res: any = await this.getFiltered({ discord: discord_id });
-      if (res.length === 0) {
-        resolve(null);  
-        return null;
-      }
-      resolve(res[0]);
-    });
+  async getByDiscordId(discordId: string) {
+    const member = (await this.getFiltered({discord: discordId}))[0];
+    if(!member) throw new Error("No Member with discordId found: " + discordId);
+    return member;
   }
 
-  getByMcUuid(mc_uuid: string): Promise<Member>{
-    return new Promise(async (resolve, reject) => {
-      if (!mc_uuid) {
-        reject(new Error("No mc_uuid given"));
-        return;
-      }
-
-      let res: any = await this.getFiltered({ mcUUID: mc_uuid });
-      if(res.length === 0) {
-        resolve(null);
-        return null;
-      }
-      resolve(res[0]);
-    });
+  async getByMcUuid(mcUuid: string) {
+    const member = (await this.getFiltered({mcUUID: mcUuid}))[0];
+    if(!member) throw new Error("No Member with mcUuid found: " + mcUuid);
+    return member;
   }
 
-  getAllWhitelisted(): Promise<Member[]>{
-    return new Promise(async (resolve, reject) => {
-      let res = await this.getFiltered({status: 1});
-      resolve(res);
-    });
+  getAllWhitelisted() {
+    return this.getFiltered({status: EMemberStatus.active});
   }
 
-  getAll(): Promise<Member[]>{
-    return new Promise(async (resolve, reject) => {
-      let res = await this.getFiltered({});
-      resolve (res);
-    });
+  getAll() {
+    return this.getFiltered({});
   }
 
-  getFiltered(filter: MongooseFilterQuery<any>): Promise<Member[]>{
-    return new Promise(async (resolve, reject) => {
-      try{
-        if (!this.connected) await this.connect();
+  async getFiltered(filter: MongooseFilterQuery<any>) {
+    if(!this.connected) await this.connect();
 
-        let res = await this.persistanceProvider.retrieveFiltered(filter);
-        let members: Member[] = [];
-        res.forEach((member: any) => {
-          members.push(new Member(member.discord, member.discord_nick, member.status, new Date(member._id.getTimestamp()), member.karma, member.mcUUID, member.mcName, member.country, member.birth_month, member.birth_year, member.publish_age, member.publish_country));
-        });
-        await Promise.all(members.map(async member => await member.init()));
-        resolve(members);
-      }catch(e){
-        reject(e);
-      }
-    });
+    const res = await this.persistanceProvider.retrieveFiltered(filter);
+    return await Promise.all(res.map((m: any) => {
+      const member = new Member(m.discord, m.discord_nick, m.status, new Date(m._id.getTimestamp()), m.mcUUID, m.mcName, m.country, m.birth_month, m.birth_year, m.publish_age, m.publish_country);
+      member.init();
+      return member;
+    }));
   }
 }

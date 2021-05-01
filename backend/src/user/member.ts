@@ -4,14 +4,13 @@ import discord_helpers = require("../discord_bot/helpers.js");
 import discord_api = require("../discord_api/index.js");
 class Member extends Persistable{
   static schema: any;
-  constructor(discord_id: string, discord_nick: string, status: number, joinedDate: Date, karma: number, mc_uuid: string, mc_ign: string, country: string, birth_month: number, birth_year: number, publish_age: boolean, publish_country: boolean){
+  constructor(discord_id: string, discord_nick: string, status: EMemberStatus, joinedDate: Date, mc_uuid: string, mc_ign: string, country: string, birth_month: number, birth_year: number, publish_age: boolean, publish_country: boolean){
     super({name: "members", schema: Member.schema});
 
     this.data.discord = discord_id;
     this.data.discord_nick = discord_nick;
-    this.data.status = Member.isValidStatus(status) ? status : 0;
+    this.data.status = status;
     this.data.joinedDate = joinedDate ? joinedDate : new Date();
-    this.data.karma = karma;
     this.data.mcUUID = mc_uuid;
     this.data.mcName = mc_ign;
     this.data.country = country;
@@ -25,11 +24,11 @@ class Member extends Persistable{
    *  BASIC GETTER/SETTER
    */
 
-  getDiscordId() {
+  getDiscordId(): string {
     return this.data.discord;
   }
 
-  getDiscordUserName() {
+  getDiscordUserName(): string {
     return this.data.discord_nick;
   }
 
@@ -41,42 +40,26 @@ class Member extends Persistable{
   }
 
   async getDiscordAvatarUrl() {
-    return await discord_api.getAvatarUrl(this.getDiscordId());
+    return discord_api.getAvatarUrl(this.getDiscordId());
   }
 
   async getDiscordUserdata() {
-    return await discord_api.getUserObjectFromId(this.getDiscordId());
+    return discord_api.getUserObjectFromId(this.getDiscordId());
   }
 
-  getJoinedDate() {
+  getJoinedDate(): Date {
     return this.data.joinedDate;
   }
 
-  getKarma() {
-    return this.data.karma;
-  }
-
-  modifyKarmaBy(modifier: number) {
-    this.data.karma += modifier;
-  }
-
-  getStatus() {
+  getStatus(): EMemberStatus {
     return this.data.status;
   }
 
-  setStatus(status: number) {
-    if(Member.isValidStatus(status)) {
-      this.data.status = status;
-    } else {
-      throw new Error(`value ${status} is not a valid status`);
-    }
+  setStatus(status: EMemberStatus) {
+    this.data.status = status;
   }
 
-  static isValidStatus(status: number) {
-    return status >= 0 && status <= 2;
-  }
-
-  getMcUuid(){
+  getMcUuid(): string{
     return this.data.mcUUID ? this.data.mcUUID : false;
   }
 
@@ -85,7 +68,7 @@ class Member extends Persistable{
     this.data.mcUUID = newMcUuid;
   }
 
-  getMcIgn(){
+  getMcIgn(): string{
     return this.data.mcName ? this.data.mcName : false;
   }
 
@@ -94,11 +77,11 @@ class Member extends Persistable{
     this.data.mcName = newIgn;
   }
 
-  getCountry(){
+  getCountry(): string {
     return this.data.country ? this.data.country : false;
   }
 
-  getCountryConsiderPrivacy(){
+  getCountryConsiderPrivacy(): string | boolean{
     return this.data.publish_country ? this.getCountry() : false;
   }
 
@@ -106,8 +89,8 @@ class Member extends Persistable{
     this.data.country = newCountry;
   }
 
-  getBirthMonth(){
-    return this.data.birth_month ? this.data.birth_month : false;
+  getBirthMonth(): number {
+    return this.data.birth_month;
   }
 
   setBirthMonth(newBirthMonth: number){
@@ -115,8 +98,8 @@ class Member extends Persistable{
     this.data.birth_month = newBirthMonth;
   }
 
-  getBirthYear(){
-    return this.data.birth_year ? this.data.birth_year : false;
+  getBirthYear(): number {
+    return this.data.birth_year;
   }
 
   setBirthYear(newBirthYear: number){
@@ -132,12 +115,12 @@ class Member extends Persistable{
     }
   }
 
-  getAgeConsiderPrivacy(){
+  getAgeConsiderPrivacy() {
     return this.data.publish_age ? this.getAge() : false;
   }
 
   getPrivacySettings(){
-    return {publish_age: this.data.publish_age, publish_country: this.data.publish_country};
+    return {publish_age: this.data.publish_age as boolean, publish_country: this.data.publish_country as boolean};
   }
 
   setPublishAge(newPublishAge: boolean){
@@ -148,7 +131,7 @@ class Member extends Persistable{
     this.data.publish_country = newPublishCountry;
   }
 
-  getMcSkinUrl(){
+  getMcSkinUrl(): string {
     return `https://crafatar.com/renders/body/${this.getMcUuid()}?overlay=true`;
   }
 
@@ -156,12 +139,12 @@ class Member extends Persistable{
    *  LIFECYCLE
    */
 
-  async giveDiscordRole(role: string){
-    return await discord_helpers.addMemberToRole(this.getDiscordId(), role);
+  giveDiscordRole(role: string){
+    return discord_helpers.addMemberToRole(this.getDiscordId(), role);
   }
 
-  async takeDiscordRole(role: string){
-    return await discord_helpers.removeMemberFromRole(this.getDiscordId(), role);
+  takeDiscordRole(role: string){
+    return discord_helpers.removeMemberFromRole(this.getDiscordId(), role);
   }
 
   async ban(){
@@ -173,21 +156,21 @@ class Member extends Persistable{
 
   async delete(){
     await this.persistanceProvider.deleteByFilter({discord: this.getDiscordId()});
-    mc.sendCmd(`whitelist remove ${this.getMcIgn()}`);
+    await mc.sendCmd(`whitelist remove ${this.getMcIgn()}`);
   }
 
   async inactivate(){
-    this.setStatus(2);
+    this.setStatus(EMemberStatus.inactive);
     await this.takeDiscordRole(global.g.config.discord_bot.roles.paxterya);
     await this.giveDiscordRole(global.g.config.discord_bot.roles.inactive);
-    mc.sendCmd(`whitelist remove ${this.getMcIgn()}`);
+    await mc.sendCmd(`whitelist remove ${this.getMcIgn()}`);
   }
 
   async activate(){
-    this.setStatus(1);
+    this.setStatus(EMemberStatus.active);
     await this.takeDiscordRole(global.g.config.discord_bot.roles.inactive);
     await this.giveDiscordRole(global.g.config.discord_bot.roles.paxterya);
-    mc.sendCmd(`whitelist add ${this.getMcIgn()}`);
+    await mc.sendCmd(`whitelist add ${this.getMcIgn()}`);
   }
 }
 

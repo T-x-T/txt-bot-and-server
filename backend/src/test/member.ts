@@ -298,16 +298,6 @@ describe("member", function(){
       assert.strictEqual(2, member.getStatus());
     });
 
-    it("creating new user with status -1 should result in user with status 0", async function () {
-      let member = await createAndSaveNewMemberWithStatus(-1);
-      assert.strictEqual(0, member.getStatus());
-    });
-
-    it("creating new user with status 3 should result in user with status 0", async function () {
-      let member = await createAndSaveNewMemberWithStatus(3);
-      assert.strictEqual(0, member.getStatus());
-    });
-
     it("setting status to 0 should correctly set status", async function () {
       let member = await createAndSaveNewMemberWithStatus(1);
       member.setStatus(0);
@@ -318,16 +308,6 @@ describe("member", function(){
       let member = await createAndSaveNewMemberWithStatus(1);
       member.setStatus(2);
       assert.strictEqual(2, member.getStatus());
-    });
-
-    it("setting status to -1 should throw", async function () {
-      let member = await createAndSaveNewMemberWithStatus(1);
-      assert.throws(() => member.setStatus(-1), new Error("value -1 is not a valid status"));
-    });
-
-    it("setting status to 3 should throw", async function () {
-      let member = await createAndSaveNewMemberWithStatus(1);
-      assert.throws(() => member.setStatus(3), new Error("value 3 is not a valid status"));
     });
   });
 
