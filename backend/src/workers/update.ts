@@ -1,86 +1,52 @@
 
 //Dependencies
-import discord_api = require("../discord_api/index.js");
 import helpers = require("../discord_bot/helpers.js");
 import mc = require("../minecraft/index.js");
 import MemberFactory = require("../user/memberFactory.js");
+import Discord = require("discord.js");
 const memberFactory = new MemberFactory();
 memberFactory.connect();
 
-import Discord = require("discord.js");
-import type Member = require("../user/member.js");
-
 let client: Discord.Client;
-global.g.emitter.once('discord_bot_ready', (_client: Discord.Client) => {
+global.g.emitter.once("discord_bot_ready", (_client: Discord.Client) => {
   client = _client;
 });
 
 const update = {
-  //Updates all IGNs from all members based on their UUID
-  updateAllIGNs() {
-    //Get all members from db
-    memberFactory.getAll()
-      .then((members: Member[]) => {
-        members.forEach(async member => {
-          //Check if the user has a ign, if not, then we have nothing to do
-          if(member.getMcUuid() != null) {
-            //Get the ign for the uuid
-            const ign = await mc.getIGN(member.getMcUuid());
-            member.setMcIgn(ign);
-            member.save();
-          }
-        });
-      })
-      .catch((e: Error) => {
-        global.g.log(2, 'workers', 'mc.updateAllIGNs couldnt get members');
-      });
+  async updateAllIGNs() {
+   return await Promise.all((await memberFactory.getAllWhitelisted()).map(async member => {
+      if(member.getMcUuid()) {
+        member.setMcIgn(await mc.getIGN(member.getMcUuid()));
+        return member.save();
+      }
+    }));
   },
 
   //Set the nick of a user to their mc_ign
-  updateNick(discord_id: string) {
-    if(discord_id == client.guilds.get(global.g.config.discord_bot.guild).ownerID) return; //Dont update the owner of the guild, this will fail
-    memberFactory.getByDiscordId(discord_id)
-      .then((member: Member) => {
-        global.g.log(0, 'workers', 'discord_helpers.updateNick got member object', {member: member.data});
-        let ign = typeof member.getMcIgn() == 'string' ? member.getMcIgn() : '';
-        //Get the members object
-        const discordMember = helpers.getMemberObjectByID(discord_id);
-          if(discordMember) {
-            //Now its time to change the users nick
-            discordMember.setNickname(ign)
-              .catch((e: Error) => {global.g.log(2, 'workers', 'discord_helpers.updateNick failed to set the members nickname', {user: discord_id, err: e.message});});
-          } else {
-            global.g.log(2, 'workers', 'discord_helpers.updateNick couldnt get the member object', {user: discord_id, discordMember: discordMember});
-          }
-      })
-      .catch((e: Error) => {
-        global.g.log(2, 'workers', 'discord_helpers.updateNick couldnt get the member document', {user: discord_id, error: e.message});
-      });
+  async updateNick(discordId: string) {
+    if(discordId == client.guilds.get(global.g.config.discord_bot.guild).ownerID) return; //Dont update the owner of the guild, this will fail
+    const member = await memberFactory.getByDiscordId(discordId);
+    const ign = member.getMcIgn();
+    try {
+      const discordMember = helpers.getMemberObjectByID(discordId);
+      await discordMember.setNickname(ign);
+    } catch(e) {
+      throw new Error("Couldn't set the nickname of the discordMember: " + discordId);
+    }
   },
 
   //Set the nick of all users to their mc_ign
-  updateAllNicks() {
-    memberFactory.getAllWhitelisted()
-      .then((members: Member[]) => {
-        members.forEach(doc => update.updateNick(doc.getDiscordId()));
-      })
-      .catch((e: Error) => {
-        global.g.log(2, 'workers', 'discord_helpers.updateAllNicks couldnt get the member database entries', {error: e});
-      });
+  async updateAllNicks() {
+    return await Promise.all((await memberFactory.getAllWhitelisted()).map(member => update.updateNick(member.getDiscordId())));
   },
 
   //This gets the current username of all users and writes them into the db
   async updateAllDiscordNicks() {
-    const members = await memberFactory.getAllWhitelisted();
-    members.forEach(async member => {
-      try {
-        const discordNick = await helpers.getNicknameByID(member.getDiscordId());
-        member.setDiscordUserName(discordNick);
-        await member.save();
-      } catch (e) {
-        global.g.log(2, 'workers', 'user.updateNick couldnt proceses user', {err: e.message, member: member.data})
-      }
-    });
+    return await Promise.all((await memberFactory.getAllWhitelisted()).map(async member => {
+      const discordNick = await helpers.getNicknameByID(member.getDiscordId());
+      member.setDiscordUserName(discordNick);
+      return member.save();
+    }));
   }
 }
 

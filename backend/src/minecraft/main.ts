@@ -33,6 +33,7 @@ export = {
 
   getIGN(uuid: string): Promise<string> {
     return new Promise((resolve, reject) => {
+      if(!uuid) reject("given uuid is falsy");
       https.get({
         host: "api.mojang.com",
         port: 443,
@@ -47,7 +48,7 @@ export = {
           //Only keep the latest entry
           data = data[data.length - 1];
           
-          if(data.hasOwnProperty("name")) {
+          if(data?.hasOwnProperty("name")) {
             resolve(data.name);
           } else {
             reject("Data from API doesnt contain valid ign: " + rawData);
