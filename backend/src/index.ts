@@ -5,7 +5,7 @@
 
 //Initialize config
 global.g = {};
-global.g.ENVIRONMENT = process.env.NODE_ENV ? process.env.NODE_ENV : 'staging';
+global.g.ENVIRONMENT = process.env.NODE_ENV ? process.env.NODE_ENV : "staging";
 console.log(global.g.ENVIRONMENT)
 require("../config.js")();
 
@@ -30,12 +30,10 @@ require("./minecraft/index.js");
 
 require("./workers/index.js");
 
-//Make log.write global
-global.g.log = log.write;
 //Log that the app got started
-global.g.log(1, 'index', 'Application started', null);
+log.write(1, "index", "Application started", null);
 
-process.on('uncaughtException', (err: Error, origin: string) => {
+process.on("uncaughtException", (err: Error, origin: string) => {
   discordHelpers.sendCrashMessage(err, origin);
   console.error(err);
   setTimeout(() => {

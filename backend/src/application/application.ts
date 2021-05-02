@@ -5,7 +5,9 @@ import discord_helpers = require("../discord_bot/index.js");
 import mc_helpers = require("../minecraft/index.js");
 import MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory();
+import log = require("../log/index.js");
 import type Member = require("../user/member.js");
+
 class Application extends Persistable{
   static schema: any; //TODO fix any type
 
@@ -56,7 +58,7 @@ class Application extends Persistable{
     if(discordMember) {
       await discordMember.setNickname(this.getMcIgn())
     } else {
-      global.g.log(2, "application", "Application#accept couldnt get discord member object", {application: this.data});
+      log.write(2, "application", "Application#accept couldnt get discord member object", {application: this.data});
     }
   }
 
@@ -80,7 +82,7 @@ class Application extends Persistable{
       member.setStatus(1);
       await member.save();
     } catch(e) {
-      global.g.log(2, 'application', 'createMemberFromApplication failed', {application: this.data, err: e.message});
+      log.write(2, "application", "createMemberFromApplication failed", {application: this.data, err: e.message});
       throw new Error(e.message);
     }
   };
@@ -207,14 +209,14 @@ class Application extends Persistable{
 }
 
 async function sendAcceptedMemberWelcomeMessage(application: Application) {
-  let msg = '';
+  let msg = "";
   if(application.getPublishAboutMe()) msg = `Welcome <@${application.getDiscordId()}> to Paxterya!\nHere is the about me text they sent us:\n${application.getAboutMe()}`;
   else msg = `Welcome <@${application.getDiscordId()}> to Paxterya!`;
-  msg += '\n\nThis means you can now join the server! If you have any troubles please ping the admins!\n';
-  msg += 'It is also a good time to give our rules a read: https://paxterya.com/rules\n';
+  msg += "\n\nThis means you can now join the server! If you have any troubles please ping the admins!\n";
+  msg += "It is also a good time to give our rules a read: https://paxterya.com/rules\n";
   msg += `Please also take a look at our FAQ: <#624992850764890122>\n`;
-  msg += 'The IP of the survival server is paxterya.com and the IP for the creative Server is paxterya.com:25566\n\n';
-  msg += 'If you encounter any issues or have any questions, feel free to contact our staff.';
+  msg += "The IP of the survival server is paxterya.com and the IP for the creative Server is paxterya.com:25566\n\n";
+  msg += "If you encounter any issues or have any questions, feel free to contact our staff.";
   await discord_helpers.sendMessage(msg, global.g.config.discord_bot.channel.new_member_announcement);
 }
 

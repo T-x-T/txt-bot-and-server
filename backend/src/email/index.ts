@@ -13,7 +13,6 @@ export = {
       global.g.emitter.emit("testing_email_sendNewApplicationMail", application);
       return;
     }
-    global.g.log(0, 'email', 'index.sendNewApplicationMail called', {application: application});
     main.application.confirmation(application);
   },
 
@@ -22,7 +21,6 @@ export = {
       global.g.emitter.emit("testing_email_sendApplicationDeniedMail", application);
       return;
     }
-    global.g.log(0, 'email', 'index.sendApplicationDeniedMail called', {application: application});
     main.application.denied(application);
   },
 
@@ -31,7 +29,6 @@ export = {
       global.g.emitter.emit("testing_email_sendApplicationAcceptedMail", application);
       return;
     }
-    global.g.log(0, 'email', 'index.sendApplicationAcceptedMail called', {application: application});
     main.application.accepted(application);
   },
 

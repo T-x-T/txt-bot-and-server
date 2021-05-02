@@ -16,6 +16,7 @@ const applicationFactory = new ApplicationFactory();
 import mc_helpers = require("../minecraft/index.js");
 import sanitize = require("sanitize-html");
 import email = require("../email/index.js");
+import log = require("../log/index.js");
 
 import type {IRequestData, IHandlerResponse} from "./webServer.js";
 import type Application = require("../application/application.js");
@@ -215,7 +216,7 @@ handlers.paxapi.application.post = async function(data: IRequestData): Promise<I
       motivation: motivation,
       buildImages: buildImages
     }
-    global.g.log(0, "web", "handlers.paxapi.application.post received incorrect input", payload);
+    log.write(0, "web", "handlers.paxapi.application.post received incorrect input", payload);
     return {
       status: 400,
       payload: {err: "Incorrect input", payload: payload}

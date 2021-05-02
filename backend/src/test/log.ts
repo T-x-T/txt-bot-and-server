@@ -60,7 +60,7 @@ describe("log", function(){
         let component = randomString(Math.ceil(Math.random() * 10));
         let name = randomString(Math.ceil(Math.random() * 100));
         let payload = {key: randomString(Math.ceil(Math.random() * 100)), depth: {another_key: randomString(Math.ceil(Math.random() * 80))}};
-        let timestamp = Date.now() - Math.ceil(Math.random() * 1000000);
+        let timestamp = new Date(Date.now() - Math.ceil(Math.random() * 1000000));
 
         let logEntry = await log.write(level, component, name, payload, timestamp);
 
@@ -76,14 +76,14 @@ describe("log", function(){
   describe("read", function(){
     it("should find all logs matching filter with timestamp in the past", async function(){
       await writeExampleLogs(10);
-      let logEntries = await log.read(0, Date.now() - 10000);
+      let logEntries = await log.read(0, new Date(Date.now() - 10000));
       
       assert.strictEqual(logEntries.length, 10);
     });
 
     it("should return logs with correct data", async function () {
       await writeExampleLogs(10);
-      let logEntries = await log.read(0, Date.now() - 10000);
+      let logEntries = await log.read(0, new Date(Date.now() - 10000));
 
       logEntries.forEach((logEntry: any) => {
         assert.strictEqual(logEntry.level, _level);
@@ -95,22 +95,22 @@ describe("log", function(){
 
     it("should return 0 results with timestamp in the future", async function(){
       await writeExampleLogs(10);
-      let logEntries = await log.read(0, Date.now() + 10000);
+      let logEntries = await log.read(0, new Date(Date.now() + 10000));
 
       assert.strictEqual(logEntries.length, 0);
     });
 
     it("calling without a level should return all logs since the given timestamp", async function(){
-      await log.write(1, _component, _name, _data, Date.now() - (1000 * 60 * 60 * 24 * 8));
-      await log.write(1, _component, _name, _data, Date.now() - (1000 * 60 * 60 * 24 * 8));
-      await log.write(1, _component, _name, _data, Date.now() - (1000 * 60 * 60 * 24 * 6));
-      await log.write(1, _component, _name, _data, Date.now() - (1000 * 60 * 60 * 24 * 6));
-      await log.write(2, _component, _name, _data, Date.now() - (1000 * 60 * 60 * 24 * 8));
-      await log.write(2, _component, _name, _data, Date.now() - (1000 * 60 * 60 * 24 * 8));
-      await log.write(2, _component, _name, _data, Date.now() - (1000 * 60 * 60 * 24 * 6));
-      await log.write(2, _component, _name, _data, Date.now() - (1000 * 60 * 60 * 24 * 6));
+      await log.write(1, _component, _name, _data, new Date(Date.now() - (1000 * 60 * 60 * 24 * 8)));
+      await log.write(1, _component, _name, _data, new Date(Date.now() - (1000 * 60 * 60 * 24 * 8)));
+      await log.write(1, _component, _name, _data, new Date(Date.now() - (1000 * 60 * 60 * 24 * 6)));
+      await log.write(1, _component, _name, _data, new Date(Date.now() - (1000 * 60 * 60 * 24 * 6)));
+      await log.write(2, _component, _name, _data, new Date(Date.now() - (1000 * 60 * 60 * 24 * 8)));
+      await log.write(2, _component, _name, _data, new Date(Date.now() - (1000 * 60 * 60 * 24 * 8)));
+      await log.write(2, _component, _name, _data, new Date(Date.now() - (1000 * 60 * 60 * 24 * 6)));
+      await log.write(2, _component, _name, _data, new Date(Date.now() - (1000 * 60 * 60 * 24 * 6)));
 
-      let logEntries = await log.read(false, Date.now() - (1000 * 60 * 60 * 24 * 7));
+      let logEntries = await log.read(false, new Date(Date.now() - (1000 * 60 * 60 * 24 * 7)));
 
       assert.strictEqual(logEntries.length, 4);
       logEntries.forEach((logEntry: any) => assert.ok(logEntry.timestamp > Date.now() - (1000 * 60 * 60 * 24 * 7)));
@@ -120,7 +120,7 @@ describe("log", function(){
   describe("readById", async function(){
     it("should return a single object", async function(){
       await writeExampleLogs(10);
-      let logEntry = await log.readById(await log.write(_level, _component, _name, _data)._id);
+      let logEntry = await log.readById((await log.write(_level, _component, _name, _data))._id);
 
       assert.strictEqual(typeof logEntry, "object");
     });
@@ -145,14 +145,14 @@ describe("log", function(){
 
   describe("prune", function(){
     it("should delete only logs older than given amount of days", async function(){
-      await log.write(_level, _component, _name, _data, Date.now() - (1000 * 60 * 60 * 24 * 8));
-      await log.write(_level, _component, _name, _data, Date.now() - (1000 * 60 * 60 * 24 * 8));
-      await log.write(_level, _component, _name, _data, Date.now() - (1000 * 60 * 60 * 24 * 6));
-      await log.write(_level, _component, _name, _data, Date.now() - (1000 * 60 * 60 * 24 * 6));
+      await log.write(_level, _component, _name, _data, new Date(Date.now() - (1000 * 60 * 60 * 24 * 8)));
+      await log.write(_level, _component, _name, _data, new Date(Date.now() - (1000 * 60 * 60 * 24 * 8)));
+      await log.write(_level, _component, _name, _data, new Date(Date.now() - (1000 * 60 * 60 * 24 * 6)));
+      await log.write(_level, _component, _name, _data, new Date(Date.now() - (1000 * 60 * 60 * 24 * 6)));
 
       await log.prune(7);
 
-      let logEntries = await log.read(_level, Date.now() - (1000 * 60 * 60 * 24 * 10));
+      let logEntries = await log.read(_level, new Date(Date.now() - (1000 * 60 * 60 * 24 * 10)));
 
       assert.strictEqual(logEntries.length, 2);
       logEntries.forEach((logEntry: any) => assert.ok(logEntry.timestamp > Date.now() - (1000 * 60 * 60 * 24 * 7)));
@@ -161,18 +161,18 @@ describe("log", function(){
 
   describe("prune level", function(){
     it("should only prune logs of given level", async function(){
-      await log.write(1, _component, _name, _data, Date.now() - (1000 * 60 * 60 * 24 * 8));
-      await log.write(1, _component, _name, _data, Date.now() - (1000 * 60 * 60 * 24 * 8));
-      await log.write(1, _component, _name, _data, Date.now() - (1000 * 60 * 60 * 24 * 6));
-      await log.write(1, _component, _name, _data, Date.now() - (1000 * 60 * 60 * 24 * 6));
-      await log.write(2, _component, _name, _data, Date.now() - (1000 * 60 * 60 * 24 * 8));
-      await log.write(2, _component, _name, _data, Date.now() - (1000 * 60 * 60 * 24 * 8));
-      await log.write(2, _component, _name, _data, Date.now() - (1000 * 60 * 60 * 24 * 6));
-      await log.write(2, _component, _name, _data, Date.now() - (1000 * 60 * 60 * 24 * 6));
+      await log.write(1, _component, _name, _data, new Date(Date.now() - (1000 * 60 * 60 * 24 * 8)));
+      await log.write(1, _component, _name, _data, new Date(Date.now() - (1000 * 60 * 60 * 24 * 8)));
+      await log.write(1, _component, _name, _data, new Date(Date.now() - (1000 * 60 * 60 * 24 * 6)));
+      await log.write(1, _component, _name, _data, new Date(Date.now() - (1000 * 60 * 60 * 24 * 6)));
+      await log.write(2, _component, _name, _data, new Date(Date.now() - (1000 * 60 * 60 * 24 * 8)));
+      await log.write(2, _component, _name, _data, new Date(Date.now() - (1000 * 60 * 60 * 24 * 8)));
+      await log.write(2, _component, _name, _data, new Date(Date.now() - (1000 * 60 * 60 * 24 * 6)));
+      await log.write(2, _component, _name, _data, new Date(Date.now() - (1000 * 60 * 60 * 24 * 6)));
 
       await log.pruneLevel(7, 2);
 
-      let logEntries = await log.read(false, Date.now() - (1000 * 60 * 60 * 24 * 10));
+      let logEntries = await log.read(false, new Date(Date.now() - (1000 * 60 * 60 * 24 * 10)));
 
       assert.strictEqual(logEntries.length, 6);
       logEntries.forEach((logEntry: any) => {

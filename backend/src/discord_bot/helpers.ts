@@ -4,6 +4,7 @@
 */
 
 import Discord = require("discord.js");
+import log = require("../log/index.js");
 
 //Global var
 const client = new Discord.Client({restWsBridgeTimeout: 50000, restTimeOffset: 1000});
@@ -11,8 +12,8 @@ let guild: Discord.Guild;
 
 client.login(global.g.config.discord_bot.bot_token)
   .then(() => {
-    console.log('The Discord helpers are ready!');
-    global.g.log(1, 'discord_bot', 'Discord helpers connected sucessfully', null);
+    console.log("The Discord helpers are ready!");
+    log.write(1, "discord_bot", "Discord helpers connected sucessfully", null);
     guild = client.guilds.get(global.g.config.discord_bot.guild);
   })
   .catch(e => console.log("Failed to log in with token: ", e));
@@ -42,7 +43,7 @@ const helpers = {
 
   getSelfAssignableRoles() {
     return guild.roles.map((item) => {
-      return item.name.indexOf('#') === 0 ? {id: item.id, name: item.name} : null;
+      return item.name.indexOf("#") === 0 ? {id: item.id, name: item.name} : null;
     }).filter(x => x);
   },
 
@@ -91,8 +92,8 @@ const helpers = {
   },
 
   banMember(userID: string) {
-    if(global.g.ENVIRONMENT == 'testing') {
-      global.g.emitter.emit('testing_discordhelpers_ban', userID);
+    if(global.g.ENVIRONMENT == "testing") {
+      global.g.emitter.emit("testing_discordhelpers_ban", userID);
       return;
     }
     guild.members.get(userID).ban();

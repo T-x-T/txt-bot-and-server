@@ -1,4 +1,4 @@
-import mongoose = require('mongoose');
+import mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 import type {MongooseFilterQuery} from "mongoose";
 import type {IPersistanceProvider} from "./IPersistanceProvider";
@@ -54,7 +54,7 @@ class Mongo implements IPersistanceProvider<any>{
   }
 
   _autoIncrement(key: string, collection: string){
-    this.schema.pre('save', 
+    this.schema.pre("save", 
       function(next: Function) {
         if (this.isNew) {
           models[collection].countDocuments().then((res: number) => {
@@ -113,10 +113,10 @@ class Mongo implements IPersistanceProvider<any>{
 
   async save(input: any){
     let filter: any = false;
-    filter = input.hasOwnProperty('_id') ? {_id: input._id} : filter;
-    filter = input.hasOwnProperty('discord') ? {discord: input.discord} : filter;
-    filter = input.hasOwnProperty('discord_id') ? {discord_id: input.discord_id} : filter;
-    filter = input.hasOwnProperty('id') ? {id: input.id} : filter;
+    filter = input.hasOwnProperty("_id") ? {_id: input._id} : filter;
+    filter = input.hasOwnProperty("discord") ? {discord: input.discord} : filter;
+    filter = input.hasOwnProperty("discord_id") ? {discord_id: input.discord_id} : filter;
+    filter = input.hasOwnProperty("id") ? {id: input.id} : filter;
 
     if(filter) {
       return await this.model.findOneAndUpdate(filter, input, {new: true, useFindAndModify: false, upsert: true});

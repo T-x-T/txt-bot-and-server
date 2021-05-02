@@ -6,6 +6,7 @@
 //Dependencies
 import https = require("https");
 import discord_helpers = require("../discord_bot");
+import log = require("../log/index.js");
 import {IncomingMessage} from "node:http";
 
 interface IYoutubeChannel {
@@ -59,13 +60,13 @@ function getNewestVideos(channel: IYoutubeChannel) {
             channel_title: data.items[0].snippet.channelTitle
           });
         } else {
-          global.g.log(3, "youtube", "Retrieved data from youtube is invalid", data);
+          log.write(3, "youtube", "Retrieved data from youtube is invalid", data);
         }
       } else {
-        global.g.log(3, "youtube", "Retrieved data from youtube is invalid", data);
+        log.write(3, "youtube", "Retrieved data from youtube is invalid", data);
       }
     }).on("error", function (e) {
-      global.g.log(3, "youtube", "Cant retrieve video data from youtube: " + e.message, null);
+      log.write(3, "youtube", "Cant retrieve video data from youtube: " + e.message, null);
     });
   });
 }
@@ -86,5 +87,5 @@ function postIfNew(video: IYoutubeVideo) {
 
 function post(video: IYoutubeVideo) {
   discord_helpers.sendMessage(`New Video: ${video.title} by ${video.channel_title}\n${video.url}\n<@&${video.channel.role}>`, video.channel.channel_id)
-    .catch((e: Error) => global.g.log(2, 'youtube', 'couldnt send the new youtube video message', {error: e.message, video: video}));
+    .catch((e: Error) => log.write(2, "youtube", "couldnt send the new youtube video message", {error: e.message, video: video}));
 }

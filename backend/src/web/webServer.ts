@@ -9,6 +9,7 @@ import StringDecoder = require("string_decoder");
 import url = require("url");
 import santize_path = require("sanitize-filename");
 import handlers = require("./handlers.js");
+import log = require("../log/index.js");
 import {IncomingMessage, ServerResponse} from "node:http";
 
 export interface IRequestData {
@@ -37,7 +38,7 @@ module.exports = () => {
     }
   }).listen(global.g.config.web.http_port, function () {
     console.log("HTTP server online on port " + global.g.config.web.http_port);
-    global.g.log(1, "web", "HTTP server is online", {port: global.g.config.web.http_port});
+    log.write(1, "web", "HTTP server is online", {port: global.g.config.web.http_port});
   });
 };
   
@@ -45,9 +46,9 @@ async function uniserver(req: IncomingMessage, res: ServerResponse) {
   //Form the data object
   const data = await getDataObject(req);
   //Log the request
-  global.g.log(0, "web", "Web Request received", {data: data});
+  log.write(0, "web", "Web Request received", {data: data});
   console.log(data.method, data.path);
-  if(data.method == 'post') console.log(data.payload);
+  if(data.method == "post") console.log(data.payload);
 
   //Some requests seem to come in without any header, which is bad, so lets add one here if thats the case, also log it
   if(!data.headers.hasOwnProperty("host")) data.headers.host = "paxterya.com";
@@ -68,7 +69,7 @@ async function uniserver(req: IncomingMessage, res: ServerResponse) {
 
     processHandlerResponse(res, handlerResponse);
   } catch(e) {
-    global.g.log(3, 'web', 'web request encountered a fatal error', {err: e.message, data: data});
+    log.write(3, "web", "web request encountered a fatal error", {err: e.message, data: data});
     processHandlerResponse(res, {status: 500, payload: {message: "Something really bad happened, while we tried to process your request", err: e.message}});
   }
 };
@@ -96,12 +97,12 @@ function getDataObject(req: IncomingMessage): Promise<IRequestData> {
 
       let cookies: any = {};
       if(req.headers.cookie) req.headers.cookie.replace(/\s/g, "").split(";").forEach(cookie => {
-        const parts = cookie.split('=');
+        const parts = cookie.split("=");
         cookies[parts[0]] = parts[1];
       });
 
       resolve({
-        path: santize_path(parsedUrl.pathname.replace(/^\/+|\/+$/g, ''), {replacement: 'ÿ'}).replace(/ÿ/g, '/').replace(/\.\./g, ''),
+        path: santize_path(parsedUrl.pathname.replace(/^\/+|\/+$/g, ""), {replacement: "ÿ"}).replace(/ÿ/g, "/").replace(/\.\./g, ""),
         queryStringObject: JSON.parse(JSON.stringify(parsedUrl.query)),
         method: req.method.toLowerCase(),
         headers: req.headers,

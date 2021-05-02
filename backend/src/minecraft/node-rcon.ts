@@ -4,11 +4,11 @@
  * MIT Licensed
  */
 
-const util = require('util')
-  , events = require('events')
-  , net = require('net')
-  , dgram = require('dgram')
-  , Buffer = require('buffer').Buffer;
+const util = require("util")
+  , events = require("events")
+  , net = require("net")
+  , dgram = require("dgram")
+  , Buffer = require("buffer").Buffer;
 
 
 const PacketType = {
@@ -77,7 +77,7 @@ class Rcon extends events.EventEmitter{
       sendBuf.writeInt16LE(0, length + 12);
     } else {
       if(this.challenge && !this._challengeToken) {
-        this.emit('error', new Error('Not authenticated'));
+        this.emit("error", new Error("Not authenticated"));
         return;
       }
       var str = "rcon ";
@@ -93,7 +93,7 @@ class Rcon extends events.EventEmitter{
 
   _sendSocket(buf: any) {
     if(this._tcpSocket) {
-      this._tcpSocket.write(buf.toString('binary'), 'binary');
+      this._tcpSocket.write(buf.toString("binary"), "binary");
     } else if(this._udpSocket) {
       this._udpSocket.send(buf, 0, buf.length, this.port, this.host);
     }
@@ -104,16 +104,16 @@ class Rcon extends events.EventEmitter{
 
     if(this.tcp) {
       this._tcpSocket = net.createConnection(this.port, this.host);
-      this._tcpSocket.on('data', function (data: any) {self._tcpSocketOnData(data)})
-        .on('connect', function () {self.socketOnConnect()})
-        .on('error', function (err: any) {self.emit('error', err)})
-        .on('end', function () {self.socketOnEnd()});
+      this._tcpSocket.on("data", function (data: any) {self._tcpSocketOnData(data)})
+        .on("connect", function () {self.socketOnConnect()})
+        .on("error", function (err: any) {self.emit("error", err)})
+        .on("end", function () {self.socketOnEnd()});
     } else {
       this._udpSocket = dgram.createSocket("udp4");
-      this._udpSocket.on('message', function (data: any) {self._udpSocketOnData(data)})
-        .on('listening', function () {self.socketOnConnect()})
-        .on('error', function (err: any) {self.emit('error', err)})
-        .on('close', function () {self.socketOnEnd()});
+      this._udpSocket.on("message", function (data: any) {self._udpSocketOnData(data)})
+        .on("listening", function () {self.socketOnConnect()})
+        .on("error", function (err: any) {self.emit("error", err)})
+        .on("close", function () {self.socketOnEnd()});
       this._udpSocket.bind(0);
     }
   }
@@ -141,12 +141,12 @@ class Rcon extends events.EventEmitter{
       if(tokens.length == 3 && tokens[0] == "challenge" && tokens[1] == "rcon") {
         this._challengeToken = tokens[2].substr(0, tokens[2].length - 1).trim();
         this.hasAuthed = true;
-        this.emit('auth');
+        this.emit("auth");
       } else {
-        this.emit('response', str.substr(1, str.length - 2));
+        this.emit("response", str.substr(1, str.length - 2));
       }
     } else {
-      this.emit('error', new Error("Received malformed packet"));
+      this.emit("error", new Error("Received malformed packet"));
     }
   }
 
@@ -167,26 +167,26 @@ class Rcon extends events.EventEmitter{
         if(id == this.rconId) {
           if(!this.hasAuthed && type == PacketType.RESPONSE_AUTH) {
             this.hasAuthed = true;
-            this.emit('auth');
+            this.emit("auth");
           } else if(type == PacketType.RESPONSE_VALUE) {
             // Read just the body of the packet (truncate the last null byte)
             // See https://developer.valvesoftware.com/wiki/Source_RCON_Protocol for details
-            var str = data.toString('utf8', 12, 12 + len - 10);
+            var str = data.toString("utf8", 12, 12 + len - 10);
 
-            if(str.charAt(str.length - 1) === '\n') {
+            if(str.charAt(str.length - 1) === "\n") {
               // Emit the response without the newline.
               str = str.substring(0, str.length - 1);
             }
 
-            this.emit('response', str);
+            this.emit("response", str);
           }
         } else {
-          this.emit('error', new Error("Authentication failed"));
+          this.emit("error", new Error("Authentication failed"));
         }
 
         data = data.slice(12 + len - 8);
       } else {
-        // Keep a reference to the chunk if it doesn't represent a full packet
+        // Keep a reference to the chunk if it doesn"t represent a full packet
         this.outstandingData = data;
         break;
       }
@@ -194,7 +194,7 @@ class Rcon extends events.EventEmitter{
   }
 
   socketOnConnect = function () {
-    this.emit('connect');
+    this.emit("connect");
 
     if(this.tcp) {
       this.send(this.password, PacketType.AUTH);
@@ -211,12 +211,12 @@ class Rcon extends events.EventEmitter{
       this._sendSocket(sendBuf);
 
       this.hasAuthed = true;
-      this.emit('auth');
+      this.emit("auth");
     }
   }
 
   socketOnEnd = function () {
-    this.emit('end');
+    this.emit("end");
     this.hasAuthed = false;
   }
 }

@@ -21,7 +21,7 @@ export = {
           rawData += chunk;
         }).on("end", function () {
           const data = JSON.parse(rawData);
-          if(data.hasOwnProperty('id') && data.id.length == 32){
+          if(data.hasOwnProperty("id") && data.id.length == 32){
             resolve(data.id);
           } else {
             reject("Data from API doesnt contain valid id. " + rawData);

@@ -8,6 +8,7 @@ import qs = require("querystring");
 import https = require("https");
 import discord_api = require("../discord_api/index.js");
 import discordBot = require("../discord_bot/index.js");
+import log = require("../log/index.js");
 import {IncomingMessage} from "node:http";
 
 const client = discordBot.client;
@@ -23,7 +24,7 @@ const main = {
       if(client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).roles.has(global.g.config.discord_bot.roles.admin)) access_level = 8;
       if(client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).roles.has(global.g.config.discord_bot.roles.owner)) access_level = 9;
     } catch(e) {}
-    global.g.log(0, 'auth', 'main.returnAcessLevel returned', {userID: userID, access_level: access_level});
+    log.write(0, "auth", "main.returnAcessLevel returned", {userID: userID, access_level: access_level});
     return access_level;
   },
 
@@ -36,7 +37,7 @@ const main = {
     if(access_token) {
       return await main.getDiscordIdFromToken(access_token);
     } else {
-      throw new Error('Couldnt get access_token for code: ' + code,);
+      throw new Error("Couldnt get access_token for code: " + code,);
     }
   },
 
@@ -46,7 +47,7 @@ const main = {
     if(access_level) {
       return access_level;
     } else {
-      throw new Error('Couldnt get access_level');
+      throw new Error("Couldnt get access_level");
     }
   },
 
@@ -59,7 +60,7 @@ const main = {
     if(discordId) {
       return main.getAccessLevelFromDiscordId(discordId);
     } else {
-      throw new Error('Couldnt get valid discord_id, this is what we got: ' + discordId);
+      throw new Error("Couldnt get valid discord_id, this is what we got: " + discordId);
     }
   },
 
@@ -104,7 +105,7 @@ const main = {
           }
         });
         req.on("error", (e) => {
-          global.g.log(2, "auth", "oauth.getAccess_token encountered an error", {err: e});
+          log.write(2, "auth", "oauth.getAccess_token encountered an error", {err: e});
           reject(e);
         });
       });

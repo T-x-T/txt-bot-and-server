@@ -5,38 +5,35 @@
 
 //Configure config
 global.g = {};
-global.g.ENVIRONMENT = 'testing';
+global.g.ENVIRONMENT = "testing";
 console.log(global.g.ENVIRONMENT)
-require('../../config.js')();
+require("../../config.js")();
 
 //Setup the global emitter
-import EventEmitter = require('events');
+import EventEmitter = require("events");
 global.g.emitter = new EventEmitter();
 
 //Require all modules for init
-require('../discord_bot/main.js');
-require('../discord_api');
+require("../discord_bot/main.js");
+require("../discord_api");
 
-require('../auth');
-import log = require('../log');
+require("../auth");
+import log = require("../log");
 
-require('../stats');
-require('../youtube');
+require("../stats");
+require("../youtube");
 
-import discordBot = require('../discord_bot/index.js');
-require('../web/webServer.js');
-require('../email');
-require('../minecraft');
-
-//Make log.write global
-global.g.log = log.write;
+import discordBot = require("../discord_bot/index.js");
+require("../web/webServer.js");
+require("../email");
+require("../minecraft");
 
 //setup global factories
-const MemberFactory = require('../user/memberFactory.js');
+const MemberFactory = require("../user/memberFactory.js");
 global.g.memberFactory = new MemberFactory();
 global.g.memberFactory.connect(); //This isnt await, might cause problems
 
-global.g.log(0, 'test', 'Mocha test started', false);
+log.write(0, "test", "Mocha test started", false);
 
 before("start discord_bot", function(done){
   this.timeout(10000);
@@ -52,7 +49,7 @@ function callDoneWhenLoggedIn(done: Function) {
 }
 
 //This makes unhandledPromiseRejections fail tests
-process.on('unhandledRejection', (reason, promise) => { 
+process.on("unhandledRejection", (reason, promise) => { 
   console.log(reason);
   throw promise 
 });

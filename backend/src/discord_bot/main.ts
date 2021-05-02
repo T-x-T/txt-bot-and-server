@@ -13,6 +13,7 @@ memberFactory.connect();
 import ApplicationFactory = require("../application/applicationFactory.js");
 const applicationFactory = new ApplicationFactory();
 applicationFactory.connect();
+import log = require("../log/index.js");
 
 const client = discordHelpers.client;
 
@@ -27,7 +28,7 @@ client.on("message", async message => {
   if(
     !message.content.startsWith(prefix)
     || message.author.bot
-    || message.channel.type === 'dm'
+    || message.channel.type === "dm"
     || message.content.startsWith(prefix + "karma")
     || message.content.length <= 2
     || Number.isInteger(Number.parseInt(message.content[2]))
@@ -49,7 +50,7 @@ client.on("message", async message => {
   try {
     await command.execute(message, args);
   } catch (e) {
-    global.g.log(3, "discord_bot", "Some Discord command just broke", { error: e.message, msg: message.content });
+    log.write(3, "discord_bot", "Some Discord command just broke", { error: e.message, msg: message.content });
     console.log("Discord command broke:", message.content, e);
     message.reply("There was an oopsie when I tried to do that");
     discordHelpers.sendCrashMessage(e, "discord command");
@@ -63,7 +64,7 @@ client.on("guildMemberRemove", async user => {
     discordHelpers.sendMessage(`${user.displayName} left the server`, global.g.config.discord_bot.channel.mod_notifications);
   } catch (e) {
     discordHelpers.sendCrashMessage(e, "discord event handler");
-    global.g.log(3, "discord_bot", "guildMemberRemove failed", {error: e.message, user: user.id});
+    log.write(3, "discord_bot", "guildMemberRemove failed", {error: e.message, user: user.id});
   }
 });
 
@@ -74,7 +75,7 @@ client.on("guildBanAdd", async (guild, user) => {
     discordHelpers.sendMessage(`${user.username} was banned from the server`, global.g.config.discord_bot.channel.mod_notifications);
   } catch (e) {
     discordHelpers.sendCrashMessage(e, "discord event handler");
-    global.g.log(3, "discord_bot", "guildBanAdd failed", {error: e.message, user: user.id});
+    log.write(3, "discord_bot", "guildBanAdd failed", {error: e.message, user: user.id});
   }
 });
 
@@ -90,7 +91,7 @@ client.on("guildMemberAdd", async user => {
     if(application?.length > 0) await application[0].acceptGuildMember();
   } catch(e) {
     discordHelpers.sendCrashMessage(e, "discord event handler");
-    global.g.log(3, "discord_bot", "guildMemberAdd failed", {error: e.message, user: user.id});
+    log.write(3, "discord_bot", "guildMemberAdd failed", {error: e.message, user: user.id});
   }
 });
 

@@ -61,7 +61,7 @@ class ApplicationFactory extends Factory{
 }
 
 async function announceNewApplication(application: Application){
-  await discord_helpers.sendMessage('New application from ' + application.getDiscordUserName() + '\nYou can find it here: https://paxterya.com/interface', global.g.config.discord_bot.channel.new_application_announcement);
+  await discord_helpers.sendMessage("New application from " + application.getDiscordUserName() + "\nYou can find it here: https://paxterya.com/interface", global.g.config.discord_bot.channel.new_application_announcement);
 }
 
 function sendNewApplicationEmail(application: Application){
