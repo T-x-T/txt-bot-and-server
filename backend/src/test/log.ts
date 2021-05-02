@@ -68,7 +68,7 @@ describe("log", function(){
         assert.strictEqual(logEntry.component, component);
         assert.strictEqual(logEntry.name, name);
         assert.deepStrictEqual(logEntry.data, payload);
-        assert.strictEqual(logEntry.timestamp.valueOf(), timestamp);
+        assert.strictEqual(logEntry.timestamp, timestamp);
       }
     });
   });
