@@ -319,10 +319,17 @@ handlers.paxapi.application.patch = async function(data: IRequestData): Promise<
 };
 
 handlers.paxapi.mcversion = async function(data: IRequestData): Promise<IHandlerResponse> {
-  return {
-    payload: await mc_helpers.getServerVersion(),
-    contentType: "plain"
-  };
+  try {
+    return {
+      payload: await mc_helpers.getServerVersion(),
+      contentType: "plain"
+    };
+  } catch (_) {
+    return {
+      payload: "",
+      contentType: "plain"
+    }
+  }
 }
 
 handlers.paxapi.memberworldmapdata = async function(data: IRequestData): Promise<IHandlerResponse> {

@@ -113,33 +113,34 @@ function getDataObject(req: IncomingMessage): Promise<IRequestData> {
 };
 
 const router: {[path: string]: (data: IRequestData) => Promise<IHandlerResponse>} = {
-  "/html/api/application": handlers.paxapi.application,
-  "/html/api/contact": handlers.paxapi.contact,
-  "/html/api/member": handlers.paxapi.member,
-  "/html/api/blog": handlers.paxapi.blog,
-  "/html/api/roles": handlers.paxapi.roles,
-  "/html/api/mcversion": handlers.paxapi.mcversion,
-  "/html/api/worldmapdata": handlers.paxapi.memberworldmapdata,
-  "/html/api/statsoverview": handlers.paxapi.statsoverview,
-  "/html/api/discorduserfromcode": handlers.paxapi.discorduserfromcode,
-  "/html/api/tokenfromcode": handlers.paxapi.tokenfromcode,
+  "api/application": handlers.paxapi.application,
+  "api/contact": handlers.paxapi.contact,
+  "api/member": handlers.paxapi.member,
+  "api/blog": handlers.paxapi.blog,
+  "api/roles": handlers.paxapi.roles,
+  "api/mcversion": handlers.paxapi.mcversion,
+  "api/worldmapdata": handlers.paxapi.memberworldmapdata,
+  "api/statsoverview": handlers.paxapi.statsoverview,
+  "api/discorduserfromcode": handlers.paxapi.discorduserfromcode,
+  "api/tokenfromcode": handlers.paxapi.tokenfromcode,
 };
 
 //Take the response from the handler and process it
 function processHandlerResponse(res: ServerResponse, handlerResponse: IHandlerResponse) {
   const {status, payload, contentType} = handlerResponse;
   //Build the response parts that are content specific
-  var payloadStr = "";
+  let payloadStr = "";
   if(status == 301 || status == 302) {
     res.writeHead(status, payload);
   } else {
-    if(contentType == "json") {
+    if(contentType == "json" || typeof payload == "object") {
       res.setHeader("Content-Type", "application/json");
       payloadStr = typeof (payload) == "object" ? JSON.stringify(payload) : payload;
     } else {
       res.setHeader("Content-Type", "text/plain");
       payloadStr = payload;
     }
+    
     res.writeHead(status);
   }
   //Finish the response with the rest which is common

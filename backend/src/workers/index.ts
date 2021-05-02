@@ -17,13 +17,6 @@ mc_helpers.updateOnlinePlayers().catch(e => console.log("mc_helpers.updateOnline
 log.prune(30).catch((e: Error) => console.log("log.prune(30) threw:", e.message));
 log.pruneLevel(1, 0).catch((e: Error) => console.log("log.pruneLevel(1, 0) threw:", e.message));
 
-//Contains discord user objects mapped by the discord id; gets cleared once an hour in workers
-global.g.cache = {};
-global.g.cache.minecraftServerVersion = "";
-rcon.getServerVersion()
-  .then(res => global.g.cache.minecraftServerVersion = res)
-  .catch(e => console.log("rcon.getServerVersion threw:", e.message))
-
 //10 seconds after startup
 setTimeout(async () => {
   try {
@@ -60,7 +53,6 @@ setInterval(async () => {
   try {
     await update.updateAllIGNs();
     await update.updateAllNicks();
-    global.g.cache.minecraftServerVersion = await rcon.getServerVersion();
   } catch(e) {
     console.log("every hour threw:", e.message);
     global.g.log(3, "workers", "every hour threw", {err: e.message});

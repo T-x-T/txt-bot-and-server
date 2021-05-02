@@ -6,7 +6,6 @@
 //Dependencies
 import fs = require("fs");
 import Discord = require("discord.js");
-const client = new Discord.Client({restWsBridgeTimeout: 50000, restTimeOffset: 1000});
 import discordHelpers = require("../discord_bot/helpers.js");
 import MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory();
@@ -14,6 +13,8 @@ memberFactory.connect();
 import ApplicationFactory = require("../application/applicationFactory.js");
 const applicationFactory = new ApplicationFactory();
 applicationFactory.connect();
+
+const client = discordHelpers.client;
 
 client.once("ready", () => {
   client.user.setActivity("your messages",{type: "LISTENING"});
@@ -99,10 +100,3 @@ for (const file of commandFiles) {
   const command = require(`./commands/${file}`);
   client.commands.set(command.name, command);
 }
-
-client.login(global.g.config.discord_bot.bot_token)
-  .then(() => {
-    console.log('The Discord bot is ready!');
-    global.g.log(1, 'discord_bot', 'Discord Bot connected sucessfully', null);
-  })
-  .catch(e => console.log("Failed to log in with token: ", e));

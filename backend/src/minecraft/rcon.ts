@@ -12,6 +12,11 @@ interface IRconServer {
   rcon_password: string
 }
 
+let serverVersion = {
+  version: "",
+  lastUpdate: Date.now()
+}
+
 const rcon = {
   //Initializes the connection to the rcon server, sends a message and terminates the connection again
   send(cmd: string | string[], server?: string): Promise<string> {
@@ -84,6 +89,8 @@ const rcon = {
   },
 
   async getServerVersion() {
+    if(serverVersion.lastUpdate > Date.now() + 1000 * 60 * 60 && serverVersion.version.length > 0) return serverVersion.version;
+
     const res = await rcon.send("version", global.g.config.minecraft.rcon_main_server);
     let version = "";
     let inVersion = false;
@@ -92,6 +99,9 @@ const rcon = {
       if(inVersion && (char === "." || Number.isInteger(Number.parseInt(char)))) version += char;
     });
     version = version.substring(0, 6);
+
+    serverVersion.version = version;
+    serverVersion.lastUpdate = Date.now();
     return version;
   }
 };

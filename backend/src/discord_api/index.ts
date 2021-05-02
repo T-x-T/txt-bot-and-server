@@ -5,10 +5,7 @@
 
 //Dependencies
 import https = require("https");
-import discordBot = require("../discord_bot/index.js");
 import {IncomingMessage} from "node:http";
-
-const client = discordBot.client;
 
 const main = {
   getUserObjectFromToken(access_token: string): Promise<IDiscordApiUserObject> {

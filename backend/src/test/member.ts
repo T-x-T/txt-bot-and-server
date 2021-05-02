@@ -215,9 +215,6 @@ describe("member", function(){
   });
 
   describe("get user object", function () {
-    if(!global.g.hasOwnProperty("cache")) global.g.cache = {};
-    global.g.cache.discordUserObjects = {};
-
     it("calling User#getDiscordUserdata shouldnt reject", async function () {
       let user = await createAndSaveNewMember();
       await assert.doesNotReject(async () => user.getDiscordUserdata());

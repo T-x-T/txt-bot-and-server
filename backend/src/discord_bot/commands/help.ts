@@ -4,6 +4,7 @@
  */
 
 import Discord = require("discord.js");
+import minecraft = require("../../minecraft/index.js");
 
 export = {
   name: "help",
@@ -20,7 +21,7 @@ export = {
       data.push("**Join here:** https://paxterya.com/join-us");
       data.push("**Survival Server IP:** paxterya.com");
       data.push("**Creative Server IP:** paxterya.com:25566");
-      data.push(`**Version:** ${global.g.cache.minecraftServerVersion} java`);
+      data.push(`**Version:** ${await minecraft.getServerVersion()} java`);
       data.push(`**Help:** <#${message.guild.channels.find(channel => channel.name == "support").id}>`);
       data.push("\nHere is a list of all available commands: ");
       data.push(commands.map(command => command.name).join(", "));
