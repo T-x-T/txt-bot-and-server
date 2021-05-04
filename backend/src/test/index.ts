@@ -45,11 +45,6 @@ before(async function(){
   
   const EventEmitter = require('events');
   global.g.emitter = new EventEmitter();
-  
-  //setup global factories
-  const MemberFactory = require("../user/memberFactory.js");
-  global.g.memberFactory = new MemberFactory();
-  global.g.memberFactory.connect(); //This isnt await, might cause problems
 });
   
 import testApplication = require("./tests/application.js");
