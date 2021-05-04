@@ -1,11 +1,11 @@
 {
   "scripts": {
-    "test": "cd dist && nyc mocha --exit -t 1000000 test/",
-    "prod": "cd dist && node index.js",
+    "test": "cd dist && (NODE_ENV=testing nyc mocha --exit -t 1000000 test/index.js)",
+    "prod": "cd dist && (NODE_ENV=prod node index.js)",
     "compile": "tsc",
     "build": "tsc -b",
     "analyze_dependencies": "depcruise --exclude \"^(node_modules|dist/test)\" --output-type dot dist | dot -T svg | depcruise-wrap-stream-in-html > dependency-graph.html",
-    "find_circular_dependency": "madge --circular dist/"
+    "find_circular_dependency": "madge --circular src/"
   },
   "name": "txt-bot-and-server",
   "description": "Combination of all Software related to txt's discord and servers",

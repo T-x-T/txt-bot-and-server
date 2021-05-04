@@ -1,6 +1,5 @@
-require("./test.js");
-import Factory = require("../persistance/factory.js");
-import TestPersistable = require("./testPersitable.js");
+import Factory = require("../../persistance/factory.js");
+import TestPersistable = require("./testPersistable.js");
 
 class TestFactory extends Factory{
   constructor(options: any){

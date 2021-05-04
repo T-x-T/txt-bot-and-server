@@ -1,8 +1,6 @@
-require("./test.js");
-
 import assert = require("assert");
-import blog = require("../blog");
-import Mongo = require("../persistance/mongo.js");
+import blog = require("../../blog");
+import Mongo = require("../../persistance/mongo.js");
 
 //Stolen from stackoverflow: https://stackoverflow.com/a/27872144
 function randomString(len: number) {

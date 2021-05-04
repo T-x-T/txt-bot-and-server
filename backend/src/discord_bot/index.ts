@@ -4,22 +4,12 @@
  */
 
 //Dependencies
-import discordHelpers = require("./helpers.js");
+import main = require("./main.js");
+import Discord = require("discord.js");
 
 export = {
-  client: discordHelpers.client,
-  getNicknameByID: discordHelpers.getNicknameByID,
-  getSelfAssignableRoles: discordHelpers.getSelfAssignableRoles,
-  getRoleId: discordHelpers.getRoleId,
-  addMemberToRole: discordHelpers.addMemberToRole,
-  removeMemberFromRole: discordHelpers.removeMemberFromRole,
-  hasRole: discordHelpers.hasRole,
-  banMember: discordHelpers.banMember,
-  isGuildMember: discordHelpers.isGuildMember,
-  getMemberObjectById: discordHelpers.getMemberObjectByID,
-  sendMessage: discordHelpers.sendMessage,
-  sendCrashMessage: discordHelpers.sendCrashMessage,
-  fetchUser: discordHelpers.fetchUser,
-  getNickname: discordHelpers.getNickname,
-  getAvatarUrl: discordHelpers.getAvatarUrl
+  async init(config: IConfigDiscordBot, client: Discord.Client) {
+    client.config = config;
+    main(config, client);
+  }
 }

@@ -12,33 +12,24 @@ import handlers = require("./handlers.js");
 import log = require("../log/index.js");
 import {IncomingMessage, ServerResponse} from "node:http";
 
-export interface IRequestData {
-  path: string,
-  queryStringObject: any,
-  method: string,
-  headers: any,
-  payload: any,
-  cookies: any
-}
+let config: IConfig;
+let environment: EEnvironment;
 
-export interface IHandlerResponse {
-  status?: number,
-  payload?: any,
-  contentType?: "json" | "plain"
-}
+export = (_config: IConfig, _environment: EEnvironment) => {
+  config = _config;
+  environment = _environment;
 
-module.exports = () => {
   http.createServer(async (req: IncomingMessage, res: ServerResponse) => {
-    if(global.g.config.web.https_redirect) {
+    if(config.web.https_redirect) {
       const data = await getDataObject(req);
       res.writeHead(302, {Location: `https://${data.headers.host}/${data.path}`});
       res.end();
     } else {
       uniserver(req, res);
     }
-  }).listen(global.g.config.web.http_port, function () {
-    console.log("HTTP server online on port " + global.g.config.web.http_port);
-    log.write(1, "web", "HTTP server is online", {port: global.g.config.web.http_port});
+  }).listen(config.web.http_port, function () {
+    console.log("HTTP server online on port " + config.web.http_port);
+    log.write(1, "web", "HTTP server is online", {port: config.web.http_port});
   });
 };
   

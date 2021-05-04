@@ -1,6 +1,5 @@
-require("./test.js");
 import assert = require("assert");
-import Mongo = require("../persistance/mongo.js");
+import Mongo = require("../../persistance/mongo.js");
 
 const schema = {
   id: {

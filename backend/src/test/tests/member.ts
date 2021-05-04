@@ -1,9 +1,14 @@
-require("./test.js");
-import Member = require("../user/member.js");
-import MemberFactory = require("../user/memberFactory.js");
-import Mongo = require("../persistance/mongo.js");
+import Member = require("../../user/member.js");
+import MemberFactory = require("../../user/memberFactory.js");
+import Mongo = require("../../persistance/mongo.js");
 import assert = require("assert");
 const schema = Member.schema;
+
+let config: IConfig;
+
+export = (_config: IConfig) => {
+  config = _config;
+}
 
 async function createAndSaveNewMember(){
   let memberFactory = new MemberFactory();
@@ -419,12 +424,12 @@ describe("member", function(){
   describe("giving and taking discord roles", function(){
     it("calling giveDiscordRole should not reject", async function(){
       let member = await createAndSaveNewMember();
-      await assert.doesNotReject(async () => await member.giveDiscordRole(global.g.config.discord_bot.roles.inactive));
+      await assert.doesNotReject(async () => await member.giveDiscordRole(config.discord_bot.roles.inactive));
     });
 
     it("calling takeDiscordRole should not reject", async function(){
       let member = await createAndSaveNewMember();
-      await assert.doesNotReject(async () => await member.takeDiscordRole(global.g.config.discord_bot.roles.inactive));
+      await assert.doesNotReject(async () => await member.takeDiscordRole(config.discord_bot.roles.inactive));
     });
   });
 
@@ -438,7 +443,7 @@ describe("member", function(){
     it("inactivate should take paxterya role away", async function () {
       global.g.emitter.once("testing_discordHelpers_removeMemberFromRole", (discordId: string, roleId: string) => {
         assert.strictEqual(discordId, member.getDiscordId());
-        assert.strictEqual(roleId, global.g.config.discord_bot.roles.paxterya);
+        assert.strictEqual(roleId, config.discord_bot.roles.paxterya);
       });
 
       let member = await createAndSaveNewMember();
@@ -448,7 +453,7 @@ describe("member", function(){
     it("inactivate should give inactive role", async function () {
       global.g.emitter.once("testing_discordHelpers_addMemberToRole", (discordId: string, roleId: string) => {
         assert.strictEqual(discordId, member.getDiscordId());
-        assert.strictEqual(roleId, global.g.config.discord_bot.roles.inactive);
+        assert.strictEqual(roleId, config.discord_bot.roles.inactive);
       });
 
       let member = await createAndSaveNewMember();
@@ -476,7 +481,7 @@ describe("member", function(){
     it("activate should take inactive role away", async function () {
       global.g.emitter.once("testing_discordHelpers_removeMemberFromRole", (discordId: string, roleId: string) => {
         assert.strictEqual(discordId, member.getDiscordId());
-        assert.strictEqual(roleId, global.g.config.discord_bot.roles.inactive);
+        assert.strictEqual(roleId, config.discord_bot.roles.inactive);
       });
 
       let member = await createAndSaveNewMember();
@@ -486,7 +491,7 @@ describe("member", function(){
     it("activate should give paxterya role", async function () {
       global.g.emitter.once("testing_discordHelpers_addMemberToRole", (discordId: string, roleId: string) => {
         assert.strictEqual(discordId, member.getDiscordId());
-        assert.strictEqual(roleId, global.g.config.discord_bot.roles.paxterya);
+        assert.strictEqual(roleId, config.discord_bot.roles.paxterya);
       });
 
       let member = await createAndSaveNewMember();

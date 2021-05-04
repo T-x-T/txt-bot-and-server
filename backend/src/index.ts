@@ -3,35 +3,28 @@
 *  for starting all components
 */
 
-//Initialize config
-global.g = {};
-global.g.ENVIRONMENT = process.env.NODE_ENV ? process.env.NODE_ENV : "staging";
-console.log(global.g.ENVIRONMENT)
-require("../config.js")();
+import init = require("./init/index.js");
 
-//Setup the global emitter
-import EventEmitter = require("events");
-global.g.emitter = new EventEmitter();
+const environment = init.getEnv();
+const config = init.getConfig(environment);
+console.log("Starting with environment:", environment)
+import persistance = require("./persistance/index.js");
+persistance(config);
 
 //Require all modules for init
-require("./discord_bot/main.js");
-require("./discord_api/index.js");
-
-require("./auth/index.js");
+import discordBot = require("./discord_bot/index.js");
+import discordHelpers = require("./discord_helpers/index.js");
+import auth = require("./auth/index.js");
 import log = require("./log/index.js");
+import youtube = require("./youtube/index.js");
+import webServer = require("./web/index.js");
+import email = require("./email/index.js");
+import minecraft = require("./minecraft/index.js");
+import user = require("./user/index.js");
+import application = require("./application/index.js");
+import workers = require("./workers/index.js");
 
-require("./stats/index.js");
-require("./youtube/index.js");
-
-import discordHelpers = require("./discord_bot/index.js");
-require("./web/webServer.js")();
-require("./email/index.js");
-require("./minecraft/index.js");
-
-require("./workers/index.js");
-
-//Log that the app got started
-log.write(1, "index", "Application started", null);
+start();
 
 process.on("uncaughtException", (err: Error, origin: string) => {
   discordHelpers.sendCrashMessage(err, origin);
@@ -40,3 +33,22 @@ process.on("uncaughtException", (err: Error, origin: string) => {
     process.exit(1);
   }, 200);
 });
+
+async function start() {
+  const discordClient = await init.getDiscordClient(config.discord_bot);
+  console.log("got discord client")
+  await discordBot.init(config.discord_bot, discordClient);
+  discordHelpers.init(config.discord_bot, environment, discordClient);
+  auth.init(config, discordClient);
+  youtube.init(config.youtube);
+  webServer(config, environment);
+  email.init(config.email, environment);
+  minecraft.init(config.minecraft, environment);
+  user(config);
+  application(config);
+  workers(config, discordClient);
+  
+  log.write(1, "index", "Application started", null);
+}
+
+export = start;

@@ -5,7 +5,7 @@
 
 //Dependencies
 import auth = require("../auth/index.js");
-import discordHelpers = require("../discord_bot/index.js");
+import discordHelpers = require("../discord_helpers/index.js");
 import stats = require("../stats/index.js");
 import blog = require("../blog/index.js");
 import MemberFactory = require("../user/memberFactory.js");
@@ -18,231 +18,320 @@ import sanitize = require("sanitize-html");
 import email = require("../email/index.js");
 import log = require("../log/index.js");
 
-import type {IRequestData, IHandlerResponse} from "./webServer.js";
 import type Application = require("../application/application.js");
 
-//Create the container
-let handlers: any = {};
-handlers.paxapi = {};
+let config: IConfig;
 
-//Not found handler
-handlers.notFound = async function (_data: IRequestData): Promise<IHandlerResponse> {
-  return {
-    status: 404,
-    payload: {err: "The page you requested is not available"}
-  };
-};
+const handlers = {
+  init(_config: IConfig) {
+    config = _config;
+  },
 
-//API endpoint for querying roles of players; Requires one uuid in the querystring
-handlers.paxapi.roles = async function(data: IRequestData): Promise<IHandlerResponse> {
-  const member = await memberFactory.getByMcUuid(data.queryStringObject.uuid);
-  if(member) {
-    return {
-      payload: {role: auth.getAccessLevelFromDiscordId(member.getDiscordId())}
-    };
-  } else {
+  async notFound(_data: IRequestData): Promise<IHandlerResponse> {
     return {
       status: 404,
-      payload: {err: "No Member with given uuid found"}
+      payload: {err: "The page you requested is not available"}
     };
+  },
+
+  paxapi: {
+    async roles(data: IRequestData): Promise<IHandlerResponse> {
+      const member = await memberFactory.getByMcUuid(data.queryStringObject.uuid);
+      if(member) {
+        return {
+          payload: {role: auth.getAccessLevelFromDiscordId(member.getDiscordId())}
+        };
+      } else {
+        return {
+          status: 404,
+          payload: {err: "No Member with given uuid found"}
+        };
+      }
+    },
+
+    async blog(data: IRequestData): Promise<IHandlerResponse> {
+      if(data.method == "post" || data.method == "put" || data.method == "get") {
+        if(data.method === "get" && data.queryStringObject.hasOwnProperty("public")) {
+          //Only this case is allowed without auth
+          return await handlers.paxapi._blog.getPublic(data);
+        } else {
+          const errorMessage = await authorizeRequest(data, 9);
+          if(errorMessage.length === 0) {
+            return await handlers.paxapi._blog[data.method](data);
+          } else {
+            return {
+              status: 401,
+              payload: {err: errorMessage}
+            };
+          }
+        }
+      } else {
+        return {
+          status: 405,
+          payload: {err: "Verb not allowed"}
+        };
+      }
+    },
+
+    _blog: {
+      async post(data: IRequestData): Promise<IHandlerResponse> {
+        return {
+          payload: {doc: await blog.create(data.payload)}
+        };
+      },
+
+      async put(data: IRequestData): Promise<IHandlerResponse> {
+        return {
+          payload: {doc: await blog.replace(data.payload)}
+        };
+      },
+
+      async get(data: IRequestData): Promise<IHandlerResponse> {
+        return {
+          payload: await blog.getAll()
+        };
+      },
+
+      async getPublic(data: IRequestData): Promise<IHandlerResponse> {
+        return {
+          payload: await blog.getPublic()
+        };
+      },
+    },
+
+    async member(data: IRequestData): Promise<IHandlerResponse> {
+      if(data.method == "get") {
+        return await handlers.paxapi._member[data.method](data);
+      } else {
+        return {
+          status: 405,
+          payload: {err: "Verb not allowed"}
+        };
+      }
+    },
+
+    _member: {
+      async get(data: IRequestData): Promise<IHandlerResponse> {
+        return {
+          payload: await stats.memberOverview()
+        };
+      }
+    },
+
+    async contact(data: IRequestData): Promise<IHandlerResponse> {
+      if(data.method == "post") {
+        return await handlers.paxapi._contact[data.method](data);
+      } else {
+        return {
+          status: 405,
+          payload: {err: "Verb not allowed"}
+        };
+      }
+    },
+
+    _contact: {
+      async post(data: IRequestData): Promise<IHandlerResponse> {
+        //Check the inputs
+        let name: string = typeof data.payload.name == "string" && data.payload.name.length > 0 ? data.payload.name : "";
+        let recipient: string = typeof data.payload.email == "string" && data.payload.email.length > 3 ? data.payload.email : "";
+        let subject: string = typeof data.payload.subject == "string" && data.payload.subject.length > 0 ? data.payload.subject : "";
+        let text: string = typeof data.payload.text == "string" && data.payload.text.length > 10 ? data.payload.text : "";
+
+        if(name.length > 0 && recipient.length > 0 && subject.length > 0 && text.length > 0) {
+          //Add the email of the sender to the text
+          text = text + "\n\n" + recipient;
+
+          discordHelpers.sendMessage(`Someone used the contact form!\nSubject: ${subject}\nBody: ${text}`, config.discord_bot.channel.new_application_announcement);
+          email.sendContactUsEmail(subject, text);
+
+          return {};
+        } else {
+          return {
+            status: 400,
+            payload: {err: "One of your inputs is a little off"}
+          };
+        }
+      }
+    },
+
+    async application(data: IRequestData): Promise<IHandlerResponse> {
+      if(data.method == "post" || data.method == "get" || data.method == "patch") {
+        if(data.method != "post") {
+          //All non post requests require authorization
+          const authError = await authorizeRequest(data, 7);
+          if(authError.length === 0) {
+            return await handlers.paxapi._application[data.method](data);
+          } else {
+            return {
+              status: 401,
+              payload: {err: authError}
+            };
+          }
+        } else {
+          return await handlers.paxapi._application[data.method](data);
+        }
+      } else {
+        return {
+          status: 405,
+          payload: {err: "Verb not allowed"}
+        };
+      }
+    },
+
+    _application: {
+      async post(data: IRequestData): Promise<IHandlerResponse> {
+        if(!data.payload || !data.payload.accept_rules || !data.payload.accept_privacy_policy) {
+          return {
+            status: 400,
+            payload: {err: "Missing or malformed payload", payload: data.payload}
+          };
+        }
+
+        const discordId: string = data.payload.discord_id.length >= 17 && data.payload.discord_id.length <= 18 ? data.payload.discord_id : "";
+        const mcIgn: string = data.payload.mc_ign.length >= 3 && data.payload.mc_ign.length <= 16 ? data.payload.mc_ign : "";
+        const emailAddress: string = data.payload.email_address.indexOf("@") > -1 && data.payload.email_address.length > 5 ? data.payload.email_address.trim() : "";
+        const country = data.payload.country ? sanitize(data.payload.country, {allowedTags: []}) : "";
+        const birthMonth = Number.parseInt(data.payload.birth_month) >= 1 && Number.parseInt(data.payload.birth_month) <= 12 ? Number.parseInt(data.payload.birth_month) : -1;
+        const birthYear = Number.parseInt(data.payload.birth_year) >= 1900 && Number.isInteger(Number.parseInt(data.payload.birth_year)) ? Number.parseInt(data.payload.birth_year) : -1;
+        const aboutMe = data.payload.about_me.length > 1 && data.payload.about_me.length <= 1500 ? sanitize(data.payload.about_me, {allowedTags: [], allowedAttributes: {}}) : "";
+        const motivation = data.payload.motivation.length > 1 && data.payload.motivation.length <= 1500 ? sanitize(data.payload.motivation, {allowedTags: [], allowedAttributes: {}}) : "";
+        const buildImages = data.payload.build_images.length > 1 && data.payload.build_images.length <= 1500 ? sanitize(data.payload.build_images, {allowedTags: [], allowedAttributes: {}}) : "";
+        const publishAboutMe = data.payload.publish_about_me;
+        const publishAge = data.payload.publish_age;
+        const publishCountry = data.payload.publish_country;
+
+        if(birthYear > new Date().getFullYear() - 13 || (birthYear > new Date().getFullYear() - 12 && new Date().getMonth() < birthMonth)) {
+          return {
+            status: 401,
+            payload: {err: "you need to be at least 13 years old to apply. If you believe this is an error contact TxT#0001 in Discord"}
+          };
+        }
+
+        if(discordId.length === 0 || mcIgn.length === 0 || emailAddress.length === 0 || country.length === 0 || birthMonth === -1 || birthYear === -1 || aboutMe.length === 0 || motivation.length === 0 || buildImages.length === 0) {
+          const payload = {
+            discordId: discordId,
+            mcIgn: data.payload.mcIgn,
+            emailAddress: emailAddress,
+            country: country,
+            birthMonth: birthMonth,
+            birthYear: birthYear,
+            aboutMe: aboutMe,
+            motivation: motivation,
+            buildImages: buildImages
+          }
+          log.write(0, "web", "handlers.paxapi.application.post received incorrect input", payload);
+          return {
+            status: 400,
+            payload: {err: "Incorrect input", payload: payload}
+          }
+        }
+
+        const mcUuid = await mc_helpers.getUUID(mcIgn)
+        const actualMcIgn = await mc_helpers.getIGN(mcUuid);
+        const userData = await discordHelpers.fetchUser(discordId);
+        const discordUserName = `${userData.username}#${userData.discriminator}`;
+        await applicationFactory.create(discordId, mcUuid, emailAddress, country, birthMonth, birthYear, aboutMe, motivation, buildImages, publishAboutMe, publishAge, publishCountry, 1, discordUserName, actualMcIgn);
+
+        return {
+          status: 201
+        };
+      },
+
+      async get(data: IRequestData): Promise<IHandlerResponse> {
+        //Clear the 0 status code, as 0 means get all data
+        if(data.queryStringObject.status == 0) data.queryStringObject = undefined;
+        return await turnFilterIntoApplication(data.queryStringObject);
+      },
+
+      async patch(data: IRequestData): Promise<IHandlerResponse> {
+        //Check if the required fields are set
+        const id: number = typeof data.payload.id == "number" && data.payload.id > -1 ? data.payload.id : -Infinity;
+        const status: number = typeof data.payload.status == "number" && data.payload.status >= 2 && data.payload.status <= 3 ? data.payload.status : -Infinity;
+
+        if(id > -Infinity && status > -Infinity) {
+          const application = await applicationFactory.getById(id);
+
+          if(status === 3) {
+            await application.accept();
+            return {};
+          } else {
+            await application.deny(data.payload.reason);
+            return {};
+          }
+        } else {
+          return {
+            status: 401,
+            payload: {err: "One of the inputs is not quite right"}
+          };
+        }
+      }
+    },
+
+    async mcversion(data: IRequestData): Promise<IHandlerResponse> {
+      try {
+        return {
+          payload: await mc_helpers.getServerVersion(),
+          contentType: "plain"
+        };
+      } catch(_) {
+        return {
+          payload: "",
+          contentType: "plain"
+        }
+      }
+    },
+
+    async memberworldmapdata(data: IRequestData): Promise<IHandlerResponse> {
+      return {
+        payload: await stats.countryList()
+      };
+    },
+
+    async statsoverview(data: IRequestData): Promise<IHandlerResponse> {
+      return {
+        payload: await stats.overview()
+      };
+    },
+
+    async discorduserfromcode(data: IRequestData): Promise<IHandlerResponse> {
+      const code = data.queryStringObject.code;
+      const discordId = await auth.getDiscordIdFromCode(code, "applicationNew");
+      const discordNick = discordHelpers.getNicknameByID(discordId);
+
+      return {
+        payload: {discordNick: discordNick, discordId: discordId}
+      };
+    },
+
+    async tokenfromcode(data: IRequestData): Promise<IHandlerResponse> {
+      const code = data.queryStringObject.code;
+      const access_level = await auth.getAccessLevelFromCode(code, "interface");
+      const access_token = await auth.getAccessTokenFromCode(code, "interface");
+
+      return {
+        payload: {access_token: access_token, access_level: access_level}
+      };
+    }
   }
 };
 
-//API functionality for handling blog posts
-handlers.paxapi.blog = async function(data: IRequestData): Promise<IHandlerResponse> {
-  if(typeof handlers.paxapi.blog[data.method] == "function") {
-    if(data.method === "get" && data.queryStringObject.hasOwnProperty("public")) {
-      //Only this case is allowed without auth
-      return await handlers.paxapi.blog.getPublic(data);
+async function authorizeRequest(data: IRequestData, minAccessLevel: number) {
+  if(data.headers.hasOwnProperty("cookie")) {
+    if(data.headers.cookie.indexOf("access_token".length > -1)) {
+      //There is an access_token cookie, lets check if it belongs to an admin
+      const accessLevel = await auth.getAccessLevelFromToken(data.cookies.access_token);
+      if(accessLevel >= minAccessLevel) {
+        return "";
+      } else {
+        return "You are not authorized to access this resource";
+      }
     } else {
-      const errorMessage = await authorizeRequest(data, 9);
-      if(errorMessage.length === 0) {
-        return await handlers.paxapi.blog[data.method](data);
-      } else {
-        return {
-          status: 401,
-          payload: {err: errorMessage}
-        };
-      }
+      return "Your client didnt send an access_token, please log in again";
     }
   } else {
-    return {
-      status: 405,
-      payload: {err: "Verb not allowed"}
-    };
+    return "Your client didnt send an access_token, please log in again";
   }
-};
-
-handlers.paxapi.blog.post = async function(data: IRequestData): Promise<IHandlerResponse> {
-  return {
-    payload: {doc: await blog.create(data.payload)}
-  };
-};
-
-handlers.paxapi.blog.put = async function(data: IRequestData): Promise<IHandlerResponse> {
-  return {
-    payload: {doc: await blog.replace(data.payload)}
-  };
 }
-
-handlers.paxapi.blog.get = async function(data: IRequestData): Promise<IHandlerResponse> {
-  return {
-    payload: await blog.getAll()
-  };
-};
-
-handlers.paxapi.blog.getPublic = async function (data: IRequestData): Promise<IHandlerResponse> {
-  return {
-    payload: await blog.getPublic()
-  };
-};
-
-//API functionallity surrounding member stuff
-handlers.paxapi.member = async function(data: IRequestData): Promise<IHandlerResponse> {
-  if(typeof handlers.paxapi.member[data.method] == "function"){
-    return await handlers.paxapi.member[data.method](data);
-  }else{
-    return {
-      status: 405,
-      payload: {err: "Verb not allowed"}
-    };
-  }
-};
-
-//Retrieves member objects
-handlers.paxapi.member.get = async function(data: IRequestData): Promise<IHandlerResponse> {
-  return {
-    payload: await stats.memberOverview()
-  };
-};
-
-//API functionallity surrounding the contact form
-handlers.paxapi.contact = async function(data: IRequestData): Promise<IHandlerResponse> {
-  if(typeof handlers.paxapi.contact[data.method] == "function"){
-    return await handlers.paxapi.contact[data.method](data);
-  }else{
-    return {
-      status: 405,
-      payload: {err: "Verb not allowed"}
-    };
-  }
-};
-
-//To send a contact email
-handlers.paxapi.contact.post = async function(data: IRequestData): Promise<IHandlerResponse> {
-  //Check the inputs
-  let name: string      = typeof data.payload.name == "string" && data.payload.name.length > 0 ? data.payload.name : "";
-  let recipient: string = typeof data.payload.email == "string" && data.payload.email.length > 3 ? data.payload.email : "";
-  let subject: string   = typeof data.payload.subject == "string" && data.payload.subject.length > 0 ? data.payload.subject : "";
-  let text: string      = typeof data.payload.text == "string" && data.payload.text.length > 10 ? data.payload.text : "";
-
-  if(name.length > 0 && recipient.length > 0 && subject.length > 0 && text.length > 0){
-    //Add the email of the sender to the text
-    text = text + "\n\n" + recipient;
-
-    discordHelpers.sendMessage(`Someone used the contact form!\nSubject: ${subject}\nBody: ${text}`, global.g.config.discord_bot.channel.new_application_announcement);
-    email.sendContactUsEmail(subject, text);
-
-    return {};
-  }else{
-    return {
-      status: 400,
-      payload: {err: "One of your inputs is a little off"}
-    };
-  }
-};
-
-handlers.paxapi.application = async function(data: IRequestData): Promise<IHandlerResponse> {
-  if(typeof handlers.paxapi.application[data.method] == "function"){
-    if(data.method != "post") {
-      //All non post requests require authorization
-      const authError = await authorizeRequest(data, 7);
-      if(authError.length === 0) {
-        return await handlers.paxapi.application[data.method](data);
-      } else {
-        return {
-          status: 401,
-          payload: {err: authError}
-        };
-      }
-    }else{
-      return await handlers.paxapi.application[data.method](data);
-    }
-  } else {
-    return {
-      status: 405,
-      payload: {err: "Verb not allowed"}
-    };
-  }
-};
-
-handlers.paxapi.application.post = async function(data: IRequestData): Promise<IHandlerResponse> {
-  if(!data.payload || !data.payload.accept_rules || !data.payload.accept_privacy_policy){
-    return {
-      status: 400,
-      payload: {err: "Missing or malformed payload", payload: data.payload}
-    };
-  }
-  
-  const discordId: string = data.payload.discord_id.length >= 17 && data.payload.discord_id.length <= 18 ? data.payload.discord_id : "";
-  const mcIgn: string = data.payload.mc_ign.length >= 3 && data.payload.mc_ign.length <= 16 ? data.payload.mc_ign : "";
-  const emailAddress: string = data.payload.email_address.indexOf("@") > -1 && data.payload.email_address.length > 5 ? data.payload.email_address.trim() : "";
-  const country = data.payload.country ? sanitize(data.payload.country, {allowedTags: []}) : "";
-  const birthMonth = Number.parseInt(data.payload.birth_month) >= 1 && Number.parseInt(data.payload.birth_month) <= 12 ? Number.parseInt(data.payload.birth_month) : -1;
-  const birthYear = Number.parseInt(data.payload.birth_year) >= 1900 && Number.isInteger(Number.parseInt(data.payload.birth_year)) ? Number.parseInt(data.payload.birth_year) : -1;
-  const aboutMe = data.payload.about_me.length > 1 && data.payload.about_me.length <= 1500 ? sanitize(data.payload.about_me, {allowedTags: [], allowedAttributes: {}}) : "";
-  const motivation = data.payload.motivation.length > 1 && data.payload.motivation.length <= 1500 ? sanitize(data.payload.motivation, {allowedTags: [], allowedAttributes: {}}) : "";
-  const buildImages = data.payload.build_images.length > 1 && data.payload.build_images.length <= 1500 ? sanitize(data.payload.build_images, {allowedTags: [], allowedAttributes: {}}) : "";
-  const publishAboutMe = data.payload.publish_about_me;
-  const publishAge = data.payload.publish_age;
-  const publishCountry = data.payload.publish_country;
-  
-  if(birthYear > new Date().getFullYear() - 13 || (birthYear > new Date().getFullYear() - 12 && new Date().getMonth() < birthMonth)){
-    return {
-      status: 401,
-      payload: {err: "you need to be at least 13 years old to apply. If you believe this is an error contact TxT#0001 in Discord"}
-    };
-  }
-  
-  if(discordId.length === 0 || mcIgn.length === 0 || emailAddress.length === 0 || country.length === 0 || birthMonth === -1 || birthYear === -1 || aboutMe.length === 0 || motivation.length === 0 || buildImages.length === 0){
-    const payload = {
-      discordId: discordId,
-      mcIgn: data.payload.mcIgn,
-      emailAddress: emailAddress,
-      country: country,
-      birthMonth: birthMonth,
-      birthYear: birthYear,
-      aboutMe: aboutMe,
-      motivation: motivation,
-      buildImages: buildImages
-    }
-    log.write(0, "web", "handlers.paxapi.application.post received incorrect input", payload);
-    return {
-      status: 400,
-      payload: {err: "Incorrect input", payload: payload}
-    }
-  }
-
-  const mcUuid = await mc_helpers.getUUID(mcIgn)
-  const actualMcIgn = await mc_helpers.getIGN(mcUuid);
-  const userData = await discordHelpers.fetchUser(discordId);
-  const discordUserName = `${userData.username}#${userData.discriminator}`;
-  await applicationFactory.create(discordId, mcUuid, emailAddress, country, birthMonth, birthYear, aboutMe, motivation, buildImages, publishAboutMe, publishAge, publishCountry, 1, discordUserName, actualMcIgn);
-
-  return {
-    status: 201
-  };
-};
-
-//Retrieves a list of applications
-//REQUIRES AUTHORIZATION!
-//Required data: none - this will return all applications
-//Optional id, discord, discord_id, mc_ign, status - these are filters, only return records matching the filter
-handlers.paxapi.application.get = async function(data: IRequestData): Promise<IHandlerResponse> {
-  //Clear the 0 status code, as 0 means get all data
-  if(data.queryStringObject.status == 0) data.queryStringObject = undefined;
-  return await turnFilterIntoApplication(data.queryStringObject);
-};
 
 async function turnFilterIntoApplication(filter: any): Promise<IHandlerResponse> {
   switch(Object.keys(filter)[0]) {
@@ -270,7 +359,7 @@ async function turnApplicationsIntoJson(applications: Application[]) {
   return applicationObjects.filter(x => x);
 }
 
-async function turnApplicationIntoJson(application: Application, getExpensiveData: boolean){
+async function turnApplicationIntoJson(application: Application, getExpensiveData: boolean) {
   return {
     id: application.getId(),
     timestamp: application.getTimestamp().valueOf(),
@@ -293,108 +382,5 @@ async function turnApplicationIntoJson(application: Application, getExpensiveDat
   };
 }
 
-//To change the status of a single application
-//REQUIRES AUTHORIZATION!
-//Required data: id, new status (2 or 3)
-handlers.paxapi.application.patch = async function(data: IRequestData): Promise<IHandlerResponse> {
-  //Check if the required fields are set
-  const id: number     = typeof data.payload.id     == "number" && data.payload.id     > -1 ? data.payload.id     : -Infinity;
-  const status: number = typeof data.payload.status == "number" && data.payload.status >= 2 && data.payload.status <= 3 ? data.payload.status : -Infinity;
-
-  if(id > -Infinity && status > -Infinity){
-    const application = await applicationFactory.getById(id);
-    
-    if(status === 3) {
-      await application.accept();
-      return {};
-    } else {
-      await application.deny(data.payload.reason);
-      return {};
-    }
-  }else{
-    return {
-      status: 401,
-      payload: {err: "One of the inputs is not quite right"}
-    };
-  }
-};
-
-handlers.paxapi.mcversion = async function(data: IRequestData): Promise<IHandlerResponse> {
-  try {
-    return {
-      payload: await mc_helpers.getServerVersion(),
-      contentType: "plain"
-    };
-  } catch (_) {
-    return {
-      payload: "",
-      contentType: "plain"
-    }
-  }
-}
-
-handlers.paxapi.memberworldmapdata = async function(data: IRequestData): Promise<IHandlerResponse> {
-  return {
-    payload: await stats.countryList()
-  };
-}
-
-handlers.paxapi.statsoverview = async function(data: IRequestData): Promise<IHandlerResponse> {
-  return {
-    payload: await stats.overview()
-  };
-}
-
-handlers.paxapi.discorduserfromcode = async function(data: IRequestData): Promise<IHandlerResponse> {
-  const code = data.queryStringObject.code;
-  const discordId = await auth.getDiscordIdFromCode(code, "applicationNew");
-  const discordNick = discordHelpers.getNicknameByID(discordId);
-  
-  return {
-    payload: {discordNick: discordNick, discordId: discordId}
-  };
-}
-
-handlers.paxapi.tokenfromcode = async function(data: IRequestData): Promise<IHandlerResponse> {
-  const code = data.queryStringObject.code;
-  const access_level = await auth.getAccessLevelFromCode(code, "interface");
-  const access_token = await auth.getAccessTokenFromCode(code, "interface");
-  
-  return {
-    payload: {access_token: access_token, access_level: access_level}
-  };
-}
-
-//Internal helper functions to make code cleaner
-var _internal: any = {};
-
-//Redirect user to the same url with the discord_id as queryStringObject
-_internal.redirectToDiscordId = async function(data: IRequestData): Promise<IHandlerResponse> {
-  const code = data.queryStringObject.code;
-  const discordId = await auth.getDiscordIdFromCode(code, "application");
-  return {
-    status: 302,
-    payload: {Location: `https://${data.headers.host}/${data.path.replace("/html/", "")}?id=${discordId}`}, //TODO: find out if the replace of /html" is still required
-    contentType: "plain"
-  };
-};
-
-async function authorizeRequest(data: IRequestData, minAccessLevel: number) {
-  if(data.headers.hasOwnProperty("cookie")) {
-    if(data.headers.cookie.indexOf("access_token".length > -1)) {
-      //There is an access_token cookie, lets check if it belongs to an admin
-      const accessLevel = await auth.getAccessLevelFromToken(data.cookies.access_token);
-      if(accessLevel >= minAccessLevel) {
-        return "";
-      } else {
-        return "You are not authorized to access this resource";
-      }
-    } else {
-      return "Your client didnt send an access_token, please log in again";
-    }
-  } else {
-    return "Your client didnt send an access_token, please log in again";
-  }
-}
 
 export = handlers;

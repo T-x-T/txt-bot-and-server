@@ -8,22 +8,20 @@ let models: any = {}; //TODO: fix any
 
 //This is the peristableProvider for saving and getting data to and from a mongoDB Database
 class Mongo implements IPersistanceProvider<any>{
-  mongodb_url;
+  static mongoDbUrl: string;
   collection;
   schema;
   model: any;
   
   //options:
-  //mongodb_url: if not given, use the value from the config
-  constructor(collection: string, schema: any, options?: {[key: string]: string | number | boolean}){
+  constructor(collection: string, schema: any){
     this.collection = collection;
     this.schema = schema;
-    this.mongodb_url = global.g.config.data.mongodb_url;
   }
 
   async connect(){
     if(!connected) {
-      await mongoose.connect(this.mongodb_url, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+      await mongoose.connect(Mongo.mongoDbUrl, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
       connected = true;
     }
     if(models.hasOwnProperty(this.collection)){

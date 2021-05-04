@@ -3,7 +3,7 @@
 *	With this command users can manage their role membership for certain roles
 */
 
-import discordHelpers = require("../helpers.js");
+import discordHelpers = require("../../discord_helpers/index.js");
 import Discord = require("discord.js");
 
 export = {
@@ -60,7 +60,7 @@ export = {
             roleCount++;
           }
         });
-        if(roleCount == 0) output += `There are none, get started by typing ${global.g.config.discord_bot.bot_prefix}role add <Role-Name>`
+        if(roleCount == 0) output += `There are none, get started by typing ${message.client.config.bot_prefix}role add <Role-Name>`
 
         //Finalize the output and send it
         output += "```";

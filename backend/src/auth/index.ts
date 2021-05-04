@@ -7,29 +7,35 @@
 import qs = require("querystring");
 import https = require("https");
 import discord_api = require("../discord_api/index.js");
-import discordBot = require("../discord_bot/index.js");
+import Discord = require("discord.js");
 import log = require("../log/index.js");
 import {IncomingMessage} from "node:http";
 
-const client = discordBot.client;
+let client: Discord.Client;
+let config: IConfig;
 
 const main = {
+  init(_config: IConfig, _client: Discord.Client) {
+    config = _config;
+    client = _client;
+  },
+
   getAccessLevelFromDiscordId(userID: string) {
     let access_level = 0;
     try {
-      if(client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).roles.has(global.g.config.discord_bot.roles.paxterya)) access_level = 3;
-      if(client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).roles.has(global.g.config.discord_bot.roles.cool)) access_level = 4;
-      if(client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).roles.has(global.g.config.discord_bot.roles.utp)) access_level = 5;
-      if(client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).roles.has(global.g.config.discord_bot.roles.mod)) access_level = 7;
-      if(client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).roles.has(global.g.config.discord_bot.roles.admin)) access_level = 8;
-      if(client.guilds.get(global.g.config.discord_bot.guild).members.get(userID).roles.has(global.g.config.discord_bot.roles.owner)) access_level = 9;
+      if(client.guilds.get(config.discord_bot.guild).members.get(userID).roles.has(config.discord_bot.roles.paxterya)) access_level = 3;
+      if(client.guilds.get(config.discord_bot.guild).members.get(userID).roles.has(config.discord_bot.roles.cool)) access_level = 4;
+      if(client.guilds.get(config.discord_bot.guild).members.get(userID).roles.has(config.discord_bot.roles.mayor)) access_level = 5;
+      if(client.guilds.get(config.discord_bot.guild).members.get(userID).roles.has(config.discord_bot.roles.mod)) access_level = 7;
+      if(client.guilds.get(config.discord_bot.guild).members.get(userID).roles.has(config.discord_bot.roles.admin)) access_level = 8;
+      if(client.guilds.get(config.discord_bot.guild).members.get(userID).roles.has(config.discord_bot.roles.owner)) access_level = 9;
     } catch(e) {}
     log.write(0, "auth", "main.returnAcessLevel returned", {userID: userID, access_level: access_level});
     return access_level;
   },
 
   isGuildMember(userID: string) {
-    return client.guilds.get(global.g.config.discord_bot.guild).members.has(userID);
+    return client.guilds.get(config.discord_bot.guild).members.has(userID);
   },
 
   async getDiscordIdFromCode(code: string, redirect: string) {
@@ -68,14 +74,14 @@ const main = {
   getAccessTokenFromCode(code: string, redirect: string): Promise<string> {
     return new Promise((resolve, reject) => {
       let redirect_uri = "";
-      redirect_uri = redirect == "application" ? global.g.config.auth.discord_redirect_uri_application : redirect_uri;
-      redirect_uri = redirect == "staffLogin" ? global.g.config.auth.discord_redirect_uri_staffLogin : redirect_uri;
-      redirect_uri = redirect == "applicationNew" ? global.g.config.auth.discord_redirect_uri_applicationNew : redirect_uri;
-      redirect_uri = redirect == "interface" ? global.g.config.auth.discord_redirect_uri_interface : redirect_uri;
+      redirect_uri = redirect == "application" ? config.auth.discord_redirect_uri_application : redirect_uri;
+      redirect_uri = redirect == "staffLogin" ? config.auth.discord_redirect_uri_staffLogin : redirect_uri;
+      redirect_uri = redirect == "applicationNew" ? config.auth.discord_redirect_uri_applicationNew : redirect_uri;
+      redirect_uri = redirect == "interface" ? config.auth.discord_redirect_uri_interface : redirect_uri;
 
       const payload = qs.stringify({
-        client_id: global.g.config.auth.discord_client_id,
-        client_secret: global.g.config.auth.discord_client_secret,
+        client_id: config.auth.discord_client_id,
+        client_secret: config.auth.discord_client_secret,
         grant_type: "authorization_code",
         code: code,
         redirect_uri: redirect_uri,

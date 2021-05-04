@@ -1,7 +1,6 @@
-require("./test.js");
 import assert = require("assert");
 import TestFactory = require("./testFactory.js");
-import TestPersistable = require("./testPersitable.js");
+import TestPersistable = require("./testPersistable.js");
 
 describe("factory base class", function(){
   describe("init", function(){

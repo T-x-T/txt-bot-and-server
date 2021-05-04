@@ -7,11 +7,8 @@
 import Rcon = require("./node-rcon.js");
 import log = require("../log/index.js");
 
-interface IRconServer {
-  rcon_server: string,
-  rcon_port: number,
-  rcon_password: string
-}
+let config: IConfigMinecraft;
+let environment: EEnvironment;
 
 let serverVersion = {
   version: "",
@@ -19,16 +16,21 @@ let serverVersion = {
 }
 
 const rcon = {
+  init(_config: IConfigMinecraft, _environment: EEnvironment){
+    config = _config;
+    environment = _environment;
+  },
+
   //Initializes the connection to the rcon server, sends a message and terminates the connection again
   send(cmd: string | string[], server?: string): Promise<string> {
     return new Promise((resolve, reject) => {
       //Abort if we are in testing mode
-      if(global.g.ENVIRONMENT == "testing") {
+      if(environment == EEnvironment.testing) {
         global.g.emitter.emit("testing_minecraft_rcon_send", cmd, server);
         resolve(null);
       }
 
-      if(!global.g.config.minecraft.rcon_enabled) {
+      if(!config.rcon_enabled) {
         log.write(0, "minecraft", "rcon.send received command to send, although its disabled", {});
         resolve(null);
       }
@@ -41,11 +43,11 @@ const rcon = {
         resolve(null);
       }
 
-      let servers: IRconServer[] = [];
+      let servers: IConfigRconServer[] = [];
       if(!server) {
-        Object.values(global.g.config.minecraft.rcon_servers).forEach((server: IRconServer) => servers.push(server));
+        Object.values(config.rcon_servers).forEach(server => servers.push(server));
       } else {
-        servers.push(global.g.config.minecraft.rcon_servers[server]);
+        servers.push(config.rcon_servers[server]);
       }
 
       if(!servers) {
@@ -82,17 +84,13 @@ const rcon = {
   },
 
   async getOnlinePlayers() {
-    return await rcon.send("list", global.g.config.minecraft.rcon_main_server);
-  },
-
-  async updateOnlinePlayers() {
-    global.g.mcPlayerCount = await rcon.getOnlinePlayers();
+    return await rcon.send("list", config.rcon_main_server);
   },
 
   async getServerVersion() {
     if(serverVersion.lastUpdate > Date.now() + 1000 * 60 * 60 && serverVersion.version.length > 0) return serverVersion.version;
 
-    const res = await rcon.send("version", global.g.config.minecraft.rcon_main_server);
+    const res = await rcon.send("version", config.rcon_main_server);
     let version = "";
     let inVersion = false;
     res.split("\n")[0].split("").forEach((char: string) => {

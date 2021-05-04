@@ -1,4 +1,3 @@
-require("./test.js");
 import assert = require("assert");
 
 describe("sanity-checks", function(){

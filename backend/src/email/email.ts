@@ -9,7 +9,13 @@ import sanitize = require("sanitize-html");
 import log      = require("../log/index.js");
 import type Application = require("../application/application.js");
 
+let config: IConfigEmail;
+
 const email = {
+  init(_config: IConfigEmail) {
+    config = _config;
+  },
+
   application: {
     confirmation(application: Application) {
       //Build the test for the mail
@@ -85,13 +91,13 @@ const email = {
       port: 465,
       secure: true,
       auth: {
-        user: global.g.config.email.mailUser,
-        pass: global.g.config.email.mailPass
+        user: config.mailUser,
+        pass: config.mailPass
       }
     });
 
     let mailOptions = {
-      from: global.g.config.email.mailUser,
+      from: config.mailUser,
       to: recipient,
       subject: subject,
       text: sanitize(text, {allowedTags: [], allowedAttributes: {}}),

@@ -6,15 +6,16 @@
 //Dependencies
 import youtube = require("../youtube/index.js");
 import log = require("../log/index.js");
-import mc_helpers = require("../minecraft/index.js");
 import stats = require("../stats/index.js");
 import update = require("./update.js");
-
-//Stuff that should run on startup
-mc_helpers.updateOnlinePlayers().catch(e => console.log("mc_helpers.updateOnlinePlayers threw:", e.message));
+import Discord = require("discord.js");
 
 log.prune(30).catch((e: Error) => console.log("log.prune(30) threw:", e.message));
 log.pruneLevel(1, 0).catch((e: Error) => console.log("log.pruneLevel(1, 0) threw:", e.message));
+
+export = (config: IConfig, client: Discord.Client) => {
+  update.init(config, client)
+}
 
 //10 seconds after startup
 setTimeout(async () => {
@@ -26,16 +27,6 @@ setTimeout(async () => {
     log.write(3, "workers", "10 seconds after startup threw", {err: e.message});
   }
 }, 10000);
-
-//Every minute
-setInterval(async () => {
-  try {
-    await mc_helpers.updateOnlinePlayers();
-  } catch (e) {
-    console.log("every minute threw:", e.message);
-    log.write(3, "workers", "every minute threw", {err: e.message});
-  }
-}, 1000 * 60);
 
 //Every 5 minutes
 setInterval(() => {

@@ -5,7 +5,7 @@
 
 //Dependencies
 import https = require("https");
-import discord_helpers = require("../discord_bot");
+import discord_helpers = require("../discord_helpers/index.js");
 import log = require("../log/index.js");
 import {IncomingMessage} from "node:http";
 
@@ -24,11 +24,16 @@ interface IYoutubeVideo {
   channel_title: string
 }
 
+let config: IConfigYoutube;
 let newestVideos: {[channels: string]: IYoutubeVideo} = {};
 
 export = {
+  init(_config: IConfigYoutube) {
+    config = _config;
+  },
+
   checkForNewVideos() {
-    const channels: IYoutubeChannel[] = global.g.config.youtube.youtube_video_announcements;
+    const channels: IYoutubeChannel[] = config.youtube_video_announcements;
     channels.forEach((channel) => getNewestVideos(channel));
   }
 }
@@ -37,7 +42,7 @@ function getNewestVideos(channel: IYoutubeChannel) {
   const options = {
     host: "www.googleapis.com",
     port: 443,
-    path: `/youtube/v3/activities?part=snippet%2CcontentDetails&channelId=${channel.youtube_id}&maxResults=1&fields=items&key=${global.g.config.youtube.google_api_key}`
+    path: `/youtube/v3/activities?part=snippet%2CcontentDetails&channelId=${channel.youtube_id}&maxResults=1&fields=items&key=${config.google_api_key}`
   };
   https.get(options, function (res: IncomingMessage) {
     res.setEncoding("utf8");

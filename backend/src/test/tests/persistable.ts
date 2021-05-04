@@ -1,6 +1,5 @@
-require("./test.js");
 import assert = require("assert");
-import TestPersistable = require("./testPersitable.js");
+import TestPersistable = require("./testPersistable.js");
 
 describe("persistable", function(){
 

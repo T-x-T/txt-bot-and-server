@@ -1,15 +1,18 @@
-require("./test.js");
 import assert = require("assert");
-import Application = require("../application/application.js");
-import ApplicationFactory = require("../application/applicationFactory.js");
+import Application = require("../../application/application.js");
+import ApplicationFactory = require("../../application/applicationFactory.js");
 const applicationFactory = new ApplicationFactory();
-import Mongo = require("../persistance/mongo.js");
-import Member = require("../user/member.js");
-import MemberFactory = require("../user/memberFactory.js");
+import Mongo = require("../../persistance/mongo.js");
+import Member = require("../../user/member.js");
+import MemberFactory = require("../../user/memberFactory.js");
 const memberFactory = new MemberFactory();
-import discord_helpers = require("../discord_bot");
+import discord_helpers = require("../../discord_helpers/index.js");
 
-import Discord = require("discord.js");
+let config: IConfig;
+
+export = (_config: IConfig) => {
+  config = _config;
+}
 
 async function createAndSaveApplication(){
   return await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT");
@@ -342,7 +345,7 @@ describe("application", function(){
         global.g.emitter.once("testing_discordHelpers_sendMessage", (_message: string, _channelId: string) => {
           global.g.emitter.once("testing_discordHelpers_sendMessage", (message: string, channelId: string) => {
             assert.ok(message.includes("293029505457586176"));
-            assert.strictEqual(channelId, global.g.config.discord_bot.channel.new_member_announcement);
+            assert.strictEqual(channelId, config.discord_bot.channel.new_member_announcement);
             resolve();
           });
         });
@@ -370,7 +373,7 @@ describe("application", function(){
 
         global.g.emitter.once("testing_discordHelpers_addMemberToRole", (discordId: string, roleId: string) => {
           assert.strictEqual(discordId, application.getDiscordId());
-          assert.strictEqual(roleId, global.g.config.discord_bot.roles.paxterya);
+          assert.strictEqual(roleId, config.discord_bot.roles.paxterya);
           resolve();
         });
 

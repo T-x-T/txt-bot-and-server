@@ -1,15 +1,21 @@
 
 //Dependencies
-import helpers = require("../discord_bot/helpers.js");
+import helpers = require("../discord_helpers/index.js");
 import mc = require("../minecraft/index.js");
 import MemberFactory = require("../user/memberFactory.js");
-import discordBot = require("../discord_bot/index.js");
+import Discord = require("discord.js");
 const memberFactory = new MemberFactory();
 memberFactory.connect();
 
-const client = discordBot.client;
+let client: Discord.Client;
+let config: IConfig;
 
 const update = {
+  init(_config: IConfig, _client: Discord.Client) {
+    config = _config;
+    client = _client;
+  },
+
   async updateAllIGNs() {
    return await Promise.all((await memberFactory.getAllWhitelisted()).map(async member => {
       if(member.getMcUuid()) {
@@ -21,11 +27,11 @@ const update = {
 
   //Set the nick of a user to their mc_ign
   async updateNick(discordId: string) {
-    if(discordId == client.guilds.get(global.g.config.discord_bot.guild).ownerID) return; //Dont update the owner of the guild, this will fail
+    if(discordId == client.guilds.get(config.discord_bot.guild).ownerID) return; //Dont update the owner of the guild, this will fail
     const member = await memberFactory.getByDiscordId(discordId);
     const ign = member.getMcIgn();
     try {
-      const discordMember = helpers.getMemberObjectByID(discordId);
+      const discordMember = helpers.getMemberObjectById(discordId);
       await discordMember.setNickname(ign);
     } catch(e) {
       throw new Error("Couldn't set the nickname of the discordMember: " + discordId);

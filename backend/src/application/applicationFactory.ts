@@ -1,8 +1,10 @@
 import Factory = require("../persistance/factory.js");
 import Application = require("./application.js");
-import discord_helpers = require("../discord_bot/helpers.js");
+import discord_helpers = require("../discord_helpers/index.js");
 import email = require("../email/index.js");
 import type {MongooseFilterQuery} from "mongoose";
+
+let config: IConfig;
 
 class ApplicationFactory extends Factory{
   constructor(options?: IFactoryOptions) {
@@ -11,6 +13,10 @@ class ApplicationFactory extends Factory{
       name: "applications",
       ...options
     });
+  }
+
+  static setConfig(_config: IConfig) {
+    config = _config;
   }
 
   //discordUserName and mcIgn are optional
@@ -61,7 +67,7 @@ class ApplicationFactory extends Factory{
 }
 
 async function announceNewApplication(application: Application){
-  await discord_helpers.sendMessage("New application from " + application.getDiscordUserName() + "\nYou can find it here: https://paxterya.com/interface", global.g.config.discord_bot.channel.new_application_announcement);
+  await discord_helpers.sendMessage("New application from " + application.getDiscordUserName() + "\nYou can find it here: https://paxterya.com/interface", config.discord_bot.channel.new_application_announcement);
 }
 
 function sendNewApplicationEmail(application: Application){

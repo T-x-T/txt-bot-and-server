@@ -7,15 +7,15 @@
 import main = require("./main.js");
 import rcon = require("./rcon.js");
 
-//Create the global variable that holds the current player count
-global.g.mcPlayerCount = 0;
-
 export = {
+  init(config: IConfigMinecraft, environment: EEnvironment) {
+    rcon.init(config, environment);
+  },
+
   getUUID: main.getUUID,
   getIGN: main.getIGN,
   getRenderUrl: main.getRenderUrl,
   sendCmd: rcon.send,
-  updateOnlinePlayers: rcon.updateOnlinePlayers,
   getServerVersion: rcon.getServerVersion,
 
   async whitelist(uuid: string){

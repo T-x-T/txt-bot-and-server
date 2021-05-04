@@ -1,8 +1,10 @@
 import Persistable = require("../persistance/persistable.js");
 import mc = require("../minecraft/index.js");
-import discord_helpers = require("../discord_bot/helpers.js");
+import discord_helpers = require("../discord_helpers/index.js");
 class Member extends Persistable{
   static schema: any;
+  static config: IConfig;
+
   constructor(discord_id: string, discord_nick: string, status: EMemberStatus, joinedDate: Date, mc_uuid: string, mc_ign: string, country: string, birth_month: number, birth_year: number, publish_age: boolean, publish_country: boolean){
     super({name: "members", schema: Member.schema});
 
@@ -160,15 +162,15 @@ class Member extends Persistable{
 
   async inactivate(){
     this.setStatus(EMemberStatus.inactive);
-    await this.takeDiscordRole(global.g.config.discord_bot.roles.paxterya);
-    await this.giveDiscordRole(global.g.config.discord_bot.roles.inactive);
+    await this.takeDiscordRole(Member.config.discord_bot.roles.paxterya);
+    await this.giveDiscordRole(Member.config.discord_bot.roles.inactive);
     await mc.sendCmd(`whitelist remove ${this.getMcIgn()}`);
   }
 
   async activate(){
     this.setStatus(EMemberStatus.active);
-    await this.takeDiscordRole(global.g.config.discord_bot.roles.inactive);
-    await this.giveDiscordRole(global.g.config.discord_bot.roles.paxterya);
+    await this.takeDiscordRole(Member.config.discord_bot.roles.inactive);
+    await this.giveDiscordRole(Member.config.discord_bot.roles.paxterya);
     await mc.sendCmd(`whitelist add ${this.getMcIgn()}`);
   }
 }

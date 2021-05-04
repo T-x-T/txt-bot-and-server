@@ -1,5 +1,4 @@
-require("./test.js");
-import Persistable = require("../persistance/persistable.js");
+import Persistable = require("../../persistance/persistable.js");
 
 class Test extends Persistable{
   text: string;

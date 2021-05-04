@@ -1,12 +1,14 @@
 import Persistable = require("../persistance/persistable.js");
 import sanitize = require("sanitize-html");
 import email = require("../email/index.js");
-import discord_helpers = require("../discord_bot/index.js");
+import discord_helpers = require("../discord_helpers/index.js");
 import mc_helpers = require("../minecraft/index.js");
 import MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory();
 import log = require("../log/index.js");
 import type Member = require("../user/member.js");
+
+let config: IConfig;
 
 class Application extends Persistable{
   static schema: any; //TODO fix any type
@@ -33,6 +35,10 @@ class Application extends Persistable{
     this.data.mc_ign = mcIgn ? mcIgn : null;
   }
 
+  static setConfig(_config: IConfig) {
+    config = _config;
+  }
+
   /*
    *  LIFECYCLE
    */
@@ -51,7 +57,7 @@ class Application extends Persistable{
     await Promise.all([
       this.createMemberFromApplication(),
       sendAcceptedMemberWelcomeMessage(this),
-      discord_helpers.addMemberToRole(this.getDiscordId(), global.g.config.discord_bot.roles.paxterya)
+      discord_helpers.addMemberToRole(this.getDiscordId(), config.discord_bot.roles.paxterya)
     ]);
     mc_helpers.whitelist(this.getMcUuid());
     const discordMember = discord_helpers.getMemberObjectById(this.getDiscordId());
@@ -217,7 +223,8 @@ async function sendAcceptedMemberWelcomeMessage(application: Application) {
   msg += `Please also take a look at our FAQ: <#624992850764890122>\n`;
   msg += "The IP of the survival server is paxterya.com and the IP for the creative Server is paxterya.com:25566\n\n";
   msg += "If you encounter any issues or have any questions, feel free to contact our staff.";
-  await discord_helpers.sendMessage(msg, global.g.config.discord_bot.channel.new_member_announcement);
+
+  await discord_helpers.sendMessage(msg, config.discord_bot.channel.new_member_announcement);
 }
 
 Application.schema = {

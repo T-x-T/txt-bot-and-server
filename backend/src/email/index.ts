@@ -7,9 +7,17 @@
 import main = require("./email.js");
 import type Application = require("../application/application.js");
 
+let config: IConfigEmail;
+let environment: EEnvironment;
+
 export = {
+  init(_config: IConfigEmail, _environment: EEnvironment) {
+    config = _config;
+    environment = _environment;
+  },
+
   sendNewApplicationMail(application: Application) {
-    if(global.g.ENVIRONMENT === "testing") {
+    if(environment == EEnvironment.testing) {
       global.g.emitter.emit("testing_email_sendNewApplicationMail", application);
       return;
     }
@@ -17,7 +25,7 @@ export = {
   },
 
   sendApplicationDeniedMail(application: Application) {
-    if(global.g.ENVIRONMENT === "testing") {
+    if(environment == EEnvironment.testing) {
       global.g.emitter.emit("testing_email_sendApplicationDeniedMail", application);
       return;
     }
@@ -25,7 +33,7 @@ export = {
   },
 
   sendApplicationAcceptedMail(application: Application) {
-    if(global.g.ENVIRONMENT === "testing") {
+    if(environment == EEnvironment.testing) {
       global.g.emitter.emit("testing_email_sendApplicationAcceptedMail", application);
       return;
     }
