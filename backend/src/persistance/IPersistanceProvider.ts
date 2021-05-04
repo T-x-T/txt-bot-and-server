@@ -1,4 +1,4 @@
-import type {MongooseFilterQuery} from "mongoose";
+import type {MongooseFilterQuery, SchemaDefinition} from "mongoose";
 
 interface IPersistanceProviderConstructor {
   new(collection: string, schema: any, options?: {[key: string]: string | number | boolean}): IPersistanceProvider<any>,
@@ -6,7 +6,7 @@ interface IPersistanceProviderConstructor {
 
 interface IPersistanceProvider<T> {
   collection: string,
-  schema: any,
+  schema: SchemaDefinition,
   options?: {[key: string]: string | number | boolean},
   connect(): Promise<void>,
   retrieveFirst(): Promise<T>,
