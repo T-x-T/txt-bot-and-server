@@ -117,7 +117,6 @@ interface IConfigEmail {
 }
 
 interface IConfigMinecraft {
-  mc_stats_remote:  string;
   rcon_main_server: string;
   rcon_enabled:     boolean;
   rcon_servers:     IConfigRconServers;
