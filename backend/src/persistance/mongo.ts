@@ -4,14 +4,14 @@ import type {MongooseFilterQuery} from "mongoose";
 import type {IPersistanceProvider} from "./IPersistanceProvider";
 
 let connected = false;
-let models: any = {}; //TODO: fix any
+let models: {[index: string]: mongoose.Model<any>} = {};
 
 //This is the peristableProvider for saving and getting data to and from a mongoDB Database
 class Mongo implements IPersistanceProvider<any>{
   static mongoDbUrl: string;
   collection;
   schema;
-  model: any;
+  model: mongoose.Model<any>;
   
   //options:
   constructor(collection: string, schema: any){

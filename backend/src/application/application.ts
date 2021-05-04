@@ -7,11 +7,12 @@ import MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory();
 import log = require("../log/index.js");
 import type Member = require("../user/member.js");
+import type {SchemaDefinition} from "mongoose";
 
 let config: IConfig;
 
 class Application extends Persistable{
-  static schema: any; //TODO fix any type
+  static schema: SchemaDefinition;
 
   constructor(id: number, discordId: string, mcUuid: string, emailAddress: string, country: string, birth_month: number, birth_year: number, about_me: string, motivation: string, buildImages: string, publishAboutMe: boolean, publishAge: boolean, publishCountry: boolean, status: EApplicationStatus, timestamp: Date, discordUserName: string, mcIgn: string){
     super({name: "applications", schema: Application.schema});
