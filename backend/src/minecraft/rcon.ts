@@ -36,7 +36,6 @@ const rcon = {
       }
 
       if(Array.isArray(cmd)) {
-        log.write(0, "minecraft", "rcon.send received array", {cmd: cmd});
         cmd.forEach((_cmd) => {
           rcon.send(_cmd, server);
         });
@@ -51,7 +50,7 @@ const rcon = {
       }
 
       if(!servers) {
-        log.write(0, "minecraft", "rcon.send received non-existent server", {cmd: cmd, server: server});
+        log.write(2, "minecraft", "rcon.send received non-existent server", {cmd: cmd, server: server});
         reject(new Error("Invalid server: " + server));
       }
 

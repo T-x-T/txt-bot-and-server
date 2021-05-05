@@ -76,7 +76,7 @@ export = (_config: IConfigDiscordBot, _client: Discord.Client) => {
       discordHelpers.sendMessage(`${user.displayName} left the server`, config.channel.mod_notifications);
     } catch(e) {
       discordHelpers.sendCrashMessage(e, "discord event handler");
-      log.write(3, "discord_bot", "guildMemberRemove failed", {error: e.message, user: user.id});
+      log.write(2, "discord_bot", "guildMemberRemove failed", {error: e.message, user: user.id});
     }
   });
 
@@ -87,7 +87,7 @@ export = (_config: IConfigDiscordBot, _client: Discord.Client) => {
       discordHelpers.sendMessage(`${user.username} was banned from the server`, config.channel.mod_notifications);
     } catch(e) {
       discordHelpers.sendCrashMessage(e, "discord event handler");
-      log.write(3, "discord_bot", "guildBanAdd failed", {error: e.message, user: user.id});
+      log.write(2, "discord_bot", "guildBanAdd failed", {error: e.message, user: user.id});
     }
   });
 
@@ -103,7 +103,7 @@ export = (_config: IConfigDiscordBot, _client: Discord.Client) => {
       if(application?.length > 0) await application[0].acceptGuildMember();
     } catch(e) {
       discordHelpers.sendCrashMessage(e, "discord event handler");
-      log.write(3, "discord_bot", "guildMemberAdd failed", {error: e.message, user: user.id});
+      log.write(2, "discord_bot", "guildMemberAdd failed", {error: e.message, user: user.id});
     }
   });
 };

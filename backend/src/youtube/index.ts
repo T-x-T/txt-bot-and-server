@@ -65,13 +65,13 @@ function getNewestVideos(channel: IYoutubeChannel) {
             channel_title: data.items[0].snippet.channelTitle
           });
         } else {
-          log.write(3, "youtube", "Retrieved data from youtube is invalid", data);
+          log.write(2, "youtube", "Retrieved data from youtube is invalid", data);
         }
       } else {
-        log.write(3, "youtube", "Retrieved data from youtube is invalid", data);
+        log.write(2, "youtube", "Retrieved data from youtube is invalid", data);
       }
     }).on("error", function (e) {
-      log.write(3, "youtube", "Cant retrieve video data from youtube: " + e.message, null);
+      log.write(2, "youtube", "Cant retrieve video data from youtube: " + e.message, null);
     });
   });
 }

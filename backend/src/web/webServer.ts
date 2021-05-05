@@ -37,9 +37,7 @@ async function uniserver(req: IncomingMessage, res: ServerResponse) {
   //Form the data object
   const data = await getDataObject(req);
   //Log the request
-  log.write(0, "web", "Web Request received", {data: data});
-  console.log(data.method, data.path);
-  if(data.method == "post") console.log(data.payload);
+  log.write(0, "web", "Web Request received", {method: data.method, path: data.path, payload: data.payload});
 
   //Some requests seem to come in without any header, which is bad, so lets add one here if thats the case, also log it
   if(!data.headers.hasOwnProperty("host")) data.headers.host = "paxterya.com";
@@ -60,7 +58,7 @@ async function uniserver(req: IncomingMessage, res: ServerResponse) {
 
     processHandlerResponse(res, handlerResponse);
   } catch(e) {
-    log.write(3, "web", "web request encountered a fatal error", {err: e.message, data: data});
+    log.write(3, "web", "web request encountered a fatal error", {err: e.message, stack: e.stack, data: data});
     processHandlerResponse(res, {status: 500, payload: {message: "Something really bad happened, while we tried to process your request", err: e.message}});
   }
 };
