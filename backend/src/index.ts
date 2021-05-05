@@ -39,6 +39,7 @@ async function start() {
   console.log("got discord client")
   await discordBot.init(config.discord_bot, discordClient);
   discordHelpers.init(config.discord_bot, environment, discordClient);
+  log.init(config, environment);
   auth.init(config, discordClient);
   youtube.init(config.youtube);
   webServer(config, environment);

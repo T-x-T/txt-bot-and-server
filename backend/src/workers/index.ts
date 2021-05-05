@@ -10,9 +10,6 @@ import stats = require("../stats/index.js");
 import update = require("./update.js");
 import Discord = require("discord.js");
 
-log.prune(30).catch((e: Error) => console.log("log.prune(30) threw:", e.message));
-log.pruneLevel(1, 0).catch((e: Error) => console.log("log.pruneLevel(1, 0) threw:", e.message));
-
 export = (config: IConfig, client: Discord.Client) => {
   update.init(config, client)
 }
@@ -58,14 +55,3 @@ setInterval(() => {
     log.write(3, "workers", "every six hours threw", {err: e.message});
   }
 }, 1000 * 60 * 60 * 6);
-
-//Every day
-setInterval(async () => {
-  try {
-    await log.prune(30);
-    await log.pruneLevel(1, 0);
-  } catch (e) {
-    console.log("every day threw:", e.message);
-    log.write(3, "workers", "every day threw", {err: e.message});
-  }
-}, 1000 * 60 * 60 * 24);

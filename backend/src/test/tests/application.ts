@@ -383,7 +383,7 @@ describe("application", function(){
 
     it("set correct nickname in discord", async function(){
       const discordMember = discord_helpers.getMemberObjectById("293029505457586176");
-      discordMember.setNickname("test");
+      await discordMember.setNickname("test");
       const application = await createAndSaveApplication();
       await application.accept();
       const newDiscordMember = discord_helpers.getMemberObjectById("293029505457586176");

@@ -24,6 +24,7 @@ import youtube = require("../youtube/index.js");
 import email = require("../email/index.js");
 import minecraft = require("../minecraft/index.js");
 import user = require("../user/index.js");
+import log = require("../log/index.js");
 import application = require("../application/index.js");
 
 
@@ -31,6 +32,7 @@ before(async function(){
   const discordClient = await init.getDiscordClient(config.discord_bot);
   console.log("got discord client")
   discordHelpers.init(config.discord_bot, environment, discordClient);
+  log.init(config, environment);
   auth.init(config, discordClient);
   youtube.init(config.youtube);
   email.init(config.email, environment);
@@ -50,7 +52,6 @@ before(async function(){
 import testApplication = require("./tests/application.js");
 require("./tests/blog.js");
 require("./tests/factory.js");
-require("./tests/log.js");
 import testMember = require("./tests/member.js");
 require("./tests/persistable.js");
 require("./tests/persistanceProviderMongo.js");

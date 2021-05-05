@@ -4,72 +4,30 @@
 */
 
 //Dependencies
-import Persistable = require("../persistance/persistable.js");
-import Factory = require("../persistance/factory.js");
-import mongoose = require("mongoose");
-const Schema = mongoose.Schema;
-const Mixed = Schema.Types.Mixed;
+import util = require("util");
+import discordHelpers = require("../discord_helpers/index.js");
+
+let config: IConfig;
+let environment: EEnvironment;
 
 const log = {
-  async write(level: number, component: string, name: string, payload: any, timestamp?: Date) {
-    let entry = new Persistable({name: "log", schema: log.schema});
-    await entry.init();
-    entry.data = {
-      timestamp: timestamp ? timestamp : new Date(),
-      level: level,
-      component: component,
-      name: name,
-      data: payload
-    };
-    return await entry.create();
+  init(_config: IConfig, _environment: EEnvironment) {
+    config = _config;
+    environment = _environment;
   },
 
-  async read(level: number | boolean, timestamp: Date): Promise<any[]> {
-    let factory = new Factory({name: "log", schema: log.schema});
-    await factory.connect();
-
-    let filter;
-    if(typeof level !== "number") {
-      filter = {timestamp: {$gt: timestamp}};
+  write(level: 0 | 1 | 2 | 3, component: string, name: string, payload: any) {
+    if(environment == EEnvironment.testing) return;
+    if(level === 0) {
+      console.log(new Date(), `[DEBUG] ${component}: ${name}`, util.inspect(payload));
     } else {
-      filter = {$and: [{level: level}, {timestamp: {$gt: timestamp}}]};
+      let output = "";
+      output += level == 1 ? "INFO:\n" : level == 2 ? "WARN:\n" : "ERROR:\n";
+      output += `Occured in: ${component}\n`;
+      output += name + "\n";
+      output += util.inspect(payload);
+      discordHelpers.sendMessage(output, config.discord_bot.channel.logs)
     }
-
-    return await factory.persistanceProvider.retrieveFiltered(filter);
-  },
-
-  async readById(id: string): Promise<any> {
-    let factory = new Factory({name: "log", schema: log.schema});
-    await factory.connect();
-
-    return await factory.persistanceProvider.retrieveNewestFiltered({_id: id});
-  },
-
-  async prune(days: number) {
-    let factory = new Factory({name: "log", schema: log.schema});
-    await factory.connect();
-
-    await factory.persistanceProvider.deleteByFilter({timestamp: {$lte: new Date(Date.now() - 1000 * 60 * 60 * 24 * days)}});
-  },
-
-  async pruneLevel(days: number, level: number) {
-    let factory = new Factory({name: "log", schema: log.schema});
-    await factory.connect();
-
-    await factory.persistanceProvider.deleteByFilter({
-      $and: [
-        {timestamp: {$lte: new Date(Date.now() - 1000 * 60 * 60 * 24 * days)}},
-        {level: level}
-      ]
-    });
-  },
-
-  schema: {
-    timestamp: Date,
-    level: Number, //0 = debug, 1 = info, 2 = warn, 3 = error
-    component: String,
-    name: String,
-    data: Mixed
   }
 };
 

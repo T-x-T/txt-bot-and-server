@@ -34,7 +34,7 @@ const helpers = {
     }
 
     const channel = guild.channels.get(channelID) as Discord.TextChannel;
-    await channel.send(message);
+    await channel.send(message, {split: true});
   },
 
   getSelfAssignableRoles() {
