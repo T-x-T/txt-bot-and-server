@@ -58,12 +58,12 @@ class Application extends Persistable{
     await Promise.all([
       this.createMemberFromApplication(),
       sendAcceptedMemberWelcomeMessage(this),
-      discord_helpers.addMemberToRole(this.getDiscordId(), config.discord_bot.roles.paxterya)
+      discord_helpers.addMemberToRole(this.getDiscordId(), config.discord_bot.roles.paxterya),
+      mc_helpers.whitelist(this.getMcUuid())
     ]);
-    mc_helpers.whitelist(this.getMcUuid());
     const discordMember = discord_helpers.getMemberObjectById(this.getDiscordId());
     if(discordMember) {
-      await discordMember.setNickname(this.getMcIgn())
+      await discordMember.setNickname(this.getMcIgn());
     } else {
       log.write(2, "application", "Application#accept couldnt get discord member object", {application: this.data});
     }
