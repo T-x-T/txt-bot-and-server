@@ -18,19 +18,16 @@ const log = {
 
   write(level: 0 | 1 | 2 | 3, component: string, name: string, payload: any) {
     if(environment == EEnvironment.testing) return;
-    if(environment == EEnvironment.staging) {
-      console.log(new Date(), `[${level}] ${component}: ${name}`, util.inspect(payload));
-    } else {
-      if(level === 0) {
-        console.log(new Date(), `[DEBUG] ${component}: ${name}`, util.inspect(payload));
-      } else {
-        let output = "";
-        output += level == 1 ? "INFO:\n" : level == 2 ? "WARN:\n" : "ERROR:\n";
-        output += `Occured in: ${component}\n`;
-        output += name + "\n";
-        output += util.inspect(payload);
-        discordHelpers.sendMessage(output, config.discord_bot.channel.logs)
-      }
+
+    console.log(new Date(), `[${level}] ${component}: ${name}`, util.inspect(payload));
+
+    if(environment == EEnvironment.prod && level > 0) {
+      let output = "";
+      output += level == 1 ? "INFO:\n" : level == 2 ? "WARN:\n" : "ERROR:\n";
+      output += `Occured in: ${component}\n`;
+      output += name + "\n";
+      output += util.inspect(payload);
+      discordHelpers.sendMessage(output, config.discord_bot.channel.logs)
     }
   }
 };
