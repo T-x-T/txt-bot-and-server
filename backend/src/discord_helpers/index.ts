@@ -8,7 +8,7 @@ import helpers = require("./helpers.js");
 import Discord = require("discord.js");
 
 export = {
-  getNicknameByID: helpers.getNicknameByID,
+  getNicknameByIdOfGuildUser: helpers.getNicknameByIdOfGuildUser,
   getSelfAssignableRoles: helpers.getSelfAssignableRoles,
   getRoleId: helpers.getRoleId,
   addMemberToRole: helpers.addMemberToRole,

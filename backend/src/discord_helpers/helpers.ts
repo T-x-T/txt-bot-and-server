@@ -19,7 +19,7 @@ const helpers = {
     guild = client.guilds.get(config.guild);
   },
 
-  getNicknameByID(userID: string) {
+  getNicknameByIdOfGuildUser(userID: string) {
     if(guild.members.get(userID)) return `${guild.members.get(userID).user.username}#${guild.members.get(userID).user.discriminator}`;
     return null;
   },

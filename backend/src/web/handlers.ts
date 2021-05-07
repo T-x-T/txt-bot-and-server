@@ -296,10 +296,10 @@ const handlers = {
     async discorduserfromcode(data: IRequestData): Promise<IHandlerResponse> {
       const code = data.queryStringObject.code;
       const discordId = await auth.getDiscordIdFromCode(code, "applicationNew");
-      const discordNick = await discordHelpers.getNicknameByID(discordId);
+      const discordUser = await discordHelpers.fetchUser(discordId)
       
       return {
-        payload: {discordNick: discordNick, discordId: discordId}
+        payload: {discordNick: discordUser.username + "#" + discordUser.discriminator, discordId: discordId}
       };
     },
 

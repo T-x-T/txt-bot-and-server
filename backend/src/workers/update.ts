@@ -46,7 +46,7 @@ const update = {
   //This gets the current username of all users and writes them into the db
   async updateAllDiscordNicks() {
     return await Promise.all((await memberFactory.getAllWhitelisted()).map(async member => {
-      const discordNick = await helpers.getNicknameByID(member.getDiscordId());
+      const discordNick = helpers.getNicknameByIdOfGuildUser(member.getDiscordId());
       member.setDiscordUserName(discordNick);
       return member.save();
     }));
