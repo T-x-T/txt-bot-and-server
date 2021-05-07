@@ -19,8 +19,9 @@ const helpers = {
     guild = client.guilds.get(config.guild);
   },
 
-  async getNicknameByID(userID: string) {
-    return `${guild.members.get(userID).user.username}#${guild.members.get(userID).user.discriminator}`;
+  getNicknameByID(userID: string) {
+    if(guild.members.get(userID)) return `${guild.members.get(userID).user.username}#${guild.members.get(userID).user.discriminator}`;
+    return null;
   },
 
   sendCrashMessage(err: Error, origin: string) {
