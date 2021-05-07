@@ -124,7 +124,7 @@ async function statsSwitch(collection: string, uuid: string | boolean, ign: stri
       return output;
     }
     case "distance": {
-      const data = await getStats(collection, uuid, rankInfo);
+      const data = await getStats("distances", uuid, rankInfo);
       if(rankInfo) {
         output += `Distance statistics for ${ign}:\n`;
         output += `Walk: ${data.distance_walk.rank} of ${data._totalPlayers} (${data.distance_walk.stat})\n`;
@@ -156,7 +156,7 @@ async function statsSwitch(collection: string, uuid: string | boolean, ign: stri
       return output;
     }
     case "ores": {
-      const data = await getStats(collection, uuid, rankInfo);
+      const data = await getStats("minedOres", uuid, rankInfo);
       if(rankInfo) {
         output += `Mined ores from ${ign}:\n`;
         output += `Diamond: ${data.mined_diamond_ore.rank} of ${data._totalPlayers} (${data.mined_diamond_ore.stat})\n`;
@@ -208,8 +208,8 @@ async function statsSwitch(collection: string, uuid: string | boolean, ign: stri
       return output;
     }
     case "top_usage": {
-      if(!rankInfo) return "This stats collection doesnt work with ranks :(";
-      const data = await getStats(collection, uuid, rankInfo);
+      if(rankInfo) return "This stats collection doesnt work with ranks :(";
+      const data = await getStats("topUsageItems", uuid, false);
       output += `Top used items from ${ign}:\n`;
       let i = 0;
       data.forEach(() => {
@@ -219,8 +219,8 @@ async function statsSwitch(collection: string, uuid: string | boolean, ign: stri
       return output;
     }
     case "top_picked_up": {
-      if(!rankInfo) return "This stats collection doesnt work with ranks :(";
-      const data = await getStats(collection, uuid, rankInfo);
+      if(rankInfo) return "This stats collection doesnt work with ranks :(";
+      const data = await getStats("topPickedUpItems", uuid, false);
       output += `Top picked up items from ${ign}:\n`;
       let i = 0;
       data.forEach(() => {
@@ -230,8 +230,8 @@ async function statsSwitch(collection: string, uuid: string | boolean, ign: stri
       return output;
     }
     case "top_mined": {
-      if(!rankInfo) return "This stats collection doesnt work with ranks :(";
-      const data = await getStats(collection, uuid, rankInfo);
+      if(rankInfo) return "This stats collection doesnt work with ranks :(";
+      const data = await getStats("topMinedBlocks", uuid, false);
       output += `Top mined items from ${ign}:\n`;
       let i = 0;
       data.forEach(() => {
@@ -241,8 +241,8 @@ async function statsSwitch(collection: string, uuid: string | boolean, ign: stri
       return output;
     }
     case "top_dropped": {
-      if(!rankInfo) return "This stats collection doesnt work with ranks :(";
-      const data = await getStats(collection, uuid, rankInfo);
+      if(rankInfo) return "This stats collection doesnt work with ranks :(";
+      const data = await getStats("topDroppedItems", uuid, false);
       output += `Top dropped items from ${ign}:\n`;
       let i = 0;
       data.forEach(() => {
@@ -252,8 +252,8 @@ async function statsSwitch(collection: string, uuid: string | boolean, ign: stri
       return output;
     }
     case "top_crafted": {
-      if(!rankInfo) return "This stats collection doesnt work with ranks :(";
-      const data = await getStats(collection, uuid, rankInfo);
+      if(rankInfo) return "This stats collection doesnt work with ranks :(";
+      const data = await getStats("topCraftedItems", uuid, false);
       output += `Top crafted items from ${ign}:\n`;
       let i = 0;
       data.forEach(() => {
@@ -263,8 +263,8 @@ async function statsSwitch(collection: string, uuid: string | boolean, ign: stri
       return output;
     }
     case "top_broken": {
-      if(!rankInfo) return "This stats collection doesnt work with ranks :(";
-      const data = await getStats(collection, uuid, rankInfo);
+      if(rankInfo) return "This stats collection doesnt work with ranks :(";
+      const data = await getStats("topBrokenItems", uuid, false);
       output += `Top broken items from ${ign}:\n`;
       let i = 0;
       data.forEach(() => {
@@ -274,8 +274,8 @@ async function statsSwitch(collection: string, uuid: string | boolean, ign: stri
       return output;
     }
     case "top_killed": {
-      if(!rankInfo) return "This stats collection doesnt work with ranks :(";
-      const data = await getStats(collection, uuid, rankInfo);
+      if(rankInfo) return "This stats collection doesnt work with ranks :(";
+      const data = await getStats("topKilledMobs", uuid, false);
       output += `Top killed mobs from ${ign}:\n`;
       let i = 0;
       data.forEach(() => {
@@ -285,8 +285,8 @@ async function statsSwitch(collection: string, uuid: string | boolean, ign: stri
       return output;
     }
     case "top_killed_by": {
-      if(!rankInfo) return "This stats collection doesnt work with ranks :(";
-      const data = await getStats(collection, uuid, rankInfo);
+      if(rankInfo) return "This stats collection doesnt work with ranks :(";
+      const data = await getStats("topKilledByMobs", uuid, false);
       output += `Top mobs killed by from ${ign}:\n`;
       let i = 0;
       data.forEach(() => {
@@ -296,8 +296,7 @@ async function statsSwitch(collection: string, uuid: string | boolean, ign: stri
       return output;
     }
     case "total_per_death": {
-      if(!rankInfo) return "This stats collection doesnt work with ranks :(";
-      const data = await getStats(collection, uuid, rankInfo);
+      const data = await getStats("totalPerDeath", uuid, rankInfo);
       if(rankInfo) {
         output += `Totals per death from ${ign}:\n`;
         output += `Blocks mined: ${data.total_per_death_mined.rank} of ${data._totalPlayers} (${data.total_per_death_mined.stat})\n`;

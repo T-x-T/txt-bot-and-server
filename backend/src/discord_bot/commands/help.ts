@@ -4,6 +4,7 @@
  */
 
 import Discord = require("discord.js");
+import log = require("../../log/index.js");
 import minecraft = require("../../minecraft/index.js");
 
 export = {
@@ -15,13 +16,20 @@ export = {
   async execute(message: Discord.Message, args: string[]) {
     const data = [];
     const { commands } = message.client;
-
+    
     //If the user didnt specify any command, list all commands
     if (!args.length) {
+      let minecraftVersion = "";
+      try {
+        minecraftVersion = await minecraft.getServerVersion();
+      } catch(e) {
+        log.write(0, "help command", "minecraft.getServerVersion() threw", {err: e.message});
+      }
+      
       data.push("**Join here:** https://paxterya.com/join-us");
       data.push("**Survival Server IP:** paxterya.com");
       data.push("**Creative Server IP:** paxterya.com:25566");
-      data.push(`**Version:** ${await minecraft.getServerVersion()} java`);
+      data.push(`**Version:** ${minecraftVersion} java`);
       data.push(`**Help:** <#${message.guild.channels.find(channel => channel.name == "support").id}>`);
       data.push("\nHere is a list of all available commands: ");
       data.push(commands.map(command => command.name).join(", "));

@@ -17,6 +17,7 @@ export = (config: IConfig, client: Discord.Client) => {
 //10 seconds after startup
 setTimeout(async () => {
   try {
+    youtube.checkForNewVideos();
     await update.updateAllNicks();
     await update.updateAllIGNs();
   } catch (e) {

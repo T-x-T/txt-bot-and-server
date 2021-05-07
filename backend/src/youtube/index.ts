@@ -44,6 +44,7 @@ function getNewestVideos(channel: IYoutubeChannel) {
     port: 443,
     path: `/youtube/v3/activities?part=snippet%2CcontentDetails&channelId=${channel.youtube_id}&maxResults=1&fields=items&key=${config.google_api_key}`
   };
+  
   https.get(options, function (res: IncomingMessage) {
     res.setEncoding("utf8");
     let rawData: string = "";
@@ -53,22 +54,18 @@ function getNewestVideos(channel: IYoutubeChannel) {
       //Parse the data object
       const data = JSON.parse(rawData);
       //Check if the response from youtube is valid
-      if(data.hasOwnProperty("items") && data.items[0]) {
-        if(data.items[0].hasOwnProperty("contentDetails")) {
-          //Data object seems valid
-          postIfNew({
-            id: data.items[0].contentDetails.upload.videoId,
-            title: data.items[0].snippet.title,
-            url: "https://youtu.be/" + data.items[0].contentDetails.upload.videoId,
-            date: new Date(data.items[0].snippet.publishedAt),
-            channel: channel,
-            channel_title: data.items[0].snippet.channelTitle
-          });
-        } else {
-          log.write(2, "youtube", "Retrieved data from youtube is invalid", data);
-        }
+      if(data?.items[0]?.hasOwnProperty("contentDetails")) {
+        //Data object seems valid
+        postIfNew({
+          id: data.items[0].contentDetails.upload.videoId,
+          title: data.items[0].snippet.title,
+          url: "https://youtu.be/" + data.items[0].contentDetails.upload.videoId,
+          date: new Date(data.items[0].snippet.publishedAt),
+          channel: channel,
+          channel_title: data.items[0].snippet.channelTitle
+        });
       } else {
-        log.write(2, "youtube", "Retrieved data from youtube is invalid", data);
+        log.write(0, "youtube", "Retrieved data from youtube is invalid", data);
       }
     }).on("error", function (e) {
       log.write(2, "youtube", "Cant retrieve video data from youtube: " + e.message, null);

@@ -61,15 +61,11 @@ const minecraft = {
 
   //Gets stats for single player
   async getSingle(uuid: string, collection: string) {
-    try {
-      const doc = await getLatestStatsByUuid(uuid);
-      if(typeof _statsTemplates[collection] === "function") {
-        return _statsTemplates[collection](doc);
-      } else {
-        return _statsTemplates.single[collection](doc);
-      }
-    } catch(e) {
-      return {}
+    const doc = await getLatestStatsByUuid(uuid);
+    if(typeof _statsTemplates[collection] === "function") {
+      return _statsTemplates[collection](doc);
+    } else {
+      return _statsTemplates.single[collection](doc);
     }
   },
 

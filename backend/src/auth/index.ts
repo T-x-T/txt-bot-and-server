@@ -38,6 +38,17 @@ const main = {
     return client.guilds.get(config.discord_bot.guild).members.has(userID);
   },
 
+  async getAccessTokenAndLevelFromCode(code: string, redirect: string) {
+    const accessToken = await main.getAccessTokenFromCode(code, redirect);
+    const discordId = await main.getDiscordIdFromToken(accessToken);
+    const accessLevel = main.getAccessLevelFromDiscordId(discordId);
+    if(accessLevel) {
+      return {accessToken: accessToken, accessLevel: accessLevel};
+    } else {
+      throw new Error("Couldnt get access_level");
+    }
+  },
+
   async getDiscordIdFromCode(code: string, redirect: string) {
     const access_token = await main.getAccessTokenFromCode(code, redirect) 
     if(access_token) {
@@ -87,7 +98,7 @@ const main = {
         redirect_uri: redirect_uri,
         scope: "identify"
       });
-
+      
       const req = https.request({
         host: "discordapp.com",
         port: 443,

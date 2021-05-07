@@ -239,7 +239,7 @@ const handlers = {
 
       async get(data: IRequestData): Promise<IHandlerResponse> {
         //Clear the 0 status code, as 0 means get all data
-        if(data.queryStringObject.status == 0) data.queryStringObject = undefined;
+        if(data.queryStringObject.status == 0) data.queryStringObject = {};
         return await turnFilterIntoApplication(data.queryStringObject);
       },
 
@@ -296,8 +296,8 @@ const handlers = {
     async discorduserfromcode(data: IRequestData): Promise<IHandlerResponse> {
       const code = data.queryStringObject.code;
       const discordId = await auth.getDiscordIdFromCode(code, "applicationNew");
-      const discordNick = discordHelpers.getNicknameByID(discordId);
-
+      const discordNick = await discordHelpers.getNicknameByID(discordId);
+      
       return {
         payload: {discordNick: discordNick, discordId: discordId}
       };
@@ -305,11 +305,10 @@ const handlers = {
 
     async tokenfromcode(data: IRequestData): Promise<IHandlerResponse> {
       const code = data.queryStringObject.code;
-      const access_level = await auth.getAccessLevelFromCode(code, "interface");
-      const access_token = await auth.getAccessTokenFromCode(code, "interface");
+      const {accessToken, accessLevel} = await auth.getAccessTokenAndLevelFromCode(code, "interface");
 
       return {
-        payload: {access_token: access_token, access_level: access_level}
+        payload: {access_token: accessToken, access_level: accessLevel}
       };
     }
   }
@@ -355,7 +354,7 @@ async function turnFilterIntoApplication(filter: any): Promise<IHandlerResponse>
 }
 
 async function turnApplicationsIntoJson(applications: Application[]) {
-  const applicationObjects: any[] = applications.map(async application => await turnApplicationIntoJson(application, false));
+  const applicationObjects: any[] = await Promise.all(applications.map(async application => await turnApplicationIntoJson(application, false)));
   return applicationObjects.filter(x => x);
 }
 

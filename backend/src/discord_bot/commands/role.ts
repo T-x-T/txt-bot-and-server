@@ -29,16 +29,18 @@ export = {
         }
         break;
       case "remove":
-        let roleId = discordHelpers.getRoleId("#" + args[1]);
-        let count = 0;
+        const roleId = discordHelpers.getRoleId("#" + args[1]);
+        if (!discordHelpers.hasRole(message.member.id, roleId)) {
+          message.reply("You don't have that role anyways...");
+          break;
+        }
+
         message.member.roles.forEach(async role => {
           if(role.id.indexOf(roleId) > -1){
             await message.member.removeRole(roleId);
             message.reply("Success!");
-            count++;
           }
         });
-        if(count == 0) message.reply("That didnt work");
         break;
       case "list":
         let output = "```\n";

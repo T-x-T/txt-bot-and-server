@@ -14,6 +14,7 @@ export = {
   init(_config: IConfigEmail, _environment: EEnvironment) {
     config = _config;
     environment = _environment;
+    main.init(config);
   },
 
   sendNewApplicationMail(application: Application) {
