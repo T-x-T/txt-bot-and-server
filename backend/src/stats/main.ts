@@ -43,7 +43,12 @@ const main = {
 
   async singleMemberOverview(discordId: string) {
     const member = await memberFactory.getByDiscordId(discordId);
-    const playtime = await main.mcGetSingle(member.getMcUuid(), "playtime");
+    let playtime = 0;
+    try {
+      playtime = await main.mcGetSingle(member.getMcUuid(), "playtime");
+    } catch (e) {
+      log.write(0, "stats", "singleMemberOverview couldnt get playtime of member", {err: e.message, discordId: discordId});
+    }
 
     return {
       discord_nick: member.getDiscordUserName(),
