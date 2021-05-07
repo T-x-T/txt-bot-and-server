@@ -10,7 +10,10 @@
 *.userosscache
 *.sln.docstates
 config.js
+config.json
 mc_stats
+dist
+dependency-graph.html
 .*
 bin
 # User-specific files (MonoDevelop/Xamarin Studio)

@@ -1,0 +1,238 @@
+{
+  "prod": {
+    "auth": {
+      "discord_client_id": "",
+      "discord_client_secret": "",
+      "discord_redirect_uri_application": "",
+      "discord_redirect_uri_staffLogin": "",
+      "oauth_uris": {
+        "application": "",
+        "login": ""
+      }
+    },
+    "data": {
+      "mongodb_url": "mongodb://localhost/production",
+      "backend": "mongo",
+      "db_upgrades": {
+        "mc_stats_sub_type": false
+      }
+    },
+    "discord_bot": {
+      "bot_prefix": "+",
+      "bot_token": "",
+      "guild": "624976691692961793",
+      "channel": {
+        "new_member_announcement": "646763503473917973",
+        "new_application_announcement": "646763571761512448",
+        "new_bulletin_announcement": "683657341958488064",
+        "mod_notifications": "646763571761512448",
+        "logs": "646763571761512448",
+        "general": "624976692280033281"
+      },
+      "roles": {
+        "owner": "624979040004079659",
+        "admin": "702479089528733826",
+        "paxterya": "624978994990678025",
+        "inactive": "701743587066511360"
+      }
+    },
+    "email": {
+      "mailUser": "",
+      "mailPass": ""
+    },
+    "minecraft": {
+      "rcon_server": "",
+      "rcon_port": 0,
+      "rcon_password": ""
+    },
+    "web": {
+      "http_port": 4000,
+      "https_port": 4001,
+      "https_redirect": false,
+      "use_external_certs": false,
+      "cert_path": ""
+    },
+    "youtube": {
+      "google_api_key": "",
+      "youtube_video_announcements": [
+        {
+          "youtube_id": "UC3bXl38E3-KtJdXHBUKg_Dw",
+          "channel_id": "624977962889904139",
+          "role": "624978928288923668"
+        },
+        {
+          "youtube_id": "UCeuVgIjBf-3fKDqiQkwcXFQ",
+          "channel_id": "624977962889904139",
+          "role": "624978928288923668"
+        },
+        {
+          "youtube_id": "UCH-JgwSf8J8tdjemXqihEKw",
+          "channel_id": "624978209716437024",
+          "role": "624978994990678025"
+        }
+      ]
+    }
+  },
+  "staging": {
+    "auth": {
+      "discord_client_id": "",
+      "discord_client_secret": "",
+      "discord_redirect_uri_application": "",
+      "discord_redirect_uri_staffLogin": "",
+      "discord_redirect_uri_applicationNew": "",
+      "discord_redirect_uri_interface": "",
+      "oauth_uris": {
+        "application": "",
+        "login": ""
+      }
+    },
+    "data": {
+      "mongodb_url": "mongodb://127.0.0.1/test1",
+      "backend": "mongo",
+      "db_upgrades":{
+        "mc_stats_sub_type": false,
+        "build_images_fill": false
+      }
+    },
+    "discord_bot": {
+      "bot_prefix": "+",
+      "bot_token": "",
+      "guild": "592303011947216896",
+      "channel": {
+        "new_member_announcement": "607504671543656458",
+        "new_application_announcement": "607504671543656458",
+        "new_bulletin_announcement": "607504671543656458",
+        "mod_notifications": "607504671543656458",
+        "logs": "607504671543656458",
+        "general": "607504671543656458"
+      },
+      "roles": {
+        "owner": "592305368831492106",
+        "admin": "592305368831492106",
+        "paxterya": "607511526668107806",
+        "inactive": "754067705547456522"
+      }
+    },
+    "email": {
+      "mailUser": "",
+      "mailPass": ""
+    },
+    "minecraft": {
+      "mc_stats_remote": "",
+      "rcon_main_server": "main_smp",
+      "rcon_enabled": true,
+      "rcon_servers": {
+        "main_smp": {
+          "rcon_server": "localhost",
+          "rcon_port": 25575,
+          "rcon_password": "123"
+        },
+        "creative_server": {
+          "rcon_server": "localhost",
+          "rcon_port": 25575,
+          "rcon_password": "123"
+        }
+      }
+    },
+    "web": {
+      "http_port": 4000,
+      "https_port": 4001,
+      "https_redirect": false,
+      "use_external_certs": false,
+      "cert_path": "/etc/letsencrypt/live/{Domain}/"
+    },
+    "youtube": {
+      "google_api_key": "",
+      "youtube_video_announcements": [
+        {
+          "youtube_id": "UC3bXl38E3-KtJdXHBUKg_Dw",
+          "channel_id": "594844047655305226",
+          "role": "614135191707058187"
+        },
+        {
+          "youtube_id": "UCH-JgwSf8J8tdjemXqihEKw",
+          "channel_id": "594844047655305226",
+          "role": "614135191707058187"
+        },
+        {
+          "youtube_id": "UCeuVgIjBf-3fKDqiQkwcXFQ",
+          "channel_id": "594844047655305226",
+          "role": "614135191707058187"
+        }
+      ]
+    }
+  },
+  "testing": {
+    "auth": {
+      "discord_client_id": "",
+      "discord_client_secret": "",
+      "discord_redirect_uri_application": "",
+      "discord_redirect_uri_staffLogin": "",
+      "oauth_uris": {
+        "application": "",
+        "login": ""
+      }
+    },
+    "data": {
+      "mongodb_url": "mongodb://127.0.0.1/testing",
+      "backend": "mongo",
+      "db_upgrades":{
+        "mc_stats_sub_type": false
+      }
+    },
+    "discord_bot": {
+      "bot_prefix": "+",
+      "bot_token": "",
+      "guild": "592303011947216896",
+      "channel": {
+        "new_member_announcement": "607504671543656458",
+        "new_application_announcement": "607504671543656458",
+        "new_bulletin_announcement": "607504671543656458",
+        "mod_notifications": "607504671543656458",
+        "logs": "607504671543656458",
+        "general": "607504671543656458"
+      },
+      "roles": {
+        "admin": "592305368831492106",
+        "paxterya": "640239004129820723",
+        "inactive": "754067705547456522"
+      }
+    },
+    "email": {
+      "mailUser": "",
+      "mailPass": ""
+    },
+    "minecraft": {
+      "rcon_server": "localhost",
+      "rcon_port": 23643,
+      "rcon_password": "beepboop"
+    },
+    "web": {
+      "http_port": 3000,
+      "https_port": 3001,
+      "https_redirect": false,
+      "use_external_certs": false,
+      "cert_path": "/etc/letsencrypt/live/{Domain}/"
+    },
+    "youtube": {
+      "google_api_key": "",
+      "youtube_video_announcements": [
+        {
+          "youtube_id": "UC3bXl38E3-KtJdXHBUKg_Dw",
+          "channel_id": "594844047655305226",
+          "role": "614135191707058187"
+        },
+        {
+          "youtube_id": "UCH-JgwSf8J8tdjemXqihEKw",
+          "channel_id": "594844047655305226",
+          "role": "614135191707058187"
+        },
+        {
+          "youtube_id": "UCeuVgIjBf-3fKDqiQkwcXFQ",
+          "channel_id": "594844047655305226",
+          "role": "614135191707058187"
+        }
+      ]
+    }
+  }
+}

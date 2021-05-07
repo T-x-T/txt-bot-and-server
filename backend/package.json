@@ -1,0 +1,47 @@
+{
+  "scripts": {
+    "test": "cd dist && (NODE_ENV=testing nyc mocha --exit -t 1000000 test/index.js)",
+    "prod": "cd dist && (NODE_ENV=prod node index.js)",
+    "compile": "tsc",
+    "build": "tsc -b",
+    "analyze_dependencies": "depcruise --exclude \"^(node_modules|dist/test)\" --output-type dot dist | dot -T svg | depcruise-wrap-stream-in-html > dependency-graph.html",
+    "find_circular_dependency": "madge --circular src/"
+  },
+  "name": "txt-bot-and-server",
+  "description": "Combination of all Software related to txt's discord and servers",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "directories": {
+    "test": "src/test"
+  },
+  "dependencies": {
+    "bufferutil": "^4.0.3",
+    "discord.js": "^11.5.1",
+    "mongoose": "^5.10.11",
+    "node-mailer": "^0.1.1",
+    "sanitize-filename": "^1.6.3",
+    "sanitize-html": "^1.22.1"
+  },
+  "devDependencies": {
+    "@types/mocha": "^8.2.2",
+    "@types/mongoose": "^5.10.5",
+    "@types/node": "^14.14.37",
+    "@types/nodemailer": "^6.4.1",
+    "@types/sanitize-html": "^2.3.1",
+    "dependency-cruiser": "^9.26.0",
+    "madge": "^4.0.2",
+    "mocha": "^7.1.2",
+    "nyc": "^15.1.0",
+    "typescript": "^4.2.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/paxterya/txt-bot-and-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/paxterya/txt-bot-and-server/issues"
+  },
+  "homepage": "https://gitlab.com/paxterya/txt-bot-and-server#readme"
+}
