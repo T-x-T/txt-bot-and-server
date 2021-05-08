@@ -67,9 +67,13 @@ export = {
         message.reply("Success");
         break;
       case "cmd":
-        let server = args[2];
-        const cmd = args.map((arg, i) => i > 2 ? arg : null).filter(x => x).join(" ");
-        message.channel.send(await mc_helpers.sendCmd(cmd.trim(), server));
+        let server = args[1];
+        const cmd = args.map((arg, i) => i > 1 ? arg : null).filter(x => x).join(" ");
+        try {
+          message.channel.send(await mc_helpers.sendCmd(cmd.trim(), server));
+        } catch(e) {
+          message.reply(e.message);
+        }
         break;
       default:
         //Paramater not found

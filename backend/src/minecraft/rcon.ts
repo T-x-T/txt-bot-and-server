@@ -48,8 +48,10 @@ const rcon = {
       } else {
         servers.push(config.rcon_servers[server]);
       }
+      
+      servers = servers.filter(x => x);
 
-      if(!servers) {
+      if(!servers || servers.length === 0) {
         log.write(2, "minecraft", "rcon.send received non-existent server", {cmd: cmd, server: server});
         reject(new Error("Invalid server: " + server));
       }
