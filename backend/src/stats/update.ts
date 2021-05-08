@@ -35,7 +35,7 @@ function read_mc_stats() {
 
       //Read the stats file for the current member
       fs.readFile(path.join(__dirname, "./../../mc_stats/" + file), "utf8", async function (err: Error, fileData: string) {
-        if(!err && fileData.length > 0) throw new Error("read_mc_stats couldnt read the stats from disk: " + err.message)
+        if(err) throw new Error("read_mc_stats couldnt read the stats from disk: " + err.message)
         //Read in some file which seems valid, try to parse it to an object
         const stats = JSON.parse(fileData);
         if (stats) {
