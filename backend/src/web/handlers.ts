@@ -318,11 +318,15 @@ async function authorizeRequest(data: IRequestData, minAccessLevel: number) {
   if(data.headers.hasOwnProperty("cookie")) {
     if(data.headers.cookie.indexOf("access_token".length > -1)) {
       //There is an access_token cookie, lets check if it belongs to an admin
-      const accessLevel = await auth.getAccessLevelFromToken(data.cookies.access_token);
-      if(accessLevel >= minAccessLevel) {
-        return "";
-      } else {
-        return "You are not authorized to access this resource";
+      try {
+        const accessLevel = await auth.getAccessLevelFromToken(data.cookies.access_token);
+        if(accessLevel >= minAccessLevel) {
+          return "";
+        } else {
+          return "You are not authorized to access this resource";
+        }
+      } catch(e) {
+        return e.message;
       }
     } else {
       return "Your client didnt send an access_token, please log in again";
