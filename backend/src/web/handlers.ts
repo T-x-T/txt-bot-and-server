@@ -381,6 +381,7 @@ async function turnApplicationIntoJson(application: Application, getExpensiveDat
     mc_ign: application.getMcIgn(),
     status: application.getStatus(),
     mc_skin_url: application.getMcSkinUrl(),
+    deny_reason: application.getDenyReason(), 
     discord_avatar_url: getExpensiveData ? await application.getDiscordAvatarUrl() : null
   };
 }

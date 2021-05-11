@@ -59,7 +59,7 @@ class ApplicationFactory extends Factory{
   async getFiltered(filter?: MongooseFilterQuery<any>){
     if(!this.connected) await this.connect();
     const res = await this.persistanceProvider.retrieveFiltered(filter);
-    const applications: Application[] = res.map((application: any) => new Application(application.id, application.discord_id, application.mc_uuid, application.email_address, application.country, application.birth_month, application.birth_year, application.about_me, application.motivation, application.build_images, application.publish_about_me, application.publish_age, application.publish_country, application.status, new Date(application._id.getTimestamp()), application.discord_nick, application.mc_ign));
+    const applications: Application[] = res.map((application: any) => new Application(application.id, application.discord_id, application.mc_uuid, application.email_address, application.country, application.birth_month, application.birth_year, application.about_me, application.motivation, application.build_images, application.publish_about_me, application.publish_age, application.publish_country, application.status, new Date(application._id.getTimestamp()), application.discord_nick, application.mc_ign, application.deny_reason));
     await Promise.all(applications.map(async application => application.init()));
 
     return applications;

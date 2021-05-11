@@ -105,16 +105,21 @@
         </div>
 
         <div id="controls">
-          <input v-if="customDenyReason" v-model="denyReason" type="text">
-          <select v-if="!customDenyReason" v-model="denyReason" @change="customDenyReason = true">
-            <option value="">Deny reason</option>
-            <option value="">Custom</option>
-            <option value="Your application was a bit too short, so try adding some more depth and detail.">Your application was a bit too short, so try adding some more depth and detail.</option>
-            <option value="Your application didn't contain any pictures of your previous builds. If you have trouble with adding them, then please let us help you by joining our Discord server.">Your application didn't contain any pictures of your previous builds. If you have trouble with adding them, then please let us help you by joining our Discord server.</option>
-          </select>
-          <div class="buttons">
-            <button id="accept" @click="accept">Accept</button>
-            <button id="deny" @click="deny">Deny</button>
+          <div v-if="openApplication.status == 1">
+            <input v-if="customDenyReason" v-model="denyReason" type="text">
+            <select v-if="!customDenyReason" v-model="denyReason" @change="customDenyReason = true">
+              <option value="">Deny reason</option>
+              <option value="">Custom</option>
+              <option value="Your application was a bit too short, so try adding some more depth and detail.">Your application was a bit too short, so try adding some more depth and detail.</option>
+              <option value="Your application didn't contain any pictures of your previous builds. If you have trouble with adding them, then please let us help you by joining our Discord server.">Your application didn't contain any pictures of your previous builds. If you have trouble with adding them, then please let us help you by joining our Discord server.</option>
+            </select>
+            <div class="buttons" v-if="openApplication.status == 1">
+              <button id="accept" @click="accept">Accept</button>
+              <button id="deny" @click="deny">Deny</button>
+            </div>
+          </div>
+          <div v-if="openApplication.status == 2">
+            <input v-if="customDenyReason" v-model="denyReason" type="text" readonly>
           </div>
           <p v-if="errorMessage">{{errorMessage}}</p>
         </div>
@@ -278,6 +283,10 @@ export default {
     async openPopup(application){
       try{
         this.openApplication = application;
+        if(this.openApplication.deny_reason) {
+          this.customDenyReason = true;
+          this.denyReason = this.openApplication.deny_reason;
+        }
         this.openApplication = await this.$axios.$get("/api/applications?id=" + application.id);
       }catch(e){
         window.alert(e.response.data.err);

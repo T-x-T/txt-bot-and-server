@@ -14,7 +14,7 @@ let config: IConfig;
 class Application extends Persistable{
   static schema: SchemaDefinition;
 
-  constructor(id: number, discordId: string, mcUuid: string, emailAddress: string, country: string, birth_month: number, birth_year: number, about_me: string, motivation: string, buildImages: string, publishAboutMe: boolean, publishAge: boolean, publishCountry: boolean, status: EApplicationStatus, timestamp: Date, discordUserName: string, mcIgn: string){
+  constructor(id: number, discordId: string, mcUuid: string, emailAddress: string, country: string, birth_month: number, birth_year: number, about_me: string, motivation: string, buildImages: string, publishAboutMe: boolean, publishAge: boolean, publishCountry: boolean, status: EApplicationStatus, timestamp: Date, discordUserName: string, mcIgn: string, denyReason?: string){
     super({name: "applications", schema: Application.schema});
 
     this.data.timestamp = timestamp ? timestamp : new Date();
@@ -34,6 +34,7 @@ class Application extends Persistable{
     this.data.id = Number.isInteger(id) ? id : null;
     this.data.discord_nick = discordUserName ? discordUserName : null;
     this.data.mc_ign = mcIgn ? mcIgn : null;
+    this.data.deny_reason = denyReason;
   }
 
   static setConfig(_config: IConfig) {
@@ -48,6 +49,7 @@ class Application extends Persistable{
     this.setStatus(EApplicationStatus.accepted);
     await this.save();
     email.sendApplicationAcceptedMail(this);
+    discord_helpers.sendMessage(`The Application of ${this.getDiscordUserName()} got accepted`, config.discord_bot.channel.mod_notifications);
 
     if(discord_helpers.isGuildMember(this.getDiscordId())){
       await this.acceptGuildMember();
@@ -98,6 +100,7 @@ class Application extends Persistable{
     this.setStatus(EApplicationStatus.denied);
     if(reason) this.setDenyReason(reason);
     await this.save();
+    discord_helpers.sendMessage(`The Application of ${this.getDiscordUserName()} got denied${reason ? ` with reason: "${reason}"` : ""}`, config.discord_bot.channel.mod_notifications);
     email.sendApplicationDeniedMail(this);
   }
 
