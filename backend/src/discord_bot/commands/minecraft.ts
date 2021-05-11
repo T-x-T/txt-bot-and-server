@@ -36,7 +36,6 @@ export = {
         if(userID){
           //If we made it here, the user wants to get the stats for one specific person
           const member = await memberFactory.getByDiscordId(userID as string);
-          memberFactory.getByDiscordId(userID as string)
           if(args[1] == "rank") {
             let output = "```";
             output += await statsSwitch(args[2], member.getMcUuid(), member.getMcIgn(), true);

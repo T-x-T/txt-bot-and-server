@@ -71,8 +71,11 @@ export = (_config: IConfigDiscordBot, _client: Discord.Client) => {
 
   client.on("guildMemberRemove", async user => {
     try {
-      const member = await memberFactory.getByDiscordId(user.id);
-      await member.delete();
+      let member;
+      try {
+        member = await memberFactory.getByDiscordId(user.id);
+      } catch(_) {}
+      if(member) await member.delete();
       discordHelpers.sendMessage(`${user.displayName} left the server`, config.channel.mod_notifications);
     } catch(e) {
       discordHelpers.sendCrashMessage(e, "discord event handler");
@@ -82,8 +85,11 @@ export = (_config: IConfigDiscordBot, _client: Discord.Client) => {
 
   client.on("guildBanAdd", async (guild, user) => {
     try {
-      const member = await memberFactory.getByDiscordId(user.id);
-      await member.ban();
+      let member;
+      try {
+        member = await memberFactory.getByDiscordId(user.id);
+      } catch(_) {}
+      if(member) await member.ban();
       discordHelpers.sendMessage(`${user.username} was banned from the server`, config.channel.mod_notifications);
     } catch(e) {
       discordHelpers.sendCrashMessage(e, "discord event handler");
