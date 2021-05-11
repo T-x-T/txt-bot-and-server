@@ -342,11 +342,13 @@ describe("application", function(){
 
     it("send welcome message", function(){
       return new Promise<void>(async (resolve, reject) => {
-        global.g.emitter.once("testing_discordHelpers_sendMessage", (_message: string, _channelId: string) => {
-          global.g.emitter.once("testing_discordHelpers_sendMessage", (message: string, channelId: string) => {
-            assert.ok(message.includes("293029505457586176"));
-            assert.strictEqual(channelId, config.discord_bot.channel.new_member_announcement);
-            resolve();
+        global.g.emitter.once("testing_discordHelpers_sendMessage", (_: string, __: string) => {
+          global.g.emitter.once("testing_discordHelpers_sendMessage", (_: string, __: string) => {
+            global.g.emitter.once("testing_discordHelpers_sendMessage", (message: string, channelId: string) => {
+              assert.ok(message.includes("293029505457586176"));
+              assert.strictEqual(channelId, config.discord_bot.channel.new_member_announcement);
+              resolve();
+            });
           });
         });
 
