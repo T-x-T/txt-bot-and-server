@@ -19,6 +19,7 @@ export = {
   name: "admin",
   description: "Commands only for admins",
   aliases: ["a"],
+  usage: "delete <message count> | activate @mention | inactivate @mention | forceaccept @mention (if accepting their application didnt work for some reason) | cmd <server> <command> (valid servers are main_smp creative_server and modded(I think))",
 
   async execute(message: Discord.Message, args: string[]) {
     if(auth.getAccessLevelFromDiscordId(message.member.id) < 8) {
