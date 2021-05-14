@@ -36,7 +36,10 @@ const handlers = {
 
   paxapi: {
     async roles(data: IRequestData): Promise<IHandlerResponse> {
-      const member = await memberFactory.getByMcUuid(data.queryStringObject.uuid);
+      let member = null;
+      try {
+        member = await memberFactory.getByMcUuid(data.queryStringObject.uuid);
+      } catch(_) {}
       if(member) {
         return {
           payload: {role: auth.getAccessLevelFromDiscordId(member.getDiscordId())}
