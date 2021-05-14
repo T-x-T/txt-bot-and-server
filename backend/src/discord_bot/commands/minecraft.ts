@@ -69,15 +69,14 @@ export = {
           server = "main_smp"
         }
 
-        const res = await minecraft.sendCmd("list", server);
-        let onlinePlayerCount = parseInt(res.replace("There are ", ""));
-        let onlinePlayers = res.split(": ")[1].split(", ");
+        const onlinePlayers = await minecraft.getOnlinePlayers();
+        const afkPlayers = await minecraft.getAfkPlayers();
+        
+        if (onlinePlayers.length === 1) output += `The following player is currently online:\n`;
+        else if(onlinePlayers.length === 0) output += `There are no players online right now. It"s on you to change that now!\n`;
+        else output += `The following ${onlinePlayers.length} players are currently online:\n`;
 
-        if (onlinePlayerCount === 1) output += `The following player is currently online:\n`;
-        else if (onlinePlayerCount === 0) output += `There are no players online right now. It"s on you to change that now!\n`;
-        else output += `The following ${onlinePlayerCount} players are currently online:\n`;
-
-        onlinePlayers.forEach(player => output += player + "\n");
+        onlinePlayers.forEach(player => afkPlayers.includes(player) ? output += player + " [AFK]\n" : output += player + "\n");
 
         output += "```";
         message.channel.send(output);

@@ -16,6 +16,8 @@ export = {
   getIGN: main.getIGN,
   getRenderUrl: main.getRenderUrl,
   sendCmd: rcon.send,
+  getOnlinePlayers: rcon.getOnlinePlayers,
+  getAfkPlayers: rcon.getAfkPlayers,
   getServerVersion: rcon.getServerVersion,
 
   async whitelist(uuid: string){

@@ -85,8 +85,16 @@ const rcon = {
   },
 
   async getOnlinePlayers() {
-    return await rcon.send("list", config.rcon_main_server);
+    const res = await rcon.send("list", config.rcon_main_server);
+    if(res.includes("There are 0 ")) return [];
+    return res.split(": ")[1].split(", ");
   },
+
+  async getAfkPlayers() {
+    const res = await rcon.send("getafkplayers");
+    if(res.length === 0) return [];
+    return res.split(",");
+  }, 
 
   async getServerVersion() {
     if(serverVersion.lastUpdate > Date.now() + 1000 * 60 * 60 && serverVersion.version.length > 0) return serverVersion.version;
