@@ -19,6 +19,7 @@ import email = require("../email/index.js");
 import log = require("../log/index.js");
 
 import type Application = require("../application/application.js");
+import type Member = require("../user/member.js");
 
 let config: IConfig;
 
@@ -103,21 +104,50 @@ const handlers = {
     },
 
     async member(data: IRequestData): Promise<IHandlerResponse> {
-      if(data.method == "get") {
-        return await handlers.paxapi._member[data.method](data);
+      if(data.queryStringObject.hasOwnProperty("public")) {
+        return await handlers.paxapi._member.getPublic(data);
       } else {
-        return {
-          status: 405,
-          payload: {err: "Verb not allowed"}
-        };
+        const errorMessage = await authorizeRequest(data, 7);
+        if(errorMessage.length === 0) {
+          if(data.method == "get") {
+            return await handlers.paxapi._member[data.method](data);
+          } else {
+            return {
+              status: 405,
+              payload: {err: "Verb not allowed"}
+            };
+          }
+        } else {
+          return {
+            status: 401,
+            payload: {err: errorMessage}
+          };
+        }
       }
     },
 
     _member: {
-      async get(data: IRequestData): Promise<IHandlerResponse> {
+      async getPublic(data: IRequestData): Promise<IHandlerResponse> {
         return {
           payload: await stats.memberOverview()
         };
+      },
+
+      async get(data: IRequestData): Promise<IHandlerResponse> {
+        if(data.queryStringObject.hasOwnProperty("discordId")){
+          return {
+            payload: await turnMemberIntoJson(await memberFactory.getByDiscordId(data.queryStringObject.discordId))
+          }
+        } else if(data.queryStringObject.hasOwnProperty("discordId")) {
+          return {
+            payload: await turnMemberIntoJson(await memberFactory.getByMcUuid(data.queryStringObject.mcUuid))
+          }
+        } else {
+          const members = await memberFactory.getAllWhitelisted();
+          return {
+            payload: await Promise.all(members.map(x => turnMemberIntoJson(x)))
+          }
+        }
       }
     },
 
@@ -389,5 +419,19 @@ async function turnApplicationIntoJson(application: Application, getExpensiveDat
   };
 }
 
+async function turnMemberIntoJson(member: Member) {
+  return {
+    discordId: member.getDiscordId(),
+    discordUserName: member.getDiscordUserName(),
+    status: member.getStatus(),
+    joinedDate: member.getJoinedDate(),
+    mcUuid: member.getMcUuid(),
+    mcIgn: member.getMcIgn(),
+    country: member.getCountry(),
+    age: member.getAge(),
+    discordAvatarUrl: await member.getDiscordAvatarUrl(),
+    mcSkinUrl: member.getMcSkinUrl()
+  }
+}
 
 export = handlers;

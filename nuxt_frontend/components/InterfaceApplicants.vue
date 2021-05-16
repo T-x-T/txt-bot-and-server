@@ -161,19 +161,6 @@ table
 #status
   display: flex
   flex-wrap: wrap
-.value
-  margin: 20px 30px 0 0
-  display: block
-  h3, p
-    color: white
-    display: inline
-    padding: 3px 10px 5px 10px
-    font-size: 12pt
-    white-space: nowrap
-  p
-    background: $pax-cyan
-  h3
-    background: $pax-darkestcyan
 
 #popup
   width: 50%

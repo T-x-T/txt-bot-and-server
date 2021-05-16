@@ -1,0 +1,137 @@
+<template>
+  <div id="wrapper">
+    <h1>Members</h1>
+    
+    <div v-if="!openMember">
+      <input id="search" type="text" v-model="searchTerm" placeholder="search">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Joined Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in filteredMembers" :key="index" @click="openMember = item">
+            <td>{{item.mcIgn}}</td>
+            <td>{{new Date(item.joinedDate).toISOString().substring(0, 10)}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="popup" v-if="openMember">
+      <button id="back" @click="openMember = null">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" /></svg>
+        back
+      </button>
+      <div id="grid">
+        <div id="info">
+          <div class="value">
+            <h3>Discord</h3><p>{{openMember.discordUserName}}</p>
+          </div>
+          <div class="value">
+            <h3>IGN</h3><p>{{openMember.mcIgn}}</p>
+          </div>
+          <div class="value">
+            <h3>Discord ID</h3><p>{{openMember.discordId}}</p>
+          </div>
+          <div class="value">
+            <h3>Minecraft UUID</h3><p>{{openMember.mcUuid}}</p>
+          </div>
+          <div class="value">
+            <h3>Country</h3><p>{{openMember.country}}</p>
+          </div>
+          <div class="value">
+            <h3>Age</h3><p>{{openMember.age}}</p>
+          </div>
+        </div>
+        <div id="avatars">
+          <img :src="openMember.discordAvatarUrl">
+          <img :src="openMember.mcSkinUrl">
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style lang="sass" scoped>
+@import ~/assets/_vars.sass
+
+#wrapper
+  margin: 50px 0px 50px 0px
+
+input#search
+  max-width: 400px
+  margin: 10px auto 10px auto
+  display: block
+
+table
+  border: 4px solid $pax-darkestcyan
+
+#popup
+  width: 50%
+  margin: 25px auto
+  @media screen and ($mobile)
+    width: 90%
+    padding: 5vw
+    margin: 0
+  button#back
+    svg
+      height: 18px
+      margin-bottom: -4px
+
+#grid
+  display: grid
+  grid-template-columns: 50% 50%
+
+#avatars
+  justify-self: end
+  img
+    height: 200px
+    margin-left: 25px
+</style>
+
+<script>
+export default {
+  data: () => ({
+    members: [],
+    filteredMembers: [],
+    searchTerm: "",
+    openMember: null,
+  }),
+
+  props: {
+    token: String
+  },
+
+  async mounted() {
+    this.refresh();
+  },
+
+  methods: {
+    async refresh(){
+      this.members = (await this.$axios.$get("/api/members")).sort((a, b) => new Date(b.joinedDate) - new Date(a.joinedDate));
+      this.applySearch();
+    },
+
+    applySearch() {
+      if(this.searchTerm.length === 0) {
+        this.filteredMembers = this.members;
+      } else {
+        this.filteredMembers = this.members.filter(x => x.mcIgn.toLowerCase().includes(this.searchTerm));
+      }
+    }
+  },
+
+  watch: {
+    searchTerm(term) {
+      this.searchTerm = term.toLowerCase();
+      this.applySearch();
+    },
+
+    openMember() {
+      this.refresh();
+    }
+  }
+}
+</script>
