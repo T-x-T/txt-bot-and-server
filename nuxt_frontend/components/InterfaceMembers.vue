@@ -25,7 +25,7 @@
         back
       </button>
       <div id="grid">
-        <div id="info">
+        <div id="info" class="popupElement">
           <div class="value">
             <h3>Discord</h3><p>{{openMember.discordUserName}}</p>
           </div>
@@ -45,9 +45,21 @@
             <h3>Age</h3><p>{{openMember.age}}</p>
           </div>
         </div>
-        <div id="avatars">
+        <div id="avatars" class="popupElement">
           <img :src="openMember.discordAvatarUrl">
           <img :src="openMember.mcSkinUrl">
+        </div>
+        <div id="status" class="popupElement" v-if="openMember.status === 1">
+          <div class="value">
+            <h3>Status</h3><p>Active</p>
+          </div>
+          <button class="secondary">Inactivate</button>
+        </div>
+        <div id="status" class="popupElement" v-if="openMember.status === 2">
+          <div class="value">
+            <h3>Status</h3><p>Inactive</p>
+          </div>
+          <button class="secondary">Activate</button>
         </div>
       </div>
     </div>
@@ -76,19 +88,38 @@ table
     padding: 5vw
     margin: 0
   button#back
+    margin-left: 50px
     svg
       height: 18px
       margin-bottom: -4px
+
+.popupElement
+  background-color: $pax-darkestcyan
+  margin: 50px
+  padding: 0px 20px 20px 20px
 
 #grid
   display: grid
   grid-template-columns: 50% 50%
 
+.value
+  h3
+    background: $pax-darkmodecyan1
+
 #avatars
-  justify-self: end
+  display: flex
+  justify-content: space-evenly
+  align-items: center
   img
-    height: 200px
-    margin-left: 25px
+    max-height: 200px
+
+#status
+  padding: 20px
+  display: flex
+  align-items: center
+  justify-content: space-evenly
+  .value
+    margin: 0
 </style>
 
 <script>
