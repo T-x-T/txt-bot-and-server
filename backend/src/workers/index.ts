@@ -9,6 +9,10 @@ import log = require("../log/index.js");
 import stats = require("../stats/index.js");
 import update = require("./update.js");
 import Discord = require("discord.js");
+import MemberFactory = require("../user/memberFactory.js");
+import discord_helpers = require("../discord_helpers/index.js");
+const memberFactory = new MemberFactory();
+memberFactory.connect();
 
 export = (config: IConfig, client: Discord.Client) => {
   update.init(config, client)
@@ -17,6 +21,8 @@ export = (config: IConfig, client: Discord.Client) => {
 //10 seconds after startup
 setTimeout(async () => {
   try {
+    const members = await memberFactory.getAllWhitelisted();
+    await Promise.all(members.map(member => discord_helpers.fetchUser(member.getDiscordId())));
     youtube.checkForNewVideos();
     await update.updateAllNicks();
     await update.updateAllIGNs();

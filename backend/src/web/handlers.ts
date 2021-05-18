@@ -109,6 +109,12 @@ const handlers = {
       } else {
         const errorMessage = await authorizeRequest(data, 7);
         if(errorMessage.length === 0) {
+          if(data.path.endsWith("/inactivate")) {
+            return await handlers.paxapi._member.inactivate(data);
+          }
+          if(data.path.endsWith("/activate")) {
+            return await handlers.paxapi._member.activate(data);
+          }
           if(data.method == "get") {
             return await handlers.paxapi._member[data.method](data);
           } else {
@@ -143,9 +149,38 @@ const handlers = {
             payload: await turnMemberIntoJson(await memberFactory.getByMcUuid(data.queryStringObject.mcUuid))
           }
         } else {
-          const members = await memberFactory.getAllWhitelisted();
+          const members = await memberFactory.getAll();
+          const res = await Promise.allSettled(members.map(x => turnMemberIntoJson(x)));
           return {
-            payload: await Promise.all(members.map(x => turnMemberIntoJson(x)))
+            payload: res.map(x => x.status == "fulfilled" ? x.value : null).filter(x => x)
+          }
+        }
+      },
+
+      async inactivate(data: IRequestData): Promise<IHandlerResponse> {
+        try {
+          const member = await memberFactory.getByDiscordId(data.path.split("/")[data.path.split("/").length - 2]);
+          await member.inactivate();
+          await member.save();
+          return {};
+        } catch(e) {
+          return {
+            status: 500,
+            payload: {error: e.message}
+          }
+        }
+      },
+
+      async activate(data: IRequestData): Promise<IHandlerResponse> {
+        try {
+          const member = await memberFactory.getByDiscordId(data.path.split("/")[data.path.split("/").length - 2]);
+          await member.activate();
+          await member.save();
+          return {};
+        } catch(e) {
+          return {
+            status: 500,
+            payload: {error: e.message}
           }
         }
       }

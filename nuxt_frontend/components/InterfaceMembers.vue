@@ -53,13 +53,13 @@
           <div class="value">
             <h3>Status</h3><p>Active</p>
           </div>
-          <button class="secondary">Inactivate</button>
+          <button class="secondary" @click="inactivateOpenMember">{{loading ? "loading..." : "Inactivate"}}</button>
         </div>
         <div id="status" class="popupElement" v-if="openMember.status === 2">
           <div class="value">
             <h3>Status</h3><p>Inactive</p>
           </div>
-          <button class="secondary">Activate</button>
+          <button class="secondary" @click="activateOpenMember">{{loading ? "loading..." : "Activate"}}</button>
         </div>
       </div>
     </div>
@@ -129,6 +129,7 @@ export default {
     filteredMembers: [],
     searchTerm: "",
     openMember: null,
+    loading: false,
   }),
 
   props: {
@@ -143,6 +144,7 @@ export default {
     async refresh(){
       this.members = (await this.$axios.$get("/api/members")).sort((a, b) => new Date(b.joinedDate) - new Date(a.joinedDate));
       this.applySearch();
+      if(this.openMember) this.openMember = this.members.filter(x => x.discordId === this.openMember.discordId)[0];
     },
 
     applySearch() {
@@ -150,6 +152,28 @@ export default {
         this.filteredMembers = this.members;
       } else {
         this.filteredMembers = this.members.filter(x => x.mcIgn.toLowerCase().includes(this.searchTerm));
+      }
+    },
+
+    async activateOpenMember() {
+      try {
+        this.loading = true;
+        await this.$axios.$post(`/api/members/${this.openMember.discordId}/activate`);
+        await this.refresh();
+        this.loading = false;
+      } catch (e) {
+        window.alert(e);
+      }
+    },
+
+    async inactivateOpenMember() {
+      try {
+        this.loading = true;
+        await this.$axios.$post(`/api/members/${this.openMember.discordId}/inactivate`);
+        await this.refresh();
+        this.loading = false;
+      } catch (e) {
+        window.alert(e);
       }
     }
   },
@@ -160,7 +184,8 @@ export default {
       this.applySearch();
     },
 
-    openMember() {
+    openMember(newMember, oldMember) {
+      if(newMember && oldMember && newMember.discordId === oldMember.discordId) return;
       this.refresh();
     }
   }
