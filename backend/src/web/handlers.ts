@@ -109,6 +109,9 @@ const handlers = {
       } else {
         const errorMessage = await authorizeRequest(data, 7);
         if(errorMessage.length === 0) {
+          if(data.path.endsWith("/overview")){
+            return await handlers.paxapi._member.overview(data);
+          }
           if(data.path.endsWith("/inactivate")) {
             return await handlers.paxapi._member.inactivate(data);
           }
@@ -154,6 +157,14 @@ const handlers = {
           return {
             payload: res.map(x => x.status == "fulfilled" ? x.value : null).filter(x => x)
           }
+        }
+      },
+
+      async overview(data: IRequestData): Promise<IHandlerResponse> {
+        const members = await memberFactory.getAll();
+        const res = await Promise.allSettled(members.map(x => turnMemberIntoOverviewJson(x)));
+        return {
+          payload: res.map(x => x.status == "fulfilled" ? x.value : null).filter(x => x)
         }
       },
 
@@ -466,6 +477,14 @@ async function turnMemberIntoJson(member: Member) {
     age: member.getAge(),
     discordAvatarUrl: await member.getDiscordAvatarUrl(),
     mcSkinUrl: member.getMcSkinUrl()
+  }
+}
+
+async function turnMemberIntoOverviewJson(member: Member) {
+  return {
+    discordId: member.getDiscordId(),
+    mcIgn: member.getMcIgn(),
+    joinedDate: member.getJoinedDate()
   }
 }
 

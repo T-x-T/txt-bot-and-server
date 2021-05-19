@@ -12,7 +12,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in filteredMembers" :key="index" @click="openMember = item">
+          <tr v-for="(item, index) in filteredMembers" :key="index" @click="openMemberDiscordId = item.discordId">
             <td>{{item.mcIgn}}</td>
             <td>{{new Date(item.joinedDate).toISOString().substring(0, 10)}}</td>
           </tr>
@@ -20,7 +20,7 @@
       </table>
     </div>
     <div id="popup" v-if="openMember">
-      <button id="back" @click="openMember = null">
+      <button id="back" @click="closeOpenMember">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" /></svg>
         back
       </button>
@@ -48,6 +48,11 @@
         <div id="avatars" class="popupElement">
           <img :src="openMember.discordAvatarUrl">
           <img :src="openMember.mcSkinUrl">
+        </div>
+        <div id="status" class="popupElement" v-if="openMember.status === 0">
+          <div class="value">
+            <h3>Status</h3><p>Not whitelisted for a very long time...</p>
+          </div>
         </div>
         <div id="status" class="popupElement" v-if="openMember.status === 1">
           <div class="value">
@@ -128,6 +133,7 @@ export default {
     members: [],
     filteredMembers: [],
     searchTerm: "",
+    openMemberDiscordId: null,
     openMember: null,
     loading: false,
   }),
@@ -142,7 +148,7 @@ export default {
 
   methods: {
     async refresh(){
-      this.members = (await this.$axios.$get("/api/members")).sort((a, b) => new Date(b.joinedDate) - new Date(a.joinedDate));
+      this.members = (await this.$axios.$get("/api/members/overview")).sort((a, b) => new Date(b.joinedDate) - new Date(a.joinedDate));
       this.applySearch();
       if(this.openMember) this.openMember = this.members.filter(x => x.discordId === this.openMember.discordId)[0];
     },
@@ -175,6 +181,12 @@ export default {
       } catch (e) {
         window.alert(e);
       }
+    },
+
+    closeOpenMember() {
+      this.openMember = null;
+      this.openMemberDiscordId = null;
+      this.refresh();
     }
   },
 
@@ -184,9 +196,11 @@ export default {
       this.applySearch();
     },
 
-    openMember(newMember, oldMember) {
-      if(newMember && oldMember && newMember.discordId === oldMember.discordId) return;
-      this.refresh();
+    async openMemberDiscordId(discordId) {
+      if(discordId) {
+        this.openMember = {discordId: discordId};
+        this.openMember = await this.$axios.$get("/api/members?discordId=" + discordId);
+      }
     }
   }
 }
