@@ -23,8 +23,9 @@ export default {
     proxy: true
   },
   proxy: {
+    "/api/v1": "https://thetxt.io/",
     "/api": process.env.NODE_ENV === "prod" ? "https://paxterya.com" : "http://localhost:4000",
-    "/users": "https://api.mojang.com/"
+    "/users": "https://api.mojang.com/",
   },
   publicRuntimeConfig: {
     discordOauthJoinUs: process.env.NODE_ENV === "prod" ? "https://discord.com/api/oauth2/authorize?client_id=624980994889613312&redirect_uri=https%3A%2F%2Fpaxterya.com%2Fjoin-us&response_type=code&scope=identify" : "https://discord.com/api/oauth2/authorize?client_id=624980994889613312&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fjoin-us&response_type=code&scope=identify",

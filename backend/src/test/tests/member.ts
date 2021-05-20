@@ -15,14 +15,14 @@ export = (_config: IConfig) => {
 async function createAndSaveNewMember(){
   let memberFactory = new MemberFactory();
   await memberFactory.connect();
-  let member = await memberFactory.create("293029505457586176", "TxT#0001", "dac25e44d1024f3b819978ed62d209a1", "The__TxT", "germany", 7, 2000, true, true, 1);
+  let member = await memberFactory.create("293029505457586176", "TxT#0001", "dac25e44d1024f3b819978ed62d209a1", "The__TxT", "germany", 7, 2000, true, true, 1, "this is a test note");
   return member;
 }
 
 async function createAndSaveNewPrivateMember() {
   let memberFactory = new MemberFactory();
   await memberFactory.connect();
-  let member = await memberFactory.create("293029505457586176", "TxT#0001", "dac25e44d1024f3b819978ed62d209a1", "The__TxT", "germany", 7, 2000, false, false, 1);
+  let member = await memberFactory.create("293029505457586176", "TxT#0001", "dac25e44d1024f3b819978ed62d209a1", "The__TxT", "germany", 7, 2000, false, false, 1, "this is a test note");
   return member;
 }
 
@@ -137,6 +137,12 @@ describe("member", function(){
       assert.ok(privacy.publish_country);
       assert.ok(privacy.publish_age);
     });
+
+    it("getNotes", async function() {
+      const member = await createAndSaveNewMember();
+      const notes = member.getNotes();
+      assert.strictEqual(notes, "this is a test note");
+    });
   });
 
   describe("basic setters", function(){
@@ -199,6 +205,13 @@ describe("member", function(){
     it("setPublishCountry should not throw with correct input", async function () {
       let member = await createAndSaveNewMember();
       assert.doesNotThrow(() => member.setPublishCountry(true));
+    });
+
+    it("setNotes should set notes", async function () {
+      const member = await createAndSaveNewMember();
+      member.setNotes("test2");
+      const notes = member.getNotes();
+      assert.strictEqual(notes, "test2");
     });
   });
 

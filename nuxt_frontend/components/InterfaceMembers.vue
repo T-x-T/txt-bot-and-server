@@ -44,6 +44,15 @@
           <div class="value">
             <h3>Age</h3><p>{{openMember.age}}</p>
           </div>
+          <div class="value">
+            <h3>Joined Date</h3><p>{{openMember.isoJoinedDate}}</p>
+          </div>
+          <div class="value">
+            <h3>Playtime</h3><p>{{openMember.playtime}}</p>
+          </div>
+          <div class="value">
+            <h3>Karma</h3><p>{{openMember.karma}}</p>
+          </div>
         </div>
         <div id="avatars" class="popupElement">
           <img :src="openMember.discordAvatarUrl">
@@ -65,6 +74,13 @@
             <h3>Status</h3><p>Inactive</p>
           </div>
           <button class="secondary" @click="activateOpenMember">{{loading ? "loading..." : "Activate"}}</button>
+        </div>
+        <div id="controls" class="popupElement">
+          <p>This is the place for some controls</p>
+        </div>
+        <div id="notes" class="popupElement">
+          <textarea v-model="openMember.notes" autocomplete="off" placeholder="This could be the start of some great notes..."></textarea>
+          <button @click="saveNotes()" class="secondary">Save</button>
         </div>
       </div>
     </div>
@@ -102,6 +118,10 @@ table
   background-color: $pax-darkestcyan
   margin: 50px
   padding: 0px 20px 20px 20px
+
+#notes
+  padding-top: 20px
+  grid-column: span 2
 
 #grid
   display: grid
@@ -157,7 +177,7 @@ export default {
       if(this.searchTerm.length === 0) {
         this.filteredMembers = this.members;
       } else {
-        this.filteredMembers = this.members.filter(x => x.mcIgn.toLowerCase().includes(this.searchTerm));
+        this.filteredMembers = this.members.filter(x => x.mcIgn.toString().toLowerCase().includes(this.searchTerm));
       }
     },
 
@@ -184,9 +204,14 @@ export default {
     },
 
     closeOpenMember() {
+      this.saveNotes();
       this.openMember = null;
       this.openMemberDiscordId = null;
       this.refresh();
+    },
+
+    saveNotes() {
+      this.$axios.$post(`/api/members/${this.openMember.discordId}/notes`, {notes: this.openMember.notes});
     }
   },
 
@@ -200,6 +225,15 @@ export default {
       if(discordId) {
         this.openMember = {discordId: discordId};
         this.openMember = await this.$axios.$get("/api/members?discordId=" + discordId);
+        const karma = (await this.$axios.$get(`/api/v1/users/${discordId}/guildkarma`))?.filter(x => x.guildId === "624976691692961793")[0]?.guildkarma;
+        const playtime = (await this.$axios.$get(`/api/members/${discordId}/playtime`)).playtime;
+        const tempOpenMember = {
+          karma: karma ? karma : 0,
+          isoJoinedDate: new Date(this.openMember.joinedDate).toISOString().substring(0, 10),
+          playtime: playtime ? playtime + "h" : "0h",
+          ...this.openMember
+        }
+        this.openMember = tempOpenMember;
       }
     }
   }

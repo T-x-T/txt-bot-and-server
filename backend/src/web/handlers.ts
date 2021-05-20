@@ -118,6 +118,12 @@ const handlers = {
           if(data.path.endsWith("/activate")) {
             return await handlers.paxapi._member.activate(data);
           }
+          if(data.path.endsWith("/playtime")) {
+            return await handlers.paxapi._member.getPlayTime(data);
+          }
+          if(data.path.endsWith("/notes") && data.method == "post") {
+            return await handlers.paxapi._member.postNotes(data);
+          }
           if(data.method == "get") {
             return await handlers.paxapi._member[data.method](data);
           } else {
@@ -186,6 +192,34 @@ const handlers = {
         try {
           const member = await memberFactory.getByDiscordId(data.path.split("/")[data.path.split("/").length - 2]);
           await member.activate();
+          await member.save();
+          return {};
+        } catch(e) {
+          return {
+            status: 500,
+            payload: {error: e.message}
+          }
+        }
+      },
+
+      async getPlayTime(data: IRequestData): Promise<IHandlerResponse> {
+        try {
+          const member = await memberFactory.getByDiscordId(data.path.split("/")[data.path.split("/").length - 2]);
+          const playtime = await stats.mcGetSingle(member.getMcUuid(), "playtime");
+          return {
+            payload: {playtime: playtime ? playtime : 0}
+          }
+        } catch(_) {
+          return {
+            payload: {playtime: 0}
+          }
+        }
+      },
+
+      async postNotes(data: IRequestData): Promise<IHandlerResponse> {
+        try {
+          const member = await memberFactory.getByDiscordId(data.path.split("/")[data.path.split("/").length - 2]);
+          member.setNotes(data.payload.notes);
           await member.save();
           return {};
         } catch(e) {
@@ -476,7 +510,8 @@ async function turnMemberIntoJson(member: Member) {
     country: member.getCountry(),
     age: member.getAge(),
     discordAvatarUrl: await member.getDiscordAvatarUrl(),
-    mcSkinUrl: member.getMcSkinUrl()
+    mcSkinUrl: member.getMcSkinUrl(),
+    notes: member.getNotes()
   }
 }
 
