@@ -90,6 +90,7 @@
 
         <div id="modLog" class="popupElement">
           <table>
+            <header><h2>Modlog</h2></header>
             <colgroup>
               <col style="width: max-content;">
               <col style="width: max-content;">
@@ -137,7 +138,8 @@ table
   border: 4px solid $pax-darkestcyan
 
 #popup
-  width: 50%
+  width: 1500px
+  max-width: 90%
   margin: 25px auto
   @media screen and ($mobile)
     width: 90%
@@ -151,12 +153,15 @@ table
 
 .popupElement
   background-color: $pax-darkestcyan
-  margin: 50px
+  margin: 20px
   padding: 0px 20px 20px 20px
 
 #grid
   display: grid
   grid-template-columns: 50% 50%
+  @media screen and ("max-width:1600px")
+    div
+      grid-column: span 2
 
 .value
   h3
@@ -189,6 +194,8 @@ table
     margin: 0
     input
       width: 100%
+  h2
+    color: white
 </style>
 
 <script>
