@@ -54,15 +54,18 @@
             <h3>Karma</h3><p>{{openMember.karma}}</p>
           </div>
         </div>
+
         <div id="avatars" class="popupElement">
           <img :src="openMember.discordAvatarUrl">
           <img :src="openMember.mcSkinUrl">
         </div>
+
         <div id="status" class="popupElement" v-if="openMember.status === 0">
           <div class="value">
             <h3>Status</h3><p>Not whitelisted for a very long time...</p>
           </div>
         </div>
+
         <div id="status" class="popupElement" v-if="openMember.status === 1">
           <div class="value">
             <h3>Status</h3><p>Active</p>
@@ -75,12 +78,44 @@
           </div>
           <button class="secondary" @click="activateOpenMember">{{loading ? "loading..." : "Activate"}}</button>
         </div>
+
         <div id="controls" class="popupElement">
           <p>This is the place for some controls</p>
         </div>
+
         <div id="notes" class="popupElement">
           <textarea v-model="openMember.notes" autocomplete="off" placeholder="This could be the start of some great notes..."></textarea>
           <button @click="saveNotes()" class="secondary">Save</button>
+        </div>
+
+        <div id="modLog" class="popupElement">
+          <table>
+            <colgroup>
+              <col style="width: max-content;">
+              <col style="width: max-content;">
+              <col style="width: 10000px;">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Logged by</th>
+                <th>Text</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in openMember.modLog" :key="index">
+                <td>{{new Date(item.timestamp).toISOString().substring(0, 10)}}</td>
+                <td>{{item.mcName}}</td>
+                <td>{{item.text}}</td>
+              </tr>
+              <tr>
+                <td><input type="date" v-model="newmodLogEntry.timestamp"></td>
+                <td><input type="text" value="You" style="width: 50px" readonly></td>
+                <td><input type="text" v-model="newmodLogEntry.text" placeholder="Text..."></td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="secondary" v-if="newmodLogEntry.text" @click="savemodLog()">Save new entry</button>
         </div>
       </div>
     </div>
@@ -119,10 +154,6 @@ table
   margin: 50px
   padding: 0px 20px 20px 20px
 
-#notes
-  padding-top: 20px
-  grid-column: span 2
-
 #grid
   display: grid
   grid-template-columns: 50% 50%
@@ -145,6 +176,19 @@ table
   justify-content: space-evenly
   .value
     margin: 0
+
+#notes
+  padding-top: 20px
+  grid-column: span 2
+
+#modLog
+  padding: 20px
+  grid-column: span 2
+  table
+    width: 100%
+    margin: 0
+    input
+      width: 100%
 </style>
 
 <script>
@@ -156,6 +200,7 @@ export default {
     openMemberDiscordId: null,
     openMember: null,
     loading: false,
+    newmodLogEntry: {},
   }),
 
   props: {
@@ -170,7 +215,10 @@ export default {
     async refresh(){
       this.members = (await this.$axios.$get("/api/members/overview")).sort((a, b) => new Date(b.joinedDate) - new Date(a.joinedDate));
       this.applySearch();
-      if(this.openMember) this.openMember = this.members.filter(x => x.discordId === this.openMember.discordId)[0];
+      if(this.openMember) {
+        this.openMember = this.members.filter(x => x.discordId === this.openMember.discordId)[0];
+        this.loadOpenMember(this.openMember.discordId);
+      }
     },
 
     applySearch() {
@@ -179,6 +227,20 @@ export default {
       } else {
         this.filteredMembers = this.members.filter(x => x.mcIgn.toString().toLowerCase().includes(this.searchTerm));
       }
+    },
+
+    async loadOpenMember(discordId) {
+      this.openMember = {discordId: discordId};
+      this.openMember = await this.$axios.$get("/api/members?discordId=" + discordId);
+      const karma = (await this.$axios.$get(`/api/v1/users/${discordId}/guildkarma`))?.filter(x => x.guildId === "624976691692961793")[0]?.guildkarma;
+      const playtime = (await this.$axios.$get(`/api/members/${discordId}/playtime`)).playtime;
+      const tempOpenMember = {
+        karma: karma ? karma : 0,
+        isoJoinedDate: new Date(this.openMember.joinedDate).toISOString().substring(0, 10),
+        playtime: playtime ? playtime + "h" : "0h",
+        ...this.openMember
+      }
+      this.openMember = tempOpenMember;
     },
 
     async activateOpenMember() {
@@ -212,6 +274,12 @@ export default {
 
     saveNotes() {
       this.$axios.$post(`/api/members/${this.openMember.discordId}/notes`, {notes: this.openMember.notes});
+    },
+
+    async savemodLog() {
+      await this.$axios.$post(`/api/members/${this.openMember.discordId}/modLog`, {modLog: this.newmodLogEntry});
+      await this.refresh();
+      this.newmodLogEntry = {};
     }
   },
 
@@ -223,17 +291,7 @@ export default {
 
     async openMemberDiscordId(discordId) {
       if(discordId) {
-        this.openMember = {discordId: discordId};
-        this.openMember = await this.$axios.$get("/api/members?discordId=" + discordId);
-        const karma = (await this.$axios.$get(`/api/v1/users/${discordId}/guildkarma`))?.filter(x => x.guildId === "624976691692961793")[0]?.guildkarma;
-        const playtime = (await this.$axios.$get(`/api/members/${discordId}/playtime`)).playtime;
-        const tempOpenMember = {
-          karma: karma ? karma : 0,
-          isoJoinedDate: new Date(this.openMember.joinedDate).toISOString().substring(0, 10),
-          playtime: playtime ? playtime + "h" : "0h",
-          ...this.openMember
-        }
-        this.openMember = tempOpenMember;
+        this.loadOpenMember(discordId);
       }
     }
   }

@@ -27,6 +27,12 @@ interface IHandlerResponse {
   contentType?: "json" | "plain"
 }
 
+interface IModLogEntry {
+  timestamp: Date,
+  text: string,
+  staffDiscordId: string
+  mcName?: string;
+}
 
 const enum EApplicationStatus {
   pending = 1,

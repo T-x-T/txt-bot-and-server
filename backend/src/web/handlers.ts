@@ -124,6 +124,9 @@ const handlers = {
           if(data.path.endsWith("/notes") && data.method == "post") {
             return await handlers.paxapi._member.postNotes(data);
           }
+          if(data.path.endsWith("/modLog") && data.method == "post") {
+            return await handlers.paxapi._member.addmodLog(data);
+          }
           if(data.method == "get") {
             return await handlers.paxapi._member[data.method](data);
           } else {
@@ -175,31 +178,17 @@ const handlers = {
       },
 
       async inactivate(data: IRequestData): Promise<IHandlerResponse> {
-        try {
-          const member = await memberFactory.getByDiscordId(data.path.split("/")[data.path.split("/").length - 2]);
-          await member.inactivate();
-          await member.save();
-          return {};
-        } catch(e) {
-          return {
-            status: 500,
-            payload: {error: e.message}
-          }
-        }
+        const member = await memberFactory.getByDiscordId(data.path.split("/")[data.path.split("/").length - 2]);
+        await member.inactivate();
+        await member.save();
+        return {};
       },
 
       async activate(data: IRequestData): Promise<IHandlerResponse> {
-        try {
-          const member = await memberFactory.getByDiscordId(data.path.split("/")[data.path.split("/").length - 2]);
-          await member.activate();
-          await member.save();
-          return {};
-        } catch(e) {
-          return {
-            status: 500,
-            payload: {error: e.message}
-          }
-        }
+        const member = await memberFactory.getByDiscordId(data.path.split("/")[data.path.split("/").length - 2]);
+        await member.activate();
+        await member.save();
+        return {};
       },
 
       async getPlayTime(data: IRequestData): Promise<IHandlerResponse> {
@@ -217,17 +206,22 @@ const handlers = {
       },
 
       async postNotes(data: IRequestData): Promise<IHandlerResponse> {
-        try {
-          const member = await memberFactory.getByDiscordId(data.path.split("/")[data.path.split("/").length - 2]);
-          member.setNotes(data.payload.notes);
-          await member.save();
-          return {};
-        } catch(e) {
-          return {
-            status: 500,
-            payload: {error: e.message}
-          }
+        const member = await memberFactory.getByDiscordId(data.path.split("/")[data.path.split("/").length - 2]);
+        member.setNotes(data.payload.notes);
+        await member.save();
+        return {};
+      },
+
+      async addmodLog(data: IRequestData): Promise<IHandlerResponse> {
+        const member = await memberFactory.getByDiscordId(data.path.split("/")[data.path.split("/").length - 2]);
+        const modLog: IModLogEntry = {
+          timestamp: data.payload.modLog.timestamp ? new Date(data.payload.modLog.timestamp) : new Date(),
+          text: data.payload.modLog.text,
+          staffDiscordId: await auth.getDiscordIdFromToken(data.cookies.access_token)
         }
+        member.addModLog(modLog);
+        await member.save();
+        return {};
       }
     },
 
@@ -511,7 +505,11 @@ async function turnMemberIntoJson(member: Member) {
     age: member.getAge(),
     discordAvatarUrl: await member.getDiscordAvatarUrl(),
     mcSkinUrl: member.getMcSkinUrl(),
-    notes: member.getNotes()
+    notes: member.getNotes(),
+    modLog: await Promise.all(member.getModLog().map(async x => {
+      x.mcName = (await memberFactory.getByDiscordId(x.staffDiscordId)).getMcIgn();
+      return x;
+    }))
   }
 }
 

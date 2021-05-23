@@ -12,17 +12,33 @@ export = (_config: IConfig) => {
   config = _config;
 }
 
+const audit1: IModLogEntry = {
+  timestamp: new Date(),
+  text: "audit1",
+  staffDiscordId: "293029505457586176"
+}
+const audit2: IModLogEntry = {
+  timestamp: new Date(),
+  text: "audit2",
+  staffDiscordId: "293029505457586176"
+}
+const audit3: IModLogEntry = {
+  timestamp: new Date(),
+  text: "audit3",
+  staffDiscordId: "293029505457586176"
+}
+
 async function createAndSaveNewMember(){
   let memberFactory = new MemberFactory();
   await memberFactory.connect();
-  let member = await memberFactory.create("293029505457586176", "TxT#0001", "dac25e44d1024f3b819978ed62d209a1", "The__TxT", "germany", 7, 2000, true, true, 1, "this is a test note");
+  let member = await memberFactory.create("293029505457586176", "TxT#0001", "dac25e44d1024f3b819978ed62d209a1", "The__TxT", "germany", 7, 2000, true, true, 1, "this is a test note", [audit1, audit2]);
   return member;
 }
 
 async function createAndSaveNewPrivateMember() {
   let memberFactory = new MemberFactory();
   await memberFactory.connect();
-  let member = await memberFactory.create("293029505457586176", "TxT#0001", "dac25e44d1024f3b819978ed62d209a1", "The__TxT", "germany", 7, 2000, false, false, 1, "this is a test note");
+  let member = await memberFactory.create("293029505457586176", "TxT#0001", "dac25e44d1024f3b819978ed62d209a1", "The__TxT", "germany", 7, 2000, false, false, 1, "this is a test note", [audit1, audit2]);
   return member;
 }
 
@@ -325,6 +341,31 @@ describe("member", function(){
       let member = await createAndSaveNewMemberWithStatus(1);
       member.setStatus(2);
       assert.strictEqual(2, member.getStatus());
+    });
+  });
+
+  describe("modLog", function() {
+    it("getModLog", async function () {
+      const member = await createAndSaveNewMember();
+      const modLog = member.getModLog();
+      assert.deepStrictEqual(modLog[0], audit1);
+      assert.deepStrictEqual(modLog[1], audit2);
+    });
+
+    it("getModLog should correctly add modLogEntry", async function() {
+      const member = await createAndSaveNewMember();
+      member.addModLog(audit3);
+      const modLog = member.getModLog();
+      assert.deepStrictEqual(modLog[2], audit3);
+    });
+
+    it("getModLog should get properly saved", async function() {
+      const member = await createAndSaveNewMember();
+      member.addModLog(audit3);
+      await member.save();
+      const loadedMember = await memberFactory.getByDiscordId("293029505457586176");
+      const modLog = loadedMember.getModLog();
+      assert.deepStrictEqual(modLog[2], audit3);
     });
   });
 
