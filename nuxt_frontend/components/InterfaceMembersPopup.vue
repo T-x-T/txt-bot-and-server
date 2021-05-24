@@ -63,14 +63,14 @@
         <p>This is the place for some controls</p>
       </div>
 
-      <div id="notes" class="popupElement">
+      <div id="notes" class="popupElement stretch">
         <textarea v-model="openMember.notes" autocomplete="off" placeholder="This could be the start of some great notes..."></textarea>
         <button @click="saveNotes()" class="secondary">Save</button>
       </div>
 
-      <div id="modLog" class="popupElement">
+      <div id="modLog" class="popupElement stretch">
         <table>
-          <header><h2>Modlog</h2></header>
+          <header><h2>Modlog:</h2></header>
           <colgroup>
             <col style="width: max-content;">
             <col style="width: max-content;">
@@ -98,12 +98,31 @@
         </table>
         <button class="secondary" v-if="newmodLogEntry.text" @click="savemodLog()">Save new entry</button>
       </div>
+
+      <div v-if="Array.isArray(openMember.applications) && openMember.applications.length > 0" id="applications" class="popupElement stretch">
+        <h2>Applications:</h2>
+        <InterfaceApplicantsTable
+          v-if="!openApplication"
+          :applications="openMember.applications"
+          :filter="null"
+          v-on:openApplication="(x) => openApplication = x"
+        />
+
+        <InterfaceApplicantsPopup
+          v-if="openApplication"
+          :openApplication="openApplication"
+          v-on:close="openApplication = null"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
+
+h2
+  color: white
 
 #popup
   width: 1500px
@@ -122,7 +141,10 @@
 .popupElement
   background-color: $pax-darkestcyan
   margin: 20px
-  padding: 0px 20px 20px 20px
+  padding: 20px
+
+.stretch
+  grid-column: span 2
 
 #grid
   display: grid
@@ -150,20 +172,17 @@
   .value
     margin: 0
 
-#notes
-  padding-top: 20px
-  grid-column: span 2
-
 #modLog
-  padding: 20px
-  grid-column: span 2
   table
     width: 100%
     margin: 0
     input
       width: 100%
-  h2
-    color: white
+  
+#applications
+  table
+    width: 100%
+    margin: 0
 </style>
 
 <script>
@@ -172,6 +191,7 @@ export default {
     openMember: null,
     loading: false,
     newmodLogEntry: {},
+    openApplication: null,
   }),
 
   props: {
@@ -188,10 +208,12 @@ export default {
       this.openMember = await this.$axios.$get("/api/members?discordId=" + discordId);
       const karma = (await this.$axios.$get(`/api/v1/users/${discordId}/guildkarma`))?.filter(x => x.guildId === "624976691692961793")[0]?.guildkarma;
       const playtime = (await this.$axios.$get(`/api/members/${discordId}/playtime`)).playtime;
+      const applications = await this.$axios.$get(`api/applications?discord_id=${discordId}`);
       const tempOpenMember = {
         karma: karma ? karma : 0,
         isoJoinedDate: new Date(this.openMember.joinedDate).toISOString().substring(0, 10),
         playtime: playtime ? playtime + "h" : "0h",
+        applications: applications,
         ...this.openMember
       }
       this.openMember = tempOpenMember;

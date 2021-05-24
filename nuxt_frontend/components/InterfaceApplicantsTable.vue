@@ -77,26 +77,32 @@ export default {
     filteredApplications: [],
     limit: 20,
     rowClasses: [],
+    statusFilter: null,
   }),
 
   props: {
     applications: Array,
-    statusFilter: Number
+    filter: Number
+  },
+
+  mounted() {
+    this.statusFilter = this.filter;
+    this.applyFilter();
   },
 
   watch: {
     statusFilter(newStatus){
       this.$emit("updateFilter", newStatus);
-      this.filter("status", newStatus);
+      this.applyFilter("status", newStatus);
     },
 
     applications() {
-      this.filter("status", this.statusFilter);
+      this.applyFilter("status", this.statusFilter);
     }
   },
 
   methods: {
-    filter(property, value){
+    applyFilter(property, value){
       if(property && value){
         this.filteredApplications = this.applications.filter(x => x[property] == value);
       }else{

@@ -5,7 +5,7 @@
     <InterfaceApplicantsTable
       v-if="!openApplication"
       :applications="applications"
-      :statusFilter="filter"
+      :filter="filter"
       v-on:openApplication="openPopup"
       v-on:refresh="refresh"
       v-on:updateFilter="updateFilter"
