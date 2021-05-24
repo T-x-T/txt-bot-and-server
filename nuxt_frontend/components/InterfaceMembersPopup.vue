@@ -223,7 +223,7 @@ export default {
       try {
         this.loading = true;
         await this.$axios.$post(`/api/members/${this.openMember.discordId}/activate`);
-        await this.refresh();
+        await this.loadOpenMember(this.openMemberDiscordId);
         this.loading = false;
       } catch (e) {
         window.alert(e);
@@ -234,7 +234,7 @@ export default {
       try {
         this.loading = true;
         await this.$axios.$post(`/api/members/${this.openMember.discordId}/inactivate`);
-        await this.refresh();
+        await this.loadOpenMember(this.openMemberDiscordId);
         this.loading = false;
       } catch (e) {
         window.alert(e);
@@ -253,7 +253,7 @@ export default {
 
     async savemodLog() {
       await this.$axios.$post(`/api/members/${this.openMember.discordId}/modLog`, {modLog: this.newmodLogEntry});
-      await this.refresh();
+      await this.loadOpenMember(this.openMemberDiscordId);
       this.newmodLogEntry = {};
     },
   }
