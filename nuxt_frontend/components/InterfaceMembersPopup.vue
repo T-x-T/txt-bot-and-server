@@ -206,7 +206,7 @@ export default {
     async loadOpenMember(discordId) {
       this.openMember = {discordId: discordId};
       this.openMember = await this.$axios.$get("/api/members?discordId=" + discordId);
-      const karma = (await this.$axios.$get(`/api/v1/users/${discordId}/guildkarma`))?.filter(x => x.guildId === "624976691692961793")[0]?.guildkarma;
+      const karma = (await this.$axios.$get(`/api2/v1/users/${discordId}/guildkarma`))?.filter(x => x.guildId === "624976691692961793")[0]?.guildkarma;
       const playtime = (await this.$axios.$get(`/api/members/${discordId}/playtime`)).playtime;
       const applications = await this.$axios.$get(`api/applications?discord_id=${discordId}`);
       const tempOpenMember = {

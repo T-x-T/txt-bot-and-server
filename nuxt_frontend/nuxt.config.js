@@ -23,7 +23,7 @@ export default {
     proxy: true
   },
   proxy: {
-    "/api/v1": "https://thetxt.io/",
+    "/api2/v1": {target: "https://thetxt.io/", pathRewrite: {"2": ""}},
     "/api": process.env.NODE_ENV === "prod" ? "https://paxterya.com" : "http://localhost:4000",
     "/users": "https://api.mojang.com/",
   },
