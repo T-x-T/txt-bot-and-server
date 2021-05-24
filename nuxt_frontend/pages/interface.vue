@@ -9,6 +9,7 @@
 
     <div v-if="accessLevel >= 7">
       <InterfaceApplicants :token="token" />
+      <InterfaceMembers />
     </div>
     
     <div v-if="accessLevel >= 9">

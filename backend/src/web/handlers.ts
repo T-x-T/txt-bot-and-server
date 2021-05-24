@@ -19,6 +19,7 @@ import email = require("../email/index.js");
 import log = require("../log/index.js");
 
 import type Application = require("../application/application.js");
+import type Member = require("../user/member.js");
 
 let config: IConfig;
 
@@ -103,21 +104,124 @@ const handlers = {
     },
 
     async member(data: IRequestData): Promise<IHandlerResponse> {
-      if(data.method == "get") {
-        return await handlers.paxapi._member[data.method](data);
+      if(data.queryStringObject.hasOwnProperty("public")) {
+        return await handlers.paxapi._member.getPublic(data);
       } else {
-        return {
-          status: 405,
-          payload: {err: "Verb not allowed"}
-        };
+        const errorMessage = await authorizeRequest(data, 7);
+        if(errorMessage.length === 0) {
+          if(data.path.endsWith("/overview")){
+            return await handlers.paxapi._member.overview(data);
+          }
+          if(data.path.endsWith("/inactivate")) {
+            return await handlers.paxapi._member.inactivate(data);
+          }
+          if(data.path.endsWith("/activate")) {
+            return await handlers.paxapi._member.activate(data);
+          }
+          if(data.path.endsWith("/playtime")) {
+            return await handlers.paxapi._member.getPlayTime(data);
+          }
+          if(data.path.endsWith("/notes") && data.method == "post") {
+            return await handlers.paxapi._member.postNotes(data);
+          }
+          if(data.path.endsWith("/modLog") && data.method == "post") {
+            return await handlers.paxapi._member.addmodLog(data);
+          }
+          if(data.method == "get") {
+            return await handlers.paxapi._member[data.method](data);
+          } else {
+            return {
+              status: 405,
+              payload: {err: "Verb not allowed"}
+            };
+          }
+        } else {
+          return {
+            status: 401,
+            payload: {err: errorMessage}
+          };
+        }
       }
     },
 
     _member: {
-      async get(data: IRequestData): Promise<IHandlerResponse> {
+      async getPublic(data: IRequestData): Promise<IHandlerResponse> {
         return {
           payload: await stats.memberOverview()
         };
+      },
+
+      async get(data: IRequestData): Promise<IHandlerResponse> {
+        if(data.queryStringObject.hasOwnProperty("discordId")){
+          return {
+            payload: await turnMemberIntoJson(await memberFactory.getByDiscordId(data.queryStringObject.discordId))
+          }
+        } else if(data.queryStringObject.hasOwnProperty("discordId")) {
+          return {
+            payload: await turnMemberIntoJson(await memberFactory.getByMcUuid(data.queryStringObject.mcUuid))
+          }
+        } else {
+          const members = await memberFactory.getAll();
+          const res = await Promise.allSettled(members.map(x => turnMemberIntoJson(x)));
+          return {
+            payload: res.map(x => x.status == "fulfilled" ? x.value : null).filter(x => x)
+          }
+        }
+      },
+
+      async overview(data: IRequestData): Promise<IHandlerResponse> {
+        const members = await memberFactory.getAll();
+        const res = await Promise.allSettled(members.map(x => turnMemberIntoOverviewJson(x)));
+        return {
+          payload: res.map(x => x.status == "fulfilled" ? x.value : null).filter(x => x)
+        }
+      },
+
+      async inactivate(data: IRequestData): Promise<IHandlerResponse> {
+        const member = await memberFactory.getByDiscordId(data.path.split("/")[data.path.split("/").length - 2]);
+        await member.inactivate();
+        await member.save();
+        return {};
+      },
+
+      async activate(data: IRequestData): Promise<IHandlerResponse> {
+        const member = await memberFactory.getByDiscordId(data.path.split("/")[data.path.split("/").length - 2]);
+        await member.activate();
+        await member.save();
+        return {};
+      },
+
+      async getPlayTime(data: IRequestData): Promise<IHandlerResponse> {
+        try {
+          const member = await memberFactory.getByDiscordId(data.path.split("/")[data.path.split("/").length - 2]);
+          const playtime = await stats.mcGetSingle(member.getMcUuid(), "playtime");
+          return {
+            payload: {playtime: playtime ? playtime : 0}
+          }
+        } catch(_) {
+          return {
+            payload: {playtime: 0}
+          }
+        }
+      },
+
+      async postNotes(data: IRequestData): Promise<IHandlerResponse> {
+        const member = await memberFactory.getByDiscordId(data.path.split("/")[data.path.split("/").length - 2]);
+        member.setNotes(data.payload.notes);
+        await member.save();
+        return {};
+      },
+
+      async addmodLog(data: IRequestData): Promise<IHandlerResponse> {
+        const member = await memberFactory.getByDiscordId(data.path.split("/")[data.path.split("/").length - 2]);
+        const modLog: IModLogEntry = {
+          timestamp: data.payload.modLog.timestamp ? new Date(data.payload.modLog.timestamp) : new Date(),
+          text: data.payload.modLog.text,
+          staffDiscordId: await auth.getDiscordIdFromToken(data.cookies.access_token)
+        }
+        member.addModLog(modLog);
+        await member.save();
+        return {};
       }
     },
 
@@ -389,5 +493,32 @@ async function turnApplicationIntoJson(application: Application, getExpensiveDat
   };
 }
 
+async function turnMemberIntoJson(member: Member) {
+  return {
+    discordId: member.getDiscordId(),
+    discordUserName: member.getDiscordUserName(),
+    status: member.getStatus(),
+    joinedDate: member.getJoinedDate(),
+    mcUuid: member.getMcUuid(),
+    mcIgn: member.getMcIgn(),
+    country: member.getCountry(),
+    age: member.getAge(),
+    discordAvatarUrl: await member.getDiscordAvatarUrl(),
+    mcSkinUrl: member.getMcSkinUrl(),
+    notes: member.getNotes(),
+    modLog: await Promise.all(member.getModLog().map(async x => {
+      x.mcName = (await memberFactory.getByDiscordId(x.staffDiscordId)).getMcIgn();
+      return x;
+    }))
+  }
+}
+
+async function turnMemberIntoOverviewJson(member: Member) {
+  return {
+    discordId: member.getDiscordId(),
+    mcIgn: member.getMcIgn(),
+    joinedDate: member.getJoinedDate()
+  }
+}
 
 export = handlers;

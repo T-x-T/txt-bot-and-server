@@ -214,7 +214,7 @@ export default {
   }),
 
   async mounted(){
-    this.members = await this.$axios.$get("/api/member");
+    this.members = await this.$axios.$get("/api/member?public=1");
     this.processMembers();
   },
 

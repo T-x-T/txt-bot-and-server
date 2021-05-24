@@ -1,11 +1,12 @@
 import Persistable = require("../persistance/persistable.js");
 import mc = require("../minecraft/index.js");
 import discord_helpers = require("../discord_helpers/index.js");
+
 class Member extends Persistable{
   static schema: any;
   static config: IConfig;
 
-  constructor(discord_id: string, discord_nick: string, status: EMemberStatus, joinedDate: Date, mc_uuid: string, mc_ign: string, country: string, birth_month: number, birth_year: number, publish_age: boolean, publish_country: boolean){
+  constructor(discord_id: string, discord_nick: string, status: EMemberStatus, joinedDate: Date, mc_uuid: string, mc_ign: string, country: string, birth_month: number, birth_year: number, publish_age: boolean, publish_country: boolean, notes: string, modLog: IModLogEntry[]){
     super({name: "members", schema: Member.schema});
 
     this.data.discord = discord_id;
@@ -19,6 +20,8 @@ class Member extends Persistable{
     this.data.birth_year = birth_year;
     this.data.publish_age = publish_age;
     this.data.publish_country = publish_country;
+    this.data.notes = notes;
+    this.data.modLog = modLog ? modLog : [];
   }
 
   /*
@@ -136,6 +139,22 @@ class Member extends Persistable{
     return `https://crafatar.com/renders/body/${this.getMcUuid()}?overlay=true`;
   }
 
+  getNotes(): string {
+    return this.data.notes;
+  }
+
+  setNotes(notes: string) {
+    this.data.notes = notes;
+  }
+
+  getModLog(): IModLogEntry[] {
+    return this.data.modLog;
+  }
+
+  addModLog(modLog: IModLogEntry) {
+    this.data.modLog.push(modLog);
+  }
+
   /*
    *  LIFECYCLE
    */
@@ -196,6 +215,11 @@ Member.schema = {
   country: String,
   publish_age: Boolean,
   publish_country: Boolean,
+  notes: {
+    type: String,
+    default: ""
+  },
+  modLog: Array,
   karma: {
     type: Number,
     default: 0
