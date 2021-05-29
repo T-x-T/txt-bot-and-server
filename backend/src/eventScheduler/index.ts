@@ -38,13 +38,26 @@ const eventScheduler = {
     const persistable = new Persistable(dbOptions);
     await persistable.init();
 
-    persistable.data = {
-      timestamp: timestamp,
-      event: event,
-      args: args  
+    if(event != "test" && event != "pardon") {
+      throw new Error("Given event not supported");
     }
 
+    const eventData: IScheduledEvent = {
+      timestamp: timestamp,
+      event: event,
+      args: args
+    }
+
+    persistable.data = eventData;
+
     await persistable.create();
+
+    try {
+      setTimeout(() => events[eventData.event](eventData.args), eventData.timestamp.valueOf() - Date.now());
+    } catch(e) {
+      log.write(3, "eventScheduler", "event threw", {event: eventData, error: e.message});
+    }
+
     return persistable.data;
   },
 
