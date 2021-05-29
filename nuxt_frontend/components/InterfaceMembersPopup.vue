@@ -60,7 +60,8 @@
       </div>
 
       <div id="controls" class="popupElement">
-        <p>This is the place for some controls</p>
+        <button class="secondary" @click="tempban">Tempban until</button>
+        <input v-model="tempbanDate" type="date">
       </div>
 
       <div id="notes" class="popupElement stretch">
@@ -99,7 +100,7 @@
         <button class="secondary" v-if="newmodLogEntry.text" @click="savemodLog()">Save new entry</button>
       </div>
 
-      <div v-if="Array.isArray(openMember.applications) && openMember.applications.length > 0" id="applications" class="popupElement stretch">
+      <div v-if="openMember && Array.isArray(openMember.applications) && openMember.applications.length > 0" id="applications" class="popupElement stretch">
         <h2>Applications:</h2>
         <InterfaceApplicantsTable
           v-if="!openApplication"
@@ -172,6 +173,11 @@ h2
   .value
     margin: 0
 
+#controls
+  input
+    width: 200px
+    margin: 10px
+
 #modLog
   table
     width: 100%
@@ -192,6 +198,7 @@ export default {
     loading: false,
     newmodLogEntry: {},
     openApplication: null,
+    tempbanDate: (new Date(Date.now() + 1000 * 60 * 60 * 24 * 7)).toISOString().substring(0, 10),
   }),
 
   props: {
@@ -223,7 +230,7 @@ export default {
       try {
         this.loading = true;
         await this.$axios.$post(`/api/members/${this.openMember.discordId}/activate`);
-        await this.refresh();
+        await this.loadOpenMember(this.openMemberDiscordId);
         this.loading = false;
       } catch (e) {
         window.alert(e);
@@ -234,7 +241,7 @@ export default {
       try {
         this.loading = true;
         await this.$axios.$post(`/api/members/${this.openMember.discordId}/inactivate`);
-        await this.refresh();
+        await this.loadOpenMember(this.openMemberDiscordId);
         this.loading = false;
       } catch (e) {
         window.alert(e);
@@ -247,13 +254,21 @@ export default {
       this.$emit("close");
     },
 
+    async tempban() {
+      await this.$axios.$patch(`/api/members/${this.openMember.discordId}/tempban`, {
+        duration: new Date(this.tempbanDate).valueOf() - Date.now()
+      });
+      window.alert("Success");
+      await this.loadOpenMember(this.openMemberDiscordId);
+    },
+
     saveNotes() {
       this.$axios.$post(`/api/members/${this.openMember.discordId}/notes`, {notes: this.openMember.notes});
     },
 
     async savemodLog() {
       await this.$axios.$post(`/api/members/${this.openMember.discordId}/modLog`, {modLog: this.newmodLogEntry});
-      await this.refresh();
+      await this.loadOpenMember(this.openMemberDiscordId);
       this.newmodLogEntry = {};
     },
   }

@@ -23,6 +23,7 @@ import minecraft = require("./minecraft/index.js");
 import user = require("./user/index.js");
 import application = require("./application/index.js");
 import workers = require("./workers/index.js");
+import eventScheduler = require("./eventScheduler/index.js");
 
 start();
 
@@ -47,8 +48,9 @@ async function start() {
   minecraft.init(config.minecraft, environment);
   user(config);
   application(config);
+  eventScheduler.init();
   workers(config, discordClient);
-  
+
   log.write(1, "index", "Application started", null);
 }
 

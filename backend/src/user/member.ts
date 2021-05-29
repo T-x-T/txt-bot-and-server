@@ -174,6 +174,14 @@ class Member extends Persistable{
     await this.delete();
   }
 
+  async banInGame() {
+    mc.sendCmd(`ban ${this.getMcIgn()}`);
+  }
+
+  async pardonInGame() {
+    mc.sendCmd(`pardon ${this.getMcIgn()}`);
+  }
+
   async delete(){
     await this.persistanceProvider.deleteByFilter({discord: this.getDiscordId()});
     await mc.sendCmd(`whitelist remove ${this.getMcIgn()}`);
