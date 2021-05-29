@@ -17,6 +17,7 @@ import mc_helpers = require("../minecraft/index.js");
 import sanitize = require("sanitize-html");
 import email = require("../email/index.js");
 import log = require("../log/index.js");
+import eventScheduler = require("../eventScheduler/index.js");
 
 import type Application = require("../application/application.js");
 import type Member = require("../user/member.js");
@@ -127,12 +128,15 @@ const handlers = {
           if(data.path.endsWith("/modLog") && data.method == "post") {
             return await handlers.paxapi._member.addmodLog(data);
           }
+          if(data.path.endsWith("/tempban") && data.method == "patch") {
+            return await handlers.paxapi._member.tempBan(data);
+          }
           if(data.method == "get") {
             return await handlers.paxapi._member[data.method](data);
           } else {
             return {
-              status: 405,
-              payload: {err: "Verb not allowed"}
+              status: 404,
+              payload: {err: "Requested Enpoint doesnt exist"}
             };
           }
         } else {
@@ -221,6 +225,29 @@ const handlers = {
         }
         member.addModLog(modLog);
         await member.save();
+        return {};
+      },
+
+      async tempBan(data: IRequestData): Promise<IHandlerResponse> {
+        if(typeof data.payload.duration != "number") {
+          return {
+            status: 400,
+            payload: {error: "No duration given"}
+          }
+        }
+
+        const member = await memberFactory.getByDiscordId(data.path.split("/")[data.path.split("/").length - 2]);
+        await member.banInGame();
+        await eventScheduler.schedule(new Date(Date.now() + data.payload.duration), "pardon", [member.getDiscordId()]);
+
+        const modLog: IModLogEntry = {
+          timestamp: new Date(),
+          text: `Tempban lasting ${Math.round(data.payload.duration / 1000 / 60 / 60 / 24)} days`,
+          staffDiscordId: await auth.getDiscordIdFromToken(data.cookies.access_token)
+        }
+        member.addModLog(modLog);
+        await member.save();
+
         return {};
       }
     },

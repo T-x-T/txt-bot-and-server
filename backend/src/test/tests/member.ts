@@ -611,7 +611,7 @@ describe("member", function(){
     it("ban should send whitelist remove and ban command per rcon", async function(){
       let member = await createAndSaveNewMember();
       let count = 0;
-      global.g.emitter.emit("testing_minecraft_rcon_send", (cmd: string) => {
+      global.g.emitter.on("testing_minecraft_rcon_send", (cmd: string) => {
         if (count === 0) assert.strictEqual(cmd, "whitelist remove The__TxT");
         if (count === 1) {
           assert.strictEqual(cmd, "ban The__TxT");
@@ -621,6 +621,28 @@ describe("member", function(){
       });
 
       await member.ban();
+    });
+  });
+
+  describe("banInGame", function() {
+    it("banInGame should send ban command per rcon", async function () {
+      const member = await createAndSaveNewMember();
+      global.g.emitter.once("testing_minecraft_rcon_send", (cmd: string) => {
+        assert.strictEqual(cmd, "ban The__TxT");
+      });
+
+      await member.banInGame();
+    });
+  });
+
+  describe("pardonInGame", function() {
+    it("banInGame should send ban command per rcon", async function () {
+      const member = await createAndSaveNewMember();
+      global.g.emitter.once("testing_minecraft_rcon_send", (cmd: string) => {
+        assert.strictEqual(cmd, "pardon The__TxT");
+      });
+
+      await member.pardonInGame();
     });
   });
 });

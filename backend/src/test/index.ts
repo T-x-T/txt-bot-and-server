@@ -58,3 +58,4 @@ require("./tests/persistanceProviderMongo.js");
 require("./tests/sanity.js");
 require("./tests/testFactory.js");
 require("./tests/testPersistable.js");
+require("./tests/eventScheduler.js");
