@@ -544,7 +544,8 @@ async function turnMemberIntoOverviewJson(member: Member) {
   return {
     discordId: member.getDiscordId(),
     mcIgn: member.getMcIgn(),
-    joinedDate: member.getJoinedDate()
+    joinedDate: member.getJoinedDate(),
+    status: member.getStatus()
   }
 }
 
