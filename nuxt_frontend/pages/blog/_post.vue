@@ -35,7 +35,7 @@ button#back
 <script>
 export default {
   head: {
-    title: "Apply"
+    title: "Blog"
   },
 
   data: () => ({
