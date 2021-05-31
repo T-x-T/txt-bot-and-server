@@ -34,6 +34,10 @@ button#back
 
 <script>
 export default {
+  head: {
+    title: "Apply"
+  },
+
   data: () => ({
     blog: null
   }),

@@ -9,3 +9,11 @@
 #blog
   margin-top: 120px
 </style>
+
+<script>
+export default {
+  head: {
+    title: "Blog"
+  },
+}
+</script>
