@@ -9,7 +9,7 @@
     <Slideshow />
     <Rules />
     <HowToJoin />
-    <Blog />
+    <BlogOverview />
     <Downloads />
     <MemberList />
     <MemberWorldmap />
