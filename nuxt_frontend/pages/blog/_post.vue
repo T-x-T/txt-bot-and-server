@@ -2,7 +2,13 @@
   <div id="wrapper">
     <Header />
     
+    <div id="spacer"></div>
+
     <BlogSinglePost id="post" v-if="blog" :post="blog" />
+    
+    <div v-if="!blog">
+      <p id="loading">loading...</p>
+    </div>
 
     <NuxtLink to="/blog">
       <button id="back">
@@ -10,11 +16,18 @@
         Back to all posts
       </button>
     </NuxtLink>
+
   </div>
 </template>
 
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
+
+#spacer
+  margin-top: 150px
+
+#loading
+  text-align: center
 
 button#back
   margin: 20px
@@ -23,7 +36,6 @@ button#back
     margin-bottom: -4px
 
 #post
-  margin-top: 150px
   padding: 10vh 25vw
   background: $pax-darkestcyan
   @media screen and ($mobile)

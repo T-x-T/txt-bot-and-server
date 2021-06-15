@@ -10,7 +10,8 @@
         </NuxtLink>
       </article>
     </div>
-    <div v-if="!posts">
+
+    <div v-if="!posts && error">
       <p id="error">
         Oh no, we could not load any blog posts 
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -20,6 +21,10 @@
         <br>
         <button @click="reload()">Try again</button>
       </p>
+    </div>
+
+    <div v-if="!posts && !error">
+      <p>loading some blog posts...</p>
     </div>
   </div>
 </template>
@@ -61,7 +66,8 @@ p#error
 <script>
 export default {
   data: () => ({
-    posts: null
+    posts: null,
+    error: false
   }),
 
   async fetch(){
@@ -70,15 +76,19 @@ export default {
 
   methods: {
     async reload() {
-      this.posts = await this.$axios.$get("/api/blog?public"); 
-      this.posts = this.posts.sort((a, b) => b.id - a.id);
-      
-      this.posts = this.posts.map(x => {
-        x.body = x.body.split("<div")[0];
-        x.body = x.body.slice(0, 499);
-        x.body += "...";
-        return x;
-      });   
+      try {
+        this.posts = await this.$axios.$get("/api/blog?public"); 
+        this.posts = this.posts.sort((a, b) => b.id - a.id);
+        
+        this.posts = this.posts.map(x => {
+          x.body = x.body.split("<div")[0];
+          x.body = x.body.slice(0, 499);
+          x.body += "...";
+          return x;
+        });   
+      } catch (e) {
+        this.error = true;
+      }
     }
   }
 }
