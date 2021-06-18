@@ -72,8 +72,8 @@ const helpers = {
     return guild.members.has(userID);
   },
 
-  setNickname(discordID: string, newNick: string) {
-    guild.members.get(discordID).setNickname(newNick);
+  async setNickname(discordID: string, newNick: string) {
+    return guild.members.get(discordID).setNickname(newNick);
   },
 
   getNickname(discordId: string) {

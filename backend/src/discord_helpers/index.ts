@@ -22,6 +22,7 @@ export = {
   fetchUser: helpers.fetchUser,
   getNickname: helpers.getNickname,
   getAvatarUrl: helpers.getAvatarUrl,
+  setNickname: helpers.setNickname,
 
   async init(config: IConfigDiscordBot, environment: EEnvironment, client: Discord.Client) {
     client.config = config;

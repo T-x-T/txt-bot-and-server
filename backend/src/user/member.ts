@@ -6,7 +6,7 @@ class Member extends Persistable{
   static schema: any;
   static config: IConfig;
 
-  constructor(discord_id: string, discord_nick: string, status: EMemberStatus, joinedDate: Date, mc_uuid: string, mc_ign: string, country: string, birth_month: number, birth_year: number, publish_age: boolean, publish_country: boolean, notes: string, modLog: IModLogEntry[]){
+  constructor(discord_id: string, discord_nick: string, status: EMemberStatus, joinedDate: Date, mc_uuid: string, mc_ign: string, country: string, birth_month: number, birth_year: number, publish_age: boolean, publish_country: boolean, notes: string, modLog: IModLogEntry[], suffix: string){
     super({name: "members", schema: Member.schema});
 
     this.data.discord = discord_id;
@@ -22,6 +22,7 @@ class Member extends Persistable{
     this.data.publish_country = publish_country;
     this.data.notes = notes;
     this.data.modLog = modLog ? modLog : [];
+    this.data.suffix = suffix;
   }
 
   /*
@@ -155,6 +156,14 @@ class Member extends Persistable{
     this.data.modLog.push(modLog);
   }
 
+  setSuffix(suffix: string) {
+    this.data.suffix = suffix;
+  }
+
+  getSuffix(): string {
+    return this.data.suffix;
+  }
+
   /*
    *  LIFECYCLE
    */
@@ -228,6 +237,7 @@ Member.schema = {
     default: ""
   },
   modLog: Array,
+  suffix: String,
   karma: {
     type: Number,
     default: 0

@@ -30,9 +30,10 @@ const update = {
     if(discordId == client.guilds.get(config.discord_bot.guild).ownerID) return; //Dont update the owner of the guild, this will fail
     const member = await memberFactory.getByDiscordId(discordId);
     const ign = member.getMcIgn();
+    const suffix = member.getSuffix();
+    const nickname = suffix?.length > 0 ? `${ign} [${suffix}]` : ign;
     try {
-      const discordMember = helpers.getMemberObjectById(discordId);
-      await discordMember.setNickname(ign);
+      await helpers.setNickname(discordId, nickname);
     } catch(e) {
       throw new Error("Couldn't set the nickname of the discordMember: " + discordId);
     }

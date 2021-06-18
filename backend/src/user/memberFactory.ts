@@ -11,8 +11,8 @@ export = class MemberFactory extends Factory{
     });
   }
 
-  async create(discord_id: string, discord_nick?: string, mc_uuid?: string, mc_ign?: string, country?: string, birth_month?: number, birth_year?: number, publish_age?: boolean, publish_country?: boolean, status?: number, notes?: string, modLog?: IModLogEntry[]) {
-    const member = new Member(discord_id, discord_nick, typeof status == "number" ? status : EMemberStatus.default, new Date(), mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country, notes, modLog ? modLog : []);
+  async create(discord_id: string, discord_nick?: string, mc_uuid?: string, mc_ign?: string, country?: string, birth_month?: number, birth_year?: number, publish_age?: boolean, publish_country?: boolean, status?: number, notes?: string, modLog?: IModLogEntry[], suffix?: string) {
+    const member = new Member(discord_id, discord_nick, typeof status == "number" ? status : EMemberStatus.default, new Date(), mc_uuid, mc_ign, country, birth_month, birth_year, publish_age, publish_country, notes, modLog ? modLog : [], suffix);
     await member.init();
     await member.create();
     return member;
@@ -43,7 +43,7 @@ export = class MemberFactory extends Factory{
 
     const res = await this.persistanceProvider.retrieveFiltered(filter);
     return await Promise.all(res.map((m: any) => {
-      const member = new Member(m.discord, m.discord_nick, m.status, new Date(m._id.getTimestamp()), m.mcUUID, m.mcName, m.country, m.birth_month, m.birth_year, m.publish_age, m.publish_country, m.notes, m.modLog);
+      const member = new Member(m.discord, m.discord_nick, m.status, new Date(m._id.getTimestamp()), m.mcUUID, m.mcName, m.country, m.birth_month, m.birth_year, m.publish_age, m.publish_country, m.notes, m.modLog, m.suffix);
       member.init();
       return member;
     }));
