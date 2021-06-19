@@ -108,6 +108,7 @@ const router: {[path: string]: (data: IRequestData) => Promise<IHandlerResponse>
   "api/member": handlers.paxapi.member,
   "api/blog": handlers.paxapi.blog,
   "api/roles": handlers.paxapi.roles,
+  "api/suffix": handlers.paxapi.suffix,
   "api/mcversion": handlers.paxapi.mcversion,
   "api/worldmapdata": handlers.paxapi.memberworldmapdata,
   "api/statsoverview": handlers.paxapi.statsoverview,

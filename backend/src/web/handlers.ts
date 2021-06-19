@@ -21,6 +21,7 @@ import eventScheduler = require("../eventScheduler/index.js");
 
 import type Application = require("../application/application.js");
 import type Member = require("../user/member.js");
+import suffix = require("../discord_bot/commands/suffix.js");
 
 let config: IConfig;
 
@@ -51,6 +52,23 @@ const handlers = {
           status: 404,
           payload: {err: "No Member with given uuid found"}
         };
+      }
+    },
+
+    async suffix(data: IRequestData): Promise<IHandlerResponse> {
+      let member = null;
+      try {
+        member = await memberFactory.getByMcUuid(data.queryStringObject.uuid);
+      } catch (_) {}
+      if(member) {
+        return {
+          payload: {suffix: member.getSuffix()}
+        }
+      } else {
+        return {
+          status: 404,
+          payload: {err: "No Member with given uuid found"}
+        }
       }
     },
 
