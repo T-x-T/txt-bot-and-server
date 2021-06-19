@@ -51,7 +51,7 @@ async function pronouns(message: Discord.Message, args: string[]){
 async function setPronoun(member: Discord.GuildMember, pronoun: string) {
   const user = await memberFactory.getByDiscordId(member.id);
   let suffix = pronoun;
-  if(user.getSuffix()?.length > 0 && (user.getSuffix().includes("|") || user.getSuffix().includes("utc"))) {
+  if(typeof user.getSuffix() == "string" && user.getSuffix().length > 0 && (user.getSuffix().includes("|") || user.getSuffix().includes("utc"))) {
     suffix += " | ";
     suffix += user.getSuffix().split("|")[1].trim();
   }
@@ -91,7 +91,7 @@ async function timezone(message: Discord.Message, args: string[]){
 async function setTimezone(member: Discord.GuildMember, timezone: string) {
   const user = await memberFactory.getByDiscordId(member.id);
   let suffix = "";
-  if(user.getSuffix()?.length > 0 && (user.getSuffix().includes("|") || !user.getSuffix().includes("utc"))) {
+  if(typeof user.getSuffix() == "string" && user.getSuffix().length > 0 && (user.getSuffix().includes("|") || !user.getSuffix().includes("utc"))) {
     suffix += user.getSuffix().split("|")[0].trim();
     suffix += " | ";
   }
