@@ -53,7 +53,11 @@ async function setPronoun(member: Discord.GuildMember, pronoun: string) {
   let suffix = pronoun;
   if(typeof user.getSuffix() == "string" && user.getSuffix().length > 0 && (user.getSuffix().includes("|") || user.getSuffix().includes("utc"))) {
     suffix += " | ";
-    suffix += user.getSuffix().split("|")[1].trim();
+    if(user.getSuffix().split("|").length > 1) {
+      suffix += user.getSuffix().split("|")[1].trim();
+    } else {
+      suffix += user.getSuffix().trim();
+    }
   }
   user.setSuffix(suffix);
   await user.save();
