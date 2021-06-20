@@ -382,7 +382,18 @@ const handlers = {
         const actualMcIgn = await mc_helpers.getIGN(mcUuid);
         const userData = await discordHelpers.fetchUser(discordId);
         const discordUserName = `${userData.username}#${userData.discriminator}`;
-        await applicationFactory.create(discordId, mcUuid, emailAddress, country, birthMonth, birthYear, aboutMe, motivation, buildImages, publishAboutMe, publishAge, publishCountry, 1, discordUserName, actualMcIgn);
+        try {
+          await applicationFactory.create(discordId, mcUuid, emailAddress, country, birthMonth, birthYear, aboutMe, motivation, buildImages, publishAboutMe, publishAge, publishCountry, 1, discordUserName, actualMcIgn);
+        } catch (e) {
+          if(e.message === "Applicant still has open application or got accepted already") {
+            return {
+              status: 400,
+              payload: {err: "Applicant still has open application or got accepted already"}
+            }
+          } else {
+            throw e;
+          }
+        }
 
         return {
           status: 201
