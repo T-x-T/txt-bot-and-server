@@ -19,7 +19,7 @@
         <li>Vanilla Gameplay</li>
         <li>Whitelist <NuxtLink to="/join-us">(Apply here!)</NuxtLink></li>
         <li>YouTube Channel <a href="https://www.youtube.com/Paxterya" target="_blank">(visit)</a></li>
-        <li>Current season since July 18, 2020</li>
+        <li>New season since July 18, 2021</li>
         <li>Dedicated Server with Ryzen 5950x, 128GB RAM and NVME Storage</li>
       </ul>
     </div>
