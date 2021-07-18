@@ -129,17 +129,17 @@ describe("member", function(){
 
     it("getAge should return correct age when publish_age is true", async function(){
       let member = await createAndSaveNewMember();
-      assert.strictEqual(member.getAge(), 20);
+      assert.strictEqual(member.getAge(), 21);
     });
 
     it("getAge should return correct age when publish_age is false", async function () {
       let member = await createAndSaveNewPrivateMember();
-      assert.strictEqual(member.getAge(), 20);
+      assert.strictEqual(member.getAge(), 21);
     });
 
     it("getAgeConsiderPrivacy should return correct age when publish_age is true", async function(){
       let member = await createAndSaveNewMember();
-      assert.strictEqual(member.getAgeConsiderPrivacy(), 20);
+      assert.strictEqual(member.getAgeConsiderPrivacy(), 21);
     });
 
     it("getAgeConsiderPrivacy should return false when publish_age is false", async function () {
