@@ -100,7 +100,7 @@ async function getAllLatestStats() {
 }
 
 async function getLatestStatsByUuid(uuid: string){
-  const stats = await statsFactory.persistanceProvider.retrieveNewestFiltered({uuid: uuid});
+  const stats = await statsFactory.persistanceProvider.retrieveNewestFiltered({$and: [{uuid: uuid}, {sub_type: "s5"}]});
   if(!stats) throw new Error("No stats received for " + uuid);
   return stats.stats.stats;
 }
