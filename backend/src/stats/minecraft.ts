@@ -232,7 +232,7 @@ _statsTemplates.overview = function(stats: any) {
 
 _statsTemplates.single = {};
 
-_statsTemplates.single.playtime                  = function(stats: any) {return prettifyDuration(stats["minecraft:custom"]["minecraft:play_one_minute"])        ? prettifyDuration(stats["minecraft:custom"]["minecraft:play_one_minute"])        : 0 };
+_statsTemplates.single.playtime                  = function(stats: any) {return prettifyDuration(stats["minecraft:custom"]["minecraft:play_time"])              ? prettifyDuration(stats["minecraft:custom"]["minecraft:play_time"])              : 0 };
 _statsTemplates.single.deaths                    = function(stats: any) {return stats["minecraft:custom"]["minecraft:deaths"]                                   ? stats["minecraft:custom"]["minecraft:deaths"]                                   : 0 };
 _statsTemplates.single.killed_by_zombies         = function(stats: any) {return stats["minecraft:killed_by"]["minecraft:zombie"]                                ? stats["minecraft:killed_by"]["minecraft:zombie"]                                : 0 };
 _statsTemplates.single.playerKills               = function(stats: any) {return stats["minecraft:custom"]["minecraft:player_kills"]                             ? stats["minecraft:custom"]["minecraft:player_kills"]                             : 0 };
