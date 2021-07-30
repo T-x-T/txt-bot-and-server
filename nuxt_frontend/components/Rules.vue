@@ -15,15 +15,6 @@
           </ol>
         </div>
 
-        <div class="hover paxItem rules2">
-          <p class="headline">Public farms</p>
-          <ol>
-            <li>Only XP, villager trading, iron, (cobble)stone, wool and manual farms can be made public.</li>
-            <li>Consult a staff member before making a farm public.</li>
-            <li>You can construct any type of farm for private use.</li>
-          </ol>
-        </div>
-
         <div class="hover paxItem rules3">
           <p class="headline">In-Game</p>
           <ol>
