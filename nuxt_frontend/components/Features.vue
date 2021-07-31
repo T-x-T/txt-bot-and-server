@@ -27,10 +27,14 @@
     <div class="hover paxItem"> 
       <p class="headline">Data packs</p>
       <ul class="text">
+        <li>Anti Enderman Grief</li>
+        <li>Armor Statues</li>
         <li>Coordinates HUD</li>
-        <li>Custom Armor Stands</li>
         <li>Durability Ping</li>
         <li>Silence Mobs</li>
+        <li>Spore Blossom Crafting</li>
+        <li>Unlock All Recipes</li>
+        <li>Piglin Sand Bartering</li>
       </ul>
     </div>
   </div>
