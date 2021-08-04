@@ -23,21 +23,21 @@
             <h3>Paxterya Season 3</h3>
             <p>The map we've been playing on from December 1, 2019 to July 17, 2020. Check the museum for coordinates of important locations.</p>
             <a href="https://stor.paxterya.com/minecraft_maps/paxteryaS3.zip"><button class="secondary">Download ZIP (25 GB)</button></a>
-            <p>Or join paxterya.com:25603</p>
+            <p>Or join s3.paxterya.com</p>
           </div>
           
           <div class="item">
             <h3>Paxterya Season 2</h3>
             <p>The map we've been playing on in September and October 2019. To play on this map, you will need to set up your own server. <a href="https://minecraft.gamepedia.com/Tutorials/Setting_up_a_server" target="_blank">Here's how to do that on your PC.</a></p>
             <a href="https://stor.paxterya.com/minecraft_maps/2019-11-30_paxterya_beta.zip"><button class="secondary">Download ZIP (1.1 GB)</button></a>
-            <p>Or join paxterya.com:25602</p>
+            <p>Or join s2.paxterya.com</p>
           </div>
 
           <div class="item">
             <h3>Paxterya Season 1 (Ancient Paxterya)</h3>
             <p>The map we've been playing on from June to November 2017. That's right, 2017.</p>
             <a href="https://stor.paxterya.com/minecraft_maps/2017-11-22-paxterya_original.zip"><button class="secondary">Download ZIP (5.4 GB)</button></a>
-            <p>Or join paxterya.com:25601</p>
+            <p>Or join s1.paxterya.com</p>
           </div>
 
           <div class="item">
