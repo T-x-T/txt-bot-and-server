@@ -14,6 +14,12 @@
           Worldsaves</h2>
         <div v-if="desktop || activeElement === 0">
           <div class="item">
+            <h3>Paxterya Season 4</h3>
+            <p>The map we've been playing on from July 18th, 2020 to July 17, 2021.</p>
+            <a href="https://stor.paxterya.com/minecraft_maps/2021-07-17-s4-final.zip"><button class="secondary">Download ZIP (26 GB)</button></a>
+          </div>
+
+          <div class="item">
             <h3>Paxterya Season 3</h3>
             <p>The map we've been playing on from December 1, 2019 to July 17, 2020. Check the museum for coordinates of important locations.</p>
             <a href="https://stor.paxterya.com/minecraft_maps/paxteryaS3.zip"><button class="secondary">Download ZIP (25 GB)</button></a>
