@@ -1,7 +1,5 @@
 <template>
   <div id="wrapper">
-    <h1>Applications</h1>
-
     <InterfaceApplicantsTable
       v-if="!openApplication"
       :applications="applications"
@@ -19,16 +17,6 @@
 
   </div>
 </template>
-
-<style lang="sass" scoped>
-@import ~/assets/_vars.sass
-
-#wrapper
-  margin-bottom: 50px
-
-h1
-  margin: 20px 0
-</style>
 
 <script>
 export default {

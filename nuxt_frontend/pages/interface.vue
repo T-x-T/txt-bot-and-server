@@ -8,12 +8,17 @@
     </div>
 
     <div v-if="accessLevel >= 7">
-      <InterfaceApplicants :token="token" />
-      <InterfaceMembers />
+      <div id="nav">
+        <button ref="applicants" class="secondary" @click="activeSection = 'applicants'">Applications</button>
+        <button ref="members" class="secondary" @click="activeSection = 'members'">Members</button>
+        <button ref="blog" class="secondary" @click="activeSection = 'blog'" v-if="accessLevel >= 9">Blog</button>
+      </div>
+      <InterfaceApplicants v-if="activeSection == 'applicants'" :token="token" />
+      <InterfaceMembers v-if="activeSection == 'members'" />
     </div>
     
     <div v-if="accessLevel >= 9">
-      <InterfaceBlog :token="token" />
+      <InterfaceBlog v-if="activeSection == 'blog'" :token="token" />
     </div>
   </main>
 </template>
@@ -22,7 +27,7 @@
 @import ~/assets/_vars.sass
 
 main
-  margin-top: 120px
+  margin: 120px 0 20px 0
 
 p.noPerms
   width: 30%
@@ -39,6 +44,16 @@ p.goHome
   color: $pax-white
   padding: 10px 20px
   @extend .pax-semibold
+
+div#nav
+  display: flex
+  justify-content: center
+  button
+    margin: 20px
+    padding: 10px 20px 10px 20px
+    font-size: 20px
+  button.active
+    background: $pax-yellow
 </style>
 
 <script>
@@ -50,6 +65,7 @@ export default {
   data: () => ({
     token: null,
     accessLevel: null,
+    activeSection: "applicants"
   }),
 
   async fetch(){
@@ -79,6 +95,13 @@ export default {
       }catch(e){
         console.error("Failed to get token from code: ", e.response.data.err);
       }
+    }
+  },
+
+  watch: {
+    activeSection(newVal, oldVal) {
+      this.$refs[newVal].classList.add("active");
+      this.$refs[oldVal].classList.remove("active");
     }
   }
 }

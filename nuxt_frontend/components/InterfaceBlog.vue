@@ -1,6 +1,5 @@
 <template>
   <div id="wrapper">
-    <h1>Blog post editor</h1>
 
     <button id="newPost" v-if="!openPost" @click="newPost">New Post</button>
     <table v-if="!openPost">
@@ -78,17 +77,11 @@
 <style lang="sass" scoped>
 @import ~/assets/_vars.sass
 
-#wrapper
-  margin-bottom: 50px
-
 #popup
   background: $pax-darkcyan
   width: 90%
   margin: 0 auto
   padding-bottom: 30px
-
-h1
-  margin-bottom: 20px
 
 table
   td

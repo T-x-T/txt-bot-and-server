@@ -1,6 +1,5 @@
 <template>
   <div id="wrapper">
-    <h1>Members</h1>
 
     <InterfaceMembersTable 
       v-if="!openMemberDiscordId" 
@@ -17,13 +16,6 @@
     />
   </div>
 </template>
-
-<style lang="sass" scoped>
-@import ~/assets/_vars.sass
-
-#wrapper
-  margin: 50px 0px 50px 0px
-</style>
 
 <script>
 export default {
