@@ -82,7 +82,7 @@ export default {
     }
     if(this.token){
       window.document.cookie = `access_token=${this.token};Max-Age=21000};path=/`;
-      this.$refs[this.activeSection].classList.add("active");
+      if(this.$refs[this.activeSection]) this.$refs[this.activeSection].classList.add("active");
     }
     window.history.replaceState({}, null, "/interface");
   },
