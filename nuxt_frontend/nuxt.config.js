@@ -4,7 +4,8 @@ export default {
     port: 3000
   },
   modules: [
-    "@nuxtjs/axios"
+    "@nuxtjs/axios",
+    "nuxt-highcharts",
   ],
   css: ["assets/general", "assets/_vars"],
   components: true,

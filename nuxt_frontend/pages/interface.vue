@@ -10,15 +10,17 @@
     <div v-if="accessLevel >= 7">
       <div id="nav">
         <button ref="applicants" class="secondary" @click="activeSection = 'applicants'">Applications</button>
+        <button ref="applicationStats" class="secondary" @click="activeSection = 'applicationStats'">Application Statistics</button>
         <button ref="members" class="secondary" @click="activeSection = 'members'">Members</button>
         <button ref="blog" class="secondary" @click="activeSection = 'blog'" v-if="accessLevel >= 9">Blog</button>
       </div>
-      <InterfaceApplicants v-if="activeSection == 'applicants'" :token="token" />
+      <InterfaceApplicants v-if="activeSection == 'applicants'" />
+      <InterfaceApplicationStats v-if="activeSection == 'applicationStats'" />
       <InterfaceMembers v-if="activeSection == 'members'" />
     </div>
     
     <div v-if="accessLevel >= 9">
-      <InterfaceBlog v-if="activeSection == 'blog'" :token="token" />
+      <InterfaceBlog v-if="activeSection == 'blog'" />
     </div>
   </main>
 </template>

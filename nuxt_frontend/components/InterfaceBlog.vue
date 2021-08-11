@@ -154,10 +154,6 @@ export default {
     openPost: null,
   }),
 
-  props: {
-    token: String
-  },
-
   async mounted(){
     this.refresh();
   },
