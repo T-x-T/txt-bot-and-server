@@ -3,7 +3,8 @@
  *	List all commands or all arguments for a single command
  */
 
-import Discord = require("discord.js");
+import { Message, CustomClient } from "discord.js";
+import helpers = require("../../discord_helpers/index.js");
 import log = require("../../log/index.js");
 import minecraft = require("../../minecraft/index.js");
 
@@ -13,9 +14,9 @@ export = {
   aliases: ["man"],
   usage: "[command name]",
 
-  async execute(message: Discord.Message, args: string[]) {
+  async execute(message: Message, args: string[]) {
     const data = [];
-    const { commands } = message.client;
+    const { commands } = message.client as CustomClient;
     
     //If the user didnt specify any command, list all commands
     if (!args.length) {
@@ -30,16 +31,16 @@ export = {
       data.push("**Survival Server IP:** paxterya.com");
       data.push("**Creative Server IP:** creative.paxterya.com");
       data.push(`**Version:** ${minecraftVersion} java`);
-      data.push(`**Help:** <#${message.guild.channels.find(channel => channel.name == "support").id}>`);
+      data.push(`**Help:** <#${message.guild.channels.cache.find(channel => channel.name == "support").id}>`);
       data.push("\nHere is a list of all available commands: ");
-      data.push(commands.map(command => command.name).join(", "));
-      data.push(`\nYou can send \`${message.client.config.bot_prefix}help [command name]\` to get info on a specific command!`);
+      data.push(commands.map((command: any) => command.name).join(", "));
+      data.push(`\nYou can send \`${(message.client as CustomClient).config.bot_prefix}help [command name]\` to get info on a specific command!`);
 
-      await message.channel.send(data, { split: true });
+      await message.reply(data.join("\n"));
       return;
     }
     
-    const command = commands.get(args[0]) || commands.find(c => c.aliases && c.aliases.includes(args[0]));
+    const command = commands.get(args[0]) || commands.find((c: any) => c.aliases && c.aliases.includes(args[0]));
 
     if (!command) {
       message.reply("I actually have no idea which command you mean");
@@ -52,6 +53,6 @@ export = {
     if (command.description) data.push(`**Description:** ${command.description}`);
     if (command.usage) data.push(`**Usage:** ${command.usage}`);
 
-    message.channel.send(data, { split: true });
+    await message.reply(data.join("\n"));
   }
 };

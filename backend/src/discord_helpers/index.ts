@@ -4,8 +4,8 @@
  */
 
 //Dependencies
+import { CustomClient } from "discord.js";
 import helpers = require("./helpers.js");
-import Discord = require("discord.js");
 
 export = {
   getNicknameByIdOfGuildUser: helpers.getNicknameByIdOfGuildUser,
@@ -24,7 +24,7 @@ export = {
   getAvatarUrl: helpers.getAvatarUrl,
   setNickname: helpers.setNickname,
 
-  async init(config: IConfigDiscordBot, environment: EEnvironment, client: Discord.Client) {
+  async init(config: IConfigDiscordBot, environment: EEnvironment, client: CustomClient) {
     client.config = config;
     helpers.init(config, environment, client);
   }

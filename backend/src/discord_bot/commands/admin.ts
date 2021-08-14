@@ -13,7 +13,7 @@ import ApplicationFactory = require("../../application/applicationFactory.js");
 const applicationFactory = new ApplicationFactory();
 applicationFactory.connect(); 
 
-import Discord = require("discord.js");
+import { Message, TextChannel } from "discord.js";
 
 export = {
   name: "admin",
@@ -21,7 +21,7 @@ export = {
   aliases: ["a"],
   usage: "delete <message count> | activate @mention | inactivate @mention | forceaccept @mention (if accepting their application didnt work for some reason) | cmd <server> <command> (valid servers are main_smp creative_server and modded(I think))",
 
-  async execute(message: Discord.Message, args: string[]) {
+  async execute(message: Message, args: string[]) {
     if(auth.getAccessLevelFromDiscordId(message.member.id) < 8) {
       message.channel.send("Sorry, you are not authorized to do that");
       return;
@@ -39,10 +39,10 @@ export = {
 
         while(amountToDelete > 0) {
           if(amountToDelete >= 100) {
-            await message.channel.bulkDelete(100, false);
+            await (message.channel as TextChannel).bulkDelete(100, false);
             amountToDelete -= 100;
           } else {
-            await message.channel.bulkDelete(amountToDelete, false);
+            await (message.channel as TextChannel).bulkDelete(amountToDelete, false);
           }
         }
         break;

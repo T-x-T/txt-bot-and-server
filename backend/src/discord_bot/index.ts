@@ -5,10 +5,10 @@
 
 //Dependencies
 import main = require("./main.js");
-import Discord = require("discord.js");
+import { CustomClient } from "discord.js";
 
 export = {
-  async init(config: IConfigDiscordBot, client: Discord.Client) {
+  async init(config: IConfigDiscordBot, client: CustomClient) {
     client.config = config;
     main(config, client);
   }

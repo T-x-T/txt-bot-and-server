@@ -42,9 +42,9 @@ async function pronouns(message: Discord.Message, args: string[]){
       message.channel.send("I'm sorry, I don't know that pronoun yet :(\nMaybe you should tell TxT about it, so he can add it?");
       return;
     }
-    await setPronoun(message.guild.members.get(message.author.id), args[2]);
+    await setPronoun(message.guild.members.cache.get(message.author.id), args[2]);
   } else if (args[1] === "remove") {
-    await removePronoun(message.guild.members.get(message.author.id));
+    await removePronoun(message.guild.members.cache.get(message.author.id));
   }
 }
 
@@ -86,9 +86,9 @@ async function timezone(message: Discord.Message, args: string[]){
       message.channel.send("Um I don't think that is a valid utc offset. Try something like +2 or -10.5 or +0 instead");
       return;
     }
-    await setTimezone(message.guild.members.get(message.author.id), args[2].trim());
+    await setTimezone(message.guild.members.cache.get(message.author.id), args[2].trim());
   } else if(args[1] === "remove") {
-    await removeTimezone(message.guild.members.get(message.author.id));
+    await removeTimezone(message.guild.members.cache.get(message.author.id));
   }
 }
 
