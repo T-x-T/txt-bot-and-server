@@ -168,12 +168,12 @@ class Member extends Persistable{
    *  LIFECYCLE
    */
 
-  giveDiscordRole(role: string){
-    return discord_helpers.addMemberToRole(this.getDiscordId(), role);
+  async giveDiscordRole(role: string){
+    return await discord_helpers.addMemberToRole(this.getDiscordId(), role);
   }
 
-  takeDiscordRole(role: string){
-    return discord_helpers.removeMemberFromRole(this.getDiscordId(), role);
+  async takeDiscordRole(role: string){
+    return await discord_helpers.removeMemberFromRole(this.getDiscordId(), role);
   }
 
   async ban(){
