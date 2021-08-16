@@ -8,8 +8,8 @@ import main = require("./main.js");
 import { CustomClient } from "discord.js";
 
 export = {
-  async init(config: IConfigDiscordBot, client: CustomClient) {
-    client.config = config;
+  async init(config: IConfig, client: CustomClient) {
+    client.config = config.discord_bot;
     main(config, client);
   }
 }

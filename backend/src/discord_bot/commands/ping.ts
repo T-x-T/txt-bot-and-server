@@ -1,15 +1,11 @@
-/*
- *	COMMAND FILE FOR PING
- *	Test command to see if the bot is working
- */
-
-import Discord = require("discord.js");
+import { SlashCommandBuilder } from "@discordjs/builders";
+import { CommandInteraction } from "discord.js";
 
 export = {
-  name: "ping",
-  description: "It pings",
-  aliases: ["ping!", "pong"],
-  async execute(message: Discord.Message, _args: string[]) {
-    message.channel.send("Pong.");
+  data: new SlashCommandBuilder()
+        .setName("ping")
+        .setDescription("It pings"),
+  async execute(interaction: CommandInteraction) {
+    await interaction.reply("pong");
   }
-};
+}

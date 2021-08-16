@@ -1,4 +1,5 @@
-import Discord = require("discord.js");
+import { SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder } from "@discordjs/builders";
+import { CommandInteraction } from "discord.js";
 import discordHelpers = require("../../discord_helpers/index.js");
 import MemberFactory = require("../../user/memberFactory.js");
 const memberFactory = new MemberFactory();
@@ -7,49 +8,75 @@ memberFactory.connect();
 const supportedPronouns = ["she", "he", "they", "it"];
 
 export = {
-  name: "suffix",
-  description: "Used to set or remove suffixes",
-  usage: `pronouns set ${supportedPronouns.join("/")} OR pronouns remove OR timezone set +2 <- UTC Offset OR timezone remove`,
-
-  async execute(message: Discord.Message, args: string[]) {
-    if(args[1] === "set" || args[1] === "remove") {
-      await figureSuffixTypeOut(message, args);
-    } else {
-      await message.channel.send("Invalid operation! Use set OR remove");
+  data: new SlashCommandBuilder()
+        .setName("suffix")
+        .setDescription("edit the suffix of your username")
+        .addSubcommandGroup(new SlashCommandSubcommandGroupBuilder()
+                      .setName("timezone")
+                      .setDescription("Configure timezone suffix")
+                      .addSubcommand(new SlashCommandSubcommandBuilder()
+                                    .setName("set")
+                                    .setDescription("sets a new timezone as your suffix")
+                                    .addStringOption(new SlashCommandStringOption()
+                                                    .setName("utc_offset")
+                                                    .setDescription("your offset in hours from utc (for example +10, -2, +0, -4.5)")               
+                                                    .setRequired(true)
+                                    )
+                      )
+                      .addSubcommand(new SlashCommandSubcommandBuilder()
+                                    .setName("remove")
+                                    .setDescription("removes the timezone from your suffix")
+                      )
+        )
+        .addSubcommandGroup(new SlashCommandSubcommandGroupBuilder()
+                      .setName("pronouns")
+                      .setDescription("Configure pronouns suffix")
+                      .addSubcommand(new SlashCommandSubcommandBuilder()
+                                    .setName("set")
+                                    .setDescription("sets new pronouns as your suffix")
+                                    .addStringOption(new SlashCommandStringOption()
+                                                    .setName("pronouns")
+                                                    .setDescription("the pronouns you would like to get refered with")               
+                                                    .setRequired(true)
+                                                    .addChoices(supportedPronouns.map(x => [x, x]))
+                                    )
+                      )
+                      .addSubcommand(new SlashCommandSubcommandBuilder()
+                                    .setName("remove")
+                                    .setDescription("removes the pronouns from your suffix")
+                      )
+        ),
+  async execute(interaction: CommandInteraction) {
+    if(!interaction.isMessageComponent) return null;
+    switch(interaction.options.getSubcommandGroup()) {
+      case "pronouns": {
+        await interaction.reply("Setting up your new suffix...");
+        await pronouns(interaction);
+        return await interaction.editReply("Done! Enjoy your new suffix (:");
+      }
+      case "timezone": {
+        await interaction.reply("Setting up your new suffix...");
+        await timezone(interaction);
+        return await interaction.editReply("Done! Enjoy your new suffix (:");
+      }
+      default: return null;
     }
   }
 };
 
-async function figureSuffixTypeOut(message: Discord.Message, args: string[]) {
-  switch(args[0]) {
-    case "pronouns": {
-      return await pronouns(message, args);
+async function pronouns(interaction: CommandInteraction){
+  switch(interaction.options.getSubcommand()) {
+    case "set": {
+      return await setPronoun(interaction.user.id, interaction.options.getString("pronouns"));
     }
-    case "timezone": {
-      return await timezone(message, args);
-    }
-    default: {
-      return await message.channel.send("Please use the help command to get help, you really seem to need it ;)")
+    case "remove": {
+      return await removePronoun(interaction.user.id);
     }
   }
 }
 
-
-
-async function pronouns(message: Discord.Message, args: string[]){
-  if(args[1] === "set") {
-    if(!supportedPronouns.includes(args[2])) {
-      message.channel.send("I'm sorry, I don't know that pronoun yet :(\nMaybe you should tell TxT about it, so he can add it?");
-      return;
-    }
-    await setPronoun(message.guild.members.cache.get(message.author.id), args[2]);
-  } else if (args[1] === "remove") {
-    await removePronoun(message.guild.members.cache.get(message.author.id));
-  }
-}
-
-async function setPronoun(member: Discord.GuildMember, pronoun: string) {
-  const user = await memberFactory.getByDiscordId(member.id);
+async function setPronoun(userId: string, pronoun: string) {
+  const user = await memberFactory.getByDiscordId(userId);
   let suffix = pronoun;
   if(typeof user.getSuffix() == "string" && user.getSuffix().length > 0 && (user.getSuffix().includes("|") || user.getSuffix().includes("utc"))) {
     suffix += " | ";
@@ -65,8 +92,8 @@ async function setPronoun(member: Discord.GuildMember, pronoun: string) {
   await updateSuffix(user.getDiscordId(), user.getMcIgn(), suffix);
 }
 
-async function removePronoun(member: Discord.GuildMember) {
-  const user = await memberFactory.getByDiscordId(member.id);
+async function removePronoun(userId: string) {
+  const user = await memberFactory.getByDiscordId(userId);
   let suffix = ""
   if(user.getSuffix()?.length > 0 && user.getSuffix().includes("|")) {
     suffix = user.getSuffix().split("|")[1].trim();
@@ -79,21 +106,19 @@ async function removePronoun(member: Discord.GuildMember) {
 
 
 
-async function timezone(message: Discord.Message, args: string[]){
-  if(args[1] === "set") {
-    args[2] += " ";
-    if(!args[2].match(/[+-]([0-9][,.]((5)|(25)|(75))|[0-9][0-2][,.]((5)|(25)|(75))|[0-9]|[0-9][0-2])[ ]/)) {
-      message.channel.send("Um I don't think that is a valid utc offset. Try something like +2 or -10.5 or +0 instead");
-      return;
+async function timezone(interaction: CommandInteraction){
+  switch(interaction.options.getSubcommand()) {
+    case "set": {
+      return await setTimezone(interaction.user.id, interaction.options.getString("utc_offset"));
     }
-    await setTimezone(message.guild.members.cache.get(message.author.id), args[2].trim());
-  } else if(args[1] === "remove") {
-    await removeTimezone(message.guild.members.cache.get(message.author.id));
+    case "remove": {
+      return await removeTimezone(interaction.user.id);
+    }
   }
 }
 
-async function setTimezone(member: Discord.GuildMember, timezone: string) {
-  const user = await memberFactory.getByDiscordId(member.id);
+async function setTimezone(userId: string, timezone: string) {
+  const user = await memberFactory.getByDiscordId(userId);
   let suffix = "";
   if(typeof user.getSuffix() == "string" && user.getSuffix().length > 0 && (user.getSuffix().includes("|") || !user.getSuffix().includes("utc"))) {
     suffix += user.getSuffix().split("|")[0].trim();
@@ -106,8 +131,8 @@ async function setTimezone(member: Discord.GuildMember, timezone: string) {
   await updateSuffix(user.getDiscordId(), user.getMcIgn(), suffix);
 }
 
-async function removeTimezone(member: Discord.GuildMember) {
-  const user = await memberFactory.getByDiscordId(member.id);
+async function removeTimezone(userId: string) {
+  const user = await memberFactory.getByDiscordId(userId);
   let suffix = "";
   if(user.getSuffix()?.length > 0 && user.getSuffix().includes("|")) {
     suffix = user.getSuffix().split("|")[0].trim();

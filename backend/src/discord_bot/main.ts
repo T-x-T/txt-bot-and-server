@@ -5,7 +5,9 @@
 
 //Dependencies
 import fs = require("fs");
-import { Client, Collection, CustomClient } from "discord.js";
+import { Collection, CommandInteraction, CustomClient } from "discord.js";
+import { REST } from "@discordjs/rest";
+import { Routes }  from "discord-api-types/v9";
 import discordHelpers = require("../discord_helpers/index.js");
 import MemberFactory = require("../user/memberFactory.js");
 const memberFactory = new MemberFactory();
@@ -15,26 +17,53 @@ const applicationFactory = new ApplicationFactory();
 applicationFactory.connect();
 import log = require("../log/index.js");
 
-let config: IConfigDiscordBot;
+let config: IConfig;
 let client: CustomClient;
 
-export = (_config: IConfigDiscordBot, _client: CustomClient) => {
+export = (_config: IConfig, _client: CustomClient) => {
   config = _config;
   client = _client;
+  const commands = new Collection();
 
-  client.commands = new Collection();
-  const commandFiles = fs.readdirSync("./discord_bot/commands").filter((file: string) => file.endsWith(".js"));
-  for(const file of commandFiles) {
-    const command = require(`./commands/${file}`);
-    client.commands.set(command.name, command);
-  }
-
-  client.once("ready", () => {
+  setTimeout(() => {
     client.user.setActivity("your messages", {type: "LISTENING"});
+    
+    const commandFiles = fs.readdirSync("./discord_bot/commands").filter((file: string) => file.endsWith(".js"));
+    for(const file of commandFiles) {
+      const command = require(`./commands/${file}`);
+      if(command.data) commands.set(command.data.name, command);
+    }
+  
+    const rest = new REST({version: "9"}).setToken(config.discord_bot.bot_token);
+  
+    (async () => {
+      try {
+        log.write(0, "discord_bot", "start refreshing slash commands", {});
+        await rest.put(Routes.applicationGuildCommands("607502693514084352", config.discord_bot.guild) as unknown as `/${string}`,
+          {body: Array.from(commands.mapValues((x: any) => x.data.toJSON()).values())}
+        );
+      } catch(e) {
+        log.write(3, "discord_bot", "refreshing slash commands failed", e);
+      }
+    })();
+  }, 100);
+
+  client.on("interactionCreate", async (interaction: CommandInteraction) => {
+    if(!interaction.isCommand) return;
+    const { commandName } = interaction as any;
+
+    if(!commands.has(commandName)) return;
+
+    try {
+      await (commands.get(commandName) as any).execute(interaction);
+    } catch (e) {
+      log.write(3, "discord_bot", "Some Discord command just broke", {error: e.message, interaction: interaction});
+      await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+    }
   });
 
   client.on("message", async message => {
-    const prefix: string = config.bot_prefix;
+    const prefix: string = config.discord_bot.bot_prefix;
 
     //Check if we can disregard the message
     if(
@@ -75,7 +104,7 @@ export = (_config: IConfigDiscordBot, _client: CustomClient) => {
         member = await memberFactory.getByDiscordId(user.id);
       } catch(_) {}
       if(member) await member.delete();
-      discordHelpers.sendMessage(`${user.displayName} left the server`, config.channel.mod_notifications);
+      discordHelpers.sendMessage(`${user.displayName} left the server`, config.discord_bot.channel.mod_notifications);
     } catch(e) {
       discordHelpers.sendCrashMessage(e, "discord event handler");
       log.write(2, "discord_bot", "guildMemberRemove failed", {error: e.message, user: user.id});
@@ -89,7 +118,7 @@ export = (_config: IConfigDiscordBot, _client: CustomClient) => {
         member = await memberFactory.getByDiscordId(ban.user.id);
       } catch(_) {}
       if(member) await member.ban();
-      discordHelpers.sendMessage(`${ban.user.username} was banned from the server`, config.channel.mod_notifications);
+      discordHelpers.sendMessage(`${ban.user.username} was banned from the server`, config.discord_bot.channel.mod_notifications);
     } catch(e) {
       discordHelpers.sendCrashMessage(e, "discord event handler");
       log.write(2, "discord_bot", "guildBanAdd failed", {error: e.message, user: ban.user.id});
@@ -101,7 +130,7 @@ export = (_config: IConfigDiscordBot, _client: CustomClient) => {
       discordHelpers.sendMessage(
         `Welcome <@${user.id}>! If you are here for joining the Minecraft server, then please read the <#${user.guild.channels.cache.find(channel => channel.name == "faq").id}> and read the rules at https://paxterya.com/rules. 
          You can then apply under https://paxterya.com/join-us\nIf you have any questions just ask in <#${user.guild.channels.cache.find(channel => channel.name == "support").id}>\nWe are looking forward to see you ingame :)`
-        , config.channel.general
+        , config.discord_bot.channel.general
       );
 
       const application = await applicationFactory.getAcceptedByDiscordId(user.id);
