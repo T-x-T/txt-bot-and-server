@@ -9,53 +9,85 @@ import MemberFactory = require("../../user/memberFactory.js");
 const memberFactory = new MemberFactory();
 memberFactory.connect();
 
-import Discord = require("discord.js");
+import { SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder, SlashCommandUserOption } from "@discordjs/builders";
+import { CommandInteraction } from "discord.js";
 
 const enum StatsTypes {
   normal, rank, compare
 }
 
 export = {
-  name: "minecraft",
-  description: "This command provides different functionality for minecraft server integration",
-  aliases: ["mc", "mcserver"],
-  usage: "*Sub-Commands:*\nstats ([rank]) [collection]  [mention user to view other stats]\n+mc stats general\n+mc stats rank total",
+  data: new SlashCommandBuilder()
+        .setName("mc")
+        .setDescription("Commands for interacting with our minecraft servers")
+        .addSubcommand(new SlashCommandSubcommandBuilder()
+                      .setName("stats")
+                      .setDescription("view minecraft stats, from the comfort of your discord client")
+                      .addStringOption(new SlashCommandStringOption()
+                                        .setName("collection")
+                                        .setDescription("The collection of statistics to view")
+                                        .setRequired(true)
+                                        .addChoices([["general", "general"], ["distance", "distance"], ["ores", "ores"], ["total", "total"], ["top_usage", "top_usage"], ["top_picked_up", "top_picked_up"], ["top_mined", "top_mined"], ["top_dropped", "top_dropped"], ["top_crafted", "top_crafted"], ["top_broken", "top_broken"], ["top_killed", "top_killed"], ["top_killed_by", "top_killed_by"], ["total_per_death", "total_per_death"]])
+                      )   
+                      .addBooleanOption(new SlashCommandBooleanOption()
+                                        .setName("ranked")
+                                        .setDescription("shows your rank, incompatible with some collections and with comparsions")
+                      )
+                      .addBooleanOption(new SlashCommandBooleanOption()
+                                        .setName("compare")
+                                        .setDescription("compare your stats with someone elses, incompatible with some collections and with ranked")
+                      )
+                      .addBooleanOption(new SlashCommandBooleanOption()
+                                        .setName("all_players")
+                                        .setDescription("gets stats for all players combined, incompatible with compare and other_player")
+                      )
+                      .addUserOption(new SlashCommandUserOption()
+                                        .setName("other_player")
+                                        .setDescription("look at the stats of someone else, required if using compare")
+                      )
+        )
+        .addSubcommand(new SlashCommandSubcommandBuilder()
+                      .setName("online")
+                      .setDescription("take a look at who is currently online")
+                      .addStringOption(new SlashCommandStringOption()
+                                        .setName("server")
+                                        .setDescription("The server to check online players on")
+                                        .setRequired(true)
+                                        .addChoices([["survival", "survival"], ["creative", "creative"]])
+                      )
+        ),
+  async execute(interaction: CommandInteraction): Promise<any> {
+    if(!interaction.isMessageComponent) return null;
+    switch(interaction.options.getSubcommand()) {
+      case "stats": {
+        if(interaction.options.getBoolean("all_players")) {
+          await interaction.reply("crunching numbers...");
+          return await interaction.editReply(await allMembers(interaction.options.getString("collection")));
 
-  async execute(message: Discord.Message, args: string[]) {
-    switch(args[0]){
-      case "stats":
-        if(args[2] == "all"){
-          message.channel.send(await allMembers(args[1]));
-        }else{
-          const userId = message.mentions.users.first() ? message.mentions.users.first().id : message.author.id;
+        } else if(interaction.options.getBoolean("ranked")) {
+          await interaction.reply("crunching numbers...");
+          const userId = interaction.options.getUser("other_player") ? interaction.options.getUser("other_player").id : interaction.user.id;
+          return await interaction.editReply(await singleMemberRanked(interaction.options.getString("collection"), userId));
 
-          if(args[1] == "rank" || args[1] == "ranked") {
-            message.channel.send(await singleMemberRanked(args[2], userId));
+        } else if(interaction.options.getBoolean("compare")) {
+          if(!interaction.options.getUser("other_player")) return await interaction.reply("You need to use the other_player argument");
+          await interaction.reply("crunching numbers...");
+          return await interaction.editReply(await compareMembers(interaction.options.getString("collection"), interaction.user.id, interaction.options.getUser("other_player").id));
 
-          } else if (args[1] == "compare" || args[1] == "vs") {
-            if(message.mentions.users.first()) {
-              message.channel.send(await compareMembers(args[2], message.author.id, message.mentions.users.first().id));
-            } else {
-              message.channel.send("You must mention the user you want to compare yourself against");
-            }
-          } else {
-            message.channel.send(await singleMember(args[1], userId));
-          }
+        } else {
+          await interaction.reply("crunching numbers...");
+          const userId = interaction.options.getUser("other_player") ? interaction.options.getUser("other_player").id : interaction.user.id;
+          return await interaction.editReply(await singleMember(interaction.options.getString("collection"), userId));
         }
+      }
+      case "online": {
+        await interaction.reply("Hold on, imma call the server rq to ask it :call_me:");
 
-        break;
-      case "online":
         let output = "```";
         
-        let server;
-        if(args[1] == "creative" || args[1] == "c"){
-          server = "creative_server";
-        }else{
-          server = "main_smp"
-        }
-
-        const onlinePlayers = await minecraft.getOnlinePlayers();
-        const afkPlayers = await minecraft.getAfkPlayers();
+        const server = interaction.options.getString("server") === "survival" ? "main_smp" : "creative_server";
+        const onlinePlayers = await minecraft.getOnlinePlayers(server);
+        const afkPlayers = await minecraft.getAfkPlayers(server);
         
         if (onlinePlayers.length === 1) output += `The following player is currently online:\n`;
         else if(onlinePlayers.length === 0) output += `There are no players online right now. It"s on you to change that now!\n`;
@@ -64,14 +96,13 @@ export = {
         onlinePlayers.forEach(player => afkPlayers.includes(player) ? output += player + " [AFK]\n" : output += player + "\n");
 
         output += "```";
-        message.channel.send(output);
-        break;
-      default:
-        message.reply("you tried to do something that I dont understand");
-        break;
+
+        return await interaction.editReply(output);
+      }
+      default: return null;
     }
   }
-}
+};
 
 async function allMembers(collection: string) {
   const ign = "all players";

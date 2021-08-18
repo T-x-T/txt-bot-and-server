@@ -84,14 +84,14 @@ const rcon = {
     });
   },
 
-  async getOnlinePlayers() {
-    const res = await rcon.send("list", config.rcon_main_server);
+  async getOnlinePlayers(server: string) {
+    const res = await rcon.send("list", server);
     if(res.includes("There are 0 ")) return [];
     return res.split(": ")[1].split(", ");
   },
 
-  async getAfkPlayers() {
-    const res = await rcon.send("getafkplayers");
+  async getAfkPlayers(server: string) {
+    const res = await rcon.send("getafkplayers", server);
     if(res.length === 0) return [];
     return res.split(",");
   }, 

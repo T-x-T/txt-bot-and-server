@@ -58,7 +58,11 @@ export = (_config: IConfig, _client: CustomClient) => {
       await (commands.get(commandName) as any).execute(interaction);
     } catch (e) {
       log.write(3, "discord_bot", "Some Discord command just broke", {error: e.message, interaction: interaction});
-      await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+      if(interaction.replied) {
+        await interaction.editReply({ content: 'There was an error while executing this command!' });
+      } else {
+        await interaction.reply({ content: 'There was an error while executing this command!' });
+      }
     }
   });
 
