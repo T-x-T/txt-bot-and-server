@@ -5,7 +5,7 @@
     "compile": "tsc",
     "build": "tsc -b",
     "analyze_dependencies": "depcruise --exclude \"^(node_modules|dist/test)\" --output-type dot dist | dot -T svg | depcruise-wrap-stream-in-html > dependency-graph.html",
-    "find_circular_dependency": "madge --circular src/"
+    "find_circular_dependency": "madge --circular dist/"
   },
   "name": "txt-bot-and-server",
   "description": "Combination of all Software related to txt's discord and servers",
