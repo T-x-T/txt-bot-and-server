@@ -8,6 +8,7 @@ export = {
         .setName("help")
         .setDescription("Gives you some information about the server"),
   async execute(interaction: CommandInteraction) {
+    if(!interaction.isCommand()) return;
     let minecraftVersion = "";
     try {
       minecraftVersion = await minecraft.getServerVersion();

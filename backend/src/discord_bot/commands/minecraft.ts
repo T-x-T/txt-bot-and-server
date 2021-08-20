@@ -56,8 +56,8 @@ export = {
                                         .addChoices([["survival", "survival"], ["creative", "creative"]])
                       )
         ),
-  async execute(interaction: CommandInteraction): Promise<any> {
-    if(!interaction.isMessageComponent) return null;
+  async execute(interaction: CommandInteraction) {
+    if(!interaction.isCommand()) return;
     switch(interaction.options.getSubcommand()) {
       case "stats": {
         if(interaction.options.getBoolean("all_players")) {

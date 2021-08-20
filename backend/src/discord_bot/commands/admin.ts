@@ -3,8 +3,6 @@
 *	Command for all the admin thingys
 */
 
-import mc_helpers = require("../../minecraft/index.js");
-import auth = require("../../auth/index.js");
 import MemberFactory = require("../../user/memberFactory.js");
 const memberFactory = new MemberFactory();
 memberFactory.connect();
@@ -13,73 +11,92 @@ import ApplicationFactory = require("../../application/applicationFactory.js");
 const applicationFactory = new ApplicationFactory();
 applicationFactory.connect(); 
 
-import { Message, TextChannel } from "discord.js";
+import { CommandInteraction, TextChannel } from "discord.js";
+import { SlashCommandBuilder, SlashCommandIntegerOption, SlashCommandSubcommandBuilder, SlashCommandUserOption } from "@discordjs/builders";
+import auth = require("../../auth/index.js");
 
 export = {
-  name: "admin",
-  description: "Commands only for admins",
-  aliases: ["a"],
-  usage: "delete <message count> | activate @mention | inactivate @mention | forceaccept @mention (if accepting their application didnt work for some reason) | cmd <server> <command> (valid servers are main_smp creative_server and modded(I think))",
+  data: new SlashCommandBuilder()
+        .setName("admin")
+        .setDescription("contains admin commands")
+        .addSubcommand(new SlashCommandSubcommandBuilder()
+                        .setName("delete")
+                        .setDescription("deletes messages")
+                        .addIntegerOption(new SlashCommandIntegerOption()
+                                          .setName("count")
+                                          .setDescription("the amount of messages to delete")
+                                          .setRequired(true)
+                        )
+        )
+        .addSubcommand(new SlashCommandSubcommandBuilder()
+                        .setName("inactivate")
+                        .setDescription("inactivates given user")
+                        .addUserOption(new SlashCommandUserOption()
+                                          .setName("user")
+                                          .setDescription("user to inactivate")
+                                          .setRequired(true)
+                        )
+        )
+        .addSubcommand(new SlashCommandSubcommandBuilder()
+                        .setName("activate")
+                        .setDescription("activates given user")
+                        .addUserOption(new SlashCommandUserOption()
+                                          .setName("user")
+                                          .setDescription("user to activate")
+                                          .setRequired(true)
+                        )
+        )
+        .addSubcommand(new SlashCommandSubcommandBuilder()
+                        .setName("forceaccept")
+                        .setDescription("force accepts application of given user")
+                        .addUserOption(new SlashCommandUserOption()
+                                          .setName("user")
+                                          .setDescription("user to force accept")
+                                          .setRequired(true)
+                        )
+        ),
+  async execute(interaction: CommandInteraction) {
+    if(!interaction.isCommand()) return;
 
-  async execute(message: Message, args: string[]) {
-    if(auth.getAccessLevelFromDiscordId(message.member.id) < 8) {
-      message.channel.send("Sorry, you are not authorized to do that");
-      return;
+    if(auth.getAccessLevelFromDiscordId(interaction.user.id) < 8) {
+      return await interaction.reply("Sorry, you are not authorized to do that");
     }
 
-    switch(args[0]) {
-      case "delete":
-        let amountToDelete = parseInt(args[1]) + 1;
+    switch(interaction.options.getSubcommand()) {
+      case "delete": {
+        const amountToDelete = Math.round(interaction.options.getInteger("count"));
 
-        //Check if its a real number
-        if(isNaN(amountToDelete) || amountToDelete < 2) {
-          message.channel.send("Thats not a real number");
-          return;
-        } 
+        if(isNaN(amountToDelete)) {
+          return await interaction.reply("Thats not a real number");
+        }
 
-        while(amountToDelete > 0) {
-          if(amountToDelete >= 100) {
-            await (message.channel as TextChannel).bulkDelete(100, false);
-            amountToDelete -= 100;
-          } else {
-            await (message.channel as TextChannel).bulkDelete(amountToDelete, false);
-          }
-        }
-        break;
-      case "inactivate":
-        {
-          const member = await memberFactory.getByDiscordId(message.mentions.users.first().id);
-          await member.inactivate();
-          await member.save();
-          message.reply("Success!");
-        }
-        break;
-      case "activate":
-        {
-          const member = await memberFactory.getByDiscordId(message.mentions.users.first().id);
-          await member.activate();
-          await member.save();
-          message.reply("Success!");
-        }
-        break;
-      case "forceaccept":
-        const applications = await applicationFactory.getByDiscordId(message.mentions.users.first().id);
+        if(amountToDelete > 100 || amountToDelete < 1) return await interaction.reply("I can only delete between 1 and 100 messages at once!");
+        
+        await (interaction.channel as TextChannel).bulkDelete(amountToDelete, false);
+
+        return await interaction.reply("I am done here");
+      }
+      case "inactivate": {
+        await interaction.reply("working on it...");
+        const member = await memberFactory.getByDiscordId(interaction.options.getUser("user").id);
+        await member.inactivate();
+        await member.save();
+        return await interaction.editReply("I am done");
+      }
+      case "activate": {
+        await interaction.reply("working on it...");
+        const member = await memberFactory.getByDiscordId(interaction.options.getUser("user").id);
+        await member.activate();
+        await member.save();
+        return await interaction.editReply("I am done");
+      }
+      case "forceaccept": {
+        await interaction.reply("working on it...");
+        const applications = await applicationFactory.getByDiscordId(interaction.options.getUser("user").id);
         if(applications) await applications[applications.length - 1].acceptGuildMember();
-        message.reply("Success");
-        break;
-      case "cmd":
-        let server = args[1];
-        const cmd = args.map((arg, i) => i > 1 ? arg : null).filter(x => x).join(" ");
-        try {
-          message.channel.send(await mc_helpers.sendCmd(cmd.trim(), server));
-        } catch(e) {
-          message.reply(e.message);
-        }
-        break;
-      default:
-        //Paramater not found
-        message.channel.send("Sorry, I cant find that paramater");
-        break;
+        return await interaction.editReply("I am done");
+      }
+      default: return;
     }
   }
-};
+}

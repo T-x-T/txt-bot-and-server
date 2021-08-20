@@ -47,7 +47,7 @@ export = {
                       )
         ),
   async execute(interaction: CommandInteraction) {
-    if(!interaction.isMessageComponent) return null;
+    if(!interaction.isCommand()) return null;
     switch(interaction.options.getSubcommandGroup()) {
       case "pronouns": {
         await interaction.reply("Setting up your new suffix...");

@@ -31,7 +31,7 @@ export = {
                       )
         ),
   async execute(interaction: CommandInteraction) {
-    if(!interaction.isCommand) return;
+    if(!interaction.isCommand()) return;
 
     switch(interaction.options.getSubcommand()) {
       case "add": {

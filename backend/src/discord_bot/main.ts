@@ -5,7 +5,7 @@
 
 //Dependencies
 import fs = require("fs");
-import { Collection, CommandInteraction, CustomClient } from "discord.js";
+import { Collection, CommandInteraction, CustomClient, Options } from "discord.js";
 import { REST } from "@discordjs/rest";
 import { Routes }  from "discord-api-types/v9";
 import discordHelpers = require("../discord_helpers/index.js");
@@ -39,13 +39,34 @@ export = (_config: IConfig, _client: CustomClient) => {
     (async () => {
       try {
         log.write(0, "discord_bot", "start refreshing slash commands", {});
+
+        let commandData: any = Array.from(commands.mapValues((x: any) => x.data.toJSON()).values());
+        commandData = commandData.map((x: any) => {
+          if(x.name === "admin") x.default_permission = false;
+          return x;
+        });
+        
         await rest.put(Routes.applicationGuildCommands("607502693514084352", config.discord_bot.guild) as unknown as `/${string}`,
-          {body: Array.from(commands.mapValues((x: any) => x.data.toJSON()).values())}
-        );
+          {body: commandData}
+        ) as any[];
+        
+        const adminCommand = (await client.guilds.cache.get(config.discord_bot.guild).commands.fetch() as any).filter((x: any) => x.name === "admin").first();
+        
+        const permissions: any = [
+          {
+            id: config.discord_bot.roles.admin,
+            type: "ROLE",
+            permission: true,
+          },
+        ];
+
+        await adminCommand.permissions.add({permissions});
+
       } catch(e) {
         log.write(3, "discord_bot", "refreshing slash commands failed", e);
       }
     })();
+
   }, 100);
 
   client.on("interactionCreate", async (interaction: CommandInteraction) => {
