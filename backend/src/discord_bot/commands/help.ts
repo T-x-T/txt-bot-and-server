@@ -1,57 +1,46 @@
-/*
- *	COMMAND FILE FOR HELP
- *	List all commands or all arguments for a single command
- */
-
-import Discord = require("discord.js");
+import { SlashCommandBuilder } from "@discordjs/builders";
+import { CommandInteraction, MessageActionRow, MessageButton } from "discord.js";
 import log = require("../../log/index.js");
 import minecraft = require("../../minecraft/index.js");
 
 export = {
-  name: "help",
-  description: "List all commands or all arguments for a single command",
-  aliases: ["man"],
-  usage: "[command name]",
-
-  async execute(message: Discord.Message, args: string[]) {
-    const data = [];
-    const { commands } = message.client;
-    
-    //If the user didnt specify any command, list all commands
-    if (!args.length) {
-      let minecraftVersion = "";
-      try {
-        minecraftVersion = await minecraft.getServerVersion();
-      } catch(e) {
-        log.write(0, "help command", "minecraft.getServerVersion() threw", {err: e.message});
-      }
-      
-      data.push("**Join here:** https://paxterya.com/join-us");
-      data.push("**Survival Server IP:** paxterya.com");
-      data.push("**Creative Server IP:** creative.paxterya.com");
-      data.push(`**Version:** ${minecraftVersion} java`);
-      data.push(`**Help:** <#${message.guild.channels.find(channel => channel.name == "support").id}>`);
-      data.push("\nHere is a list of all available commands: ");
-      data.push(commands.map(command => command.name).join(", "));
-      data.push(`\nYou can send \`${message.client.config.bot_prefix}help [command name]\` to get info on a specific command!`);
-
-      await message.channel.send(data, { split: true });
-      return;
-    }
-    
-    const command = commands.get(args[0]) || commands.find(c => c.aliases && c.aliases.includes(args[0]));
-
-    if (!command) {
-      message.reply("I actually have no idea which command you mean");
-      return;
+  data: new SlashCommandBuilder()
+        .setName("help")
+        .setDescription("Gives you some information about the server"),
+  async execute(interaction: CommandInteraction) {
+    if(!interaction.isCommand()) return;
+    let minecraftVersion = "";
+    try {
+      minecraftVersion = await minecraft.getServerVersion();
+    } catch(e) {
+      log.write(0, "help command", "minecraft.getServerVersion() threw", {err: e.message});
     }
 
-    data.push(`**Name:** ${command.name}`);
+    let output = "";
+    output += "**Survival Server IP:** paxterya.com\n";
+    output += "**Creative Server IP:** creative.paxterya.com\n";
+    output += `**Version:** ${minecraftVersion} java\n`;
+    output += `**Help:** <#${interaction.guild.channels.cache.find(channel => channel.name == "support").id}>\n`;
+    output += `**FAQ:** <#${interaction.guild.channels.cache.find(channel => channel.name == "faq").id}>\n`;
+    output += "Check out all commands by typing /";
 
-    if (command.aliases) data.push(`**Aliases:** ${command.aliases.join(", ")}`);
-    if (command.description) data.push(`**Description:** ${command.description}`);
-    if (command.usage) data.push(`**Usage:** ${command.usage}`);
+    const row = new MessageActionRow()
+                .addComponents(new MessageButton()
+                              .setLabel("Website")
+                              .setStyle("LINK")
+                              .setURL("https://paxterya.com")
+                )
+                .addComponents(new MessageButton()
+                              .setLabel("Apply here")
+                              .setStyle("LINK")
+                              .setURL("https://paxterya.com/join-us")
+                )
+                .addComponents(new MessageButton()
+                              .setLabel("Dynmap")
+                              .setStyle("LINK")
+                              .setURL("https://paxterya.com/dynmap/survival")
+                );
 
-    message.channel.send(data, { split: true });
+    await interaction.reply({content: output, components: [row]});
   }
-};
+}

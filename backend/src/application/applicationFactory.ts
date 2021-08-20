@@ -28,6 +28,7 @@ class ApplicationFactory extends Factory{
     await application.init();
     const rawResult = await application.create();
     application.setId(rawResult.id);
+    await application.save();
     announceNewApplication(application);
     sendNewApplicationEmail(application);
     return application;

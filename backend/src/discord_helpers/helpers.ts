@@ -16,11 +16,11 @@ const helpers = {
     config = _config;
     environment = _environment;
     client = _client;
-    guild = client.guilds.get(config.guild);
+    guild = client.guilds.cache.get(config.guild);
   },
 
   getNicknameByIdOfGuildUser(userID: string) {
-    if(guild.members.get(userID)) return `${guild.members.get(userID).user.username}#${guild.members.get(userID).user.discriminator}`;
+    if(guild.members.cache.get(userID)) return `${guild.members.cache.get(userID).user.username}#${guild.members.cache.get(userID).user.discriminator}`;
     return null;
   },
 
@@ -34,18 +34,18 @@ const helpers = {
       return;
     }
 
-    const channel = guild.channels.get(channelID) as Discord.TextChannel;
-    await channel.send(message, {split: true});
+    const channel = guild.channels.cache.get(channelID) as Discord.TextChannel;
+    await Promise.all(Discord.Util.splitMessage(message).map(msg => channel.send(msg)));
   },
 
   getSelfAssignableRoles() {
-    return guild.roles.map((item) => {
+    return guild.roles.cache.map((item) => {
       return item.name.indexOf("#") === 0 ? {id: item.id, name: item.name} : null;
     }).filter(x => x);
   },
 
   getRoleId(roleName: string) {
-    return guild.roles.find(x => x.name === roleName)?.id
+    return guild.roles.cache.find(x => x.name === roleName)?.id
   },
 
   async addMemberToRole(discordID: string, roleID: string) {
@@ -53,7 +53,7 @@ const helpers = {
       global.g.emitter.emit("testing_discordHelpers_addMemberToRole", discordID, roleID);
       return null;
     }
-    return await guild.members.get(discordID).addRoles([roleID]);
+    return await guild.members.cache.get(discordID).roles.add(roleID);
   },
 
   async removeMemberFromRole(discordID: string, roleID: string) {
@@ -61,31 +61,32 @@ const helpers = {
       global.g.emitter.emit("testing_discordHelpers_removeMemberFromRole", discordID, roleID);
       return null;
     }
-    return await guild.members.get(discordID).removeRoles([roleID]);
+    return await guild.members.cache.get(discordID).roles.remove(roleID);
   },
 
   hasRole(discordID: string, roleToCheck: string) {
-    return guild.members.get(discordID).roles.has(roleToCheck);
+    return guild.members.cache.get(discordID).roles.cache.has(roleToCheck);
   },
 
   isGuildMember(userID: string) {
-    return guild.members.has(userID);
+    return guild.members.cache.has(userID);
   },
 
   async setNickname(discordID: string, newNick: string) {
-    return guild.members.get(discordID).setNickname(newNick);
+    return guild.members.cache.get(discordID).setNickname(newNick);
   },
 
   getNickname(discordId: string) {
-    return `${client.guilds.get(config.guild).members.get(discordId).user.username}#${client.guilds.get(config.guild).members.get(discordId).user.discriminator}`;
+    const user = client.guilds.cache.get(config.guild).members.cache.get(discordId).user
+    return `${user.username}#${user.discriminator}`;
   },
 
   getMemberObjectByID(userID: string) {
-    return guild.members.get(userID);
+    return guild.members.cache.get(userID);
   },
 
   fetchUser(userId: string) {
-    return client.fetchUser(userId);
+    return client.users.fetch(userId);
   },
 
   banMember(userID: string) {
@@ -93,11 +94,11 @@ const helpers = {
       global.g.emitter.emit("testing_discordhelpers_ban", userID);
       return;
     }
-    guild.members.get(userID).ban();
+    guild.members.cache.get(userID).ban();
   },
 
   async getAvatarUrl(discordId: string) {
-    return (await client.fetchUser(discordId)).avatarURL;
+    return (await client.users.fetch(discordId)).avatarURL();
   }
 };
 

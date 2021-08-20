@@ -38,8 +38,8 @@ process.on("uncaughtException", (err: Error, origin: string) => {
 async function start() {
   const discordClient = await init.getDiscordClient(config.discord_bot);
   console.log("got discord client")
-  await discordBot.init(config.discord_bot, discordClient);
   discordHelpers.init(config.discord_bot, environment, discordClient);
+  await discordBot.init(config, discordClient);
   log.init(config, environment);
   auth.init(config, discordClient);
   youtube.init(config.youtube);

@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "cd dist && (NODE_ENV=testing nyc mocha --exit -t 1000000 test/index.js)",
+    "test": "cd dist && (NODE_ENV=testing nyc mocha --exit -t 60000 test/index.js)",
     "prod": "cd dist && (NODE_ENV=prod node index.js)",
     "compile": "tsc",
     "build": "tsc -b",
@@ -15,8 +15,11 @@
     "test": "src/test"
   },
   "dependencies": {
+    "@discordjs/builders": "^0.5.0",
+    "@discordjs/rest": "^0.1.0-canary.0",
     "bufferutil": "^4.0.3",
-    "discord.js": "^11.5.1",
+    "discord-api-types": "^0.22.0",
+    "discord.js": "^13.1.0",
     "mongoose": "^5.10.11",
     "nodemailer": "^6.6.0",
     "sanitize-filename": "^1.6.3",

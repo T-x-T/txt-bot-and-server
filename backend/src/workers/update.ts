@@ -27,7 +27,7 @@ const update = {
 
   //Set the nick of a user to their mc_ign
   async updateNick(discordId: string) {
-    if(discordId == client.guilds.get(config.discord_bot.guild).ownerID) return; //Dont update the owner of the guild, this will fail
+    if(discordId == client.guilds.cache.get(config.discord_bot.guild).ownerId) return; //Dont update the owner of the guild, this will fail
     const member = await memberFactory.getByDiscordId(discordId);
     const ign = member.getMcIgn();
     const suffix = member.getSuffix();

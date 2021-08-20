@@ -51,22 +51,22 @@ describe("application", function(){
     });
 
     it("trying to create a new application when the same discordId has an accepted application should fail", async function(){
-      (await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT")).accept();
+      await (await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT")).accept();
       await assert.rejects(async () => await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT"), new Error("Applicant still has open application or got accepted already"));
     });
 
     it("trying to create a new application when the same mcUuid has an accepted application should fail", async function () {
-      (await applicationFactory.create("293029505457586175", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT")).accept();
+      await (await applicationFactory.create("293029505457586175", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT")).accept();
       await assert.rejects(async () => await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT"), new Error("Applicant still has open application or got accepted already"));
     });
 
     it("trying to create a new application when the same discordId has a denied application should work", async function () {
-      (await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT")).deny();
+      await (await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT")).deny();
       await assert.doesNotReject(async () => await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a0", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT"));
     });
 
     it("trying to create a new application when the same mcUuid has a denied application should work", async function () {
-      (await applicationFactory.create("293029505457586175", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT")).deny();
+      await (await applicationFactory.create("293029505457586175", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT")).deny();
       await assert.doesNotReject(async () => await applicationFactory.create("293029505457586176", "dac25e44d1024f3b819978ed62d209a1", "test@test.com", "germany", 7, 2000, "this is the about me text", "this is my motivation", "nice image", false, true, true, null, "TxT#0001", "The__TxT"));
     });
   });
@@ -281,7 +281,7 @@ describe("application", function(){
     it("create a member from the application", async function(){
       let application = await createAndSaveApplication();
       await application.accept();
-
+      
       let member = await memberFactory.getByDiscordId("293029505457586176");
       assert.ok(member);
     });
@@ -318,7 +318,6 @@ describe("application", function(){
 
     it("correctly fill out existing member", async function(){
       let application = await createAndSaveApplication();
-      await memberFactory.create("293029505457586176");
       await application.accept();
       let member = await memberFactory.getByDiscordId("293029505457586176");
       assert.strictEqual(application.getDiscordId(), member.getDiscordId());

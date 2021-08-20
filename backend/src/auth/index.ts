@@ -23,19 +23,19 @@ const main = {
   getAccessLevelFromDiscordId(userID: string) {
     let access_level = 0;
     try {
-      if(client.guilds.get(config.discord_bot.guild).members.get(userID).roles.has(config.discord_bot.roles.paxterya)) access_level = 3;
-      if(client.guilds.get(config.discord_bot.guild).members.get(userID).roles.has(config.discord_bot.roles.cool)) access_level = 4;
-      if(client.guilds.get(config.discord_bot.guild).members.get(userID).roles.has(config.discord_bot.roles.mayor)) access_level = 5;
-      if(client.guilds.get(config.discord_bot.guild).members.get(userID).roles.has(config.discord_bot.roles.mod)) access_level = 7;
-      if(client.guilds.get(config.discord_bot.guild).members.get(userID).roles.has(config.discord_bot.roles.admin)) access_level = 8;
-      if(client.guilds.get(config.discord_bot.guild).members.get(userID).roles.has(config.discord_bot.roles.owner)) access_level = 9;
+      if(client.guilds.cache.get(config.discord_bot.guild).members.cache.get(userID).roles.cache.has(config.discord_bot.roles.paxterya)) access_level = 3;
+      if(client.guilds.cache.get(config.discord_bot.guild).members.cache.get(userID).roles.cache.has(config.discord_bot.roles.cool)) access_level = 4;
+      if(client.guilds.cache.get(config.discord_bot.guild).members.cache.get(userID).roles.cache.has(config.discord_bot.roles.mayor)) access_level = 5;
+      if(client.guilds.cache.get(config.discord_bot.guild).members.cache.get(userID).roles.cache.has(config.discord_bot.roles.mod)) access_level = 7;
+      if(client.guilds.cache.get(config.discord_bot.guild).members.cache.get(userID).roles.cache.has(config.discord_bot.roles.admin)) access_level = 8;
+      if(client.guilds.cache.get(config.discord_bot.guild).members.cache.get(userID).roles.cache.has(config.discord_bot.roles.owner)) access_level = 9;
     } catch(e) {}
     log.write(0, "auth", "main.returnAcessLevel returned", {userID: userID, access_level: access_level});
     return access_level;
   },
 
   isGuildMember(userID: string) {
-    return client.guilds.get(config.discord_bot.guild).members.has(userID);
+    return client.guilds.cache.get(config.discord_bot.guild).members.cache.has(userID);
   },
 
   async getAccessTokenAndLevelFromCode(code: string, redirect: string) {
