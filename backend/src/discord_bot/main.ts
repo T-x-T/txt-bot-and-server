@@ -46,7 +46,7 @@ export = (_config: IConfig, _client: CustomClient) => {
           return x;
         });
         
-        await rest.put(Routes.applicationGuildCommands("607502693514084352", config.discord_bot.guild) as unknown as `/${string}`,
+        await rest.put(Routes.applicationGuildCommands(config.discord_bot.application_id, config.discord_bot.guild) as unknown as `/${string}`,
           {body: commandData}
         ) as any[];
         

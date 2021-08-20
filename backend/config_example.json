@@ -21,6 +21,7 @@
       "bot_prefix": "+",
       "bot_token": "",
       "guild": "624976691692961793",
+      "application_id": "ID",
       "channel": {
         "new_member_announcement": "646763503473917973",
         "new_application_announcement": "646763571761512448",
@@ -98,6 +99,7 @@
       "bot_prefix": "+",
       "bot_token": "",
       "guild": "592303011947216896",
+      "application_id": "ID",
       "channel": {
         "new_member_announcement": "607504671543656458",
         "new_application_announcement": "607504671543656458",
@@ -184,6 +186,7 @@
       "bot_prefix": "+",
       "bot_token": "",
       "guild": "592303011947216896",
+      "application_id": "ID",
       "channel": {
         "new_member_announcement": "607504671543656458",
         "new_application_announcement": "607504671543656458",

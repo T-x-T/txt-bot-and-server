@@ -91,11 +91,12 @@ interface IConfigDBUpgrades {
 }
 
 interface IConfigDiscordBot {
-  bot_prefix: string;
-  bot_token:  string;
-  guild:      string;
-  channel:    IConfigDiscordChannels;
-  roles:      IConfigDiscordRoles;
+  bot_prefix:     string;
+  bot_token:      string;
+  guild:          string;
+  application_id: string;
+  channel:        IConfigDiscordChannels;
+  roles:          IConfigDiscordRoles;
 }
 
 interface IConfigDiscordChannels {
