@@ -67,7 +67,7 @@ export = (_config: IConfig, _client: CustomClient) => {
       }
     })();
 
-  }, 100);
+  }, 500);
 
   client.on("interactionCreate", async (interaction: CommandInteraction) => {
     if(!interaction.isCommand) return;
