@@ -24,8 +24,9 @@ const helpers = {
     return null;
   },
 
-  sendCrashMessage(err: Error, origin: string) {
-    helpers.sendMessage(`HELP I crashed:\n${err.stack}\n\n${origin}`, config.channel.logs);
+  async sendCrashMessage(err: Error, origin: string) {
+    if(!helpers) return;
+    await helpers.sendMessage(`HELP I crashed:\n${err.stack}\n\n${origin}`, config.channel.logs);
   },
 
   async sendMessage(message: string, channelID: string) {

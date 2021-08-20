@@ -28,7 +28,7 @@ import eventScheduler = require("./eventScheduler/index.js");
 start();
 
 process.on("uncaughtException", (err: Error, origin: string) => {
-  discordHelpers.sendCrashMessage(err, origin);
+  discordHelpers.sendCrashMessage(err, origin).catch(e => console.error("Failed to send discord crash message"));
   console.error(err);
   setTimeout(() => {
     process.exit(1);
