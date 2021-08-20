@@ -60,24 +60,33 @@ export = {
     if(!interaction.isCommand()) return;
     switch(interaction.options.getSubcommand()) {
       case "stats": {
-        if(interaction.options.getBoolean("all_players")) {
-          await interaction.reply("crunching numbers...");
-          return await interaction.editReply(await allMembers(interaction.options.getString("collection")));
-
-        } else if(interaction.options.getBoolean("ranked")) {
-          await interaction.reply("crunching numbers...");
-          const userId = interaction.options.getUser("other_player") ? interaction.options.getUser("other_player").id : interaction.user.id;
-          return await interaction.editReply(await singleMemberRanked(interaction.options.getString("collection"), userId));
-
-        } else if(interaction.options.getBoolean("compare")) {
-          if(!interaction.options.getUser("other_player")) return await interaction.reply("You need to use the other_player argument");
-          await interaction.reply("crunching numbers...");
-          return await interaction.editReply(await compareMembers(interaction.options.getString("collection"), interaction.user.id, interaction.options.getUser("other_player").id));
-
-        } else {
-          await interaction.reply("crunching numbers...");
-          const userId = interaction.options.getUser("other_player") ? interaction.options.getUser("other_player").id : interaction.user.id;
-          return await interaction.editReply(await singleMember(interaction.options.getString("collection"), userId));
+        try {
+          if(interaction.options.getBoolean("all_players")) {
+            await interaction.reply("crunching numbers...");
+            return await interaction.editReply(await allMembers(interaction.options.getString("collection")));
+            
+          } else if(interaction.options.getBoolean("ranked")) {
+            await interaction.reply("crunching numbers...");
+            const userId = interaction.options.getUser("other_player") ? interaction.options.getUser("other_player").id : interaction.user.id;
+            return await interaction.editReply(await singleMemberRanked(interaction.options.getString("collection"), userId));
+            
+          } else if(interaction.options.getBoolean("compare")) {
+            if(!interaction.options.getUser("other_player")) return await interaction.reply("You need to use the other_player argument");
+            await interaction.reply("crunching numbers...");
+            return await interaction.editReply(await compareMembers(interaction.options.getString("collection"), interaction.user.id, interaction.options.getUser("other_player").id));
+            
+          } else {
+            await interaction.reply("crunching numbers...");
+            const userId = interaction.options.getUser("other_player") ? interaction.options.getUser("other_player").id : interaction.user.id;
+            return await interaction.editReply(await singleMember(interaction.options.getString("collection"), userId));
+          }
+        } catch(e) {
+          console.log(e)
+          if((e as string).includes("no stats received")) {
+            return await interaction.reply("Well, someone doesnt have any stats, so this is a bit pointless...");
+          } else {
+            throw e;
+          }
         }
       }
       case "online": {
