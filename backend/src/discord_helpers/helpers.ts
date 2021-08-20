@@ -36,6 +36,7 @@ const helpers = {
     }
 
     const channel = guild.channels.cache.get(channelID) as Discord.TextChannel;
+    if(!channel) return log.write(2, "discord_helpers", "sendMessage tried to send to a channel that doesnt exist", {message, channelID});
     await Promise.all(Discord.Util.splitMessage(message).map(msg => channel.send(msg)));
   },
 
