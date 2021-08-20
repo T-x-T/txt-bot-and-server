@@ -86,42 +86,7 @@ export = (_config: IConfig, _client: CustomClient) => {
       }
     }
   });
-
-  client.on("message", async message => {
-    const prefix: string = config.discord_bot.bot_prefix;
-
-    //Check if we can disregard the message
-    if(
-      !message.content.startsWith(prefix)
-      || message.author.bot
-      || message.content.startsWith(prefix + "karma")
-      || message.content.length <= 2
-      || Number.isInteger(Number.parseInt(message.content[2]))
-    ) return;
-
-    //Split the message into the command name and its arguments
-    const words: string[] = message.content.replace(prefix, "").trim().split(" ");
-    const commandName = words.shift().toLowerCase();
-    const args = words.map(word => word.toLowerCase());
-
-    //Stop processing the message if the command specified cant be found
-    const command = client.commands.get(commandName) || client.commands.find((cmd: any) => cmd.aliases && cmd.aliases.includes(commandName));
-    if(!command) {
-      message.channel.send("I cant find that command :(");
-      return;
-    }
-
-    //Call the command
-    try {
-      await command.execute(message, args);
-    } catch(e) {
-      log.write(3, "discord_bot", "Some Discord command just broke", {error: e.message, msg: message.content});
-      console.log("Discord command broke:", message.content, e);
-      message.reply("There was an oopsie when I tried to do that");
-      discordHelpers.sendCrashMessage(e, "discord command");
-    }
-  });
-
+  
   client.on("guildMemberRemove", async user => {
     try {
       let member;
