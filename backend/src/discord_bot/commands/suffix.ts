@@ -56,8 +56,12 @@ export = {
       }
       case "timezone": {
         await interaction.reply("Setting up your new suffix...");
-        await timezone(interaction);
-        return await interaction.editReply("Done! Enjoy your new suffix (:");
+        try {
+          await timezone(interaction);
+          return await interaction.editReply("Done! Enjoy your new suffix (:");
+        } catch (e) {
+          return await interaction.editReply(e.message);
+        }
       }
       default: return null;
     }
@@ -119,6 +123,10 @@ async function timezone(interaction: CommandInteraction){
 
 async function setTimezone(userId: string, timezone: string) {
   const user = await memberFactory.getByDiscordId(userId);
+  if(!timezone.match(/[+-]([0-9][,.]((5)|(25)|(75))|[0-9][0-2][,.]((5)|(25)|(75))|[0-9]|[0-9][0-2])/)) {
+    throw new Error("Um I don't think that is a valid utc offset. Try something like +2 or -10.5 or +0 instead");
+  }
+  
   let suffix = "";
   if(typeof user.getSuffix() == "string" && user.getSuffix().length > 0 && (user.getSuffix().includes("|") || !user.getSuffix().includes("utc"))) {
     suffix += user.getSuffix().split("|")[0].trim();
