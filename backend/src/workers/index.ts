@@ -54,9 +54,10 @@ setInterval(async () => {
 }, 1000 * 60 * 60);
 
 //Every six hours
-setInterval(() => {
+setInterval(async () => {
   try {
     stats.updateMcStats();
+    await update.updateAllDiscordNicks();
   } catch(e) {
     console.log("every six hours threw:", e.message);
     log.write(2, "workers", "every six hours threw", {err: e.message});
