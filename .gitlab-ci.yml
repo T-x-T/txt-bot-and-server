@@ -30,18 +30,6 @@ test:
   - npm run test
   dependencies:
     - compile_backend
-find_circular_dependencies:
-  stage: test
-  needs: 
-    - compile_backend
-  image: node:latest
-  script:
-  - cd backend
-  - npm i
-  - cp $config_json ./config.json
-  - npm run find_circular_dependency
-  dependencies:
-    - compile_backend
 sast:
   needs: 
     - compile_backend
