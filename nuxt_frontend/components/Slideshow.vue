@@ -2,7 +2,7 @@
   <div class="background-dark" ref="slideshowWrapper">
     <div id="section_slideshow" class="scrollTarget"></div>
 
-    <img v-if="inView" :src="images[towns[townIndex]][index]"/>
+    <img :class="loading" v-if="inView" :src="images[towns[townIndex]][index]" @load="loading = false" @loadstart="loading = 'loading'"/>
 
     <div id="controlsWrapper">
       <div id="controls">
@@ -34,6 +34,10 @@ img
   display: block
   margin: 0 auto
   box-shadow: 0px 7px 0px $pax-darkmodecyan1
+  animation-duration: 2.5s
+  &.loading
+    opacity: 0.5
+    filter: grayscale(0.5) blur(16)
   @media screen and ($mobile)
     width: 100vw
     height: auto
@@ -116,28 +120,53 @@ export default {
     towns: [],
     townIndex: 0,
     inView: false,
+    loading: "",
     images: {
-      "Pearlshire": [
-        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_04.png_1080.webp",
-        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_07.png_1080.webp",
-        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_08.png_1080.webp",
-        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_09.png_1080.webp",
-        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_10.png_1080.webp",
-        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_11.png_1080.webp",
-        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_12.png_1080.webp",
-        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_13.png_1080.webp",
-        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_20.png_1080.webp",
-        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_21.png_1080.webp",
-        "https://stor.paxterya.com/website/screenshots/2021-04/pearlshire_22.png_1080.webp"
+      "Fantasy": [
+        "https://stor.paxterya.com/website/screenshots/2021-10/fantasy-1.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/fantasy-2.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/fantasy-3.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/fantasy-4.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/fantasy-5.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/fantasy-6.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/fantasy-7.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/fantasy-8.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/fantasy-9.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/fantasy-10.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/fantasy-11.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/fantasy-12.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/fantasy-13.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/fantasy-14.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/fantasy-15.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/fantasy-16.png_1080.webp"
       ],
-      "Town of Paxterya": [
-        "https://stor.paxterya.com/website/screenshots/2021-04/top_01.jpg_1080.webp",
-        "https://stor.paxterya.com/website/screenshots/2021-04/top_02.jpg_1080.webp",
-        "https://stor.paxterya.com/website/screenshots/2021-04/top_03.jpg_1080.webp",
-        "https://stor.paxterya.com/website/screenshots/2021-04/top_04.jpg_1080.webp",
-        "https://stor.paxterya.com/website/screenshots/2021-04/top_05.jpg_1080.webp",
-        "https://stor.paxterya.com/website/screenshots/2021-04/top_06.jpg_1080.webp",
-        "https://stor.paxterya.com/website/screenshots/2021-04/top_07.jpg_1080.webp"
+      "Underwater": [
+        "https://stor.paxterya.com/website/screenshots/2021-10/underwater-1.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/underwater-2.png_1080.webp"
+      ],
+      "Cyberpunk": [
+        "https://stor.paxterya.com/website/screenshots/2021-10/cyberpunk-1.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/cyberpunk-2.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/cyberpunk-3.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/cyberpunk-4.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/cyberpunk-5.png_1080.webp"
+      ],
+      "Steampunk": [
+        "https://stor.paxterya.com/website/screenshots/2021-10/steampunk-1.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/steampunk-2.png_1080.webp"
+      ],
+      "Medieval": [
+        "https://stor.paxterya.com/website/screenshots/2021-10/medieval-1.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/medieval-2.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/medieval-3.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/medieval-4.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/medieval-5.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/medieval-6.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/medieval-7.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/medieval-8.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/medieval-9.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/medieval-10.png_1080.webp",
+        "https://stor.paxterya.com/website/screenshots/2021-10/medieval-11.png_1080.webp"
       ]
     }
   }),
