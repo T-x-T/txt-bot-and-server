@@ -128,12 +128,14 @@ export default {
   }),
 
   async mounted(){
-    const res = await this.$axios.$get("/api/statsoverview");
-    this.memberCount = res.total_members;
-    this.playtime = res.total_playtime;
-    this.medianAge = res.median_age;
-    this.averageAge = res.average_age;
-    this.silly = res.silly;
+    try {
+      const res = await this.$axios.$get("/api/statsoverview");
+      this.memberCount = res.total_members;
+      this.playtime = res.total_playtime;
+      this.medianAge = res.median_age;
+      this.averageAge = res.average_age;
+      this.silly = res.silly;
+    } catch(e) {}
   }
 }
 </script>

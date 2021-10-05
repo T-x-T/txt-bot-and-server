@@ -206,7 +206,11 @@ export default {
         }
 
         const observer = new IntersectionObserver(this.intersect, options);
-        observer.observe(this.$refs["memberWorldmapBackground"]);
+        try{
+          observer.observe(this.$refs["memberWorldmapBackground"]);
+        } catch (e) {
+          console.error("Cant setup intersection observer for member worldmap", e)
+        }
       });
     }
   },

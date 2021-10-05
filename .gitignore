@@ -11,6 +11,7 @@
 *.sln.docstates
 config.js
 config.json
+dependency-graph.html
 mc_stats
 dist
 dependency-graph.html
