@@ -107,7 +107,10 @@ export = (_config: IConfig, _client: CustomClient) => {
       try {
         member = await memberFactory.getByDiscordId(ban.user.id);
       } catch(_) {}
-      if(member) await member.ban();
+      if(member) {
+        await member.banInGame();
+        await member.delete();
+      }
       discordHelpers.sendMessage(`${ban.user.username} was banned from the server`, config.discord_bot.channel.mod_notifications);
     } catch(e) {
       discordHelpers.sendCrashMessage(e, "discord event handler");
