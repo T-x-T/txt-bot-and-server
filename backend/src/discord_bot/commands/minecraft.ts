@@ -99,7 +99,7 @@ export = {
         const afkPlayers = await minecraft.getAfkPlayers(server);
         
         if (onlinePlayers.length === 1) output += `The following player is currently online:\n`;
-        else if(onlinePlayers.length === 0) output += `There are no players online right now. It"s on you to change that now!\n`;
+        else if(onlinePlayers.length === 0) output += `There are no players online right now. It's on you to change that now!\n`;
         else output += `The following ${onlinePlayers.length} players are currently online:\n`;
 
         onlinePlayers.forEach(player => afkPlayers.includes(player) ? output += player + " [AFK]\n" : output += player + "\n");
