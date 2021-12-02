@@ -88,14 +88,14 @@
 
             <div class="formInput active">
               <p class="headline small">About me</p>
-              <span class="hoverInfo hoverInfoTextarea">Tell us something about yourself so we get to know you. What you're doing with your life, what you love about Minecraft, what pizza flavor is your favorite, anything you'd like to share with us!</span>
-              <textarea v-model="aboutMe" placeholder="Type text..." maxlength="1500" required></textarea>
+              <span class="hoverInfo hoverInfoTextarea">Tell us something about yourself so we get to know you. What you're doing with your life, what you love about Minecraft, what pizza flavor is your favorite, anything you'd like to share with us! (150-1500 characters)</span>
+              <textarea v-model="aboutMe" placeholder="Type text..." maxlength="1500" minlength="150" required></textarea>
               <p class="characterCount">{{1500 - aboutMe.length}} characters remaining</p>
             </div>
             <div class="formInput active">
               <p class="headline small">Why do you want to join Paxterya?</p>
-              <span class="hoverInfo hoverInfoTextarea">What is your first goal on our server, what project do you want to realize, what do you think you can contribute to our community?</span>
-              <textarea v-model="motivation" placeholder="Type text..." maxlength="1500" required></textarea>
+              <span class="hoverInfo hoverInfoTextarea">What is your first goal on our server, what project do you want to realize, what do you think you can contribute to our community? (150-1500 characters)</span>
+              <textarea v-model="motivation" placeholder="Type text..." maxlength="1500" minlength="150" required></textarea>
               <p class="characterCount">{{1500 - motivation.length}} characters remaining</p>
             </div>
             <div class="formInput active">
@@ -103,7 +103,7 @@
               <span class="hoverInfo hoverInfoTextarea">
                 Please show us some screenshots of your previous Minecraft buildings, the ones you're most proud of! Don't worry, it doesn't have to be anything big.
                 <br>
-                If you don't know where to upload your images, use <a href="https://imgur.com/upload" target="blank">imgur</a> and paste the link here.
+                If you don't know where to upload your images, use imgur or copy an image from discord and paste the link here.
               </span>
               <textarea v-model="buildImages" placeholder="Type text..." maxlength="1500" required></textarea>
               <p class="characterCount">{{1500 - buildImages.length}} characters remaining</p>
@@ -399,8 +399,8 @@ export default {
   }),
 
   async fetch(){
-    this.generateValidBirthYears();
     await this.turnCodeintoDiscordNick();
+    this.generateValidBirthYears();
   },
 
   mounted(){
@@ -409,6 +409,11 @@ export default {
 
   methods: {
     async submit(){
+      if(!this.buildImages.includes("https://cdn.discordapp.com") && !this.buildImages.includes("https://media.discordapp.com") && !this.buildImages.includes("https://cdn.discord.com") && !this.buildImages.includes("https://media.discord.com") && !this.buildImages.includes("https://imgur.com") && !this.buildImages.includes("https://i.imgur.com")) {
+        window.alert("Please put image links from imgur or discord into the previous builds section");
+        return;
+      }
+
       const application = {
         discord_id: this.discordId,
         mc_ign: this.mcIgn,

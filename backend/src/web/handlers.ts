@@ -345,9 +345,9 @@ const handlers = {
         const country = data.payload.country ? sanitize(data.payload.country, {allowedTags: []}) : "";
         const birthMonth = Number.parseInt(data.payload.birth_month) >= 1 && Number.parseInt(data.payload.birth_month) <= 12 ? Number.parseInt(data.payload.birth_month) : -1;
         const birthYear = Number.parseInt(data.payload.birth_year) >= 1900 && Number.isInteger(Number.parseInt(data.payload.birth_year)) ? Number.parseInt(data.payload.birth_year) : -1;
-        const aboutMe = data.payload.about_me.length > 1 && data.payload.about_me.length <= 1500 ? sanitize(data.payload.about_me, {allowedTags: [], allowedAttributes: {}}) : "";
-        const motivation = data.payload.motivation.length > 1 && data.payload.motivation.length <= 1500 ? sanitize(data.payload.motivation, {allowedTags: [], allowedAttributes: {}}) : "";
-        const buildImages = data.payload.build_images.length > 1 && data.payload.build_images.length <= 1500 ? sanitize(data.payload.build_images, {allowedTags: [], allowedAttributes: {}}) : "";
+        const aboutMe = data.payload.about_me.length >= 150 && data.payload.about_me.length <= 1500 ? sanitize(data.payload.about_me, {allowedTags: [], allowedAttributes: {}}) : "";
+        const motivation = data.payload.motivation.length >= 150 && data.payload.motivation.length <= 1500 ? sanitize(data.payload.motivation, {allowedTags: [], allowedAttributes: {}}) : "";
+        const buildImages = data.payload.build_images.length > 1 && data.payload.build_images.length <= 1500 && (data.payload.build_images.includes("https://cdn.discordapp.com") || data.payload.build_images.includes("https://media.discordapp.com") || data.payload.build_images.includes("https://cdn.discord.com") || data.payload.build_images.includes("https://media.discord.com") || data.payload.build_images.includes("https://imgur.com") || data.payload.build_images.includes("https://i.imgur.com")) ? sanitize(data.payload.build_images, {allowedTags: [], allowedAttributes: {}}) : "";
         const publishAboutMe = data.payload.publish_about_me;
         const publishAge = data.payload.publish_age;
         const publishCountry = data.payload.publish_country;
