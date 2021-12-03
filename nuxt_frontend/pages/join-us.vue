@@ -409,7 +409,7 @@ export default {
 
   methods: {
     async submit(){
-      if(!this.buildImages.includes("https://cdn.discordapp.com") && !this.buildImages.includes("https://media.discordapp.com") && !this.buildImages.includes("https://cdn.discord.com") && !this.buildImages.includes("https://media.discord.com") && !this.buildImages.includes("https://imgur.com") && !this.buildImages.includes("https://i.imgur.com")) {
+      if(!this.buildImages.includes("https://cdn.discordapp.") && !this.buildImages.includes("https://media.discordapp.") && !this.buildImages.includes("https://cdn.discord.") && !this.buildImages.includes("https://media.discord.") && !this.buildImages.includes("https://imgur.") && !this.buildImages.includes("https://i.imgur.")) {
         window.alert("Please put image links from imgur or discord into the previous builds section");
         return;
       }
