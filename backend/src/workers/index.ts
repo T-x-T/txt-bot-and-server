@@ -26,6 +26,7 @@ setTimeout(async () => {
     youtube.checkForNewVideos();
     await update.updateAllNicks();
     await update.updateAllIGNs();
+    stats.updateMcStats();
   } catch (e) {
     console.log("10 seconds after startup threw:", e.message);
     log.write(2, "workers", "10 seconds after startup threw", {err: e.message});
