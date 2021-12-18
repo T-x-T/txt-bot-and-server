@@ -8,7 +8,6 @@
         <li>Dynmap</li>
         <li>DiscordSRV</li>
         <li>WorldBorder</li>
-        <li>DrSleep</li>
       </ul>
     </div>
 
@@ -19,7 +18,7 @@
         <li>Vanilla Gameplay</li>
         <li>Whitelist <NuxtLink to="/join-us">(Apply here!)</NuxtLink></li>
         <li>YouTube Channel <a href="https://www.youtube.com/Paxterya" target="_blank">(visit)</a></li>
-        <li>New season since July 18, 2021</li>
+        <li>New season since December 17, 2021</li>
         <li>Dedicated Server with Ryzen 5950x, 128GB RAM and NVME Storage</li>
       </ul>
     </div>
@@ -32,9 +31,8 @@
         <li>Coordinates HUD</li>
         <li>Durability Ping</li>
         <li>Silence Mobs</li>
-        <li>Spore Blossom Crafting</li>
         <li>Unlock All Recipes</li>
-        <li>Piglin Sand Bartering</li>
+        <li>Terralith</li>
       </ul>
     </div>
   </div>

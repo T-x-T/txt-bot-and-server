@@ -42,7 +42,7 @@ function read_mc_stats() {
           const final_stat = {
             uuid: uuid,
             stats: stats,
-            sub_type: "s5",
+            sub_type: "s6",
             timestamp: Date.now()
           };
 
