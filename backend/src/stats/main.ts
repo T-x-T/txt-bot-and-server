@@ -88,7 +88,8 @@ const main = {
 
   mcGetRanked: mc.getRanked,
   mcGetSingle: mc.getSingle,
-  mcGetAll: mc.getAll
+  mcGetAll: mc.getAll,
+  mcGetToplist: mc.getTopList
 };
 
 //Internal stuff

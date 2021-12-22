@@ -30,7 +30,6 @@ const statsFactory = new Factory({name: "mcstats", schema: schema});
 statsFactory.connect();
 
 const minecraft = {
-  //Gets ranked stats for single player
   async getRanked(uuid: string, collection: string) {
     const stats = await minecraft.getSingle(uuid, collection);
     const allRawStats = await getAllLatestStats();
@@ -65,16 +64,22 @@ const minecraft = {
     return finalStats;
   },
 
-  //Gets stats for single player
   async getSingle(uuid: string, collection: string) {
     const doc = await getLatestStatsByUuid(uuid);
     return typeof (_statsTemplates as any)[collection] === "function" ? (_statsTemplates as any)[collection](doc) : (_statsTemplates as any).single[collection](doc);
   },
 
-  //Gets stats for all players combined
   async getAll(collection: string) {
     const docs = await getAllLatestStats();
     return typeof (_statsTemplates as any)[collection] === "function" ? (_statsTemplates as any)[collection](sumArray(docs)) : (_statsTemplates as any).single[collection](sumArray(docs));
+  },
+
+  async getTopList(singleStat: string) {
+    if(!Object.keys(_statsTemplates.single).includes(singleStat)) throw new Error("Statistic not implemented");
+
+    const rawStats = await getAllLatestStats();
+    const stats = rawStats.map(x => ({value: (_statsTemplates as any).single[singleStat](x), playerName: x.playerName}));
+    return stats.sort((a, b) => b.value - a.value);
   }
 }
 
@@ -93,7 +98,7 @@ function sumArray(docs: any){
 
 async function getAllLatestStats() {
   const members: any = await memberFactory.getAllWhitelisted();
-  const results: any = await Promise.allSettled(members.map(async (member: Member) => await getLatestStatsByUuid(member.getMcUuid())));
+  const results: any = await Promise.allSettled(members.map(async (member: Member) => ({playerName: member.getMcIgn(), ...await getLatestStatsByUuid(member.getMcUuid())})));
   const stats: any[] = [];
   results.forEach((res: any) => {
     if(res.status === "fulfilled") stats.push(res.value);

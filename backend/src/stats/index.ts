@@ -17,5 +17,6 @@ export = {
   countryList: main.countryList,
   mcGetRanked: main.mcGetRanked,
   mcGetSingle: main.mcGetSingle,
-  mcGetAll: main.mcGetAll
+  mcGetAll: main.mcGetAll,
+  mcGetTopList: main.mcGetToplist
 }

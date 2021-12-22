@@ -13,7 +13,7 @@ import { SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandStringOptio
 import { CommandInteraction } from "discord.js";
 
 const enum StatsTypes {
-  normal, rank, compare
+  normal, rank, compare, topList
 }
 
 export = {
@@ -27,7 +27,7 @@ export = {
                                         .setName("collection")
                                         .setDescription("The collection of statistics to view")
                                         .setRequired(true)
-                                        .addChoices([["general", "general"], ["distance", "distance"], ["ores", "ores"], ["total", "total"], ["top_usage", "top_usage"], ["top_picked_up", "top_picked_up"], ["top_mined", "top_mined"], ["top_dropped", "top_dropped"], ["top_crafted", "top_crafted"], ["top_broken", "top_broken"], ["top_killed", "top_killed"], ["top_killed_by", "top_killed_by"], ["total_per_death", "total_per_death"]])
+                                        .addChoices([["general", "general"], ["distance", "distance"], ["ores", "ores"], ["total", "total"], ["top_usage", "top_usage"], ["top_picked_up", "top_picked_up"], ["top_mined", "top_mined"], ["top_dropped", "top_dropped"], ["top_crafted", "top_crafted"], ["top_broken", "top_broken"], ["top_killed", "top_killed"], ["top_killed_by", "top_killed_by"], ["total_per_death", "total_per_death"], ["deaths", "deaths"]])
                       )   
                       .addBooleanOption(new SlashCommandBooleanOption()
                                         .setName("ranked")
@@ -470,15 +470,26 @@ async function statsSwitch(collection: string, uuid: string | boolean, ign: stri
         }
       }
     }
+    case "deaths": {
+      const data = await getStats("deaths", false, true);
+      data.forEach((player: any) => {
+        output += `${player.playerName}: ${player.value}`;
+      });
+      return output;
+    }
     default:
-      return "I couldnt find that collection. Please use one of the following collecitons: general, distance, ores, total, top_usage, top_picked_up, top_dropped, top_crafted, top_broken, top_mined, top_killed, top_killed_by, total_per_death";
+      return "I couldnt find that collection. Please use one of the following collecitons: general, distance, ores, total, top_usage, top_picked_up, top_dropped, top_crafted, top_broken, top_mined, top_killed, top_killed_by, total_per_death, deaths";
   }
 };
 
 async function getStats(collection: string, uuid: string | boolean, rankInfo: boolean) {
   let data;
   if(!uuid) {
-    data = await stats.mcGetAll(collection);
+    if(!rankInfo) {
+      data = await stats.mcGetAll(collection);
+    } else {
+      data = await stats.mcGetTopList(collection);
+    }
   } else if(rankInfo) {
     data = await stats.mcGetRanked(uuid as string, collection);
   } else {
