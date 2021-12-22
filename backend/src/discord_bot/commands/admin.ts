@@ -54,6 +54,10 @@ export = {
                                           .setDescription("user to force accept")
                                           .setRequired(true)
                         )
+        )
+        .addSubcommand(new SlashCommandSubcommandBuilder()
+                        .setName("restart")
+                        .setDescription("restarts the bot")
         ),
   async execute(interaction: CommandInteraction) {
     if(!interaction.isCommand()) return;
@@ -95,6 +99,10 @@ export = {
         const applications = await applicationFactory.getByDiscordId(interaction.options.getUser("user").id);
         if(applications) await applications[applications.length - 1].acceptGuildMember();
         return await interaction.editReply("I am done");
+      }
+      case "restart": {
+        await interaction.reply("Restarting");
+        process.exit();
       }
       default: return;
     }
