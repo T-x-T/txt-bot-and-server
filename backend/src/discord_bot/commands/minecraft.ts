@@ -472,8 +472,9 @@ async function statsSwitch(collection: string, uuid: string | boolean, ign: stri
     }
     case "deaths": {
       const data = await getStats("deaths", false, true);
+      output += "Top Deaths:\n"
       data.forEach((player: any) => {
-        output += `${player.playerName}: ${player.value}`;
+        if(player.value) output += `${player.playerName}: ${player.value}\n`;
       });
       return output;
     }
