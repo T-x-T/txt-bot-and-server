@@ -27,7 +27,7 @@ export = {
                                         .setName("collection")
                                         .setDescription("The collection of statistics to view")
                                         .setRequired(true)
-                                        .addChoices([["general", "general"], ["distance", "distance"], ["ores", "ores"], ["total", "total"], ["top_usage", "top_usage"], ["top_picked_up", "top_picked_up"], ["top_mined", "top_mined"], ["top_dropped", "top_dropped"], ["top_crafted", "top_crafted"], ["top_broken", "top_broken"], ["top_killed", "top_killed"], ["top_killed_by", "top_killed_by"], ["total_per_death", "total_per_death"], ["deaths", "deaths"]])
+                                        .addChoices([["general", "general"], ["distance", "distance"], ["ores", "ores"], ["total", "total"], ["top_usage", "top_usage"], ["top_picked_up", "top_picked_up"], ["top_mined", "top_mined"], ["top_dropped", "top_dropped"], ["top_crafted", "top_crafted"], ["top_broken", "top_broken"], ["top_killed", "top_killed"], ["top_killed_by", "top_killed_by"], ["total_per_death", "total_per_death"], ["deaths", "deaths"], ["playtime", "playtime"]])
                       )   
                       .addBooleanOption(new SlashCommandBooleanOption()
                                         .setName("ranked")
@@ -477,6 +477,18 @@ async function statsSwitch(collection: string, uuid: string | boolean, ign: stri
       data.forEach((player: any) => {
         if(player.value) {
           output += `${i}. ${player.playerName}: ${player.value}\n`;
+          i++;
+        }
+      });
+      return output;
+    }
+    case "playtime": {
+      const data = await getStats("playtime", false, true);
+      output += "Top Playtime:\n"
+      let i = 1;
+      data.forEach((player: any) => {
+        if(player.value) {
+          output += `${i}. ${player.playerName}: ${player.value}h\n`;
           i++;
         }
       });
