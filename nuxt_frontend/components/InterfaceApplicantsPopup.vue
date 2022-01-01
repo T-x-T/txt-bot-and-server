@@ -122,11 +122,11 @@
     .buttons
       display: flex
       justify-content: space-between
-      &:disabled
-        opacity: 0.5
     button
       width: 45%
       color: $pax-white
+      &:disabled
+        opacity: 0.5
     button#accept
       background: $pax-green
     button#deny
