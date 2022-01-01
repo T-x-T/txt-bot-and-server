@@ -65,7 +65,7 @@
             <option value="Your application didn't contain any pictures of your previous builds. If you have trouble with adding them, then please let us help you by joining our Discord server.">Your application didn't contain any pictures of your previous builds. If you have trouble with adding them, then please let us help you by joining our Discord server.</option>
           </select>
           <div class="buttons" v-if="openApplication.status == 1">
-            <button id="accept" @click="accept">Accept</button>
+            <button id="accept" @click="accept" :disabled="customDenyReason">Accept</button>
             <button id="deny" @click="deny">Deny</button>
           </div>
         </div>
