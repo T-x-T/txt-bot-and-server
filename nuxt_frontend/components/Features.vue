@@ -19,7 +19,7 @@
         <li>Whitelist <NuxtLink to="/join-us">(Apply here!)</NuxtLink></li>
         <li>YouTube Channel <a href="https://www.youtube.com/Paxterya" target="_blank">(visit)</a></li>
         <li>New season since December 17, 2021</li>
-        <li>Dedicated Server with Ryzen 5950x, 128GB RAM and NVME Storage</li>
+        <li>Dedicated Server with a Ryzen 3600, 64GB RAM and NVME Storage</li>
       </ul>
     </div>
   

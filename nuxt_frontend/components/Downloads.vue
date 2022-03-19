@@ -17,6 +17,7 @@
             <h3>Paxterya Season 5</h3>
             <p>The map we've been playing on from July 17th, 2021 to December 17th, 2021.</p>
             <a href="https://stor.paxterya.com/minecraft_maps/2021-12-15-s5-final.zip"><button class="secondary">Download ZIP (30 GB)</button></a>
+            <a href="https://stor.paxterya.com/minecraft_maps/2021-12-15-s5-anarchy.zip"><button class="secondary">Download Anarchy ZIP (30 GB)</button></a>
           </div>
 
           <div class="item">
@@ -29,6 +30,7 @@
             <h3>Paxterya Season 3</h3>
             <p>The map we've been playing on from December 1, 2019 to July 17th, 2020. Check the museum for coordinates of important locations.</p>
             <a href="https://stor.paxterya.com/minecraft_maps/paxteryaS3.zip"><button class="secondary">Download ZIP (25 GB)</button></a>
+            <a href="https://stor.paxterya.com/minecraft_maps/anarchyS3.zip"><button class="secondary">Download Anarchy ZIP (25 GB)</button></a>
           </div>
           
           <div class="item">
