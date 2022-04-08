@@ -251,14 +251,14 @@ export default {
     sortArray: function(input = [], property, order = 'asc'){
       if(order === 'asc'){
         return input.sort((a, b) => {
-          if (a[property] > b[property]) return 1;
-          if (a[property] < b[property]) return -1;
+          if (a[property]?.toLowerCase() > b[property]?.toLowerCase()) return 1;
+          if (a[property]?.toLowerCase() < b[property]?.toLowerCase()) return -1;
           return 0;
         });
       }else{
         return input.sort((a, b) => {
-          if (a[property] < b[property]) return 1;
-          if (a[property] > b[property]) return -1;
+          if (a[property]?.toLowerCase() < b[property]?.toLowerCase()) return 1;
+          if (a[property]?.toLowerCase() > b[property]?.toLowerCase()) return -1;
           return 0;
         });
       }
