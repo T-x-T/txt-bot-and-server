@@ -32,7 +32,6 @@
         <li>Durability Ping</li>
         <li>Silence Mobs</li>
         <li>Unlock All Recipes</li>
-        <li>Terralith</li>
       </ul>
     </div>
   </div>
