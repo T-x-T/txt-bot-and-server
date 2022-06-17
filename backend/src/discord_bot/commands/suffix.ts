@@ -5,7 +5,7 @@ import MemberFactory = require("../../user/memberFactory.js");
 const memberFactory = new MemberFactory();
 memberFactory.connect();
 
-const supportedPronouns = ["she", "he", "they", "it"];
+const supportedPronouns = ["she", "he", "they", "it", "any"];
 
 export = {
   data: new SlashCommandBuilder()
