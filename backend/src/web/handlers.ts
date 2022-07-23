@@ -332,71 +332,8 @@ const handlers = {
 
     _application: {
       async post(data: IRequestData): Promise<IHandlerResponse> {
-        if(!data.payload || !data.payload.accept_rules || !data.payload.accept_privacy_policy) {
-          return {
-            status: 400,
-            payload: {err: "Missing or malformed payload", payload: data.payload}
-          };
-        }
-
-        const discordId: string = data.payload.discord_id.length >= 17 && data.payload.discord_id.length <= 18 ? data.payload.discord_id : "";
-        const mcIgn: string = data.payload.mc_ign.length >= 3 && data.payload.mc_ign.length <= 16 ? data.payload.mc_ign : "";
-        const emailAddress: string = data.payload.email_address.indexOf("@") > -1 && data.payload.email_address.length > 5 ? data.payload.email_address.trim() : "";
-        const country = data.payload.country ? sanitize(data.payload.country, {allowedTags: []}) : "";
-        const birthMonth = Number.parseInt(data.payload.birth_month) >= 1 && Number.parseInt(data.payload.birth_month) <= 12 ? Number.parseInt(data.payload.birth_month) : -1;
-        const birthYear = Number.parseInt(data.payload.birth_year) >= 1900 && Number.isInteger(Number.parseInt(data.payload.birth_year)) ? Number.parseInt(data.payload.birth_year) : -1;
-        const aboutMe = data.payload.about_me.length >= 150 && data.payload.about_me.length <= 1500 ? sanitize(data.payload.about_me, {allowedTags: [], allowedAttributes: {}}) : "";
-        const motivation = data.payload.motivation.length >= 150 && data.payload.motivation.length <= 1500 ? sanitize(data.payload.motivation, {allowedTags: [], allowedAttributes: {}}) : "";
-        const buildImages = data.payload.build_images.length > 1 && data.payload.build_images.length <= 1500 && (data.payload.build_images.includes("https://cdn.discordapp.") || data.payload.build_images.includes("https://media.discordapp.") || data.payload.build_images.includes("https://cdn.discord.") || data.payload.build_images.includes("https://media.discord.") || data.payload.build_images.includes("https://imgur.") || data.payload.build_images.includes("https://i.imgur.")) ? sanitize(data.payload.build_images, {allowedTags: [], allowedAttributes: {}}) : "";
-        const publishAboutMe = data.payload.publish_about_me;
-        const publishAge = data.payload.publish_age;
-        const publishCountry = data.payload.publish_country;
-
-        if(birthYear > new Date().getFullYear() - 13 || (birthYear > new Date().getFullYear() - 12 && new Date().getMonth() < birthMonth)) {
-          return {
-            status: 401,
-            payload: {err: "you need to be at least 13 years old to apply. If you believe this is an error contact TxT#0001 in Discord"}
-          };
-        }
-
-        if(discordId.length === 0 || mcIgn.length === 0 || emailAddress.length === 0 || country.length === 0 || birthMonth === -1 || birthYear === -1 || aboutMe.length === 0 || motivation.length === 0 || buildImages.length === 0) {
-          const payload = {
-            discordId: discordId,
-            mcIgn: data.payload.mcIgn,
-            emailAddress: emailAddress,
-            country: country,
-            birthMonth: birthMonth,
-            birthYear: birthYear,
-            aboutMe: aboutMe,
-            motivation: motivation,
-            buildImages: buildImages
-          }
-          log.write(0, "web", "handlers.paxapi.application.post received incorrect input", payload);
-          return {
-            status: 400,
-            payload: {err: "Incorrect input", payload: payload}
-          }
-        }
-
-        const mcUuid = await mc_helpers.getUUID(mcIgn)
-        const actualMcIgn = await mc_helpers.getIGN(mcUuid);
-        const userData = await discordHelpers.fetchUser(discordId);
-        const discordUserName = `${userData.username}#${userData.discriminator}`;
-        try {
-          await applicationFactory.create(discordId, mcUuid, emailAddress, country, birthMonth, birthYear, aboutMe, motivation, buildImages, publishAboutMe, publishAge, publishCountry, 1, discordUserName, actualMcIgn);
-        } catch (e) {
-          if(e.message === "Applicant still has open application or got accepted already") {
-            return {
-              status: 400,
-              payload: {err: "Applicant still has open application or got accepted already"}
-            }
-          } else {
-            throw e;
-          }
-        }
-
         return {
-          status: 201
+          status: 418
         };
       },
 
