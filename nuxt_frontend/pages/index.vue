@@ -8,7 +8,6 @@
     <Stats />
     <Slideshow />
     <Rules />
-    <HowToJoin />
     <BlogOverview />
     <Downloads />
     <MemberList />
