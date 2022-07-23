@@ -125,7 +125,7 @@ describe("application", function(){
 
     it("getAge should return correct age", async function(){
       let application = await createAndSaveApplication();
-      assert.strictEqual(application.getAge(), 21);
+      assert.strictEqual(application.getAge(), 22);
     });
 
     it("getAboutMe should return correct value", async function(){
