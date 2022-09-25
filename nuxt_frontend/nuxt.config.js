@@ -3,6 +3,7 @@ export default {
     host: "0.0.0.0",
     port: 3000
   },
+  target: "static",
   modules: [
     "@nuxtjs/axios",
     "nuxt-highcharts",
@@ -21,7 +22,7 @@ export default {
     ]
   },
   axios: {
-    proxy: true
+    proxy: false
   },
   proxy: {
     "/api2/v1": {target: "https://thetxt.io/", pathRewrite: {"2": ""}},

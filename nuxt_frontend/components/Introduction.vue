@@ -11,9 +11,9 @@
             <span class="right">Since 2019</span>
           </div>
           <p>
-            Paxterya is a close-knit and dedicated Minecraft community. What we enjoy most is the freedom Minecraft has to offer. 
-            You can do anything on Paxterya: start big projects with others, construct a town, or go far away to found your very own empire.
-            <br>Let's be creative together!
+            Paxterya was a close-knit and dedicated Minecraft community. What we enjoyed most is the freedom Minecraft has to offer. 
+            You used to be able to do anything on Paxterya: start big projects with others, construct a town, or go far away to found your very own empire.
+            <br>We are still an active discord community that's open for everyone.
           </p>
           <a href="https://discord.gg/mAjZCTG" target="_blank"><button><img id="discordLogo" src="~/assets/Discord-Logo-Black.svg"> Join our Discord</button></a>
         </div>

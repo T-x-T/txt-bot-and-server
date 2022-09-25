@@ -14,6 +14,18 @@
           Worldsaves</h2>
         <div v-if="desktop || activeElement === 0">
           <div class="item">
+            <h3>Paxterya Season 7</h3>
+            <p>The map we've been playing on from April 9th, 2022 to September 23rd, 2022.</p>
+            <a href="https://stor.paxterya.com/minecraft_maps/2022-09-25-s7.zip"><button class="secondary">Download ZIP (42 GB)</button></a>
+          </div>
+
+          <div class="item">
+            <h3>Paxterya Season 6</h3>
+            <p>The map we've been playing on from December 17th, 2021 to April 3rd, 2022.</p>
+            <a href="https://stor.paxterya.com/minecraft_maps/2022-03-31-s6.zip"><button class="secondary">Download ZIP (184 GB)</button></a>
+          </div>
+          
+          <div class="item">
             <h3>Paxterya Season 5</h3>
             <p>The map we've been playing on from July 17th, 2021 to December 17th, 2021.</p>
             <a href="https://stor.paxterya.com/minecraft_maps/2021-12-15-s5-final.zip"><button class="secondary">Download ZIP (30 GB)</button></a>
@@ -61,6 +73,18 @@
             <h3>Paxterya Modded S3 (RLCraft)</h3>
             <p>In January 2021 we came back down to Earth to get ourselves killed way too often.</p>
             <a href="https://stor.paxterya.com/minecraft_maps/modded_s3_rlcraft.zip"><button class="secondary">Download ZIP (1.2 GB)</button></a>
+          </div>
+
+          <div class="item">
+            <h3>Paxterya Modded S4</h3>
+            <p>Vault Hunters 1.12.4</p>
+            <a href="https://stor.paxterya.com/minecraft_maps/2022-09-25-modded.zip"><button class="secondary">Download ZIP (4.5 GB)</button></a>
+          </div>
+
+          <div class="item">
+            <h3>Creative</h3>
+            <p>Our creative server where you can find tons of nostalgic builds and ideas</p>
+            <a href="https://stor.paxterya.com/minecraft_maps/2022-09-25-s7.zip"><button class="secondary">Download ZIP (1.7 GB)</button></a>
           </div>
         </div>
       </section>

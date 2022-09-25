@@ -1,18 +1,10 @@
 <template>
   <main>
-    <FloatingNav />
     <Introduction />
-    <Features />
-    <Videos />
-    <Dynmaps />
-    <Stats />
-    <Slideshow />
-    <Rules />
-    <BlogOverview />
     <Downloads />
-    <MemberList />
-    <MemberWorldmap />
-    <ContactForm />
+    <Videos />
+    <Slideshow />
+    <BlogOverview />
     <Footer />
   </main>
 </template>

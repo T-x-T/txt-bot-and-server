@@ -40,8 +40,8 @@ export default {
     post: null
   }),
 
-  async mounted() {
-    this.post = await this.$axios.$get("/api/blog?public"); 
+  async fetch() {
+    this.post = await this.$axios.$get("https://paxterya.com/posts.json"); 
     this.post = this.post.sort((a, b) => b.id - a.id)[0];
   }
 }

@@ -4,10 +4,7 @@
 
     <div v-if="posts">
       <article v-for="(item, index) in posts" :key="index">
-        <NuxtLink :to="`/blog/${item.id.toString()}-${new Date(item.date).toISOString().substring(0, 10)}-${item.title.replace(/ /g, '-')}`">
-          <BlogSinglePost :post="item" />
-          <p>Click to expand</p>
-        </NuxtLink>
+        <BlogSinglePost :post="item" />
       </article>
     </div>
 
@@ -77,15 +74,9 @@ export default {
   methods: {
     async reload() {
       try {
-        this.posts = await this.$axios.$get("/api/blog?public"); 
+        this.posts = await this.$axios.$get("https://paxterya.com/posts.json"); 
         this.posts = this.posts.sort((a, b) => b.id - a.id);
         
-        this.posts = this.posts.map(x => {
-          x.body = x.body.split("<div")[0];
-          x.body = x.body.slice(0, 499);
-          x.body += "...";
-          return x;
-        });   
       } catch (e) {
         this.error = true;
       }

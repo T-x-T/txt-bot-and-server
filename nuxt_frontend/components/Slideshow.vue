@@ -167,6 +167,56 @@ export default {
         "https://stor.paxterya.com/website/screenshots/2021-10/medieval-9.png_1080.webp",
         "https://stor.paxterya.com/website/screenshots/2021-10/medieval-10.png_1080.webp",
         "https://stor.paxterya.com/website/screenshots/2021-10/medieval-11.png_1080.webp"
+      ],
+      "Town of Paxterya": [
+        "https://stor.paxterya.com/website/screenshots/top_01.webp",
+        "https://stor.paxterya.com/website/screenshots/top_02.webp",
+        "https://stor.paxterya.com/website/screenshots/top_03.webp",
+        "https://stor.paxterya.com/website/screenshots/top_04.webp",
+        "https://stor.paxterya.com/website/screenshots/top_05.webp",
+        "https://stor.paxterya.com/website/screenshots/top_06.webp",
+        "https://stor.paxterya.com/website/screenshots/top_07.webp",
+        "https://stor.paxterya.com/website/screenshots/top_08.webp",
+        "https://stor.paxterya.com/website/screenshots/top_09.webp",
+        "https://stor.paxterya.com/website/screenshots/top_10.webp"
+      ],
+      "Penliam": [
+        "https://stor.paxterya.com/website/screenshots/penliam_01.webp",
+        "https://stor.paxterya.com/website/screenshots/penliam_02.webp",
+        "https://stor.paxterya.com/website/screenshots/penliam_03.webp",
+        "https://stor.paxterya.com/website/screenshots/penliam_04.webp",
+        "https://stor.paxterya.com/website/screenshots/penliam_05.webp",
+        "https://stor.paxterya.com/website/screenshots/penliam_06.webp"
+      ],
+      "Paxterdam": [
+        "https://stor.paxterya.com/website/screenshots/paxterdam_01.webp",
+        "https://stor.paxterya.com/website/screenshots/paxterdam_02.webp",
+        "https://stor.paxterya.com/website/screenshots/paxterdam_03.webp",
+        "https://stor.paxterya.com/website/screenshots/paxterdam_04.webp"
+      ],
+      "Paxendorf": [
+        "https://stor.paxterya.com/website/screenshots/paxendorf_01.webp",
+        "https://stor.paxterya.com/website/screenshots/paxendorf_02.webp",
+        "https://stor.paxterya.com/website/screenshots/paxendorf_03.webp",
+        "https://stor.paxterya.com/website/screenshots/paxendorf_04.webp"
+      ],
+      "Littleroot": [
+        "https://stor.paxterya.com/website/screenshots/littleroot_01.webp",
+        "https://stor.paxterya.com/website/screenshots/littleroot_02.webp",
+        "https://stor.paxterya.com/website/screenshots/littleroot_03.webp",
+        "https://stor.paxterya.com/website/screenshots/littleroot_04.webp"
+      ],
+      "Cookietown": [
+        "https://stor.paxterya.com/website/screenshots/cookietown_01.webp",
+        "https://stor.paxterya.com/website/screenshots/cookietown_02.webp",
+        "https://stor.paxterya.com/website/screenshots/cookietown_03.webp",
+        "https://stor.paxterya.com/website/screenshots/cookietown_04.webp"
+      ],
+      "Turtles Cove": [
+        "https://stor.paxterya.com/website/screenshots/turtlescove_01.webp",
+        "https://stor.paxterya.com/website/screenshots/turtlescove_02.webp",
+        "https://stor.paxterya.com/website/screenshots/turtlescove_03.webp",
+        "https://stor.paxterya.com/website/screenshots/turtlescove_04.webp"
       ]
     }
   }),
